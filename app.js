@@ -11,6 +11,8 @@ const express = require(`express`),
 
 
 // DB Setup
+const signUp = require('./routes/accounts/client/signup_login')
+
 const connection = require(`./config/dbConnection`);
 connection(mongoose);
 
@@ -24,6 +26,7 @@ loadExpressSession(app, expressSession, MongoStore);
 // body parser
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use('/signUp',signUp);
 
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
