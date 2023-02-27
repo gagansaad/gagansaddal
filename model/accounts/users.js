@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    userBasicInfo: {
+    userInfo: {
         name: {
             type: String,
             required: true
@@ -14,11 +14,10 @@ const userSchema = new mongoose.Schema({
         password: { type: String },
         mobile_number: {
             country_code: {
-                ...defaultStringConfig,
+                type: String
             },
             phone_number: {
-                ...defaultStringConfig,
-                match: commonRegex.mobileNumber.india,
+                type: String
             }
         },
     },
