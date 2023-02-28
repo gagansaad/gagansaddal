@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema({
         email_address: {
             type: String,
             required: true,
-            index: { unique: true }
         },
         password: { type: String },
         mobile_number: {
@@ -21,6 +20,12 @@ const userSchema = new mongoose.Schema({
             }
         },
     },
+
+    userBasicInfo: {
+        profile: { type: String, possibleValues: ['User', 'Host', 'Blogger'], default: 'User' },
+        source: { type: String, possibleValues: ['Facebook', 'Instagram', 'Email', 'Apple'] },
+    },
+
 
     userDateInfo: {
         loginDate: { type: Date, default: Date.now() },

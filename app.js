@@ -9,12 +9,14 @@ const express = require(`express`),
     expressSession = require(`express-session`),
     MongoStore = require(`connect-mongo`);
 
-
 // DB Setup
-const signUp = require('./routes/accounts/client/signup_login')
 
 const connection = require(`./config/dbConnection`);
 connection(mongoose);
+
+require(`./model/accounts/users`);
+// DB Setup
+const signUp = require('./routes/api/accounts/user');
 
 const loadHelmet = require(`./loaders/helmets`),
     loadExpressSession = require(`./loaders/expressSession`);
@@ -26,13 +28,13 @@ loadExpressSession(app, expressSession, MongoStore);
 // body parser
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-app.use('/signUp',signUp);
+app.use('/', signUp);
+
 
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))
 }
-
 
 // Server setup
 app.listen(process.env.PORT, () => console.log(`[ MENEHARIYA API ] on ${process.env.PORT}`));
