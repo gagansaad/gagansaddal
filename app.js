@@ -9,10 +9,13 @@ const express = require(`express`),
     expressSession = require(`express-session`),
     MongoStore = require(`connect-mongo`);
 
-// DB Setup
 
+// DB Setup
 const connection = require(`./config/dbConnection`);
 connection(mongoose);
+
+
+app.use(cors())
 
 require(`./model/accounts/users`);
 // DB Setup
