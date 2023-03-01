@@ -56,7 +56,7 @@ module.exports = {
             ) {
                 res.json({
                     status: 400,
-                    message: `email aready exist`,
+                    message: `email aready exist.......`,
                 });
             }
         } else {
