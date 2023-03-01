@@ -6,7 +6,7 @@ router.post(`/signUpWithEmail`,
 );
 
 
-router.post(`/login-with-email`,
+router.post(`/loginWithEmail`,
     controllers.loginWithEmail
 );
 

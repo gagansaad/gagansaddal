@@ -159,10 +159,18 @@ module.exports = {
                     },
                 });
 
+                const data ={
+                    ...checkUserDetail[0].userInfo,
+                    mobile_number: checkUserDetail[0].userInfo.mobile_number.phone_number,
+                    country_code: checkUserDetail[0].userInfo.mobile_number.country_code
+                }
+
+                delete data["password"]
+
 
                 res.json({
                     status: 200,
-                    data: checkUserDetail[0],
+                    data: data,
                     message: `success`,
                     token: createJWT(checkUserDetail[0]._id),
                 });
