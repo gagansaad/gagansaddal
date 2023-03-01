@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
+
     userInfo: {
+        
         name: {
             type: String,
             required: true
@@ -21,11 +23,18 @@ const userSchema = new mongoose.Schema({
         },
     },
 
+    user_status: {
+        user_action_Status: {
+            type: Number,
+            required: true,
+            enum: [1, 2]
+        },
+    },
+
     userBasicInfo: {
         profile: { type: String, possibleValues: ['User', 'Host', 'Blogger'], default: 'User' },
         source: { type: String, possibleValues: ['Facebook', 'Instagram', 'Email', 'Apple'] },
     },
-
 
     userDateInfo: {
         loginDate: { type: Date, default: Date.now() },
@@ -33,7 +42,7 @@ const userSchema = new mongoose.Schema({
         LastUpdate: { type: Date, default: Date.now() },
         userDisableDate: { type: Date },
     },
-    userFacebookInfo:{
+    userFacebookInfo: {
         fbId: { type: String },
         fbToken: { type: String },
         loginOn: { type: Date, default: Date.now() },
@@ -50,13 +59,7 @@ const userSchema = new mongoose.Schema({
         appleToken: { type: String },
         loginOn: { type: Date, default: Date.now() },
     },
-    userStatus: {
-        blocked: { type: Boolean, default: false },
-        appVersion: { type: String, default: "0.01" },
-        userActionStatus: { type: String, default: "Enable" },
-        userLoginStatusForFbGmail: { type: String, default: "SignUp" },
-        userStatus: { type: String, possibleValues: ['Login', 'Logout'] },
-    },
+   
 
 }, { timestamps: true });
 
