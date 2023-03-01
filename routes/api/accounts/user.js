@@ -6,5 +6,10 @@ router.post(`/signUpWithEmail`,
 );
 
 
+router.post(`/login-with-email`,
+    controllers.loginWithEmail
+);
+
+
 
 module.exports = router;
