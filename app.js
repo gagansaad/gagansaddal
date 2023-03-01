@@ -31,7 +31,7 @@ loadExpressSession(app, expressSession, MongoStore);
 // body parser
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-app.use('/menehariya/v1/', signUp);
+app.use('/v1/api/', signUp);
 
 
 // logging http activity
