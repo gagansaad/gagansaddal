@@ -4,7 +4,8 @@ const mongoose = require("mongoose"),
     OTP = mongoose.model("otp"),
     bcrypt = require("bcryptjs"),
     createJWT = require(`../../../utils/createJWT`),
-    ObjectId = require("mongodb").ObjectID;
+    generateOTP = require(`../../../utils/generateOTP`)
+ObjectId = require("mongodb").ObjectID;
 
 const { EmailOTPVerification } = require(`../../../resources/sendEmailFunction`);
 const { MobileNumberVerificationOTP } = require(`../../../resources/sendOTPFunction`);
@@ -131,6 +132,7 @@ module.exports = {
                 };
                 newUserDetail.userInfo = {
                     name: newUser.name,
+                    is_active: false,
                     password: newUser.password,
                     email_address: newUser.email,
                     mobile_number: {
@@ -167,6 +169,7 @@ module.exports = {
                                 name: result.userInfo.name || null,
                                 email_address: result?.userInfo?.email_address || null,
                                 phone_number: result?.userInfo?.mobile_number?.phone_number || null,
+                                is_active: result.userInfo.is_active
                             },
                             message: `User register successfully`,
                             token: createJWT(result._id),
@@ -177,7 +180,7 @@ module.exports = {
                             user: result._id,
                             for: 1
 
-                        }).then((data)=>{
+                        }).then((data) => {
                             console.log(data)
                         })
 
@@ -229,21 +232,50 @@ module.exports = {
                     },
                 });
 
+                const email_address = checkUserDetail[0]?.userInfo?.email_address,
+                    phone_number = checkUserDetail[0].userInfo.mobile_number.phone_number,
+                    is_active = checkUserDetail[0].userInfo.is_active;
+
                 const data = {
                     ...checkUserDetail[0].userInfo,
-                    mobile_number: checkUserDetail[0].userInfo.mobile_number.phone_number,
-                    country_code: checkUserDetail[0].userInfo.mobile_number.country_code
+                    mobile_number: checkUserDetail[0]?.userInfo?.mobile_number?.phone_number,
+                    country_code: checkUserDetail[0]?.userInfo?.mobile_number?.country_code,
+                    is_active: checkUserDetail[0]?.userInfo?.is_active
                 }
 
                 delete data["password"]
 
+                if (!is_active) {
+                    if (email_address) {
 
-                res.json({
-                    status: 200,
-                    data: data,
-                    message: `success`,
-                    token: createJWT(checkUserDetail[0]._id),
-                });
+                        res.json({
+                            status: 204,
+                            data: data,
+                            message: `success`,
+                            token: createJWT(checkUserDetail[0]._id),
+                        });
+
+                    } else if(email_address && phone_number) {
+                        res.json({
+                            status: 205,
+                            data: data,
+                            message: `success`,
+                            token: createJWT(checkUserDetail[0]._id),
+                        });
+                    }
+                } else {
+
+
+                    res.json({
+                        status: 200,
+                        data: data,
+                        message: `success`,
+                        token: createJWT(checkUserDetail[0]._id),
+                    });
+
+                }
+
+
 
             } else {
                 res.json({
@@ -260,27 +292,99 @@ module.exports = {
         }
     },
 
-    verifiy_otps: function (req, res, next) {
+    verifiy_otps: async function (req, res, next) {
 
         const {
-            email_address,
             otp_for_email,
             otp_for_mobile_number,
-            phone_number,
             userId
         } = req.body;
 
-        const country_code_list = [
-            `+91`,
-            `+92`
-        ]
-        res.json({
-            data: country_code_list
-        })
+        if (otp_for_mobile_number) {
+
+            OTP.find({
+                user: userId,
+                code: otp_for_email
+            }).then((foundEmailOTP) => {
+
+                let invalidOTP = 0
+
+                if (!foundEmailOTP) {
+                    invalidOTP = 1
+                }
+
+                OTP.find({
+                    user: userId,
+                    code: otp_for_email
+                }).then((foundMobileOTP) => {
+
+                    if (!foundMobileOTP) {
+                        invalidOTP = 2
+                    }
+
+                    if (!(foundEmailOTP && foundMobileOTP)) {
+                        invalidOTP = 3
+                    }
+
+                    if (invalidOTP) {
+                        res.json({
+                            status: 200,
+                            invalidOTP,
+                            message: `success`
+                        })
+                    } else {
+                        res.json({
+                            status: 400,
+                            invalidOTP,
+                            message: `success`
+                        })
+                    }
+                })
+
+
+            })
+
+        } else {
+            OTP.find({
+                user: userId,
+                code: otp_for_email
+            }).then((foundOTP) => {
+                res.json({
+                    status: 200,
+                    invalidOTP: 0,
+                    message: `success`
+                })
+            })
+        }
+
     },
 
 
-    country_code_lists : function (req, res, next)  {
+    forget_password: async function(req,res,next){
+        const email_address = req?.body?.email_address;
+
+        if(!email_address) return res.json({status:400, message: `Email not exist`});
+
+        User.find({ 'userInfo.email_address': email_address})
+        .then((foundUser)=>{
+            res.json({
+                status: 200,
+                message: `success`
+            })
+        }).catch((err)=>{
+            res.json({
+                status: 400,
+                message: `fail`
+            })
+        })
+    },
+
+    // verify_forget_password_otp: async function (req,res,next)=>{
+
+    // }
+
+
+    country_code_lists: async function (req, res, next) {
         const country_code_list = [
             `+91`,
             `+92`

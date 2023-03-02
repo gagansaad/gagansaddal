@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
                 type: String
             }
         },
+        is_active:{
+            type: Boolean,
+            required: true,
+            default: false
+        }
     },
 
     user_status: {
@@ -30,6 +35,9 @@ const userSchema = new mongoose.Schema({
             required: true,
             enum: [1, 2]
         },
+        // 1 disable
+        // 2 enable
+        // 3 enable
     },
 
     userBasicInfo: {
