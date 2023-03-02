@@ -245,6 +245,7 @@ module.exports = {
                 }
 
                 delete data["password"]
+                delete data["mobile_number"]
 
                 if (!is_active) {
                     if (phone_number) {
