@@ -18,6 +18,7 @@ connection(mongoose);
 app.use(cors())
 
 require(`./model/accounts/users`);
+require(`./model/otp`);
 // DB Setup
 const signUp = require('./routes/api/accounts/user');
 
