@@ -56,7 +56,7 @@ module.exports = {
             if (invalidData.length) data.invalid = invalidData;
 
             return res.json({
-                ...data,
+                status: 400,
                 message: `Some data is missing/invalid`
             });
         } else {
