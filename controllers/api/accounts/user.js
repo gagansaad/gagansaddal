@@ -178,7 +178,7 @@ module.exports = {
 
                         }).then((data) => {
                             console.log(data)
-                            EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name, data.code)
+                            MobileNumberVerificationOTP(result?.userInfo?.email_address, result?.userInfo?.name, data.code)
                         })
 
                         // MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name)
@@ -233,14 +233,14 @@ module.exports = {
                     },
                 });
 
-                const email_address = checkUserDetail[0]?.userInfo?.email_address,
-                    phone_number = checkUserDetail[0].userInfo.mobile_number?.phone_number,
+                const email_address = checkUserDetail[0]?.userInfo?.email_address || null,
+                    phone_number = checkUserDetail[0].userInfo.mobile_number?.phone_number || null,
                     is_active = checkUserDetail[0].userInfo.is_active;
 
                 const data = {
                     ...checkUserDetail[0].userInfo,
-                    mobile_number: checkUserDetail[0]?.userInfo?.mobile_number?.phone_number,
-                    country_code: checkUserDetail[0]?.userInfo?.mobile_number?.country_code,
+                    mobile_number: checkUserDetail[0]?.userInfo?.mobile_number?.phone_number || null,
+                    country_code: checkUserDetail[0]?.userInfo?.mobile_number?.phone_number ?  checkUserDetail[0]?.userInfo?.mobile_number?.country_code : null,
                     is_active: checkUserDetail[0]?.userInfo?.is_active
                 }
 
