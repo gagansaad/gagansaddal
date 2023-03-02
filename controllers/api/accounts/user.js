@@ -234,7 +234,7 @@ module.exports = {
                 });
 
                 const email_address = checkUserDetail[0]?.userInfo?.email_address,
-                    phone_number = checkUserDetail[0].userInfo.mobile_number.phone_number,
+                    phone_number = checkUserDetail[0].userInfo.mobile_number?.phone_number,
                     is_active = checkUserDetail[0].userInfo.is_active;
 
                 const data = {
@@ -247,18 +247,18 @@ module.exports = {
                 delete data["password"]
 
                 if (!is_active) {
-                    if (!phone_number) {
+                    if (phone_number) {
 
                         res.json({
-                            status: 204,
+                            status: 205,
                             data: data,
                             message: `success`,
                             token: createJWT(checkUserDetail[0]._id),
                         });
 
-                    } else if(email_address && phone_number) {
+                    } else  {
                         res.json({
-                            status: 205,
+                            status: 204,
                             data: data,
                             message: `success`,
                             token: createJWT(checkUserDetail[0]._id),
