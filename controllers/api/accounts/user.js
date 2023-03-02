@@ -410,14 +410,6 @@ module.exports = {
 
 },
 
-
-
-
-
-
-
-
-
     function verifyqJWT(token) {
         jwt.verify(token, `AbCdEfGhIjKlMnOPYT`, function (err, decoded) {
             if (err) {
