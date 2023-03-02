@@ -40,10 +40,6 @@ module.exports = {
         if (!isValidString(password)) missingData.push(`password`);
 
         if (!isValidString(device_token)) missingData.push(`device token`);
-        if (!isValidString(device_name)) missingData.push(`device name`);
-        if (!isValidString(device_model)) missingData.push(`device model`);
-        if (!isValidString(device_version)) missingData.push(`device version`);
-
         if (!(device_type)) missingData.push(`device type`);
         else if (isNaN(device_type)) invalidData.push(`device type`);
 
@@ -282,7 +278,7 @@ module.exports = {
             data: country_code_list
         })
     },
-    
+
 
     country_code_lists : function (req, res, next)  {
         const country_code_list = [

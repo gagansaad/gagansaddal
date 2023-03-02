@@ -49,18 +49,7 @@ const userSchema = new mongoose.Schema({
             // 2=android
             // 3=web
         },
-        device_name: {
-            type: String,
-            required: true
-        },
-        device_model: {
-            type: String,
-            required: true
-        },
-        device_version: {
-            type: String,
-            required: true
-        }
+     
     }],
     
 
