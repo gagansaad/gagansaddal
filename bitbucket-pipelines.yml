@@ -8,7 +8,7 @@ pipelines:
   branches:
     development-0.0.1:
       - step:
-          name: Production
+          name: development api
           caches:
             - composer
           script:
