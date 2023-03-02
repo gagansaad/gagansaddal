@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer'),
     { generateOTP } = require(`../utils/generateOTP`);
 
-exports.EmailOTPVerification = (email_address = ``, name = ``) => {
+exports.EmailOTPVerification = (email_address = ``, name = ``, code) => {
 
 
     const mailTransporter = nodemailer.createTransport({
@@ -16,7 +16,7 @@ exports.EmailOTPVerification = (email_address = ``, name = ``) => {
         from: 'mohammad.sahil@netscapelabs.com',
         to: email_address,
         subject: 'Test mail',
-        text: `${name} your top is ${generateOTP(6)}`
+        text: `${name} your top is ${code}`
     };
 
     mailTransporter.sendMail(mailDetails, function (err, data) {

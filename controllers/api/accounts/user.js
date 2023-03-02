@@ -4,7 +4,7 @@ const mongoose = require("mongoose"),
     OTP = mongoose.model("otp"),
     bcrypt = require("bcryptjs"),
     createJWT = require(`../../../utils/createJWT`),
-    generateOTP = require(`../../../utils/generateOTP`)
+    { generateOTP } = require(`../../../utils/generateOTP`)
 ObjectId = require("mongodb").ObjectID;
 
 const { EmailOTPVerification } = require(`../../../resources/sendEmailFunction`);
@@ -26,10 +26,6 @@ module.exports = {
             phone_number,
             device_token,
             device_type,
-            device_name,
-            device_model,
-            device_version
-
         } = req.body;
 
         console.log(req.body)
@@ -176,12 +172,13 @@ module.exports = {
                         });
 
                         OTP.create({
-                            code: `123`,
+                            code: generateOTP(6),
                             user: result._id,
                             for: 1
 
                         }).then((data) => {
                             console.log(data)
+                            EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name, data.code)
                         })
 
                         // MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name)
@@ -195,6 +192,10 @@ module.exports = {
     },
     // Standard login.
     login_with_email: async function (req, res) {
+        console.log(`hjsdaghd`)
+        try{
+
+        
 
         var userData = req.body;
         if (!userData.email) return res.json({ message: "please provide a email" });
@@ -246,7 +247,7 @@ module.exports = {
                 delete data["password"]
 
                 if (!is_active) {
-                    if (email_address) {
+                    if (!phone_number) {
 
                         res.json({
                             status: 204,
@@ -265,7 +266,6 @@ module.exports = {
                     }
                 } else {
 
-
                     res.json({
                         status: 200,
                         data: data,
@@ -281,7 +281,6 @@ module.exports = {
                 res.json({
                     status: 401,
                     message: `Incorrect password`,
-                    Title: `Incorrect password`,
                 });
             }
         } else {
@@ -290,6 +289,9 @@ module.exports = {
                 message: `email not registered`,
             });
         }
+    }catch(err){
+        console.log(err)
+    }
     },
 
     verifiy_otps: async function (req, res, next) {
