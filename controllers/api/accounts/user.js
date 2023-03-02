@@ -240,7 +240,7 @@ module.exports = {
                 const data = {
                     ...checkUserDetail[0].userInfo,
                     phone_number: checkUserDetail[0]?.userInfo?.mobile_number?.phone_number || null,
-                    country_code: checkUserDetail[0]?.userInfo?.mobile_number?.phone_number ?  checkUserDetail[0]?.userInfo?.mobile_number?.country_code : null,
+                    country_code:  checkUserDetail[0]?.userInfo?.mobile_number?.country_code || null,
                     is_active: checkUserDetail[0]?.userInfo?.is_active
                 }
 
