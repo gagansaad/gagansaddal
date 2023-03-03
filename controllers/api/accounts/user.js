@@ -322,6 +322,7 @@ module.exports = {
 
     verifiy_otps: async function (req, res, next) {
 
+      
         const {
             otp_for_email,
             otp_for_mobile_number,
@@ -372,6 +373,35 @@ module.exports = {
                     }
 
                     else if (invalidOTP === 3) {
+
+                        User.update({ _id: req.userId }, {
+                            $set: {
+                                "userInfo.is_active": true,
+                            },
+                        }).then((data) => {
+
+                            if (data) {
+                                return res.json({
+                                    status: 206,
+                                    invalidOTP,
+                                    message: `success`
+                                })
+                            } else {
+                                return res.json({
+                                    status: 400,
+                                    invalidOTP,
+                                    message: `fail`
+                                })
+                            }
+
+                        }).catch((err) => {
+                            return res.json({
+                                status: 400,
+                                invalidOTP,
+                                message: `fail`
+                            })
+                        })
+                        
                         return res.json({
                             status: 206,
                             invalidOTP,
