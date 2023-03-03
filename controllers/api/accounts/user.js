@@ -491,7 +491,14 @@ module.exports = {
         if (!newPassword) {
             return res.json({
                 status: 400,
-                message: `fail`
+                message: `please provide password`
+            })
+        }
+
+        if (!userId) {
+            return res.json({
+                status: 400,
+                message: `user not found`
             })
         }
 
@@ -512,11 +519,12 @@ module.exports = {
             } else {
                 return res.json({
                     status: 400,
-                    message: `fail`
+                    message: `Something went wrong`
                 })
             }
            
         }).catch((err)=>{
+            console.log(err)
             return res.json({
                 status: 400,
                 message: `fail`
