@@ -313,13 +313,11 @@ module.exports = {
         const {
             otp_for_email,
             otp_for_mobile_number,
-            userId
         } = req.body;
 
         if (otp_for_mobile_number) {
 
-            OTP.find({
-                user: userId,
+            OTP.findOne({
                 code: otp_for_email
             }).then((foundEmailOTP) => {
 
@@ -329,33 +327,32 @@ module.exports = {
                     invalidOTP = 1
                 }
 
-                OTP.find({
-                    user: userId,
-                    code: otp_for_email
+                OTP.findOne({
+                    code: otp_for_mobile_number
                 }).then((foundMobileOTP) => {
 
                     if (!foundMobileOTP) {
                         invalidOTP = 2
                     }
 
-                    if (!(foundEmailOTP && foundMobileOTP)) {
+                    if (!foundEmailOTP && !foundMobileOTP) {
                         invalidOTP = 3
                     }
 
                     if (invalidOTP === 0) {
-                        res.json({
+                        return res.json({
                             status: 200,
                             invalidOTP,
                             message: `success`
                         })
                     } else if (invalidOTP === 1) {
-                        res.json({
+                        return res.json({
                             status: 204,
                             invalidOTP,
                             message: `success`
                         })
                     } else if (invalidOTP === 2) {
-                        res.json({
+                        return res.json({
                             status: 205,
                             invalidOTP,
                             message: `success`
@@ -363,7 +360,7 @@ module.exports = {
                     }
 
                     else if (invalidOTP === 3) {
-                        res.json({
+                        return res.json({
                             status: 206,
                             invalidOTP,
                             message: `success`
@@ -375,14 +372,33 @@ module.exports = {
             })
 
         } else {
-            OTP.find({
-                user: userId,
+
+            OTP.findOne({
                 code: otp_for_email
             }).then((foundOTP) => {
+
+                console.log(`working2`)
+                console.log(foundOTP)
+
+                if (foundOTP){
+                    return res.json({
+                        status: 200,
+                        invalidOTP: 0,
+                        message: `success`
+                    })
+                } else {
+                   return  res.json({
+                        status: 400,
+                        invalidOTP: null,
+                        message: `fail`
+                    })
+                }
+
+            }).catch((err)=>{
                 res.json({
-                    status: 200,
-                    invalidOTP: 0,
-                    message: `success`
+                    status: 400,
+                    invalidOTP: null,
+                    message: `fail`
                 })
             })
         }
@@ -395,23 +411,35 @@ module.exports = {
 
         if (!email_address) return res.json({ status: 400, message: `Email not exist` });
 
-        User.find({ 'userInfo.email_address': email_address })
+        User.findOne({ 'userInfo.email_address': email_address })
             .then((foundUser) => {
 
                 if (foundUser) {
-                    res.json({
+                   
+                        OTP.create({
+                            code: generateOTP(6),
+                            user: foundUser._id,
+                            for: 1
+
+                        }).then((data) => {
+                            EmailOTPVerification(email_address, foundUser?.userInfo?.name, data.code)
+                        })
+                    
+
+
+                    return res.json({
                         status: 200,
                         message: `success`
                     })
                 } else {
-                    res.json({
+                    return res.json({
                         status: 400,
-                        message: `fail`
+                        message: `Email Not Exists`
                     })
                 }
 
             }).catch((err) => {
-                res.json({
+                return res.json({
                     status: 400,
                     message: `fail`
                 })
@@ -421,33 +449,33 @@ module.exports = {
     verify_forget_password_otp: async function (req, res, next) {
         const {
             otp
-        } = req.body
+        } = req.body;
 
-        if (otp) {
+        if (!otp) {
             return res.json({
                 status: 400,
-                message: `success`
+                message: `fail`
             })
         }
 
-        OTP.find({
+        OTP.findOne({
             code: otp
         }).then((foundOTP) => {
 
             if (foundOTP) {
-                res.json({
+                return res.json({
                     status: 200,
                     message: `success`
                 })
             } else {
-                res.json({
+                return res.json({
                     status: 400,
                     message: `success`
                 })
             }
 
         }).catch((err) => {
-            res.json({
+             return res.json({
                 status: 400,
                 message: `success`
             })
