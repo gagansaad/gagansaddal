@@ -470,14 +470,14 @@ module.exports = {
             } else {
                 return res.json({
                     status: 400,
-                    message: `success`
+                    message: `fail`
                 })
             }
 
         }).catch((err) => {
              return res.json({
                 status: 400,
-                message: `success`
+                message: `fail`
             })
         })
     },
@@ -491,7 +491,7 @@ module.exports = {
         if (!newPassword) {
             return res.json({
                 status: 400,
-                message: `success`
+                message: `fail`
             })
         }
 
@@ -512,14 +512,14 @@ module.exports = {
             } else {
                 return res.json({
                     status: 400,
-                    message: `success`
+                    message: `fail`
                 })
             }
            
         }).catch((err)=>{
             return res.json({
                 status: 400,
-                message: `success`
+                message: `fail`
             })
         })
 
