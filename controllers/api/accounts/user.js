@@ -188,6 +188,18 @@ module.exports = {
                                    console.log(data)
                                    MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name, data.code)
                                })
+
+                               OTP.create({
+                                   code: generateOTP(6),
+                                   user: result._id,
+                                   for: 1
+
+                               }).then((data) => {
+                                   console.log(data)
+                                   EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name, data.code)
+                               })
+
+
                            }
 
 
@@ -465,6 +477,7 @@ module.exports = {
             if (foundOTP) {
                 return res.json({
                     status: 200,
+                    userId: foundOTP.userId,
                     message: `success`
                 })
             } else {
