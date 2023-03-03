@@ -16,7 +16,7 @@ exports.MobileNumberVerificationOTP = (mobile_number = NaN, name = ``, code) => 
                 .create({
                     body: `Your OTP Verification Code is: ${code}`,
                     from: smsNo,
-                    to: mobile_number
+                    to: '+91'+mobile_number
                 })
                 .then(message => console.log(message.sid));
             // const otpResponse = await client.verify.services(seriveSid)
