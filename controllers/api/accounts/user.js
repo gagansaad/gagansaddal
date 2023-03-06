@@ -382,13 +382,13 @@ module.exports = {
                         })
                     } else if (invalidOTP === 1) {
                         return res.json({
-                            status: 204,
+                            status: 200,
                             invalidOTP,
                             message: `success`
                         })
                     } else if (invalidOTP === 2) {
                         return res.json({
-                            status: 205,
+                            status: 200,
                             invalidOTP,
                             message: `success`
                         })
@@ -398,7 +398,7 @@ module.exports = {
 
                     
                         return res.json({
-                            status: 206,
+                            status: 200,
                             invalidOTP,
                             message: `success`
                         })
