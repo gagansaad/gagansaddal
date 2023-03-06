@@ -37,7 +37,7 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.get('/', (req,res)=>{
     res.json({message: `msbdhsmb`})
 });
-// app.use('/v1/api/', signUp);
+app.use('/v1/api/', signUp);
 
 
 // logging http activity
