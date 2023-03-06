@@ -180,33 +180,33 @@ module.exports = {
                             });
 
 
-                            // if (result?.userInfo?.mobile_number?.phone_number) {
-                            //     OTP.create({
-                            //         code: generateOTP(4),
-                            //         user: result._id,
-                            //         for: 1
+                            if (result?.userInfo?.mobile_number?.phone_number) {
+                                OTP.create({
+                                    code: generateOTP(4),
+                                    user: result._id,
+                                    for: 1
 
-                            //     }).then((data) => {
-                            //         console.log(data)
-                            //         MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name, data.code)
-                            //     })
+                                }).then((data) => {
+                                    console.log(data)
+                                    MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name, data.code)
+                                })
 
 
                             
-                            // }
+                            }
 
-                            // if (result?.userInfo?.email_address) {
-                            //     OTP.create({
-                            //         code: generateOTP(4),
-                            //         user: result._id,
-                            //         for: 2
+                            if (result?.userInfo?.email_address) {
+                                OTP.create({
+                                    code: generateOTP(4),
+                                    user: result._id,
+                                    for: 2
 
-                            //     }).then((data) => {
-                            //         console.log(data)
-                            //         EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name, data.code)
-                            //     })
+                                }).then((data) => {
+                                    console.log(data)
+                                    EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name, data.code)
+                                })
 
-                            // }
+                            }
 
                            
 
@@ -496,7 +496,7 @@ module.exports = {
                         for: 1
 
                     }).then((data) => {
-                        // EmailOTPVerification(email_address, foundUser?.userInfo?.name, data.code)
+                        EmailOTPVerification(email_address, foundUser?.userInfo?.name, data.code)
                     })
 
 
