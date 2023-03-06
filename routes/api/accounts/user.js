@@ -47,9 +47,10 @@ router.post(`/verify-forget-password-otp`, controllers.verify_forget_password_ot
 
 router.post(`/update-password`, controllers.update_password);
 
-// router.post(`/update-profile`, 
-// upload.single("picture"),
-//  controllers.update_profile
-//  );
+router.patch(`/update-profile`,
+    authMiddleware.ensureUserLoggedIn,
+    upload.single("picture"),
+    controllers.update_profile
+);
 
 module.exports = router;
