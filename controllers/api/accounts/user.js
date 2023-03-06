@@ -180,7 +180,7 @@ module.exports = {
 
                            if (result?.userInfo?.mobile_number?.phone_number) {
                                OTP.create({
-                                   code: generateOTP(6),
+                                   code: generateOTP(4),
                                    user: result._id,
                                    for: 1
 
@@ -190,7 +190,7 @@ module.exports = {
                                })
 
                                OTP.create({
-                                   code: generateOTP(6),
+                                   code: generateOTP(4),
                                    user: result._id,
                                    for: 1
 
@@ -322,8 +322,6 @@ module.exports = {
 
     verifiy_otps: async function (req, res, next) {
 
-        console.log(req.userId)
-      
         const {
             otp_for_email,
             otp_for_mobile_number,
@@ -354,11 +352,7 @@ module.exports = {
                     }
 
                     if (invalidOTP === 0) {
-                        // return res.json({
-                        //     status: 200,
-                        //     invalidOTP,
-                        //     message: `success`
-                        // })
+        
                         User.update({ _id: req.userId }, {
                             $set: {
                                 "userInfo.is_active": true,
@@ -474,17 +468,20 @@ module.exports = {
 
 
     forget_password: async function (req, res, next) {
+        console.log(req.body)
         const email_address = req?.body?.email_address;
 
         if (!email_address) return res.json({ status: 400, message: `Email not exist` });
 
-        User.findOne({ 'userInfo.email_address': email_address })
+        User.findOne({ 
+            'userInfo.email_address': email_address,
+         })
             .then((foundUser) => {
 
                 if (foundUser) {
                    
                         OTP.create({
-                            code: generateOTP(6),
+                            code: generateOTP(4),
                             user: foundUser._id,
                             for: 1
 
@@ -496,6 +493,7 @@ module.exports = {
 
                     return res.json({
                         status: 200,
+                        userId: foundUser.userId,
                         message: `success`
                     })
                 } else {
