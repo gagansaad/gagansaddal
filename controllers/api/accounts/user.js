@@ -6,7 +6,7 @@ const mongoose = require("mongoose"),
     createJWT = require(`../../../utils/createJWT`),
     { generateOTP } = require(`../../../utils/generateOTP`),
 
-ObjectId = require("mongodb").ObjectID;
+    ObjectId = require("mongodb").ObjectID;
 
 const { EmailOTPVerification } = require(`../../../resources/sendEmailFunction`);
 const { MobileNumberVerificationOTP } = require(`../../../resources/sendOTPFunction`);
@@ -191,18 +191,18 @@ module.exports = {
                                     MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name, data.code)
                                 })
 
-                                OTP.create({
-                                    code: generateOTP(4),
-                                    user: result._id,
-                                    for: 2
-
-                                }).then((data) => {
-                                    console.log(data)
-                                    EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name, data.code)
-                                })
-
-
+                            
                             }
+
+                            OTP.create({
+                                code: generateOTP(4),
+                                user: result._id,
+                                for: 2
+
+                            }).then((data) => {
+                                console.log(data)
+                                EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name, data.code)
+                            })
 
 
                             // MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name)
@@ -572,7 +572,7 @@ module.exports = {
             })
         }
 
-        if (email_address && !isValidEmailAddress(email_address)){
+        if (email_address && !isValidEmailAddress(email_address)) {
             return res.json({
                 status: 400,
                 message: `please provide email address`
@@ -622,95 +622,79 @@ module.exports = {
     },
 
 
-    updateProfile: async function (req, res) {
+    update_profile: async function (req, res) {
+        console.log(req.file)
+        console.log(req.body)
+        return res.json({ picture: req.file.path });
+        // try {
 
-        try {
-    
-                const {
-                    name,
-                    email_address,
-                    mobile_number,
-                    date_of_birth,
-                    gender
-                } = req.body;
-
-
-                if (name && !isValidString(name)) return sendFailureJSONResponse(res, { message: `Invalid Name` });
-                if (date_of_birth && !isValidDate(date_of_birth)) return sendFailureJSONResponse(res, { message: `Invalid Date Of Birth` });
-                if (email_address && !isValidEmailAddress(email_address)) return sendFailureJSONResponse(res, { message: `Invalid Email Address` });
-                if (mobile_number && !isValidIndianMobileNumber(location)) return sendFailureJSONResponse(res, { message: `Invalid Mobile Number` });
-                if (gender && isNaN(Number(gender))) return sendFailureJSONResponse(res, { message: `Invalid Gender` });
-
-        
-            //     const profileDataObj = {};
-
-            //     if (firstName) profileDataObj.userInfo = {
-            //         firstName
-            //     };
-
-            //     if (lastName) profileDataObj.userInfo = {
-            //         ...profileDataObj.userInfo,
-            //         lastName: lastName
-            //     };
-
-            //     if (department) profileDataObj.userBasicInfo = {
-            //         ...profileDataObj.userBasicInfo,
-            //         department
-            //     }
-
-            //     if (location) profileDataObj.userBasicInfo = {
-            //         ...profileDataObj.userBasicInfo,
-            //         address: location
-            //     }
-
-            //     if (position) profileDataObj.userBasicInfo = {
-            //         ...profileDataObj.userBasicInfo,
-            //         position
-            //     }
-
-            //     if (corporatePhoneNumber) profileDataObj.userBasicInfo = {
-            //         ...profileDataObj.userBasicInfo,
-            //         corporatePhoneNumber: Number(corporatePhoneNumber)
-            //     }
+        //     const {
+        //         name,
+        //         email_address,
+        //         mobile_number,
+        //         date_of_birth,
+        //         gender
+        //     } = req.body;
 
 
-            //     if (linkedInProfile) profileDataObj.userBasicInfo = {
-            //         ...profileDataObj.userBasicInfo,
-            //         linkedInProfile
-            //     }
-
-            //     if (workingDays) profileDataObj.userBasicInfo = {
-            //         ...profileDataObj.userBasicInfo,
-            //         workingDays: Number(workingDays)
-            //     }
-            //     if (signature) profileDataObj.userBasicInfo = {
-            //         ...profileDataObj.userBasicInfo,
-            //         signature: signature
-            //     }
-
-            //     if (req.file) {
-            //         profileDataObj.userBasicInfo = {
-            //             ...profileDataObj.userBasicInfo,
-            //             profilePicture: `/uploads/${req?.file?.filename}`
-            //         }
-            //     }
-
-            //     var updatedProfileRes = await User.updateOne({ _id: userId }, { $set: profileDataObj });
-
-            //     if (updatedProfileRes) {
-            //         return sendSuccessJSONResponse(res, {
-            //             message: alertMessages.success,
-            //             updatedProfileData: updatedProfileRes
-            //         });
-            //     } else {
-            //         return sendFailureJSONResponse(res, { message: alertMessages.somethingWrong });
-            //     }
+        //     if (name && !isValidString(name)) return sendFailureJSONResponse(res, { message: `Invalid Name` });
+        //     if (date_of_birth && !isValidDate(date_of_birth)) return sendFailureJSONResponse(res, { message: `Invalid Date Of Birth` });
+        //     if (email_address && !isValidEmailAddress(email_address)) return sendFailureJSONResponse(res, { message: `Invalid Email Address` });
+        //     if (mobile_number && !isValidIndianMobileNumber(location)) return sendFailureJSONResponse(res, { message: `Invalid Mobile Number` });
+        //     if (gender && isNaN(Number(gender))) return sendFailureJSONResponse(res, { message: `Invalid Gender` });
 
 
-        } catch (err) {
-            console.log(err)
-            return sendFailureJSONResponse(res, { message: alertMessages.somethingWrong });
-        }
+        //     const profileDataObj = {};
+
+
+        //     if (name) profileDataObj.userInfo = {
+        //         name
+        //     };
+
+        //     if (date_of_birth) profileDataObj.userInfo = {
+        //         ...profileDataObj.userInfo,
+        //         date_of_birth: date_of_birth
+        //     };
+
+        //     if (email_address) profileDataObj.userInfo = {
+        //         ...profileDataObj.userInfo,
+        //         email_address
+        //     }
+
+        //     if (mobile_number) profileDataObj.userInfo = {
+        //         ...profileDataObj.userInfo,
+        //         mobile_number:{
+        //             phone_number
+        //         } 
+        //     }
+
+        //     if (gender) profileDataObj.userBasicInfo = {
+        //         ...profileDataObj.userInfo,
+        //         gender
+        //     }
+
+        //     if (req.file) {
+        //         profileDataObj.userBasicInfo = {
+        //             ...profileDataObj.userBasicInfo,
+        //             profilePicture: `/uploads/${req?.file?.filename}`
+        //         }
+        //     }
+
+        //     var updatedProfileRes = await User.updateOne({ _id: userId }, { $set: profileDataObj });
+
+        //     if (updatedProfileRes) {
+        //         return sendSuccessJSONResponse(res, {
+        //             message: `success`,
+        //             updatedProfileData: updatedProfileRes
+        //         });
+        //     } else {
+        //         return sendFailureJSONResponse(res, { message: alertMessages.somethingWrong });
+        //     }
+
+
+        // } catch (err) {
+        //     return sendFailureJSONResponse(res, { message: alertMessages.somethingWrong });
+        // }
 
     },
 

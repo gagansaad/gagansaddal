@@ -53,6 +53,7 @@ const userSchema = new mongoose.Schema({
 
     userBasicInfo: {
         source: { type: String, possibleValues: ['Facebook', 'Instagram', 'Email', 'Apple'] },
+        profile_image: { type: String },
     },
 
     user_device_info: [{
