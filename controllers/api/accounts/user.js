@@ -4,13 +4,15 @@ const mongoose = require("mongoose"),
     OTP = mongoose.model("otp"),
     bcrypt = require("bcryptjs"),
     createJWT = require(`../../../utils/createJWT`),
-    { generateOTP } = require(`../../../utils/generateOTP`)
+    { generateOTP } = require(`../../../utils/generateOTP`),
+
 ObjectId = require("mongodb").ObjectID;
 
 const { EmailOTPVerification } = require(`../../../resources/sendEmailFunction`);
 const { MobileNumberVerificationOTP } = require(`../../../resources/sendOTPFunction`);
 const {
     isValidString,
+    isValidDate,
     isValidEmailAddress,
     isValidIndianMobileNumber
 } = require(`../../../utils/validators`);
@@ -554,7 +556,7 @@ module.exports = {
     update_password: async function (req, res, next) {
         let newPassword = req.body.newPassword;
 
-        const userId = req.body.userId;
+        const email_address = req?.body?.email_address;
 
         if (!newPassword) {
             return res.json({
@@ -563,17 +565,17 @@ module.exports = {
             })
         }
 
-        if (!userId) {
+        if (!email_address) {
             return res.json({
                 status: 400,
-                message: `user not found`
+                message: `email address not found`
             })
         }
 
 
         newPassword = bcrypt.hashSync(newPassword, 8);
 
-        User.update({ _id: userId }, {
+        User.update({ "userInfo.email_address": email_address }, {
             $set: {
                 "userInfo.password": newPassword,
             },
@@ -626,26 +628,13 @@ module.exports = {
                 } = req.body;
 
 
-            //     console.log(`req.body`, req.body)
+                if (name && !isValidString(name)) return sendFailureJSONResponse(res, { message: `Invalid Name` });
+                if (date_of_birth && !isValidDate(date_of_birth)) return sendFailureJSONResponse(res, { message: `Invalid Date Of Birth` });
+                if (email_address && !isValidEmailAddress(email_address)) return sendFailureJSONResponse(res, { message: `Invalid Email Address` });
+                if (mobile_number && !isValidIndianMobileNumber(location)) return sendFailureJSONResponse(res, { message: `Invalid Mobile Number` });
+                if (gender && isNaN(Number(gender))) return sendFailureJSONResponse(res, { message: `Invalid Gender` });
 
-
-            //     if (firstName && !isValidString(firstName)) return sendFailureJSONResponse(res, { message: `Invalid First Name` });
-            //     if (lastName && !isValidString(lastName)) return sendFailureJSONResponse(res, { message: `Invalid Last Name` });
-            //     if (department && !isValidString(department)) return sendFailureJSONResponse(res, { message: `Invalid Department` });
-            //     if (location && !isValidString(location)) return sendFailureJSONResponse(res, { message: `Invalid Location` });
-            //     if (position && !isValidString(position)) return sendFailureJSONResponse(res, { message: `Invalid Position` });
-
-            //     if (corporatePhoneNumber && !isValidIndianMobileNumber(corporatePhoneNumber)) return sendFailureJSONResponse(res, { message: `Invalid Corporate Phone Number` });
-
-            //     if (workingDays && isNaN(Number(workingDays))) {
-            //         return sendFailureJSONResponse(res, { message: `Invalid Working Days` });
-            //     } else if (Number(workingDays) < 1 || Number(workingDays) > 7) {
-            //         return sendFailureJSONResponse(res, { message: `Week days must be between range of 1 to 7 days` });
-            //     }
-
-            //     if (linkedInProfile && !isValidString(linkedInProfile)) return sendFailureJSONResponse(res, { message: `Invalid LinkedIn Profile` });
-
-
+        
             //     const profileDataObj = {};
 
             //     if (firstName) profileDataObj.userInfo = {

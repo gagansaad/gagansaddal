@@ -1,4 +1,4 @@
-exports.sendSuccessJSONResponse = (res = null, data = null, httpStatusCode = null) => {
+exports.successJSONResponse = (res = null, data = null, httpStatusCode = null) => {
 
     if (res) {
         let httpStatusCodeToUse = 200;
@@ -11,7 +11,7 @@ exports.sendSuccessJSONResponse = (res = null, data = null, httpStatusCode = nul
     }
 }
 
-exports.sendFailureJSONResponse = (res = null, data = null, httpStatusCode = null) => {
+exports.failureJSONResponse = (res = null, data = null, httpStatusCode = null) => {
     if (res) {
         let httpStatusCodeToUse = 401;
         if (httpStatusCode && Number(httpStatusCode)) httpStatusCodeToUse = Number(httpStatusCode);
@@ -23,7 +23,7 @@ exports.sendFailureJSONResponse = (res = null, data = null, httpStatusCode = nul
     }
 }
 
-exports.sendErrorJSONResponse = (res = null, message = `Error occured on server`, errorCode = null, data = null, httpStatusCode = 500) => {
+exports.errorJSONResponse = (res = null, message = `Error occured on server`, errorCode = null, data = null, httpStatusCode = 500) => {
 
     const objToSend = {
         status: `error`,

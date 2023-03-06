@@ -18,3 +18,10 @@ exports.isValidIndianMobileNumber = (mobileNumber = null) => {
         && String(mobileNumber)
         && String(mobileNumber).match(commonRegex.indianMobileNumberRegex));
 }
+
+exports.isValidDate = (date=null) => {
+    const dateObj = new Date(date);
+
+    if(dateObj.getTime() - dateObj.getTime() === 0) return true;
+    else return false;
+}
