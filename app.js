@@ -33,6 +33,10 @@ loadExpressSession(app, expressSession, MongoStore);
 // body parser
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+app.get('/', (req,res)=>{
+    res.json({message: `msbdhsmb`})
+});
 app.use('/v1/api/', signUp);
 
 
