@@ -191,19 +191,24 @@ module.exports = {
                                     MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name, data.code)
                                 })
 
-                                
+
                             
                             }
 
-                            OTP.create({
-                                code: generateOTP(4),
-                                user: result._id,
-                                for: 2
+                            if (result?.userInfo?.email_address) {
+                                OTP.create({
+                                    code: generateOTP(4),
+                                    user: result._id,
+                                    for: 2
 
-                            }).then((data) => {
-                                console.log(data)
-                                EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name, data.code)
-                            })
+                                }).then((data) => {
+                                    console.log(data)
+                                    EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name, data.code)
+                                })
+
+                            }
+
+                           
 
 
                             // MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name)
