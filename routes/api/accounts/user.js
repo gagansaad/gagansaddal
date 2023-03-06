@@ -1,5 +1,5 @@
 const router = require(`express`).Router(),
-authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
+    authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
     controllers = require(`../../../controllers/api/accounts/user`);
 
 router.post(`/signup-with-email`,
@@ -14,7 +14,8 @@ router.get(`/country_code_lists`, controllers.country_code_lists);
 
 router.post(`/verify-otp`,
     authMiddleware.ensureUserLoggedIn,
-        controllers.verifiy_otps);
+    controllers.verifiy_otps
+);
 
 router.post(`/forget-password`, controllers.forget_password);
 router.post(`/verify-forget-password-otp`, controllers.verify_forget_password_otp);

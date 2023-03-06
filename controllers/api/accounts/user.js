@@ -19,201 +19,201 @@ module.exports = {
 
     validate_signup_data: async function (req, res, next) {
 
-      try {
-          const {
-              email,
-              password,
-              name,
-              phone_number,
-              device_token,
-              device_type,
-          } = req.body;
+        try {
+            const {
+                email,
+                password,
+                name,
+                phone_number,
+                device_token,
+                device_type,
+            } = req.body;
 
 
-          const missingData = [],
-              invalidData = [];
+            const missingData = [],
+                invalidData = [];
 
-          if (!isValidString(name)) missingData.push(`name`);
-          if (!isValidString(password)) missingData.push(`password`);
+            if (!isValidString(name)) missingData.push(`name`);
+            if (!isValidString(password)) missingData.push(`password`);
 
-          if (!isValidString(device_token)) missingData.push(`device token`);
-          if (!(device_type)) missingData.push(`device type`);
-          else if (isNaN(device_type)) invalidData.push(`device type`);
+            if (!isValidString(device_token)) missingData.push(`device token`);
+            if (!(device_type)) missingData.push(`device type`);
+            else if (isNaN(device_type)) invalidData.push(`device type`);
 
-          if (!isValidString(email)) missingData.push(`email address`);
-          else if (email && !isValidEmailAddress(email)) invalidData.push(`email address`);
+            if (!isValidString(email)) missingData.push(`email address`);
+            else if (email && !isValidEmailAddress(email)) invalidData.push(`email address`);
 
-          if (phone_number && !isValidIndianMobileNumber(phone_number)) invalidData.push(`phone number`);
+            if (phone_number && !isValidIndianMobileNumber(phone_number)) invalidData.push(`phone number`);
 
-          if (missingData.length || invalidData.length) {
-              const data = {};
+            if (missingData.length || invalidData.length) {
+                const data = {};
 
-              if (missingData.length) data.missing = missingData;
-              if (invalidData.length) data.invalid = invalidData;
+                if (missingData.length) data.missing = missingData;
+                if (invalidData.length) data.invalid = invalidData;
 
-              return res.json({
-                  status: 400,
-                  message: `Some data is missing/invalid`
-              });
-          } else {
-              return next();
-          }
-        
-      } catch (error) {
+                return res.json({
+                    status: 400,
+                    message: `Some data is missing/invalid`
+                });
+            } else {
+                return next();
+            }
+
+        } catch (error) {
             console.log(error)
-      }
+        }
 
     },
 
     // Standard signup with email.
     signup_with_email: async function (req, res) {
-       try{
-           var newUser = req.body;
-           newUser.email = newUser.email.toLowerCase();
+        try {
+            var newUser = req.body;
+            newUser.email = newUser.email.toLowerCase();
 
-           // Check If email is register with any user via other platforms like facebook,google or email.
+            // Check If email is register with any user via other platforms like facebook,google or email.
 
-           const checkUserEmail = await User.find(
-               { "userInfo.email_address": newUser.email },
-               { userBasicInfo: 1, userInfo: 1 }
-           );
+            const checkUserEmail = await User.find(
+                { "userInfo.email_address": newUser.email },
+                { userBasicInfo: 1, userInfo: 1 }
+            );
 
-           if (checkUserEmail.length) {
-               //If user has signedup from fb
-               if (
-                   checkUserEmail[0].userBasicInfo.source == "Facebook" ||
-                   checkUserEmail[0].userBasicInfo.source == "facebook"
-               ) {
-                   res.json({
-                       status: 400,
-                       message: `fail`,
+            if (checkUserEmail.length) {
+                //If user has signedup from fb
+                if (
+                    checkUserEmail[0].userBasicInfo.source == "Facebook" ||
+                    checkUserEmail[0].userBasicInfo.source == "facebook"
+                ) {
+                    res.json({
+                        status: 400,
+                        message: `fail`,
 
-                   });
-               }
-               //If user has signedup from google
-               else if (checkUserEmail[0].userBasicInfo.source == "GoogleEmail") {
-                   res.json({
-                       status: 400,
-                       message: `fail`,
+                    });
+                }
+                //If user has signedup from google
+                else if (checkUserEmail[0].userBasicInfo.source == "GoogleEmail") {
+                    res.json({
+                        status: 400,
+                        message: `fail`,
 
-                   });
-               }
-               //If user has signedup from Apple
-               else if (checkUserEmail[0].userBasicInfo.source == "Apple") {
-                   res.json({
-                       status: 400,
-                       message: `fail`,
-                   });
-               }
-               //If user has signedup from email
-               else if (
-                   checkUserEmail[0].userBasicInfo.source == "Email" ||
-                   checkUserEmail[0].userBasicInfo.source == "email"
-               ) {
-                   res.json({
-                       status: 400,
-                       message: `email aready exist`
-                   });
-               }
-           } else {
-               try {
+                    });
+                }
+                //If user has signedup from Apple
+                else if (checkUserEmail[0].userBasicInfo.source == "Apple") {
+                    res.json({
+                        status: 400,
+                        message: `fail`,
+                    });
+                }
+                //If user has signedup from email
+                else if (
+                    checkUserEmail[0].userBasicInfo.source == "Email" ||
+                    checkUserEmail[0].userBasicInfo.source == "email"
+                ) {
+                    res.json({
+                        status: 400,
+                        message: `email aready exist`
+                    });
+                }
+            } else {
+                try {
 
-                   var newUserDetail = {};
+                    var newUserDetail = {};
 
-                   newUser.password = bcrypt.hashSync(newUser.password, 8);
+                    newUser.password = bcrypt.hashSync(newUser.password, 8);
 
-                   newUserDetail.user_status = {
-                       user_action_Status: 1
-                   }
-
-
-                   newUserDetail.userStatus = {
-                       userStatus: "Login",
-                       appVersion: newUser.appVersion,
-                   };
-                   newUserDetail.userInfo = {
-                       name: newUser.name,
-                       is_active: false,
-                       password: newUser.password,
-                       email_address: newUser.email,
-                       mobile_number: {
-                           country_code: 91,
-                           phone_number: newUser.phone_number
-                       },
-                   };
-                   newUserDetail.user_device_info = {
-                       device_version: newUser.device_version,
-                       device_model: newUser.device_model,
-                       device_name: newUser.device_name,
-                       token: newUser.device_token,
-                       device_type: newUser.device_type,
-                   };
-                   newUserDetail.userBasicInfo = {
-                       source: "email",
-
-                   };
+                    newUserDetail.user_status = {
+                        user_action_Status: 1
+                    }
 
 
-                   User(newUserDetail).save(function (err, result) {
-                       if (err) {
-                           console.log(err)
-                           res.json({
-                               status: 400,
-                               message: `fail`,
-                           });
-                       } else {
+                    newUserDetail.userStatus = {
+                        userStatus: "Login",
+                        appVersion: newUser.appVersion,
+                    };
+                    newUserDetail.userInfo = {
+                        name: newUser.name,
+                        is_active: false,
+                        password: newUser.password,
+                        email_address: newUser.email,
+                        mobile_number: {
+                            country_code: 91,
+                            phone_number: newUser.phone_number
+                        },
+                    };
+                    newUserDetail.user_device_info = {
+                        device_version: newUser.device_version,
+                        device_model: newUser.device_model,
+                        device_name: newUser.device_name,
+                        token: newUser.device_token,
+                        device_type: newUser.device_type,
+                    };
+                    newUserDetail.userBasicInfo = {
+                        source: "email",
+
+                    };
 
 
-                           res.json({
-                               status: 201,
-                               data: {
-                                   userId: result._id,
-                                   name: result.userInfo.name || null,
-                                   email_address: result?.userInfo?.email_address || null,
-                                   phone_number: result?.userInfo?.mobile_number?.phone_number || null,
-                                   is_active: result.userInfo.is_active
-                               },
-                               message: `User register successfully`,
-                               token: createJWT(result._id),
-                           });
+                    User(newUserDetail).save(function (err, result) {
+                        if (err) {
+                            console.log(err)
+                            res.json({
+                                status: 400,
+                                message: `fail`,
+                            });
+                        } else {
 
 
-                           if (result?.userInfo?.mobile_number?.phone_number) {
-                               OTP.create({
-                                   code: generateOTP(4),
-                                   user: result._id,
-                                   for: 1
-
-                               }).then((data) => {
-                                   console.log(data)
-                                   MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name, data.code)
-                               })
-
-                               OTP.create({
-                                   code: generateOTP(4),
-                                   user: result._id,
-                                   for: 1
-
-                               }).then((data) => {
-                                   console.log(data)
-                                   EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name, data.code)
-                               })
+                            res.json({
+                                status: 201,
+                                data: {
+                                    userId: result._id,
+                                    name: result.userInfo.name || null,
+                                    email_address: result?.userInfo?.email_address || null,
+                                    phone_number: result?.userInfo?.mobile_number?.phone_number || null,
+                                    is_active: result.userInfo.is_active
+                                },
+                                message: `User register successfully`,
+                                token: createJWT(result._id),
+                            });
 
 
-                           }
+                            if (result?.userInfo?.mobile_number?.phone_number) {
+                                OTP.create({
+                                    code: generateOTP(4),
+                                    user: result._id,
+                                    for: 1
+
+                                }).then((data) => {
+                                    console.log(data)
+                                    MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name, data.code)
+                                })
+
+                                OTP.create({
+                                    code: generateOTP(4),
+                                    user: result._id,
+                                    for: 2
+
+                                }).then((data) => {
+                                    console.log(data)
+                                    EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name, data.code)
+                                })
 
 
-                           // MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name)
-                           // EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name)
-                       }
-                   });
-               } catch (err) {
-                   console.log(err);
-               }
-           }
-       } catch(err){
-        console.log(err);
-       }
+                            }
+
+
+                            // MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name)
+                            // EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name)
+                        }
+                    });
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+        } catch (err) {
+            console.log(err);
+        }
     },
     // Standard login.
     login_with_email: async function (req, res) {
@@ -330,7 +330,8 @@ module.exports = {
         if (otp_for_mobile_number) {
 
             OTP.findOne({
-                code: otp_for_email
+                code: otp_for_email,
+                for: 2
             }).then((foundEmailOTP) => {
 
                 let invalidOTP = 0
@@ -340,7 +341,8 @@ module.exports = {
                 }
 
                 OTP.findOne({
-                    code: otp_for_mobile_number
+                    code: otp_for_mobile_number,
+                    for: 1
                 }).then((foundMobileOTP) => {
 
                     if (!foundMobileOTP) {
@@ -352,7 +354,7 @@ module.exports = {
                     }
 
                     if (invalidOTP === 0) {
-        
+
                         User.update({ _id: req.userId }, {
                             $set: {
                                 "userInfo.is_active": true,
@@ -396,7 +398,7 @@ module.exports = {
 
                     else if (invalidOTP === 3) {
 
-                    
+
                         return res.json({
                             status: 200,
                             invalidOTP,
@@ -417,7 +419,7 @@ module.exports = {
                 console.log(`working2`)
                 console.log(foundOTP)
 
-                if (foundOTP){
+                if (foundOTP) {
 
                     User.update({ _id: req.userId }, {
                         $set: {
@@ -446,16 +448,16 @@ module.exports = {
                             message: `fail`
                         })
                     })
-               
+
                 } else {
-                   return  res.json({
+                    return res.json({
                         status: 400,
                         invalidOTP: null,
                         message: `fail`
                     })
                 }
 
-            }).catch((err)=>{
+            }).catch((err) => {
                 res.json({
                     status: 400,
                     invalidOTP: null,
@@ -473,22 +475,22 @@ module.exports = {
 
         if (!email_address) return res.json({ status: 400, message: `Email not exist` });
 
-        User.findOne({ 
+        User.findOne({
             'userInfo.email_address': email_address,
-         })
+        })
             .then((foundUser) => {
 
                 if (foundUser) {
-                   
-                        OTP.create({
-                            code: generateOTP(4),
-                            user: foundUser._id,
-                            for: 1
 
-                        }).then((data) => {
-                            EmailOTPVerification(email_address, foundUser?.userInfo?.name, data.code)
-                        })
-                    
+                    OTP.create({
+                        code: generateOTP(4),
+                        user: foundUser._id,
+                        for: 1
+
+                    }).then((data) => {
+                        EmailOTPVerification(email_address, foundUser?.userInfo?.name, data.code)
+                    })
+
 
 
                     return res.json({
@@ -519,7 +521,7 @@ module.exports = {
         if (!otp) {
             return res.json({
                 status: 400,
-                message: `fail`
+                message: `Please enter valid otp`
             })
         }
 
@@ -536,21 +538,21 @@ module.exports = {
             } else {
                 return res.json({
                     status: 400,
-                    message: `fail`
+                    message: `Please enter valid otp`
                 })
             }
 
         }).catch((err) => {
-             return res.json({
+            return res.json({
                 status: 400,
-                message: `fail`
+                message: `Please enter valid otp`
             })
         })
     },
 
 
     update_password: async function (req, res, next) {
-        let  newPassword = req.body.newPassword;
+        let newPassword = req.body.newPassword;
 
         const userId = req.body.userId;
 
@@ -568,16 +570,16 @@ module.exports = {
             })
         }
 
- 
+
         newPassword = bcrypt.hashSync(newPassword, 8);
 
         User.update({ _id: userId }, {
             $set: {
                 "userInfo.password": newPassword,
             },
-        }).then((data)=>{
+        }).then((data) => {
 
-            if(data){
+            if (data) {
                 return res.json({
                     status: 200,
                     message: `success`
@@ -588,8 +590,8 @@ module.exports = {
                     message: `Something went wrong`
                 })
             }
-           
-        }).catch((err)=>{
+
+        }).catch((err) => {
             console.log(err)
             return res.json({
                 status: 400,
@@ -608,7 +610,114 @@ module.exports = {
         res.json({
             data: country_code_list
         })
-    }
+    },
+
+
+    updateProfile: async function (req, res) {
+
+        try {
+    
+                const {
+                    name,
+                    email_address,
+                    mobile_number,
+                    date_of_birth,
+                    gender
+                } = req.body;
+
+
+            //     console.log(`req.body`, req.body)
+
+
+            //     if (firstName && !isValidString(firstName)) return sendFailureJSONResponse(res, { message: `Invalid First Name` });
+            //     if (lastName && !isValidString(lastName)) return sendFailureJSONResponse(res, { message: `Invalid Last Name` });
+            //     if (department && !isValidString(department)) return sendFailureJSONResponse(res, { message: `Invalid Department` });
+            //     if (location && !isValidString(location)) return sendFailureJSONResponse(res, { message: `Invalid Location` });
+            //     if (position && !isValidString(position)) return sendFailureJSONResponse(res, { message: `Invalid Position` });
+
+            //     if (corporatePhoneNumber && !isValidIndianMobileNumber(corporatePhoneNumber)) return sendFailureJSONResponse(res, { message: `Invalid Corporate Phone Number` });
+
+            //     if (workingDays && isNaN(Number(workingDays))) {
+            //         return sendFailureJSONResponse(res, { message: `Invalid Working Days` });
+            //     } else if (Number(workingDays) < 1 || Number(workingDays) > 7) {
+            //         return sendFailureJSONResponse(res, { message: `Week days must be between range of 1 to 7 days` });
+            //     }
+
+            //     if (linkedInProfile && !isValidString(linkedInProfile)) return sendFailureJSONResponse(res, { message: `Invalid LinkedIn Profile` });
+
+
+            //     const profileDataObj = {};
+
+            //     if (firstName) profileDataObj.userInfo = {
+            //         firstName
+            //     };
+
+            //     if (lastName) profileDataObj.userInfo = {
+            //         ...profileDataObj.userInfo,
+            //         lastName: lastName
+            //     };
+
+            //     if (department) profileDataObj.userBasicInfo = {
+            //         ...profileDataObj.userBasicInfo,
+            //         department
+            //     }
+
+            //     if (location) profileDataObj.userBasicInfo = {
+            //         ...profileDataObj.userBasicInfo,
+            //         address: location
+            //     }
+
+            //     if (position) profileDataObj.userBasicInfo = {
+            //         ...profileDataObj.userBasicInfo,
+            //         position
+            //     }
+
+            //     if (corporatePhoneNumber) profileDataObj.userBasicInfo = {
+            //         ...profileDataObj.userBasicInfo,
+            //         corporatePhoneNumber: Number(corporatePhoneNumber)
+            //     }
+
+
+            //     if (linkedInProfile) profileDataObj.userBasicInfo = {
+            //         ...profileDataObj.userBasicInfo,
+            //         linkedInProfile
+            //     }
+
+            //     if (workingDays) profileDataObj.userBasicInfo = {
+            //         ...profileDataObj.userBasicInfo,
+            //         workingDays: Number(workingDays)
+            //     }
+            //     if (signature) profileDataObj.userBasicInfo = {
+            //         ...profileDataObj.userBasicInfo,
+            //         signature: signature
+            //     }
+
+            //     if (req.file) {
+            //         profileDataObj.userBasicInfo = {
+            //             ...profileDataObj.userBasicInfo,
+            //             profilePicture: `/uploads/${req?.file?.filename}`
+            //         }
+            //     }
+
+            //     var updatedProfileRes = await User.updateOne({ _id: userId }, { $set: profileDataObj });
+
+            //     if (updatedProfileRes) {
+            //         return sendSuccessJSONResponse(res, {
+            //             message: alertMessages.success,
+            //             updatedProfileData: updatedProfileRes
+            //         });
+            //     } else {
+            //         return sendFailureJSONResponse(res, { message: alertMessages.somethingWrong });
+            //     }
+
+
+        } catch (err) {
+            console.log(err)
+            return sendFailureJSONResponse(res, { message: alertMessages.somethingWrong });
+        }
+
+    },
+
 
 },
 
