@@ -572,7 +572,7 @@ module.exports = {
             })
         }
 
-        if (email_address && isValidEmailAddress(email_address)){
+        if (email_address && !isValidEmailAddress(email_address)){
             return res.json({
                 status: 400,
                 message: `please provide email address`
