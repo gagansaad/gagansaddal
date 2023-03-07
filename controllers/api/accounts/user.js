@@ -230,6 +230,7 @@ module.exports = {
         try {
 
 
+            console.log(`req.body`, req.body)
 
             var userData = req.body;
             if (!userData.email) return res.json({ message: "please provide a email" });
@@ -719,7 +720,7 @@ module.exports = {
 
 
 
-                            var updatedProfileRes = await User.update({ _id: userId }, { $set: profileDataObj });
+                            var updatedProfileRes = await User.updateOne({ _id: userId }, { $set: profileDataObj });
 
                             if (updatedProfileRes) {
                                 return successJSONResponse(res, {
@@ -743,6 +744,16 @@ module.exports = {
       
 
     },
+
+
+    // change email address 
+
+    generate_otp_to_chnage_email: async function (req, res) {
+        const userId = req.userId;
+
+        
+    }
+
 
 
 },
