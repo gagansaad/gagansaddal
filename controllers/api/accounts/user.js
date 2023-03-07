@@ -192,8 +192,6 @@ module.exports = {
                                     MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name, data.code)
                                 })
 
-
-
                             }
 
                             if (result?.userInfo?.email_address) {
@@ -209,19 +207,22 @@ module.exports = {
 
                             }
 
-
-
-
-                            // MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name)
-                            // EmailOTPVerification(result?.userInfo?.email_address, result?.userInfo?.name)
                         }
                     });
                 } catch (err) {
-                    console.log(err);
+                    res.json({
+                        status: 400,
+                        invalidOTP: null,
+                        message: `fail`
+                    })
                 }
             }
         } catch (err) {
-            console.log(err);
+            res.json({
+                status: 400,
+                invalidOTP: null,
+                message: `fail`
+            })
         }
     },
     // Standard login.
@@ -230,7 +231,7 @@ module.exports = {
         try {
 
 
-            console.log(`req.body`, req.body)
+            // console.log(`req.body`, req.body)
 
             var userData = req.body;
             if (!userData.email) return res.json({ message: "please provide a email" });
@@ -331,8 +332,6 @@ module.exports = {
 
                     }
 
-
-
                 } else {
                     res.json({
                         status: 401,
@@ -346,7 +345,10 @@ module.exports = {
                 });
             }
         } catch (err) {
-            console.log(err)
+            res.json({
+                status: 401,
+                message: `something went wrong`,
+            });
         }
     },
 
@@ -684,7 +686,7 @@ module.exports = {
             } = req.body;
 
             if (name && !isValidString(name)) return failureJSONResponse(res, { message: `Invalid Name` });
-            if (date_of_birth && !isValidDate(date_of_birth)) return failureJSONResponse(res, { message: `Invalid Date Of Birth` });
+            // if (date_of_birth && !isValidDate(date_of_birth)) return failureJSONResponse(res, { message: `Invalid Date Of Birth` });
             if (gender && isNaN(Number(gender))) return failureJSONResponse(res, { message: `Invalid Gender` });
 
 
@@ -716,7 +718,6 @@ module.exports = {
             }
 
 
-
             var updatedProfileRes = await User.updateOne({ _id: userId }, { $set: profileDataObj });
 
             if (updatedProfileRes) {
@@ -733,17 +734,56 @@ module.exports = {
             return failureJSONResponse(res, { message: `something went wrong` });
         }
 
-
-
     },
 
 
     // change email address 
 
-    generate_otp_to_chnage_email: async function (req, res) {
+    generate_otp_for_chnage_email_mobile: async function (req, res) {
         const userId = req.userId;
 
+        const source = req?.body?.source,
+            email_address = req?.body?.email_address,
+            phone_number = req?.body?.phone_number;
 
+        if (!source) return failureJSONResponse(res, { message: `something went wrong` });
+
+        if (source === Number(1)){
+            if (!email_address) return failureJSONResponse(res, { message: `please provide email address` });
+            else if (!isValidEmailAddress(email_address)) return failureJSONResponse(res, { message: `please provide valid email address` });
+
+            OTP.create({
+                code: generateOTP(4),
+                user: userId,
+                for: 2
+
+            }).then((foundOTP) => {
+
+                if (!foundOTP){
+                    return failureJSONResponse(res, { message: `something went wrong` });
+                } else {
+                    MobileNumberVerificationOTP(phone_number, result?.userInfo?.name, data.code)
+                    return successJSONResponse(res, { message: `success` });
+                }
+
+            })
+
+        } else if (source === Number(2)){
+            if (!phone_number) return failureJSONResponse(res, { message: `something went wrong` });
+            else if (!isValidEmailAddress(email_address)) return failureJSONResponse(res, { message: `please provide valid phone number` });
+
+            OTP.create({
+                code: generateOTP(4),
+                user: userId,
+                for: 2
+
+            }).then((data) => {
+                EmailOTPVerification(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name, data.code)
+            })
+
+        }
+
+       
     }
 
 

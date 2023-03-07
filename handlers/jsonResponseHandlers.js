@@ -6,7 +6,7 @@ exports.successJSONResponse = (res = null, data = null, httpStatusCode = null) =
 
         return res.status(httpStatusCodeToUse).json({
             status: httpStatusCodeToUse,
-            data
+            ...data
         });
     }
 }
@@ -18,7 +18,7 @@ exports.failureJSONResponse = (res = null, data = null, httpStatusCode = null) =
 
         return res.status(httpStatusCodeToUse).json({
             status: httpStatusCodeToUse,
-            data
+            ...data
         });
     }
 }
