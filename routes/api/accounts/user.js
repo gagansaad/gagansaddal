@@ -54,10 +54,10 @@ router.patch(`/update-profile`,
 );
 
 
-// router.patch(`/generate-otp-for`,
-//     authMiddleware.ensureUserLoggedIn,
-//     upload.single("picture"),
-//     controllers.update_profile
-// );
+router.post(`/generate_otp`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.check_email_already_exists,
+    controllers.generate_otp_for_change_email_mobile
+);
 
 module.exports = router;
