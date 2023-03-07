@@ -667,8 +667,8 @@ module.exports = {
                     return next()
                 }
 
-            }).catch((err)=>{
-                return failureJSONResponse(res, { message: `something went wrong` }); 
+            }).catch((err) => {
+                return failureJSONResponse(res, { message: `something went wrong` });
             })
     },
 
@@ -701,7 +701,7 @@ module.exports = {
 
             if (date_of_birth) profileDataObj = {
                 ...profileDataObj,
-                'userInfo.date_of_birth': new Date(),
+                'userInfo.date_of_birth': new Date(date_of_birth),
             };
 
 
@@ -718,11 +718,16 @@ module.exports = {
             }
 
 
-            var updatedProfileRes = await User.updateOne({ _id: userId }, { $set: profileDataObj });
+            var updatedProfileRes = await User.updateOne({ _id: userId }, { $set: profileDataObj }, { new: true });
 
             if (updatedProfileRes) {
                 return successJSONResponse(res, {
-                    message: `success`,
+                    message: `success`, data:{
+                        name: updatedProfileRes?.userInfo?.name || null,
+                        date_of_birth: updatedProfileRes?.userInfo?.date_of_birth || null,
+                        gender: updatedProfileRes?.userInfo?.gender || null,
+                        picture: updatedProfileRes?.userBasicInfo?.picture || null
+                    }
                 });
             } else {
                 return failureJSONResponse(res, { message: `something went wrong` });
@@ -747,7 +752,7 @@ module.exports = {
 
         if (!source) return failureJSONResponse(res, { message: `something went wrong` });
 
-        if (source === Number(1)){
+        if (source === Number(1)) {
             if (!email_address) return failureJSONResponse(res, { message: `please provide email address` });
             else if (!isValidEmailAddress(email_address)) return failureJSONResponse(res, { message: `please provide valid email address` });
 
@@ -758,16 +763,16 @@ module.exports = {
 
             }).then((foundOTP) => {
 
-                if (!foundOTP){
+                if (!foundOTP) {
                     return failureJSONResponse(res, { message: `something went wrong` });
                 } else {
-                    MobileNumberVerificationOTP(phone_number, result?.userInfo?.name, data.code)
+                    MobileNumberVerificationOTP(phone_number, result?.userInfo?.name, foundOTP?.code)
                     return successJSONResponse(res, { message: `success` });
                 }
 
             })
 
-        } else if (source === Number(2)){
+        } else if (source === Number(2)) {
             if (!phone_number) return failureJSONResponse(res, { message: `something went wrong` });
             else if (!isValidEmailAddress(email_address)) return failureJSONResponse(res, { message: `please provide valid phone number` });
 
@@ -776,15 +781,21 @@ module.exports = {
                 user: userId,
                 for: 2
 
-            }).then((data) => {
-                EmailOTPVerification(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name, data.code)
+            }).then((foundOTP) => {
+                if (!foundOTP) {
+                    return failureJSONResponse(res, { message: `something went wrong` });
+
+                } else {
+                    EmailOTPVerification(phone_number, `Hi`, foundOTP?.code)
+                    return successJSONResponse(res, { message: `success` });
+                }
+
             })
 
         }
 
-       
-    }
 
+    }
 
 
 },
