@@ -193,7 +193,7 @@ module.exports = {
                                 })
 
 
-                            
+
                             }
 
                             if (result?.userInfo?.email_address) {
@@ -209,7 +209,7 @@ module.exports = {
 
                             }
 
-                           
+
 
 
                             // MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name)
@@ -291,7 +291,7 @@ module.exports = {
                                 for: 1
 
                             }).then((data) => {
-                           
+
                                 MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
                             })
 
@@ -310,7 +310,7 @@ module.exports = {
                                 for: 2
 
                             }).then((data) => {
-                               
+
                                 EmailOTPVerification(checkUserDetail[0]?.userInfo?.email_address, checkUserDetail[0]?.userInfo?.name, data.code)
                             })
                             res.json({
@@ -649,6 +649,27 @@ module.exports = {
         })
     },
 
+    check_email_already_exists: async function (req, res, next) {
+
+        const dbQuery = { _id: { $ne: req.userId } };
+
+        if (email_address) dbQuery[`userInfo.email_address`] = email_address;
+
+        User.findOne(dbQuery)
+            .then(async (foundUser) => {
+                if (foundUser) {
+                    return failureJSONResponse(res, {
+                        message: `Account with that ${email_address} already exists`
+                    });
+                } else {
+                    return next()
+                }
+
+            }).catch((err)=>{
+                return failureJSONResponse(res, { message: `something went wrong` }); 
+            })
+    },
+
 
     update_profile: async function (req, res) {
 
@@ -656,81 +677,16 @@ module.exports = {
         try {
             const userId = req.userId;
 
-                const {
-                    name,
-                    date_of_birth,
-                    gender
-                } = req.body;
+            const {
+                name,
+                date_of_birth,
+                gender
+            } = req.body;
 
-                if (name && !isValidString(name)) return failureJSONResponse(res, { message: `Invalid Name` });
-                if (date_of_birth && !isValidDate(date_of_birth)) return failureJSONResponse(res, { message: `Invalid Date Of Birth` });
-                if (gender && isNaN(Number(gender))) return failureJSONResponse(res, { message: `Invalid Gender` });
+            if (name && !isValidString(name)) return failureJSONResponse(res, { message: `Invalid Name` });
+            if (date_of_birth && !isValidDate(date_of_birth)) return failureJSONResponse(res, { message: `Invalid Date Of Birth` });
+            if (gender && isNaN(Number(gender))) return failureJSONResponse(res, { message: `Invalid Gender` });
 
-                const dbQuery = { _id: { $ne: req.userId } };
-
-                if (email_address) dbQuery[`userInfo.email_address`] = email_address;
-
-                // User.findOne(dbQuery)
-                //     .then(async (foundUser) => {
-                //         if (foundUser) {
-                //             return failureJSONResponse(res, {
-                //                 message: `Account with that ${email_address} already exists`
-                //             });
-                //         } else {
-                //             let profileDataObj = {};
-
-
-                //             if (name) profileDataObj = {
-                //                 ...profileDataObj,
-                //                 'userInfo.name': name,
-                //             };
-
-                //             if (date_of_birth) profileDataObj = {
-                //                 ...profileDataObj,
-                //                 'userInfo.date_of_birth': new Date(),
-                //             };
-
-                //             if (email_address) profileDataObj = {
-                //                 ...profileDataObj,
-                //                 'userInfo.email_address': email_address,
-                //             }
-
-                //             if (gender) profileDataObj = {
-                //                 ...profileDataObj,
-                //                 'userInfo.gender': gender,
-                //             }
-
-                //             if (mobile_number) profileDataObj = {
-                //                 ...profileDataObj,
-                //                 'userInfo.mobile_number.mobile_number': phone_number,
-                //             }
-
-                //             console.log(profileDataObj)
-
-                //             if (req?.file?.path) {
-                //                 profileDataObj = {
-                //                     ...profileDataObj,
-                //                     'userBasicInfo.profile_image': req.file.path,
-                //                 }
-                //             }
-
-
-
-                //             var updatedProfileRes = await User.updateOne({ _id: userId }, { $set: profileDataObj });
-
-                //             if (updatedProfileRes) {
-                //                 return successJSONResponse(res, {
-                //                     message: `success`,
-                //                     updatedProfileData: updatedProfileRes
-                //                 });
-                //             } else {
-                //                 return failureJSONResponse(res, { message: `something went wrong` });
-                //             }
-
-                //         }
-
-
-                //     })
 
 
             let profileDataObj = {};
@@ -773,11 +729,11 @@ module.exports = {
             }
 
 
-        }catch(err){
+        } catch (err) {
             return failureJSONResponse(res, { message: `something went wrong` });
         }
 
-      
+
 
     },
 
