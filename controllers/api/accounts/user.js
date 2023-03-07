@@ -701,7 +701,7 @@ module.exports = {
 
             if (date_of_birth) profileDataObj = {
                 ...profileDataObj,
-                'userInfo.date_of_birth': date_of_birth 
+                'userInfo.date_of_birth': Date(date_of_birth)
             };
 
 
