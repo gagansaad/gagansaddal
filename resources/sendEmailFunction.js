@@ -1,10 +1,8 @@
-const nodemailer = require('nodemailer'),
-    { generateOTP } = require(`../utils/generateOTP`);
+const nodemailer = require('nodemailer');
 
 exports.EmailOTPVerification = (email_address = ``, name = ``, code) => {
 
-
-    const mailTransporter = nodemailer.createTransport({
+    let mailTransporter = nodemailer.createTransport({
         host: "sandbox.smtp.mailtrap.io",
         port: 2525,
         auth: {
@@ -12,11 +10,11 @@ exports.EmailOTPVerification = (email_address = ``, name = ``, code) => {
             pass: "b347427170f314"
         }
     });
-    const mailDetails = {
-        from: 'kaushlender.verma@netscapelabs.com',
-        to: email_address,
+    let mailDetails = {
+        from: 'mohammad.sahil@netscapelabs.com',
+        to: 'sahil.seraphic@gmail.com',
         subject: 'Test mail',
-        text: `${name} your top is ${code}`
+        text: `${name} your otp is ${code}`
     };
 
     mailTransporter.sendMail(mailDetails, function (err, data) {
