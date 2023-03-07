@@ -13,7 +13,7 @@ exports.EmailOTPVerification = (email_address = ``, name = ``, code) => {
         }
     });
     const mailDetails = {
-        from: 'mohammad.sahil@netscapelabs.com',
+        from: 'kaushlender.verma@netscapelabs.com',
         to: email_address,
         subject: 'Test mail',
         text: `${name} your top is ${code}`

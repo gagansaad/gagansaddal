@@ -719,11 +719,11 @@ module.exports = {
 
 
             var updatedProfileRes = await User.updateOne({ _id: userId }, { $set: profileDataObj }, { new: true });
-            console.log(`updatedProfileRes`,updatedProfileRes)
+            console.log(`updatedProfileRes`, updatedProfileRes)
 
             if (updatedProfileRes) {
                 return successJSONResponse(res, {
-                    message: `success`, data:{
+                    message: `success`, data: {
                         name: name,
                         date_of_birth: date_of_birth,
                         gender: gender,
@@ -747,9 +747,9 @@ module.exports = {
 
         const email_address = req?.body?.email_address;
 
-        console.log(`asdnasvdh****`,email_address)
+        console.log(`asdnasvdh****`, email_address)
 
-        if (email_address && !isValidEmailAddress(email_address)){
+        if (email_address && !isValidEmailAddress(email_address)) {
             return failureJSONResponse(res, { message: `please provide valid email` });
         }
 
@@ -759,12 +759,12 @@ module.exports = {
 
         console.log(dbQuery)
 
-        if (email_address){
+        if (email_address) {
             User.findOne(dbQuery)
-                .then( (foundUser) => {
+                .then((foundUser) => {
 
 
-                    console.log(`foundUser`,foundUser)
+                    console.log(`foundUser`, foundUser)
                     if (foundUser) {
                         return failureJSONResponse(res, {
                             message: `Account with that ${email_address} already exists`
@@ -780,7 +780,7 @@ module.exports = {
         } else {
             return next()
         }
-    
+
     },
 
 
@@ -839,6 +839,106 @@ module.exports = {
 
             })
 
+        }
+
+
+    },
+
+
+    update_email_or_phone_number: async function (req, res) {
+
+        const userId = req.userId;
+
+        const source = req?.body?.source,
+            email_address = req?.body?.email_address,
+            otp = req?.body?.otp,
+            phone_number = req?.body?.phone_number;
+
+        if (!source) return failureJSONResponse(res, { message: `please provide soruce` });
+        if (!otp) return failureJSONResponse(res, { message: `please provide otp` });
+
+        if (source === Number(1)) {
+            if (!phone_number) return failureJSONResponse(res, { message: `please provide phone number` });
+            else if (!isValidIndianMobileNumber(phone_number)) return failureJSONResponse(res, { message: `please provide valid phone number` });
+
+
+            OTP.findOne({
+                code: otp,
+                for: 1
+            }).then((foundOTP) => {
+
+                if (!foundOTP) {
+                    return failureJSONResponse(res, { message: `somehting went wrong` });
+                } else if (foundOTP) {
+
+                    User.updateOne(
+                        { _id: userId },
+                        { $set: { 'userInfo.mobile_number.phone_number': phone_number, } },
+                        { new: true })
+                        .then((updatedUser) => {
+
+                            if (updatedUser) {
+                                return successJSONResponse(res, {
+                                    message: `success`,
+                                    data: { phone_number }
+                                });
+                            } else {
+                                return failureJSONResponse(res, { message: `something went wrong` });
+                            }
+
+                    })
+
+                }
+
+            }).catch((err) => {
+                console.log(err)
+                return failureJSONResponse(res, { message: `something went wrong` });
+            })
+
+
+        } else if (source === Number(2)) {
+            if (!email_address) return failureJSONResponse(res, { message: `please provide email address` });
+            else if (!isValidEmailAddress(email_address)) return failureJSONResponse(res, { message: `please provide valid phone number` });
+
+
+
+            OTP.findOne({
+                code: otp,
+                for: 2
+            }).then((foundOTP) => {
+
+                if (!foundOTP) {
+                    return failureJSONResponse(res, { message: `somehting went wrong` });
+                } else if (foundOTP) {
+
+                    User.updateOne(
+                        { _id: userId },
+                        { $set: { 'userInfo.email_address': email_address, } },
+                        { new: true })
+                        .then((updatedUser) => {
+                            console.log(updatedUser)
+
+                            if (updatedUser) {
+                                return successJSONResponse(res, {
+                                    message: `success`,
+                                    data: { email_address }
+                                });
+                            } else {
+                                console.log(`working`)
+                                return failureJSONResponse(res, { message: `something went wrong` });
+                            }
+
+                        })
+
+                }
+
+            }).catch((err) => {
+                console.log(err)
+                return failureJSONResponse(res, { message: `something went wrong` });
+            })
+
+
+        
         }
 
 
