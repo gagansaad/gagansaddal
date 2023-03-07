@@ -723,7 +723,6 @@ module.exports = {
             if (updatedProfileRes) {
                 return successJSONResponse(res, {
                     message: `success`,
-                    updatedProfileData: updatedProfileRes
                 });
             } else {
                 return failureJSONResponse(res, { message: `something went wrong` });
