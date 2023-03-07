@@ -686,7 +686,7 @@ module.exports = {
             } = req.body;
 
             if (name && !isValidString(name)) return failureJSONResponse(res, { message: `Invalid Name` });
-            // if (date_of_birth && !isValidDate(date_of_birth)) return failureJSONResponse(res, { message: `Invalid Date Of Birth` });
+            if (date_of_birth && !isValidDate(date_of_birth)) return failureJSONResponse(res, { message: `Invalid Date Of Birth` });
             if (gender && isNaN(Number(gender))) return failureJSONResponse(res, { message: `Invalid Gender` });
 
 
@@ -757,8 +757,6 @@ module.exports = {
 
         if (email_address) dbQuery[`userInfo.email_address`] = email_address;
 
-        console.log(dbQuery)
-
         if (email_address) {
             User.findOne(dbQuery)
                 .then((foundUser) => {
@@ -782,8 +780,6 @@ module.exports = {
         }
 
     },
-
-
 
     // change email address 
 
@@ -825,7 +821,7 @@ module.exports = {
 
             OTP.create({
                 code: generateOTP(4),
-                email_address: email_address,
+                email_address: email_address.toLowerCase(),
                 user: userId,
                 for: 2
 
@@ -917,7 +913,7 @@ module.exports = {
 
                     User.updateOne(
                         { _id: userId },
-                        { $set: { 'userInfo.email_address': email_address, } },
+                        { $set: { 'userInfo.email_address': email_address.toLowerCase(), } },
                         { new: true })
                         .then((updatedUser) => {
                             console.log(updatedUser)
@@ -947,8 +943,6 @@ module.exports = {
 
 
     }
-
-
 },
 
     function verifyqJWT(token) {
