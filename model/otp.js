@@ -9,7 +9,10 @@ const otpSchema = new mongoose.Schema({
     for: {
         type: Number,
         required: true,
+        // 2= email
+        // 1= mobile number
     },
+
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: `user`,
