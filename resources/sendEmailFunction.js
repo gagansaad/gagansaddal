@@ -8,8 +8,8 @@ exports.EmailOTPVerification = (email_address = ``, name = ``, code) => {
         host: "sandbox.smtp.mailtrap.io",
         port: 2525,
         auth: {
-            user: "20a5c3b7c9ba76",
-            pass: "c848c886a56f96"
+            user: "a165c441b7db27",
+            pass: "b347427170f314"
         }
     });
     const mailDetails = {
