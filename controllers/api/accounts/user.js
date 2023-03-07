@@ -675,7 +675,6 @@ module.exports = {
 
     update_profile: async function (req, res) {
 
-
         try {
             const userId = req.userId;
 
@@ -784,7 +783,7 @@ module.exports = {
     // change email address 
 
     generate_otp_for_change_email_mobile: async function (req, res) {
-
+    
         const userId = req.userId;
 
         const source = req?.body?.source,

@@ -37,6 +37,8 @@ loadExpressSession(app, expressSession, MongoStore);
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
+
+
 app.get('/', (req,res)=>{
     res.json({message: `msbdhsmb`})
 });
@@ -48,6 +50,18 @@ app.use('/admin/login',adminSignIp);
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))
 }
+
+// add the error handler middleware function to the app
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        
+        // handle the error in a custom way
+        res.status(400).send({ 
+            status: 400,
+            error: 'Invalid JSON'
+         });
+    }
+});
 
 // Server setup
 app.listen(process.env.PORT, () => console.log(`[ MENEHARIYA API ] on ${process.env.PORT}`));
