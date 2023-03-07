@@ -903,7 +903,7 @@ module.exports = {
 
             OTP.findOne({
                 code: otp,
-                email_address: email_address,
+                email_address: email_address.toLowerCase(),
                 for: 2
             }).then((foundOTP) => {
 
