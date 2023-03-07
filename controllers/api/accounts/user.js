@@ -701,7 +701,7 @@ module.exports = {
 
             if (date_of_birth) profileDataObj = {
                 ...profileDataObj,
-                'userInfo.date_of_birth': new Date(date_of_birth),
+                'userInfo.date_of_birth': date_of_birth 
             };
 
 
@@ -719,14 +719,15 @@ module.exports = {
 
 
             var updatedProfileRes = await User.updateOne({ _id: userId }, { $set: profileDataObj }, { new: true });
+            console.log(`updatedProfileRes`,updatedProfileRes)
 
             if (updatedProfileRes) {
                 return successJSONResponse(res, {
                     message: `success`, data:{
-                        name: updatedProfileRes?.userInfo?.name || null,
-                        date_of_birth: updatedProfileRes?.userInfo?.date_of_birth || null,
-                        gender: updatedProfileRes?.userInfo?.gender || null,
-                        picture: updatedProfileRes?.userBasicInfo?.picture || null
+                        name: name,
+                        date_of_birth: date_of_birth,
+                        gender: gender,
+                        picture: req?.file?.path || null
                     }
                 });
             } else {
@@ -735,6 +736,7 @@ module.exports = {
 
 
         } catch (err) {
+            console.log(err)
             return failureJSONResponse(res, { message: `something went wrong` });
         }
 

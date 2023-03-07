@@ -53,4 +53,11 @@ router.patch(`/update-profile`,
     controllers.update_profile
 );
 
+
+// router.patch(`/generate-otp-for`,
+//     authMiddleware.ensureUserLoggedIn,
+//     upload.single("picture"),
+//     controllers.update_profile
+// );
+
 module.exports = router;
