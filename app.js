@@ -18,10 +18,13 @@ connection(mongoose);
 app.use(cors())
 
 require(`./model/accounts/users`);
+require(`./model/accounts/admin`);
 require(`./model/otp`);
 
 // DB Setup
 const signUp = require('./routes/api/accounts/user');
+
+const adminSignIp = require('./routes/accounts/admin/admin_login');
 
 const loadHelmet = require(`./loaders/helmets`),
     loadExpressSession = require(`./loaders/expressSession`);
@@ -38,7 +41,7 @@ app.get('/', (req,res)=>{
     res.json({message: `msbdhsmb`})
 });
 app.use('/v1/api/', signUp);
-
+app.use('/admin/login',adminSignIp);
 
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
