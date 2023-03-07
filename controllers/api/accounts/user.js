@@ -803,8 +803,9 @@ module.exports = {
 
             OTP.create({
                 code: generateOTP(4),
+                phone_number: phone_number,
                 user: userId,
-                for: 2
+                for: 1
 
             }).then((foundOTP) => {
                 console.log(foundOTP)
@@ -824,6 +825,7 @@ module.exports = {
 
             OTP.create({
                 code: generateOTP(4),
+                email_address: email_address,
                 user: userId,
                 for: 2
 
@@ -863,7 +865,8 @@ module.exports = {
 
 
             OTP.findOne({
-                code: otp,
+                code: otp, 
+                phone_number: phone_number,
                 for: 1
             }).then((foundOTP) => {
 
@@ -904,6 +907,7 @@ module.exports = {
 
             OTP.findOne({
                 code: otp,
+                email_address: email_address,
                 for: 2
             }).then((foundOTP) => {
 
