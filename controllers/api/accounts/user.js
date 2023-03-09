@@ -307,7 +307,7 @@ module.exports = {
 
                             OTP.create({
                                 code: generateOTP(4),
-                                user: result._id,
+                                user: checkUserDetail[0]._id,
                                 for: 2
 
                             }).then((data) => {
