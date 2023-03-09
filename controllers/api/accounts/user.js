@@ -783,60 +783,71 @@ module.exports = {
     // change email address 
 
     generate_otp_for_change_email_mobile: async function (req, res) {
-    
-        const userId = req.userId;
 
-        const source = req?.body?.source,
-            email_address = req?.body?.email_address,
-            phone_number = req?.body?.phone_number;
+        try{
+            const userId = req.userId;
 
-        if (!source) return failureJSONResponse(res, { message: `please provide soruce` });
+            const source = req?.body?.source,
+                email_address = req?.body?.email_address,
+                phone_number = req?.body?.phone_number;
 
-        if (source === Number(1)) {
-            if (!phone_number) return failureJSONResponse(res, { message: `please provide phone number` });
-            else if (!isValidIndianMobileNumber(phone_number)) return failureJSONResponse(res, { message: `please provide valid phone number` });
+            if (!source) return failureJSONResponse(res, { message: `please provide soruce` });
+            else if (isNaN(source)) return failureJSONResponse(res, { message: `please provide valid soruce ` });
 
-            OTP.create({
-                code: generateOTP(4),
-                phone_number: phone_number,
-                user: userId,
-                for: 1
+            if (Number(source) === Number(1)) {
+                if (!phone_number) return failureJSONResponse(res, { message: `please provide phone number` });
+                else if (!isValidIndianMobileNumber(phone_number)) return failureJSONResponse(res, { message: `please provide valid phone number` });
 
-            }).then((foundOTP) => {
-                console.log(foundOTP)
+                OTP.create({
+                    code: generateOTP(4),
+                    phone_number: phone_number,
+                    user: userId,
+                    for: 1
 
-                if (!foundOTP) {
+                }).then((foundOTP) => {
+                    console.log(foundOTP)
+
+                    if (!foundOTP) {
+                        return failureJSONResponse(res, { message: `something went wrong` });
+                    } else {
+                        MobileNumberVerificationOTP(phone_number, `hi`, foundOTP?.code)
+                        return successJSONResponse(res, { message: `success` });
+                    }
+
+                }).catch((err) => {
                     return failureJSONResponse(res, { message: `something went wrong` });
-                } else {
-                    MobileNumberVerificationOTP(phone_number, `hi`, foundOTP?.code)
-                    return successJSONResponse(res, { message: `success` });
-                }
+                })
 
-            })
+            } else if (Number(source) === Number(2)) {
+                if (!email_address) return failureJSONResponse(res, { message: `please provide email address` });
+                else if (!isValidEmailAddress(email_address)) return failureJSONResponse(res, { message: `please provide valid phone number` });
 
-        } else if (source === Number(2)) {
-            if (!email_address) return failureJSONResponse(res, { message: `please provide email address` });
-            else if (!isValidEmailAddress(email_address)) return failureJSONResponse(res, { message: `please provide valid phone number` });
+                OTP.create({
+                    code: generateOTP(4),
+                    email_address: email_address.toLowerCase(),
+                    user: userId,
+                    for: 2
 
-            OTP.create({
-                code: generateOTP(4),
-                email_address: email_address.toLowerCase(),
-                user: userId,
-                for: 2
+                }).then((foundOTP) => {
+                    console.log(foundOTP)
+                    if (!foundOTP) {
+                        return failureJSONResponse(res, { message: `something went wrong` });
 
-            }).then((foundOTP) => {
-                console.log(foundOTP)
-                if (!foundOTP) {
+                    } else {
+                        EmailOTPVerification(phone_number, `Hi`, foundOTP?.code)
+                        return successJSONResponse(res, { message: `success` });
+                    }
+
+                }).catch((err)=>{
                     return failureJSONResponse(res, { message: `something went wrong` });
+                })
 
-                } else {
-                    EmailOTPVerification(phone_number, `Hi`, foundOTP?.code)
-                    return successJSONResponse(res, { message: `success` });
-                }
-
-            })
-
+            }
+        } catch(err){
+            return failureJSONResponse(res, { message: `something went wrong` });
         }
+    
+     
 
 
     },
