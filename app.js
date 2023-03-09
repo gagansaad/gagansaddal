@@ -88,5 +88,9 @@ app.use((req, res, next) => {
 //     app.use(centralErrorHandlers[key]);
 // }
 
+app.use((err, req, res, next) => {
+    res.status(500).send({ error: 'seriously something went wrong ' });
+});
+
 // Server setup
 app.listen(process.env.PORT, () => console.log(`[ MENEHARIYA API ] on ${process.env.PORT}`));
