@@ -739,50 +739,55 @@ module.exports = {
 
     check_email_already_exists: async function (req, res, next) {
 
-        const email_address = req?.body?.email_address;
+       try{
+           const email_address = req?.body?.email_address;
 
-        console.log(`asdnasvdh****`, email_address)
+           console.log(`asdnasvdh****`, email_address)
 
-        if (email_address && !isValidEmailAddress(email_address)) {
-            return failureJSONResponse(res, { message: `please provide valid email` });
-        }
+           if (email_address && !isValidEmailAddress(email_address)) {
+               return failureJSONResponse(res, { message: `please provide valid email` });
+           }
 
-        const dbQuery = { _id: { $ne: req.userId } };
+           const dbQuery = { _id: { $ne: req.userId } };
 
-        if (email_address) dbQuery[`userInfo.email_address`] = email_address;
+           if (email_address) dbQuery[`userInfo.email_address`] = email_address;
 
-        if (email_address) {
-            User.findOne(dbQuery)
-                .then((foundUser) => {
+           if (email_address) {
+               User.findOne(dbQuery)
+                   .then((foundUser) => {
 
 
-                    console.log(`foundUser`, foundUser)
-                    if (foundUser) {
-                        return failureJSONResponse(res, {
-                            message: `Account with that ${email_address} already exists`
-                        }, statusCode = 409);
-                    } else {
-                        return next()
-                    }
+                       console.log(`foundUser`, foundUser)
+                       if (foundUser) {
+                           return failureJSONResponse(res, {
+                               message: `Account with that ${email_address} already exists`
+                           }, statusCode = 409);
+                       } else {
+                           return next()
+                       }
 
-                }).catch((err) => {
-                    console.log(err)
-                    return failureJSONResponse(res, { message: `something went wrong` });
-                })
-        } else {
-            return next()
-        }
+                   }).catch((err) => {
+                       console.log(err)
+                       return failureJSONResponse(res, { message: `something went wrong` });
+                   })
+           } else {
+               return next()
+           }
+       }catch(err){
+           console.log(err)
+           return failureJSONResponse(res, { message: `something went wrong` });
+       }
 
     },
 
     // change email address 
 
     generate_otp_for_change_email_mobile: async function (req, res) {
-
+        console.log(`working22`)
         try {
             const userId = req.userId;
 
-            const source = req?.body?.source,
+            const source = Math.abs(req?.body?.source),
                 email_address = req?.body?.email_address,
                 phone_number = req?.body?.phone_number;
 
@@ -790,6 +795,7 @@ module.exports = {
             else if (source && isNaN(source)) return failureJSONResponse(res, { message: `please provide valid soruce ` });
 
             if (Number(source) === Number(1)) {
+                console.log(`working`)
                 if (!phone_number) return failureJSONResponse(res, { message: `please provide phone number` });
                 else if (!isValidIndianMobileNumber(phone_number)) return failureJSONResponse(res, { message: `please provide valid phone number` });
 
@@ -848,20 +854,25 @@ module.exports = {
 
 
     update_email_or_phone_number: async function (req, res) {
+        console.log(`working22`)
         try{
             const userId = req.userId;
 
-            const source = req?.body?.source,
+            const source = Math.abs(req?.body?.source),
                 email_address = req?.body?.email_address,
                 otp = req?.body?.otp,
                 phone_number = req?.body?.phone_number;
+
+     
 
             if (!source) return failureJSONResponse(res, { message: `please provide soruce` });
             else if (source && isNaN(source)) return failureJSONResponse(res, { message: `please provide valid soruce ` });
 
             if (!otp) return failureJSONResponse(res, { message: `please provide otp` });
 
-            if (Number(source) === Number(1)) {
+            if (Number(source) == Number(1)) {
+
+                console.log(`working22qwqwq`)
                 if (!phone_number) return failureJSONResponse(res, { message: `please provide phone number` });
                 else if (!isValidIndianMobileNumber(phone_number)) return failureJSONResponse(res, { message: `please provide valid phone number` });
 
@@ -892,6 +903,7 @@ module.exports = {
                                 }
 
                             }).catch((err) => {
+                                console.log(err)
                                 return failureJSONResponse(res, { message: `something went wrong` });
                             })
 
@@ -904,7 +916,7 @@ module.exports = {
                 })
 
 
-            } else if (Number(source) === Number(2)) {
+            } else if (Number(source) == Number(2)) {
                 if (!email_address) return failureJSONResponse(res, { message: `please provide email address` });
                 else if (!isValidEmailAddress(email_address)) return failureJSONResponse(res, { message: `please provide valid phone number` });
 
@@ -938,6 +950,7 @@ module.exports = {
                                 }
 
                             }).catch((err) => {
+                                console.log(err)
                                 return failureJSONResponse(res, { message: `something went wrong` });
                             })
 
@@ -952,6 +965,7 @@ module.exports = {
             }
 
         }catch(err){
+            console.log(err)
             return failureJSONResponse(res, { message: `something went wrong` });
         }
 
@@ -973,6 +987,7 @@ module.exports = {
                         name: user?.userInfo?.name || null,
                         email_address: user?.userInfo?.email_address || null,
                         phone_number: user?.userInfo?.mobile_number?.phone_number || null,
+                        gender: user?.userInfo?.gender || null,
                         date_of_birth: user?.userInfo?.date_of_birth || null,
                         profile_image: user?.userBasicInfo?.profile_image || null,
 
