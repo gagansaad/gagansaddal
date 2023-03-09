@@ -22,10 +22,23 @@ const storage = new CloudinaryStorage({
     params: {
         folder: "DEV",
     },
+    
 });
 
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage,  });
+
+function validateImage(req, res, next) {
+    console.log(req.file.mimetype)
+
+    const fileType = req.file.mimetype.split('/')[1];
+    if (fileType !== 'jpg' && fileType !== 'jpeg' && fileType !== 'png') {
+        return res.status(200).json({ status: 400,error: 'Only JPEG or PNG images are allowed.' });
+    }
+
+    next();
+}
+
 
 router.get(`/user-profile`,
     authMiddleware.ensureUserLoggedIn,
@@ -51,6 +64,7 @@ router.post(`/forget-password`, controllers.forget_password);
 router.post(`/verify-forget-password-otp`, controllers.verify_forget_password_otp);
 
 router.post(`/update-password`, controllers.update_password);
+
 
 router.patch(`/update-profile`,
     authMiddleware.ensureUserLoggedIn,

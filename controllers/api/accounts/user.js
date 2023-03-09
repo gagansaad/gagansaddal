@@ -227,11 +227,8 @@ module.exports = {
     },
     // Standard login.
     login_with_email: async function (req, res) {
-        console.log(`hjsdaghd`)
+    
         try {
-
-
-            // console.log(`req.body`, req.body)
 
             var userData = req.body;
             if (!userData.email) return res.json({ message: "please provide a email" });
@@ -246,7 +243,7 @@ module.exports = {
             );
 
             if (checkUserDetail.length) {
-                if (!checkUserDetail[0].userInfo.password) {
+                if (!checkUserDetail[0]?.userInfo?.password) {
                     return res.json({
                         status: 400,
                         message: `Incorrect password`,
@@ -977,13 +974,14 @@ module.exports = {
 
     fetchProfileDetails: async function (req, res) {
         try {
+
             const userId = req.userId;
 
             if (!userId) return failureJSONResponse(res, { message: `please provide user id` });
 
-            User.findById({
-                _id: userId
-            }).select(`userInfo userBasicInfo`).then((user)=>{
+            User.findById({ _id: userId })
+            .select(`userInfo userBasicInfo`)
+            .then((user)=>{
                 if (!user) return failureJSONResponse(res, { message: `something went worng` });
                 else {
 
