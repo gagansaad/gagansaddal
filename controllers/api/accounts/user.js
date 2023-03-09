@@ -324,7 +324,7 @@ module.exports = {
                     delete data["mobile_number"]
 
                     if (!is_active) {
-                        if (phone_number) {
+                        if (phone_number && email_address ) {
 
                             OTP.create({
                                 code: generateOTP(4),
@@ -332,7 +332,7 @@ module.exports = {
                                 for: 1
 
                             }).then((data) => {
-
+                                EmailOTPVerification(checkUserDetail[0]?.userInfo?.email_address, checkUserDetail[0]?.userInfo?.name, data.code)
                                 MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
                             })
 
@@ -343,7 +343,7 @@ module.exports = {
                                 token: createJWT(checkUserDetail[0]._id),
                             });
 
-                        } else {
+                        } else if (phone_number && !email_address) {
 
                             OTP.create({
                                 code: generateOTP(4),
@@ -351,8 +351,7 @@ module.exports = {
                                 for: 2
 
                             }).then((data) => {
-
-                                EmailOTPVerification(checkUserDetail[0]?.userInfo?.email_address, checkUserDetail[0]?.userInfo?.name, data.code)
+                                MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
                             })
                             res.json({
                                 status: 204,
