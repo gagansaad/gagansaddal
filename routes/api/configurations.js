@@ -5,6 +5,11 @@ router.get(`/privacy-policy`,
     controllers.privacyPolicy
 );
 
+router.get(`/term-conditions`,
+    controllers.termAndConditions
+);
+
+
 
 
 module.exports = router;
