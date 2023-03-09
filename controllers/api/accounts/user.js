@@ -345,8 +345,9 @@ module.exports = {
                 });
             }
         } catch (err) {
+            console.log(err)
             res.json({
-                status: 401,
+                status: 400,
                 message: `something went wrong`,
             });
         }
