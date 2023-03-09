@@ -668,7 +668,10 @@ module.exports = {
     },
 
 
-    update_profile: async function (req, res) {
+    update_profile: async function (req, res, next) {
+
+        console.log(req?.file)
+
 
         try {
             const userId = req.userId;
@@ -710,7 +713,6 @@ module.exports = {
                     'userBasicInfo.profile_image': req.file.path,
                 }
             }
-
 
             var updatedProfileRes = await User.updateOne({ _id: userId }, { $set: profileDataObj }, { new: true });
             console.log(`updatedProfileRes`, updatedProfileRes)
@@ -783,7 +785,7 @@ module.exports = {
     // change email address 
 
     generate_otp_for_change_email_mobile: async function (req, res) {
-        console.log(`working22`)
+        
         try {
             const userId = req.userId;
 
@@ -793,6 +795,7 @@ module.exports = {
 
             if (!source) return failureJSONResponse(res, { message: `please provide soruce` });
             else if (source && isNaN(source)) return failureJSONResponse(res, { message: `please provide valid soruce ` });
+            else if (source && (source < 1 || source > 2)) return failureJSONResponse(res, { message: `please provide source between 1-2` });
 
             if (Number(source) === Number(1)) {
                 console.log(`working`)
@@ -854,7 +857,7 @@ module.exports = {
 
 
     update_email_or_phone_number: async function (req, res) {
-        console.log(`working22`)
+        
         try{
             const userId = req.userId;
 
@@ -867,6 +870,7 @@ module.exports = {
 
             if (!source) return failureJSONResponse(res, { message: `please provide soruce` });
             else if (source && isNaN(source)) return failureJSONResponse(res, { message: `please provide valid soruce ` });
+            else if (source && (source < 1 || source > 2)) return failureJSONResponse(res, { message: `please provide sorurce between 1-2` });
 
             if (!otp) return failureJSONResponse(res, { message: `please provide otp` });
 
@@ -1001,7 +1005,6 @@ module.exports = {
             return failureJSONResponse(res, { message: `please provide user id` });
         }
     }
-
 
 }
 
