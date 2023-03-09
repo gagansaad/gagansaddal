@@ -878,7 +878,7 @@ module.exports = {
                 }).then((foundOTP) => {
 
                     if (!foundOTP) {
-                        return failureJSONResponse(res, { message: `somehting went wrong` });
+                        return failureJSONResponse(res, { message: `Invalid OTP` });
                     } else if (foundOTP) {
 
                         User.updateOne(
@@ -922,7 +922,7 @@ module.exports = {
                 }).then((foundOTP) => {
 
                     if (!foundOTP) {
-                        return failureJSONResponse(res, { message: `somehting went wrong` });
+                        return failureJSONResponse(res, { message: `Invalid OTP` });
                     } else if (foundOTP) {
 
                         User.updateOne(
@@ -962,7 +962,6 @@ module.exports = {
 
     },
 
-   
 }
 
 
