@@ -30,6 +30,7 @@ require(`./model/configurations/termAndCondition`);
 const signUp = require('./routes/api/accounts/user');
 
 const adminSignIp = require('./routes/accounts/admin/admin_login');
+const configurationsRoute = require('./routes/api/configurations');
 
 const loadHelmet = require(`./loaders/helmets`),
     loadExpressSession = require(`./loaders/expressSession`);
@@ -50,6 +51,9 @@ app.get('/', (req,res)=>{
 
 app.use('/v1/api/', signUp);
 app.use('/admin/login',adminSignIp);
+app.use('/v1/api/configurations', configurationsRoute);
+
+
 
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {

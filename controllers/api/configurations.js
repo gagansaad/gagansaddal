@@ -4,7 +4,7 @@ const mongoose = require("mongoose"),
     {
         successJSONResponse,
         failureJSONResponse
-    } = require(`../../../handlers/jsonResponseHandlers`);
+    } = require(`../../handlers/jsonResponseHandlers`);
 
 
 exports.privacyPolicy = async(req,res) => {
