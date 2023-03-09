@@ -329,10 +329,19 @@ module.exports = {
                             OTP.create({
                                 code: generateOTP(4),
                                 user: checkUserDetail[0]._id,
-                                for: 1
+                                for: 2
 
                             }).then((data) => {
                                 EmailOTPVerification(checkUserDetail[0]?.userInfo?.email_address, checkUserDetail[0]?.userInfo?.name, data.code)
+
+                            })
+
+                            OTP.create({
+                                code: generateOTP(4),
+                                user: checkUserDetail[0]._id,
+                                for: 1
+
+                            }).then((data) => {
                                 MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
                             })
 
