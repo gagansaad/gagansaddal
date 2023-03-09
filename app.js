@@ -53,25 +53,25 @@ if (process.env.MODE.toLowerCase() === `dev`) {
 }
 
 // add the error handler middleware function to the app
-// app.use((err, req, res, next) => {
-//     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
         
-//         // handle the error in a custom way
-//         res.status(400).send({ 
-//             status: 400,
-//             error: 'Invalid JSON'
-//          });
-//     }
-// });
+        // handle the error in a custom way
+        res.status(400).send({ 
+            status: 400,
+            error: 'Invalid JSON'
+         });
+    }
+});
 
-// // Error handling
-// // handle 404 errors
-// app.use((req, res, next) => {
-//     res.status(404).json({
-//         status: 404,
-//         message:'Sorry,end point found.'
-//     });
-// });
+// Error handling
+// handle 404 errors
+app.use((req, res, next) => {
+    res.status(404).json({
+        status: 404,
+        message:'Sorry,end point found.'
+    });
+});
 
 
 
