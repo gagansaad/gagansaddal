@@ -404,7 +404,7 @@ module.exports = {
                                 return res.json({
                                     status: 400,
                                     invalidOTP,
-                                    message: `fail`
+                                    message: `something went wrong`
                                 })
                             }
 
@@ -412,7 +412,7 @@ module.exports = {
                             return res.json({
                                 status: 400,
                                 invalidOTP,
-                                message: `fail`
+                                message: `Invalid OTP`
                             })
                         })
                     } else if (invalidOTP === 1) {
@@ -449,8 +449,6 @@ module.exports = {
                 code: otp_for_email
             }).then((foundOTP) => {
 
-                console.log(`working2`)
-                console.log(foundOTP)
 
                 if (foundOTP) {
 
@@ -463,30 +461,26 @@ module.exports = {
                         if (data) {
                             return res.json({
                                 status: 200,
-                                invalidOTP: null,
                                 message: `success!`
                             })
                         } else {
                             return res.json({
                                 status: 400,
-                                invalidOTP: null,
-                                message: `fail`
+                                message: `Invalid OTP`
                             })
                         }
 
                     }).catch((err) => {
                         return res.json({
                             status: 400,
-                            invalidOTP,
-                            message: `fail`
+                            message: `Invalid OTP`
                         })
                     })
 
                 } else {
                     return res.json({
                         status: 400,
-                        invalidOTP: null,
-                        message: `fail`
+                        message: `something went wrong`
                     })
                 }
 
@@ -494,7 +488,7 @@ module.exports = {
                 res.json({
                     status: 400,
                     invalidOTP: null,
-                    message: `fail`
+                    message: `something went wrong`
                 })
             })
         }

@@ -9,7 +9,4 @@ router.get(`/term-conditions`,
     controllers.termAndConditions
 );
 
-
-
-
 module.exports = router;
