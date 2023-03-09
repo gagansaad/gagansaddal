@@ -14,7 +14,7 @@ exports.privacyPolicy = async(req, res, next) => {
         .then((privacy)=>{
             if (!(privacy && privacy.length)) return failureJSONResponse(res,{message: `something went wrong`});
             else {
-                return successJSONResponse(res, { privacy: privacy[0] });
+                return successJSONResponse(res, { privacy: privacy[0]?.htmlText });
             }
         })
 
@@ -31,7 +31,7 @@ exports.termAndConditions = async (req, res, next) => {
             .then((termAndCondition) => {
                 if (!(termAndCondition && termAndCondition.length)) return failureJSONResponse(res, { message: `something went wrong` });
                 else {
-                    return successJSONResponse(res, { termAndCondition: termAndCondition[0] });
+                    return successJSONResponse(res, { termAndCondition: termAndCondition[0]?.htmlText });
                 }
             })
 

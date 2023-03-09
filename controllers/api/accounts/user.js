@@ -466,21 +466,21 @@ module.exports = {
                         } else {
                             return res.json({
                                 status: 400,
-                                message: `Invalid OTP`
+                                message: `something went wrong`
                             })
                         }
 
                     }).catch((err) => {
                         return res.json({
                             status: 400,
-                            message: `Invalid OTP`
+                            message: `something went wrong`
                         })
                     })
 
                 } else {
                     return res.json({
                         status: 400,
-                        message: `something went wrong`
+                        message: `Invalid OTP`
                     })
                 }
 
