@@ -784,7 +784,7 @@ module.exports = {
 
     generate_otp_for_change_email_mobile: async function (req, res) {
 
-        try{
+        try {
             const userId = req.userId;
 
             const source = req?.body?.source,
@@ -792,7 +792,7 @@ module.exports = {
                 phone_number = req?.body?.phone_number;
 
             if (!source) return failureJSONResponse(res, { message: `please provide soruce` });
-            else if (isNaN(source)) return failureJSONResponse(res, { message: `please provide valid soruce ` });
+            else if (source && isNaN(source)) return failureJSONResponse(res, { message: `please provide valid soruce ` });
 
             if (Number(source) === Number(1)) {
                 if (!phone_number) return failureJSONResponse(res, { message: `please provide phone number` });
@@ -805,7 +805,6 @@ module.exports = {
                     for: 1
 
                 }).then((foundOTP) => {
-                    console.log(foundOTP)
 
                     if (!foundOTP) {
                         return failureJSONResponse(res, { message: `something went wrong` });
@@ -838,132 +837,133 @@ module.exports = {
                         return successJSONResponse(res, { message: `success` });
                     }
 
-                }).catch((err)=>{
+                }).catch((err) => {
                     return failureJSONResponse(res, { message: `something went wrong` });
                 })
 
             }
-        } catch(err){
+        } catch (err) {
             return failureJSONResponse(res, { message: `something went wrong` });
         }
-    
-     
+
+
 
 
     },
 
 
     update_email_or_phone_number: async function (req, res) {
+        try{
+            const userId = req.userId;
 
-        const userId = req.userId;
+            const source = req?.body?.source,
+                email_address = req?.body?.email_address,
+                otp = req?.body?.otp,
+                phone_number = req?.body?.phone_number;
 
-        const source = req?.body?.source,
-            email_address = req?.body?.email_address,
-            otp = req?.body?.otp,
-            phone_number = req?.body?.phone_number;
+            if (!source) return failureJSONResponse(res, { message: `please provide soruce` });
+            else if (source && isNaN(source)) return failureJSONResponse(res, { message: `please provide valid soruce ` });
 
-        if (!source) return failureJSONResponse(res, { message: `please provide soruce` });
-        if (!otp) return failureJSONResponse(res, { message: `please provide otp` });
+            if (!otp) return failureJSONResponse(res, { message: `please provide otp` });
 
-        if (source === Number(1)) {
-            if (!phone_number) return failureJSONResponse(res, { message: `please provide phone number` });
-            else if (!isValidIndianMobileNumber(phone_number)) return failureJSONResponse(res, { message: `please provide valid phone number` });
+            if (Number(source) === Number(1)) {
+                if (!phone_number) return failureJSONResponse(res, { message: `please provide phone number` });
+                else if (!isValidIndianMobileNumber(phone_number)) return failureJSONResponse(res, { message: `please provide valid phone number` });
 
 
-            OTP.findOne({
-                code: otp, 
-                phone_number: phone_number,
-                for: 1
-            }).then((foundOTP) => {
+                OTP.findOne({
+                    code: otp,
+                    phone_number: phone_number,
+                    for: 1
+                }).then((foundOTP) => {
 
-                if (!foundOTP) {
-                    return failureJSONResponse(res, { message: `somehting went wrong` });
-                } else if (foundOTP) {
+                    if (!foundOTP) {
+                        return failureJSONResponse(res, { message: `somehting went wrong` });
+                    } else if (foundOTP) {
 
-                    User.updateOne(
-                        { _id: userId },
-                        { $set: { 'userInfo.mobile_number.phone_number': phone_number, } },
-                        { new: true })
-                        .then((updatedUser) => {
+                        User.updateOne(
+                            { _id: userId },
+                            { $set: { 'userInfo.mobile_number.phone_number': phone_number, } },
+                            { new: true })
+                            .then((updatedUser) => {
 
-                            if (updatedUser) {
-                                return successJSONResponse(res, {
-                                    message: `success`,
-                                    data: { phone_number }
-                                });
-                            } else {
+                                if (updatedUser) {
+                                    return successJSONResponse(res, {
+                                        message: `success`,
+                                        data: { phone_number }
+                                    });
+                                } else {
+                                    return failureJSONResponse(res, { message: `something went wrong` });
+                                }
+
+                            }).catch((err) => {
                                 return failureJSONResponse(res, { message: `something went wrong` });
-                            }
-
-                    })
-
-                }
-
-            }).catch((err) => {
-                console.log(err)
-                return failureJSONResponse(res, { message: `something went wrong` });
-            })
+                            })
 
 
-        } else if (source === Number(2)) {
-            if (!email_address) return failureJSONResponse(res, { message: `please provide email address` });
-            else if (!isValidEmailAddress(email_address)) return failureJSONResponse(res, { message: `please provide valid phone number` });
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    return failureJSONResponse(res, { message: `something went wrong` });
+                })
+
+
+            } else if (Number(source) === Number(2)) {
+                if (!email_address) return failureJSONResponse(res, { message: `please provide email address` });
+                else if (!isValidEmailAddress(email_address)) return failureJSONResponse(res, { message: `please provide valid phone number` });
 
 
 
-            OTP.findOne({
-                code: otp,
-                email_address: email_address.toLowerCase(),
-                for: 2
-            }).then((foundOTP) => {
+                OTP.findOne({
+                    code: otp,
+                    email_address: email_address.toLowerCase(),
+                    for: 2
+                }).then((foundOTP) => {
 
-                if (!foundOTP) {
-                    return failureJSONResponse(res, { message: `somehting went wrong` });
-                } else if (foundOTP) {
+                    if (!foundOTP) {
+                        return failureJSONResponse(res, { message: `somehting went wrong` });
+                    } else if (foundOTP) {
 
-                    User.updateOne(
-                        { _id: userId },
-                        { $set: { 'userInfo.email_address': email_address.toLowerCase(), } },
-                        { new: true })
-                        .then((updatedUser) => {
-                            console.log(updatedUser)
+                        User.updateOne(
+                            { _id: userId },
+                            { $set: { 'userInfo.email_address': email_address.toLowerCase(), } },
+                            { new: true })
+                            .then((updatedUser) => {
+                                console.log(updatedUser)
 
-                            if (updatedUser) {
-                                return successJSONResponse(res, {
-                                    message: `success`,
-                                    data: { email_address }
-                                });
-                            } else {
-                                console.log(`working`)
+                                if (updatedUser) {
+                                    return successJSONResponse(res, {
+                                        message: `success`,
+                                        data: { email_address }
+                                    });
+                                } else {
+                                    console.log(`working`)
+                                    return failureJSONResponse(res, { message: `something went wrong` });
+                                }
+
+                            }).catch((err) => {
                                 return failureJSONResponse(res, { message: `something went wrong` });
-                            }
-
-                        })
-
-                }
-
-            }).catch((err) => {
-                console.log(err)
-                return failureJSONResponse(res, { message: `something went wrong` });
-            })
+                            })
 
 
-        
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    return failureJSONResponse(res, { message: `something went wrong` });
+                })
+
+            }
+
+        }catch(err){
+            return failureJSONResponse(res, { message: `something went wrong` });
         }
 
+    },
 
-    }
-},
-
-    function verifyqJWT(token) {
-        jwt.verify(token, `AbCdEfGhIjKlMnOPYT`, function (err, decoded) {
-            if (err) {
-                return err;
-            } else {
-                return decoded.userId;
-            }
-        });
-    }
+   
+}
 
 
 
