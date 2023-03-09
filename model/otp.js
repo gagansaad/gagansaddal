@@ -13,6 +13,15 @@ const otpSchema = new mongoose.Schema({
         // 1= mobile number
     },
 
+    email_address: {
+        type: String,
+    },
+
+    phone_number: {
+        type: String,
+   
+    },
+
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: `user`,

@@ -6,6 +6,7 @@ const express = require(`express`),
     helmet = require(`helmet`),
     morgan = require(`morgan`),
     mongoose = require(`mongoose`),
+    centralErrorHandlers = require(`./utils/centralErrorHandlers`),
     expressSession = require(`express-session`),
     MongoStore = require(`connect-mongo`);
 
@@ -20,6 +21,10 @@ app.use(cors())
 require(`./model/accounts/users`);
 require(`./model/accounts/admin`);
 require(`./model/otp`);
+
+// configuration
+require(`./model/configurations/privacy`);
+require(`./model/configurations/termAndCondition`);
 
 // DB Setup
 const signUp = require('./routes/api/accounts/user');
@@ -38,6 +43,8 @@ loadExpressSession(app, expressSession, MongoStore);
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
+
+
 app.get('/', (req,res)=>{
     res.json({message: `msbdhsmb`})
 });
@@ -50,6 +57,34 @@ app.use('/api/admin/users',usercontrol);
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))
 }
+
+// add the error handler middleware function to the app
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        
+        // handle the error in a custom way
+        res.status(400).send({ 
+            status: 400,
+            error: 'Invalid JSON'
+         });
+    }
+});
+
+// Error handling
+// handle 404 errors
+app.use((req, res, next) => {
+    res.status(404).json({
+        status: 404,
+        message:'Sorry,end point found.'
+    });
+});
+
+
+
+// Error handling
+// for (let key in centralErrorHandlers) {
+//     app.use(centralErrorHandlers[key]);
+// }
 
 // Server setup
 app.listen(process.env.PORT, () => console.log(`[ MENEHARIYA API ] on ${process.env.PORT}`));
