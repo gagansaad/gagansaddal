@@ -27,6 +27,11 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
+router.get(`/user-profile`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchProfileDetails
+);
+
 router.post(`/signup-with-email`,
     controllers.validate_signup_data,
     controllers.signup_with_email

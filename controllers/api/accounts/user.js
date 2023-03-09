@@ -957,6 +957,37 @@ module.exports = {
 
     },
 
+    fetchProfileDetails: async function (req, res) {
+        try {
+            const userId = req.userId;
+
+            if (!userId) return failureJSONResponse(res, { message: `please provide user id` });
+
+            User.findById({
+                _id: userId
+            }).select(`userInfo userBasicInfo`).then((user)=>{
+                if (!user) return failureJSONResponse(res, { message: `something went worng` });
+                else {
+
+                    const data ={
+                        name: user?.userInfo?.name || null,
+                        email_address: user?.userInfo?.email_address || null,
+                        phone_number: user?.userInfo?.mobile_number?.phone_number || null,
+                        date_of_birth: user?.userInfo?.date_of_birth || null,
+                        profile_image: user?.userBasicInfo?.profile_image || null,
+
+                    }
+                    return successJSONResponse(res, { user: data });
+                }
+            }).catch((err)=>{
+                return failureJSONResponse(res, { message: `please provide user id` });
+            })
+        } catch (error) {
+            return failureJSONResponse(res, { message: `please provide user id` });
+        }
+    }
+
+
 }
 
 
