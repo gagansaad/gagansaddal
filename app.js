@@ -25,6 +25,7 @@ require(`./model/otp`);
 const signUp = require('./routes/api/accounts/user');
 
 const adminSignIp = require('./routes/accounts/admin/admin_login');
+const usercontrol = require('./routes/accounts/admin/users_control');
 
 const loadHelmet = require(`./loaders/helmets`),
     loadExpressSession = require(`./loaders/expressSession`);
@@ -43,6 +44,7 @@ app.get('/', (req,res)=>{
 
 app.use('/v1/api/', signUp);
 app.use('/admin/login',adminSignIp);
+app.use('/api/admin/users',usercontrol);
 
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
