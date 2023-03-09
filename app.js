@@ -6,6 +6,7 @@ const express = require(`express`),
     helmet = require(`helmet`),
     morgan = require(`morgan`),
     mongoose = require(`mongoose`),
+    centralErrorHandlers = require(`./utils/centralErrorHandlers`),
     expressSession = require(`express-session`),
     MongoStore = require(`connect-mongo`);
 
@@ -62,6 +63,22 @@ app.use((err, req, res, next) => {
          });
     }
 });
+
+// Error handling
+// handle 404 errors
+app.use((req, res, next) => {
+    res.status(404).json({
+        status: 404,
+        message:'Sorry,end point found.'
+    });
+});
+
+
+
+// Error handling
+for (let key in centralErrorHandlers) {
+    app.use(centralErrorHandlers[key]);
+}
 
 // Server setup
 app.listen(process.env.PORT, () => console.log(`[ MENEHARIYA API ] on ${process.env.PORT}`));
