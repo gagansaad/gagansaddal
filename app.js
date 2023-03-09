@@ -22,6 +22,10 @@ require(`./model/accounts/users`);
 require(`./model/accounts/admin`);
 require(`./model/otp`);
 
+// configuration
+require(`./model/configurations/privacy`);
+require(`./model/configurations/termAndCondition`);
+
 // DB Setup
 const signUp = require('./routes/api/accounts/user');
 
