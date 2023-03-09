@@ -16,6 +16,9 @@ exports.privacyPolicy = async(req, res, next) => {
             else {
                 return successJSONResponse(res, { privacy: privacy[0]?.htmlText });
             }
+        }).catch((err)=>{
+            console.log(err)
+            return failureJSONResponse(res, { message: `something went wrong` })
         })
 
     }catch(err){
@@ -33,9 +36,13 @@ exports.termAndConditions = async (req, res, next) => {
                 else {
                     return successJSONResponse(res, { termAndCondition: termAndCondition[0]?.htmlText });
                 }
+            }).catch((err) => {
+                console.log(err)
+                return failureJSONResponse(res, { message: `something went wrong` })
             })
 
     } catch (err) {
+        console.log(err)
         return failureJSONResponse(res, { message: `something went wrong` })
     }
 
