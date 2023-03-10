@@ -285,7 +285,7 @@ module.exports = {
                 { userInfo: 1, userBasicInfo: 1, userStatus: 1, }
             );
 
-            if (checkUserDetail.length) {
+            if (checkUserDetail?.length) {
                 if (!checkUserDetail[0]?.userInfo?.password) {
                     return res.json({
                         status: 400,
@@ -300,93 +300,98 @@ module.exports = {
 
                 if (passwordIsValid) {
                     // Update device information of user
-                    const updateDeviceInfo = await User.update({ _id: checkUserDetail[0]._id }, {
+                   try{
+                       const updateDeviceInfo = await User.update({ _id: checkUserDetail[0]._id }, {
 
-                        $set: {
-                            "userStatus.userStatus": "Login",
-                            "userStatus.userActionStatus": "Enable",
-                            "userDateInfo.lastLoginDate": new Date(),
-                        },
-                    });
+                           $set: {
+                               "userStatus.userStatus": "Login",
+                               "userStatus.userActionStatus": "Enable",
+                               "userDateInfo.lastLoginDate": new Date(),
+                           },
+                       });
 
-                    const email_address = checkUserDetail[0]?.userInfo?.email_address || null,
-                        phone_number = checkUserDetail[0].userInfo.mobile_number?.phone_number || null,
-                        is_active = checkUserDetail[0].userInfo.is_active;
+                       const email_address = checkUserDetail[0]?.userInfo?.email_address || null,
+                           phone_number = checkUserDetail[0].userInfo.mobile_number?.phone_number || null,
+                           is_active = checkUserDetail[0].userInfo.is_active;
 
-                    const data = {
-                        ...checkUserDetail[0].userInfo,
-                        phone_number: checkUserDetail[0]?.userInfo?.mobile_number?.phone_number || null,
-                        country_code: checkUserDetail[0]?.userInfo?.mobile_number?.country_code || null,
-                        is_active: checkUserDetail[0]?.userInfo?.is_active
-                    }
+                       const data = {
+                           ...checkUserDetail[0].userInfo,
+                           phone_number: checkUserDetail[0]?.userInfo?.mobile_number?.phone_number || null,
+                           country_code: checkUserDetail[0]?.userInfo?.mobile_number?.country_code || null,
+                           is_active: checkUserDetail[0]?.userInfo?.is_active
+                       }
 
-                    delete data["password"]
-                    delete data["mobile_number"]
+                       delete data["password"]
+                       delete data["mobile_number"]
 
-                    if (!is_active) {
-                        if (phone_number && email_address ) {
+                    //    if (!is_active) {
+                    //        if (phone_number && email_address) {
 
-                            OTP.create({
-                                code: generateOTP(4),
-                                user: checkUserDetail[0]._id,
-                                for: 2
+                    //            OTP.create({
+                    //                code: generateOTP(4),
+                    //                user: checkUserDetail[0]._id,
+                    //                for: 2
 
-                            }).then((data) => {
-                                EmailOTPVerification(checkUserDetail[0]?.userInfo?.email_address, checkUserDetail[0]?.userInfo?.name, data.code)
+                    //            }).then((data) => {
+                    //                EmailOTPVerification(checkUserDetail[0]?.userInfo?.email_address, checkUserDetail[0]?.userInfo?.name, data.code)
 
-                            }).catch((err)=>{
-                                return failureJSONResponse(res, { message: `something went wrong` }); 
-                            })
+                    //            }).catch((err) => {
+                    //                return failureJSONResponse(res, { message: `something went wrong` });
+                    //            })
 
-                            OTP.create({
-                                code: generateOTP(4),
-                                user: checkUserDetail[0]._id,
-                                for: 1
+                    //            OTP.create({
+                    //                code: generateOTP(4),
+                    //                user: checkUserDetail[0]._id,
+                    //                for: 1
 
-                            }).then((data) => {
-                                MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
-                            }).catch((err) => {
-                                console.log(err)
-                                return failureJSONResponse(res, { message: `something went wrong` });
-                            })
+                    //            }).then((data) => {
+                    //                MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
+                    //            }).catch((err) => {
+                    //                console.log(err)
+                    //                return failureJSONResponse(res, { message: `something went wrong` });
+                    //            })
 
-                            res.json({
-                                status: 205,
-                                data: data,
-                                message: `success`,
-                                token: createJWT(checkUserDetail[0]._id),
-                            });
+                    //            res.json({
+                    //                status: 205,
+                    //                data: data,
+                    //                message: `success`,
+                    //                token: createJWT(checkUserDetail[0]._id),
+                    //            });
 
-                        } else if (phone_number && !email_address) {
+                    //        } else if (phone_number && !email_address) {
 
-                            OTP.create({
-                                code: generateOTP(4),
-                                user: checkUserDetail[0]._id,
-                                for: 2
+                    //            OTP.create({
+                    //                code: generateOTP(4),
+                    //                user: checkUserDetail[0]._id,
+                    //                for: 2
 
-                            }).then((data) => {
-                                MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
-                            }).catch((err) => {
-                                console.log(err)
-                                return failureJSONResponse(res, { message: `something went wrong` });
-                            })
-                            res.json({
-                                status: 204,
-                                data: data,
-                                message: `success`,
-                                token: createJWT(checkUserDetail[0]._id),
-                            });
-                        }
-                    } else {
+                    //            }).then((data) => {
+                    //                MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
+                    //            }).catch((err) => {
+                    //                console.log(err)
+                    //                return failureJSONResponse(res, { message: `something went wrong` });
+                    //            })
+                    //            res.json({
+                    //                status: 204,
+                    //                data: data,
+                    //                message: `success`,
+                    //                token: createJWT(checkUserDetail[0]._id),
+                    //            });
+                    //        }
+                    //    } else {
 
-                        res.json({
-                            status: 200,
-                            data: data,
-                            message: `success`,
-                            token: createJWT(checkUserDetail[0]._id),
-                        });
+                    //        res.json({
+                    //            status: 200,
+                    //            data: data,
+                    //            message: `success`,
+                    //            token: createJWT(checkUserDetail[0]._id),
+                    //        });
 
-                    }
+                    //    }
+                    
+                   }catch(Err){
+                       console.log(Err)
+                   }
 
                 } else {
                     res.json({
@@ -394,6 +399,9 @@ module.exports = {
                         message: `Incorrect password`,
                     });
                 }
+
+
+
             } else {
                 res.json({
                     status: 404,

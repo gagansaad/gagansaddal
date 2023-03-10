@@ -16,7 +16,7 @@ const connection = require(`./config/dbConnection`);
 connection(mongoose);
 
 
-app.use(cors())
+
 
 require(`./model/accounts/users`);
 require(`./model/accounts/admin`);
@@ -26,6 +26,7 @@ require(`./model/otp`);
 require(`./model/configurations/privacy`);
 require(`./model/configurations/termAndCondition`);
 
+app.use(cors())
 // DB Setup
 const signUp = require('./routes/api/accounts/user');
 
@@ -61,6 +62,7 @@ if (process.env.MODE.toLowerCase() === `dev`) {
 
 // add the error handler middleware function to the app
 app.use((err, req, res, next) => {
+    console.log(err)
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
         
         // handle the error in a custom way
@@ -89,6 +91,7 @@ app.use((req, res, next) => {
 // }
 
 app.use((err, req, res, next) => {
+    console.log(err)
     res.status(500).send({ error: 'seriously something went wrong ' });
 });
 
