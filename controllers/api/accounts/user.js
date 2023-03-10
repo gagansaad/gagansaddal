@@ -380,14 +380,22 @@ module.exports = {
                     //        }
                     //    } else {
 
-                    //        res.json({
-                    //            status: 200,
-                    //            data: data,
-                    //            message: `success`,
-                    //            token: createJWT(checkUserDetail[0]._id),
-                    //        });
+                        //    res.json({
+                        //        status: 200,
+                        //        data: data,
+                        //        message: `success`,
+                        //        token: createJWT(checkUserDetail[0]._id),
+                        //    });
 
                     //    }
+
+                       res.json({
+                           status: 200,
+                           data: data,
+                           message: `success`,
+                           token: createJWT(checkUserDetail[0]._id),
+                       });
+
                     
                    }catch(Err){
                        console.log(Err)
