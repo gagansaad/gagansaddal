@@ -270,7 +270,8 @@ module.exports = {
     },
     // Standard login.
     login_with_email: async function (req, res) {
-    
+        console.log(`ashgdhafdhasfhda sajhdfhasg sa`)
+
         try {
 
             var userData = req.body;
