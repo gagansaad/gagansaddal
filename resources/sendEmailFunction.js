@@ -6,13 +6,13 @@ exports.EmailOTPVerification = (email_address = ``, name = ``, code) => {
         host: "sandbox.smtp.mailtrap.io",
         port: 2525,
         auth: {
-            user: "a165c441b7db27",
-            pass: "b347427170f314"
+            user: "f7c228fb77059b",
+            pass: "3c24155c86b784"
         }
     });
     let mailDetails = {
-        from: 'mohammad.sahil@netscapelabs.com',
-        to: 'sahil.seraphic@gmail.com',
+        from: 'dtestthird@gmail.com',
+        to: 'mohammad.sahil@netscapelabs.com',
         subject: 'Test mail',
         text: `${name} your otp is ${code}`
     };
