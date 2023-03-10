@@ -359,7 +359,7 @@ module.exports = {
                                    token: createJWT(checkUserDetail[0]._id),
                                });
 
-                           } else if (phone_number && !email_address) {
+                           } else  {
 
                                OTP.create({
                                    code: generateOTP(4),
