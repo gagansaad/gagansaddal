@@ -282,7 +282,7 @@ module.exports = {
 
             const checkUserDetail = await User.find(
                 { "userInfo.email_address": userData.email },
-                { userInfo: 1, userBasicInfo: 1, userStatus: 1, userDateInfo: 1 }
+                { userInfo: 1, userBasicInfo: 1, userStatus: 1, }
             );
 
             if (checkUserDetail.length) {
@@ -334,6 +334,8 @@ module.exports = {
                             }).then((data) => {
                                 EmailOTPVerification(checkUserDetail[0]?.userInfo?.email_address, checkUserDetail[0]?.userInfo?.name, data.code)
 
+                            }).catch((err)=>{
+                                return failureJSONResponse(res, { message: `something went wrong` }); 
                             })
 
                             OTP.create({
@@ -343,6 +345,9 @@ module.exports = {
 
                             }).then((data) => {
                                 MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
+                            }).catch((err) => {
+                                console.log(err)
+                                return failureJSONResponse(res, { message: `something went wrong` });
                             })
 
                             res.json({
@@ -361,6 +366,9 @@ module.exports = {
 
                             }).then((data) => {
                                 MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
+                            }).catch((err) => {
+                                console.log(err)
+                                return failureJSONResponse(res, { message: `something went wrong` });
                             })
                             res.json({
                                 status: 204,
@@ -408,7 +416,7 @@ module.exports = {
             otp_for_mobile_number,
         } = req.body;
 
-        if (otp_for_mobile_number) {
+        if (otp_for_mobile_number ) {
 
             OTP.findOne({
                 code: otp_for_email,
@@ -905,6 +913,8 @@ module.exports = {
 
 
     },
+
+  
 
 
     update_email_or_phone_number: async function (req, res) {
