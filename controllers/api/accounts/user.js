@@ -554,7 +554,7 @@ module.exports = {
 
     forget_password: async function (req, res, next) {
         console.log(req.body)
-        const email_address = req?.body?.email_address;
+        const email_address = req?.body?.email_address.toLowerCase();
 
         if (!email_address) return res.json({ status: 400, message: `Email not exist` });
 
@@ -637,7 +637,7 @@ module.exports = {
     update_password: async function (req, res, next) {
         let newPassword = req.body.newPassword;
 
-        const email_address = req?.body?.email_address;
+        const email_address = req?.body?.email_address.toLowerCase();
 
         if (!newPassword) {
             return res.json({
@@ -706,7 +706,7 @@ module.exports = {
 
         const dbQuery = { _id: { $ne: req.userId } };
 
-        if (email_address) dbQuery[`userInfo.email_address`] = email_address;
+        if (email_address) dbQuery[`userInfo.email_address`] = email_address.toLowerCase();
 
         User.findOne(dbQuery)
             .then(async (foundUser) => {
@@ -801,7 +801,7 @@ module.exports = {
     check_email_already_exists: async function (req, res, next) {
 
        try{
-           const email_address = req?.body?.email_address;
+           const email_address = req?.body?.email_address?.toLowerCase();
 
            console.log(`asdnasvdh****`, email_address)
 
@@ -849,7 +849,7 @@ module.exports = {
             const userId = req.userId;
 
             const source = Math.abs(req?.body?.source),
-                email_address = req?.body?.email_address,
+                email_address = req?.body?.email_address?.toLowerCase(),
                 phone_number = req?.body?.phone_number;
 
             if (!source) return failureJSONResponse(res, { message: `please provide soruce` });
@@ -923,7 +923,7 @@ module.exports = {
             const userId = req.userId;
 
             const source = Math.abs(req?.body?.source),
-                email_address = req?.body?.email_address,
+                email_address = req?.body?.email_address?.toLowerCase(),
                 otp = req?.body?.otp,
                 phone_number = req?.body?.phone_number;
 
