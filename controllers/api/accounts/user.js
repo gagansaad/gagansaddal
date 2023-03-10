@@ -347,6 +347,7 @@ module.exports = {
 
                                }).then((data) => {
                                    MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
+                                   
                                }).catch((err) => {
                                    console.log(err)
                                    return failureJSONResponse(res, { message: `something went wrong` });
@@ -359,7 +360,7 @@ module.exports = {
                                    token: createJWT(checkUserDetail[0]._id),
                                });
 
-                           } else  {
+                           } else if (email_address) {
 
                                OTP.create({
                                    code: generateOTP(4),
@@ -367,7 +368,7 @@ module.exports = {
                                    for: 2
 
                                }).then((data) => {
-                                   MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
+                                   EmailOTPVerification(checkUserDetail[0]?.userInfo?.email_address, checkUserDetail[0]?.userInfo?.name, data.code)
                                }).catch((err) => {
                                    console.log(err)
                                    return failureJSONResponse(res, { message: `something went wrong` });
