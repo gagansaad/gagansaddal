@@ -59,7 +59,7 @@ const vali = (date) => {
     return "Valid date";
 }
 
-    
+
 
 module.exports = {
 
@@ -115,12 +115,12 @@ module.exports = {
     signup_with_email: async function (req, res) {
         try {
             var newUser = req.body;
-            newUser.email = newUser.email.toLowerCase();
+            newUser.email = newUser.email.trim().toLowerCase();
 
             // Check If email is register with any user via other platforms like facebook,google or email.
 
             const checkUserEmail = await User.find(
-                { "userInfo.email_address": newUser.email },
+                { "userInfo.email_address": (newUser.email).trim() },
                 { userBasicInfo: 1, userInfo: 1 }
             );
 
@@ -282,7 +282,7 @@ module.exports = {
             // Check If email is register with any user via other platforms like facebook,google or email.
 
             const checkUserDetail = await User.find(
-                { "userInfo.email_address": userData.email },
+                { "userInfo.email_address": (userData.email).trim() },
                 { userInfo: 1, userBasicInfo: 1, userStatus: 1, }
             );
 
@@ -295,105 +295,105 @@ module.exports = {
                     });
                 }
                 let passwordIsValid = bcrypt.compareSync(
-                    (userData?.password.trim()),
+                    userData?.password,
                     checkUserDetail[0].userInfo.password
                 );
 
                 if (passwordIsValid) {
                     // Update device information of user
-                   try{
-                       const updateDeviceInfo = await User.update({ _id: checkUserDetail[0]._id }, {
+                    try {
+                        const updateDeviceInfo = await User.update({ _id: checkUserDetail[0]._id }, {
 
-                           $set: {
-                               "userStatus.userStatus": "Login",
-                               "userStatus.userActionStatus": "Enable",
-                               "userDateInfo.lastLoginDate": new Date(),
-                           },
-                       });
+                            $set: {
+                                "userStatus.userStatus": "Login",
+                                "userStatus.userActionStatus": "Enable",
+                                "userDateInfo.lastLoginDate": new Date(),
+                            },
+                        });
 
-                       const email_address = checkUserDetail[0]?.userInfo?.email_address || null,
-                           phone_number = checkUserDetail[0].userInfo.mobile_number?.phone_number || null,
-                           is_active = checkUserDetail[0].userInfo.is_active;
+                        const email_address = checkUserDetail[0]?.userInfo?.email_address || null,
+                            phone_number = checkUserDetail[0].userInfo.mobile_number?.phone_number || null,
+                            is_active = checkUserDetail[0].userInfo.is_active;
 
-                       const data = {
-                           ...checkUserDetail[0].userInfo,
-                           phone_number: checkUserDetail[0]?.userInfo?.mobile_number?.phone_number || null,
-                           country_code: checkUserDetail[0]?.userInfo?.mobile_number?.country_code || null,
-                           is_active: checkUserDetail[0]?.userInfo?.is_active
-                       }
+                        const data = {
+                            ...checkUserDetail[0].userInfo,
+                            phone_number: checkUserDetail[0]?.userInfo?.mobile_number?.phone_number || null,
+                            country_code: checkUserDetail[0]?.userInfo?.mobile_number?.country_code || null,
+                            is_active: checkUserDetail[0]?.userInfo?.is_active
+                        }
 
-                       delete data["password"]
-                       delete data["mobile_number"]
+                        delete data["password"]
+                        delete data["mobile_number"]
 
-                       if (!is_active) {
-                           if (phone_number && email_address) {
+                        if (!is_active) {
+                            if (phone_number && email_address) {
 
-                               OTP.create({
-                                   code: generateOTP(4),
-                                   user: checkUserDetail[0]._id,
-                                   for: 2
+                                OTP.create({
+                                    code: generateOTP(4),
+                                    user: checkUserDetail[0]._id,
+                                    for: 2
 
-                               }).then((data) => {
-                                   EmailOTPVerification(checkUserDetail[0]?.userInfo?.email_address, checkUserDetail[0]?.userInfo?.name, data.code)
+                                }).then((data) => {
+                                    EmailOTPVerification(checkUserDetail[0]?.userInfo?.email_address, checkUserDetail[0]?.userInfo?.name, data.code)
 
-                               }).catch((err) => {
-                                   return failureJSONResponse(res, { message: `something went wrong` });
-                               })
+                                }).catch((err) => {
+                                    return failureJSONResponse(res, { message: `something went wrong` });
+                                })
 
-                               OTP.create({
-                                   code: generateOTP(4),
-                                   user: checkUserDetail[0]._id,
-                                   for: 1
+                                OTP.create({
+                                    code: generateOTP(4),
+                                    user: checkUserDetail[0]._id,
+                                    for: 1
 
-                               }).then((data) => {
-                                   MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
-                                   
-                               }).catch((err) => {
-                                   console.log(err)
-                                   return failureJSONResponse(res, { message: `something went wrong` });
-                               })
+                                }).then((data) => {
+                                    MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
 
-                               res.json({
-                                   status: 205,
-                                   data: data,
-                                   message: `success`,
-                                   token: createJWT(checkUserDetail[0]._id),
-                               });
+                                }).catch((err) => {
+                                    console.log(err)
+                                    return failureJSONResponse(res, { message: `something went wrong` });
+                                })
 
-                           } else if (email_address) {
+                                res.json({
+                                    status: 205,
+                                    data: data,
+                                    message: `success`,
+                                    token: createJWT(checkUserDetail[0]._id),
+                                });
 
-                               OTP.create({
-                                   code: generateOTP(4),
-                                   user: checkUserDetail[0]._id,
-                                   for: 2
+                            } else if (email_address) {
 
-                               }).then((data) => {
-                                   EmailOTPVerification(checkUserDetail[0]?.userInfo?.email_address, checkUserDetail[0]?.userInfo?.name, data.code)
-                               }).catch((err) => {
-                                   console.log(err)
-                                   return failureJSONResponse(res, { message: `something went wrong` });
-                               })
-                               res.json({
-                                   status: 204,
-                                   data: data,
-                                   message: `success`,
-                                   token: createJWT(checkUserDetail[0]._id),
-                               });
-                           }
-                       } else {
+                                OTP.create({
+                                    code: generateOTP(4),
+                                    user: checkUserDetail[0]._id,
+                                    for: 2
 
-                           res.json({
-                               status: 200,
-                               data: data,
-                               message: `success`,
-                               token: createJWT(checkUserDetail[0]._id),
-                           });
+                                }).then((data) => {
+                                    EmailOTPVerification(checkUserDetail[0]?.userInfo?.email_address, checkUserDetail[0]?.userInfo?.name, data.code)
+                                }).catch((err) => {
+                                    console.log(err)
+                                    return failureJSONResponse(res, { message: `something went wrong!` });
+                                })
+                                res.json({
+                                    status: 204,
+                                    data: data,
+                                    message: `success`,
+                                    token: createJWT(checkUserDetail[0]._id),
+                                });
+                            }
+                        } else {
 
-                       }
-                    
-                   }catch(Err){
-                       console.log(Err)
-                   }
+                            res.json({
+                                status: 200,
+                                data: data,
+                                message: `success`,
+                                token: createJWT(checkUserDetail[0]._id),
+                            });
+
+                        }
+
+                    } catch (Err) {
+                        console.log(Err)
+                    }
 
                 } else {
                     res.json({
@@ -403,7 +403,7 @@ module.exports = {
                 }
 
 
-                
+
             } else {
                 res.json({
                     status: 404,
@@ -414,7 +414,7 @@ module.exports = {
             console.log(err)
             res.json({
                 status: 400,
-                message: `something went wrong`,
+                message: `something went wrong!`,
             });
         }
     },
@@ -426,7 +426,7 @@ module.exports = {
             otp_for_mobile_number,
         } = req.body;
 
-        if (otp_for_mobile_number ) {
+        if (otp_for_mobile_number) {
 
             OTP.findOne({
                 code: otp_for_email,
@@ -734,7 +734,7 @@ module.exports = {
     },
 
 
-   
+
 
 
     update_profile: async function (req, res, next) {
@@ -810,51 +810,51 @@ module.exports = {
 
     check_email_already_exists: async function (req, res, next) {
 
-       try{
-           const email_address = req?.body?.email_address?.toLowerCase();
+        try {
+            const email_address = req?.body?.email_address?.toLowerCase();
 
-           console.log(`asdnasvdh****`, email_address)
+            console.log(`asdnasvdh****`, email_address)
 
-           if (email_address && !isValidEmailAddress(email_address)) {
-               return failureJSONResponse(res, { message: `please provide valid email` });
-           }
+            if (email_address && !isValidEmailAddress(email_address)) {
+                return failureJSONResponse(res, { message: `please provide valid email` });
+            }
 
-           const dbQuery = { _id: { $ne: req.userId } };
+            const dbQuery = { _id: { $ne: req.userId } };
 
-           if (email_address) dbQuery[`userInfo.email_address`] = email_address;
+            if (email_address) dbQuery[`userInfo.email_address`] = email_address;
 
-           if (email_address) {
-               User.findOne(dbQuery)
-                   .then((foundUser) => {
+            if (email_address) {
+                User.findOne(dbQuery)
+                    .then((foundUser) => {
 
 
-                       console.log(`foundUser`, foundUser)
-                       if (foundUser) {
-                           return failureJSONResponse(res, {
-                               message: `Account with that ${email_address} already exists`
-                           }, statusCode = 409);
-                       } else {
-                           return next()
-                       }
+                        console.log(`foundUser`, foundUser)
+                        if (foundUser) {
+                            return failureJSONResponse(res, {
+                                message: `Account with that ${email_address} already exists`
+                            }, statusCode = 409);
+                        } else {
+                            return next()
+                        }
 
-                   }).catch((err) => {
-                       console.log(err)
-                       return failureJSONResponse(res, { message: `something went wrong` });
-                   })
-           } else {
-               return next()
-           }
-       }catch(err){
-           console.log(err)
-           return failureJSONResponse(res, { message: `something went wrong` });
-       }
+                    }).catch((err) => {
+                        console.log(err)
+                        return failureJSONResponse(res, { message: `something went wrong` });
+                    })
+            } else {
+                return next()
+            }
+        } catch (err) {
+            console.log(err)
+            return failureJSONResponse(res, { message: `something went wrong` });
+        }
 
     },
 
     // change email address 
 
     generate_otp_for_change_email_mobile: async function (req, res) {
-        
+
         try {
             const userId = req.userId;
 
@@ -924,12 +924,12 @@ module.exports = {
 
     },
 
-  
+
 
 
     update_email_or_phone_number: async function (req, res) {
-        
-        try{
+
+        try {
             const userId = req.userId;
 
             const source = Math.abs(req?.body?.source),
@@ -937,7 +937,7 @@ module.exports = {
                 otp = req?.body?.otp,
                 phone_number = req?.body?.phone_number;
 
-     
+
 
             if (!source) return failureJSONResponse(res, { message: `please provide soruce` });
             else if (source && isNaN(source)) return failureJSONResponse(res, { message: `please provide valid soruce ` });
@@ -1039,7 +1039,7 @@ module.exports = {
 
             }
 
-        }catch(err){
+        } catch (err) {
             console.log(err)
             return failureJSONResponse(res, { message: `something went wrong` });
         }
@@ -1054,25 +1054,25 @@ module.exports = {
             if (!userId) return failureJSONResponse(res, { message: `please provide user id` });
 
             User.findById({ _id: userId })
-            .select(`userInfo userBasicInfo`)
-            .then((user)=>{
-                if (!user) return failureJSONResponse(res, { message: `something went worng` });
-                else {
+                .select(`userInfo userBasicInfo`)
+                .then((user) => {
+                    if (!user) return failureJSONResponse(res, { message: `something went worng` });
+                    else {
 
-                    const data ={
-                        name: user?.userInfo?.name || null,
-                        email_address: user?.userInfo?.email_address || null,
-                        phone_number: user?.userInfo?.mobile_number?.phone_number || null,
-                        gender: user?.userInfo?.gender || null,
-                        date_of_birth: user?.userInfo?.date_of_birth || null,
-                        profile_image: user?.userBasicInfo?.profile_image || null,
+                        const data = {
+                            name: user?.userInfo?.name || null,
+                            email_address: user?.userInfo?.email_address || null,
+                            phone_number: user?.userInfo?.mobile_number?.phone_number || null,
+                            gender: user?.userInfo?.gender || null,
+                            date_of_birth: user?.userInfo?.date_of_birth || null,
+                            profile_image: user?.userBasicInfo?.profile_image || null,
 
+                        }
+                        return successJSONResponse(res, { user: data });
                     }
-                    return successJSONResponse(res, { user: data });
-                }
-            }).catch((err)=>{
-                return failureJSONResponse(res, { message: `please provide user id` });
-            })
+                }).catch((err) => {
+                    return failureJSONResponse(res, { message: `please provide user id` });
+                })
         } catch (error) {
             return failureJSONResponse(res, { message: `please provide user id` });
         }
