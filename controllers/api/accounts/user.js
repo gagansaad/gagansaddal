@@ -277,7 +277,7 @@ module.exports = {
             var userData = req.body;
             if (!userData.email) return res.json({ message: "please provide a email" });
 
-            userData.email = userData.email.toLowerCase();
+            userData.email = (userData?.email).trim().toLowerCase();
 
             // Check If email is register with any user via other platforms like facebook,google or email.
 
@@ -295,7 +295,7 @@ module.exports = {
                     });
                 }
                 let passwordIsValid = bcrypt.compareSync(
-                    userData.password,
+                    (userData?.password.trim()),
                     checkUserDetail[0].userInfo.password
                 );
 
