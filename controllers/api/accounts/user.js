@@ -178,13 +178,13 @@ module.exports = {
                         appVersion: newUser.appVersion,
                     };
                     newUserDetail.userInfo = {
-                        name: newUser.name,
+                        name: (newUser?.name).trim(),
                         is_active: false,
-                        password: newUser.password,
-                        email_address: newUser.email,
+                        password: (newUser?.password).trim(),
+                        email_address: (newUser?.email).trim(),
                         mobile_number: {
                             country_code: 91,
-                            phone_number: newUser.phone_number
+                            phone_number: (newUser?.phone_number).trim()
                         },
                     };
                     newUserDetail.user_device_info = {
