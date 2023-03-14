@@ -79,17 +79,17 @@ module.exports = {
             const missingData = [],
                 invalidData = [];
 
-            if (!isValidString(name)) missingData.push(`name`);
-            if (!isValidString(password)) missingData.push(`password`);
+            if (!isValidString(name.trim())) missingData.push(`name`);
+            if (!isValidString(password.trim())) missingData.push(`password`);
 
-            if (!isValidString(device_token)) missingData.push(`device token`);
+            if (!isValidString(device_token.trim())) missingData.push(`device token`);
             if (!(device_type)) missingData.push(`device type`);
             else if (isNaN(device_type)) invalidData.push(`device type`);
 
-            if (!isValidString(email)) missingData.push(`email address`);
-            else if (email && !isValidEmailAddress(email)) invalidData.push(`email address`);
+            if (!isValidString(email.trim())) missingData.push(`email address`);
+            else if (email.trim() && !isValidEmailAddress(email.trim())) invalidData.push(`email address`);
 
-            if (phone_number && !isValidIndianMobileNumber(phone_number)) invalidData.push(`phone number`);
+            if (phone_number.trim() && !isValidIndianMobileNumber(phone_number.trim())) invalidData.push(`phone number`);
 
             if (missingData.length || invalidData.length) {
                 const data = {};
