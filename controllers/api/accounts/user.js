@@ -752,7 +752,7 @@ module.exports = {
             } = req.body;
             console.log(vali(Date(date_of_birth)))
             if (name && !isValidString(name)) return failureJSONResponse(res, { message: `Invalid Name` });
-            if (date_of_birth && !vali(date_of_birth)) return failureJSONResponse(res, { message: `Invalid Date Of Birth` });
+            // if (date_of_birth && !vali(date_of_birth)) return failureJSONResponse(res, { message: `Invalid Date Of Birth` });
             if (gender && isNaN(Number(gender))) return failureJSONResponse(res, { message: `Invalid Gender` });
 
 
