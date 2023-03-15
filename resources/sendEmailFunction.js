@@ -6,8 +6,8 @@ exports.EmailOTPVerification = (email_address = ``, name = ``, code) => {
         host: "sandbox.smtp.mailtrap.io",
         port: 2525,
         auth: {
-            user: "f7c228fb77059b",
-            pass: "3c24155c86b784"
+            user: "7b0d4ef3a7805a",
+            pass: "fd00eb2dce2636"
         }
     });
     let mailDetails = {
