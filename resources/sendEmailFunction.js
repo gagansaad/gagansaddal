@@ -12,7 +12,7 @@ exports.EmailOTPVerification = (email_address = ``, name = ``, code) => {
     });
     let mailDetails = {
         from: 'dtestthird@gmail.com',
-        to: 'mohammad.sahil@netscapelabs.com',
+        to: `${email_address}`,
         subject: 'Test mail',
         text: `${name} your otp is ${code}`
     };
