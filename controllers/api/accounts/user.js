@@ -528,7 +528,7 @@ module.exports = {
 
                         "userGoogleInfo.facebookId": facebookId,
                         "userGoogleInfo.googleEmail": emailAddress.toLowerCase(),
-                        "userGoogleInfo.googleToken": googleToken,
+                        "userGoogleInfo.googleToken": facebookToken,
 
                         user_device_info: {
                             token: deviceToken,
