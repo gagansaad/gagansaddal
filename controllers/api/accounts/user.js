@@ -124,6 +124,7 @@ module.exports = {
                 { userBasicInfo: 1, userInfo: 1 }
             );
 
+
             if (checkUserEmail.length) {
                 //If user has signedup from fb
                 if (
@@ -268,9 +269,525 @@ module.exports = {
             })
         }
     },
+
+
+
+
+    // Standard signup with Google.
+    login_signup_with_google: async function (req, res) {
+
+
+        const emailAddress = (req?.body?.email_address).trim(),
+            name = (req?.body?.name).trim(),
+            deviceType = req?.body?.device_type,
+            googleId = (req?.body?.google_id),
+            googleToken = (req?.body?.google_token),
+            deviceToken = (req?.body?.device_token);
+
+        if (!isValidString(name.trim())) return failureJSONResponse(res, { message: `Please enter valid name` });
+        if (!isValidString(googleId.trim())) return failureJSONResponse(res, { message: `google id missing` });
+        if (!isValidString(googleToken.trim())) return failureJSONResponse(res, { message: `google token missing` });
+
+        if (!isValidString(deviceToken.trim())) return failureJSONResponse(res, { message: `device token missing` });
+        if (!(deviceType)) return failureJSONResponse(res, { message: `device type missing` });
+        else if (isNaN(deviceType)) return failureJSONResponse(res, { message: `device type invalid;` });
+
+        if (!isValidString(emailAddress.trim())) return failureJSONResponse(res, { message: `Please enter email address` });
+        else if (emailAddress.trim() && !isValidEmailAddress(emailAddress.trim())) return failureJSONResponse(res, { message: `Please enter valid email address` });
+
+        // Check If email is register with any user via other platforms like facebook,google or email.
+
+        const foundUser = await User.findOne(
+            { "userGoogleInfo.googleId": googleId },
+            {
+                _id: 1,
+                userBasicInfo: 1,
+                userStatus: 1,
+                userInfo: 1,
+                userDateInfo: 1
+            }
+        );
+
+        if (foundUser && Object.keys(foundUser).length) {
+
+            console.log(`case 1`)
+
+            const updateDeviceInfo = await User.update({ _id: foundUser._id }, {
+                $addToSet: {
+                    user_device_info: {
+                        token: deviceToken,
+                        device_type: Number(deviceType)
+                    },
+                },
+                $set: {
+                    "user_status.user_action_Status": Number(2),
+                    "user_status.lastLoginDate": new Date(),
+                },
+            });
+
+            return successJSONResponse(res, {
+                status: 200,
+                data: {
+                    userId: foundUser._id,
+                    name: foundUser?.userInfo?.name || null,
+                    email_address: foundUser?.userInfo?.email_address || null,
+                    phone_number: foundUser?.userInfo?.mobile_number?.phone_number || null,
+                    is_active: foundUser?.userInfo?.is_active
+                },
+                message: `success`,
+                token: createJWT(foundUser._id),
+            })
+
+        } else {
+
+
+            const foundUserWithEmailAddress = await User.findOne({
+                "userInfo.email_address": emailAddress.toLowerCase(),
+                "userGoogleInfo.googleId": null,
+                "user_status.user_action_Status": 2,
+            }, { userBasicInfo: 1, _id: 1, userStatus: 1, userInfo: 1, userDateInfo: 1 });
+
+
+            if (foundUserWithEmailAddress && Object.keys(foundUserWithEmailAddress).length) {
+                console.log(`case2 `)
+
+                const updateDeviceInfo = await dbSchema.User.update({ _id: foundUserWithEmailAddress._id }, {
+                    $addToSet: {
+
+                        "userGoogleInfo.googleId": googleId,
+                        "userGoogleInfo.googleEmail": emailAddress.toLowerCase(),
+                        "userGoogleInfo.googleToken": googleToken,
+
+                        user_device_info: {
+                            token: deviceToken,
+                            device_type: Numbe(deviceType)
+                        },
+                    },
+                    $set: {
+                        "user_status.userActionStatus": 2
+                    },
+                });
+
+                return successJSONResponse(res, {
+                    status: 200,
+                    data: {
+                        userId: foundUserWithEmailAddress._id,
+                        name: foundUserWithEmailAddress.userInfo.name || null,
+                        email_address: foundUserWithEmailAddress?.userInfo?.email_address || null,
+                        phone_number: foundUserWithEmailAddress?.userInfo?.mobile_number?.phone_number || null,
+                        is_active: foundUserWithEmailAddress?.userInfo?.is_active
+                    },
+                    message: `success`,
+                    token: createJWT(foundUserWithEmailAddress._id),
+                })
+
+            } else {
+                console.log(`case3`)
+
+                // Create a new user.
+                var newUserDetail = {};
+                var user_status = {
+                    user_action_Status: 2,
+                };
+                var userGoogleInfo = {
+                    googleId: googleId,
+                    googleEmail: emailAddress.toLowerCase(),
+                    facebookToken: facebookToken,
+                };
+                var userInfo = {
+                    name: name,
+                    is_active: true,
+                    email_address: emailAddress.toLowerCase(),
+                };
+                var userBasicInfo = {
+                    source: "GoogleEmail",
+                };
+                var user_device_info = {
+                    token: deviceToken,
+                    device_type: Number(deviceType),
+                };
+
+                newUserDetail.user_status = user_status;
+                newUserDetail.userGoogleInfo = userGoogleInfo;
+                newUserDetail.userInfo = userInfo;
+                newUserDetail.userBasicInfo = userBasicInfo;
+                newUserDetail.user_device_info = user_device_info;
+
+                User(newUserDetail).save(function (err, result) {
+                    if (err) {
+                        res.json({
+                            status: 401,
+                            message: `fail`,
+                            data: err,
+                        });
+                    } else {
+
+                        return res.json({
+                            status: 201,
+                            data: {
+                                userId: result._id,
+                                name: result.userInfo.name || null,
+                                email_address: result?.userInfo?.email_address || null,
+                                phone_number: result?.userInfo?.mobile_number?.phone_number || null,
+                                is_active: result?.userInfo?.is_active
+                            },
+
+                            message: `success`,
+                            token: createJWT(result._id),
+                        });
+
+                    }
+
+                });
+
+            }
+        }
+    },
+
+    // Standard signup with Google.
+    login_signup_with_facebook: async function (req, res) {
+
+        console.log(req.body)
+
+        const emailAddress = (req?.body?.email_address),
+            name = (req?.body?.name).trim(),
+            deviceType = req?.body?.device_type,
+            facebookId = (req?.body?.facebook_id),
+            facebookToken = (req?.body?.facebook_token),
+            deviceToken = (req?.body?.device_token);
+
+        if (!isValidString(name.trim())) return failureJSONResponse(res, { message: `Please enter valid name` });
+        if (!isValidString(facebookId.trim())) return failureJSONResponse(res, { message: `facebook id missing` });
+        if (!isValidString(facebookToken.trim())) return failureJSONResponse(res, { message: `facebook token missing` });
+
+        if (!isValidString(deviceToken.trim())) return failureJSONResponse(res, { message: `device token missing` });
+        if (!(deviceType)) return failureJSONResponse(res, { message: `device type missing` });
+        else if (isNaN(deviceType)) return failureJSONResponse(res, { message: `device type invalid;` });
+
+        if (!isValidString(emailAddress.trim())) return failureJSONResponse(res, { message: `Please enter email address` });
+        else if (emailAddress.trim() && !isValidEmailAddress(emailAddress.trim())) return failureJSONResponse(res, { message: `Please enter valid email address` });
+
+        // Check If email is register with any user via other platforms like facebook,google or email.
+
+        const foundUser = await User.findOne(
+            { "userGoogleInfo.googleId": facebookId },
+            {
+                _id: 1,
+                userBasicInfo: 1,
+                userStatus: 1,
+                userInfo: 1,
+                userDateInfo: 1
+            }
+        );
+
+        if (foundUser && Object.keys(foundUser).length) {
+
+            console.log(`case 1`)
+
+            const updateDeviceInfo = await User.update({ _id: foundUser._id }, {
+                $addToSet: {
+                    user_device_info: {
+                        token: deviceToken,
+                        device_type: Number(deviceType)
+                    },
+                },
+                $set: {
+                    "user_status.user_action_Status": Number(2),
+                    "user_status.lastLoginDate": new Date(),
+                },
+            });
+
+            return successJSONResponse(res, {
+                status: 200,
+                data: {
+                    userId: foundUser._id,
+                    name: foundUser?.userInfo?.name || null,
+                    email_address: foundUser?.userInfo?.email_address || null,
+                    phone_number: foundUser?.userInfo?.mobile_number?.phone_number || null,
+                    is_active: foundUser?.userInfo?.is_active
+                },
+                message: `success`,
+                token: createJWT(foundUser._id),
+            })
+
+        } else {
+
+
+            const foundUserWithEmailAddress = await User.findOne({
+                "userInfo.email_address": emailAddress.toLowerCase(),
+                "userGoogleInfo.facebookId": null,
+                "user_status.user_action_Status": 2,
+            }, { userBasicInfo: 1, _id: 1, userStatus: 1, userInfo: 1, userDateInfo: 1 });
+
+
+            if (foundUserWithEmailAddress && Object.keys(foundUserWithEmailAddress).length) {
+                console.log(`case2 `)
+
+                const updateDeviceInfo = await dbSchema.User.update({ _id: foundUserWithEmailAddress._id }, {
+                    $addToSet: {
+
+                        "userGoogleInfo.facebookId": facebookId,
+                        "userGoogleInfo.googleEmail": emailAddress.toLowerCase(),
+                        "userGoogleInfo.googleToken": googleToken,
+
+                        user_device_info: {
+                            token: deviceToken,
+                            device_type: Numbe(deviceType)
+                        },
+                    },
+                    $set: {
+                        "user_status.userActionStatus": 2
+                    },
+                });
+
+                return successJSONResponse(res, {
+                    status: 200,
+                    data: {
+                        userId: foundUserWithEmailAddress._id,
+                        name: foundUserWithEmailAddress.userInfo.name || null,
+                        email_address: foundUserWithEmailAddress?.userInfo?.email_address || null,
+                        phone_number: foundUserWithEmailAddress?.userInfo?.mobile_number?.phone_number || null,
+                        is_active: foundUserWithEmailAddress?.userInfo?.is_active
+                    },
+                    message: `success`,
+                    token: createJWT(foundUserWithEmailAddress._id),
+                })
+
+            } else {
+                console.log(`case3`)
+
+                // Create a new user.
+                var newUserDetail = {};
+                var user_status = {
+                    user_action_Status: 2,
+                };
+                var userGoogleInfo = {
+                    facebookId: facebookId,
+                    googleEmail: emailAddress.toLowerCase(),
+                    googleToken: googleToken,
+                };
+                var userInfo = {
+                    name: name,
+                    is_active: true,
+                    email_address: emailAddress.toLowerCase(),
+                };
+                var userBasicInfo = {
+                    source: "Facebook",
+                };
+                var user_device_info = {
+                    token: deviceToken,
+                    device_type: Number(deviceType),
+                };
+
+                newUserDetail.user_status = user_status;
+                newUserDetail.userGoogleInfo = userGoogleInfo;
+                newUserDetail.userInfo = userInfo;
+                newUserDetail.userBasicInfo = userBasicInfo;
+                newUserDetail.user_device_info = user_device_info;
+
+                User(newUserDetail).save(function (err, result) {
+                    if (err) {
+                        res.json({
+                            status: 401,
+                            message: `fail`,
+                            data: err,
+                        });
+                    } else {
+
+                        return res.json({
+                            status: 201,
+                            data: {
+                                userId: result._id,
+                                name: result.userInfo.name || null,
+                                email_address: result?.userInfo?.email_address || null,
+                                phone_number: result?.userInfo?.mobile_number?.phone_number || null,
+                                is_active: result?.userInfo?.is_active
+                            },
+
+                            message: `success`,
+                            token: createJWT(result._id),
+                        });
+
+                    }
+
+                });
+
+            }
+        }
+    },
+
+
+
+    // Standard signup with Google.
+    login_signup_with_google: async function (req, res) {
+
+        const emailAddress = (req?.body?.email_address).trim(),
+            name = (req?.body?.name).trim(),
+            deviceType = req?.body?.device_type,
+            googleId = (req?.body?.google_id),
+            googleToken = (req?.body?.google_token),
+            deviceToken = (req?.body?.device_token);
+
+        if (!isValidString(name.trim())) return failureJSONResponse(res, { message: `Please enter valid name` });
+        if (!isValidString(googleId.trim())) return failureJSONResponse(res, { message: `google id missing` });
+        if (!isValidString(googleToken.trim())) return failureJSONResponse(res, { message: `google token missing` });
+
+        if (!isValidString(deviceToken.trim())) return failureJSONResponse(res, { message: `device token missing` });
+        if (!(deviceType)) return failureJSONResponse(res, { message: `device type missing` });
+        else if (isNaN(deviceType)) return failureJSONResponse(res, { message: `device type invalid;` });
+
+        if (!isValidString(emailAddress.trim())) return failureJSONResponse(res, { message: `Please enter email address` });
+        else if (emailAddress.trim() && !isValidEmailAddress(emailAddress.trim())) return failureJSONResponse(res, { message: `Please enter valid email address` });
+
+        // Check If email is register with any user via other platforms like facebook,google or email.
+
+        const foundUser = await User.findOne(
+            { "userGoogleInfo.googleId": googleId },
+            {
+                _id: 1,
+                userBasicInfo: 1,
+                userStatus: 1,
+                userInfo: 1,
+                userDateInfo: 1
+            }
+        );
+
+        if (foundUser && Object.keys(foundUser).length) {
+
+            console.log(`case 1`)
+
+            const updateDeviceInfo = await User.update({ _id: foundUser._id }, {
+                $addToSet: {
+                    user_device_info: {
+                        token: deviceToken,
+                        device_type: Number(deviceType)
+                    },
+                },
+                $set: {
+                    "user_status.user_action_Status": Number(2),
+                    "user_status.lastLoginDate": new Date(),
+                },
+            });
+
+            return successJSONResponse(res, {
+                status: 200,
+                data: {
+                    userId: foundUser._id,
+                    name: foundUser?.userInfo?.name || null,
+                    email_address: foundUser?.userInfo?.email_address || null,
+                    phone_number: foundUser?.userInfo?.mobile_number?.phone_number || null,
+                    is_active: foundUser?.userInfo?.is_active
+                },
+                message: `success`,
+                token: createJWT(foundUser._id),
+            })
+
+        } else {
+
+            const foundUserWithEmailAddress = await User.findOne({
+                "userInfo.email_address": emailAddress,
+                "userGoogleInfo.googleId": null,
+                "user_status.user_action_Status": 2,
+            }, { userBasicInfo: 1, _id: 1, userStatus: 1, userInfo: 1, userDateInfo: 1 });
+
+            if (foundUserWithEmailAddress && Object.keys(foundUserWithEmailAddress).length) {
+
+                console.log(`case2 `)
+                const updateDeviceInfo = await dbSchema.User.update({ _id: foundUserWithEmailAddress._id }, {
+                    $addToSet: {
+
+                        "userGoogleInfo.googleId": googleId,
+                        "userGoogleInfo.googleEmail": emailAddress.toLowerCase(),
+                        "userGoogleInfo.googleToken": googleToken,
+
+                        user_device_info: {
+                            token: deviceToken,
+                            device_type: Numbe(deviceType)
+                        },
+                    },
+                    $set: {
+                        "user_status.userActionStatus": 2
+                    },
+                });
+
+                return successJSONResponse(res, {
+                    status: 200,
+                    data: {
+                        userId: foundUserWithEmailAddress._id,
+                        name: foundUserWithEmailAddress.userInfo.name || null,
+                        email_address: foundUserWithEmailAddress?.userInfo?.email_address || null,
+                        phone_number: foundUserWithEmailAddress?.userInfo?.mobile_number?.phone_number || null,
+                        is_active: foundUserWithEmailAddress?.userInfo?.is_active
+                    },
+                    message: `success`,
+                    token: createJWT(foundUserWithEmailAddress._id),
+                })
+
+            } else {
+                console.log(`case3`)
+
+                // Create a new user.
+                var newUserDetail = {};
+                var user_status = {
+                    user_action_Status: 2,
+                };
+                var userGoogleInfo = {
+                    googleId: googleId,
+                    googleEmail: emailAddress.toLowerCase(),
+                    googleToken: googleToken,
+                };
+                var userInfo = {
+                    name: name,
+                    is_active: true,
+                    email_address: emailAddress.toLowerCase(),
+                };
+                var userBasicInfo = {
+                    source: "GoogleEmail",
+                };
+                var user_device_info = {
+                    token: deviceToken,
+                    device_type: Number(deviceType),
+                };
+
+                newUserDetail.user_status = user_status;
+                newUserDetail.userGoogleInfo = userGoogleInfo;
+                newUserDetail.userInfo = userInfo;
+                newUserDetail.userBasicInfo = userBasicInfo;
+                newUserDetail.user_device_info = user_device_info;
+
+                User(newUserDetail).save(function (err, result) {
+                    if (err) {
+                        res.json({
+                            status: 401,
+                            message: `fail`,
+                            data: err,
+                        });
+                    } else {
+
+                        return res.json({
+                            status: 201,
+                            data: {
+                                userId: result._id,
+                                name: result.userInfo.name || null,
+                                email_address: result?.userInfo?.email_address || null,
+                                phone_number: result?.userInfo?.mobile_number?.phone_number || null,
+                                is_active: result?.userInfo?.is_active
+                            },
+
+                            message: `success`,
+                            token: createJWT(result._id),
+                        });
+
+                    }
+                });
+            }
+        }
+    },
+
+
+
     // Standard login.
     login_with_email: async function (req, res) {
-        console.log(`ashgdhafdhasfhda sajhdfhasg sa`)
 
         try {
 
@@ -1074,9 +1591,41 @@ module.exports = {
                     return failureJSONResponse(res, { message: `please provide user id` });
                 })
         } catch (error) {
-            return failureJSONResponse(res, { message: `please provide user id` });
+            return failureJSONResponse(res, { message: `something went wrong` });
         }
+    },
+
+    logout: async function (req, res) {
+
+        const deviceType = (req?.body?.device_type),
+            deviceToken = (req?.body?.device_token);
+
+        if (!isValidString(deviceToken.trim())) return failureJSONResponse(res, { message: `device token missing` });
+        if (!(deviceType)) return failureJSONResponse(res, { message: `device type missing` });
+        else if (isNaN(deviceType)) return failureJSONResponse(res, { message: `device type invalid;` });
+
+
+        User.update({
+            _id: req.userId,
+        }, {
+            $pull: {
+                user_device_info: {
+                    token: deviceToken,
+                    device_type: Number(deviceType)
+                },
+            },
+        },
+            function (err, user) {
+                if (err) {
+                    return failureJSONResponse(res, { message: `something went wrong` });
+                } else {
+                    return successJSONResponse(res, { message: `logout successfully` });
+                }
+            }
+        );
     }
+
+
 
 }
 
