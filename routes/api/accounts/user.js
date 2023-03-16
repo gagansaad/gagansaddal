@@ -50,6 +50,14 @@ router.post(`/signup-with-email`,
     controllers.signup_with_email
 );
 
+router.post(`/login-with-google`,
+    controllers.login_signup_with_google
+);
+
+router.post(`/login-with-facebook`,
+    controllers.login_signup_with_facebook
+);
+
 
 router.post(`/login-with-email`, controllers.login_with_email);
 
@@ -84,6 +92,11 @@ router.post(`/update_email_or_password`,
     authMiddleware.ensureUserLoggedIn,
     controllers.check_email_already_exists,
     controllers.update_email_or_phone_number
+);
+
+router.post(`/logout`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.logout
 );
 
 module.exports = router;

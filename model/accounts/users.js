@@ -46,13 +46,16 @@ const userSchema = new mongoose.Schema({
             required: true,
             enum: [1, 2]
         },
+
         // 1 disable
         // 2 enable
         // 3 enable
+
     },
 
     userBasicInfo: {
-        source: { type: String, possibleValues: ['Facebook', 'Instagram', 'Email', 'Apple'] },
+        source: {
+            type: String, possibleValues: ['Facebook', 'Instagram', 'Email', 'Apple', 'GoogleEmail'] },
         profile_image: { type: String },
     },
 
@@ -85,7 +88,7 @@ const userSchema = new mongoose.Schema({
         loginOn: { type: Date, default: Date.now() },
     },
     userGoogleInfo: {
-        googleId: { type: String },
+        googleId: { type: String, default: null },
         googleEmail: { type: String },
         googleToken: { type: String },
         loginOn: { type: Date, default: Date.now() },
