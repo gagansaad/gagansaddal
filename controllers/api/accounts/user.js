@@ -447,8 +447,7 @@ module.exports = {
     // Standard signup with Google.
     login_signup_with_facebook: async function (req, res) {
 
-        console.log(req.body)
-
+  
         const emailAddress = (req?.body?.email_address),
             name = (req?.body?.name).trim(),
             deviceType = req?.body?.device_type,
@@ -532,7 +531,7 @@ module.exports = {
 
                         user_device_info: {
                             token: deviceToken,
-                            device_type: Numbe(deviceType)
+                            device_type: Number(deviceType)
                         },
                     },
                     $set: {
@@ -564,7 +563,7 @@ module.exports = {
                 var userGoogleInfo = {
                     facebookId: facebookId,
                     googleEmail: emailAddress.toLowerCase(),
-                    googleToken: googleToken,
+                    googleToken: facebookToken,
                 };
                 var userInfo = {
                     name: name,
