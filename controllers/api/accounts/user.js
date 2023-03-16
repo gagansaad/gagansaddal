@@ -523,7 +523,7 @@ module.exports = {
             if (foundUserWithEmailAddress && Object.keys(foundUserWithEmailAddress).length) {
                 console.log(`case2 `)
 
-                const updateDeviceInfo = await dbSchema.User.update({ _id: foundUserWithEmailAddress._id }, {
+                const updateDeviceInfo = User.update({ _id: foundUserWithEmailAddress._id }, {
                     $addToSet: {
 
                         "userGoogleInfo.facebookId": facebookId,
@@ -693,7 +693,7 @@ module.exports = {
             if (foundUserWithEmailAddress && Object.keys(foundUserWithEmailAddress).length) {
 
                 console.log(`case2 `)
-                const updateDeviceInfo = await dbSchema.User.update({ _id: foundUserWithEmailAddress._id }, {
+                const updateDeviceInfo = User.update({ _id: foundUserWithEmailAddress._id }, {
                     $addToSet: {
 
                         "userGoogleInfo.googleId": googleId,
