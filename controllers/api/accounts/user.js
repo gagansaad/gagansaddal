@@ -4,6 +4,7 @@ const mongoose = require("mongoose"),
     OTP = mongoose.model("otp"),
     bcrypt = require("bcryptjs"),
     createJWT = require(`../../../utils/createJWT`),
+    alertMessage = require(`../../../utils/alertMessage`),
     { generateOTP } = require(`../../../utils/generateOTP`),
 
     ObjectId = require("mongodb").ObjectID;
@@ -58,7 +59,6 @@ const vali = (date) => {
     }
     return "Valid date";
 }
-
 
 
 module.exports = {
@@ -133,7 +133,7 @@ module.exports = {
                 ) {
                     res.json({
                         status: 400,
-                        message: `fail`,
+                        message: alertMessage.facebookAccountExist,
 
                     });
                 }
@@ -141,7 +141,7 @@ module.exports = {
                 else if (checkUserEmail[0].userBasicInfo.source == "GoogleEmail") {
                     res.json({
                         status: 400,
-                        message: `fail`,
+                        message: `facebook account already exists with this email`,
 
                     });
                 }
@@ -149,7 +149,7 @@ module.exports = {
                 else if (checkUserEmail[0].userBasicInfo.source == "Apple") {
                     res.json({
                         status: 400,
-                        message: `fail`,
+                        message: alertMessage.appleAccountExist,
                     });
                 }
                 //If user has signedup from email
@@ -159,7 +159,7 @@ module.exports = {
                 ) {
                     res.json({
                         status: 400,
-                        message: `email aready exist`
+                        message: alertMessage.emailAccountExist
                     });
                 }
             } else {
@@ -172,7 +172,6 @@ module.exports = {
                     newUserDetail.user_status = {
                         user_action_Status: 1
                     }
-
 
                     newUserDetail.userStatus = {
                         userStatus: "Login",
@@ -199,7 +198,6 @@ module.exports = {
                         source: "email",
 
                     };
-
 
                     User(newUserDetail).save(function (err, result) {
                         if (err) {
@@ -269,9 +267,6 @@ module.exports = {
             })
         }
     },
-
-
-
 
     // Standard signup with Google.
     login_signup_with_google: async function (req, res) {
@@ -616,20 +611,20 @@ module.exports = {
     },
 
 
+     // Standard signup with Google.
+    login_signup_with_apple: async function (req, res) {
 
-    // Standard signup with Google.
-    login_signup_with_google: async function (req, res) {
 
         const emailAddress = (req?.body?.email_address).trim(),
             name = (req?.body?.name).trim(),
             deviceType = req?.body?.device_type,
-            googleId = (req?.body?.google_id),
-            googleToken = (req?.body?.google_token),
+            appleId = (req?.body?.apple_id),
+            appleToken = (req?.body?.apple_token),
             deviceToken = (req?.body?.device_token);
 
         if (!isValidString(name.trim())) return failureJSONResponse(res, { message: `Please enter valid name` });
-        if (!isValidString(googleId.trim())) return failureJSONResponse(res, { message: `google id missing` });
-        if (!isValidString(googleToken.trim())) return failureJSONResponse(res, { message: `google token missing` });
+        if (!isValidString(appleId.trim())) return failureJSONResponse(res, { message: `apple id missing` });
+        if (!isValidString(appleToken.trim())) return failureJSONResponse(res, { message: `apple token missing` });
 
         if (!isValidString(deviceToken.trim())) return failureJSONResponse(res, { message: `device token missing` });
         if (!(deviceType)) return failureJSONResponse(res, { message: `device type missing` });
@@ -641,7 +636,7 @@ module.exports = {
         // Check If email is register with any user via other platforms like facebook,google or email.
 
         const foundUser = await User.findOne(
-            { "userGoogleInfo.googleId": googleId },
+            { "userGoogleInfo.appleId": appleId },
             {
                 _id: 1,
                 userBasicInfo: 1,
@@ -683,21 +678,23 @@ module.exports = {
 
         } else {
 
+
             const foundUserWithEmailAddress = await User.findOne({
-                "userInfo.email_address": emailAddress,
-                "userGoogleInfo.googleId": null,
+                "userInfo.email_address": emailAddress.toLowerCase(),
+                "userGoogleInfo.appleId": null,
                 "user_status.user_action_Status": 2,
             }, { userBasicInfo: 1, _id: 1, userStatus: 1, userInfo: 1, userDateInfo: 1 });
 
-            if (foundUserWithEmailAddress && Object.keys(foundUserWithEmailAddress).length) {
 
+            if (foundUserWithEmailAddress && Object.keys(foundUserWithEmailAddress).length) {
                 console.log(`case2 `)
-                const updateDeviceInfo = User.update({ _id: foundUserWithEmailAddress._id }, {
+
+                const updateDeviceInfo = await dbSchema.User.update({ _id: foundUserWithEmailAddress._id }, {
                     $addToSet: {
 
-                        "userGoogleInfo.googleId": googleId,
+                        "userGoogleInfo.appleId": appleId,
                         "userGoogleInfo.googleEmail": emailAddress.toLowerCase(),
-                        "userGoogleInfo.googleToken": googleToken,
+                        "userGoogleInfo.appleToken": appleToken,
 
                         user_device_info: {
                             token: deviceToken,
@@ -731,9 +728,9 @@ module.exports = {
                     user_action_Status: 2,
                 };
                 var userGoogleInfo = {
-                    googleId: googleId,
+                    appleId: appleId,
                     googleEmail: emailAddress.toLowerCase(),
-                    googleToken: googleToken,
+                    facebookToken: facebookToken,
                 };
                 var userInfo = {
                     name: name,
@@ -778,11 +775,12 @@ module.exports = {
                         });
 
                     }
+
                 });
+
             }
         }
     },
-
 
 
     // Standard login.
@@ -1249,10 +1247,6 @@ module.exports = {
             })
     },
 
-
-
-
-
     update_profile: async function (req, res, next) {
 
 
@@ -1328,9 +1322,7 @@ module.exports = {
 
         try {
             const email_address = req?.body?.email_address?.toLowerCase();
-
-            console.log(`asdnasvdh****`, email_address)
-
+            
             if (email_address && !isValidEmailAddress(email_address)) {
                 return failureJSONResponse(res, { message: `please provide valid email` });
             }
@@ -1439,9 +1431,6 @@ module.exports = {
 
 
     },
-
-
-
 
     update_email_or_phone_number: async function (req, res) {
 
@@ -1596,8 +1585,8 @@ module.exports = {
 
     logout: async function (req, res) {
 
-        const deviceType = (req?.body?.device_type),
-            deviceToken = (req?.body?.device_token);
+        const deviceType = req?.body?.device_type,
+            deviceToken = req?.body?.device_token;
 
         if (!isValidString(deviceToken.trim())) return failureJSONResponse(res, { message: `device token missing` });
         if (!(deviceType)) return failureJSONResponse(res, { message: `device type missing` });
@@ -1623,8 +1612,6 @@ module.exports = {
             }
         );
     }
-
-
 
 }
 
