@@ -10,7 +10,9 @@ const mongoose = require("mongoose"),
 exports.fetchPostsTypes = async (req, res, next) => {
 
     try {
-        PostType.find({})
+        PostType.find({
+            is_active: true
+        }).select(`type`)
             .then((foundPostType) => {
                 return successJSONResponse(res, { postType: foundPostType });
             }).catch((err) => {
