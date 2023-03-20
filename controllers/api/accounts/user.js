@@ -387,7 +387,7 @@ module.exports = {
                 var userGoogleInfo = {
                     googleId: googleId,
                     googleEmail: emailAddress.toLowerCase(),
-                    facebookToken: facebookToken,
+                    googleToken: googleToken,
                 };
                 var userInfo = {
                     name: name,
