@@ -12,7 +12,7 @@ exports.fetchPostsTypes = async (req, res, next) => {
     try {
         PostType.find({
             is_active: true
-        }).select(`type`)
+        }).select(`name`)
             .then((foundPostType) => {
                 return successJSONResponse(res, { postType: foundPostType });
             }).catch((err) => {
