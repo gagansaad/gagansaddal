@@ -14,7 +14,7 @@ exports.fetchPostsTypes = async (req, res, next) => {
             is_active: true
         }).select(`name`)
             .then((foundPostType) => {
-                return successJSONResponse(res, { postType: foundPostType });
+                return successJSONResponse(res, { message: `success`, postType: foundPostType });
             }).catch((err) => {
                 return failureJSONResponse(res, { message: `something went wrong` })
             })
