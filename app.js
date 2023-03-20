@@ -24,6 +24,7 @@ require(`./model/otp`);
 
 // post
 require(`./model/posts/Types`);
+require(`./model/posts/roomRents`);
 
 // configuration
 require(`./model/configurations/privacy`);
@@ -38,6 +39,7 @@ const usercontrol = require('./routes/accounts/admin/users_control');
 const configurationsRoute = require('./routes/api/configurations');
 
 const postTypeRoutes = require('./routes/api/posts/types');
+const roomRentsRoutes = require('./routes/api/posts/roomRents');
 
 const loadHelmet = require(`./loaders/helmets`),
     loadExpressSession = require(`./loaders/expressSession`);
@@ -61,6 +63,8 @@ app.use('/api/admin/users',usercontrol);
 app.use('/v1/api/configurations', configurationsRoute);
 
 app.use('/v1/api/posts/types', postTypeRoutes);
+app.use('/v1/api/posts/room-rents', roomRentsRoutes);
+
 
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
