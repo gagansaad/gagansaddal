@@ -3,16 +3,16 @@ const nodemailer = require('nodemailer');
 exports.EmailOTPVerification = (email_address = ``, name = ``, code) => {
 
     let mailTransporter = nodemailer.createTransport({
-        host: "sandbox.smtp.mailtrap.io",
-        port: 2525,
+        host: "smtp-relay.sendinblue.com",
+        port: 587,
         auth: {
-            user: "f7c228fb77059b",
-            pass: "3c24155c86b784"
+            user: "mohammad.sahil@netscapelabs.com",
+            pass: "xsmtpsib-6b110cbae84bbcc85a6611bf2ad11cb5e1a7b39080c01a1b4eb8241dff7b45fc-Tat3NJ1hVj6CKmsX"
         }
     });
     let mailDetails = {
         from: 'dtestthird@gmail.com',
-        to: 'mohammad.sahil@netscapelabs.com',
+        to: `${email_address}`,
         subject: 'Test mail',
         text: `${name} your otp is ${code}`
     };
