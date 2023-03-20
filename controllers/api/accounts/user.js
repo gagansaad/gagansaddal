@@ -506,6 +506,7 @@ module.exports = {
 
         } else {
 
+            console.log(`dvnavsndvsah`)
 
             const foundUserWithEmailAddress = await User.findOne({
                 "userInfo.email_address": emailAddress.toLowerCase(),
