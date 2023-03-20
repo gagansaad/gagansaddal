@@ -22,6 +22,10 @@ require(`./model/accounts/users`);
 require(`./model/accounts/admin`);
 require(`./model/otp`);
 
+// post
+require(`./model/posts/Types`);
+require(`./model/posts/roomRents`);
+
 // configuration
 require(`./model/configurations/privacy`);
 require(`./model/configurations/termAndCondition`);
@@ -33,6 +37,9 @@ const signUp = require('./routes/api/accounts/user');
 const adminSignIp = require('./routes/accounts/admin/admin_login');
 const usercontrol = require('./routes/accounts/admin/users_control');
 const configurationsRoute = require('./routes/api/configurations');
+
+const postTypeRoutes = require('./routes/api/posts/types');
+const roomRentsRoutes = require('./routes/api/posts/roomRents');
 
 const loadHelmet = require(`./loaders/helmets`),
     loadExpressSession = require(`./loaders/expressSession`);
@@ -54,6 +61,10 @@ app.use('/v1/api/', signUp);
 app.use('/admin/login',adminSignIp);
 app.use('/api/admin/users',usercontrol);
 app.use('/v1/api/configurations', configurationsRoute);
+
+app.use('/v1/api/posts/types', postTypeRoutes);
+app.use('/v1/api/posts/room-rents', roomRentsRoutes);
+
 
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
@@ -78,11 +89,9 @@ app.use((err, req, res, next) => {
 app.use((req, res, next) => {
     res.status(404).json({
         status: 404,
-        message:'Sorry,end point found.'
+        message:'Sorry,end point not found.'
     });
 });
-
-
 
 
 // Error handling
