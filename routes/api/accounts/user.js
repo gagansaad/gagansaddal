@@ -54,8 +54,7 @@ router.post(`/login-with-google`,
     controllers.login_signup_with_google
 );
 
-router.post(`/login-with-facebook`,
-    controllers.login_signup_with_facebook
+router.post(`/login-with-facebook`, controllers.login_signup_with_facebook
 );
 
 router.post(`/login-with-apple`,
