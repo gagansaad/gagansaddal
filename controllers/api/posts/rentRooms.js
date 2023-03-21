@@ -21,7 +21,7 @@ exports.fetchDynamicsData = async (req, res, next) => {
             `broker`
         ],
        Accommodates: [
-        1,2,3,4,5,6,7,8,9
+        `1`,`2`,`3`,`4`,`5`,`6`,`7`,`8`,`9`
        ],
        furnished :[
            `Semi-furnished`,
@@ -35,6 +35,21 @@ exports.fetchDynamicsData = async (req, res, next) => {
        data: objtSend
    })
 
+}
+
+
+exports.creatingRoomRentsAdd = async (req, res, next) => {
+
+    const {
+        status,
+        adsType,
+        adsInfo
+
+    } = req.body;
+
+
+    
+    
 }
 
 
