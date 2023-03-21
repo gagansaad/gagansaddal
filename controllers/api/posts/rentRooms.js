@@ -6,6 +6,7 @@ const mongoose = require("mongoose"),
         successJSONResponse,
         failureJSONResponse
     } = require(`../../../handlers/jsonResponseHandlers`),
+    { fieldsToExclude} = require(`../../../utils/mongoose`),
     {
         isValidString,
         isValidMongoObjId,
@@ -178,9 +179,19 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     const newRoomRentPost = await RoomRentsAds.create(dataObj);
 
 
+
+    const roomtRentObjToSend = {};
+
+    for (let key in newRoomRentPost.toObject()) {
+        if (!fieldsToExclude.hasOwnProperty(String(key))) {
+            roomtRentObjToSend[key] = newRoomRentPost[key];
+        }
+    }
+
+
     return successJSONResponse(res, {
         message: `success`,
-        newRoomRentPost,
+        roomtRentObjToSend,
         status: 200,
     })
 

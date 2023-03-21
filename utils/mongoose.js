@@ -1,8 +1,5 @@
-const slug = require(`slug`),
-    stateList = require(`./lists/indiaStateList`);
+const slug = require(`slug`); 
 
-const { customAlphabet } = require(`nanoid`),
-    charactersForShortID = `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`;
 
 
 const toExport = {
@@ -43,13 +40,13 @@ const toExport = {
         message: `{PATH} cannot be an empty array`
     },
 
-    getAlphaNumID() {
-        return customAlphabet(charactersForShortID, 12)();
-        /**
-         * At rate of 10000 IDs/second; ~9 days needed, in order to have a 1% probability of at least one collision.
-         * Checked at: https://zelark.github.io/nano-id-cc/
-         */
-    },
+    // getAlphaNumID() {
+    //     return customAlphabet(charactersForShortID, 12)();
+    //     /**
+    //      * At rate of 10000 IDs/second; ~9 days needed, in order to have a 1% probability of at least one collision.
+    //      * Checked at: https://zelark.github.io/nano-id-cc/
+    //      */
+    // },
 
     fieldsToExclude: {
         createdAt: false,
@@ -68,13 +65,13 @@ const toExport = {
         }
     },
 
-    getSlug(providedString = ``, charCount = 6) {
-        return slug(String(providedString)) + `-` + customAlphabet(charactersForShortID, charCount)();
-        /**
-         * At rate of 500 IDs/hour; ~1 hour needed, in order to have a 1% probability of at least one collision.
-         * Checked at: https://zelark.github.io/nano-id-cc/
-         */
-    },
+    // getSlug(providedString = ``, charCount = 6) {
+    //     return slug(String(providedString)) + `-` + customAlphabet(charactersForShortID, charCount)();
+    //     /**
+    //      * At rate of 500 IDs/hour; ~1 hour needed, in order to have a 1% probability of at least one collision.
+    //      * Checked at: https://zelark.github.io/nano-id-cc/
+    //      */
+    // },
 
     getDefaultAddressObj(mandatoryFields = true) {
         return {
