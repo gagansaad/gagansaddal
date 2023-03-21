@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const roomRentsSchema = new mongoose.Schema({
 
     status: {
-        type: Boolean,
+        type: Number,
         enum:[1,2,3],
         required: true
 
