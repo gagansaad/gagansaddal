@@ -4,7 +4,13 @@ const mongoose = require("mongoose"),
     {
         successJSONResponse,
         failureJSONResponse
-    } = require(`../../../handlers/jsonResponseHandlers`);
+    } = require(`../../../handlers/jsonResponseHandlers`),
+    {
+        isValidString,
+        isValidDate,
+        isValidEmailAddress,
+        isValidIndianMobileNumber
+    } = require(`../../../utils/validators`);
 
 
 exports.fetchDynamicsData = async (req, res, next) => {
@@ -16,6 +22,7 @@ exports.fetchDynamicsData = async (req, res, next) => {
            `Triple`,
            `Quad`
         ],
+
         whoAreU:[
             `owner`,
             `broker`
@@ -37,6 +44,45 @@ exports.fetchDynamicsData = async (req, res, next) => {
        message: `success`,
        data: objtSend
    })
+
+}
+
+exports.validateRoomRentsAdsData = async (req, res, next) => {
+    const {
+        status,
+        adsType,
+        title,
+        descriptions,
+        roomType,
+        listerType,
+        accommodates,
+        furnished,
+        attachedBath,
+        rent,
+        isSmokingAllowed,
+        isAlcoholAllowed,
+        isPetFriendly,
+        occupation,
+        preferredGender,
+        location,
+
+        name,
+        emailAddress,
+        phoneNumber,
+        hideAddress,
+        preferableModeContact
+
+    } = req.body;
+
+
+
+    if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter status name` });
+    if (isValidString(adsType)) return failureJSONResponse(res, { message: `Please enter status name` });
+
+    if (!isValidString(googleId.trim())) return failureJSONResponse(res, { message: `google id missing` });
+    if (!isValidString(googleToken.trim())) return failureJSONResponse(res, { message: `google token missing` });
+
+
 
 }
 
@@ -70,11 +116,8 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     } = req.body;
 
 
-    console.log(req.body)
-
     
 
-console.log(req.files)
 
 
 const imageArr = [];
@@ -124,9 +167,10 @@ const imageArr = [];
     const newRoomRentPost = await RoomRentsAds.create(dataObj);
 
 
-    res.json({
-        working: `,jhgfdhsv`,
-        newRoomRentPost: newRoomRentPost
+    return successJSONResponse(res, {
+        message: `success`,
+        newRoomRentPost,
+        status: 200,
     })
 
 }
