@@ -5,6 +5,10 @@ exports.isValidString = (str = ``) => {
     return Boolean(str && (typeof str === `string`) && str.trim());
 }
 
+exports.isValidMongoObjId = (mongoose, objectId = ``) => {
+    return Boolean(mongoose.Types.ObjectId.isValid(objectId))
+}
+
 exports.isValidEmailAddress = (emailAddress = null) => {
     const stringifiedEmailAddress = String(emailAddress);
 

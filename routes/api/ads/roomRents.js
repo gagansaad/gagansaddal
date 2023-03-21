@@ -47,7 +47,15 @@ router.get(`/dynamics-data`,
     controllers.fetchDynamicsData
 );
 
-router.post(`/`, upload.array('photos', 12), controllers.creatingRoomRentsAds)
+router.post(`/`, upload.array('photos', 12),
+    controllers.validateRoomRentsAdsData,
+ controllers.creatingRoomRentsAds)
+
+
+
+router.patch(`/edit/:roomRentId`,
+    controllers.editRoomRentAds
+    )
 
 
 module.exports = router;

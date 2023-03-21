@@ -1,3 +1,4 @@
+const { json } = require("express");
 
 const mongoose = require("mongoose"),
     RoomRentsAds = mongoose.model("RoomRent"),
@@ -7,6 +8,7 @@ const mongoose = require("mongoose"),
     } = require(`../../../handlers/jsonResponseHandlers`),
     {
         isValidString,
+        isValidMongoObjId,
         isValidDate,
         isValidEmailAddress,
         isValidIndianMobileNumber
@@ -15,74 +17,86 @@ const mongoose = require("mongoose"),
 
 exports.fetchDynamicsData = async (req, res, next) => {
 
-   const objtSend={
-        roomType:[
+    const objtSend = {
+        roomType: [
             `Single`,
-           `Double`,
-           `Triple`,
-           `Quad`
+            `Double`,
+            `Triple`,
+            `Quad`
         ],
 
-        whoAreU:[
+        whoAreU: [
             `owner`,
             `broker`
         ],
-       Accommodates: [
-        `1`,`2`,`3`,`4`,`5`,`6`,`7`,`8`,`9`
-       ],
-       attachedBathRoom: [
-           `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`
-       ],
-       furnished :[
-           `Semi-furnished`,
-           `furnished`,
-           `fully-furnished` 
-       ]
-   }
+        Accommodates: [
+            `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`
+        ],
+        attachedBathRoom: [
+            `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`
+        ],
+        furnished: [
+            `Semi-furnished`,
+            `furnished`,
+            `fully-furnished`
+        ]
+    }
 
-   return successJSONResponse(res,{
-       message: `success`,
-       data: objtSend
-   })
+    return successJSONResponse(res, {
+        message: `success`,
+        data: objtSend
+    })
 
 }
 
 exports.validateRoomRentsAdsData = async (req, res, next) => {
-    const {
-        status,
-        adsType,
-        title,
-        descriptions,
-        roomType,
-        listerType,
-        accommodates,
-        furnished,
-        attachedBath,
-        rent,
-        isSmokingAllowed,
-        isAlcoholAllowed,
-        isPetFriendly,
-        occupation,
-        preferredGender,
-        location,
+    try {
+        const {
+            status,
+            adsType,
+            title,
+            descriptions,
+            roomType,
+            listerType,
+            accommodates,
+            furnished,
+            attachedBath,
+            rent,
+            isSmokingAllowed,
+            isAlcoholAllowed,
+            isPetFriendly,
+            occupation,
+            preferredGender,
+            location,
 
-        name,
-        emailAddress,
-        phoneNumber,
-        hideAddress,
-        preferableModeContact
+            name,
+            emailAddress,
+            phoneNumber,
+            hideAddress,
+            preferableModeContact
 
-    } = req.body;
-
-
-
-    if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter status name` });
-    if (isValidString(adsType)) return failureJSONResponse(res, { message: `Please enter status name` });
-
-    if (!isValidString(googleId.trim())) return failureJSONResponse(res, { message: `google id missing` });
-    if (!isValidString(googleToken.trim())) return failureJSONResponse(res, { message: `google token missing` });
+        } = req.body;
 
 
+
+        if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
+        else if (status < 1 || status > 3) failureJSONResponse(res, { message: `Please enter status bwtween 1 to 3` });
+
+        // if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
+        // else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
+
+        if (!isValidString(title)) return failureJSONResponse(res, { message: `Please provide valid title` });
+        if (!isValidString(descriptions)) return failureJSONResponse(res, { message: `Please provide valid descriptions` });
+        if (!isValidString(listerType)) return failureJSONResponse(res, { message: `Please provide valid listerType` });
+        if (!isValidString(roomType)) return failureJSONResponse(res, { message: `Please provide valid roomType` });
+
+        return json({
+            data: `working`
+        })
+    }
+    catch (err) {
+        console.log(err)
+    }
 
 }
 
@@ -116,15 +130,12 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     } = req.body;
 
 
-    
+
+    const imageArr = [];
 
 
 
-const imageArr = [];
-
-
-
-    req.files.forEach((data)=>{
+    req.files.forEach((data) => {
         imageArr.push(data?.path)
     })
 
@@ -132,7 +143,7 @@ const imageArr = [];
     const dataObj = {
         status: parseInt(status),
         adsType,
-        adsInfo:{
+        adsInfo: {
             title,
             descriptions,
             roomType,
@@ -149,7 +160,7 @@ const imageArr = [];
             location,
             image: imageArr
         },
-        listerBasicInfo:{
+        listerBasicInfo: {
             name,
             emailAddress,
             phoneNumber,
@@ -157,10 +168,10 @@ const imageArr = [];
 
             mobileNumber: {
                 countryCode: +91,
-                phoneNumber:phoneNumber
+                phoneNumber: phoneNumber
             },
             preferableModeContact: preferableModeContact
-            
+
         }
     }
 
@@ -174,6 +185,23 @@ const imageArr = [];
     })
 
 }
+
+
+exports.editRoomRentAds  = async (req, res, next) => {
+    const roomRentId = req?.params?.roomRentId;
+
+    if (!roomRentId) return successJSONResponse(res, {
+        message: `success`,
+        newRoomRentPost,
+        status: 200,
+    })
+
+}
+
+
+
+
+
 
 
 
