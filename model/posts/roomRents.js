@@ -1,10 +1,18 @@
 const mongoose = require("mongoose");
+const {
+    defaultStringConfig,
+    nonEmptyArrayValidator,
+    defaultPriceProperty,
+    defaultCurrencyProperty,
+    getAlphaNumID,
+    defaultBooleanConfig
+} = require(`../../utils/mongoose`);
 
 const roomRentsSchema = new mongoose.Schema({
 
     status: {
         type: Number,
-        enum:[1,2,3],
+        enum: [1, 2, 3],
         required: true
 
         //1 = active
@@ -18,36 +26,36 @@ const roomRentsSchema = new mongoose.Schema({
         required: true
     },
     adsInfo: {
-        title: { 
-            type: String,
+        title: {
+            ...defaultStringConfig,
             required: true
         },
-        descriptions : {
-            type: String,
+        descriptions: {
+            ...defaultStringConfig,
             required: true
         },
         roomType: {
-            type: String,
+            ...defaultStringConfig,
             required: true
         },
         listerType: {
-            type: String,
+            ...defaultStringConfig,
             required: true
 
         },
-        accommodates:{
-            type: String,
+        accommodates: {
+            type: Number,
             required: true
         },
         accommodates: {
             type: String,
             required: true
         },
-        attachedBath:{
-            type: String,
+        attachedBath: {
+            type: Number,
             required: true
         },
-        rent :{
+        rent: {
             type: Number,
             required: true
         },
@@ -59,61 +67,46 @@ const roomRentsSchema = new mongoose.Schema({
             type: Boolean,
             required: true
         },
-         isPetFriendly: {
+        isPetFriendly: {
             type: Boolean,
             required: true
         },
-         occupation: {
-            type: String,
+        occupation: {
+            ...defaultStringConfig,
             required: true
         },
-        preferredGender :{
+        preferredGender: {
             type: Number,
             required: true
         },
-        furnished:{
-            type: String,
-            required: true 
+        furnished: {
+            ...defaultStringConfig,
+            required: true
         },
-        location:{
-            type: String,
+        location: {
+            ...defaultStringConfig,
             required: true
         },
         image: [{
-            type: String,
+            ...defaultStringConfig,
             required: true
         }]
 
     },
-    listerBasicInfo :{ 
-        name: {
-            type: String,
-            required: true
-        },
-        emailAddress: {
-            type: String,
-            required: true
-        },
+    listerBasicInfo: {
+        name: defaultStringConfig,
+        emailAddress: defaultStringConfig,
         mobileNumber: {
-            countryCode: {
-                type: String,
-                required: true
-            },
-            phoneNumber: {
-                type: String,
-                required: true
-            }
+            countryCode: defaultStringConfig,
+            phoneNumber: defaultStringConfig
         },
-        hideAddress:{
-            type: Boolean,
-            required: true
-        },
+        hideAddress: defaultBooleanConfig,
 
         preferableModeContact: {
             type: Number,
-            enum:[1,2]
+            enum: [1, 2, 3]
         }
-        
+
     }
 
 }, { timestamps: true });

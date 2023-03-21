@@ -5,6 +5,9 @@ exports.isValidString = (str = ``) => {
     return Boolean(str && (typeof str === `string`) && str.trim());
 }
 
+exports.isValidBoolean = (str = ``) => {
+    return Boolean(str && (typeof str === `boolean`));
+}
 exports.isValidMongoObjId = (mongoose, objectId = ``) => {
     return Boolean(mongoose.Types.ObjectId.isValid(objectId))
 }
