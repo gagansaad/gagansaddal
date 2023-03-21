@@ -10,6 +10,7 @@ const toExport = {
 
     defaultStringConfig: {
         type: String,
+        default: ``,
         trim: true
     },
 
@@ -21,6 +22,7 @@ const toExport = {
     defaultPriceProperty: {
         // All price amounts to be stored in smallest unit of the current we're using. So if we're using INR, then store price amount in Indian paisa
         type: Number,
+        default: 0,
         required: true,
         min: 0
     },
