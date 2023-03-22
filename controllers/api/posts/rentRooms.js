@@ -263,7 +263,39 @@ exports.editRoomRentAds  = async (req, res, next) => {
 
 
 
-    const dataObj = {
+    const dataObj = {},
+        adsInfoObj = {},
+        listerBasicInfoObj = {};
+
+    if (status) dataObj.status = parseInt(status);
+    if (adsType) dataObj.adsType = adsType;
+
+    if (title) adsInfoObj.title = title;
+    if (descriptions) adsInfoObj.descriptions = descriptions;
+    if (roomType) adsInfoObj.roomType = roomType; 
+    if (furnished) adsInfoObj.furnished = furnished;
+    if (listerType) adsInfoObj.listerType = listerType;
+    if (accommodates) adsInfoObj.accommodates = accommodates;
+    if (attachedBath) adsInfoObj.attachedBath = attachedBath;
+    if (rent) adsInfoObj.rent = rent;
+    if (isSmokingAllowed) adsInfoObj.isSmokingAllowed = isSmokingAllowed;
+    if (isAlcoholAllowed) adsInfoObj.isAlcoholAllowed = isAlcoholAllowed;
+    if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFriendly;
+    if (occupation) adsInfoObj.occupation = occupation;
+    if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFriendly;
+    if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFriendly;
+
+
+    if (name) listerBasicInfoObj.name = name;
+
+
+    if (adsInfoObj && Object.keys(adsInfoObj).length){
+        dataObj.adsInfo = adsInfoObj
+    }
+
+
+
+    const dataObjq = {
         status: parseInt(status),
         adsType,
         adsInfo: {
@@ -299,10 +331,10 @@ exports.editRoomRentAds  = async (req, res, next) => {
 
     console.log(dataObj)
 
-    const updateRoomRents = await  RoomRentsAds.findByIdAndUpdate({ _id: roomRentId }, { $set: dataObj},{new: true})
+    const updateRoomRents = await RoomRentsAds.findByIdAndUpdate({ _id: roomRentId }, { $set: dataObjq },{new: true})
 
 
-    console.log(updateRoomRents)
+    // console.log(updateRoomRents)
     return successJSONResponse(res, {
         message: `success`,
         updateRoomRents,
