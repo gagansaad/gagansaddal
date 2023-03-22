@@ -292,17 +292,20 @@ exports.editRoomRentAds  = async (req, res, next) => {
                 countryCode: +91,
                 phoneNumber: phoneNumber
             },
-            preferableModeContact: preferableModeContact
+            preferableModeContact: parseInt(preferableModeContact)
 
         }
     }
 
-    const updateRoomRentsD = await  RoomRentsAds.findByIdAndUpdate({ _id: roomRentId }, { $set: dataObj},{new: true})
+    console.log(dataObj)
+
+    const updateRoomRents = await  RoomRentsAds.findByIdAndUpdate({ _id: roomRentId }, { $set: dataObj},{new: true})
 
 
-    console.log(updateRoomRentsD)
+    console.log(updateRoomRents)
     return successJSONResponse(res, {
         message: `success`,
+        updateRoomRents,
         status: 200,
     })
 
