@@ -6,7 +6,7 @@ const mongoose = require("mongoose"),
         successJSONResponse,
         failureJSONResponse
     } = require(`../../../handlers/jsonResponseHandlers`),
-    { fieldsToExclude} = require(`../../../utils/mongoose`),
+    { fieldsToExclude } = require(`../../../utils/mongoose`),
     {
         isValidString,
         isValidMongoObjId,
@@ -103,7 +103,7 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         else if (!isValidBoolean(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide boolean value for Smoking Allowed` });
 
 
-      
+
         // if (!rent) {
         //     return failureJSONResponse(res, { message: `Please provide rent` });
         // }
@@ -225,7 +225,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
 }
 
 
-exports.editRoomRentAds  = async (req, res, next) => {
+exports.editRoomRentAds = async (req, res, next) => {
     const roomRentId = req?.params?.roomRentId;
 
     if (!roomRentId) return successJSONResponse(res, {
@@ -272,7 +272,7 @@ exports.editRoomRentAds  = async (req, res, next) => {
 
     if (title) adsInfoObj.title = title;
     if (descriptions) adsInfoObj.descriptions = descriptions;
-    if (roomType) adsInfoObj.roomType = roomType; 
+    if (roomType) adsInfoObj.roomType = roomType;
     if (furnished) adsInfoObj.furnished = furnished;
     if (listerType) adsInfoObj.listerType = listerType;
     if (accommodates) adsInfoObj.accommodates = accommodates;
@@ -289,7 +289,7 @@ exports.editRoomRentAds  = async (req, res, next) => {
     if (name) listerBasicInfoObj.name = name;
 
 
-    if (adsInfoObj && Object.keys(adsInfoObj).length){
+    if (adsInfoObj && Object.keys(adsInfoObj).length) {
         dataObj.adsInfo = adsInfoObj
     }
 
@@ -331,15 +331,25 @@ exports.editRoomRentAds  = async (req, res, next) => {
 
     console.log(dataObj)
 
-    const updateRoomRents = await RoomRentsAds.findByIdAndUpdate({ _id: roomRentId }, { $set: dataObjq },{new: true})
+    const updateRoomRents = await RoomRentsAds.findByIdAndUpdate({ _id: roomRentId }, { $set: dataObjq }, { new: true })
 
+    if (updateRoomRents) {
 
-    // console.log(updateRoomRents)
-    return successJSONResponse(res, {
-        message: `success`,
-        updateRoomRents,
-        status: 200,
-    })
+        // console.log(updateRoomRents)
+        return successJSONResponse(res, {
+            message: `success`,
+            updateRoomRents,
+            status: 200,
+        })
+    } else {
+        // console.log(updateRoomRents)
+        return failureJSONResponse(res, {
+            message: `Something went wrong`,
+            updateRoomRents: null,
+            status: 200,
+        })
+    }
+
 
 }
 
