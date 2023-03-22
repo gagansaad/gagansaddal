@@ -339,14 +339,12 @@ exports.editRoomRentAds = async (req, res, next) => {
         return successJSONResponse(res, {
             message: `success`,
             updateRoomRents,
-            status: 200,
         })
     } else {
         // console.log(updateRoomRents)
         return failureJSONResponse(res, {
             message: `Something went wrong`,
             updateRoomRents: null,
-            status: 200,
         })
     }
 
