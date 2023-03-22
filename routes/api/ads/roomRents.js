@@ -48,8 +48,9 @@ router.get(`/dynamics-data`,
 );
 
 router.post(`/`, upload.array('photos', 12),
-    // controllers.validateRoomRentsAdsData,
- controllers.creatingRoomRentsAds)
+    controllers.validateRoomRentsAdsData,
+    controllers.creatingRoomRentsAds
+    )
 
 
 

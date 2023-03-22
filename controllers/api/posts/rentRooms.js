@@ -10,6 +10,7 @@ const mongoose = require("mongoose"),
     {
         isValidString,
         isValidMongoObjId,
+        isValidBoolean,
         isValidDate,
         isValidEmailAddress,
         isValidIndianMobileNumber
@@ -83,17 +84,43 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
         else if (status < 1 || status > 3) failureJSONResponse(res, { message: `Please enter status bwtween 1 to 3` });
 
-        // if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
-        // else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
+        if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
+        else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
         if (!isValidString(title)) return failureJSONResponse(res, { message: `Please provide valid title` });
         if (!isValidString(descriptions)) return failureJSONResponse(res, { message: `Please provide valid descriptions` });
         if (!isValidString(listerType)) return failureJSONResponse(res, { message: `Please provide valid listerType` });
         if (!isValidString(roomType)) return failureJSONResponse(res, { message: `Please provide valid roomType` });
 
-        return json({
-            data: `working`
-        })
+        if (isNaN(Number(attachedBath))) return failureJSONResponse(res, { message: `Please provide valid attachedBath` });
+        if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
+        if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
+
+        if (!(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide valid isSmokingAllowed` });
+        else if (typeof isSmokingAllowed == "boolean") return failureJSONResponse(res, { message: `Please provide boolean value for Smoking Allowed` });
+
+        if (!(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide valid isSmokingAllowed` });
+        else if (!isValidBoolean(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide boolean value for Smoking Allowed` });
+
+
+      
+        // if (!rent) {
+        //     return failureJSONResponse(res, { message: `Please provide rent` });
+        // }
+        // else {
+        //     const amount = rent?.amount,
+        //         currency = rent?.currency;
+
+        //     if (!amount) missingData.push(`purchase price`);
+        //     else if (amount && isNaN(amount)) invalidData.push(`purchase price`);
+
+        //     if (!isTruthyString(currency)) missingData.push(`purchase currency`);
+        // }
+
+
+
+
+        return next();
     }
     catch (err) {
         console.log(err)
@@ -204,6 +231,78 @@ exports.editRoomRentAds  = async (req, res, next) => {
     if (!roomRentId) return successJSONResponse(res, {
         message: `success`,
         newRoomRentPost,
+        status: 200,
+    })
+
+
+    const {
+        status,
+        adsType,
+        title,
+        descriptions,
+        roomType,
+        listerType,
+        accommodates,
+        furnished,
+        attachedBath,
+        rent,
+        isSmokingAllowed,
+        isAlcoholAllowed,
+        isPetFriendly,
+        occupation,
+        preferredGender,
+        location,
+
+        name,
+        emailAddress,
+        phoneNumber,
+        hideAddress,
+        preferableModeContact
+
+    } = req.body;
+
+
+
+    const dataObj = {
+        status: parseInt(status),
+        adsType,
+        adsInfo: {
+            title,
+            descriptions,
+            roomType,
+            furnished,
+            listerType,
+            accommodates,
+            attachedBath,
+            rent,
+            isSmokingAllowed,
+            isAlcoholAllowed,
+            isPetFriendly,
+            occupation,
+            preferredGender: parseInt(preferredGender),
+            location
+        },
+        listerBasicInfo: {
+            name,
+            emailAddress,
+            phoneNumber,
+            hideAddress,
+
+            mobileNumber: {
+                countryCode: +91,
+                phoneNumber: phoneNumber
+            },
+            preferableModeContact: preferableModeContact
+
+        }
+    }
+
+    const updateRoomRentsD = await  RoomRentsAds.findByIdAndUpdate({ _id: roomRentId }, { $set: dataObj},{new: true})
+
+
+    console.log(updateRoomRentsD)
+    return successJSONResponse(res, {
+        message: `success`,
         status: 200,
     })
 
