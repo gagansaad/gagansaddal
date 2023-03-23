@@ -43,8 +43,8 @@ const adminconfigurationsRoute = require('./routes/api/accounts/admin/configurat
 const usercontrol = require('./routes/accounts/admin/users_control');
 const configurationsRoute = require('./routes/api/configurations');
 
-const postTypeRoutes = require('./routes/api/posts/types');
-const roomRentsRoutes = require('./routes/api/posts/roomRents');
+const postTypeRoutes = require('./routes/api/ads/types');
+const roomRentsRoutes = require('./routes/api/ads/roomRents');
 
 const loadHelmet = require(`./loaders/helmets`),
     loadExpressSession = require(`./loaders/expressSession`);
@@ -76,6 +76,11 @@ app.use('/v1/api/posts/room-rents', roomRentsRoutes);
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))
 }
+
+
+// Routes
+const routes = require(`./routes/_all`);
+app.use(routes);
 
 // add the error handler middleware function to the app
 app.use((err, req, res, next) => {

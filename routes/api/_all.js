@@ -1,5 +1,8 @@
 const router = require(`express`).Router();
 
-router.use(`/v1`, apiRoutes);
+
+const adsRoutes = require(`./ads/_all`);
+
+router.use(`/ads`, adsRoutes);
 
 module.exports = router;
