@@ -15,9 +15,6 @@ const express = require(`express`),
 const connection = require(`./config/dbConnection`);
 connection(mongoose);
 
-
-
-
 require(`./model/accounts/users`);
 require(`./model/accounts/admin`);
 require(`./model/otp`);
