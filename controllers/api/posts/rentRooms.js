@@ -262,7 +262,6 @@ exports.editRoomRentAds = async (req, res, next) => {
     } = req.body;
 
 
-
     const dataObj = {},
         adsInfoObj = {},
         listerBasicInfoObj = {};
@@ -293,8 +292,6 @@ exports.editRoomRentAds = async (req, res, next) => {
         dataObj.adsInfo = adsInfoObj
     }
 
-
-
     const dataObjq = {
         status: parseInt(status),
         adsType,
@@ -311,7 +308,7 @@ exports.editRoomRentAds = async (req, res, next) => {
             isAlcoholAllowed,
             isPetFriendly,
             occupation,
-            preferredGender: parseInt(preferredGender),
+            preferredGender: preferredGender,
             location
         },
         listerBasicInfo: {
@@ -324,7 +321,7 @@ exports.editRoomRentAds = async (req, res, next) => {
                 countryCode: +91,
                 phoneNumber: phoneNumber
             },
-            preferableModeContact: parseInt(preferableModeContact)
+            preferableModeContact: preferableModeContact
 
         }
     }
