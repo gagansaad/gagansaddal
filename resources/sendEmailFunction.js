@@ -10,6 +10,7 @@ exports.EmailOTPVerification = (email_address = ``, name = ``, code) => {
             pass: "xsmtpsib-6b110cbae84bbcc85a6611bf2ad11cb5e1a7b39080c01a1b4eb8241dff7b45fc-Tat3NJ1hVj6CKmsX"
         }
     });
+    
     let mailDetails = {
         from: 'dtestthird@gmail.com',
         to: `${email_address}`,
