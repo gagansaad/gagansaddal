@@ -7,7 +7,7 @@ const {
 } = require(`../../utils/mongoose`);
 
 
-const otpSchema = new mongoose.Schema({
+const addPlanSchema = new mongoose.Schema({
 
     entity: {
         ...defaultStringConfig,
@@ -28,20 +28,25 @@ const otpSchema = new mongoose.Schema({
         ...defaultStringConfig,
         required: true
     },
+    duration: {
+        type: Number, 
+        required: true
+    },
     ads_type: {
         type: mongoose.Schema.Types.ObjectId,
         ref: `PostType`
     },
     featured_price: {
         amount: defaultPriceProperty,
-        currency: defaultCurrencyProperty
+        currency: defaultCurrencyProperty,
     },
 
     price: {
         amount: defaultPriceProperty,
-        currency: defaultCurrencyProperty
+        currency: defaultCurrencyProperty,
+
     },
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('otp', otpSchema);
+module.exports = mongoose.model('adsplan', addPlanSchema);
