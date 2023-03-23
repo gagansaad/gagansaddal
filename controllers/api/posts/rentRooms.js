@@ -26,6 +26,16 @@ exports.fetchDynamicsData = async (req, res, next) => {
             `Triple`,
             `Quad`
         ],
+        occupation: [
+            `employed`,
+            `self employed`,
+            `engineer`,
+        ],
+        gender: [
+            `male `,
+            `female`,
+            `couple`
+        ],
 
         whoAreU: [
             `owner`,
@@ -321,7 +331,7 @@ exports.editRoomRentAds = async (req, res, next) => {
                 countryCode: +91,
                 phoneNumber: phoneNumber
             },
-            preferableModeContact: preferableModeContact ? preferableModeContact : 1
+            preferableModeContact: preferableModeContact
 
         }
     }
