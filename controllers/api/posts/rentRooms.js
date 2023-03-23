@@ -321,7 +321,7 @@ exports.editRoomRentAds = async (req, res, next) => {
                 countryCode: +91,
                 phoneNumber: phoneNumber
             },
-            preferableModeContact: preferableModeContact
+            preferableModeContact: preferableModeContact ? preferableModeContact : 1
 
         }
     }
