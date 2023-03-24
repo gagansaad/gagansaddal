@@ -695,7 +695,6 @@ module.exports = {
                 const updateDeviceInfo = await User.update({ _id: foundUserWithEmailAddress._id }, {
                     $addToSet: {
                         "userAppleInfo.appleId": appleId,
-                        "userAppleInfo.appleEmail": emailAddress.toLowerCase(),
                         "userAppleInfo.appleToken": appleToken,
 
                         user_device_info: {
@@ -746,7 +745,7 @@ module.exports = {
                     token: deviceToken,
                     device_type: Number(deviceType),
                 };
-                
+
 
                 newUserDetail.user_status = user_status;
                 newUserDetail.userAppleInfo = userGoogleInfo;
