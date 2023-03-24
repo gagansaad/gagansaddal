@@ -637,7 +637,7 @@ module.exports = {
         // Check If email is register with any user via other platforms like facebook,google or email.
 
         const foundUser = await User.findOne(
-            { "userGoogleInfo.appleId": appleId },
+            { "userAppleInfo.appleId": appleId },
             {
                 _id: 1,
                 userBasicInfo: 1,
@@ -646,6 +646,8 @@ module.exports = {
                 userDateInfo: 1
             }
         );
+
+        console.log()
 
         if (foundUser && Object.keys(foundUser).length) {
 
@@ -693,9 +695,9 @@ module.exports = {
                 const updateDeviceInfo = await dbSchema.User.update({ _id: foundUserWithEmailAddress._id }, {
                     $addToSet: {
 
-                        "userGoogleInfo.appleId": appleId,
-                        "userGoogleInfo.googleEmail": emailAddress.toLowerCase(),
-                        "userGoogleInfo.appleToken": appleToken,
+                        "userAppleInfo.appleId": appleId,
+                        "userAppleInfo.googleEmail": emailAddress.toLowerCase(),
+                        "userAppleInfo.appleToken": appleToken,
 
                         user_device_info: {
                             token: deviceToken,
@@ -730,8 +732,8 @@ module.exports = {
                 };
                 var userGoogleInfo = {
                     appleId: appleId,
-                    googleEmail: emailAddress.toLowerCase(),
-                    facebookToken: facebookToken,
+                    appleEmail: emailAddress.toLowerCase(),
+                    appleToken: appleToken,
                 };
                 var userInfo = {
                     name: name,
@@ -739,7 +741,7 @@ module.exports = {
                     email_address: emailAddress.toLowerCase(),
                 };
                 var userBasicInfo = {
-                    source: "GoogleEmail",
+                    source: "Apple",
                 };
                 var user_device_info = {
                     token: deviceToken,
@@ -747,7 +749,7 @@ module.exports = {
                 };
 
                 newUserDetail.user_status = user_status;
-                newUserDetail.userGoogleInfo = userGoogleInfo;
+                newUserDetail.userAppleInfo = userGoogleInfo;
                 newUserDetail.userInfo = userInfo;
                 newUserDetail.userBasicInfo = userBasicInfo;
                 newUserDetail.user_device_info = user_device_info;

@@ -106,11 +106,11 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
         if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
 
-        if (!(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide valid isSmokingAllowed` });
-        else if (typeof isSmokingAllowed == "boolean") return failureJSONResponse(res, { message: `Please provide boolean value for Smoking Allowed` });
+        // if (!(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide valid isSmokingAllowed` });
+        // else if (typeof isSmokingAllowed == "boolean") return failureJSONResponse(res, { message: `Please provide boolean value for Smoking Allowed` });
 
-        if (!(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide valid isSmokingAllowed` });
-        else if (!isValidBoolean(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide boolean value for Smoking Allowed` });
+        // if (!(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide valid isSmokingAllowed` });
+        // else if (!isValidBoolean(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide boolean value for Smoking Allowed` });
 
 
 
