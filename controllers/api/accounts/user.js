@@ -692,16 +692,15 @@ module.exports = {
             if (foundUserWithEmailAddress && Object.keys(foundUserWithEmailAddress).length) {
                 console.log(`case2 `)
 
-                const updateDeviceInfo = await dbSchema.User.update({ _id: foundUserWithEmailAddress._id }, {
+                const updateDeviceInfo = await User.update({ _id: foundUserWithEmailAddress._id }, {
                     $addToSet: {
-
                         "userAppleInfo.appleId": appleId,
-                        "userAppleInfo.googleEmail": emailAddress.toLowerCase(),
+                        "userAppleInfo.appleEmail": emailAddress.toLowerCase(),
                         "userAppleInfo.appleToken": appleToken,
 
                         user_device_info: {
                             token: deviceToken,
-                            device_type: Numbe(deviceType)
+                            device_type: Number(deviceType)
                         },
                     },
                     $set: {

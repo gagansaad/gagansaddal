@@ -97,6 +97,7 @@ const userSchema = new mongoose.Schema({
     userAppleInfo: {
         appleId: { type: String },
         appleToken: { type: String },
+        appleEmail: { type: String },
         loginOn: { type: Date, default: Date.now() },
     },
 
