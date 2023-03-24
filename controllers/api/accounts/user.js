@@ -746,6 +746,7 @@ module.exports = {
                     token: deviceToken,
                     device_type: Number(deviceType),
                 };
+                
 
                 newUserDetail.user_status = user_status;
                 newUserDetail.userAppleInfo = userGoogleInfo;
