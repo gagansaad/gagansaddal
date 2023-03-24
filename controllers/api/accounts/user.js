@@ -347,7 +347,7 @@ module.exports = {
                 console.log(`case2 `)
 
                 const updateDeviceInfo = await dbSchema.User.update({ _id: foundUserWithEmailAddress._id }, {
-                    $addToSet: {
+                    $set: {
 
                         "userGoogleInfo.googleId": googleId,
                         "userGoogleInfo.googleEmail": emailAddress.toLowerCase(),
