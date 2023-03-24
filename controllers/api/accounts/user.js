@@ -693,8 +693,11 @@ module.exports = {
                 console.log(`case2 `)
 
                 const updateDeviceInfo = await User.update({ _id: foundUserWithEmailAddress._id }, {
-                    $addToSet: {
+                 
+                    $set: {
+
                         "userAppleInfo.appleId": appleId,
+                        "userAppleInfo.googleEmail": emailAddress.toLowerCase(),
                         "userAppleInfo.appleToken": appleToken,
 
                         user_device_info: {
