@@ -186,7 +186,7 @@ module.exports = {
                         password: (newUser?.password).trim(),
                         email_address: (newUser?.email).trim(),
                         mobile_number: {
-                            country_code: 91,
+                            country_code: newUser?.newUser || 91,
                             phone_number: (newUser?.phone_number).trim()
                         },
                     };
