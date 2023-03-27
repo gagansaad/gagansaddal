@@ -6,7 +6,7 @@ AdminConfigurations = mongoose.model("adminConfigurations"),
     failureJSONResponse
 } = require(`../../../../handlers/jsonResponseHandlers`);
 const PostType = mongoose.model("PostType");
-const AddPlan = mongoose.model("adsplan");
+const AdsPlan = mongoose.model("adsplan");
 
 exports.postconfigurations = async (req, res, next) => {
 
@@ -56,7 +56,7 @@ exports.posttypeconfigurations = async (req, res, next) => {
         // console.log(req.body);
         const { is_active ,visible ,name ,ads_type ,featured_amount ,featured_currency ,price_amount ,price_currency, duration } = req.body; 
 
-        const addTypePlan = new AddPlan({
+        const addTypePlan = new AdsPlan({
             "is_active":is_active,
             "visible":visible,
             "name":name,
@@ -85,7 +85,7 @@ exports.gettypeconfigurations = async (req, res, next) => {
 
     try {
         
-        AddPlan.find()
+        AdsPlan.find()
         .then(result => {
             if (!result){
                 return failureJSONResponse(res, {message: `something went wrong` })
@@ -101,4 +101,5 @@ exports.gettypeconfigurations = async (req, res, next) => {
     }
 
 }
+
 
