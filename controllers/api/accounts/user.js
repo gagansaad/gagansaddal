@@ -127,7 +127,6 @@ module.exports = {
                 { userBasicInfo: 1, userInfo: 1 }
             );
 
-
             if (checkUserEmail.length) {
                 //If user has signedup from fb
                 if (
@@ -186,7 +185,7 @@ module.exports = {
                         password: (newUser?.password).trim(),
                         email_address: (newUser?.email).trim(),
                         mobile_number: {
-                            country_code: newUser?.newUser || 91,
+                            country_code: newUser?.country_code || 91,
                             phone_number: (newUser?.phone_number).trim()
                         },
                     };
