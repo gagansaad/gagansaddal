@@ -91,6 +91,9 @@ module.exports = {
 
             if (phone_number.trim() && !isValidIndianMobileNumber(phone_number.trim())) invalidData.push(`phone number`);
 
+            console.log(missingData)
+            console.log(invalidData)
+
             if (missingData.length || invalidData.length) {
                 const data = {};
 
