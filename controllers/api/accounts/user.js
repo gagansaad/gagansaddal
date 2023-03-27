@@ -1226,9 +1226,7 @@ module.exports = {
             `+91`,
             `+92`
         ]
-        res.json({
-            data: country_code_list
-        })
+        return successJSONResponse(res, { message: `success`, countryCode: country_code_list });
     },
 
     check_email_already_exists: async function (req, res, next) {
