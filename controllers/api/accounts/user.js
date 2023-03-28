@@ -76,37 +76,20 @@ module.exports = {
             } = req.body;
 
 
-            const missingData = [],
-                invalidData = [];
 
-            if (!isValidString(name.trim())) missingData.push(`name`);
-            if (!isValidString(password.trim())) missingData.push(`password`);
+            if (!isValidString(name.trim())) return failureJSONResponse(res,{message:`Please provide name`}) ;
+            if (!isValidString(password.trim())) return failureJSONResponse(res, { message: `Please provide name` });
 
-            if (!isValidString(device_token.trim())) missingData.push(`device token`);
-            if (!(device_type)) missingData.push(`device type`);
-            else if (isNaN(device_type)) invalidData.push(`device type`);
+            if (!isValidString(device_token.trim())) return failureJSONResponse(res, { message: `Please provide device token` });
+            if (!(device_type)) return failureJSONResponse(res, { message: `Please provide device type` });
+            else if (isNaN(device_type)) return failureJSONResponse(res, { message: `Please provide valid device type` }); 
 
-            if (!isValidString(email.trim())) missingData.push(`email address`);
-            else if (email.trim() && !isValidEmailAddress(email.trim())) invalidData.push(`email address`);
+            if (!isValidString(email.trim())) return failureJSONResponse(res, { message: `Please provide email address` }); 
+            else if (email.trim() && !isValidEmailAddress(email.trim())) return failureJSONResponse(res, { message: `Please provide valid email address` }); 
 
-            if (phone_number.trim() && !isValidIndianMobileNumber(phone_number.trim())) invalidData.push(`phone number`);
-
-            console.log(missingData)
-            console.log(invalidData)
-
-            if (missingData.length || invalidData.length) {
-                const data = {};
-
-                if (missingData.length) data.missing = missingData;
-                if (invalidData.length) data.invalid = invalidData;
-
-                return res.json({
-                    status: 400,
-                    message: `Some data is missing/invalid`
-                });
-            } else {
-                return next();
-            }
+    
+            return next();
+            
 
         } catch (error) {
             console.log(error)
@@ -134,7 +117,7 @@ module.exports = {
                     checkUserEmail[0].userBasicInfo.source == "facebook"
                 ) {
                     res.json({
-                        status: 400,
+                        status: 403,
                         message: alertMessage.facebookAccountExist,
 
                     });
@@ -142,7 +125,7 @@ module.exports = {
                 //If user has signedup from google
                 else if (checkUserEmail[0].userBasicInfo.source == "GoogleEmail") {
                     res.json({
-                        status: 400,
+                        status: 403,
                         message: `facebook account already exists with this email`,
 
                     });
@@ -150,7 +133,7 @@ module.exports = {
                 //If user has signedup from Apple
                 else if (checkUserEmail[0].userBasicInfo.source == "Apple") {
                     res.json({
-                        status: 400,
+                        status: 403,
                         message: alertMessage.appleAccountExist,
                     });
                 }
@@ -160,7 +143,7 @@ module.exports = {
                     checkUserEmail[0].userBasicInfo.source == "email"
                 ) {
                     res.json({
-                        status: 400,
+                        status: 403,
                         message: alertMessage.emailAccountExist
                     });
                 }
@@ -1225,8 +1208,10 @@ module.exports = {
 
     country_code_lists: async function (req, res, next) {
         const country_code_list = [
-            `+91`,
-            `+92`
+            `+1`,
+            `+92`,
+            `+971`,
+            `+86`
         ]
         return successJSONResponse(res, { message: `success`, countryCode: country_code_list });
     },
@@ -1253,9 +1238,6 @@ module.exports = {
     },
 
     update_profile: async function (req, res, next) {
-
-
-
 
         try {
             const userId = req.userId;
