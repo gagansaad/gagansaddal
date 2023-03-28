@@ -5,8 +5,9 @@ const router = require(`express`).Router(),
 
 
 
+
 router.get(`/`,
-    authMiddleware.ensureUserLoggedIn,
+    // authMiddleware.ensureUserLoggedIn,
     controllers.fetchPlanForAds
 );
 
