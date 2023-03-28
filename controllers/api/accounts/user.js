@@ -169,7 +169,7 @@ module.exports = {
                         email_address: (newUser?.email).trim(),
                         mobile_number: {
                             country_code: newUser?.country_code || 91,
-                            phone_number: (newUser?.phone_number).trim()
+                            phone_number: (newUser?.phone_number)
                         },
                     };
                     newUserDetail.user_device_info = {
@@ -237,6 +237,7 @@ module.exports = {
                         }
                     });
                 } catch (err) {
+                    console.log(err)
                     res.json({
                         status: 400,
                         invalidOTP: null,
@@ -245,6 +246,7 @@ module.exports = {
                 }
             }
         } catch (err) {
+            console.log(err)
             res.json({
                 status: 400,
                 invalidOTP: null,
