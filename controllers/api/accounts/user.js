@@ -237,21 +237,11 @@ module.exports = {
                         }
                     });
                 } catch (err) {
-                    console.log(err)
-                    res.json({
-                        status: 400,
-                        invalidOTP: null,
-                        message: `fail`
-                    })
+                    return failureJSONResponse(res, { message: `something went wrog` })
                 }
             }
         } catch (err) {
-            console.log(err)
-            res.json({
-                status: 400,
-                invalidOTP: null,
-                message: `fail`
-            })
+            return failureJSONResponse(res,{message: `something went wrog`})
         }
     },
 
