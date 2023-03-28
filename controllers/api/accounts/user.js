@@ -1393,7 +1393,7 @@ module.exports = {
                         return failureJSONResponse(res, { message: `something went wrong` });
 
                     } else {
-                        EmailOTPVerification(phone_number, `Hi`, foundOTP?.code)
+                        EmailOTPVerification(email_address, `Hi`, foundOTP?.code)
                         return successJSONResponse(res, { message: `success` });
                     }
 
