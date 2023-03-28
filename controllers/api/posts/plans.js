@@ -19,15 +19,15 @@ exports.fetchPlanForAds = async (req, res, next) => {
         })
         .then(result => {
             if (!result){
-                console.log('fail');
+                // console.log('fail');
                 return failureJSONResponse(res, {message: `something went wrong` })
             }
-            console.log('success');
-            console.log(result);
+            // console.log('success');
+            // console.log(result);
             return  successJSONResponse(res, { data: result })
         })
         .catch(err=>{
-            console.log('result fail');
+            // console.log('result fail');
             return failureJSONResponse(res, { message: `something went wrong` })
         })
 
