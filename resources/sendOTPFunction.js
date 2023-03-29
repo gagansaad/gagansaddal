@@ -32,10 +32,6 @@ console.log(`jshfjsdhfjshfj`)
             // console.log(otpResponse);
             // console.log(Math.floor(100000 + Math.random() * 900000));
         } catch (error) {
-<<<<<<< HEAD
-            console.log(error)
-            res.status(error?.status || 400).send(error?.message || 'something went wrong!');
-=======
             console.log(`Enter Only Verified Mobile Number`)
         }
     
@@ -81,7 +77,6 @@ const MobileNumberVerificationOTPByUserId = (userId) => {
 
         } catch (error) {
             console.log(`dfsfds`)
->>>>>>> 035917d8319f3f4b57ccdcc1dfe350e216669168
         }
     // res.send(`hghjgj`)
    
