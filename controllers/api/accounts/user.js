@@ -1367,7 +1367,7 @@ module.exports = {
                 else if (!isValidIndianMobileNumber(phone_number)) return failureJSONResponse(res, { message: `please provide valid phone number` });
 
                 MobileNumberVerificationOTPByUserId(userId);
-
+                return successJSONResponse(res, { message: `success` });
                 // OTP.create({
                 //     code: generateOTP(4),
                 //     phone_number: phone_number,
@@ -1409,11 +1409,13 @@ module.exports = {
                     }
 
                 }).catch((err) => {
+                    console.log(err);
                     return failureJSONResponse(res, { message: `something went wrong` });
                 })
 
             }
         } catch (err) {
+            console.log(err);
             return failureJSONResponse(res, { message: `something went wrong` });
         }
 
