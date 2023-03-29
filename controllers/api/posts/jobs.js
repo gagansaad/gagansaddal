@@ -10,7 +10,7 @@ postJobAd = mongoose.model("postJobAd"),
 
 
 exports.getDnymicsData = async (req, res, next) => {
-        const objtSend = {
+        const dynamicsData = {
 
             jobCategory: [
                 `employed`,
@@ -24,8 +24,8 @@ exports.getDnymicsData = async (req, res, next) => {
             ],
 
             jobTypes: [
-                ``,
-                ``
+                `Enginner`,
+                `Plumber`
             ],
         
             Language: [
@@ -34,8 +34,8 @@ exports.getDnymicsData = async (req, res, next) => {
            
             
             workAuthorization: [
-                ``,
-                ``
+                `test`,
+                `test1`
             ],
             gender: [
                 `male`,
@@ -44,8 +44,8 @@ exports.getDnymicsData = async (req, res, next) => {
 
         }
         return successJSONResponse(res, {
-            message: `sent successfully`,
-            objtSend
+            message: `success`,
+            data: dynamicsData
         })
     }
 
