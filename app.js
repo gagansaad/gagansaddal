@@ -27,6 +27,7 @@ require(`./model/posts/roomRents`);
 require(`./model/configurations/privacy`);
 require(`./model/configurations/termAndCondition`);
 require(`./model/plan/plan`);
+require(`./model/posts/postJobAd`);
 
 // admin configuration
 require(`./model/accounts/admin/configuration`);
@@ -43,6 +44,9 @@ const configurationsRoute = require('./routes/api/configurations');
 
 const postTypeRoutes = require('./routes/api/ads/types');
 const roomRentsRoutes = require('./routes/api/ads/roomRents');
+
+const jobsRoutes = require('./routes/api/ads/jobs');
+
 
 const loadHelmet = require(`./loaders/helmets`),
     loadExpressSession = require(`./loaders/expressSession`);
@@ -69,7 +73,7 @@ app.use('/admin/v1/api/configurations', adminconfigurationsRoute);
 app.use('/v1/api/posts/types', postTypeRoutes);
 app.use('/v1/api/posts/room-rents', roomRentsRoutes);
 
-
+app.use('/v1/api/posts/jobs', jobsRoutes);
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))
