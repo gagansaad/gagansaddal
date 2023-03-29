@@ -625,7 +625,7 @@ module.exports = {
             }
         );
 
-        console.log()
+        
 
         if (foundUser && Object.keys(foundUser).length) {
 
@@ -675,7 +675,7 @@ module.exports = {
                     $set: {
 
                         "userAppleInfo.appleId": appleId,
-                        "userAppleInfo.googleEmail": emailAddress.toLowerCase(),
+                        "userAppleInfo.appleId": emailAddress.toLowerCase(),
                         "userAppleInfo.appleToken": appleToken,
 
                         user_device_info: {
