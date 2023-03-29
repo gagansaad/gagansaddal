@@ -2,11 +2,7 @@ const router = require(`express`).Router(),
     authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
     controllers = require(`../../../controllers/api/posts/plans`);
 
-
-
-
-
-router.get(`/`,
+router.post(`/`,
     // authMiddleware.ensureUserLoggedIn,
     controllers.fetchPlanForAds
 );

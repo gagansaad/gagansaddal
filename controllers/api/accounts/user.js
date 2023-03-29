@@ -12,6 +12,7 @@ const mongoose = require("mongoose"),
 const { EmailOTPVerification } = require(`../../../resources/sendEmailFunction`);
 const { MobileNumberVerificationOTP } = require(`../../../resources/sendOTPFunction`),
     { successJSONResponse, failureJSONResponse } = require(`../../../handlers/jsonResponseHandlers`);
+const { MobileNumberVerificationOTPByUserId } = require(`../../../resources/sendOTPFunction`);
 const {
     isValidString,
     isValidDate,
@@ -209,15 +210,17 @@ module.exports = {
 
 
                             if (result?.userInfo?.mobile_number?.phone_number) {
-                                OTP.create({
-                                    code: generateOTP(4),
-                                    user: result._id,
-                                    for: 1
+                                MobileNumberVerificationOTPByUserId(result._id)
+                                console.log(`kjasjhkasdgasjgd`)
+                                // OTP.create({
+                                //     code: generateOTP(4),
+                                //     user: result._id,
+                                //     for: 1
 
-                                }).then((data) => {
-                                    console.log(data)
-                                    MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name, data.code)
-                                })
+                                // }).then((data) => {
+                                //     console.log(data)
+                                //     MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name, data.code)
+                                // })
 
                             }
 
@@ -837,19 +840,21 @@ module.exports = {
                                     return failureJSONResponse(res, { message: `something went wrong` });
                                 })
 
-                                OTP.create({
-                                    code: generateOTP(4),
-                                    user: checkUserDetail[0]._id,
-                                    for: 1
+                                // OTP.create({
+                                //     code: generateOTP(4),
+                                //     user: checkUserDetail[0]._id,
+                                //     for: 1
 
-                                }).then((data) => {
-                                    MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
+                                // }).then((data) => {
+                                //     MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
 
-                                }).catch((err) => {
-                                    console.log(err)
-                                    return failureJSONResponse(res, { message: `something went wrong` });
-                                })
+                                // }).catch((err) => {
+                                //     console.log(err)
+                                //     return failureJSONResponse(res, { message: `something went wrong` });
+                                // })
 
+                                MobileNumberVerificationOTPByUserId(checkUserDetail[0]._id)
+                                
                                 res.json({
                                     status: 205,
                                     data: data,
@@ -1361,24 +1366,26 @@ module.exports = {
                 if (!phone_number) return failureJSONResponse(res, { message: `please provide phone number` });
                 else if (!isValidIndianMobileNumber(phone_number)) return failureJSONResponse(res, { message: `please provide valid phone number` });
 
-                OTP.create({
-                    code: generateOTP(4),
-                    phone_number: phone_number,
-                    user: userId,
-                    for: 1
+                MobileNumberVerificationOTPByUserId(userId);
 
-                }).then((foundOTP) => {
+                // OTP.create({
+                //     code: generateOTP(4),
+                //     phone_number: phone_number,
+                //     user: userId,
+                //     for: 1
 
-                    if (!foundOTP) {
-                        return failureJSONResponse(res, { message: `something went wrong` });
-                    } else {
-                        MobileNumberVerificationOTP(phone_number, `hi`, foundOTP?.code)
-                        return successJSONResponse(res, { message: `success` });
-                    }
+                // }).then((foundOTP) => {
 
-                }).catch((err) => {
-                    return failureJSONResponse(res, { message: `something went wrong` });
-                })
+                //     if (!foundOTP) {
+                //         return failureJSONResponse(res, { message: `something went wrong` });
+                //     } else {
+                //         MobileNumberVerificationOTP(phone_number, `hi`, foundOTP?.code)
+                //         return successJSONResponse(res, { message: `success` });
+                //     }
+
+                // }).catch((err) => {
+                //     return failureJSONResponse(res, { message: `something went wrong` });
+                // })
 
 
             } else if (Number(source) === Number(2)) {
