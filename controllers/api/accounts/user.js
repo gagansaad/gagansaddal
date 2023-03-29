@@ -772,7 +772,7 @@ module.exports = {
         try {
 
             var userData = req.body;
-            if (!userData.email) return res.json({ message: "please provide a email" });
+            if (!userData.email) return res.json({ message: "please provide a email address" });
 
             userData.email = (userData?.email).trim().toLowerCase();
 
@@ -904,7 +904,7 @@ module.exports = {
             } else {
                 res.json({
                     status: 404,
-                    message: `email not registered`,
+                    message: `Email address not registered`,
                 });
             }
         } catch (err) {
@@ -1353,7 +1353,7 @@ module.exports = {
                 phone_number = req?.body?.phone_number;
 
             if (!source) return failureJSONResponse(res, { message: `please provide soruce` });
-            else if (source && isNaN(source)) return failureJSONResponse(res, { message: `please provide valid soruce ` });
+            else if (source && isNaN(source)) return failureJSONResponse(res, { message: `please provide valid source ` });
             else if (source && (source < 1 || source > 2)) return failureJSONResponse(res, { message: `please provide source between 1-2` });
 
             if (Number(source) === Number(1)) {

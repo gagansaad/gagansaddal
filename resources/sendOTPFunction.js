@@ -24,6 +24,7 @@ exports.MobileNumberVerificationOTP = (mobile_number = NaN, name = ``, code) => 
             // console.log(otpResponse);
             // console.log(Math.floor(100000 + Math.random() * 900000));
         } catch (error) {
+            console.log(error)
             res.status(error?.status || 400).send(error?.message || 'something went wrong!');
         }
     // res.send(`hghjgj`)
