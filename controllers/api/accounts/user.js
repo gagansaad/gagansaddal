@@ -1207,7 +1207,7 @@ module.exports = {
     country_code_lists: async function (req, res, next) {
         const country_code_list = [
             `+1`,
-            `+92`,
+            `+91`,
             `+971`,
             `+86`
         ]
