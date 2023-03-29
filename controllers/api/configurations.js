@@ -47,3 +47,10 @@ exports.termAndConditions = async (req, res, next) => {
     }
 
 }
+
+exports.createTermAndConditions = async (req, res, next) => {
+    res.json({
+        data:`jhgdajhgda`
+    })
+
+}

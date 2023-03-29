@@ -42,6 +42,8 @@ const adminconfigurationsRoute = require('./routes/api/accounts/admin/configurat
 const usercontrol = require('./routes/accounts/admin/users_control');
 const configurationsRoute = require('./routes/api/configurations');
 
+const adminconfigurationsRoute1 = require('./routes/admin/configurations');
+
 const postTypeRoutes = require('./routes/api/ads/types');
 const roomRentsRoutes = require('./routes/api/ads/roomRents');
 
@@ -68,7 +70,8 @@ app.use('/v1/api/', signUp);
 app.use('/admin/login',adminSignIp);
 app.use('/api/admin/users',usercontrol);
 app.use('/v1/api/configurations', configurationsRoute);
-app.use('/admin/v1/api/configurations', adminconfigurationsRoute);
+app.use('/admin/v1/api/configurations1', adminconfigurationsRoute);
+app.use('/admin/v1/api/configurations', adminconfigurationsRoute1);
 
 app.use('/v1/api/posts/types', postTypeRoutes);
 app.use('/v1/api/posts/room-rents', roomRentsRoutes);
