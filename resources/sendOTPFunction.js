@@ -9,80 +9,81 @@ const mongoose = require("mongoose"),
     { generateOTP } = require(`../utils/generateOTP`);
 
 const MobileNumberVerificationOTP = (mobile_number = NaN, name = ``, code) => {
-console.log(`jshfjsdhfjshfj`)
-        try {
-            // client.verify.v2.services
-            // .create({friendlyName: 'OTP'})
-            // .then(service => console.log(service.sid));
-            const otp_code = Math.floor(100000 + Math.random() * 900000);
-            client.messages
-                .create({
-                    body: `Your OTP Verification Code is: ${code}`,
-                    from: smsNo,
-                    to: mobile_number
-                })
-                .then(message => console.log(message.sid))
-                .catch((error)=>{
-                    // console.log(`dfsfds`)
-                    console.log('something went wrong1!');
+    console.log(`jshfjsdhfjshfj`)
+    try {
+        // client.verify.v2.services
+        // .create({friendlyName: 'OTP'})
+        // .then(service => console.log(service.sid));
+        const otp_code = Math.floor(100000 + Math.random() * 900000);
+        client.messages
+            .create({
+                body: `Your OTP Verification Code is: ${code}`,
+                from: smsNo,
+                to: mobile_number
+            })
+            .then(message => console.log(message.sid))
+            .catch((error) => {
+                // console.log(`dfsfds`)
+                console.log('something went wrong1!');
 
-                });
-            // const otpResponse = await client.verify.services(seriveSid)
-            //         .verifications.create({to: "+919592407801",channel: 'sms'});
-            // console.log(otpResponse);
-            // console.log(Math.floor(100000 + Math.random() * 900000));
-        } catch (error) {
-            console.log(`Enter Only Verified Mobile Number`)
-        }
-    
+            });
+        // const otpResponse = await client.verify.services(seriveSid)
+        //         .verifications.create({to: "+919592407801",channel: 'sms'});
+        // console.log(otpResponse);
+        // console.log(Math.floor(100000 + Math.random() * 900000));
+    } catch (error) {
+        console.log(`Enter Only Verified Mobile Number`)
+    }
+
 };
 
 const MobileNumberVerificationOTPByUserId = (userId) => {
-    
+
     try {
-            console.log('----------------------------------------------------')
-            console.log(userId)
-            User.findById({
-                _id: userId
-            })
-           
-            .then((foundUser)=>{
+        console.log('----------------------------------------------------')
+        console.log(userId)
+        User.findById({
+            _id: userId
+        })
+
+            .then((foundUser) => {
                 console.log(foundUser)
 
                 // console.log(foundUser.userInfo.mobile_number);
                 const fullNumber = '+' + foundUser.userInfo.mobile_number.country_code + foundUser.userInfo.mobile_number.phone_number;
                 // console.log(fullNumber);
-                if(foundUser){
+                if (foundUser) {
                     OTP.create({
                         code: generateOTP(4),
+                        phone_number: foundUser?.userInfo?.mobile_number?.phone_number,
                         user: userId,
                         for: 1
                     }).then((data) => {
                         // console.log(foundUser)
-                        MobileNumberVerificationOTP(fullNumber, name=``, data.code)
+                        MobileNumberVerificationOTP(fullNumber, name = ``, data.code)
                     })
-                    .catch((error)=>{
-                        console.log('something went wrong2!');
+                        .catch((error) => {
+                            console.log('something went wrong2!');
 
-                    })
+                        })
                 }
 
                 // console.log(foundUser)
                 // MobileNumberVerificationOTP()
             })
-            .catch((error)=>{
+            .catch((error) => {
                 console.log('something went wrong3!');
 
             })
 
-        } catch (error) {
-            console.log(`dfsfds`)
-        }
+    } catch (error) {
+        console.log(`dfsfds`)
+    }
     // res.send(`hghjgj`)
-   
+
 };
 
-module.exports={
+module.exports = {
     MobileNumberVerificationOTP,
     MobileNumberVerificationOTPByUserId
 }

@@ -1109,6 +1109,7 @@ module.exports = {
     },
 
     verify_forget_password_otp: async function (req, res, next) {
+       
         const {
             otp
         } = req.body;
@@ -1426,6 +1427,8 @@ module.exports = {
 
     update_email_or_phone_number: async function (req, res) {
 
+ 
+
         try {
             const userId = req.userId;
 
@@ -1444,7 +1447,7 @@ module.exports = {
 
             if (Number(source) == Number(1)) {
 
-                console.log(`working22qwqwq`)
+                
                 if (!phone_number) return failureJSONResponse(res, { message: `please provide phone number` });
                 else if (!isValidIndianMobileNumber(phone_number)) return failureJSONResponse(res, { message: `please provide valid phone number` });
 
