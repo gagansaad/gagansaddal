@@ -1109,6 +1109,8 @@ module.exports = {
     },
 
     verify_forget_password_otp: async function (req, res, next) {
+        console.log(`req.body`)
+        console.log(req.body)
        
         const {
             otp
@@ -1350,6 +1352,8 @@ module.exports = {
     // change email address 
 
     generate_otp_for_change_email_mobile: async function (req, res) {
+
+        console.log(req.body)
 
         try {
             const userId = req.userId;
