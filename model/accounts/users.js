@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema({
 
         name: {
             type: String,
-            required: true
         },
         date_of_birth:{
             type:  Date
@@ -21,7 +20,6 @@ const userSchema = new mongoose.Schema({
         },
         email_address: {
             type: String,
-            required: true,
         },
         password: { type: String },
 

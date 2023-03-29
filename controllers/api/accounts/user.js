@@ -247,10 +247,11 @@ module.exports = {
 
     // Standard signup with Google.
     login_signup_with_google: async function (req, res) {
+        console.log(req.body)
 
 
-        const emailAddress = (req?.body?.email_address).trim(),
-            name = (req?.body?.name).trim(),
+        const emailAddress = (req?.body?.email_address),
+            name = (req?.body?.name),
             deviceType = req?.body?.device_type,
             googleId = (req?.body?.google_id),
             googleToken = (req?.body?.google_token),
@@ -594,13 +595,13 @@ module.exports = {
 
 
         const emailAddress = (req?.body?.email_address).trim(),
-            name = (req?.body?.name).trim(),
+            name = req?.body?.name || `` ,
             deviceType = req?.body?.device_type,
             appleId = (req?.body?.apple_id),
             appleToken = (req?.body?.apple_token),
             deviceToken = (req?.body?.device_token);
 
-        if (!isValidString(name.trim())) return failureJSONResponse(res, { message: `Please enter valid name` });
+        // if (!isValidString(name.trim())) return failureJSONResponse(res, { message: `Please enter valid name` });
         if (!isValidString(appleId.trim())) return failureJSONResponse(res, { message: `apple id missing` });
         if (!isValidString(appleToken.trim())) return failureJSONResponse(res, { message: `apple token missing` });
 
@@ -1230,6 +1231,8 @@ module.exports = {
     },
 
     update_profile: async function (req, res, next) {
+        console.log(req.body)
+        console.log(`jhadsghjdgja`)
 
         try {
             const userId = req.userId;
@@ -1376,6 +1379,7 @@ module.exports = {
                 }).catch((err) => {
                     return failureJSONResponse(res, { message: `something went wrong` });
                 })
+
 
             } else if (Number(source) === Number(2)) {
                 if (!email_address) return failureJSONResponse(res, { message: `please provide email address` });
