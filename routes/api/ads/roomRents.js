@@ -59,7 +59,7 @@ router.patch(`/edit/:roomRentId`,
     upload.array('photos', 12),
     controllers.editRoomRentAds
 );
-router.get(`/fetchAllRooms`,
+router.get(`/fetchMyAds`,
     authMiddleware.ensureUserLoggedIn,
     controllers.fetchAllRooms
 );
