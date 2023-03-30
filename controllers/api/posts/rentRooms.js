@@ -167,7 +167,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
 
     } = req.body;
 
-
+    const userId = req.userId;
 
     const imageArr = [];
 
@@ -210,7 +210,8 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
             },
             preferableModeContact: preferableModeContact
 
-        }
+        },
+        userId: userId
     }
 
     const newRoomRentPost = await RoomRentsAds.create(dataObj);
@@ -233,7 +234,22 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     })
 
 }
-
+exports.fetchAllRooms = async (req, res, next) => {
+    try {
+        let RoomRent = await RoomRentsAds.find({ userId: req.userId });
+        if (RoomRent) {
+            return successJSONResponse(res, {
+                message: `success`,
+                RoomRent,
+                status: 200,
+            })
+        } else {
+            return failureJSONResponse(res, { message: `Room not Available` })
+        }
+    } catch (err) {
+        return failureJSONResponse(res, { message: `something went wrong` })
+    }
+}
 
 exports.editRoomRentAds = async (req, res, next) => {
     const roomRentId = req?.params?.roomRentId;

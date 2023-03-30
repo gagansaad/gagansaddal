@@ -48,16 +48,20 @@ router.get(`/dynamics-data`,
 );
 
 router.post(`/`, upload.array('photos', 12),
+    authMiddleware.ensureUserLoggedIn,
     controllers.validateRoomRentsAdsData,
     controllers.creatingRoomRentsAds
-    )
+)
 
 
 
 router.patch(`/edit/:roomRentId`,
     upload.array('photos', 12),
     controllers.editRoomRentAds
-    )
-
+);
+router.get(`/fetchAllRooms`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchAllRooms
+);
 
 module.exports = router;

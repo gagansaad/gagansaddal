@@ -107,6 +107,10 @@ const roomRentsSchema = new mongoose.Schema({
             enum: [1, 2, 3]
         }
 
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
     }
 
 }, { timestamps: true });
