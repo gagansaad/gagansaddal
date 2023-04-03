@@ -288,7 +288,7 @@ exports.editJobAds = async (req, res, next) => {
         if (work_authorization) adsInfoObj.work_authorization = work_authorization;
         if (location) adsInfoObj.location = location;
         if (preferred_gender) adsInfoObj.preferred_gender = preferred_gender;
-        if (image && imageArr.length) adsInfoObj.image = imageArr;
+        if (imageArr && imageArr.length) adsInfoObj.image = imageArr;
 
 
         if (name) listerBasicInfoObj.name = name;
@@ -299,7 +299,7 @@ exports.editJobAds = async (req, res, next) => {
         }
 
         const dataObjq = {
-            adsInfoObj,
+           adsInfo: adsInfoObj,
             listerBasicInfo: {
                 name,
                 emailAddress,

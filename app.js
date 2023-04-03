@@ -65,7 +65,9 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.get('/', (req, res) => {
     res.json({ message: `msbdhsmb` })
 });
-
+if (process.env.MODE.toLowerCase() === `dev`) {
+    app.use(morgan("tiny",))
+}
 app.use('/v1/api/', signUp);
 app.use('/admin/login', adminSignIp);
 app.use('/api/admin/users', usercontrol);
@@ -81,9 +83,7 @@ app.use('/v1/api/posts/jobs', jobsRoutes);
 
 app.use('/v1/api/profile', profile);
 // logging http activity
-if (process.env.MODE.toLowerCase() === `dev`) {
-    app.use(morgan("tiny",))
-}
+
 
 
 // Routes
