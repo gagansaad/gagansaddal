@@ -46,8 +46,8 @@ const roomRentsSchema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-        experince: {
-            type:Number,
+        experience: {
+            type: Number,
             required: true
         },
         language: {
@@ -56,11 +56,11 @@ const roomRentsSchema = new mongoose.Schema({
 
         },
         salary: {
-            type:Number,
+            type: Number,
             required: true
         },
         no_of_opening: {
-            type:Number,
+            type: Number,
             required: true
         },
         website: {
@@ -78,7 +78,7 @@ const roomRentsSchema = new mongoose.Schema({
         },
 
         preferred_gender: {
-            type:Number,
+            type: Number,
             required: true
         },
 
