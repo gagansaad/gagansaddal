@@ -56,4 +56,8 @@ router.patch(`/edit/:jobId`,
     authMiddleware.ensureUserLoggedIn,
     controllers.editJobAds
 );
+router.patch(`/edit-role/:jobId`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.editJobStatus
+);
 module.exports = router;
