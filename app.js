@@ -27,7 +27,7 @@ require(`./model/posts/roomRents`);
 require(`./model/configurations/privacy`);
 require(`./model/configurations/termAndCondition`);
 require(`./model/plan/plan`);
-require(`./model/posts/postJobAd`);
+require(`./model/posts/jobs`);
 
 // admin configuration
 require(`./model/accounts/admin/configuration`);

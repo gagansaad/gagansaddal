@@ -59,9 +59,9 @@ router.patch(`/edit/:roomRentId`,
     upload.array('photos', 12),
     controllers.editRoomRentAds
 );
-router.get(`/fetchMyAds`,
-    authMiddleware.ensureUserLoggedIn,
-    controllers.fetchAllRooms
-);
+// router.get(`/fetchMyAds`,
+//     authMiddleware.ensureUserLoggedIn,
+//     controllers.fetchAllRooms
+// );
 
 module.exports = router;

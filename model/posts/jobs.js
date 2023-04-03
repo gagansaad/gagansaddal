@@ -26,6 +26,14 @@ const roomRentsSchema = new mongoose.Schema({
         required: true
     },
     adsInfo: {
+        title: {
+            ...defaultStringConfig,
+            required: true
+        },
+        descriptions: {
+            ...defaultStringConfig,
+            required: true
+        },
         categories: {
             ...defaultStringConfig,
             required: true
@@ -39,7 +47,7 @@ const roomRentsSchema = new mongoose.Schema({
             required: true
         },
         experince: {
-            ...defaultStringConfig,
+            type:Number,
             required: true
         },
         language: {
@@ -47,36 +55,33 @@ const roomRentsSchema = new mongoose.Schema({
             required: true
 
         },
-        no_of_open_day: {
-            type: Number,
+        salary: {
+            type:Number,
+            required: true
+        },
+        no_of_opening: {
+            type:Number,
             required: true
         },
         website: {
-            type: String,
+            ...defaultStringConfig,
             required: true
         },
-        attachedBath: {
-            type: Number,
-            required: true
-        },
+
         work_authorization: {
-            type: Number,
+            ...defaultStringConfig,
             required: true
         },
-        location: {
-            type: Boolean,
-            required: true
-        },
-     
-        preferredGender: {
-            type: Number,
-            required: true
-        },
-     
         location: {
             ...defaultStringConfig,
             required: true
         },
+
+        preferred_gender: {
+            type:Number,
+            required: true
+        },
+
         image: [{
             ...defaultStringConfig,
             required: true
@@ -101,4 +106,4 @@ const roomRentsSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('jobs', roomRentsSchema);
+module.exports = mongoose.model('job', roomRentsSchema);
