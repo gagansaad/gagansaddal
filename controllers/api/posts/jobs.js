@@ -113,7 +113,7 @@ exports.validateJobAdsData = async (req, res, next) => {
 
 
 exports.createJobAds = async (req, res, next) => {
-    //   console.log(req.body)
+      console.log(req.body)
     try {
 
         const {
@@ -223,11 +223,12 @@ exports.createJobAds = async (req, res, next) => {
 
 ///--------------------Edit Job------------------///
 exports.editJobAds = async (req, res, next) => {
-    console.log(`kejhrjhyewgrjhew`)
+
+
     try {
         console.log(req.files)
         const jobId = req?.params?.jobId;
-
+        console.log(jobId)
         if (!jobId) return successJSONResponse(res, {
             message: `success`,
             newJobPost,
@@ -251,7 +252,7 @@ exports.editJobAds = async (req, res, next) => {
             work_authorization,
             location,
             preferred_gender,
-            image,
+
 
             name,
             emailAddress,
@@ -266,40 +267,38 @@ exports.editJobAds = async (req, res, next) => {
             imageArr.push(data?.path)
         })
 
-        console.log(`imageArr`, imageArr)
-
         const dataObj = {},
-            adsInfoObj = {},
+            adsInfo = {},
             listerBasicInfoObj = {};
 
         if (status) dataObj.status = parseInt(status);
         if (adsType) dataObj.adsType = adsType;
 
-        if (title) adsInfoObj.title = title;
-        if (descriptions) adsInfoObj.descriptions = descriptions;
-        if (type) adsInfoObj.type = type;
-        if (categories) adsInfoObj.categories = categories;
-        if (role) adsInfoObj.role = role;
-        if (experince) adsInfoObj.experince = experince;
-        if (language) adsInfoObj.language = language;
-        if (salary) adsInfoObj.salary = salary;
-        if (no_of_opening) adsInfoObj.no_of_opening = no_of_opening;
-        if (website) adsInfoObj.website = website;
-        if (work_authorization) adsInfoObj.work_authorization = work_authorization;
-        if (location) adsInfoObj.location = location;
-        if (preferred_gender) adsInfoObj.preferred_gender = preferred_gender;
-        if (image && imageArr.length) adsInfoObj.image = imageArr;
+        if (title) adsInfo.title = title;
+        if (descriptions) adsInfo.descriptions = descriptions;
+        if (type) adsInfo.type = type;
+        if (categories) adsInfo.categories = categories;
+        if (role) adsInfo.role = role;
+        if (experince) adsInfo.experince = experince;
+        if (language) adsInfo.language = language;
+        if (salary) adsInfo.salary = salary;
+        if (no_of_opening) adsInfo.no_of_opening = no_of_opening;
+        if (website) adsInfo.website = website;
+        if (work_authorization) adsInfo.work_authorization = work_authorization;
+        if (location) adsInfo.location = location;
+        if (preferred_gender) adsInfo.preferred_gender = preferred_gender;
+        if (imageArr.length) adsInfo.image = imageArr;
 
 
         if (name) listerBasicInfoObj.name = name;
 
 
-        if (adsInfoObj && Object.keys(adsInfoObj).length) {
-            dataObj.adsInfo = adsInfoObj
+        if (adsInfo && Object.keys(adsInfo).length) {
+            dataObj.adsInfo = adsInfo
         }
 
         const dataObjq = {
-            adsInfoObj,
+            adsInfo,
             listerBasicInfo: {
                 name,
                 emailAddress,
@@ -312,13 +311,16 @@ exports.editJobAds = async (req, res, next) => {
                 },
                 preferableModeContact: preferableModeContact
 
-            }
+            },
+      
         }
 
         console.log(dataObjq)
-        console.log("object", { image: imageArr });
 
-        const updateJob = await postJobAd.findByIdAndUpdate({ _id: jobId }, { $set: dataObjq }, { new: true })
+
+        const updateJob = await postJobAd.findByIdAndUpdate({ _id: jobId }, { $set: dataObjq }, { new: true });
+
+        console.log(updateJob)
 
         if (updateJob) {
 
