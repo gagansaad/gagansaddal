@@ -74,7 +74,7 @@ exports.validateJobAdsData = async (req, res, next) => {
             categories,
             type,
             role,
-            experince,
+            experience,
             language,
             salary,
             no_of_opening,
@@ -90,7 +90,7 @@ exports.validateJobAdsData = async (req, res, next) => {
         if (!isValidString(role)) return failureJSONResponse(res, { message: `Please provide valid jobRole` });
         if (!isValidString(title)) return failureJSONResponse(res, { message: "Pleae provide us your jobTitle" })
         if (!isValidString(descriptions)) return failureJSONResponse(res, { message: `please provide valid jobDescription` });
-        if (isNaN(Number(experince))) return failureJSONResponse(res, { message: `Please provide us your experience` });
+        if (isNaN(Number(experience))) return failureJSONResponse(res, { message: `Please provide us your experience` });
         if (!isValidString(language)) return failureJSONResponse(res, { message: `Please provide us the information about how many languages do you know` });
         if (!isValidString(salary)) return failureJSONResponse(res, { message: `please provide us salary` });
         if (isNaN(Number(no_of_opening))) return failureJSONResponse(res, { message: "number of jobs opening" });
@@ -125,7 +125,7 @@ exports.createJobAds = async (req, res, next) => {
             categories,
             type,
             role,
-            experince,
+            experience,
             language,
             salary,
             no_of_opening,
@@ -167,7 +167,7 @@ exports.createJobAds = async (req, res, next) => {
                 categories,
                 type,
                 role,
-                experince,
+                experience,
                 language,
                 salary,
                 no_of_opening,
@@ -244,7 +244,7 @@ exports.editJobAds = async (req, res, next) => {
             categories,
             type,
             role,
-            experince,
+            experience,
             language,
             salary,
             no_of_opening,
@@ -274,20 +274,20 @@ exports.editJobAds = async (req, res, next) => {
         if (status) dataObj.status = parseInt(status);
         if (adsType) dataObj.adsType = adsType;
 
-        if (title) adsInfo.title = title;
-        if (descriptions) adsInfo.descriptions = descriptions;
-        if (type) adsInfo.type = type;
-        if (categories) adsInfo.categories = categories;
-        if (role) adsInfo.role = role;
-        if (experince) adsInfo.experince = experince;
-        if (language) adsInfo.language = language;
-        if (salary) adsInfo.salary = salary;
-        if (no_of_opening) adsInfo.no_of_opening = no_of_opening;
-        if (website) adsInfo.website = website;
-        if (work_authorization) adsInfo.work_authorization = work_authorization;
-        if (location) adsInfo.location = location;
-        if (preferred_gender) adsInfo.preferred_gender = preferred_gender;
-        if (imageArr.length) adsInfo.image = imageArr;
+        if (title) adsInfoObj.title = title;
+        if (descriptions) adsInfoObj.descriptions = descriptions;
+        if (type) adsInfoObj.type = type;
+        if (categories) adsInfoObj.categories = categories;
+        if (role) adsInfoObj.role = role;
+        if (experience) adsInfoObj.experience = experience;
+        if (language) adsInfoObj.language = language;
+        if (salary) adsInfoObj.salary = salary;
+        if (no_of_opening) adsInfoObj.no_of_opening = no_of_opening;
+        if (website) adsInfoObj.website = website;
+        if (work_authorization) adsInfoObj.work_authorization = work_authorization;
+        if (location) adsInfoObj.location = location;
+        if (preferred_gender) adsInfoObj.preferred_gender = preferred_gender;
+        if ( imageArr.length) adsInfoObj.image = imageArr;
 
 
         if (name) listerBasicInfoObj.name = name;
@@ -298,7 +298,7 @@ exports.editJobAds = async (req, res, next) => {
         }
 
         const dataObjq = {
-            adsInfo,
+            adsInfo: adsInfoObj,
             listerBasicInfo: {
                 name,
                 emailAddress,
