@@ -103,5 +103,9 @@ router.delete(`/account-delete`,
     authMiddleware.ensureUserLoggedIn,
     controllers.account_delete
 );
+router.patch(`/change-password`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.change_password
+);
 
 module.exports = router;
