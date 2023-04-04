@@ -1107,13 +1107,14 @@ module.exports = {
             
                   return res.json({
                     status: 200,
-                    invalidOTP,
+                    invalidOTP: null,
                     message: `success!`,
                   });
 
                 } else {
                   return res.json({
                     status: 400,
+                    invalidOTP: null,
                     message: `something went wrong`,
                   });
                 }
@@ -1121,12 +1122,14 @@ module.exports = {
               .catch((err) => {
                 return res.json({
                   status: 400,
+                  invalidOTP: null,
                   message: `something went wrong`,
                 });
               });
           } else {
             return res.json({
               status: 400,
+              invalidOTP: null,
               message: `Invalid OTP`,
             });
           }
