@@ -994,7 +994,7 @@ module.exports = {
   },
 
   verifiy_otps: async function (req, res, next) {
-    const { otp_for_email, otp_for_mobile_number } = req.body;
+    const { otp_for_email, otp_for_mobile_number, is_email_verified } = req.body;
 
     if (otp_for_mobile_number) {
       OTP.findOne({
@@ -1025,6 +1025,8 @@ module.exports = {
               {
                 $set: {
                   "userInfo.is_active": true,
+                  "userInfo.mobile_number.is_verified": true,
+                  "userInfo.is_verified_email": true,
                 },
               }
             )
@@ -1082,6 +1084,7 @@ module.exports = {
               {
                 $set: {
                   "userInfo.is_active": true,
+                  "userInfo.is_verified_email": true,
                 },
               }
             )
@@ -1870,7 +1873,7 @@ module.exports = {
           });
         }
     }catch(err){
-      Error:err
+      console.log(err);
         res.json({
             status: 404,
             message: `Something went wrong`,

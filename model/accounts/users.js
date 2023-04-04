@@ -19,9 +19,11 @@ const userSchema = new mongoose.Schema({
         },
         email_address: {
             type: String,
-            is_verified:{
-                type: String
-            }
+           
+        },
+        is_verified_email:{
+            type: Boolean,
+            default: false
         },
         password: { type: String },
 
@@ -31,9 +33,10 @@ const userSchema = new mongoose.Schema({
             },
             phone_number: {
                 type: String,
-                is_verified:{
-                    type: String
-                }
+            },
+            is_verified:{
+                type: Boolean,
+                default: false
             }
         },
         is_active:{
