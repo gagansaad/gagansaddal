@@ -1406,7 +1406,8 @@ module.exports = {
             short_bio: short_bio,
             my_website: my_website,
             address: data.location.address,
-            coordinates: data.location.coordinates,
+            lat: data.location.coordinates[0],
+            long: data.location.coordinates[1],
             publicInfo: publicInfo,
             privateInfo: privateInfo,
             picture: req?.file?.path || null,
@@ -1721,6 +1722,13 @@ module.exports = {
               gender: user?.userInfo?.gender || null,
               date_of_birth: user?.userInfo?.date_of_birth || null,
               profile_image: user?.userBasicInfo?.profile_image || null,
+              short_bio: user?.userBasicInfo?.short_bio || null,
+              my_website: user?.userBasicInfo?.my_website || null,
+              address: user?.userBasicInfo?.location?.address || null,
+              lat: user?.userBasicInfo?.location?.coordinates[0] || null,
+              long: user?.userBasicInfo?.location?.coordinates[1] || null,
+              publicInfo: user?.userBasicInfo?.info?.publicInfo || null,
+              privateInfo: user?.userBasicInfo?.info?.privateInfo|| null,
             };
             return successJSONResponse(res, { user: data });
           }
@@ -1788,6 +1796,9 @@ module.exports = {
         return failureJSONResponse(res, { message: `please provide user id` });
       });
   },
+
+
+  ////////---------------------chaNGE pASSwORD---------/////////////////
 
   change_password: async function (req, res, next) {
     try{
