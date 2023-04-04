@@ -1101,12 +1101,16 @@ module.exports = {
                 },
               }
             )
-              .then((data) => {
+              .then(async(data) => {
+
                 if (data) {
+            
                   return res.json({
                     status: 200,
+                    invalidOTP,
                     message: `success!`,
                   });
+
                 } else {
                   return res.json({
                     status: 400,
