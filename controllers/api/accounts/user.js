@@ -1244,11 +1244,22 @@ module.exports = {
 
         try {
             const userId = req.userId;
-
+            let data={
+                location: {
+                    address : req.body.location,
+                    coordinates: [req.body.lat, req.body.long],
+            },
+          
+        }
             const {
                 name,
                 date_of_birth,
-                gender
+                gender,
+                short_bio,
+                my_website,
+                location,
+                privateInfo,
+                publicInfo
             } = req.body;
             console.log(vali(Date(date_of_birth)))
             if (name && !isValidString(name)) return failureJSONResponse(res, { message: `Invalid Name` });
@@ -1282,6 +1293,45 @@ module.exports = {
                     'userBasicInfo.profile_image': req.file.path,
                 }
             }
+            if (short_bio) profileDataObj = {
+                ...profileDataObj,
+                'userBasicInfo.short_bio': short_bio,
+            }
+
+            if (my_website) profileDataObj = {
+                ...profileDataObj,
+                'userBasicInfo.my_website': my_website,
+            }
+
+            if (location ) profileDataObj = {
+                ...profileDataObj,
+                'userBasicInfo.location': data.location,
+            }
+            if (privateInfo) profileDataObj = {
+                ...profileDataObj,
+                'userBasicInfo.info.privateInfo':privateInfo,
+            }
+            if (publicInfo) profileDataObj = {
+                ...profileDataObj,
+                'userBasicInfo.info.publicInfo':publicInfo,
+            }
+
+            console.log(profileDataObj,"gfgfgsss");
+            
+            // if (location) profileDataObj = {
+            //     ...profileDataObj,
+            //     'userBasicInfo.data': data,
+            // }
+            // if (lat) profileDataObj = {
+            //     ...profileDataObj,
+            //     'coordinates': lat,
+            // }
+            
+            // if (long) profileDataObj = {
+            //     ...profileDataObj,
+            //     'coordinates': long,
+            // }
+
 
             var updatedProfileRes = await User.updateOne({ _id: userId }, { $set: profileDataObj }, { new: true });
             console.log(`updatedProfileRes`, updatedProfileRes)
@@ -1292,7 +1342,12 @@ module.exports = {
                         name: name,
                         date_of_birth: date_of_birth,
                         gender: gender,
-                        picture: req?.file?.path || null
+                        short_bio:short_bio,
+                        my_website:my_website,
+                        location: data.location,
+                        info:{publicInfo:publicInfo,privateInfo:privateInfo},
+                        picture: req?.file?.path || null,
+                     
                     }
                 });
             } else {
@@ -1610,8 +1665,25 @@ module.exports = {
                 }
             }
         );
-    }
+    },
+///////////////////////////////////////////////////
+    account_delete: async function (req, res) {
+        const userId = req.userId;
 
+        if (!userId) return failureJSONResponse(res, { message: `please provide user id` });
+
+        User.findByIdAndDelete({ _id: userId })
+            .then((user) => {
+                if (!user) return failureJSONResponse(res, { message: `something went worng` });
+                else {
+
+                    return successJSONResponse(res, { message:"Account deleted successfully"});
+                }
+            }).catch((err) => {
+                return failureJSONResponse(res, { message: `please provide user id` });
+            })
+   
+    }
 }
 
 

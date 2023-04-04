@@ -53,6 +53,23 @@ const userSchema = new mongoose.Schema({
     userBasicInfo: {
         source: { type: String, possibleValues: ['Facebook', 'Instagram', 'Email', 'Apple', 'GoogleEmail'] },
         profile_image: { type: String },
+
+        short_bio:{
+            type: String
+        }, 
+        my_website:{
+            type: String
+        }, 
+        location: {
+            address: { type: String },
+            coordinates: [{
+                type: String
+            }]
+        },
+        info:{
+            privateInfo:{type:String},
+            publicInfo:{type:String}
+        }
     },
 
     user_device_info: [{

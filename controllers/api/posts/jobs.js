@@ -336,10 +336,8 @@ exports.editJobStatus = async (req, res, next) => {
       });
     const dataObj = {};
     const { status } = req.body;
-    console.log(status);
 
     if (status) dataObj.status = parseInt(status);
-    console.log(dataObj, "hjfhh");
 
     const updateJob = await postJobAd.findByIdAndUpdate(
       { _id: jobId },

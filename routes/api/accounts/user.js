@@ -99,5 +99,9 @@ router.post(`/logout`,
     authMiddleware.ensureUserLoggedIn,
     controllers.logout
 );
+router.delete(`/account-delete`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.account_delete
+);
 
 module.exports = router;
