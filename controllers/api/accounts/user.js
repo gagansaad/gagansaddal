@@ -201,6 +201,7 @@ module.exports = {
                 data: {
                   userId: result._id,
                   name: result.userInfo.name || null,
+                  source: result?.userBasicInfo?.source || null,
                   email_address: result?.userInfo?.email_address || null,
                   phone_number:
                     result?.userInfo?.mobile_number?.phone_number || null,
