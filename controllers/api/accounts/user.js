@@ -9,6 +9,7 @@ const mongoose = require("mongoose"),
 
 const {
   EmailOTPVerification,
+  WelcomeEmail
 } = require(`../../../resources/sendEmailFunction`);
 const {
     MobileNumberVerificationOTP,
@@ -1043,13 +1044,22 @@ module.exports = {
                 },
               }
             )
-              .then((data) => {
+              .then(async(data) => {
                 if (data) {
+                  let foundUser = await User.findById({_id: req.userId},{userInfo: 1});
+             
+
+                  if(foundUser && Object.keys(foundUser).length ){
+                    WelcomeEmail(foundUser.userInfo.email_address, foundUser.userInfo.name)
+                  }
+
                   return res.json({
                     status: 200,
                     invalidOTP,
                     message: `success!`,
                   });
+
+                
                 } else {
                   return res.json({
                     status: 400,
@@ -1104,6 +1114,12 @@ module.exports = {
               .then(async(data) => {
 
                 if (data) {
+
+                  let foundUser = await User.findById({_id: req.userId},{userInfo: 1});
+ 
+                  if(foundUser && Object.keys(foundUser).length){
+                    WelcomeEmail(foundUser.userInfo.email_address, foundUser.userInfo.name)
+                  }
             
                   return res.json({
                     status: 200,
