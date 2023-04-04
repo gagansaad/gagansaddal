@@ -1832,10 +1832,10 @@ module.exports = {
           });
         }
        
-    console.log(checkUserDetail[0]?.userInfo?.password,"hvegcvgd");
+    console.log(checkUserDetail?.userInfo?.password,"hvegcvgd");
           let passwordIsValid = await bcrypt.compare(
             oldPassword,
-            checkUserDetail[0]?.userInfo?.password
+            checkUserDetail?.userInfo?.password
           );
     
           if (passwordIsValid) {
@@ -1876,7 +1876,7 @@ module.exports = {
       console.log(err);
         res.json({
             status: 404,
-            message: `Something went wrong`,
+            message: err.message,
           
           });
     }
