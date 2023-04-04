@@ -342,3 +342,54 @@ exports.editJobAds = async (req, res, next) => {
     }
 
 }
+
+
+
+
+/////------------update Status------/////
+
+
+
+
+///--------------------Edit Job------------------///
+exports.editJobStatus = async (req, res, next) => {
+    console.log(`kejhrjhyewgrjhew`)
+    try {
+        // console.log(req.files)
+        const jobId = req?.params?.jobId;
+
+        if (!jobId) return successJSONResponse(res, {
+            message: `success`,
+            newJobPost,
+            status: 200,
+        })
+        const dataObj = {};
+        const {status} = req.body;
+        console.log(status);
+        
+
+        if (status) dataObj.status = parseInt(status);
+        console.log(dataObj,"hjfhh");
+
+        const updateJob = await postJobAd.findByIdAndUpdate({ _id: jobId }, { $set: dataObj }, { new: true })
+
+        if (updateJob) {
+
+            // console.log(updateRoomRents)
+            return successJSONResponse(res, {
+                message: `success`,
+                updateJob,
+            })
+        } else {
+            // console.log(updateRoomRents)
+            return failureJSONResponse(res, {
+                message: `Something went wrong`,
+                updatejob: null,
+            })
+        }
+
+    } catch (err) {
+        console.log(err)
+    }
+
+}
