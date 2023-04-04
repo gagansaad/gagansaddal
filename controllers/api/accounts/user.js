@@ -1803,14 +1803,23 @@ module.exports = {
   change_password: async function (req, res, next) {
     try{
         const userId = req.userId;
-        if (!userId)
-          return failureJSONResponse(res, { message: `please provide user id` });
+        if (!userId) return failureJSONResponse(res, { message: `please provide user id` });
+
+        const checkUserDetail = await User.findById({ _id: userId }, { userInfo: 1 , userBasicInfo: 1});
+
+        if(checkUserDetail.userBasicInfo.source === "email"){
+
+        
+       
+
         let newPassword = req.body.newPassword;
         let oldPassword = req.body.password;
+      
+        console.log(checkUserDetail,"jcbnhchyegc");
         if (!oldPassword) {
           return res.json({
             status: 400,
-            message: `please provide Current password`,
+            message: `please Provide Current password`,
           });
         }
         if (!newPassword) {
@@ -1819,7 +1828,7 @@ module.exports = {
             message: `please provide New password`,
           });
         }
-        const checkUserDetail = await User.find({ _id: userId }, { userInfo: 1 });
+       
     console.log(checkUserDetail[0]?.userInfo?.password,"hvegcvgd");
           let passwordIsValid = await bcrypt.compare(
             oldPassword,
@@ -1854,11 +1863,18 @@ module.exports = {
                 message: `wrong current password`,
               });
           }
-       
+        }else{
+          return res.json({
+            status: 400,
+            message: `can't change password of social login account`,
+          });
+        }
     }catch(err){
+      Error:err
         res.json({
             status: 404,
             message: `Something went wrong`,
+          
           });
     }
    
