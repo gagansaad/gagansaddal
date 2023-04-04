@@ -319,6 +319,7 @@ module.exports = {
         status: 200,
         data: {
           userId: foundUser._id,
+          source: foundUser?.userBasicInfo.source || null,
           name: foundUser?.userInfo?.name || null,
           email_address: foundUser?.userInfo?.email_address || null,
           phone_number:
@@ -373,6 +374,7 @@ module.exports = {
           status: 200,
           data: {
             userId: foundUserWithEmailAddress._id,
+            source: foundUserWithEmailAddress?.userBasicInfo.source || null,
             name: foundUserWithEmailAddress.userInfo.name || null,
             email_address:
               foundUserWithEmailAddress?.userInfo?.email_address || null,
@@ -429,6 +431,7 @@ module.exports = {
               data: {
                 userId: result._id,
                 name: result.userInfo.name || null,
+                source: result?.userBasicInfo.source || null,
                 email_address: result?.userInfo?.email_address || null,
                 phone_number:
                   result?.userInfo?.mobile_number?.phone_number || null,
@@ -512,6 +515,7 @@ module.exports = {
         status: 200,
         data: {
           userId: foundUser._id,
+          source: foundUser?.userBasicInfo?.source || null,
           name: foundUser?.userInfo?.name || null,
           email_address: foundUser?.userInfo?.email_address || null,
           phone_number:
@@ -568,6 +572,7 @@ module.exports = {
           status: 200,
           data: {
             userId: foundUserWithEmailAddress._id,
+            source: foundUserWithEmailAddress?.userBasicInfo?.source || null,
             name: foundUserWithEmailAddress.userInfo.name || null,
             email_address:
               foundUserWithEmailAddress?.userInfo?.email_address || null,
@@ -624,6 +629,7 @@ module.exports = {
               data: {
                 userId: result._id,
                 name: result.userInfo.name || null,
+                source: result?.userBasicInfo?.source || null,
                 email_address: result?.userInfo?.email_address || null,
                 phone_number:
                   result?.userInfo?.mobile_number?.phone_number || null,
@@ -706,6 +712,7 @@ module.exports = {
         status: 200,
         data: {
           userId: foundUser._id,
+          source: foundUser?.userBasicInfo?.source || null,
           name: foundUser?.userInfo?.name || null,
           email_address: foundUser?.userInfo?.email_address || null,
           phone_number:
@@ -760,6 +767,7 @@ module.exports = {
           status: 200,
           data: {
             userId: foundUserWithEmailAddress._id,
+            source: foundUserWithEmailAddress?.userBasicInfo?.source || null,
             name: foundUserWithEmailAddress.userInfo.name || null,
             email_address:
               foundUserWithEmailAddress?.userInfo?.email_address || null,
@@ -815,6 +823,7 @@ module.exports = {
               status: 201,
               data: {
                 userId: result._id,
+                source: result?.userBasicInfo?.source || null,
                 name: result.userInfo.name || null,
                 email_address: result?.userInfo?.email_address || null,
                 phone_number:
@@ -884,6 +893,9 @@ module.exports = {
               ...checkUserDetail[0].userInfo,
               phone_number:
                 checkUserDetail[0]?.userInfo?.mobile_number?.phone_number ||
+                null,
+                source:
+                checkUserDetail[0]?.userBasicInfo?.source ||
                 null,
               country_code:
                 checkUserDetail[0]?.userInfo?.mobile_number?.country_code ||
