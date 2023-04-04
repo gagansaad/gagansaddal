@@ -7,9 +7,7 @@ const userSchema = new mongoose.Schema({
         name: {
             type: String,
         },
-        date_of_birth:{
-            type:  Date
-        },
+        date_of_birth:{ type: Date, default: Date.now() },
         gender: {
             type: Number,
             enum:[1,2,3]
@@ -17,6 +15,7 @@ const userSchema = new mongoose.Schema({
             // 1 = male
             // 2 = female
             // 3 = other
+            
         },
         email_address: {
             type: String,
@@ -52,8 +51,7 @@ const userSchema = new mongoose.Schema({
     },
 
     userBasicInfo: {
-        source: {
-            type: String, possibleValues: ['Facebook', 'Instagram', 'Email', 'Apple', 'GoogleEmail'] },
+        source: { type: String, possibleValues: ['Facebook', 'Instagram', 'Email', 'Apple', 'GoogleEmail'] },
         profile_image: { type: String },
     },
 
