@@ -1348,7 +1348,8 @@ module.exports = {
         short_bio,
         my_website,
         location,
-    
+        privateInfo,
+        publicInfo,
       } = req.body;
       console.log(vali(Date(date_of_birth)));
       if (name && !isValidString(name))
@@ -1400,7 +1401,16 @@ module.exports = {
           ...profileDataObj,
           "userBasicInfo.location": data.location,
         };
-
+      if (privateInfo)
+        profileDataObj = {
+          ...profileDataObj,
+          "userBasicInfo.info.privateInfo": privateInfo,
+        };
+      if (publicInfo)
+        profileDataObj = {
+          ...profileDataObj,
+          "userBasicInfo.info.publicInfo": publicInfo,
+        };
 
       console.log(profileDataObj, "gfgfgsss");
 
@@ -1437,7 +1447,8 @@ module.exports = {
             address: data.location.address,
             lat: data.location.coordinates[0],
             long: data.location.coordinates[1],
-           
+            publicInfo: publicInfo,
+            privateInfo: privateInfo,
             picture: req?.file?.path || null,
           },
         });
