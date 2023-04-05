@@ -42,6 +42,11 @@ exports.validateEventAdsData = async (req, res, next) => {
       link,
       image,
     } = req.body;
+    if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
+    else if (status < 1 || status > 3) failureJSONResponse(res, { message: `Please enter status bwtween 1 to 3` });
+
+    if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
+    else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
     if (!isValidString(title))
       return failureJSONResponse(res, {
@@ -70,6 +75,7 @@ exports.validateEventAdsData = async (req, res, next) => {
         message: "Please let us know your current location",
       });
 
+
     return next();
   } catch (err) {
     console.log(err);
@@ -90,7 +96,7 @@ exports.createEventAds = async (req, res, next) => {
       add_platform,
       details,
       ticket_price,
-      location,
+      
       link,
       image,
 
@@ -98,6 +104,7 @@ exports.createEventAds = async (req, res, next) => {
       emailAddress,
       phoneNumber,
       hideAddress,
+      location,
       preferableModeContact,
     } = req.body;
 
@@ -118,7 +125,7 @@ exports.createEventAds = async (req, res, next) => {
         add_platform,
         details,
         ticket_price,
-        location,
+        
         link,
         image: imageArr,
       },
@@ -127,7 +134,7 @@ exports.createEventAds = async (req, res, next) => {
         emailAddress,
         phoneNumber,
         hideAddress,
-
+        location,
         mobileNumber: {
           countryCode: +91,
           phoneNumber: phoneNumber,
