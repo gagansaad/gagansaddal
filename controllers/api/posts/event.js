@@ -1,7 +1,7 @@
 const { json } = require("express");
 
 const mongoose = require("mongoose"),
-  postJobAd = mongoose.model("job"),
+  eventAd = mongoose.model("event"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -17,17 +17,10 @@ const mongoose = require("mongoose"),
   } = require(`../../../utils/validators`);
 
 ///-----------------------Dynamic Data---------------------------////
+
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
-    categories: [`employed`, `self employed`, `engineer`],
-    role: [`male `, `female`, `couple`],
-
-    type: [`Enginner`, `Plumber`],
-
-    language: [`English`, `Hindi`],
-
-    work_authorization: [`test`, `test1`],
-    preferred_gender: [`male`, `female`],
+    type: [`live`, `vanue based`],
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -37,71 +30,42 @@ exports.getDnymicsData = async (req, res, next) => {
 
 ///-----------------------Validate Data---------------------------//
 
-exports.validateJobAdsData = async (req, res, next) => {
-  //   console.log(req.body)
+exports.validateEventAdsData = async (req, res, next) => {
   try {
     const {
       title,
-      descriptions,
-      categories,
       type,
-      role,
-      experience,
-      language,
-      salary,
-      no_of_opening,
-      website,
-      work_authorization,
+      add_platform,
+      details,
+      ticket_price,
       location,
-      preferred_gender,
+      link,
       image,
     } = req.body;
 
-    if (!isValidString(categories))
+    if (!isValidString(title))
       return failureJSONResponse(res, {
-        message: `Please provide valid jobCategory`,
+        message: `Please provide valid title`,
       });
     if (!isValidString(type))
       return failureJSONResponse(res, {
-        message: `Please provide valid jobType`,
+        message: `Please provide valid type`,
       });
-    if (!isValidString(role))
+    if (!isValidString(add_platform))
       return failureJSONResponse(res, {
-        message: `Please provide valid jobRole`,
+        message: `Please provide valid add_platform`,
       });
-    if (!isValidString(title))
+    if (!isValidString(details))
       return failureJSONResponse(res, {
-        message: "Pleae provide us your jobTitle",
+        message: "Pleae provide us your details",
       });
-    if (!isValidString(descriptions))
+    if (!isValidString(ticket_price))
       return failureJSONResponse(res, {
-        message: `please provide valid jobDescription`,
+        message: `please provide valid ticket_price`,
       });
-    if (isNaN(Number(experience)))
-      return failureJSONResponse(res, {
-        message: `Please provide us your experience`,
-      });
-    if (!isValidString(language))
-      return failureJSONResponse(res, {
-        message: `Please provide us the information about how many languages do you know`,
-      });
-    if (!isValidString(salary))
-      return failureJSONResponse(res, { message: `please provide us salary` });
-    if (isNaN(Number(no_of_opening)))
-      return failureJSONResponse(res, { message: "number of jobs opening" });
-    if (!isValidString(preferred_gender))
-      return failureJSONResponse(res, {
-        message: "Please provide us your gender prefrences",
-      });
-    if (!isValidString(website))
-      return failureJSONResponse(res, {
-        mesage: `Please provide us your website`,
-      });
-    if (!isValidString(work_authorization))
-      return failureJSONResponse(res, {
-        mesage: `Please provide us work authorization`,
-      });
-    if (!isValidString(location))
+    if (!isValidString(link))
+      return failureJSONResponse(res, { message: `please provide us link` });
+        if (!isValidString(location))
       return failureJSONResponse(res, {
         message: "Please let us know your current location",
       });
@@ -112,27 +76,23 @@ exports.validateJobAdsData = async (req, res, next) => {
   }
 };
 
-////-----------------------Create Job------------------------------//
+////-----------------------Create Event------------------------------//
 
-exports.createJobAds = async (req, res, next) => {
+exports.createEventAds = async (req, res, next) => {
   try {
+    console.log(req.files,"dccdcdc");
     const {
       status,
       adsType,
 
       title,
-      descriptions,
-      categories,
       type,
-      role,
-      experience,
-      language,
-      salary,
-      no_of_opening,
-      website,
-      work_authorization,
+      add_platform,
+      details,
+      ticket_price,
       location,
-      preferred_gender,
+      link,
+      image,
 
       name,
       emailAddress,
@@ -154,20 +114,12 @@ exports.createJobAds = async (req, res, next) => {
       adsType,
       adsInfo: {
         title,
-        descriptions,
-        title,
-        descriptions,
-        categories,
         type,
-        role,
-        experience,
-        language,
-        salary,
-        no_of_opening,
-        website,
-        work_authorization,
-        
-        preferred_gender: parseInt(preferred_gender),
+        add_platform,
+        details,
+        ticket_price,
+        location,
+        link,
         image: imageArr,
       },
       listerBasicInfo: {
@@ -175,7 +127,7 @@ exports.createJobAds = async (req, res, next) => {
         emailAddress,
         phoneNumber,
         hideAddress,
-        location,
+
         mobileNumber: {
           countryCode: +91,
           phoneNumber: phoneNumber,
@@ -185,19 +137,19 @@ exports.createJobAds = async (req, res, next) => {
       userId: userId,
     };
 
-    const newJobPost = await postJobAd.create(dataObj);
+    const newEventPost = await eventAd.create(dataObj);
 
-    const postJobAdObjToSend = {};
+    const postEventAdObjToSend = {};
 
-    for (let key in newJobPost.toObject()) {
+    for (let key in newEventPost.toObject()) {
       if (!fieldsToExclude.hasOwnProperty(String(key))) {
-        postJobAdObjToSend[key] = newJobPost[key];
+        postEventAdObjToSend[key] = newEventPost[key];
       }
     }
 
     return successJSONResponse(res, {
       message: `success`,
-      postJobAdObjToSend,
+      events:postEventAdObjToSend,
       status: 200,
     });
   } catch (err) {
@@ -205,37 +157,32 @@ exports.createJobAds = async (req, res, next) => {
   }
 };
 
-///--------------------------Edit Job-----------------------------///
+///--------------------------Edit event-----------------------------///
 
-exports.editJobAds = async (req, res, next) => {
+exports.editEventAds = async (req, res, next) => {
   console.log(`kejhrjhyewgrjhew`);
   try {
     console.log(req.files);
-    const jobId = req?.params?.jobId;
+    const eventId = req?.params?.eventId;
 
-    if (!jobId)
+    if (!eventId)
       return successJSONResponse(res, {
         message: `success`,
-        newJobPost,
+        newEventPost,
         status: 200,
       });
 
     const {
       status,
       adsType,
+     
       title,
-      descriptions,
-      categories,
       type,
-      role,
-      experience,
-      language,
-      salary,
-      no_of_opening,
-      website,
-      work_authorization,
+      add_platform,
+      details,
+      ticket_price,
       location,
-      preferred_gender,
+      link,
       image,
 
       name,
@@ -260,18 +207,12 @@ exports.editJobAds = async (req, res, next) => {
     if (adsType) dataObj.adsType = adsType;
 
     if (title) adsInfoObj.title = title;
-    if (descriptions) adsInfoObj.descriptions = descriptions;
     if (type) adsInfoObj.type = type;
-    if (categories) adsInfoObj.categories = categories;
-    if (role) adsInfoObj.role = role;
-    if (experience) adsInfoObj.experience = experience;
-    if (language) adsInfoObj.language = language;
-    if (salary) adsInfoObj.salary = salary;
-    if (no_of_opening) adsInfoObj.no_of_opening = no_of_opening;
-    if (website) adsInfoObj.website = website;
-    if (work_authorization) adsInfoObj.work_authorization = work_authorization;
+    if (add_platform) adsInfoObj.add_platform = add_platform;
+    if (details) adsInfoObj.details = details;
+    if (ticket_price) adsInfoObj.ticket_price = ticket_price;
+    if (link) adsInfoObj.link = link;
     if (location) listerBasicInfoObj.location = location;
-    if (preferred_gender) adsInfoObj.preferred_gender = preferred_gender;
     if (imageArr.length) adsInfoObj.image = imageArr;
 
     if (name) listerBasicInfoObj.name = name;
@@ -288,6 +229,7 @@ exports.editJobAds = async (req, res, next) => {
         phoneNumber,
         hideAddress,
         location,
+
         mobileNumber: {
           countryCode: +91,
           phoneNumber: phoneNumber,
@@ -295,25 +237,21 @@ exports.editJobAds = async (req, res, next) => {
         preferableModeContact: preferableModeContact,
       },
     };
-
-    console.log(dataObjq);
-    console.log("object", { image: imageArr });
-
-    const updateJob = await postJobAd.findByIdAndUpdate(
-      { _id: jobId },
+    const updateEvent = await eventAd.findByIdAndUpdate(
+      { _id: eventId },
       { $set: dataObjq },
       { new: true }
     );
 
-    if (updateJob) {
+    if (updateEvent) {
       return successJSONResponse(res, {
         message: `success`,
-        updateJob,
+        updateEvent:updateEvent,
       });
     } else {
       return failureJSONResponse(res, {
         message: `Something went wrong`,
-        updatejob: null,
+        updateEvent: null,
       });
     }
   } catch (err) {
@@ -321,14 +259,13 @@ exports.editJobAds = async (req, res, next) => {
   }
 };
 
-/////----------------------Update Job Status -------------------/////
+/////----------------------Update event Status -------------------/////
 
-exports.editJobStatus = async (req, res, next) => {
-  console.log(`kejhrjhyewgrjhew`);
+exports.editEventStatus = async (req, res, next) => {
   try {
-    const jobId = req?.params?.jobId;
+    const eventId = req?.params?.eventId;
 
-    if (!jobId)
+    if (!eventId)
       return successJSONResponse(res, {
         message: `success`,
         newJobPost,
@@ -339,21 +276,21 @@ exports.editJobStatus = async (req, res, next) => {
 
     if (status) dataObj.status = parseInt(status);
 
-    const updateJob = await postJobAd.findByIdAndUpdate(
-      { _id: jobId },
+    const updateEvent = await eventAd.findByIdAndUpdate(
+      { _id: eventId },
       { $set: dataObj },
       { new: true }
     );
 
-    if (updateJob) {
+    if (updateEvent) {
       return successJSONResponse(res, {
         message: `success`,
-        updateJob,
+        updateEvent:updateEvent,
       });
     } else {
       return failureJSONResponse(res, {
         message: `Something went wrong`,
-        updatejob: null,
+        updateEvent: null,
       });
     }
   } catch (err) {

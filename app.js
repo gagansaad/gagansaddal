@@ -22,7 +22,8 @@ require(`./model/otp`);
 // post
 require(`./model/posts/Types`);
 require(`./model/posts/roomRents`);
-
+//Event
+require(`./model/posts/event`)
 // configuration
 require(`./model/configurations/privacy`);
 require(`./model/configurations/termAndCondition`);
@@ -49,7 +50,7 @@ const roomRentsRoutes = require('./routes/api/ads/roomRents');
 
 const jobsRoutes = require('./routes/api/ads/jobs');
 
-
+const eventRoutes = require(`./routes/api/ads/event`)
 const loadHelmet = require(`./loaders/helmets`),
     loadExpressSession = require(`./loaders/expressSession`);
 
@@ -75,7 +76,7 @@ app.use('/admin/v1/api/configurations', adminconfigurationsRoute1);
 
 app.use('/v1/api/posts/types', postTypeRoutes);
 app.use('/v1/api/posts/room-rents', roomRentsRoutes);
-
+app.use('/v1/api/posts/events',eventRoutes);
 app.use('/v1/api/posts/jobs', jobsRoutes);
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
