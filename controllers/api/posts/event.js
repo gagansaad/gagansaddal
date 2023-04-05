@@ -33,6 +33,8 @@ exports.getDnymicsData = async (req, res, next) => {
 exports.validateEventAdsData = async (req, res, next) => {
   try {
     const {
+      status,
+      adsType,
       title,
       type,
       add_platform,
