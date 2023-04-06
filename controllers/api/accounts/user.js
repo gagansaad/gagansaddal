@@ -14,8 +14,8 @@ const {
   AccountDeleteEmail
 } = require(`../../../resources/sendEmailFunction`);
 const {
-    MobileNumberVerificationOTP,
-  } = require(`../../../resources/sendOTPFunction`),
+  MobileNumberVerificationOTP,
+} = require(`../../../resources/sendOTPFunction`),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -888,7 +888,7 @@ module.exports = {
             );
 
             const email_address =
-                checkUserDetail[0]?.userInfo?.email_address || null,
+              checkUserDetail[0]?.userInfo?.email_address || null,
               phone_number =
                 checkUserDetail[0].userInfo.mobile_number?.phone_number || null,
               is_active = checkUserDetail[0].userInfo.is_active;
@@ -898,7 +898,7 @@ module.exports = {
               phone_number:
                 checkUserDetail[0]?.userInfo?.mobile_number?.phone_number ||
                 null,
-                source:
+              source:
                 checkUserDetail[0]?.userBasicInfo?.source ||
                 null,
               country_code:
@@ -1012,9 +1012,13 @@ module.exports = {
   verifiy_otps: async function (req, res, next) {
     const { otp_for_email, otp_for_mobile_number, is_email_verified } = req.body;
 
+    console.log(req.body)
+    console.log(req.userId)
+
     if (otp_for_mobile_number) {
       OTP.findOne({
-        userId: req.userId,
+        user: req.userId,
+
         code: otp_for_email,
         for: 2,
       }).then((foundEmailOTP) => {
@@ -1025,7 +1029,7 @@ module.exports = {
         }
 
         OTP.findOne({
-          userId: req.userId,
+          user: req.userId,
           code: otp_for_mobile_number,
           for: 1,
         }).then((foundMobileOTP) => {
@@ -1048,12 +1052,12 @@ module.exports = {
                 },
               }
             )
-              .then(async(data) => {
+              .then(async (data) => {
                 if (data) {
-                  let foundUser = await User.findById({_id: req.userId},{userInfo: 1});
-             
+                  let foundUser = await User.findById({ _id: req.userId }, { userInfo: 1 });
 
-                  if(foundUser && Object.keys(foundUser).length ){
+
+                  if (foundUser && Object.keys(foundUser).length) {
                     WelcomeEmail(foundUser.userInfo.email_address, foundUser.userInfo.name)
                   }
 
@@ -1063,7 +1067,7 @@ module.exports = {
                     message: `success!`,
                   });
 
-                
+
                 } else {
                   return res.json({
                     status: 400,
@@ -1102,8 +1106,9 @@ module.exports = {
       });
     } else {
       OTP.findOne({
-        userId: req.userId,
+        user: req.userId,
         code: otp_for_email,
+        source: 2
       })
         .then((foundOTP) => {
           if (foundOTP) {
@@ -1116,16 +1121,16 @@ module.exports = {
                 },
               }
             )
-              .then(async(data) => {
+              .then(async (data) => {
 
                 if (data) {
 
-                  let foundUser = await User.findById({_id: req.userId},{userInfo: 1});
- 
-                  if(foundUser && Object.keys(foundUser).length){
+                  let foundUser = await User.findById({ _id: req.userId }, { userInfo: 1 });
+
+                  if (foundUser && Object.keys(foundUser).length) {
                     WelcomeEmail(foundUser.userInfo.email_address, foundUser.userInfo.name)
                   }
-            
+
                   return res.json({
                     status: 200,
                     invalidOTP: 0,
@@ -1181,6 +1186,7 @@ module.exports = {
           OTP.create({
             code: generateOTP(4),
             user: foundUser._id,
+            email_address: email_address,
             for: 1,
           }).then((data) => {
             EmailOTPVerification(
@@ -1215,7 +1221,7 @@ module.exports = {
     // console.log(req.body);
 
 
-    const { otp,user_id } = req.body;
+    const { otp, user_id } = req.body;
 
     if (!otp) {
       return res.json({
@@ -1226,7 +1232,7 @@ module.exports = {
 
     OTP.findOne({
       code: otp,
-      userId: req?.body?.user_id
+      email_address: req?.body?.email_address
     })
       .then((foundOTP) => {
         if (foundOTP) {
@@ -1338,8 +1344,8 @@ module.exports = {
   },
 
   update_profile: async function (req, res, next) {
-    console.log(  `anmsbdnas`,  req.body)
-    console.log(`sSas`,req.file)
+    console.log(`anmsbdnas`, req.body)
+    console.log(`sSas`, req.file)
     try {
       const userId = req.userId;
       let data = {
@@ -1359,7 +1365,7 @@ module.exports = {
       // console.log(vali(Date(date_of_birth)));
       let picture = req?.file?.path
       console.log(picture);
-     
+
       if (name && !isValidString(name))
         return failureJSONResponse(res, { message: `Invalid Name` });
       // if (date_of_birth && !vali(date_of_birth)) return failureJSONResponse(res, { message: `Invalid Date Of Birth` });
@@ -1368,28 +1374,23 @@ module.exports = {
 
       let profileDataObj = {};
 
-      let userInfo={
-        name,
-        date_of_birth,
-        gender,
-       
-      }
-      let userBasicInfo={
-        short_bio,
-        my_website,
-        location:data.location,
-       
-      }
-        const pictureUrl = req?.body?.picture;
 
-      if(req.file && Object.keys(req.file).length){
-        console.log(`asjgdjhasgjhgsdjasjgj`)
-        userBasicInfo.profile_image = picture
-      } else {
-        userBasicInfo.profile_image = pictureUrl
+      const dataObj = {
+        "userInfo.name": name,
+        "userInfo.date_of_birth": date_of_birth,
+        "userInfo.gender": gender,
+
+        "userInfo.short_bio": short_bio,
+        "userInfo.my_website": my_website,
+        "userInfo.location": data.location
       }
 
     
+      if (req.file && Object.keys(req.file).length) {
+        dataObj["userBasicInfo.profile_image"] =picture
+      } 
+
+
       // const pictureUrl = req?.body?.picture;
       // console.log(`pictureUrl`,pictureUrl )
 
@@ -1404,70 +1405,71 @@ module.exports = {
       //   };
       // }
 
-      profileDataObj.userInfo=userInfo
-      
-      profileDataObj.userBasicInfo=userBasicInfo
+      // profileDataObj.userInfo = userInfo
 
-      // if (name)
-      //   userInfo = {
-      //     ...profileDataObj,
-      //     "userInfo.name": name,
-      //   };
+      // profileDataObj.userBasicInfo = userBasicInfo
 
-      // if (date_of_birth)
-      //   profileDataObj = {
-      //     ...profileDataObj,
-      //     "userInfo.date_of_birth": Date(date_of_birth),
-      //   };
 
-      // if (gender)
-      //   profileDataObj = {
-      //     ...profileDataObj,
-      //     "userInfo.gender": gender,
-      //   };
-      
-     
-      // if (short_bio)
-      //   profileDataObj = {
-      //     ...profileDataObj,
-      //     "userBasicInfo.short_bio": short_bio,
-      //   };
+      // userInfo = {
+      //   ...profileDataObj,
+      //   "userInfo.name": name,
 
-      // if (my_website)
-      //   profileDataObj = {
-      //     ...profileDataObj,
-      //     "userBasicInfo.my_website": my_website,
-      //   };
-
-      // if (location)
-      //   profileDataObj = {
-      //     ...profileDataObj,
-      //     "userBasicInfo.location": data.location,
-      //   };
-   
-      // console.log(profileDataObj, "gfgfgsss");
-
-      // if (location) profileDataObj = {
-      //     ...profileDataObj,
-      //     'userBasicInfo.data': data,
-      // }
-      // if (lat) profileDataObj = {
-      //     ...profileDataObj,
-      //     'coordinates': lat,
       // }
 
-      // if (long) profileDataObj = {
-      //     ...profileDataObj,
-      //     'coordinates': long,
+      // profileDataObj = {
+      //   ...profileDataObj,
+      //   "userInfo.date_of_birth": Date(date_of_birth),
       // }
+
+
+      // profileDataObj = {
+      //   ...profileDataObj,
+      //   "userInfo.gender": gender,
+      // }
+
+
+
+      // profileDataObj = {
+      //   ...profileDataObj,
+      //   "userBasicInfo.short_bio": short_bio,
+      // };
+
+
+      // profileDataObj = {
+      //   ...profileDataObj,
+      //   "userBasicInfo.my_website": my_website,
+      // }
+
+
+      // profileDataObj = {
+      //   ...profileDataObj,
+      //   "userBasicInfo.location": data.location,
+      // };
+
+      // // console.log(profileDataObj, "gfgfgsss");
+
+      // profileDataObj = {
+      //   ...profileDataObj,
+      //   'userBasicInfo.data': data,
+      // }
+      // profileDataObj = {
+      //   ...profileDataObj,
+      //   'coordinates': lat,
+      // }
+
+      // profileDataObj = {
+      //   ...profileDataObj,
+      //   'coordinates': long,
+      // }
+
+
 
       var updatedProfileRes = await User.updateOne(
         { _id: userId },
-        { $set: profileDataObj },
+        { $set: dataObj },
         { new: true }
       );
-      console.log(`updatedProfileRes`, updatedProfileRes);
-
+   
       if (updatedProfileRes) {
         return successJSONResponse(res, {
           message: `success`,
@@ -1480,7 +1482,7 @@ module.exports = {
             address: data.location.address,
             lat: data.location.coordinates[0],
             long: data.location.coordinates[1],
-            picture:profileDataObj?.userBasicInfo?.profile_image,
+            picture: profileDataObj?.userBasicInfo?.profile_image,
           },
         });
       } else {
@@ -1667,7 +1669,7 @@ module.exports = {
         OTP.findOne({
           code: otp,
           phone_number: phone_number,
-          userId: req.userId,
+          user: req.userId,
           for: 1,
         })
           .then((foundOTP) => {
@@ -1719,7 +1721,7 @@ module.exports = {
 
         OTP.findOne({
           code: otp,
-          userId: req.userId,
+          user: req.userId,
           email_address: email_address.toLowerCase(),
           for: 2,
         })
@@ -1785,10 +1787,10 @@ module.exports = {
           console.log(user)
           if (!user)
             return failureJSONResponse(res, {
-              message: `something went worng`, 
+              message: `something went worng`,
             });
           else {
-            
+
             const data = {
               name: user?.userInfo?.name || null,
               email_address: user?.userInfo?.email_address || null,
@@ -1840,10 +1842,10 @@ module.exports = {
           },
         },
       },
-      function (err, user) {    
+      function (err, user) {
         if (err) {
           return failureJSONResponse(res, { message: `something went wrong` });
-        } else {    
+        } else {
           return successJSONResponse(res, { message: `logout successfully` });
         }
       }
@@ -1851,110 +1853,110 @@ module.exports = {
   },
   ///////////////////////////////////////////////////
   account_delete: async function (req, res) {
-    try{
+    try {
       const userId = req.userId;
       if (!userId) return failureJSONResponse(res, { message: `please provide user id` });
 
-      const checkUserDetail = await User.findById({ _id: userId }, { userInfo: 1 , userBasicInfo: 1});
+      const checkUserDetail = await User.findById({ _id: userId }, { userInfo: 1, userBasicInfo: 1 });
 
-      if(checkUserDetail.userBasicInfo.source === "email"){
-      let Password = req.body.password;
-      if (!Password) {
-        return res.json({
-          status: 400,
-          message: `please Provide Your password`,
-        });
-      }
+      if (checkUserDetail.userBasicInfo.source === "email") {
+        let Password = req.body.password;
+        if (!Password) {
+          return res.json({
+            status: 400,
+            message: `please Provide Your password`,
+          });
+        }
         let passwordIsValid = await bcrypt.compare(
           Password,
           checkUserDetail?.userInfo?.password
         );
-  
+
         if (passwordIsValid) {
-       let found_user = await User.findByIdAndDelete({ _id: userId })
-          if(!found_user){
-            return failureJSONResponse(res, { message: `Failed to delete Your Account` });
-          } else {
-            if(found_user && Object.keys(found_user).length ){
-              AccountDeleteEmail(found_user.userInfo.email_address, found_user.userInfo.name)
-            }
-            return successJSONResponse(res, {
-              message: "Account deleted successfully",
-             
-            });
-          }
-           
-        }else{
-          return res.json({
-              status: 400,
-              message: `The password you entered is incorrect. Please try again.`,
-            });
-        }
-      } else if(checkUserDetail.userBasicInfo.source !== "email"){
-        let Password = req.body.password;
-      if (!Password) {
-        return res.json({
-          status: 400,
-          message: `please Provide Your password`,
-        });
-      }
-      let isPassword = Password.trim().toLowerCase();
-        if (isPassword === "menehariya")  {
           let found_user = await User.findByIdAndDelete({ _id: userId })
-          if(!found_user){
+          if (!found_user) {
             return failureJSONResponse(res, { message: `Failed to delete Your Account` });
           } else {
-            if(found_user && Object.keys(found_user).length ){
+            if (found_user && Object.keys(found_user).length) {
+              AccountDeleteEmail(found_user.userInfo.email_address, found_user.userInfo.name)
+            }
+            return successJSONResponse(res, {
+              message: "Account deleted successfully",
+
+            });
+          }
+
+        } else {
+          return res.json({
+            status: 400,
+            message: `The password you entered is incorrect. Please try again.`,
+          });
+        }
+      } else if (checkUserDetail.userBasicInfo.source !== "email") {
+        let Password = req.body.password;
+        if (!Password) {
+          return res.json({
+            status: 400,
+            message: `please Provide Your password`,
+          });
+        }
+        let isPassword = Password.trim().toLowerCase();
+        if (isPassword === "menehariya") {
+          let found_user = await User.findByIdAndDelete({ _id: userId })
+          if (!found_user) {
+            return failureJSONResponse(res, { message: `Failed to delete Your Account` });
+          } else {
+            if (found_user && Object.keys(found_user).length) {
               AccountDeleteEmail(found_user.userInfo.email_address, found_user.userInfo.name)
             }
             return successJSONResponse(res, {
               message: "Account deleted successfully",
             });
           }
-           
-        }else{
+
+        } else {
           return res.json({
-              status: 400,
-              message: `The password you entered is incorrect. Please Enter (menehariya) As a password and try again.`,
-            });
+            status: 400,
+            message: `The password you entered is incorrect. Please Enter (menehariya) As a password and try again.`,
+          });
         }
 
       }
-      else{
+      else {
         return res.json({
           status: 400,
           message: `Failed to delete Your Account`,
         });
       }
-  }catch(err){
-    console.log(err);
+    } catch (err) {
+      console.log(err);
       res.json({
-          status: 404,
-          message: "Something went wrong",err:err.message,
-        
-        });
-      }
+        status: 404,
+        message: "Something went wrong", err: err.message,
+
+      });
+    }
   },
 
 
   ////////---------------------chaNGE pASSwORD---------/////////////////
 
   change_password: async function (req, res, next) {
-    try{
-        const userId = req.userId;
-        if (!userId) return failureJSONResponse(res, { message: `please provide user id` });
+    try {
+      const userId = req.userId;
+      if (!userId) return failureJSONResponse(res, { message: `please provide user id` });
 
-        const checkUserDetail = await User.findById({ _id: userId }, { userInfo: 1 , userBasicInfo: 1});
+      const checkUserDetail = await User.findById({ _id: userId }, { userInfo: 1, userBasicInfo: 1 });
 
-        if(checkUserDetail.userBasicInfo.source === "email"){
+      if (checkUserDetail.userBasicInfo.source === "email") {
 
-        
-       
+
+
 
         let newPassword = req.body.newPassword;
         let oldPassword = req.body.password;
-      
-        console.log(checkUserDetail,"jcbnhchyegc");
+
+        console.log(checkUserDetail, "jcbnhchyegc");
         if (!oldPassword) {
           return res.json({
             status: 400,
@@ -1967,55 +1969,55 @@ module.exports = {
             message: `please provide New password`,
           });
         }
-       
-    console.log(checkUserDetail?.userInfo?.password,"hvegcvgd");
-          let passwordIsValid = await bcrypt.compare(
-            oldPassword,
-            checkUserDetail?.userInfo?.password
-          );
-    
-          if (passwordIsValid) {
-            let password = await bcrypt.hash(newPassword,8)
-            // Update device information of user
-    
-            const updatePassword = await User.findByIdAndUpdate(
-              { _id: userId },
-              { $set: { "userInfo.password": password } },
-              { new: true }
-            )
-              
-                if (updatePassword) {
-                  return res.json({
-                    status: 200,
-                    message: `password change Successfully`,
-                  });
-                } else {
-                  return res.json({
-                    status: 400,
-                    message: `failed to change password`,
-                  });
-                }
-             
-          }else{
+
+        console.log(checkUserDetail?.userInfo?.password, "hvegcvgd");
+        let passwordIsValid = await bcrypt.compare(
+          oldPassword,
+          checkUserDetail?.userInfo?.password
+        );
+
+        if (passwordIsValid) {
+          let password = await bcrypt.hash(newPassword, 8)
+          // Update device information of user
+
+          const updatePassword = await User.findByIdAndUpdate(
+            { _id: userId },
+            { $set: { "userInfo.password": password } },
+            { new: true }
+          )
+
+          if (updatePassword) {
             return res.json({
-                status: 400,
-                message: `wrong current password`,
-              });
+              status: 200,
+              message: `password change Successfully`,
+            });
+          } else {
+            return res.json({
+              status: 400,
+              message: `failed to change password`,
+            });
           }
-        }else{
+
+        } else {
           return res.json({
             status: 400,
-            message: `can't change password of social login account`,
+            message: `wrong current password`,
           });
         }
-    }catch(err){
+      } else {
+        return res.json({
+          status: 400,
+          message: `can't change password of social login account`,
+        });
+      }
+    } catch (err) {
       console.log(err);
-        res.json({
-            status: 404,
-            message: err.message,
-          
-          });
+      res.json({
+        status: 404,
+        message: err.message,
+
+      });
     }
-   
+
   },
 };
