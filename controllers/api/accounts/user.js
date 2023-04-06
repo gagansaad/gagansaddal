@@ -1332,6 +1332,7 @@ module.exports = {
   },
 
   update_profile: async function (req, res, next) {
+    console.log(req.body)
     try {
       const userId = req.userId;
       let data = {
@@ -1372,14 +1373,14 @@ module.exports = {
         location:data.location,
        
       }
+
+      const pictureUrl = req?.body?.picture;
       
       if (picture) {
         userBasicInfo = {
           ...userBasicInfo,
           "profile_image": picture,
         };
-      }else{
-        picture = ``
       }
       profileDataObj.userInfo=userInfo
       
