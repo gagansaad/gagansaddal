@@ -1014,6 +1014,7 @@ module.exports = {
 
     if (otp_for_mobile_number) {
       OTP.findOne({
+        userId: req.userId,
         code: otp_for_email,
         for: 2,
       }).then((foundEmailOTP) => {
@@ -1024,6 +1025,7 @@ module.exports = {
         }
 
         OTP.findOne({
+          userId: req.userId,
           code: otp_for_mobile_number,
           for: 1,
         }).then((foundMobileOTP) => {
@@ -1100,6 +1102,7 @@ module.exports = {
       });
     } else {
       OTP.findOne({
+        userId: req.userId,
         code: otp_for_email,
       })
         .then((foundOTP) => {
@@ -1174,6 +1177,7 @@ module.exports = {
     })
       .then((foundUser) => {
         if (foundUser) {
+
           OTP.create({
             code: generateOTP(4),
             user: foundUser._id,
@@ -1188,7 +1192,7 @@ module.exports = {
 
           return res.json({
             status: 200,
-            userId: foundUser.userId,
+            userId: foundUser._id,
             message: `success`,
           });
         } else {
@@ -1207,10 +1211,11 @@ module.exports = {
   },
 
   verify_forget_password_otp: async function (req, res, next) {
-    console.log(`req.body`);
-    console.log(req.body);
+    // console.log(`req.body`);
+    // console.log(req.body);
 
-    const { otp } = req.body;
+
+    const { otp,user_id } = req.body;
 
     if (!otp) {
       return res.json({
@@ -1221,6 +1226,7 @@ module.exports = {
 
     OTP.findOne({
       code: otp,
+      userId: req?.body?.user_id
     })
       .then((foundOTP) => {
         if (foundOTP) {
@@ -1661,6 +1667,7 @@ module.exports = {
         OTP.findOne({
           code: otp,
           phone_number: phone_number,
+          userId: req.userId,
           for: 1,
         })
           .then((foundOTP) => {
@@ -1712,6 +1719,7 @@ module.exports = {
 
         OTP.findOne({
           code: otp,
+          userId: req.userId,
           email_address: email_address.toLowerCase(),
           for: 2,
         })
