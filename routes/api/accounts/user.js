@@ -99,7 +99,7 @@ router.post(`/logout`,
     authMiddleware.ensureUserLoggedIn,
     controllers.logout
 );
-router.delete(`/account-delete`,
+router.post(`/account-delete`,
     authMiddleware.ensureUserLoggedIn,
     controllers.account_delete
 );
