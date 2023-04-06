@@ -1380,9 +1380,9 @@ module.exports = {
         "userInfo.date_of_birth": date_of_birth,
         "userInfo.gender": gender,
 
-        "userInfo.short_bio": short_bio,
-        "userInfo.my_website": my_website,
-        "userInfo.location": data.location
+        "userBasicInfo.short_bio": short_bio,
+        "userBasicInfo.my_website": my_website,
+        "userBasicInfo.location": data.location
       }
 
     
