@@ -7,6 +7,7 @@ const mongoose = require("mongoose"),
   { generateOTP } = require(`../../../utils/generateOTP`),
   ObjectId = require("mongodb").ObjectID;
 
+const { errorMonitor } = require("connect-mongo");
 const {
   EmailOTPVerification,
   WelcomeEmail,
@@ -1756,6 +1757,7 @@ module.exports = {
       User.findById({ _id: userId })
         .select(`userInfo userBasicInfo`)
         .then((user) => {
+          console.log(user)
           if (!user)
             return failureJSONResponse(res, {
               message: `something went worng`,
@@ -1771,15 +1773,16 @@ module.exports = {
               short_bio: user?.userBasicInfo?.short_bio || null,
               my_website: user?.userBasicInfo?.my_website || null,
               address: user?.userBasicInfo?.location?.address || null,
-              lat: user?.userBasicInfo?.location?.coordinates[0] || null,
-              long: user?.userBasicInfo?.location?.coordinates[1] || null,
+              lat: user?.userBasicInfo?.location?.coordinates?.coordinates[0] || null,
+              long: user?.userBasicInfo?.location?.coordinates?.coordinates[1] || null,
             };
             return successJSONResponse(res, { user: data });
           }
         })
         .catch((err) => {
+          console.log(err)
           return failureJSONResponse(res, {
-            message: `please provide user id`,
+            message: `something went wrong`,
           });
         });
     } catch (error) {
