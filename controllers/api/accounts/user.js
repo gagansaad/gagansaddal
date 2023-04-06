@@ -1332,8 +1332,8 @@ module.exports = {
   },
 
   update_profile: async function (req, res, next) {
-    console.log(req.body)
-    console.log(req.files)
+    console.log(  `anmsbdnas`,  req.body)
+    console.log(`sSas`,req.file)
     try {
       const userId = req.userId;
       let data = {
@@ -1374,9 +1374,14 @@ module.exports = {
         location:data.location,
        
       }
+        const pictureUrl = req?.body?.picture;
 
-      if(picture) userBasicInfo.profile_image = picture
-
+      if(req.file && Object.keys(req.file).length){
+        console.log(`asjgdjhasgjhgsdjasjgj`)
+        userBasicInfo.profile_image = picture
+      } else {
+        userBasicInfo.profile_image = pictureUrl
+      }
 
     
       // const pictureUrl = req?.body?.picture;
