@@ -1839,7 +1839,7 @@ module.exports = {
         }else{
           return res.json({
               status: 400,
-              message: `The password you enterd is incorrect. Please try again.`,
+              message: `The password you entered is incorrect. Please try again.`,
             });
         }
       } else if(checkUserDetail.userBasicInfo.source !== "email"){
@@ -1867,7 +1867,7 @@ module.exports = {
         }else{
           return res.json({
               status: 400,
-              message: `The password you enterd is incorrect. Please Enter (menehariya) As a password and try again.`,
+              message: `The password you entered is incorrect. Please Enter (menehariya) As a password and try again.`,
             });
         }
 
