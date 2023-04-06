@@ -1773,8 +1773,8 @@ module.exports = {
               short_bio: user?.userBasicInfo?.short_bio || null,
               my_website: user?.userBasicInfo?.my_website || null,
               address: user?.userBasicInfo?.location?.address || null,
-              // lat: user?.userBasicInfo?.location?.coordinates?.coordinates[0] || null,
-              // long: user?.userBasicInfo?.location?.coordinates?.coordinates[1] || null,
+              lat: user?.userBasicInfo?.location?.coordinates?.coordinates[0] || null,
+              long: user?.userBasicInfo?.location?.coordinates?.coordinates[1] || null,
             };
             return successJSONResponse(res, { user: data });
           }
