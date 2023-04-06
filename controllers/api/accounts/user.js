@@ -1333,6 +1333,7 @@ module.exports = {
 
   update_profile: async function (req, res, next) {
     console.log(req.body)
+    console.log(req.files)
     try {
       const userId = req.userId;
       let data = {
@@ -1374,15 +1375,24 @@ module.exports = {
        
       }
 
-      const pictureUrl = req?.body?.picture;
-      console.log(`pictureUrl`,pictureUrl )
+      if(picture) userBasicInfo.profile_image = picture
 
-      if (picture) {
-        userBasicInfo = {
-          ...userBasicInfo,
-          "profile_image": picture,
-        };
-      }
+
+    
+      // const pictureUrl = req?.body?.picture;
+      // console.log(`pictureUrl`,pictureUrl )
+
+      // if(!pictureUrl){
+
+      // // }
+
+      // if (picture) {
+      //   userBasicInfo = {
+      //     ...userBasicInfo,
+      //     "profile_image": picture,
+      //   };
+      // }
+
       profileDataObj.userInfo=userInfo
       
       profileDataObj.userBasicInfo=userBasicInfo
@@ -1459,7 +1469,7 @@ module.exports = {
             address: data.location.address,
             lat: data.location.coordinates[0],
             long: data.location.coordinates[1],
-            picture:profileDataObj.userBasicInfo.profile_image,
+            picture:profileDataObj?.userBasicInfo?.profile_image,
           },
         });
       } else {
