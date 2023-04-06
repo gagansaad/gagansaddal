@@ -1758,9 +1758,10 @@ module.exports = {
         .then((user) => {
           if (!user)
             return failureJSONResponse(res, {
-              message: `something went worng`,
+              message: `something went worng`, 
             });
           else {
+            
             const data = {
               name: user?.userInfo?.name || null,
               email_address: user?.userInfo?.email_address || null,
