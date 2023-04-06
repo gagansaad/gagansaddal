@@ -33,6 +33,8 @@ exports.getDnymicsData = async (req, res, next) => {
 exports.validateEventAdsData = async (req, res, next) => {
   try {
     const {
+      status,
+      adsType,
       title,
       type,
       add_platform,
@@ -43,7 +45,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       image,
     } = req.body;
     if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
-    else if (status < 1 || status > 3) failureJSONResponse(res, { message: `Please enter status bwtween 1 to 3` });
+    else if (status < 1 || status > 3) failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
 
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
@@ -62,7 +64,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       });
     if (!isValidString(details))
       return failureJSONResponse(res, {
-        message: "Pleae provide us your details",
+        message: "Please provide us your details",
       });
     if (!isValidString(ticket_price))
       return failureJSONResponse(res, {
@@ -70,10 +72,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       });
     if (!isValidString(link))
       return failureJSONResponse(res, { message: `please provide us link` });
-        if (!isValidString(location))
-      return failureJSONResponse(res, {
-        message: "Please let us know your current location",
-      });
+      
 
 
     return next();
@@ -188,7 +187,7 @@ exports.editEventAds = async (req, res, next) => {
       add_platform,
       details,
       ticket_price,
-      location,
+      
       link,
       image,
 
@@ -196,6 +195,7 @@ exports.editEventAds = async (req, res, next) => {
       emailAddress,
       phoneNumber,
       hideAddress,
+      location,
       preferableModeContact,
     } = req.body;
     const imageArr = [];
@@ -219,10 +219,10 @@ exports.editEventAds = async (req, res, next) => {
     if (details) adsInfoObj.details = details;
     if (ticket_price) adsInfoObj.ticket_price = ticket_price;
     if (link) adsInfoObj.link = link;
-    if (location) listerBasicInfoObj.location = location;
+    if (location) listerBasicInfo.location = location;
     if (imageArr.length) adsInfoObj.image = imageArr;
 
-    if (name) listerBasicInfoObj.name = name;
+    if (name) listerBasicInfo.name = name;
 
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;

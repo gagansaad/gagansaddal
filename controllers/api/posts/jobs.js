@@ -41,6 +41,8 @@ exports.validateJobAdsData = async (req, res, next) => {
   //   console.log(req.body)
   try {
     const {
+      status,
+      adsType,
       title,
       descriptions,
       categories,
@@ -57,25 +59,30 @@ exports.validateJobAdsData = async (req, res, next) => {
       image,
     } = req.body;
 
+    if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
+    else if (status < 1 || status > 3) failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
+
+    if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
+    else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
     if (!isValidString(categories))
       return failureJSONResponse(res, {
-        message: `Please provide valid jobCategory`,
+        message: `Please provide valid job Category`,
       });
     if (!isValidString(type))
       return failureJSONResponse(res, {
-        message: `Please provide valid jobType`,
+        message: `Please provide valid job Type`,
       });
     if (!isValidString(role))
       return failureJSONResponse(res, {
-        message: `Please provide valid jobRole`,
+        message: `Please provide valid job Role`,
       });
     if (!isValidString(title))
       return failureJSONResponse(res, {
-        message: "Pleae provide us your jobTitle",
+        message: "Please provide us your job Title",
       });
     if (!isValidString(descriptions))
       return failureJSONResponse(res, {
-        message: `please provide valid jobDescription`,
+        message: `please provide valid job Description`,
       });
     if (isNaN(Number(experience)))
       return failureJSONResponse(res, {
@@ -91,7 +98,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, { message: "number of jobs opening" });
     if (!isValidString(preferred_gender))
       return failureJSONResponse(res, {
-        message: "Please provide us your gender prefrences",
+        message: "Please provide us your gender preferences",
       });
     if (!isValidString(website))
       return failureJSONResponse(res, {
@@ -101,10 +108,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         mesage: `Please provide us work authorization`,
       });
-    if (!isValidString(location))
-      return failureJSONResponse(res, {
-        message: "Please let us know your current location",
-      });
+   
 
     return next();
   } catch (err) {
@@ -131,14 +135,8 @@ exports.createJobAds = async (req, res, next) => {
       no_of_opening,
       website,
       work_authorization,
-      location,
       preferred_gender,
-
-      name,
-      emailAddress,
-      phoneNumber,
-      hideAddress,
-      preferableModeContact,
+      location,
     } = req.body;
 
     const userId = req.userId;
@@ -166,7 +164,7 @@ exports.createJobAds = async (req, res, next) => {
         no_of_opening,
         website,
         work_authorization,
-        
+        location,
         preferred_gender: parseInt(preferred_gender),
         image: imageArr,
       },
@@ -175,7 +173,6 @@ exports.createJobAds = async (req, res, next) => {
         emailAddress,
         phoneNumber,
         hideAddress,
-        location,
         mobileNumber: {
           countryCode: +91,
           phoneNumber: phoneNumber,
@@ -189,6 +186,8 @@ exports.createJobAds = async (req, res, next) => {
 
     const postJobAdObjToSend = {};
 
+  
+
     for (let key in newJobPost.toObject()) {
       if (!fieldsToExclude.hasOwnProperty(String(key))) {
         postJobAdObjToSend[key] = newJobPost[key];
@@ -197,7 +196,7 @@ exports.createJobAds = async (req, res, next) => {
 
     return successJSONResponse(res, {
       message: `success`,
-      postJobAdObjToSend,
+      postJobAdObjToSend:postJobAdObjToSend,
       status: 200,
     });
   } catch (err) {

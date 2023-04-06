@@ -91,7 +91,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, { message: "number of jobs opening" });
     if (!isValidString(preferred_gender))
       return failureJSONResponse(res, {
-        message: "Please provide us your gender prefrences",
+        message: "Please provide us your gender preferences",
       });
     if (!isValidString(website))
       return failureJSONResponse(res, {

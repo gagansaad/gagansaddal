@@ -59,7 +59,7 @@ const events_Schema = new mongoose.Schema({
 
     },
     listerBasicInfo: {
-        location:defaultStringConfig,
+        
         name: defaultStringConfig,
         emailAddress: defaultStringConfig,
         mobileNumber: {
@@ -67,7 +67,7 @@ const events_Schema = new mongoose.Schema({
             phoneNumber: defaultStringConfig
         },
         hideAddress: defaultBooleanConfig,
-
+        location:defaultStringConfig,
         preferableModeContact: {
             type: Number,
             enum: [1, 2, 3]

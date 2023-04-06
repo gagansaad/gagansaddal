@@ -9,7 +9,8 @@ const mongoose = require("mongoose"),
 
 const {
   EmailOTPVerification,
-  WelcomeEmail
+  WelcomeEmail,
+  AccountDeleteEmail
 } = require(`../../../resources/sendEmailFunction`);
 const {
     MobileNumberVerificationOTP,
@@ -1348,8 +1349,6 @@ module.exports = {
         short_bio,
         my_website,
         location,
-        privateInfo,
-        publicInfo,
       } = req.body;
       console.log(vali(Date(date_of_birth)));
       if (name && !isValidString(name))
@@ -1401,17 +1400,7 @@ module.exports = {
           ...profileDataObj,
           "userBasicInfo.location": data.location,
         };
-      if (privateInfo)
-        profileDataObj = {
-          ...profileDataObj,
-          "userBasicInfo.info.privateInfo": privateInfo,
-        };
-      if (publicInfo)
-        profileDataObj = {
-          ...profileDataObj,
-          "userBasicInfo.info.publicInfo": publicInfo,
-        };
-
+   
       console.log(profileDataObj, "gfgfgsss");
 
       // if (location) profileDataObj = {
@@ -1447,8 +1436,6 @@ module.exports = {
             address: data.location.address,
             lat: data.location.coordinates[0],
             long: data.location.coordinates[1],
-            publicInfo: publicInfo,
-            privateInfo: privateInfo,
             picture: req?.file?.path || null,
           },
         });
@@ -1816,24 +1803,89 @@ module.exports = {
   },
   ///////////////////////////////////////////////////
   account_delete: async function (req, res) {
-    const userId = req.userId;
+    try{
+      const userId = req.userId;
+      if (!userId) return failureJSONResponse(res, { message: `please provide user id` });
 
-    if (!userId)
-      return failureJSONResponse(res, { message: `please provide user id` });
+      const checkUserDetail = await User.findById({ _id: userId }, { userInfo: 1 , userBasicInfo: 1});
 
-    User.findByIdAndDelete({ _id: userId })
-      .then((user) => {
-        if (!user)
-          return failureJSONResponse(res, { message: `something went worng` });
-        else {
-          return successJSONResponse(res, {
-            message: "Account deleted successfully",
-          });
+      if(checkUserDetail.userBasicInfo.source === "email"){
+      let Password = req.body.password;
+      if (!Password) {
+        return res.json({
+          status: 400,
+          message: `please Provide Your password`,
+        });
+      }
+        let passwordIsValid = await bcrypt.compare(
+          Password,
+          checkUserDetail?.userInfo?.password
+        );
+  
+        if (passwordIsValid) {
+       let found_user = await User.findByIdAndDelete({ _id: userId })
+          if(!found_user){
+            return failureJSONResponse(res, { message: `Failed to delete Your Account` });
+          } else {
+            if(found_user && Object.keys(found_user).length ){
+              AccountDeleteEmail(found_user.userInfo.email_address, found_user.userInfo.name)
+            }
+            return successJSONResponse(res, {
+              message: "Account deleted successfully",
+             
+            });
+          }
+           
+        }else{
+          return res.json({
+              status: 400,
+              message: `The password you enterd is incorrect. Please try again.`,
+            });
         }
-      })
-      .catch((err) => {
-        return failureJSONResponse(res, { message: `please provide user id` });
-      });
+      } else if(checkUserDetail.userBasicInfo.source !== "email"){
+        let Password = req.body.password;
+      if (!Password) {
+        return res.json({
+          status: 400,
+          message: `please Provide Your password`,
+        });
+      }
+
+        if (Password === "menehariya")  {
+          let found_user = await User.findByIdAndDelete({ _id: userId })
+          if(!found_user){
+            return failureJSONResponse(res, { message: `Failed to delete Your Account` });
+          } else {
+            if(found_user && Object.keys(found_user).length ){
+              AccountDeleteEmail(found_user.userInfo.email_address, found_user.userInfo.name)
+            }
+            return successJSONResponse(res, {
+              message: "Account deleted successfully",
+            });
+          }
+           
+        }else{
+          return res.json({
+              status: 400,
+              message: `The password you enterd is incorrect. Please Enter (menehariya) As a password and try again.`,
+            });
+        }
+
+      }
+      else{
+        return res.json({
+          status: 400,
+          message: `Failed to delete Your Account`,
+        });
+      }
+  }catch(err){
+    console.log(err);
+      res.json({
+          status: 404,
+          message: "Something went wrong",err:err.message,
+        
+        });
+      }
   },
 
 

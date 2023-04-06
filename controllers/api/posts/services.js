@@ -59,23 +59,23 @@ exports.validateJobAdsData = async (req, res, next) => {
 
     if (!isValidString(categories))
       return failureJSONResponse(res, {
-        message: `Please provide valid jobCategory`,
+        message: `Please provide valid job Category`,
       });
     if (!isValidString(type))
       return failureJSONResponse(res, {
-        message: `Please provide valid jobType`,
+        message: `Please provide valid job Type`,
       });
     if (!isValidString(role))
       return failureJSONResponse(res, {
-        message: `Please provide valid jobRole`,
+        message: `Please provide valid job Role`,
       });
     if (!isValidString(title))
       return failureJSONResponse(res, {
-        message: "Pleae provide us your jobTitle",
+        message: "Pleae provide us your job Title",
       });
     if (!isValidString(descriptions))
       return failureJSONResponse(res, {
-        message: `please provide valid jobDescription`,
+        message: `please provide valid job Description`,
       });
     if (isNaN(Number(experience)))
       return failureJSONResponse(res, {
@@ -91,7 +91,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, { message: "number of jobs opening" });
     if (!isValidString(preferred_gender))
       return failureJSONResponse(res, {
-        message: "Please provide us your gender prefrences",
+        message: "Please provide us your gender preferences",
       });
     if (!isValidString(website))
       return failureJSONResponse(res, {

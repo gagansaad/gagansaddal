@@ -72,10 +72,7 @@ const roomRentsSchema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-        location: {
-            ...defaultStringConfig,
-            required: true
-        },
+       
 
         preferred_gender: {
             type: Number,
@@ -96,7 +93,7 @@ const roomRentsSchema = new mongoose.Schema({
             phoneNumber: defaultStringConfig
         },
         hideAddress: defaultBooleanConfig,
-
+        location:defaultStringConfig,
         preferableModeContact: {
             type: Number,
             enum: [1, 2, 3]
