@@ -1375,7 +1375,8 @@ module.exports = {
       }
 
       const pictureUrl = req?.body?.picture;
-      
+      console.log(`pictureUrl`,pictureUrl )
+
       if (picture) {
         userBasicInfo = {
           ...userBasicInfo,
