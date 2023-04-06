@@ -1386,10 +1386,12 @@ module.exports = {
       }
 
     
-      
+
       if (req.file && Object.keys(req.file).length) {
-        dataObj["userBasicInfo.profile_image"] =picture
-      } 
+        dataObj["userBasicInfo.profile_image"] = picture
+      }else {
+        dataObj["userBasicInfo.profile_image"] = req?.body?.picture
+      }
 
 
       // const pictureUrl = req?.body?.picture;
