@@ -1386,6 +1386,7 @@ module.exports = {
       }
 
     
+      
       if (req.file && Object.keys(req.file).length) {
         dataObj["userBasicInfo.profile_image"] =picture
       } 
