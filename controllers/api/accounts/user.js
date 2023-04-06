@@ -1789,6 +1789,7 @@ module.exports = {
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
+  
 
   logout: async function (req, res) {
     const deviceType = req?.body?.device_type,
