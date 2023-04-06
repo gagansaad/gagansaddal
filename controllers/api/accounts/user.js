@@ -1368,7 +1368,7 @@ module.exports = {
       let userBasicInfo={
         short_bio,
         my_website,
-        location,
+        location:data.location,
        
       }
       
