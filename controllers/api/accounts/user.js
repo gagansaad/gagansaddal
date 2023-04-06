@@ -1393,6 +1393,7 @@ module.exports = {
         dataObj["userBasicInfo.profile_image"] = req?.body?.picture
       }
 
+      
 
       // const pictureUrl = req?.body?.picture;
       // console.log(`pictureUrl`,pictureUrl )
