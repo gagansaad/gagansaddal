@@ -41,8 +41,7 @@ const userSchema = new mongoose.Schema({
         },
         is_active:{
             type: Boolean,
-            required: true,
-            default: false
+            default: false,
         }
     },
 
@@ -75,10 +74,6 @@ const userSchema = new mongoose.Schema({
                 type: String
             }]
         },
-        info:{
-            privateInfo:{type:String},
-            publicInfo:{type:String}
-        }
     },
 
     user_device_info: [{

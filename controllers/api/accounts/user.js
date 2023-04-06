@@ -1331,9 +1331,6 @@ module.exports = {
   },
 
   update_profile: async function (req, res, next) {
-    console.log(req.body);
-    console.log(`jhadsghjdgja`);
-
     try {
       const userId = req.userId;
       let data = {
@@ -1350,7 +1347,7 @@ module.exports = {
         my_website,
         location,
       } = req.body;
-      console.log(vali(Date(date_of_birth)));
+      // console.log(vali(Date(date_of_birth)));
       if (name && !isValidString(name))
         return failureJSONResponse(res, { message: `Invalid Name` });
       // if (date_of_birth && !vali(date_of_birth)) return failureJSONResponse(res, { message: `Invalid Date Of Birth` });
@@ -1359,49 +1356,69 @@ module.exports = {
 
       let profileDataObj = {};
 
-      if (name)
-        profileDataObj = {
-          ...profileDataObj,
-          "userInfo.name": name,
-        };
+      let userInfo={
+        name,
+        date_of_birth,
+        gender,
+       
+      }
+      let userBasicInfo={
+        short_bio,
+        my_website,
+        location,
+        
+       
+      }
+      
+      profileDataObj.userInfo=userInfo
+      
+      profileDataObj.userBasicInfo=userBasicInfo
 
-      if (date_of_birth)
-        profileDataObj = {
-          ...profileDataObj,
-          "userInfo.date_of_birth": Date(date_of_birth),
-        };
+      // if (name)
+      //   userInfo = {
+      //     ...profileDataObj,
+      //     "userInfo.name": name,
+      //   };
 
-      if (gender)
-        profileDataObj = {
-          ...profileDataObj,
-          "userInfo.gender": gender,
-        };
+      // if (date_of_birth)
+      //   profileDataObj = {
+      //     ...profileDataObj,
+      //     "userInfo.date_of_birth": Date(date_of_birth),
+      //   };
 
-      if (req?.file?.path) {
-        profileDataObj = {
-          ...profileDataObj,
+      // if (gender)
+      //   profileDataObj = {
+      //     ...profileDataObj,
+      //     "userInfo.gender": gender,
+      //   };
+      let picture = req?.file?.path
+      if (picture) {
+        userBasicInfo = {
+          ...userBasicInfo,
           "userBasicInfo.profile_image": req.file.path,
         };
+      }else{
+        picture = ``
       }
-      if (short_bio)
-        profileDataObj = {
-          ...profileDataObj,
-          "userBasicInfo.short_bio": short_bio,
-        };
+      // if (short_bio)
+      //   profileDataObj = {
+      //     ...profileDataObj,
+      //     "userBasicInfo.short_bio": short_bio,
+      //   };
 
-      if (my_website)
-        profileDataObj = {
-          ...profileDataObj,
-          "userBasicInfo.my_website": my_website,
-        };
+      // if (my_website)
+      //   profileDataObj = {
+      //     ...profileDataObj,
+      //     "userBasicInfo.my_website": my_website,
+      //   };
 
-      if (location)
-        profileDataObj = {
-          ...profileDataObj,
-          "userBasicInfo.location": data.location,
-        };
+      // if (location)
+      //   profileDataObj = {
+      //     ...profileDataObj,
+      //     "userBasicInfo.location": data.location,
+      //   };
    
-      console.log(profileDataObj, "gfgfgsss");
+      // console.log(profileDataObj, "gfgfgsss");
 
       // if (location) profileDataObj = {
       //     ...profileDataObj,
@@ -1436,7 +1453,7 @@ module.exports = {
             address: data.location.address,
             lat: data.location.coordinates[0],
             long: data.location.coordinates[1],
-            picture: req?.file?.path || null,
+            picture: picture,
           },
         });
       } else {
@@ -1753,8 +1770,6 @@ module.exports = {
               address: user?.userBasicInfo?.location?.address || null,
               lat: user?.userBasicInfo?.location?.coordinates[0] || null,
               long: user?.userBasicInfo?.location?.coordinates[1] || null,
-              publicInfo: user?.userBasicInfo?.info?.publicInfo || null,
-              privateInfo: user?.userBasicInfo?.info?.privateInfo|| null,
             };
             return successJSONResponse(res, { user: data });
           }
@@ -1850,8 +1865,8 @@ module.exports = {
           message: `please Provide Your password`,
         });
       }
-
-        if (Password === "menehariya")  {
+      let isPassword = Password.trim().toLowerCase();
+        if (isPassword === "menehariya")  {
           let found_user = await User.findByIdAndDelete({ _id: userId })
           if(!found_user){
             return failureJSONResponse(res, { message: `Failed to delete Your Account` });
