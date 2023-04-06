@@ -16,11 +16,11 @@ exports.fetchPostsTypes = async (req, res, next) => {
             .then((foundPostType) => {
                 return successJSONResponse(res, { message: `success`, postType: foundPostType });
             }).catch((err) => {
-                return failureJSONResponse(res, { message: `something went wrong` })
+                return failureJSONResponse(res, { message: `Failed to fetch types`,error:err.message })
             })
 
     } catch (err) {
-        return failureJSONResponse(res, { message: `something went wrong` })
+        return failureJSONResponse(res, { message: `something went wrong`,error:err.message })
     }
 
 }
@@ -33,17 +33,17 @@ exports.createPostsTypes = async (req, res, next) => {
             .then((newPostType) => {
 
                 if (!newPostType){
-                    return failureJSONResponse(res, { message: `something went wrong` })
+                    return failureJSONResponse(res, { message: `Failed to create types` })
                 } else {
                     return successJSONResponse(res, { newPostType });
                 }
                 
             }).catch((err) => {
-                return failureJSONResponse(res, { message: `something went wrong` })
+                return failureJSONResponse(res, { message: `something went wrong`,Erorr:err.message })
             })
 
     } catch (err) {
-        return failureJSONResponse(res, { message: `something went wrong` })
+        return failureJSONResponse(res, { message: `something went wrong`, Erorr:err.message})
     }
 
 }

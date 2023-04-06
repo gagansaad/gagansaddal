@@ -1348,6 +1348,9 @@ module.exports = {
         location,
       } = req.body;
       // console.log(vali(Date(date_of_birth)));
+      let picture = req?.file?.path
+      console.log(picture);
+     
       if (name && !isValidString(name))
         return failureJSONResponse(res, { message: `Invalid Name` });
       // if (date_of_birth && !vali(date_of_birth)) return failureJSONResponse(res, { message: `Invalid Date Of Birth` });
@@ -1366,10 +1369,17 @@ module.exports = {
         short_bio,
         my_website,
         location,
-        
        
       }
       
+      if (picture) {
+        userBasicInfo = {
+          ...userBasicInfo,
+          "profile_image": picture,
+        };
+      }else{
+        picture = ``
+      }
       profileDataObj.userInfo=userInfo
       
       profileDataObj.userBasicInfo=userBasicInfo
@@ -1391,15 +1401,8 @@ module.exports = {
       //     ...profileDataObj,
       //     "userInfo.gender": gender,
       //   };
-      let picture = req?.file?.path
-      if (picture) {
-        userBasicInfo = {
-          ...userBasicInfo,
-          "userBasicInfo.profile_image": req.file.path,
-        };
-      }else{
-        picture = ``
-      }
+      
+     
       // if (short_bio)
       //   profileDataObj = {
       //     ...profileDataObj,
@@ -1453,11 +1456,11 @@ module.exports = {
             address: data.location.address,
             lat: data.location.coordinates[0],
             long: data.location.coordinates[1],
-            picture: picture,
+            picture:profileDataObj.userBasicInfo.profile_image,
           },
         });
       } else {
-        return failureJSONResponse(res, { message: `something went wrong` });
+        return failureJSONResponse(res, { message: `Failed to update profile` });
       }
     } catch (err) {
       console.log(err);
