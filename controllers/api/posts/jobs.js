@@ -6,7 +6,7 @@ const mongoose = require("mongoose"),
     successJSONResponse,
     failureJSONResponse,
   } = require(`../../../handlers/jsonResponseHandlers`),
-  { fieldsToExclude } = require(`../../../utils/mongoose`),
+  { fieldsToExclude,listerBasicInfo } = require(`../../../utils/mongoose`),
   {
     isValidString,
     isValidMongoObjId,
@@ -148,6 +148,7 @@ exports.createJobAds = async (req, res, next) => {
     });
 
     const dataObj = {
+     
       status: parseInt(status),
       adsType,
       adsInfo: {
@@ -168,37 +169,35 @@ exports.createJobAds = async (req, res, next) => {
         preferred_gender: parseInt(preferred_gender),
         image: imageArr,
       },
-      listerBasicInfo: {
-        name,
-        emailAddress,
-        phoneNumber,
-        hideAddress,
-        mobileNumber: {
-          countryCode: +91,
-          phoneNumber: phoneNumber,
-        },
-        preferableModeContact: preferableModeContact,
-      },
       userId: userId,
+    
+ 
+     
     };
 
     const newJobPost = await postJobAd.create(dataObj);
 
     const postJobAdObjToSend = {};
-
+  
   
 
     for (let key in newJobPost.toObject()) {
-      if (!fieldsToExclude.hasOwnProperty(String(key))) {
+      if (!fieldsToExclude.hasOwnProperty(String(key))&&!listerBasicInfo.hasOwnProperty(String(key))) {
         postJobAdObjToSend[key] = newJobPost[key];
       }
     }
 
-    return successJSONResponse(res, {
-      message: `success`,
-      postJobAdObjToSend:postJobAdObjToSend,
-      status: 200,
-    });
+    if (newJobPost) {
+      return successJSONResponse(res, {
+        message: `success`,
+        postJobAdObjToSend:postJobAdObjToSend,
+      });
+    } else {
+      return failureJSONResponse(res, {
+        message: `Something went wrong`,
+        postJobAdObjToSend: null,
+      });
+    }
   } catch (err) {
     console.log(err);
   }
@@ -269,14 +268,15 @@ exports.editJobAds = async (req, res, next) => {
     if (no_of_opening) adsInfoObj.no_of_opening = no_of_opening;
     if (website) adsInfoObj.website = website;
     if (work_authorization) adsInfoObj.work_authorization = work_authorization;
-    if (location) listerBasicInfoObj.location = location;
+    if (location) adsInfoObj.location = location;
     if (preferred_gender) adsInfoObj.preferred_gender = preferred_gender;
     if (imageArr.length) adsInfoObj.image = imageArr;
 
     if (name) listerBasicInfoObj.name = name;
-
+   
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
+     
     }
 
     const dataObjq = {
@@ -286,7 +286,6 @@ exports.editJobAds = async (req, res, next) => {
         emailAddress,
         phoneNumber,
         hideAddress,
-        location,
         mobileNumber: {
           countryCode: +91,
           phoneNumber: phoneNumber,
@@ -303,11 +302,16 @@ exports.editJobAds = async (req, res, next) => {
       { $set: dataObjq },
       { new: true }
     );
-
+   let updateJobAdObjToSend ={}
+    for (let key in updateJob.toObject()) {
+      if (!fieldsToExclude.hasOwnProperty(String(key))) {
+        updateJobAdObjToSend[key] = updateJob[key];
+      }
+    }
     if (updateJob) {
       return successJSONResponse(res, {
         message: `success`,
-        updateJob,
+        updateJobAdObjToSend:updateJobAdObjToSend,
       });
     } else {
       return failureJSONResponse(res, {

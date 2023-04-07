@@ -6,7 +6,7 @@ const mongoose = require("mongoose"),
     successJSONResponse,
     failureJSONResponse,
   } = require(`../../../handlers/jsonResponseHandlers`),
-  { fieldsToExclude } = require(`../../../utils/mongoose`),
+  { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
     isValidString,
     isValidMongoObjId,
@@ -64,14 +64,14 @@ exports.validateEventAdsData = async (req, res, next) => {
       });
     if (!isValidString(details))
       return failureJSONResponse(res, {
-        message: "Please provide us your details",
+        message: "Please provide valid details",
       });
     if (!isValidString(ticket_price))
       return failureJSONResponse(res, {
         message: `please provide valid ticket_price`,
       });
     if (!isValidString(link))
-      return failureJSONResponse(res, { message: `please provide us link` });
+      return failureJSONResponse(res, { message: `please provide valid link` });
       
 
 
@@ -95,16 +95,9 @@ exports.createEventAds = async (req, res, next) => {
       add_platform,
       details,
       ticket_price,
-      
       link,
       image,
 
-      name,
-      emailAddress,
-      phoneNumber,
-      hideAddress,
-      location,
-      preferableModeContact,
     } = req.body;
 
     const userId = req.userId;
@@ -124,22 +117,11 @@ exports.createEventAds = async (req, res, next) => {
         add_platform,
         details,
         ticket_price,
-        
         link,
         image: imageArr,
+      
       },
-      listerBasicInfo: {
-        name,
-        emailAddress,
-        phoneNumber,
-        hideAddress,
-        location,
-        mobileNumber: {
-          countryCode: +91,
-          phoneNumber: phoneNumber,
-        },
-        preferableModeContact: preferableModeContact,
-      },
+     
       userId: userId,
     };
 
@@ -148,16 +130,21 @@ exports.createEventAds = async (req, res, next) => {
     const postEventAdObjToSend = {};
 
     for (let key in newEventPost.toObject()) {
-      if (!fieldsToExclude.hasOwnProperty(String(key))) {
+      if (!fieldsToExclude.hasOwnProperty(String(key))&&(!listerBasicInfo.hasOwnProperty(String(key)))) {
         postEventAdObjToSend[key] = newEventPost[key];
       }
     }
-
-    return successJSONResponse(res, {
-      message: `success`,
-      events:postEventAdObjToSend,
-      status: 200,
-    });
+    if (newEventPost) {
+      return successJSONResponse(res, {
+        message: `success`,
+        postEventAdObjToSend:postEventAdObjToSend,
+      });
+    } else {
+      return failureJSONResponse(res, {
+        message: `Something went wrong`,
+        postEventAdObjToSend: null,
+      });
+    }
   } catch (err) {
     console.log(err);
   }
@@ -187,15 +174,15 @@ exports.editEventAds = async (req, res, next) => {
       add_platform,
       details,
       ticket_price,
-      
       link,
       image,
-
+      location,
       name,
       emailAddress,
+      
       phoneNumber,
       hideAddress,
-      location,
+      addressInfo,
       preferableModeContact,
     } = req.body;
     const imageArr = [];
@@ -219,10 +206,8 @@ exports.editEventAds = async (req, res, next) => {
     if (details) adsInfoObj.details = details;
     if (ticket_price) adsInfoObj.ticket_price = ticket_price;
     if (link) adsInfoObj.link = link;
-    if (location) listerBasicInfo.location = location;
     if (imageArr.length) adsInfoObj.image = imageArr;
-
-    if (name) listerBasicInfo.name = name;
+    
 
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
@@ -231,16 +216,18 @@ exports.editEventAds = async (req, res, next) => {
     const dataObjq = {
       adsInfo: adsInfoObj,
       listerBasicInfo: {
+        location,
         name,
         emailAddress,
         phoneNumber,
         hideAddress,
-        location,
+        
 
         mobileNumber: {
           countryCode: +91,
           phoneNumber: phoneNumber,
         },
+        addressInfo,
         preferableModeContact: preferableModeContact,
       },
     };
@@ -249,11 +236,17 @@ exports.editEventAds = async (req, res, next) => {
       { $set: dataObjq },
       { new: true }
     );
+    let updateEventAdObjToSend ={}
+    for (let key in updateEvent.toObject()) {
+      if (!fieldsToExclude.hasOwnProperty(String(key))) {
+        updateEventAdObjToSend[key] = updateEvent[key];
+      }
+    }
 
     if (updateEvent) {
       return successJSONResponse(res, {
         message: `success`,
-        updateEvent:updateEvent,
+        updateEventAdObjToSend:updateEventAdObjToSend,
       });
     } else {
       return failureJSONResponse(res, {

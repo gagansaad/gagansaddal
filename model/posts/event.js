@@ -55,19 +55,21 @@ const events_Schema = new mongoose.Schema({
         image: [{
             ...defaultStringConfig,
             required: true
-        }]
+        }],
+       
 
     },
     listerBasicInfo: {
-        
+        location:defaultStringConfig,
         name: defaultStringConfig,
         emailAddress: defaultStringConfig,
+        
         mobileNumber: {
             countryCode: defaultStringConfig,
             phoneNumber: defaultStringConfig
         },
         hideAddress: defaultBooleanConfig,
-        location:defaultStringConfig,
+        addressInfo: defaultStringConfig,
         preferableModeContact: {
             type: Number,
             enum: [1, 2, 3]

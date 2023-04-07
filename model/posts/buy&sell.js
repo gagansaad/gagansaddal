@@ -8,7 +8,7 @@ const {
     defaultBooleanConfig
 } = require(`../../utils/mongoose`);
 
-const events_Schema = new mongoose.Schema({
+const BuySellSchema = new mongoose.Schema({
 
     status: {
         type: Number,
@@ -26,7 +26,7 @@ const events_Schema = new mongoose.Schema({
         required: true
     },
     adsInfo: {
-        category: {
+        categories: {
             ...defaultStringConfig,
             required: true
         },
@@ -47,11 +47,11 @@ const events_Schema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-        description: {
+        descriptions: {
             ...defaultStringConfig,
             required: true
         },
-        Additional_info: {
+        additional_info: {
             ...defaultStringConfig,
             required: true
         },
@@ -71,7 +71,7 @@ const events_Schema = new mongoose.Schema({
             
         location:defaultStringConfig,
         hideAddress: defaultBooleanConfig,
-
+        addressInfo: defaultStringConfig,
         preferableModeContact: {
             type: Number,
             enum: [1, 2, 3]
@@ -81,4 +81,4 @@ const events_Schema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('event',events_Schema);
+module.exports = mongoose.model('Buy & Sell',BuySellSchema);

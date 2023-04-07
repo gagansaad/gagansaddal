@@ -8,7 +8,7 @@ const {
     defaultBooleanConfig
 } = require(`../../utils/mongoose`);
 
-const events_Schema = new mongoose.Schema({
+const babysitter_Schema = new mongoose.Schema({
 
     status: {
         type: Number,
@@ -26,11 +26,11 @@ const events_Schema = new mongoose.Schema({
         required: true
     },
     adsInfo: {
-        category: {
+        option: {
             ...defaultStringConfig,
             required: true
         },
-        type: {
+        care_service: {
             ...defaultStringConfig,
             required: true
         },
@@ -38,32 +38,7 @@ const events_Schema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-        // product_condition: {
-        //     ...defaultStringConfig,
-        //     required: true
-        // },
-        // user_type: {
-        //     ...defaultStringConfig,
-        //     required: true
-        // },
-
-        // price: {
-        //     ...defaultStringConfig,
-        //     required: true
-        // },
-        // description: {
-        //     ...defaultStringConfig,
-        //     required: true
-        // },
-        // Additional_info: {
-        //     ...defaultStringConfig,
-        //     required: true
-        // },
-        // image: [{
-        //     ...defaultStringConfig,
-        //     required: true
-        // }]
-
+    
     },
     listerBasicInfo: {
         name: defaultStringConfig,
@@ -75,7 +50,7 @@ const events_Schema = new mongoose.Schema({
             
         location:defaultStringConfig,
         hideAddress: defaultBooleanConfig,
-
+        addressInfo:defaultStringConfig,
         preferableModeContact: {
             type: Number,
             enum: [1, 2, 3]
@@ -85,4 +60,4 @@ const events_Schema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('event',events_Schema);
+module.exports = mongoose.model('babysitter & nannie',babysitter_Schema);

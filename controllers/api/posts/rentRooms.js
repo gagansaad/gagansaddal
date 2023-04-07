@@ -6,7 +6,7 @@ const mongoose = require("mongoose"),
         successJSONResponse,
         failureJSONResponse
     } = require(`../../../handlers/jsonResponseHandlers`),
-    { fieldsToExclude } = require(`../../../utils/mongoose`),
+    { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
     {
         isValidString,
         isValidMongoObjId,
@@ -221,7 +221,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     const roomtRentObjToSend = {};
 
     for (let key in newRoomRentPost.toObject()) {
-        if (!fieldsToExclude.hasOwnProperty(String(key))) {
+        if (!fieldsToExclude.hasOwnProperty(String(key))&&!listerBasicInfo.hasOwnProperty(String(key))) {
             roomtRentObjToSend[key] = newRoomRentPost[key];
         }
     }
@@ -279,7 +279,7 @@ exports.editRoomRentAds = async (req, res, next) => {
         occupation,
         preferredGender,
         location,
-
+        image,
         name,
         emailAddress,
         phoneNumber,
@@ -287,7 +287,11 @@ exports.editRoomRentAds = async (req, res, next) => {
         preferableModeContact
 
     } = req.body;
+    const imageArr = [];
 
+    req.files.forEach((data) => {
+      imageArr.push(data?.path);
+    });
 
     const dataObj = {},
         adsInfoObj = {},
@@ -297,6 +301,8 @@ exports.editRoomRentAds = async (req, res, next) => {
     if (adsType) dataObj.adsType = adsType;
 
     if (title) adsInfoObj.title = title;
+    
+    if (preferredGender) adsInfoObj.preferredGender = preferredGender;
     if (descriptions) adsInfoObj.descriptions = descriptions;
     if (roomType) adsInfoObj.roomType = roomType;
     if (furnished) adsInfoObj.furnished = furnished;
@@ -310,8 +316,8 @@ exports.editRoomRentAds = async (req, res, next) => {
     if (occupation) adsInfoObj.occupation = occupation;
     if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFriendly;
     if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFriendly;
-
-
+    if (location) adsInfoObj.location = location;
+    if (imageArr.length) adsInfoObj.image = imageArr;
     if (name) listerBasicInfoObj.name = name;
 
 
@@ -320,49 +326,35 @@ exports.editRoomRentAds = async (req, res, next) => {
     }
 
     const dataObjq = {
-        status: parseInt(status),
-        adsType,
-        adsInfo: {
-            title,
-            descriptions,
-            roomType,
-            furnished,
-            listerType,
-            accommodates,
-            attachedBath,
-            rent,
-            isSmokingAllowed,
-            isAlcoholAllowed,
-            isPetFriendly,
-            occupation,
-            preferredGender: preferredGender,
-            location
-        },
+        adsInfo: adsInfoObj,
         listerBasicInfo: {
-            name,
-            emailAddress,
-            phoneNumber,
-            hideAddress,
-
-            mobileNumber: {
-                countryCode: +91,
-                phoneNumber: phoneNumber
-            },
-            preferableModeContact: preferableModeContact
-
-        }
-    }
+          name,
+          emailAddress,
+          phoneNumber,
+          hideAddress,
+          mobileNumber: {
+            countryCode: +91,
+            phoneNumber: phoneNumber,
+          },
+          preferableModeContact: preferableModeContact,
+        },
+      };
 
     console.log(dataObj)
 
     const updateRoomRents = await RoomRentsAds.findByIdAndUpdate({ _id: roomRentId }, { $set: dataObjq }, { new: true })
-
+    let updateRoomAdObjToSend ={}
+    for (let key in updateRoomRents.toObject()) {
+      if (!fieldsToExclude.hasOwnProperty(String(key))) {
+        updateRoomAdObjToSend[key] = updateRoomRents[key];
+      }
+    }
     if (updateRoomRents) {
 
         // console.log(updateRoomRents)
         return successJSONResponse(res, {
             message: `success`,
-            updateRoomRents,
+            updateRoomAdObjToSend:updateRoomAdObjToSend,
         })
     } else {
         // console.log(updateRoomRents)

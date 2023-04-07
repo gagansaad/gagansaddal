@@ -1,12 +1,12 @@
 const { json } = require("express");
 
 const mongoose = require("mongoose"),
-  postJobAd = mongoose.model("job"),
+postBuySellAd = mongoose.model("Buy & Sell"),
   {
     successJSONResponse,
     failureJSONResponse,
   } = require(`../../../handlers/jsonResponseHandlers`),
-  { fieldsToExclude } = require(`../../../utils/mongoose`),
+  { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
     isValidString,
     isValidMongoObjId,
@@ -19,7 +19,10 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
-    categories: [`employed`, `self employed`, `engineer`],
+    categories: [`buy`, `sell `],
+    product_condition:[`New`,`Used`,`Good`,`Age-worn`],
+    user_type:[`Individual`,`Retailer`],
+
     
   };
   return successJSONResponse(res, {
@@ -30,7 +33,7 @@ exports.getDnymicsData = async (req, res, next) => {
 
 ///-----------------------Validate Data---------------------------//
 
-exports.validateJobAdsData = async (req, res, next) => {
+exports.validateBuySellAdsData = async (req, res, next) => {
   //   console.log(req.body)
   try {
     const {
@@ -44,10 +47,19 @@ exports.validateJobAdsData = async (req, res, next) => {
       additional_info,
       image,
     } = req.body;
-
+    if (!isValidString(title))
+    return failureJSONResponse(res, {
+      message: "Pleae provide us your title",
+    });
+    
+    if (!isValidString(descriptions))
+      return failureJSONResponse(res, {
+        message: `please provide valid description`,
+      });
+      
     if (!isValidString(categories))
       return failureJSONResponse(res, {
-        message: `Please provide valid jobCategory`,
+        message: `Please provide valid category`,
       });
     if (!isValidString(user_type))
       return failureJSONResponse(res, {
@@ -57,24 +69,16 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid product_condition`,
       });
-    if (!isValidString(title))
-      return failureJSONResponse(res, {
-        message: "Pleae provide us your jobTitle",
-      });
-    if (!isValidString(descriptions))
-      return failureJSONResponse(res, {
-        message: `please provide valid jobDescription`,
-      });
+  
    
    
     if (!isValidString(price))
-      return failureJSONResponse(res, { message: `please provide us salary` });
-      if (!isValidString(additional_info))
-      return failureJSONResponse(res, { message: `please provide us additional_info` });
-    if (!isValidString(location))
-      return failureJSONResponse(res, {
-        message: "Please let us know your current location",
-      });
+      return failureJSONResponse(res, { message: `please provide valid price` });
+
+    if (!isValidString(additional_info))
+      return failureJSONResponse(res, { message: `please provide valid additional_info` });
+      
+  
 
     return next();
   } catch (err) {
@@ -82,9 +86,9 @@ exports.validateJobAdsData = async (req, res, next) => {
   }
 };
 
-////-----------------------Create Job------------------------------//
+////-----------------------Create buysell------------------------------//
 
-exports.createJobAds = async (req, res, next) => {
+exports.createBuySellAds = async (req, res, next) => {
   try {
     const {
       status,
@@ -97,13 +101,6 @@ exports.createJobAds = async (req, res, next) => {
       price,
       additional_info,
       image,
-
-      name,
-      emailAddress,
-      phoneNumber,
-      location,
-      hideAddress,
-      preferableModeContact,
     } = req.body;
 
     const userId = req.userId;
@@ -127,44 +124,39 @@ exports.createJobAds = async (req, res, next) => {
         additional_info,
         image: imageArr,
       },
-      listerBasicInfo: {
-        name,
-        emailAddress,
-        phoneNumber,
-        hideAddress,
-        location,
-        mobileNumber: {
-          countryCode: +91,
-          phoneNumber: phoneNumber,
-        },
-        preferableModeContact: preferableModeContact,
-      },
+     
       userId: userId,
     };
 
-    const newproductPost = await postJobAd.create(dataObj);
+    const newBuySellPost = await postBuySellAd.create(dataObj);
 
-    const buyAndSell = {};
+    const postBuySellAdObjToSend = {};
 
-    for (let key in newproductPost.toObject()) {
-      if (!fieldsToExclude.hasOwnProperty(String(key))) {
-        buyAndSell[key] = newproductPost[key];
+    for (let key in newBuySellPost.toObject()) {
+      if (!fieldsToExclude.hasOwnProperty(String(key))&&!listerBasicInfo.hasOwnProperty(String(key))) {
+        postBuySellAdObjToSend[key] = newBuySellPost[key];
       }
     }
 
-    return successJSONResponse(res, {
-      message: `success`,
-      buyAndSell,
-      status: 200,
-    });
+    if (newBuySellPost) {
+      return successJSONResponse(res, {
+        message: `success`,
+        postBuySellAdObjToSend:postBuySellAdObjToSend,
+      });
+    } else {
+      return failureJSONResponse(res, {
+        message: `Something went wrong`,
+        postBuySellAdObjToSend: null,
+      });
+    }
   } catch (err) {
     console.log(err);
   }
 };
 
-///--------------------------Edit Job-----------------------------///
+///--------------------------Edit buysell-----------------------------///
 
-exports.editJobAds = async (req, res, next) => {
+exports.editBuySellAds = async (req, res, next) => {
  
   try {
     console.log(req.files);
@@ -194,6 +186,7 @@ exports.editJobAds = async (req, res, next) => {
       phoneNumber,
       hideAddress,
       location,
+      addressInfo,
       preferableModeContact,
     } = req.body;
     const imageArr = [];
@@ -239,6 +232,7 @@ exports.editJobAds = async (req, res, next) => {
           countryCode: +91,
           phoneNumber: phoneNumber,
         },
+        addressInfo,
         preferableModeContact: preferableModeContact,
       },
     };
@@ -246,21 +240,28 @@ exports.editJobAds = async (req, res, next) => {
     console.log(dataObjq);
     console.log("object", { image: imageArr });
 
-    const updateProduct = await postJobAd.findByIdAndUpdate(
+    const updateProduct = await postBuySellAd.findByIdAndUpdate(
       { _id: buyAndSellId },
       { $set: dataObjq },
       { new: true }
     );
 
+    let updateBuySellAdObjToSend ={}
+    for (let key in updateProduct.toObject()) {
+      if (!fieldsToExclude.hasOwnProperty(String(key))) {
+        updateBuySellAdObjToSend[key] = updateProduct[key];
+      }
+    }
+
     if (updateProduct) {
       return successJSONResponse(res, {
         message: `success`,
-        updateProduct,
+        updateBuySellAdObjToSend:updateBuySellAdObjToSend,
       });
     } else {
       return failureJSONResponse(res, {
         message: `Something went wrong`,
-        updateProduct: null,
+        updateBuySellAdObjToSend: null,
       });
     }
   } catch (err) {
@@ -268,9 +269,9 @@ exports.editJobAds = async (req, res, next) => {
   }
 };
 
-/////----------------------Update Job Status -------------------/////
+/////----------------------Update Buy Sell Status -------------------/////
 
-exports.editJobStatus = async (req, res, next) => {
+exports.editBuySellStatus = async (req, res, next) => {
   console.log(`kejhrjhyewgrjhew`);
   try {
     const buyAndSellId = req?.params?.buyAndSellId;
@@ -286,7 +287,7 @@ exports.editJobStatus = async (req, res, next) => {
 
     if (status) dataObj.status = parseInt(status);
 
-    const updateProduct = await postJobAd.findByIdAndUpdate(
+    const updateProduct = await postBuySellAd.findByIdAndUpdate(
       { _id: buyAndSellId },
       { $set: dataObj },
       { new: true }

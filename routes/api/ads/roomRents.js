@@ -57,6 +57,7 @@ router.post(`/`, upload.array('photos', 12),
 
 router.patch(`/edit/:roomRentId`,
     upload.array('photos', 12),
+    controllers.validateRoomRentsAdsData,
     controllers.editRoomRentAds
 );
 // router.get(`/fetchMyAds`,

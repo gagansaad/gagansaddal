@@ -55,7 +55,9 @@ const toExport = {
         updatedAt: false,
         __v: false
     },
-
+    listerBasicInfo:{
+        listerBasicInfo:false
+    },
     get fieldsToExcludeAsString() {
         return Object.keys(this.fieldsToExclude).map((key) => '-' + key).join(` `);
     },
