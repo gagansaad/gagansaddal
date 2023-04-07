@@ -230,8 +230,11 @@ module.exports = {
 
               if (result?.userInfo?.email_address) {
                 OTP.create({
+                  is_active: true,
                   code: generateOTP(4),
                   user: result._id,
+                  used_for: 2,
+                  email_address: (result?.userInfo?.email_address).toLowerCase(),
                   for: 2,
                 }).then((data) => {
                   console.log(data);
@@ -913,8 +916,10 @@ module.exports = {
             if (!is_active) {
               if (phone_number && email_address) {
                 OTP.create({
+                  is_active: true,
                   code: generateOTP(4),
                   user: checkUserDetail[0]._id,
+                  email_address: email_address.toLowerCase(),
                   for: 2,
                 })
                   .then((data) => {
@@ -953,8 +958,10 @@ module.exports = {
                 });
               } else if (email_address) {
                 OTP.create({
+                  is_active: true,
                   code: generateOTP(4),
                   user: checkUserDetail[0]._id,
+                  email_address: email_address.toLowerCase(),
                   for: 2,
                 })
                   .then((data) => {
@@ -1010,17 +1017,26 @@ module.exports = {
   },
 
   verifiy_otps: async function (req, res, next) {
-    const { otp_for_email, otp_for_mobile_number, is_email_verified } = req.body;
+
+    const { otp_for_email, otp_for_mobile_number } = req.body;
 
     console.log(req.body)
     console.log(req.userId)
-
+   
     if (otp_for_mobile_number) {
       OTP.findOne({
-        user: req.userId,
+        $and: [{ is_active: true },
+        { user: req.userId },
+        { used_for: 2 },
+        { code: otp_for_email },
+        { for: 2 }
 
-        code: otp_for_email,
-        for: 2,
+        ]
+
+        // is_active: true,
+        // user: req.userId,
+        // code: otp_for_email,
+        // for: 2,
       }).then((foundEmailOTP) => {
         let invalidOTP = 0;
 
@@ -1030,9 +1046,10 @@ module.exports = {
 
         OTP.findOne({
           user: req.userId,
+          used_for: 2,
           code: otp_for_mobile_number,
           for: 1,
-        }).then((foundMobileOTP) => {
+        }).then(async(foundMobileOTP) => {
           if (!foundMobileOTP) {
             invalidOTP = 2;
           }
@@ -1042,6 +1059,9 @@ module.exports = {
           }
 
           if (invalidOTP === 0) {
+
+            await OTP.deleteMany({_id:{$in:[foundMobileOTP._id, foundEmailOTP._id]}});
+
             User.update(
               { _id: req.userId },
               {
@@ -1106,12 +1126,21 @@ module.exports = {
       });
     } else {
       OTP.findOne({
-        user: req.userId,
-        code: otp_for_email,
-        source: 2
+        $and: [{ is_active: true },
+        { user: req.userId },
+        { used_for: 2 },
+        { code: otp_for_email },
+        { for: 2 }
+        ]
+        // is_active: true,
+        // user: req.userId,
+        // code: otp_for_email,
+        // source: 2
       })
-        .then((foundOTP) => {
+        .then(async(foundOTP) => {
           if (foundOTP) {
+            await OTP.findByIdAndDelete({_id:foundOTP._id});
+
             User.update(
               { _id: req.userId },
               {
@@ -1172,7 +1201,7 @@ module.exports = {
 
   forget_password: async function (req, res, next) {
     console.log(req.body);
-    const email_address = req?.body?.email_address.toLowerCase();
+    const email_address = (req?.body?.email_address).toLowerCase();
 
     if (!email_address)
       return res.json({ status: 400, message: `Email not exist` });
@@ -1184,10 +1213,12 @@ module.exports = {
         if (foundUser) {
 
           OTP.create({
+            is_active: true,
             code: generateOTP(4),
+            used_for: 1,
             user: foundUser._id,
-            email_address: email_address,
-            for: 1,
+            email_address: email_address.toLowerCase(),
+            for: 2,
           }).then((data) => {
             EmailOTPVerification(
               email_address,
@@ -1218,7 +1249,7 @@ module.exports = {
 
   verify_forget_password_otp: async function (req, res, next) {
     // console.log(`req.body`);
-    // console.log(req.body);
+    console.log(req.body);
 
 
     const { otp, user_id } = req.body;
@@ -1231,11 +1262,21 @@ module.exports = {
     }
 
     OTP.findOne({
-      code: otp,
-      email_address: req?.body?.email_address
+      $and: [{ is_active: true },
+      { code: otp },
+      { used_for: 1 },
+      { email_address: (req?.body?.email_address.toLowerCase()) },
+      { for: 2 }
+
+      ]
+      // is_active: true,
+      // code: otp,
+      // email_address: req?.body?.email_address
     })
-      .then((foundOTP) => {
+      .then(async (foundOTP) => {
         if (foundOTP) {
+         await OTP.findByIdAndDelete({_id:foundOTP._id});
+
           return res.json({
             status: 200,
             userId: foundOTP.userId,
@@ -1385,15 +1426,14 @@ module.exports = {
         "userBasicInfo.location": data.location
       }
 
-    
 
       if (req.file && Object.keys(req.file).length) {
         dataObj["userBasicInfo.profile_image"] = picture
-      }else {
+      } else {
         dataObj["userBasicInfo.profile_image"] = req?.body?.picture
       }
 
-      
+
 
       // const pictureUrl = req?.body?.picture;
       // console.log(`pictureUrl`,pictureUrl )
@@ -1473,7 +1513,7 @@ module.exports = {
         { $set: dataObj },
         { new: true }
       );
-   
+
       if (updatedProfileRes) {
         return successJSONResponse(res, {
           message: `success`,
@@ -1608,6 +1648,7 @@ module.exports = {
           });
 
         OTP.create({
+          is_active: true,
           code: generateOTP(4),
           email_address: email_address.toLowerCase(),
           user: userId,
@@ -1671,6 +1712,8 @@ module.exports = {
           });
 
         OTP.findOne({
+          is_active: true,
+          used_for: 2 ,
           code: otp,
           phone_number: phone_number,
           user: req.userId,
@@ -1724,10 +1767,19 @@ module.exports = {
           });
 
         OTP.findOne({
-          code: otp,
-          user: req.userId,
-          email_address: email_address.toLowerCase(),
-          for: 2,
+          $and: [{ is_active: true },
+          { user: req.userId },
+          { code: otp },
+          // { email_address: email_address.toLowerCase()},
+          { for: 2 },
+          {  used_for: 2 }
+         
+          ]
+          // is_active: true,
+          // code: otp,
+          // user: req.userId,
+          // email_address: email_address.toLowerCase(),
+          // for: 2,
         })
           .then((foundOTP) => {
             if (!foundOTP) {
