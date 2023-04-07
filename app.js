@@ -30,6 +30,7 @@ require(`./model/configurations/termAndCondition`);
 require(`./model/plan/plan`);
 require(`./model/posts/jobs`);
 require(`./model/posts/buy&sell`);
+require(`./model/posts/bizAndServices`);
 require(`./model/posts/babbysitter & nannis`);
 // admin configuration
 require(`./model/accounts/admin/configuration`);
@@ -48,7 +49,7 @@ const adminconfigurationsRoute1 = require('./routes/admin/configurations');
 
 const postTypeRoutes = require('./routes/api/ads/types');
 const roomRentsRoutes = require('./routes/api/ads/roomRents');
-
+const bizRoutes = require('./routes/api/ads/bizAndServices');
 const jobsRoutes = require('./routes/api/ads/jobs');
 const buySellRoutes = require('./routes/api/ads/buysell');
 const babysitterRoutes = require('./routes/api/ads/babbysitter & nannis');
@@ -82,6 +83,7 @@ app.use('/v1/api/posts/events',eventRoutes);
 app.use('/v1/api/posts/jobs', jobsRoutes);
 app.use('/v1/api/posts/buysell', buySellRoutes);
 app.use('/v1/api/posts/babysitter', babysitterRoutes);
+app.use('/v1/api/posts/biz', bizRoutes);
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))

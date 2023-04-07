@@ -108,7 +108,10 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         mesage: `Please provide us work authorization`,
       });
-   
+      if (!isValidString(location))
+      return failureJSONResponse(res, {
+        mesage: `Please provide us location`,
+      });
 
     return next();
   } catch (err) {
