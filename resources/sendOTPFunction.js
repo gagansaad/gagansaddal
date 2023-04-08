@@ -37,7 +37,7 @@ const MobileNumberVerificationOTP = (mobile_number = NaN, name = ``, code) => {
 
 };
 
-const MobileNumberVerificationOTPByUserId = (userId) => {
+const MobileNumberVerificationOTPByUserId = (userId, phone_number=null) => {
 
     try {
         console.log('----------------------------------------------------')
@@ -57,7 +57,7 @@ const MobileNumberVerificationOTPByUserId = (userId) => {
                         is_active: true,
                         code: generateOTP(4),
                         used_for: 2,
-                        phone_number: foundUser?.userInfo?.mobile_number?.phone_number,
+                        phone_number: phone_number ? phone_number:  foundUser?.userInfo?.mobile_number?.phone_number,
                         user: userId,
                         for: 1
                     }).then((data) => {

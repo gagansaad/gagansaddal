@@ -215,7 +215,7 @@ module.exports = {
               });
 
               if (result?.userInfo?.mobile_number?.phone_number) {
-                MobileNumberVerificationOTPByUserId(result._id);
+                MobileNumberVerificationOTPByUserId(result._id, null);
                 console.log(`kjasjhkasdgasjgd`);
                 // OTP.create({
                 //     code: generateOTP(4),
@@ -948,7 +948,7 @@ module.exports = {
                 //     return failureJSONResponse(res, { message: `something went wrong` });
                 // })
 
-                MobileNumberVerificationOTPByUserId(checkUserDetail[0]._id);
+                MobileNumberVerificationOTPByUserId(checkUserDetail[0]._id,null);
 
                 res.json({
                   status: 205,
@@ -1020,9 +1020,8 @@ module.exports = {
 
     const { otp_for_email, otp_for_mobile_number } = req.body;
 
-    console.log(req.body)
-    console.log(req.userId)
-   
+
+
     if (otp_for_mobile_number) {
       OTP.findOne({
         $and: [{ is_active: true },
@@ -1049,7 +1048,7 @@ module.exports = {
           used_for: 2,
           code: otp_for_mobile_number,
           for: 1,
-        }).then(async(foundMobileOTP) => {
+        }).then(async (foundMobileOTP) => {
           if (!foundMobileOTP) {
             invalidOTP = 2;
           }
@@ -1060,7 +1059,7 @@ module.exports = {
 
           if (invalidOTP === 0) {
 
-            await OTP.deleteMany({_id:{$in:[foundMobileOTP._id, foundEmailOTP._id]}});
+            await OTP.deleteMany({ _id: { $in: [foundMobileOTP._id, foundEmailOTP._id] } });
 
             User.update(
               { _id: req.userId },
@@ -1137,9 +1136,9 @@ module.exports = {
         // code: otp_for_email,
         // source: 2
       })
-        .then(async(foundOTP) => {
+        .then(async (foundOTP) => {
           if (foundOTP) {
-            await OTP.findByIdAndDelete({_id:foundOTP._id});
+            await OTP.findByIdAndDelete({ _id: foundOTP._id });
 
             User.update(
               { _id: req.userId },
@@ -1275,7 +1274,7 @@ module.exports = {
     })
       .then(async (foundOTP) => {
         if (foundOTP) {
-         await OTP.findByIdAndDelete({_id:foundOTP._id});
+          await OTP.findByIdAndDelete({ _id: foundOTP._id });
 
           return res.json({
             status: 200,
@@ -1387,6 +1386,7 @@ module.exports = {
   update_profile: async function (req, res, next) {
     console.log(`anmsbdnas`, req.body)
     console.log(`sSas`, req.file)
+
     try {
       const userId = req.userId;
       let data = {
@@ -1428,6 +1428,7 @@ module.exports = {
 
 
       if (req.file && Object.keys(req.file).length) {
+        console.log(`jhsadsadhsa dashdhgasfdhgasdahsdfhasgda hgasdhga`)
         dataObj["userBasicInfo.profile_image"] = picture
       } else {
         dataObj["userBasicInfo.profile_image"] = req?.body?.picture
@@ -1586,7 +1587,6 @@ module.exports = {
   // change email address
 
   generate_otp_for_change_email_mobile: async function (req, res) {
-    console.log(req.body);
 
     try {
       const userId = req.userId;
@@ -1612,12 +1612,9 @@ module.exports = {
           return failureJSONResponse(res, {
             message: `please provide phone number`,
           });
-        else if (!isValidIndianMobileNumber(phone_number))
-          return failureJSONResponse(res, {
-            message: `please provide valid phone number`,
-          });
+       
 
-        MobileNumberVerificationOTPByUserId(userId);
+        MobileNumberVerificationOTPByUserId(userId, phone_number);
         return successJSONResponse(res, { message: `success` });
         // OTP.create({
         //     code: generateOTP(4),
@@ -1707,23 +1704,21 @@ module.exports = {
           return failureJSONResponse(res, {
             message: `please provide phone number`,
           });
-        else if (!isValidIndianMobileNumber(phone_number))
-          return failureJSONResponse(res, {
-            message: `please provide valid phone number`,
-          });
+        
 
         OTP.findOne({
           is_active: true,
-          used_for: 2 ,
+          used_for: 2,
           code: otp,
           phone_number: phone_number,
           user: req.userId,
           for: 1,
         })
-          .then((foundOTP) => {
+          .then(async(foundOTP) => {
             if (!foundOTP) {
               return failureJSONResponse(res, { message: `Invalid OTP` });
             } else if (foundOTP) {
+              await OTP.findByIdAndDelete({_id: foundOTP._id})
               User.updateOne(
                 { _id: userId },
                 {
@@ -1771,10 +1766,10 @@ module.exports = {
           $and: [{ is_active: true },
           { user: req.userId },
           { code: otp },
-          // { email_address: email_address.toLowerCase()},
+          { email_address: email_address.toLowerCase()},
           { for: 2 },
-          {  used_for: 2 }
-         
+          { used_for: 2 }
+
           ]
           // is_active: true,
           // code: otp,
@@ -1782,10 +1777,13 @@ module.exports = {
           // email_address: email_address.toLowerCase(),
           // for: 2,
         })
-          .then((foundOTP) => {
+          .then(async(foundOTP) => {
             if (!foundOTP) {
               return failureJSONResponse(res, { message: `Invalid OTP` });
             } else if (foundOTP) {
+
+              await OTP.findByIdAndDelete({_id: foundOTP._id})
+
               User.updateOne(
                 { _id: userId },
                 {
@@ -2006,9 +2004,6 @@ module.exports = {
       const checkUserDetail = await User.findById({ _id: userId }, { userInfo: 1, userBasicInfo: 1 });
 
       if (checkUserDetail.userBasicInfo.source === "email") {
-
-
-
 
         let newPassword = req.body.newPassword;
         let oldPassword = req.body.password;
