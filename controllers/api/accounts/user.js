@@ -586,7 +586,7 @@ module.exports = {
         };
 
         newUserDetail.user_status = user_status;
-        newUserDetail.userGoogleInfo = userGoogleInfo;
+        newUserDetail.userFacebookInfo = userGoogleInfo;
         newUserDetail.userInfo = userInfo;
         newUserDetail.userBasicInfo = userBasicInfo;
         newUserDetail.user_device_info = user_device_info;
@@ -631,6 +631,8 @@ module.exports = {
       appleId = req?.body?.apple_id,
       appleToken = req?.body?.apple_token,
       deviceToken = req?.body?.device_token;
+
+      console.log(`req.body`,req.body)
 
     // if (!isValidString(name.trim())) return failureJSONResponse(res, { message: `Please enter valid name` });
     if (!isValidString(appleId.trim()))
@@ -797,6 +799,11 @@ module.exports = {
               data: err,
             });
           } else {
+            
+            if(result?.userInfo?.email_address){
+              WelcomeEmail(result?.userInfo?.email_address, result?.userInfo?.name)
+            }
+           
             return res.json({
               status: 201,
               data: {
