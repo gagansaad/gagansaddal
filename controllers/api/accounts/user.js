@@ -11,7 +11,8 @@ const { errorMonitor } = require("connect-mongo");
 const {
   EmailOTPVerification,
   WelcomeEmail,
-  AccountDeleteEmail
+  AccountDeleteEmail,
+  PasswordChange
 } = require(`../../../resources/sendEmailFunction`);
 const {
   MobileNumberVerificationOTP,
@@ -799,7 +800,7 @@ module.exports = {
               data: err,
             });
           } else {
-            
+
             if(result?.userInfo?.email_address){
               WelcomeEmail(result?.userInfo?.email_address, result?.userInfo?.name)
             }
@@ -2021,6 +2022,9 @@ module.exports = {
           )
 
           if (updatePassword) {
+            if (checkUserDetail && Object.keys(checkUserDetail).length) {
+              PasswordChange(checkUserDetail?.userInfo?.email_address, checkUserDetail?.userInfo.name)
+            }
             return res.json({
               status: 200,
               message: `password change Successfully`,
