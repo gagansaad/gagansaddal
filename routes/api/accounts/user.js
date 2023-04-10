@@ -85,13 +85,13 @@ router.patch(`/update-profile`,
 
 router.post(`/generate_otp`,
     authMiddleware.ensureUserLoggedIn,
+    controllers.check_email_already_exists,
     controllers.generate_otp_for_change_email_mobile
 );
 
 
 router.post(`/update_email_or_password`,
     authMiddleware.ensureUserLoggedIn,
-    controllers.check_email_already_exists,
     controllers.update_email_or_phone_number
 );
 

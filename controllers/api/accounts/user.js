@@ -1542,7 +1542,7 @@ module.exports = {
                 {
                   message: `Account with that ${email_address} already exists`,
                 },
-                (statusCode = 409)
+                (statusCode = 403)
               );
             } else {
               return next();
@@ -1570,6 +1570,8 @@ module.exports = {
     try {
       const userId = req.userId;
 
+      
+
       const source = Math.abs(req?.body?.source),
         email_address = req?.body?.email_address?.toLowerCase(),
         phone_number = req?.body?.phone_number;
@@ -1584,71 +1586,80 @@ module.exports = {
         return failureJSONResponse(res, {
           message: `please provide source between 1-2`,
         });
+     
+        User.findById({_id: userId}).then((user)=>{
 
-      if (Number(source) === Number(1)) {
-        console.log(`working`);
-        if (!phone_number)
-          return failureJSONResponse(res, {
-            message: `please provide phone number`,
-          });
-       
+          if(!user) return failureJSONResponse(res, { message: `User not exits` });
 
-        MobileNumberVerificationOTPByUserId(userId, phone_number);
-        return successJSONResponse(res, { message: `success` });
-        // OTP.create({
-        //     code: generateOTP(4),
-        //     phone_number: phone_number,
-        //     user: userId,
-        //     for: 1
-
-        // }).then((foundOTP) => {
-
-        //     if (!foundOTP) {
-        //         return failureJSONResponse(res, { message: `something went wrong` });
-        //     } else {
-        //         MobileNumberVerificationOTP(phone_number, `hi`, foundOTP?.code)
-        //         return successJSONResponse(res, { message: `success` });
-        //     }
-
-        // }).catch((err) => {
-        //     return failureJSONResponse(res, { message: `something went wrong` });
-        // })
-      } else if (Number(source) === Number(2)) {
-        if (!email_address)
-          return failureJSONResponse(res, {
-            message: `please provide email address`,
-          });
-        else if (!isValidEmailAddress(email_address))
-          return failureJSONResponse(res, {
-            message: `please provide valid phone number`,
-          });
-
-        OTP.create({
-          is_active: true,
-          code: generateOTP(4),
-          email_address: email_address.toLowerCase(),
-          used_for: 2,
-          user: userId,
-          for: 2,
-        })
-          .then((foundOTP) => {
-            console.log(foundOTP);
-            if (!foundOTP) {
+          if (Number(source) === Number(1)) {
+            console.log(`working`);
+            if (!phone_number)
               return failureJSONResponse(res, {
-                message: `something went wrong`,
+                message: `please provide phone number`,
               });
-            } else {
-              EmailOTPVerification(email_address, `Hi`, foundOTP?.code);
-              return successJSONResponse(res, { message: `success` });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            return failureJSONResponse(res, {
-              message: `something went wrong`,
-            });
-          });
-      }
+           
+    
+            MobileNumberVerificationOTPByUserId(user?._id, null);
+            return successJSONResponse(res, { message: `success` });
+            // OTP.create({
+            //     code: generateOTP(4),
+            //     phone_number: phone_number,
+            //     user: userId,
+            //     for: 1
+    
+            // }).then((foundOTP) => {
+    
+            //     if (!foundOTP) {
+            //         return failureJSONResponse(res, { message: `something went wrong` });
+            //     } else {
+            //         MobileNumberVerificationOTP(phone_number, `hi`, foundOTP?.code)
+            //         return successJSONResponse(res, { message: `success` });
+            //     }
+    
+            // }).catch((err) => {
+            //     return failureJSONResponse(res, { message: `something went wrong` });
+            // })
+          } else if (Number(source) === Number(2)) {
+            if (!email_address)
+              return failureJSONResponse(res, {
+                message: `please provide email address`,
+              });
+            else if (!isValidEmailAddress(email_address))
+              return failureJSONResponse(res, {
+                message: `please provide valid phone number`,
+              });
+    
+            OTP.create({
+              is_active: true,
+              code: generateOTP(4),
+              email_address:  user?.userInfo?.email_address.toLowerCase(),
+              used_for: 2,
+              user: userId,
+              for: 2,
+            })
+              .then((foundOTP) => {
+                console.log(foundOTP);
+                if (!foundOTP) {
+                  return failureJSONResponse(res, {
+                    message: `something went wrong`,
+                  });
+                } else {
+                  EmailOTPVerification(user?.userInfo?.email_address, `Hi`, foundOTP?.code);
+                  return successJSONResponse(res, { message: `success` });
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+                return failureJSONResponse(res, {
+                  message: `something went wrong`,
+                });
+              });
+          }
+
+        }).catch((err)=>{
+           return failureJSONResponse(res, { message: `something went wrong` });
+        })
+    
     } catch (err) {
       console.log(err);
       return failureJSONResponse(res, { message: `something went wrong` });
@@ -1885,6 +1896,7 @@ module.exports = {
       }
     );
   },
+
   ///////////////////////////////////////////////////
   account_delete: async function (req, res) {
     try {
@@ -1971,7 +1983,6 @@ module.exports = {
       });
     }
   },
-
 
   ////////---------------------chaNGE pASSwORD---------/////////////////
 
