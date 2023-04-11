@@ -9,7 +9,7 @@ const mongoose = require("mongoose"),
     { generateOTP } = require(`../utils/generateOTP`);
 
 const MobileNumberVerificationOTP = (mobile_number = NaN, name = ``, code) => {
-    console.log(`jshfjsdhfjshfj`)
+    
     try {
         // client.verify.v2.services
         // .create({friendlyName: 'OTP'})
@@ -37,7 +37,7 @@ const MobileNumberVerificationOTP = (mobile_number = NaN, name = ``, code) => {
 
 };
 
-const MobileNumberVerificationOTPByUserId = (userId) => {
+const MobileNumberVerificationOTPByUserId = (userId, phone_number=null) => {
 
     try {
         console.log('----------------------------------------------------')
@@ -54,8 +54,10 @@ const MobileNumberVerificationOTPByUserId = (userId) => {
                 // console.log(fullNumber);
                 if (foundUser) {
                     OTP.create({
+                        is_active: true,
                         code: generateOTP(4),
-                        phone_number: foundUser?.userInfo?.mobile_number?.phone_number,
+                        used_for: 2,
+                        phone_number: phone_number ? phone_number:  foundUser?.userInfo?.mobile_number?.phone_number,
                         user: userId,
                         for: 1
                     }).then((data) => {
@@ -64,7 +66,6 @@ const MobileNumberVerificationOTPByUserId = (userId) => {
                     })
                         .catch((error) => {
                             console.log('something went wrong2!');
-
                         })
                 }
 

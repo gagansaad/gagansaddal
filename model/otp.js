@@ -2,6 +2,13 @@ const mongoose = require("mongoose");
 
 const otpSchema = new mongoose.Schema({
 
+
+    is_active: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
+
     code: {
         type: String,
         required: true
@@ -11,6 +18,16 @@ const otpSchema = new mongoose.Schema({
         required: true,
         // 2= email
         // 1= mobile number
+    },
+
+    used_for: {
+        type: Number,
+        required: true,
+
+        //1= forget password
+        //2= sign up
+
+     
     },
 
     email_address: {
@@ -26,8 +43,10 @@ const otpSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: `user`,
         required: true
-    }
+    },
+    // createdAt: { type: Date, default: Date.now, index: { expires: 100 } },
 
-}, { timestamps: true });
+},{timestamps: true});
 
 module.exports = mongoose.model('otp', otpSchema);
+
