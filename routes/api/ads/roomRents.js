@@ -57,6 +57,7 @@ router.post(`/`, upload.array('photos', 12),
 
 router.patch(`/edit/:roomRentId`,
     upload.array('photos', 12),
+    authMiddleware.ensureUserLoggedIn,
     controllers.validateRoomRentsAdsData,
     controllers.editRoomRentAds
 );

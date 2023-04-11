@@ -20,7 +20,7 @@ const mongoose = require("mongoose"),
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
     categories: [`employed`, `self employed`, `engineer`],
-    role: [`male `, `female`, `couple`],
+    role: [`male`,`female`,`couple`],
 
     type: [`Enginner`, `Plumber`],
 
@@ -242,6 +242,7 @@ exports.editJobAds = async (req, res, next) => {
       name,
       emailAddress,
       phoneNumber,
+      countryCode,
       hideAddress,
       preferableModeContact,
     } = req.body;
@@ -250,9 +251,16 @@ exports.editJobAds = async (req, res, next) => {
     req.files.forEach((data) => {
       imageArr.push(data?.path);
     });
-
+if (phoneNumber !== "" || phoneNumber !== ""){
+  if (!isValidString(countryCode))
+  return failureJSONResponse(res, {
+    mesage: `Please provide us countryCode`,
+  })
+}else{
+ country_Code: `+${countryCode}`
+}
     console.log(`imageArr`, imageArr);
-
+   
     const dataObj = {},
       adsInfoObj = {},
       listerBasicInfoObj = {};
@@ -290,7 +298,7 @@ exports.editJobAds = async (req, res, next) => {
         phoneNumber,
         hideAddress,
         mobileNumber: {
-          countryCode: +91,
+          countryCode:`+${countryCode}`,
           phoneNumber: phoneNumber,
         },
         preferableModeContact: preferableModeContact,
