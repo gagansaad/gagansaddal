@@ -132,23 +132,41 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       preferableModeContact,
     } = req.body;
    console.log(typeof(hideAddress),"yyyyyyyyyyyyyyyyyyyyyy");
-   
+   console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)",isValidBoolean(hideAddress))
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide us your country code`,
     // });
- if (preferableModeContact && isNaN(Number(preferableModeContact)))
+    if (preferableModeContact && isNaN(Number(preferableModeContact))){
       return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
-      else if (preferableModeContact < 1 || preferableModeContact > 3) failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
+    }else if (preferableModeContact < 1 || preferableModeContact > 3){
+      return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
+    } 
    
-    if (emailAddress && !isValidEmailAddress(emailAddress))
+    if (emailAddress && !isValidEmailAddress(emailAddress)){
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
-      if (hideAddress && !isValidBoolean(`${hideAddress}`))
-      return failureJSONResponse(res, {
+    }
+      
+      // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
+
+      if(hideAddress !== "true" && hideAddress !== "false") return  failureJSONResponse(res, {
         message: `Please provide us hide/show address (true/false)`,
-      });
+      
+      })
+      let booleanString = false;
+      if(hideAddress == "true") booleanString = true;
+      else booleanString = false;
+
+      if (booleanString && !isValidBoolean(booleanString)){
+        return failureJSONResponse(res, {
+          message: `Please provide us hide/show address (true/false)`,
+        });
+      }
+
+      console.log(booleanString)
+      
       // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
       // return failureJSONResponse(res, {
       //   message: `Please provide valid phone number`,
