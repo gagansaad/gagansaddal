@@ -105,15 +105,15 @@ exports.validateJobAdsData = async (req, res, next) => {
       else if (preferred_gender < 1 || preferred_gender > 3) failureJSONResponse(res, { message: `Please enter preferred_gender between 1 to 3` });
     if (!isValidUrl(website))
       return failureJSONResponse(res, {
-        mesage: `Please provide valid website`,
+        message: `Please provide valid website`,
       });
     if (!isValidString(work_authorization))
       return failureJSONResponse(res, {
-        mesage: `Please provide us work authorization`,
+        message: `Please provide us work authorization`,
       });
       if (!isValidString(location))
       return failureJSONResponse(res, {
-        mesage: `Please provide us location`,
+        message: `Please provide us location`,
       });
       
     return next();
@@ -141,19 +141,19 @@ exports.validateListerBasicinfo = async (req, res, next) => {
    
     if (emailAddress && !isValidEmailAddress(emailAddress))
       return failureJSONResponse(res, {
-        mesage: `Please provide valid email address`,
+        message: `Please provide valid email address`,
       });
       // if (hideAddress && !isValidBoolean(hideAddress))
       // return failureJSONResponse(res, {
-      //   mesage: `Please provide us hide/show address (true/false)`,
+      //   message: `Please provide us hide/show address (true/false)`,
       // });
       if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
       return failureJSONResponse(res, {
-        mesage: `Please provide us phone number`,
+        message: `Please provide us phone number`,
       });
       if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
       return failureJSONResponse(res, {
-        mesage: `Please provide us phone number`,
+        message: `Please provide us phone number`,
       });
     return next();
   } catch (err) {
