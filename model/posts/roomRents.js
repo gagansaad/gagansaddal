@@ -77,6 +77,7 @@ const roomRentsSchema = new mongoose.Schema({
         },
         preferredGender: {
             type: Number,
+           
             required: true
         },
         furnished: {
