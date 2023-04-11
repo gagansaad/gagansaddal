@@ -46,6 +46,7 @@ router.get(`/dynamics-data`,
 
 router.post(`/new-job`, upload.array('photos', 12),
     authMiddleware.ensureUserLoggedIn,
+   
     controllers.validateJobAdsData,
     controllers.createJobAds
 )
@@ -55,6 +56,7 @@ router.patch(`/edit/:jobId`,
     upload.array('photos', 12),
     authMiddleware.ensureUserLoggedIn,
     controllers.validateJobAdsData,
+    controllers.validateListerBasicinfo,
     controllers.editJobAds
 );
 router.patch(`/edit-role/:jobId`,

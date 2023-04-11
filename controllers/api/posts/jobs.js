@@ -22,7 +22,7 @@ const mongoose = require("mongoose"),
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
     categories: [`employed`, `self employed`, `engineer`],
-    // role: [`male`,`female`,`couple`],
+    role: [`male`,`female`,`couple`],
 
     type: [`Enginner`, `Plumber`],
 
@@ -59,6 +59,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       location,
       preferred_gender,
       image,
+
     } = req.body;
 
     if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
@@ -94,12 +95,14 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide us the information about how many languages do you know`,
       });
-    if (!isValidString(salary))
+    if (isNaN(Number(salary)))
       return failureJSONResponse(res, { message: `Please provide us salary` });
     if (isNaN(Number(no_of_opening)))
-      return failureJSONResponse(res, { message: "Number of jobs opening" });
+      return failureJSONResponse(res, { message: "Please provide number of jobs opening" });
+      else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null ) failureJSONResponse(res, { message: `Please provide number of job opening` });
       if (isNaN(Number(preferred_gender)))
       return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
+      else if (preferred_gender < 0 || preferred_gender > 1) failureJSONResponse(res, { message: `Please enter preferred_gender between 0 to 1` });
     if (!isValidUrl(website))
       return failureJSONResponse(res, {
         mesage: `Please provide valid website`,
@@ -112,7 +115,46 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         mesage: `Please provide us location`,
       });
-
+      
+    return next();
+  } catch (err) {
+    console.log(err);
+  }
+};
+exports.validateListerBasicinfo = async (req, res, next) => {
+  //   console.log(req.body)
+  try {
+    const {
+      emailAddress,
+      phoneNumber,
+      countryCode,
+      hideAddress,
+      preferableModeContact,
+    } = req.body;
+    if (isNaN(Number(countryCode)))
+    return failureJSONResponse(res, {
+      message: `Please provide us your country code`,
+    });
+ if (isNaN(Number(preferableModeContact)))
+      return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
+      else if (preferableModeContact < 1 || preferableModeContact > 3) failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
+   
+    if (!isValidEmailAddress(emailAddress))
+      return failureJSONResponse(res, {
+        mesage: `Please provide valid email address`,
+      });
+      if (!isValidBoolean(hideAddress))
+      return failureJSONResponse(res, {
+        mesage: `Please provide us hide/show address (true/false)`,
+      });
+      if (!isValidIndianMobileNumber(phoneNumber))
+      return failureJSONResponse(res, {
+        mesage: `Please provide us phone number`,
+      });
+      if (!isValidIndianMobileNumber(phoneNumber))
+      return failureJSONResponse(res, {
+        mesage: `Please provide us phone number`,
+      });
     return next();
   } catch (err) {
     console.log(err);
@@ -141,9 +183,7 @@ exports.createJobAds = async (req, res, next) => {
       preferred_gender,
       location,
     } = req.body;
-
-    const userId = req.userId;
-
+ 
     const imageArr = [];
 
     req.files.forEach((data) => {
@@ -251,15 +291,7 @@ exports.editJobAds = async (req, res, next) => {
     req.files.forEach((data) => {
       imageArr.push(data?.path);
     });
-    let country_Code =`+${countryCode}`
-if (phoneNumber !== ""){
-  if (!isValidString(countryCode))
-  return failureJSONResponse(res, {
-    mesage: `Please provide us countryCode`,
-  })
-}else{
-  country_Code = ""
-}
+    
     console.log(`imageArr`, imageArr);
    
     const dataObj = {},
@@ -299,7 +331,7 @@ if (phoneNumber !== ""){
         phoneNumber,
         hideAddress,
         mobileNumber: {
-          countryCode:country_Code,
+          countryCode,
           phoneNumber: phoneNumber,
         },
         preferableModeContact: preferableModeContact,
