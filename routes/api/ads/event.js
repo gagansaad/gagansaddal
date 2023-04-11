@@ -54,6 +54,7 @@ router.post(`/new-event`, upload.array('photos', 12),
 router.patch(`/edit/:eventId`,
     upload.array('photos', 12),
     authMiddleware.ensureUserLoggedIn,
+    controllers.validateEventAdsData,
     controllers.editEventAds
 );
 router.patch(`/edit-status/:eventId`,

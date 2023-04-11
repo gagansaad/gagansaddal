@@ -53,6 +53,7 @@ router.post(`/add`,
 
 router.patch(`/edit/:productId`,
     authMiddleware.ensureUserLoggedIn,
+    controllers.validateAdsData,
     controllers.editAds
 );
 // router.patch(`/edit-role/:buyAndSellId`,

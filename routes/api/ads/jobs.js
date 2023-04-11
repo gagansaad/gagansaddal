@@ -54,10 +54,12 @@ router.post(`/new-job`, upload.array('photos', 12),
 router.patch(`/edit/:jobId`,
     upload.array('photos', 12),
     authMiddleware.ensureUserLoggedIn,
+    controllers.validateJobAdsData,
     controllers.editJobAds
 );
 router.patch(`/edit-role/:jobId`,
     authMiddleware.ensureUserLoggedIn,
+    controllers.validateJobAdsData,
     controllers.editJobStatus
 );
 module.exports = router;

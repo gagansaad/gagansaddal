@@ -54,6 +54,7 @@ router.post(`/create-service`, upload.array('photos', 12),
 router.patch(`/edit/:bizId`,
     upload.array('photos', 12),
     authMiddleware.ensureUserLoggedIn,
+    controllers.validatebizAdsData,
     controllers.editbizAds
 );
 // router.patch(`/edit-role/:buyAndSellId`,
