@@ -159,11 +159,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
         preferredGender,
         location,
 
-        name,
-        emailAddress,
-        phoneNumber,
-        hideAddress,
-        preferableModeContact
+       
 
     } = req.body;
 
@@ -198,19 +194,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
             location,
             image: imageArr
         },
-        listerBasicInfo: {
-            name,
-            emailAddress,
-            phoneNumber,
-            hideAddress,
-
-            mobileNumber: {
-                countryCode,
-                phoneNumber: phoneNumber
-            },
-            preferableModeContact: preferableModeContact
-
-        },
+    
         userId: userId
     }
 
@@ -282,6 +266,7 @@ exports.editRoomRentAds = async (req, res, next) => {
         image,
         name,
         emailAddress,
+        countryCode,
         phoneNumber,
         hideAddress,
         preferableModeContact
@@ -333,8 +318,8 @@ exports.editRoomRentAds = async (req, res, next) => {
           phoneNumber,
           hideAddress,
           mobileNumber: {
-            countryCode: +91,
-            phoneNumber: phoneNumber,
+            countryCode: countryCode || ``,
+            phoneNumber: phoneNumber || ``,
           },
           preferableModeContact: preferableModeContact,
         },

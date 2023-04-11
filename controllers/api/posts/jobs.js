@@ -128,9 +128,11 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       emailAddress,
       // phoneNumber,
       // countryCode,
-      // hideAddress,
+      hideAddress,
       preferableModeContact,
     } = req.body;
+   console.log(typeof(hideAddress),"yyyyyyyyyyyyyyyyyyyyyy");
+   
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide us your country code`,
@@ -143,10 +145,10 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
-      // if (hideAddress && !isValidBoolean(hideAddress))
-      // return failureJSONResponse(res, {
-      //   message: `Please provide us hide/show address (true/false)`,
-      // });
+      if (hideAddress && !isValidBoolean(`${hideAddress}`))
+      return failureJSONResponse(res, {
+        message: `Please provide us hide/show address (true/false)`,
+      });
       // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
       // return failureJSONResponse(res, {
       //   message: `Please provide valid phone number`,
@@ -283,6 +285,7 @@ exports.editJobAds = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
+    console.log(req.body.hideAddress,"ddeedr");
     const imageArr = [];
 
     req.files.forEach((data) => {
