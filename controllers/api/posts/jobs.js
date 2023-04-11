@@ -10,17 +10,19 @@ const mongoose = require("mongoose"),
   {
     isValidString,
     isValidMongoObjId,
+    isValidUrl,
     isValidBoolean,
     isValidDate,
     isValidEmailAddress,
     isValidIndianMobileNumber,
+    isValidNumber
   } = require(`../../../utils/validators`);
 
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
     categories: [`employed`, `self employed`, `engineer`],
-    role: [`male`,`female`,`couple`],
+    // role: [`male`,`female`,`couple`],
 
     type: [`Enginner`, `Plumber`],
 
@@ -93,16 +95,14 @@ exports.validateJobAdsData = async (req, res, next) => {
         message: `Please provide us the information about how many languages do you know`,
       });
     if (!isValidString(salary))
-      return failureJSONResponse(res, { message: `please provide us salary` });
+      return failureJSONResponse(res, { message: `Please provide us salary` });
     if (isNaN(Number(no_of_opening)))
-      return failureJSONResponse(res, { message: "number of jobs opening" });
-    if (!isValidString(preferred_gender))
+      return failureJSONResponse(res, { message: "Number of jobs opening" });
+      if (isNaN(Number(preferred_gender)))
+      return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
+    if (!isValidUrl(website))
       return failureJSONResponse(res, {
-        message: "Please provide us your gender preferences",
-      });
-    if (!isValidString(website))
-      return failureJSONResponse(res, {
-        mesage: `Please provide us your website`,
+        mesage: `Please provide valid website`,
       });
     if (!isValidString(work_authorization))
       return failureJSONResponse(res, {
@@ -251,13 +251,14 @@ exports.editJobAds = async (req, res, next) => {
     req.files.forEach((data) => {
       imageArr.push(data?.path);
     });
-if (phoneNumber !== "" || phoneNumber !== ""){
+    let country_Code =`+${countryCode}`
+if (phoneNumber !== ""){
   if (!isValidString(countryCode))
   return failureJSONResponse(res, {
     mesage: `Please provide us countryCode`,
   })
 }else{
- country_Code: `+${countryCode}`
+  country_Code = ""
 }
     console.log(`imageArr`, imageArr);
    
@@ -298,7 +299,7 @@ if (phoneNumber !== "" || phoneNumber !== ""){
         phoneNumber,
         hideAddress,
         mobileNumber: {
-          countryCode:`+${countryCode}`,
+          countryCode:country_Code,
           phoneNumber: phoneNumber,
         },
         preferableModeContact: preferableModeContact,

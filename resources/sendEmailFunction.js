@@ -72,8 +72,8 @@ exports.PasswordChange = (email_address = ``, name = ``) => {
     let mailDetails = {
         from: 'support@menehariya.com',
         to: `${email_address}`,
-        subject: 'Password Change!',
-        text: `Your account password change successfully`
+        subject: 'Password Changed Successfully',
+        text: `Your account password changed successfully`
     };
 
     mailTransporter.sendMail(mailDetails, function (err, data) {

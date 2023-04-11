@@ -4,7 +4,9 @@ const commonRegex = require(`./commonRegex`);
 exports.isValidString = (str = ``) => {
     return Boolean(str && (typeof str === `string`) && str.trim());
 }
-
+exports.isValidNumber = (str = ``) => {
+    return Boolean(str && (typeof str === `Number`));
+}
 exports.isValidBoolean = (str = ``) => {
     return Boolean(str && (typeof str === `boolean`));
 }
@@ -18,6 +20,13 @@ exports.isValidEmailAddress = (emailAddress = null) => {
     return Boolean(emailAddress
         && stringifiedEmailAddress
         && stringifiedEmailAddress.match(commonRegex.emailAddressRegex));
+}
+exports.isValidUrl = (website = null) => {
+    const stringifiedWebsite = String(website);
+
+    return Boolean(website
+        && stringifiedWebsite
+        && stringifiedWebsite.match(commonRegex.urlvalidate));
 }
 
 exports.isValidIndianMobileNumber = (mobileNumber = null) => {
