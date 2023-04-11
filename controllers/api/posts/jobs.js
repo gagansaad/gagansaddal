@@ -126,15 +126,15 @@ exports.validateListerBasicinfo = async (req, res, next) => {
   try {
     const {
       emailAddress,
-      phoneNumber,
-      countryCode,
-      hideAddress,
+      // phoneNumber,
+      // countryCode,
+      // hideAddress,
       preferableModeContact,
     } = req.body;
-    if (countryCode && isNaN(Number(countryCode)))
-    return failureJSONResponse(res, {
-      message: `Please provide us your country code`,
-    });
+    // if (countryCode && isNaN(Number(countryCode)))
+    // return failureJSONResponse(res, {
+    //   message: `Please provide us your country code`,
+    // });
  if (preferableModeContact && isNaN(Number(preferableModeContact)))
       return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
       else if (preferableModeContact < 1 || preferableModeContact > 3) failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
@@ -147,14 +147,11 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       // return failureJSONResponse(res, {
       //   message: `Please provide us hide/show address (true/false)`,
       // });
-      if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
-      return failureJSONResponse(res, {
-        message: `Please provide us phone number`,
-      });
-      if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
-      return failureJSONResponse(res, {
-        message: `Please provide us phone number`,
-      });
+      // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
+      // return failureJSONResponse(res, {
+      //   message: `Please provide valid phone number`,
+      // });
+    
     return next();
   } catch (err) {
     console.log(err);
