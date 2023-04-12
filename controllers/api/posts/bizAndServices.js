@@ -113,7 +113,7 @@ console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolea
       return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
     }else if (preferableModeContact < 1 || preferableModeContact > 2 || preferableModeContact.includes(".") ){
       return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 2` });
-    } else if (preferableModeContact != 1 && preferableModeContact != 2 ) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 2` });}
+    } else if (preferableModeContact != 1 && preferableModeContact != 2) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 2` });}
    
     if (emailAddress && !isValidEmailAddress(emailAddress)){
       return failureJSONResponse(res, {

@@ -28,16 +28,16 @@ const router = require(`express`).Router(),
     const upload = multer({ storage: storage, });
     
     function validateImage(req, res, next) {
-        console.log("dhbbchdbchdbchdbchdhcdhcdh",req.files.map(({ mimetype }) => mimetype));
-        let mimetypes = req.files.map(({ mimetype }) => mimetype)
-        
-       
+        let mimetypes = req.files.map(mimetype => mimetype.mimetype)
+        console.log("dhbbchdbchdbchdbchdhcdhcdh",req.fi);
+    //    if(mimetypes){
             for (var i = 0; i <= mimetypes.length; i++) {
-                if(mimetype !== 'image/jpg' || mimetype !== 'image/jpeg' || mimetype !== 'image/png'){
-                     return res.status(400).json({ status: 400, error: 'Only JPEG or PNG images are allowed.' });}
+                if(!["image/jpg","image/jpeg","image/png"].includes(mimetypes[i])){
+                    return res.status(400).json({ status: 400, error: 'Only JPEG or PNG images are allowed.' });
+                } 
             }
-            
-           
+            console.log("Fvdfdbdbdffb")
+        // }
            
         
        
