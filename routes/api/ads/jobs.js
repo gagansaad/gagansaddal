@@ -23,27 +23,23 @@ const router = require(`express`).Router(),
         },
     
     });
-    
-    
-    const upload = multer({ storage: storage, });
-    
-    function validateImage(req, res, next) {
-        let mimetypes = req.files.map(mimetype => mimetype.mimetype)
-        console.log("dhbbchdbchdbchdbchdhcdhcdh",req.fi);
-    //    if(mimetypes){
-            for (var i = 0; i <= mimetypes.length; i++) {
-                if(!["image/jpg","image/jpeg","image/png"].includes(mimetypes[i])){
-                    return res.status(400).json({ status: 400, error: 'Only JPEG or PNG images are allowed.' });
-                } 
-            }
-            console.log("Fvdfdbdbdffb")
-        // }
-           
-        
-       
-        next();
-    }
 
+    const upload = multer({ storage: storage,    });
+
+    // fileFilter: (res, file, cb) => {
+    //     if (file.fieldname === "photos") {
+    //       if (
+    //         file.mimetype === "image/png" ||
+    //         file.mimetype === "image/jpg" ||
+    //         file.mimetype === "image/jpeg"
+    //       ) {
+    //         cb(null, true);
+    //       } else {
+    //         cb(null, false);
+    //         return res.status(200).json({ status: 400, error: 'Only JPEG or PNG images are allowed.' });
+    //       }
+    //     }
+    //   }, 
 
 router.get(`/dynamics-data`,
     authMiddleware.ensureUserLoggedIn,
@@ -52,7 +48,7 @@ router.get(`/dynamics-data`,
 
 router.post(`/new-job`, upload.array('photos', 12),
     authMiddleware.ensureUserLoggedIn,
-    validateImage,
+   
     controllers.validateJobAdsData,
     controllers.createJobAds
 )
