@@ -157,8 +157,8 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       if (preferableModeContact && isNaN(Number(preferableModeContact))){
         return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
       }else if (preferableModeContact < 1 || preferableModeContact > 2 || preferableModeContact.includes(".") ){
-        return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 2` });
-      } else if (preferableModeContact != 1 && preferableModeContact != 2 ) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 2` });}
+        return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
+      } else if (preferableModeContact != 1 && preferableModeContact != 2 ) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });}
      
       if (emailAddress && !isValidEmailAddress(emailAddress)){
         return failureJSONResponse(res, {
