@@ -46,7 +46,7 @@ exports.validateEventAdsData = async (req, res, next) => {
     } = req.body;
     if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
     else if (status < 1 || status > 3) failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
-
+    else if (status != 1 && status != 2 &&  status != 3)  return failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
@@ -66,20 +66,71 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: "Please provide valid details",
       });
-    if (!isValidString(ticket_price))
+    if (isNaN(Number(ticket_price)))
       return failureJSONResponse(res, {
         message: `please provide valid ticket_price`,
       });
     if (!isValidString(link))
       return failureJSONResponse(res, { message: `please provide valid link` });
       
-
+      if (!isValidString(location))
+      return failureJSONResponse(res, { message: `please provide valid location` });
+      
 
     return next();
   } catch (err) {
     console.log(err);
   }
 };
+
+exports.validateListerBasicinfo = async (req, res, next) => {
+ 
+  try {
+    const {
+      emailAddress,
+      // phoneNumber,
+      // countryCode,
+      hideAddress,
+      preferableModeContact,
+    } = req.body;
+   console.log(typeof(hideAddress),"yyyyyyyyyyyyyyyyyyyyyy");
+console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)",isValidBoolean(hideAddress))
+    // if (countryCode && isNaN(Number(countryCode)))
+    // return failureJSONResponse(res, {
+    //   message: `Please provide valid country code`,
+    // });
+    if (preferableModeContact && isNaN(Number(preferableModeContact))){
+      return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
+    }else if (preferableModeContact < 1 || preferableModeContact > 2 || preferableModeContact.includes(".") ){
+      return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 2` });
+    } else if (preferableModeContact != 1 && preferableModeContact != 2 ) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 2` });}
+   
+    if (emailAddress && !isValidEmailAddress(emailAddress)){
+      return failureJSONResponse(res, {
+        message: `Please provide valid email address`,
+      });
+    }
+      
+      // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
+
+    if(["true","false"].includes(hideAddress) == false){
+        return  failureJSONResponse(res, {
+          message: `Please provide us hide/show address (true/false)`
+      })
+    }
+     
+      // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
+      // return failureJSONResponse(res, {
+      //   message: `Please provide valid phone number`,
+      // });
+    
+    return next();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
 
 ////-----------------------Create Event------------------------------//
 
@@ -97,6 +148,7 @@ exports.createEventAds = async (req, res, next) => {
       ticket_price,
       link,
       image,
+      location,
 
     } = req.body;
 
@@ -119,7 +171,7 @@ exports.createEventAds = async (req, res, next) => {
         ticket_price,
         link,
         image: imageArr,
-      
+        location,
       },
      
       userId: userId,
@@ -179,8 +231,9 @@ exports.editEventAds = async (req, res, next) => {
       location,
       name,
       emailAddress,
-      
+
       phoneNumber,
+      countryCode,
       hideAddress,
       addressInfo,
       preferableModeContact,
@@ -207,8 +260,7 @@ exports.editEventAds = async (req, res, next) => {
     if (ticket_price) adsInfoObj.ticket_price = ticket_price;
     if (link) adsInfoObj.link = link;
     if (imageArr.length) adsInfoObj.image = imageArr;
-    
-
+    if (location) adsInfoObj.location = location;
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
     }
@@ -216,7 +268,7 @@ exports.editEventAds = async (req, res, next) => {
     const dataObjq = {
       adsInfo: adsInfoObj,
       listerBasicInfo: {
-        location,
+        
         name,
         emailAddress,
         phoneNumber,
@@ -224,7 +276,7 @@ exports.editEventAds = async (req, res, next) => {
         
 
         mobileNumber: {
-          countryCode: +91,
+          countryCode,
           phoneNumber: phoneNumber,
         },
         addressInfo,

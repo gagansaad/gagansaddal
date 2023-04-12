@@ -1,5 +1,5 @@
 const { json } = require("express");
-
+var validUrl = require('valid-url');
 const mongoose = require("mongoose"),
   postJobAd = mongoose.model("job"),
   {
@@ -63,8 +63,8 @@ exports.validateJobAdsData = async (req, res, next) => {
     } = req.body;
 
     if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
-    else if (status < 1 || status > 3) failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
-
+    else if (status < 1 || status > 3)  return failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
+    else if (status != 1 && status != 2 &&  status != 3 || status.includes(".") )  return failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
     if (!isValidString(categories))
@@ -95,14 +95,15 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide us the information about how many languages do you know`,
       });
+    
     if (isNaN(Number(salary)))
       return failureJSONResponse(res, { message: `Please provide us salary` });
     if (isNaN(Number(no_of_opening)))
       return failureJSONResponse(res, { message: "Please provide number of jobs opening" });
-      else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null ) failureJSONResponse(res, { message: `Please provide number of job opening` });
+      else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null || no_of_opening.includes(".") ) failureJSONResponse(res, { message: `Please provide valid number of job opening` });
       if (isNaN(Number(preferred_gender)))
       return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
-      else if (preferred_gender < 1 || preferred_gender > 3) failureJSONResponse(res, { message: `Please enter preferred_gender between 1 to 3` });
+      else if (preferred_gender < 1 || preferred_gender > 3 || preferred_gender.includes(".")) return failureJSONResponse(res, { message: `Please enter preferred_gender between 1 to 3` });
     if (!isValidUrl(website))
       return failureJSONResponse(res, {
         message: `Please provide valid website`,
@@ -122,7 +123,7 @@ exports.validateJobAdsData = async (req, res, next) => {
   }
 };
 exports.validateListerBasicinfo = async (req, res, next) => {
-  //   console.log(req.body)
+ 
   try {
     const {
       emailAddress,
@@ -132,16 +133,16 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       preferableModeContact,
     } = req.body;
    console.log(typeof(hideAddress),"yyyyyyyyyyyyyyyyyyyyyy");
-   console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)",isValidBoolean(hideAddress))
+console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)",isValidBoolean(hideAddress))
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
-    //   message: `Please provide us your country code`,
+    //   message: `Please provide valid country code`,
     // });
     if (preferableModeContact && isNaN(Number(preferableModeContact))){
       return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
-    }else if (preferableModeContact < 1 || preferableModeContact > 3){
-      return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
-    } 
+    }else if (preferableModeContact < 1 || preferableModeContact > 2 || preferableModeContact.includes(".") ){
+      return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 2` });
+    } else if (preferableModeContact != 1 && preferableModeContact != 2 ) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 2` });}
    
     if (emailAddress && !isValidEmailAddress(emailAddress)){
       return failureJSONResponse(res, {
@@ -151,22 +152,12 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       
       // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
 
-      if(hideAddress !== "true" && hideAddress !== "false") return  failureJSONResponse(res, {
-        message: `Please provide us hide/show address (true/false)`,
-      
+    if(["true","false"].includes(hideAddress) == false){
+        return  failureJSONResponse(res, {
+          message: `Please provide us hide/show address (true/false)`
       })
-      let booleanString = false;
-      if(hideAddress == "true") booleanString = true;
-      else booleanString = false;
-
-      if (booleanString && !isValidBoolean(booleanString)){
-        return failureJSONResponse(res, {
-          message: `Please provide us hide/show address (true/false)`,
-        });
-      }
-
-      console.log(booleanString)
-      
+    }
+     
       // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
       // return failureJSONResponse(res, {
       //   message: `Please provide valid phone number`,

@@ -55,6 +55,7 @@ router.patch(`/edit/:eventId`,
     upload.array('photos', 12),
     authMiddleware.ensureUserLoggedIn,
     controllers.validateEventAdsData,
+    controllers.validateListerBasicinfo,
     controllers.editEventAds
 );
 router.patch(`/edit-status/:eventId`,

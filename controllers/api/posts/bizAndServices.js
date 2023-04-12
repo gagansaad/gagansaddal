@@ -19,15 +19,9 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
+    profession:[`Local Professional`,`Business Center / Local Retailer / Showroom`,`Brand`,`Agent`],
     categories: [`employed`, `self employed`, `engineer`],
-    role: [`male `, `female`, `couple`],
-
-    type: [`Enginner`, `Plumber`],
-
-    language: [`English`, `Hindi`],
-
-    work_authorization: [`test`, `test1`],
-    preferred_gender: [`male`, `female`],
+    preferableModeContact:[`Phone Number`,`Email`]
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -41,6 +35,8 @@ exports.validatebizAdsData = async (req, res, next) => {
   //   console.log(req.body)
   try {
     const {
+      status,
+      adsType,
         profession,
         categories,
         buisness_name,
@@ -52,6 +48,12 @@ exports.validatebizAdsData = async (req, res, next) => {
         image,
       
     } = req.body;
+    
+    if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
+    else if (status < 1 || status > 3)  return failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
+    else if (status != 1 && status != 2 &&  status != 3 || status.includes(".") )  return failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
+    if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
+    else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
     if (!isValidString(profession))
     return failureJSONResponse(res, {
       message: `Please provide valid profession`,
@@ -90,7 +92,53 @@ exports.validatebizAdsData = async (req, res, next) => {
     console.log(err);
   }
 };
+//////////////
+exports.validateListerBasicinfo = async (req, res, next) => {
+ 
+  try {
+    const {
+      emailAddress,
+      // phoneNumber,
+      // countryCode,
+      hideAddress,
+      preferableModeContact,
+    } = req.body;
+   console.log(typeof(hideAddress),"yyyyyyyyyyyyyyyyyyyyyy");
+console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)",isValidBoolean(hideAddress))
+    // if (countryCode && isNaN(Number(countryCode)))
+    // return failureJSONResponse(res, {
+    //   message: `Please provide valid country code`,
+    // });
+    if (preferableModeContact && isNaN(Number(preferableModeContact))){
+      return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
+    }else if (preferableModeContact < 1 || preferableModeContact > 2 || preferableModeContact.includes(".") ){
+      return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 2` });
+    } else if (preferableModeContact != 1 && preferableModeContact != 2 ) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 2` });}
+   
+    if (emailAddress && !isValidEmailAddress(emailAddress)){
+      return failureJSONResponse(res, {
+        message: `Please provide valid email address`,
+      });
+    }
+      
+      // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
 
+    if(["true","false"].includes(hideAddress) == false){
+        return  failureJSONResponse(res, {
+          message: `Please provide us hide/show address (true/false)`
+      })
+    }
+     
+      // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
+      // return failureJSONResponse(res, {
+      //   message: `Please provide valid phone number`,
+      // });
+    
+    return next();
+  } catch (err) {
+    console.log(err);
+  }
+};
 ////-----------------------Create Event------------------------------//
 
 exports.createbizAds = async (req, res, next) => {

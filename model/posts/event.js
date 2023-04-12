@@ -55,12 +55,13 @@ const events_Schema = new mongoose.Schema({
         image: [{
             ...defaultStringConfig,
             required: true
+        
         }],
-       
+        location:defaultStringConfig
 
     },
     listerBasicInfo: {
-        location:defaultStringConfig,
+        
         name: defaultStringConfig,
         emailAddress: defaultStringConfig,
         
