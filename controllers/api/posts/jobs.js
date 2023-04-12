@@ -1,5 +1,4 @@
 const { json } = require("express");
-var validUrl = require('valid-url');
 const mongoose = require("mongoose"),
   postJobAd = mongoose.model("job"),
   {
