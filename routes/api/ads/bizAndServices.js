@@ -55,6 +55,7 @@ router.patch(`/edit/:bizId`,
     upload.array('photos', 12),
     authMiddleware.ensureUserLoggedIn,
     controllers.validatebizAdsData,
+    controllers.validateListerBasicinfo,
     controllers.editbizAds
 );
 // router.patch(`/edit-role/:buyAndSellId`,
