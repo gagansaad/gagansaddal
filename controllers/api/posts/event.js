@@ -207,7 +207,8 @@ exports.createEventAds = async (req, res, next) => {
 ///--------------------------Edit event-----------------------------///
 
 exports.editEventAds = async (req, res, next) => {
-  console.log(`kejhrjhyewgrjhew`);
+
+  console.log(`hahhahahahahahha====================>>>>>>`,req.body);
   try {
     console.log(req.files);
     const eventId = req?.params?.eventId;
