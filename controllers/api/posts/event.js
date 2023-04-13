@@ -95,17 +95,22 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
-   
+   console.log(typeof(hideAddress),"yyyyyyyyyyyyyyyyyyyyyy");
+console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)",isValidBoolean(hideAddress))
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
     // });
-    console.log(parseInt(preferableModeContact))
+    if(preferableModeContact){
+      if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".") ){
+        return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
+      } else if (preferableModeContact != 1 && preferableModeContact != 2  && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });}
+    }else{
+      console.log("preferableModeContact---empty-------->>>>>>.",preferableModeContact)
+    }
     if (preferableModeContact && isNaN(Number(preferableModeContact))){
       return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
-    }else if (parseInt(preferableModeContact) < 1 || parseInt(preferableModeContact) > 3 ){
-      return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
-    } else if (preferableModeContact != 1 && preferableModeContact != 2  && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });}
+    }
    
     if (emailAddress && !isValidEmailAddress(emailAddress)){
       return failureJSONResponse(res, {
@@ -137,7 +142,6 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 ////-----------------------Create Event------------------------------//
 
 exports.createEventAds = async (req, res, next) => {
-  console.log(`ejhgjehf`)
   try {
     console.log(req.files,"dccdcdc");
     const {
@@ -211,7 +215,7 @@ exports.editEventAds = async (req, res, next) => {
 
   console.log(`hahhahahahahahha====================>>>>>>`,req.body);
   try {
-    console.log(req.body);
+    console.log(req.files);
     const eventId = req?.params?.eventId;
  
     const validate_id = await eventAd.findById(eventId)
