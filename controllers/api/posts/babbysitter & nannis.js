@@ -248,6 +248,7 @@ exports.editAds = async (req, res, next) => {
       { $set: dataObjq },
       { new: true }
     );
+    console.log(updateproduct,"dfvxfvdxfbdfbvdfvdxfvdxfv");
     let Babysitter_Nannies ={}
     for (let key in updateproduct.toObject()) {
       if (!fieldsToExclude.hasOwnProperty(String(key))) {
@@ -273,40 +274,40 @@ exports.editAds = async (req, res, next) => {
 
 /////----------------------Update Job Status -------------------/////
 
-exports.editJobStatus = async (req, res, next) => {
-  console.log(`kejhrjhyewgrjhew`);
-  try {
-    const jobId = req?.params?.jobId;
+// exports.editJobStatus = async (req, res, next) => {
+//   console.log(`kejhrjhyewgrjhew`);
+//   try {
+//     const jobId = req?.params?.jobId;
 
-    if (!jobId)
-      return successJSONResponse(res, {
-        message: `success`,
-        newJobPost,
-        status: 200,
-      });
-    const dataObj = {};
-    const { status } = req.body;
+//     if (!jobId)
+//       return successJSONResponse(res, {
+//         message: `success`,
+//         newJobPost,
+//         status: 200,
+//       });
+//     const dataObj = {};
+//     const { status } = req.body;
 
-    if (status) dataObj.status = parseInt(status);
+//     if (status) dataObj.status = parseInt(status);
 
-    const updateJob = await postJobAd.findByIdAndUpdate(
-      { _id: jobId },
-      { $set: dataObj },
-      { new: true }
-    );
+//     const updateJob = await postJobAd.findByIdAndUpdate(
+//       { _id: jobId },
+//       { $set: dataObj },
+//       { new: true }
+//     );
 
-    if (updateJob) {
-      return successJSONResponse(res, {
-        message: `success`,
-        updateJob,
-      });
-    } else {
-      return failureJSONResponse(res, {
-        message: `Something went wrong`,
-        updatejob: null,
-      });
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
+//     if (updateJob) {
+//       return successJSONResponse(res, {
+//         message: `success`,
+//         updateJob,
+//       });
+//     } else {
+//       return failureJSONResponse(res, {
+//         message: `Something went wrong`,
+//         updatejob: null,
+//       });
+//     }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
