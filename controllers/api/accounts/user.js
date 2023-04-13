@@ -893,7 +893,7 @@ module.exports = {
 
             if (!is_active) {
               if (phone_number && email_address) {
-                consolr.log(`sjdfhkjdshfkjs sdkjbfdshbfsd `)
+                console.log(`sjdfhkjdshfkjs sdkjbfdshbfsd `)
                 OTP.create({
                   is_active: true,
                   code: generateOTP(4),
