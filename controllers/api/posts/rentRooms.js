@@ -127,11 +127,6 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         //     if (!amount) missingData.push(`purchase price`);
         //     else if (amount && isNaN(amount)) invalidData.push(`purchase price`);
 
-        //     if (!isTruthyString(currency)) missingData.push(`purchase currency`);
-        // }
-
-
-
 
         return next();
     }
