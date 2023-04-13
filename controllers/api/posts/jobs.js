@@ -260,6 +260,11 @@ exports.editJobAds = async (req, res, next) => {
   try {
     console.log(req.files);
     const jobId = req?.params?.jobId;
+    const validate_id = await postJobAd.findById(jobId)
+    if (!validate_id){
+    return failureJSONResponse(res, {
+      message: `Failed to find your job id`,
+    })}
 
     if (!jobId)
       return successJSONResponse(res, {

@@ -221,15 +221,14 @@ exports.createBuySellAds = async (req, res, next) => {
 exports.editBuySellAds = async (req, res, next) => {
  
   try {
-    console.log(req.files);
+    console.log(req.params);
     const buyAndSellId = req?.params?.buyAndSellId;
 
-    if (!buyAndSellId)
-      return successJSONResponse(res, {
-        message: `success`,
-        newProductPost,
-        status: 200,
-      });
+    const validate_id = await postBuySellAd.findById(buyAndSellId)
+    if (!validate_id){
+    return failureJSONResponse(res, {
+      message: `Failed to find your buy sell id`,
+    })}
 
     const {
       status,

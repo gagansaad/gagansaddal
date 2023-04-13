@@ -28,7 +28,13 @@ exports.isValidUrl = (website = null) => {
         && stringifiedWebsite
         && stringifiedWebsite.match(commonRegex.urlvalidate));
 }
+exports.isValidlink = (link = null) => {
+    const stringifiedWebsite = String(link);
 
+    return Boolean(link
+        && stringifiedWebsite
+        && stringifiedWebsite.match(commonRegex.urlvalidate));
+}
 exports.isValidIndianMobileNumber = (mobileNumber = null) => {
     return (mobileNumber
         && String(mobileNumber)

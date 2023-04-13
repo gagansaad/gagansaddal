@@ -218,6 +218,12 @@ exports.editbizAds = async (req, res, next) => {
   try {
     console.log(req.files);
     const bizId = req?.params?.bizId;
+    
+    const validate_id = await postbizAndServicesAd.findById(bizId)
+    if (!validate_id){
+    return failureJSONResponse(res, {
+      message: `Failed to find your loacl biz And Services id`,
+    })}
 
     if (!bizId)
       return successJSONResponse(res, {

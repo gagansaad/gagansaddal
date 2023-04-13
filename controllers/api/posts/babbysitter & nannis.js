@@ -180,13 +180,11 @@ exports.editAds = async (req, res, next) => {
     
     const productId = req?.params?.productId;
 
-    if (!productId)
-      return successJSONResponse(res, {
-        message: `success`,
-        newPost,
-        status: 200,
-      });
-
+    const validate_id = await postbabyAd.findById(productId)
+    if (!validate_id){
+    return failureJSONResponse(res, {
+      message: `Failed to find your babysitter and nannies id`,
+    })}
     const {
       status,
       adsType,

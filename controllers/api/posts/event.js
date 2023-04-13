@@ -15,6 +15,7 @@ const mongoose = require("mongoose"),
     isValidEmailAddress,
     isValidIndianMobileNumber,
     isValidUrl,
+    isValidlink,
   } = require(`../../../utils/validators`);
 
 ///-----------------------Dynamic Data---------------------------////
@@ -71,7 +72,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid ticket_price`,
       });
-    if (!isValidUrl(link))
+    if (!isValidlink(link))
       return failureJSONResponse(res, { message: `please provide valid link` });
       
       if (!isValidString(location))
@@ -210,6 +211,12 @@ exports.editEventAds = async (req, res, next) => {
   try {
     console.log(req.files);
     const eventId = req?.params?.eventId;
+ 
+    const validate_id = await eventAd.findById(eventId)
+    if (!validate_id){
+    return failureJSONResponse(res, {
+      message: `Failed to find your event id`,
+    })}
 
     if (!eventId)
       return successJSONResponse(res, {
