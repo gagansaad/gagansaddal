@@ -907,6 +907,7 @@ module.exports = {
                       checkUserDetail[0]?.userInfo?.name,
                       data.code
                     );
+                    
                   })
                   .catch((err) => {
                     return failureJSONResponse(res, {
@@ -929,7 +930,7 @@ module.exports = {
 
                 MobileNumberVerificationOTPByUserId(checkUserDetail[0]._id,null);
 
-                res.json({
+                return res.json({
                   status: 205,
                   data: data,
                   message: `success`,
