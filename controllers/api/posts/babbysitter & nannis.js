@@ -37,11 +37,18 @@ exports.validateAdsData = async (req, res, next) => {
   //   console.log(req.body)
   try {
     const {
+      status,
+      adsType,
      option,
      care_service,
      sub_type
       
     } = req.body;
+    if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
+    else if (status < 1 || status > 3) failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
+    else if (status != 1 && status != 2 &&  status != 3)  return failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
+    if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
+    else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
     if (!isValidString(option))
       return failureJSONResponse(res, {

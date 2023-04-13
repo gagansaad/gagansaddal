@@ -37,6 +37,8 @@ exports.validateBuySellAdsData = async (req, res, next) => {
   //   console.log(req.body)
   try {
     const {
+      status,
+      adsType,
       title,
       descriptions,
       categories,
@@ -47,6 +49,12 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       additional_info,
       image,
     } = req.body;
+    if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
+    else if (status < 1 || status > 3) failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
+    else if (status != 1 && status != 2 &&  status != 3)  return failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
+    if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
+    else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
+
     if (!isValidString(title))
     return failureJSONResponse(res, {
       message: "Pleae provide us your title",
