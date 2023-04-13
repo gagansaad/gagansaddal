@@ -54,6 +54,7 @@ router.post(`/create`, upload.array('photos', 12),
 router.patch(`/edit/:buyAndSellId`,
     upload.array('photos', 12),
     authMiddleware.ensureUserLoggedIn,
+    controllers.validateListerBasicinfo,
     controllers.validateBuySellAdsData,
     controllers.editBuySellAds
 );

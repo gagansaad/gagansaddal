@@ -14,6 +14,7 @@ const mongoose = require("mongoose"),
     isValidDate,
     isValidEmailAddress,
     isValidIndianMobileNumber,
+    isValidUrl,
   } = require(`../../../utils/validators`);
 
 ///-----------------------Dynamic Data---------------------------////
@@ -70,7 +71,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid ticket_price`,
       });
-    if (!isValidString(link))
+    if (!isValidUrl(link))
       return failureJSONResponse(res, { message: `please provide valid link` });
       
       if (!isValidString(location))
