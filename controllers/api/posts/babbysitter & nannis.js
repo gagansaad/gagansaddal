@@ -250,7 +250,7 @@ exports.editAds = async (req, res, next) => {
     );
     console.log(updateproduct,"dfvxfvdxfbdfbvdfvdxfvdxfv");
     let Babysitter_Nannies ={}
-    for (let key in updateproduct.toObject()) {
+    for (let key in updateproduct) {
       if (!fieldsToExclude.hasOwnProperty(String(key))) {
         Babysitter_Nannies[key] = updateproduct[key];
       }
