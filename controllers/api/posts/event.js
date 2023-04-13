@@ -103,7 +103,7 @@ console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolea
     // });
     if (preferableModeContact && isNaN(Number(preferableModeContact))){
       return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
-    }else if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".") ){
+    }else if (preferableModeContact < 1 || preferableModeContact > 3 ){
       return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
     } else if (preferableModeContact != 1 && preferableModeContact != 2  && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });}
    
