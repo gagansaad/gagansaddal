@@ -897,6 +897,7 @@ module.exports = {
                 OTP.create({
                   is_active: true,
                   code: generateOTP(4),
+                  used_for:2,
                   user: checkUserDetail[0]._id,
                   email_address: email_address.toLowerCase(),
                   for: 2,
