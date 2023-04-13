@@ -72,8 +72,10 @@ exports.validateBuySellAdsData = async (req, res, next) => {
   
    
    
-    if (!isValidString(price))
-      return failureJSONResponse(res, { message: `please provide valid price` });
+      if (isNaN(Number(price)))
+      return failureJSONResponse(res, {
+        message: `please provide valid ticket_price`,
+      });
 
     if (!isValidString(additional_info))
       return failureJSONResponse(res, { message: `please provide valid additional_info` });
