@@ -210,7 +210,7 @@ exports.editEventAds = async (req, res, next) => {
 
   console.log(`hahhahahahahahha====================>>>>>>`,req.body);
   try {
-    console.log(req.files);
+    console.log(req.body);
     const eventId = req?.params?.eventId;
  
     const validate_id = await eventAd.findById(eventId)
