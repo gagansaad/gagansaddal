@@ -830,8 +830,7 @@ module.exports = {
   login_with_email: async function (req, res) {
     try {
       var userData = req.body;
-      if (!userData.email)
-        return res.json({ message: "please provide a email address" });
+      if (!userData.email) return res.json({ message: "please provide a email address" });
 
       userData.email = (userData?.email).trim().toLowerCase();
 
@@ -894,6 +893,7 @@ module.exports = {
 
             if (!is_active) {
               if (phone_number && email_address) {
+                consolr.log(`sjdfhkjdshfkjs sdkjbfdshbfsd `)
                 OTP.create({
                   is_active: true,
                   code: generateOTP(4),
@@ -907,9 +907,20 @@ module.exports = {
                       checkUserDetail[0]?.userInfo?.name,
                       data.code
                     );
+
+                    
+                MobileNumberVerificationOTPByUserId(checkUserDetail[0]._id,null);
+
+                return res.json({
+                  status: 205,
+                  data: data,
+                  message: `success`,
+                  token: createJWT(checkUserDetail[0]._id),
+                });
                     
                   })
                   .catch((err) => {
+                    console.log(err)
                     return failureJSONResponse(res, {
                       message: `something went wrong`,
                     });
@@ -928,14 +939,6 @@ module.exports = {
                 //     return failureJSONResponse(res, { message: `something went wrong` });
                 // })
 
-                MobileNumberVerificationOTPByUserId(checkUserDetail[0]._id,null);
-
-                return res.json({
-                  status: 205,
-                  data: data,
-                  message: `success`,
-                  token: createJWT(checkUserDetail[0]._id),
-                });
               } else if (email_address) {
                 OTP.create({
                   is_active: true,
@@ -957,7 +960,7 @@ module.exports = {
                       message: `something went wrong!`,
                     });
                   });
-                res.json({
+               return res.json({
                   status: 204,
                   data: data,
                   message: `success`,
@@ -965,7 +968,7 @@ module.exports = {
                 });
               }
             } else {
-              res.json({
+             return res.json({
                 status: 200,
                 data: data,
                 message: `success`,
@@ -976,20 +979,20 @@ module.exports = {
             console.log(Err);
           }
         } else {
-          res.json({
+          return res.json({
             status: 401,
             message: `Incorrect password`,
           });
         }
       } else {
-        res.json({
+        return res.json({
           status: 404,
           message: `Email address not registered`,
         });
       }
     } catch (err) {
       console.log(err);
-      res.json({
+     return  res.json({
         status: 400,
         message: `something went wrong!`,
       });
