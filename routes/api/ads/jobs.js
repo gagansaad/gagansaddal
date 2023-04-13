@@ -24,7 +24,7 @@ const router = require(`express`).Router(),
     
     });
 
-    const upload = multer({ storage: storage,    });
+    const upload = multer({ storage: storage});
 
     // fileFilter: (res, file, cb) => {
     //     if (file.fieldname === "photos") {

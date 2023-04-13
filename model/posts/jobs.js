@@ -100,7 +100,7 @@ const roomRentsSchema = new mongoose.Schema({
         hideAddress: defaultBooleanConfig,
         preferableModeContact: {
             type: Number,
-            enum: [1, 2]
+            enum: [1,2,3]
         }
 
     }

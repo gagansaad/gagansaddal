@@ -247,19 +247,32 @@ exports.editAds = async (req, res, next) => {
       { _id: productId },
       { $set: dataObjq },
       { new: true }
+
+ 
     );
+
+    // if(updateproduct && Object.keys(updateproduct).length){
+    //   return  successJSONResponse(res, {
+    //     message: `object full`
+    // })
+    // } else{
+    //   return  failureJSONResponse(res, {
+    //     message: `object empty`
+    // })
+    // }
     console.log(updateproduct,"dfvxfvdxfbdfbvdfvdxfvdxfv");
-    let Babysitter_Nannies ={}
-    for (let key in updateproduct) {
+    let BabysitterNannies ={}
+
+    for (let key in updateproduct.toObject()) {
       if (!fieldsToExclude.hasOwnProperty(String(key))) {
-        Babysitter_Nannies[key] = updateproduct[key];
+        BabysitterNannies[key] = updateproduct[key];
       }
     }
 
     if (updateproduct) {
       return successJSONResponse(res, {
         message: `success`,
-        Babysitter_Nannies:Babysitter_Nannies,
+        Babysitter_Nannies:BabysitterNannies,
       });
     } else {
       return failureJSONResponse(res, {

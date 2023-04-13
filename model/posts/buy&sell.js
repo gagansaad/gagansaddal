@@ -74,7 +74,7 @@ const BuySellSchema = new mongoose.Schema({
         addressInfo: defaultStringConfig,
         preferableModeContact: {
             type: Number,
-            enum: [1, 2, 3]
+            enum: [1,2,3]
         }
 
     }
