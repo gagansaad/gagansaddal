@@ -34,7 +34,7 @@ exports.getDnymicsData = async (req, res, next) => {
 ///-----------------------Validate Data---------------------------//
 
 exports.validateAdsData = async (req, res, next) => {
-    console.log(req.body)
+    
   try {
     const {
       status,
@@ -44,7 +44,6 @@ exports.validateAdsData = async (req, res, next) => {
      sub_type
       
     } = req.body;
-    console.log(req.body)
     if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
     else if (status < 1 || status > 3) failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
     else if (status != 1 && status != 2 &&  status != 3)  return failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
@@ -122,7 +121,7 @@ console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolea
 ////-----------------------Create babbysitter & nannis------------------------------//
 
 exports.createAds = async (req, res, next) => {
-  console.log(req.body);
+
   try {
     const {
       isfeatured,
@@ -209,6 +208,7 @@ exports.editAds = async (req, res, next) => {
       location,
       addressInfo,
       preferableModeContact,
+      image
     } = req.body;
     const imageArr = [];
 

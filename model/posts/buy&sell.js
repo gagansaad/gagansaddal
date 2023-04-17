@@ -48,7 +48,7 @@ const BuySellSchema = new mongoose.Schema({
         },
 
         price: {
-            ...defaultStringConfig,
+            type:Number,
             required: true
         },
         descriptions: {

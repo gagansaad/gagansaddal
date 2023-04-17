@@ -28,7 +28,6 @@ const mongoose = require("mongoose"),
 ////////////////
 exports.fetchAlldashboard = async (req, res, next) => {
   try {
-    console.log("object");
     const isFeatured = req.query.isfeatured;
     let dbQuery = {
       status: 1,
@@ -49,24 +48,34 @@ exports.fetchAlldashboard = async (req, res, next) => {
       ...jobs,
       ...buysell,
     ];
-    //
+    
     const count = records.filter(function (item) {
       if (item.isfeatured === true) {
         return true;
       }
     });
-    // let total = records.reduce((sum,item) => {
-    //     if(item.price){
-    //         sum + Number(item.price) , 0,
-    //     }
-    //     else if(item.ticket_price){
-    //         sum + Number(item.ticket_price) , 0,
-    //     } 
-    // });
-  
-  console.log(Object.values(records)) // 160
+    
+    
+//     const sum = records.reduce(((parseInt(sum)), item) => {
+//         if(item.adsInfo.price && !isNaN(item.adsInfo.price)){
+//             console.log(item.adsInfo.price ,"fufheuhdfe",parseInt(sum));
+//             return parseInt(sum) + parseInt(item?.adsInfo?.price || 0);
+//         }
+       
+        
 
-    if (records || count || total) {
+//     }, 0);
+
+// console.log(`asdgahfdhgsafdhasfdhgsafdhgfhsgadfhas`,sum,"jhyfgvuydfhvufdhyud");
+
+//  const sum = records.reduce((a, b) => {
+//     console.log()
+// return(a+b.adsInfo.price)
+// }, 1);
+
+// console.log(sum)
+
+    if (records || count) {
       return successJSONResponse(res, {
         message: `success`,
         totalads: Object.keys(records).length,

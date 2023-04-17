@@ -48,7 +48,7 @@ const events_Schema = new mongoose.Schema({
         },
 
         ticket_price: {
-            ...defaultStringConfig,
+            type:Number,
             required: true
         },
         link: {

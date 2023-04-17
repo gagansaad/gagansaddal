@@ -44,7 +44,10 @@ const babysitter_Schema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-    
+     image: [{
+            ...defaultStringConfig,
+            required: true
+        }]
     },
     listerBasicInfo: {
         name: defaultStringConfig,

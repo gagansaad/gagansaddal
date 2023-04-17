@@ -945,6 +945,7 @@ module.exports = {
                   is_active: true,
                   code: generateOTP(4),
                   user: checkUserDetail[0]._id,
+                  used_for: 2,
                   email_address: email_address.toLowerCase(),
                   for: 2,
                 })

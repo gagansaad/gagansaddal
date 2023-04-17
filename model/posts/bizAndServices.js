@@ -7,6 +7,7 @@ const {
     getAlphaNumID,
     defaultBooleanConfig
 } = require(`../../utils/mongoose`);
+const { Number } = require("twilio/lib/twiml/VoiceResponse");
 
 const bizAndServices = new mongoose.Schema({
 
@@ -53,7 +54,7 @@ const bizAndServices = new mongoose.Schema({
         },
 
         price: {
-            ...defaultStringConfig,
+            type:Number,
             required: true
         },
         descriptions: {
