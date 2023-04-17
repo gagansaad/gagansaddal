@@ -175,6 +175,7 @@ console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolea
 exports.createJobAds = async (req, res, next) => {
   try {
     const {
+      isfeatured,
       status,
       adsType,
 
@@ -202,6 +203,7 @@ exports.createJobAds = async (req, res, next) => {
     const dataObj = {
      
       status: parseInt(status),
+      isfeatured,
       adsType,
       adsInfo: {
         title,

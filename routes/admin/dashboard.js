@@ -1,6 +1,6 @@
 const router = require(`express`).Router(),
-    authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
-    controllers = require(`../../../controllers/admin/ads/dashboard`);
+    authMiddleware = require(`../../middleware/ensureUserLoggedIn`),
+    controllers = require(`../../controllers/admin/ads/dashboard`);
 
 
 const cloudinary = require("cloudinary").v2;
@@ -39,9 +39,9 @@ function validateImage(req, res, next) {
 }
 
 
-router.get(`/totalads`,
-    authMiddleware.ensureUserLoggedIn,
-    controllers.fetchAll_dashboard
+router.get(`/`,
+    // authMiddleware.ensureUserLoggedIn,
+    controllers.fetchAlldashboard
    
 );
 

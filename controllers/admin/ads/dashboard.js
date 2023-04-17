@@ -25,33 +25,62 @@ const mongoose = require("mongoose"),
 
 ///-----------------------Dynamic Data---------------------------////
 
-
-
 ////////////////
-exports.fetchAll_dashboard = async (req, res, next) => {
+exports.fetchAlldashboard = async (req, res, next) => {
   try {
     console.log("object");
     const isFeatured = req.query.isfeatured;
-    let dbQuery ={
-        status: 1
+    let dbQuery = {
+      status: 1,
     };
 
-if(isFeatured) dbQuery.isfeatured = isFeatured;
-let ads = {eventAd,bizAd,buysellAd,babysitterAd,roomrentAd,jobsAd}
-
-
-      let records = await bizAd.find(dbQuery);
-      if (records) {
-          return successJSONResponse(res, {
-              message: `success`,
-              total:Object.keys(records).length,
-              records,
-              status:200,
-          })
-      } else {
-          return failureJSONResponse(res, { message: `Ads not available` })
+    if (isFeatured) dbQuery.isfeatured = isFeatured;
+    let event = await eventAd.find(dbQuery);
+    let biz = await bizAd.find(dbQuery);
+    let babysitter = await babysitterAd.find(dbQuery);
+    let roomrent = await roomrentAd.find(dbQuery);
+    let jobs = await jobsAd.find(dbQuery);
+    let buysell = await buysellAd.find(dbQuery);
+    let records = [
+      ...event,
+      ...biz,
+      ...babysitter,
+      ...roomrent,
+      ...jobs,
+      ...buysell,
+    ];
+    //
+    const count = records.filter(function (item) {
+      if (item.isfeatured === true) {
+        return true;
       }
+    });
+//     for (price in records.adsinfo.price) {
+//         console.log(records.adsinfo.price[price]);
+//     }
+//     let total = records.reduce((sum,item) => {sum + Number(item.price) , 0,
+//         console.log(item.price)
+//     }
+//   );
+  
+//   console.log(Object.entries(records))
+
+    if (records || count) {
+      return successJSONResponse(res, {
+        message: `success`,
+        totalads: Object.keys(records).length,
+        isfeatured: Object.keys(count).length,
+        // totalrevenue:total,
+        // records,
+        status: 200,
+      });
+    } else {
+      return failureJSONResponse(res, { message: `Ads not available` });
+    }
   } catch (err) {
-      return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, {
+      message: `something went wrong`,
+      err: err.message,
+    });
   }
-}
+};

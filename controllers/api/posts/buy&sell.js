@@ -155,6 +155,7 @@ console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolea
 exports.createBuySellAds = async (req, res, next) => {
   try {
     const {
+      isfeatured,
       status,
       adsType,
       title,
@@ -176,6 +177,7 @@ exports.createBuySellAds = async (req, res, next) => {
     });
 
     const dataObj = {
+      isfeatured,
       status: parseInt(status),
       adsType,
       adsInfo: {

@@ -147,6 +147,7 @@ exports.createbizAds = async (req, res, next) => {
   try {
     console.log(req.files,"dccdcdc");
     const {
+      isfeatured,
       status,
       adsType,
       profession,
@@ -170,6 +171,7 @@ exports.createbizAds = async (req, res, next) => {
     });
 
     const dataObj = {
+      isfeatured,
       status: parseInt(status),
       adsType,
       adsInfo: {

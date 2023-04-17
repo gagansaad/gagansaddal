@@ -43,7 +43,7 @@ const signUp = require('./routes/api/accounts/user');
 
 const adminSignIp = require('./routes/accounts/admin/admin_login');
 const adminconfigurationsRoute = require('./routes/api/accounts/admin/configurations');
-const dashboardRoute = require('./routes/api/ads/dashboard');
+const dashboardRoute = require('./routes/admin/dashboard');
 const usercontrol = require('./routes/accounts/admin/users_control');
 const configurationsRoute = require('./routes/api/configurations');
 
@@ -79,6 +79,8 @@ app.use('/api/admin/users',usercontrol);
 app.use('/v1/api/configurations', configurationsRoute);
 app.use('/admin/v1/api/configurations1', adminconfigurationsRoute);
 app.use('/admin/v1/api/configurations', adminconfigurationsRoute1);
+app.use('/admin/v1/api/posts/dashboard',dashboardRoute);
+
 
 app.use('/v1/api/posts/types', postTypeRoutes);
 app.use('/v1/api/posts/room-rents', roomRentsRoutes);
@@ -87,7 +89,7 @@ app.use('/v1/api/posts/jobs', jobsRoutes);
 app.use('/v1/api/posts/buysell', buySellRoutes);
 app.use('/v1/api/posts/babysitter', babysitterRoutes);
 app.use('/v1/api/posts/biz', bizRoutes);
-app.use('v1/api/posts/dashboard',dashboardRoute);
+
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))

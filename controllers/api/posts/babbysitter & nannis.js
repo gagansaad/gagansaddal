@@ -123,6 +123,7 @@ console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolea
 exports.createAds = async (req, res, next) => {
   try {
     const {
+      isfeatured,
       status,
       adsType,
 
@@ -137,6 +138,7 @@ exports.createAds = async (req, res, next) => {
     
 
     const dataObj = {
+      isfeatured,
       status: parseInt(status),
       adsType,
       adsInfo: {
@@ -260,7 +262,7 @@ exports.editAds = async (req, res, next) => {
     //     message: `object empty`
     // })
     // }
-    console.log(updateproduct,"dfvxfvdxfbdfbvdfvdxfvdxfv");
+    
     let BabysitterNannies ={}
 
     for (let key in updateproduct.toObject()) {

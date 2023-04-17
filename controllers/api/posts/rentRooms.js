@@ -109,8 +109,8 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         return failureJSONResponse(res, {
           message: `please provide valid ticket_price`,
         });
-        // if (!(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide valid isSmokingAllowed` });
-        // else if (typeof isSmokingAllowed == "boolean") return failureJSONResponse(res, { message: `Please provide boolean value for Smoking Allowed` });
+        // if (!( isfeatured)) return failureJSONResponse(res, { message: `Please provide valid isfeatured (true/false)` });
+        // else if (typeof  isfeatured == "boolean") return failureJSONResponse(res, { message: `Please provide boolean value for isfeatured` });
 
         // if (!(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide valid isSmokingAllowed` });
         // else if (!isValidBoolean(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide boolean value for Smoking Allowed` });

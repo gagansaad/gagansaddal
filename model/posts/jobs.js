@@ -20,7 +20,11 @@ const roomRentsSchema = new mongoose.Schema({
         //2 = inactive
         //3 = draft 
     },
-
+    isfeatured:{
+        type: Boolean,
+        required: true,
+        default:false
+    },
     adsType: {
         type: mongoose.Schema.Types.ObjectId,
         ref: `PostType`,

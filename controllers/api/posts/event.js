@@ -143,6 +143,7 @@ exports.createEventAds = async (req, res, next) => {
   try {
     console.log(req.files,"dccdcdc");
     const {
+      isfeatured,
       status,
       adsType,
 
@@ -166,6 +167,7 @@ exports.createEventAds = async (req, res, next) => {
     });
 
     const dataObj = {
+      isfeatured,
       status: parseInt(status),
       adsType,
       adsInfo: {
@@ -230,6 +232,7 @@ exports.editEventAds = async (req, res, next) => {
       });
 
     const {
+      
       status,
       adsType,
      
