@@ -55,23 +55,24 @@ exports.fetchAlldashboard = async (req, res, next) => {
         return true;
       }
     });
-//     for (price in records.adsinfo.price) {
-//         console.log(records.adsinfo.price[price]);
-//     }
-//     let total = records.reduce((sum,item) => {sum + Number(item.price) , 0,
-//         console.log(item.price)
-//     }
-//   );
+    // let total = records.reduce((sum,item) => {
+    //     if(item.price){
+    //         sum + Number(item.price) , 0,
+    //     }
+    //     else if(item.ticket_price){
+    //         sum + Number(item.ticket_price) , 0,
+    //     } 
+    // });
   
-//   console.log(Object.entries(records))
+  console.log(Object.values(records)) // 160
 
-    if (records || count) {
+    if (records || count || total) {
       return successJSONResponse(res, {
         message: `success`,
         totalads: Object.keys(records).length,
         isfeatured: Object.keys(count).length,
         // totalrevenue:total,
-        // records,
+        records,
         status: 200,
       });
     } else {

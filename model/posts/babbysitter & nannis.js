@@ -13,7 +13,8 @@ const babysitter_Schema = new mongoose.Schema({
     status: {
         type: Number,
         enum: [1, 2, 3],
-        required: true
+        required: true,
+        default:3
 
         //1 = active
         //2 = inactive
