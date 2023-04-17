@@ -131,12 +131,16 @@ exports.createAds = async (req, res, next) => {
 
       option,
       care_service,
-      sub_type
-       
+      sub_type,
+       image
     } = req.body;
 
     const userId = req.userId;
+    const imageArr = [];
 
+    req.files.forEach((data) => {
+      imageArr.push(data?.path);
+    });
     
 
     const dataObj = {
@@ -146,7 +150,8 @@ exports.createAds = async (req, res, next) => {
       adsInfo: {
           option,
           care_service,
-          sub_type
+          sub_type,
+          image: imageArr,
       },
     
       userId: userId,
@@ -205,7 +210,11 @@ exports.editAds = async (req, res, next) => {
       addressInfo,
       preferableModeContact,
     } = req.body;
-    
+    const imageArr = [];
+
+    req.files.forEach((data) => {
+      imageArr.push(data?.path);
+    });
 
    
 
@@ -223,7 +232,7 @@ exports.editAds = async (req, res, next) => {
     if (location) listerBasicInfoObj.location = location;
     
     if (name) listerBasicInfoObj.name = name;
-
+    if (imageArr.length) adsInfoObj.image = imageArr;
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
     }
