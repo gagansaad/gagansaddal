@@ -43,7 +43,7 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
 
                 const user = await User.findOne(dbQuery);
 
-                if (!user) return res.json({
+                if (!user) return res.status(401).json({
                     status: 404,
                     message: `User  not found`
                 });

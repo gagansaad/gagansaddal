@@ -62,4 +62,12 @@ router.patch(`/edit-role/:buyAndSellId`,
     authMiddleware.ensureUserLoggedIn,
     controllers.editBuySellStatus
 );
+router.get(`/fetchMyAds`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchAll
+);
+router.get(`/fetchMyAds`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchAll
+);
 module.exports = router;

@@ -62,4 +62,8 @@ router.patch(`/edit-status/:eventId`,
     authMiddleware.ensureUserLoggedIn,
     controllers.editEventStatus
 );
+router.get(`/fetchMyAds`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchAll
+);
 module.exports = router;

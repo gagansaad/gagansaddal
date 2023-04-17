@@ -62,4 +62,8 @@ router.patch(`/edit/:bizId`,
 //     authMiddleware.ensureUserLoggedIn,
 //     controllers.editBuySellStatus
 // );
+router.get(`/fetchMyAds`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchAll
+);
 module.exports = router;

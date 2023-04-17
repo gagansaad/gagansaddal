@@ -52,7 +52,10 @@ router.post(`/new-job`, upload.array('photos', 12),
     controllers.validateJobAdsData,
     controllers.createJobAds
 )
-
+router.get(`/fetchMyAds`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchAll
+);
 
 router.patch(`/edit/:jobId`,
     upload.array('photos', 12),

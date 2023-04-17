@@ -1,8 +1,6 @@
 const router = require(`express`).Router(),
     authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
-    controllers = require(`../../../controllers/api/posts/rentRooms`);
-
-
+    controllers = require(`../../../controllers/admin/ads/dashboard`);
 
 
 const cloudinary = require("cloudinary").v2;
@@ -18,53 +16,35 @@ cloudinary.config({
 });
 
 
-
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: "DEV",
     },
-
+    
 });
 
 
-const upload = multer({ storage: storage, });
+const upload = multer({ storage: storage,  });
 
 function validateImage(req, res, next) {
     console.log(req.file.mimetype)
 
     const fileType = req.file.mimetype.split('/')[1];
     if (fileType !== 'jpg' && fileType !== 'jpeg' && fileType !== 'png') {
-        return res.status(200).json({ status: 400, error: 'Only JPEG or PNG images are allowed.' });
+        return res.status(200).json({ status: 400,error: 'Only JPEG or PNG images are allowed.' });
     }
 
     next();
 }
 
 
-router.get(`/dynamics-data`,
+router.get(`/totalads`,
     authMiddleware.ensureUserLoggedIn,
-    controllers.fetchDynamicsData
+    controllers.fetchAll_dashboard
+   
 );
 
-router.post(`/`, upload.array('photos', 12),
-    authMiddleware.ensureUserLoggedIn,
-    controllers.validateRoomRentsAdsData,
-    controllers.creatingRoomRentsAds
-)
 
-
-
-router.patch(`/edit/:roomRentId`,
-    upload.array('photos', 12),
-    authMiddleware.ensureUserLoggedIn,
-    controllers.validateListerBasicinfo,
-    controllers.validateRoomRentsAdsData,
-    controllers.editRoomRentAds
-);
-router.get(`/fetchMyAds`,
-    authMiddleware.ensureUserLoggedIn,
-    controllers.fetchAll
-);
 
 module.exports = router;

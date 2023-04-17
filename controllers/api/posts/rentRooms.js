@@ -190,6 +190,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 exports.creatingRoomRentsAds = async (req, res, next) => {
 
     const {
+        isfeatured,
         status,
         adsType,
         title,
@@ -223,6 +224,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
 
 
     const dataObj = {
+        isfeatured,
         status: parseInt(status),
         adsType,
         adsInfo: {
@@ -267,13 +269,21 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
 
 }
 
-exports.fetchAllRooms = async (req, res, next) => {
+exports.fetchAll = async (req, res, next) => {
+    
     try {
-        let RoomRent = await RoomRentsAds.find({ userId: req.userId });
-        if (RoomRent) {
+        const isFeatured = req.query.isfeatured;
+        let dbQuery ={
+            status: 1
+        };
+
+    if(isFeatured) dbQuery.isfeatured = isFeatured;
+        let records = await RoomRentsAds.find(dbQuery);
+        if (records) {
             return successJSONResponse(res, {
                 message: `success`,
-                RoomRent,
+                total:Object.keys(records).length,
+                records,
                 status: 200,
             })
         } else {
