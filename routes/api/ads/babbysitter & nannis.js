@@ -44,14 +44,14 @@ router.get(`/dynamics-data`,
     controllers.getDnymicsData
 );
 
-router.post(`/add`,upload.array('photos', 12),
+router.post(`/add`,
     authMiddleware.ensureUserLoggedIn,
     controllers.validateAdsData,
     controllers.createAds
 )
 
 
-router.patch(`/edit/:productId`,upload.array('photos', 12),
+router.patch(`/edit/:productId`,
     authMiddleware.ensureUserLoggedIn,
     controllers.validateAdsData,
     controllers.validateListerBasicinfo,
