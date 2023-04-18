@@ -56,6 +56,17 @@ const jobsRoutes = require('./routes/api/ads/jobs');
 const buySellRoutes = require('./routes/api/ads/buysell');
 const babysitterRoutes = require('./routes/api/ads/babbysitter & nannis');
 const eventRoutes = require(`./routes/api/ads/event`)
+
+
+//admin
+
+const adminroomRentsRoutes = require('./routes/admin/roomRents');
+const adminbizRoutes = require('./routes/admin/bizAndServices');
+const adminjobsRoutes = require('./routes/admin/jobs');
+const adminbuySellRoutes = require('./routes/admin/buysell');
+const adminbabysitterRoutes = require('./routes/admin/babbysitter & nannis');
+const admineventRoutes = require(`./routes/admin/event`)
+//
 const loadHelmet = require(`./loaders/helmets`),
     loadExpressSession = require(`./loaders/expressSession`);
 
@@ -80,7 +91,12 @@ app.use('/v1/api/configurations', configurationsRoute);
 app.use('/admin/v1/api/configurations1', adminconfigurationsRoute);
 app.use('/admin/v1/api/configurations', adminconfigurationsRoute1);
 app.use('/admin/v1/api/posts/dashboard',dashboardRoute);
-
+app.use('/admin/v1/api/posts/room-rents',adminroomRentsRoutes);
+app.use('/admin/v1/api/posts/biz',adminbizRoutes);
+app.use('/admin/v1/api/posts/jobs',adminjobsRoutes);
+app.use('/admin/v1/api/posts/buysell',adminbuySellRoutes);
+app.use('/admin/v1/api/posts/babysitter',adminbabysitterRoutes);
+app.use('/admin/v1/api/posts/events',admineventRoutes);
 
 app.use('/v1/api/posts/types', postTypeRoutes);
 app.use('/v1/api/posts/room-rents', roomRentsRoutes);

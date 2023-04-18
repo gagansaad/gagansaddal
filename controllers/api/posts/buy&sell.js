@@ -190,7 +190,6 @@ exports.createBuySellAds = async (req, res, next) => {
         additional_info,
         image: imageArr,
       },
-     
       userId: userId,
     };
 

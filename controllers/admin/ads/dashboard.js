@@ -26,7 +26,7 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 
 ////////////////
-exports.fetchAlldashboard = async (req, res, next) => {
+exports.fetchAllFeaturedAds = async (req, res, next) => {
   try {
     const isFeatured = req.query.isfeatured;
     let dbQuery = {
@@ -34,6 +34,7 @@ exports.fetchAlldashboard = async (req, res, next) => {
     };
 
     if (isFeatured) dbQuery.isfeatured = isFeatured;
+    if(!isFeatured) dbQuery.isfeatured =true;
     let event = await eventAd.find(dbQuery);
     let biz = await bizAd.find(dbQuery);
     let babysitter = await babysitterAd.find(dbQuery);
@@ -49,39 +50,50 @@ exports.fetchAlldashboard = async (req, res, next) => {
       ...buysell,
     ];
     
-    const count = records.filter(function (item) {
-      if (item.isfeatured === true) {
-        return true;
-      }
+    if (records) {
+      return successJSONResponse(res, {
+        message: `success`,
+        isfeatured: Object.keys(records).length,
+        status: 200,
+      });
+    } else {
+      return failureJSONResponse(res, { message: `Ads not available` });
+    }
+  } catch (err) {
+    return failureJSONResponse(res, {
+      message: `something went wrong`,
+      err: err.message,
     });
+  }
+};
+
+
+exports.fetchAlldashboard = async (req, res, next) => {
+  try {
+    let dbQuery = {
+      status: 1,
+    };
+
+    let event = await eventAd.find(dbQuery);
+    let biz = await bizAd.find(dbQuery);
+    let babysitter = await babysitterAd.find(dbQuery);
+    let roomrent = await roomrentAd.find(dbQuery);
+    let jobs = await jobsAd.find(dbQuery);
+    let buysell = await buysellAd.find(dbQuery);
+    let records = [
+      ...event,
+      ...biz,
+      ...babysitter,
+      ...roomrent,
+      ...jobs,
+      ...buysell,
+    ];
     
-    
-//     const sum = records.reduce(((parseInt(sum)), item) => {
-//         if(item.adsInfo.price && !isNaN(item.adsInfo.price)){
-//             console.log(item.adsInfo.price ,"fufheuhdfe",parseInt(sum));
-//             return parseInt(sum) + parseInt(item?.adsInfo?.price || 0);
-//         }
-       
-        
-
-//     }, 0);
-
-// console.log(`asdgahfdhgsafdhasfdhgsafdhgfhsgadfhas`,sum,"jhyfgvuydfhvufdhyud");
-
-//  const sum = records.reduce((a, b) => {
-//     console.log()
-// return(a+b.adsInfo.price)
-// }, 1);
-
-// console.log(sum)
-
-    if (records || count) {
+ 
+    if (records) {
       return successJSONResponse(res, {
         message: `success`,
         totalads: Object.keys(records).length,
-        isfeatured: Object.keys(count).length,
-        // totalrevenue:total,
-        records,
         status: 200,
       });
     } else {
