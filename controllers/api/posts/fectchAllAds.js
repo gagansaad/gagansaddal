@@ -129,7 +129,7 @@ return failureJSONResponse(res, {
     }
    
   } catch (err) {
-      return failureJSONResponse(res, { message: `something went wrong` },error:err.message)
+      return failureJSONResponse(res, { message: `something went wrong` },{error:err.message})
   }
 }
 
