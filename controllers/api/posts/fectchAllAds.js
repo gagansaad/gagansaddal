@@ -129,6 +129,7 @@ return failureJSONResponse(res, {
     }
    
   } catch (err) {
+    console.log(err);
       return failureJSONResponse(res, { message: `something went wrong` },{error:err.message})
   }
 }
