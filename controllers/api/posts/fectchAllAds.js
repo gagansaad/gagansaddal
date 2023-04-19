@@ -34,7 +34,7 @@ exports.fetchAll = async (req, res, next) => {
 
   try {
     let adstype = req.body.adsType;
-    let pageSize = parseInt(req.body.pageSize);
+    let pageSize = parseInt(req.body.pageSize) || 10;
     let page = parseInt(req.body.page) || 1;
     if (!adstype) return failureJSONResponse(res, { message: `Please provide post type  id` });
       else if (adstype && !isValidMongoObjId(mongoose, adstype)) return failureJSONResponse(res, { message: `Please provide valid post type id` });
@@ -48,7 +48,7 @@ exports.fetchAll = async (req, res, next) => {
     }
      
     if (findCategory.name === "Babysitters and Nannies"){
-      let babysitter = await babysitterAd.find().limit(pageSize || 10 ).skip(pageSize * page);;
+      let babysitter = await babysitterAd.find().limit(pageSize).skip(pageSize * page);;
       if(babysitter){
         return  successJSONResponse(res, {
           message: `Record found successfully`,
