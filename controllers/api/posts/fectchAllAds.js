@@ -33,13 +33,14 @@ category = mongoose.model("PostType"),
 exports.fetchAll = async (req, res, next) => {
 
   try {
-    let adstype = req.body.adsType;
-    let pageSize = parseInt(req.body.pageSize) || 10;
-    let page = parseInt(req.body.page) || 1;
+    let adstype = req.query.adsType;
+    var perPage = 9 || parseInt(req.query.perpage)
+    var page = req.query.page || 1
+   
     if (!adstype) return failureJSONResponse(res, { message: `Please provide post type  id` });
       else if (adstype && !isValidMongoObjId(mongoose, adstype)) return failureJSONResponse(res, { message: `Please provide valid post type id` });
 
-    let findCategory = await category.findOne({_id:req.body.adsType})
+    let findCategory = await category.findOne({_id:adstype})
    
     if(!findCategory){
       return  failureJSONResponse(res, {
@@ -48,8 +49,9 @@ exports.fetchAll = async (req, res, next) => {
     }
      
     if (findCategory.name === "Babysitters and Nannies"){
-      let babysitter = await babysitterAd.find().limit(pageSize).skip(pageSize * page);;
-      if(babysitter){
+      let babysitter = await babysitterAd.find({}) .skip((perPage * page) - perPage).limit(perPage)  
+      console.log(babysitter);
+      if(babysitter?.length){
         return  successJSONResponse(res, {
           message: `Record found successfully`,
           records:babysitter
