@@ -1,17 +1,17 @@
 const router = require(`express`).Router(),
     authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
-    controllers = require(`../../../controllers/api/posts/payment`);
+    controllers = require(`../../../controllers/api/posts/fectchAllAds`);
 
     
     
     
 
 
-router.post(`/create-payment-intent`,
+router.get(`/all-ads`,
 authMiddleware.ensureUserLoggedIn,
-    controllers.validatepaymentData,
-    controllers.plan_payment
+    controllers.fetchAll
 );
+
 
 
 module.exports = router;

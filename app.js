@@ -56,7 +56,8 @@ const jobsRoutes = require('./routes/api/ads/jobs');
 const buySellRoutes = require('./routes/api/ads/buysell');
 const babysitterRoutes = require('./routes/api/ads/babbysitter & nannis');
 const eventRoutes = require(`./routes/api/ads/event`)
-
+const paymentRoutes = require(`./routes/api/ads/payment`)
+const AllAdsRoutes = require(`./routes/api/ads/fetchAllAds`)
 
 //admin
 
@@ -105,7 +106,8 @@ app.use('/v1/api/posts/jobs', jobsRoutes);
 app.use('/v1/api/posts/buysell', buySellRoutes);
 app.use('/v1/api/posts/babysitter', babysitterRoutes);
 app.use('/v1/api/posts/biz', bizRoutes);
-
+app.use('/v1/api/posts/payment', paymentRoutes)
+app.use('/v1/api/posts/ads', AllAdsRoutes)
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))
