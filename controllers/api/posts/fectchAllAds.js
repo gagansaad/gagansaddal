@@ -49,7 +49,7 @@ exports.fetchAll = async (req, res, next) => {
     }
      
     if (findCategory.name === "Babysitters and Nannies"){
-      let babysitter = await babysitterAd.find({}) .skip((perPage * page) - perPage).limit(perPage)  
+      let babysitter = await babysitterAd.find({}).sort([['createdAt', -1]]) .skip((perPage * page) - perPage).limit(perPage)  
       console.log(babysitter);
       if(babysitter?.length){
         return  successJSONResponse(res, {
