@@ -63,7 +63,7 @@ exports.fetchAll = async (req, res, next) => {
       }
     }
     if (findCategory.name === "Buy & Sell"){
-      let buysell = await buysellAd.find().limit(pageSize).skip(pageSize * page);;
+      let buysell = await buysellAd.find().skip((perPage * page) - perPage).limit(perPage)  
       if(buysell){
         return  successJSONResponse(res, {
           message: `Record found successfully`,
@@ -77,7 +77,7 @@ return failureJSONResponse(res, {
       }
     }
     if (findCategory.name === "Local Biz and services"){
-      let biz = await bizAd.find().limit(pageSize).skip(pageSize * page);;
+      let biz = await bizAd.find().skip((perPage * page) - perPage).limit(perPage)  
       if(biz){
         return  successJSONResponse(res, {
           message: `Record found successfully`,
@@ -91,7 +91,7 @@ return failureJSONResponse(res, {
       }
     }
     if (findCategory.name === "Events"){
-      let event = await eventAd.find().limit(pageSize).skip(pageSize * page);;
+      let event = await eventAd.find().skip((perPage * page) - perPage).limit(perPage)  
       if(event){
         return  successJSONResponse(res, {
           message: `Record found successfully`,
@@ -104,7 +104,7 @@ return failureJSONResponse(res, {
     }
     }
     if (findCategory.name  === "Job"){
-      let jobs = await jobsAd.find().limit(pageSize).skip(pageSize * page);;
+      let jobs = await jobsAd.find().skip((perPage * page) - perPage).limit(perPage)  
       if(jobs){
         return  successJSONResponse(res, {
           message: `Record found successfully`,
@@ -117,7 +117,7 @@ return failureJSONResponse(res, {
     }
     }
     if (findCategory.name === "Room For Rent"){
-      let roomrent = await roomrentAd.find().limit(pageSize).skip(pageSize * page);;
+      let roomrent = await roomrentAd.find().skip((perPage * page) - perPage).limit(perPage)  
       if(roomrent){
         return  successJSONResponse(res, {
           message: `Record found successfully`,
