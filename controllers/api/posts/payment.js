@@ -30,7 +30,7 @@ category = mongoose.model("PostType"),
 
 //   const env = require('dotenv').config({path: '../../'});
 
-  const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+  // const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 
 
@@ -190,10 +190,10 @@ exports.validatepaymentData = async (req, res, next) => {
     // let findad = await 
     // let setprice = totalprice*100
 
-    const params = {
-      amount: setprice,
-      currency: coins,
-    }
+    // const params = {
+    //   amount: setprice,
+    //   currency: coins,
+    // }
     // if(paymentMethodType === 'acss_debit') {
     //   params.payment_method_options = {
     //     acss_debit: {
