@@ -19,10 +19,10 @@ const roomRentsSchema = new mongoose.Schema({
         //2 = inactive
         //3 = draft 
     },
-    isfeatured:{
+    isfeatured: {
         type: Boolean,
         required: true,
-        default:false
+        default: false
     },
 
     adsType: {
@@ -82,7 +82,7 @@ const roomRentsSchema = new mongoose.Schema({
         },
         preferredGender: {
             type: Number,
-           
+
             required: true
         },
         furnished: {
@@ -94,9 +94,9 @@ const roomRentsSchema = new mongoose.Schema({
             required: true
         },
         image: [{
-            ...defaultStringConfig,
-            required: true
-        }]
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `media`,
+        }],
 
     },
     listerBasicInfo: {
@@ -110,7 +110,7 @@ const roomRentsSchema = new mongoose.Schema({
 
         preferableModeContact: {
             type: Number,
-            enum: [1,2,3]
+            enum: [1, 2, 3]
         }
 
     },

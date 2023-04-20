@@ -134,10 +134,13 @@ exports.createAds = async (req, res, next) => {
 
     const userId = req.userId;
     const imageArr = [];
-
-    req.files.forEach((data) => {
-      imageArr.push(data?.path);
-    });
+    for(var i = 0; i < req.files.length; i++){
+      var thumbnail = JSON.stringify(req.files[i]);
+     
+      productImages =  await Media.create({image:thumbnail});            
+      imageArr.push(productImages._id);
+      
+  }
     
 
     const dataObj = {
@@ -209,10 +212,13 @@ exports.editAds = async (req, res, next) => {
       image
     } = req.body;
     const imageArr = [];
-
-    req.files.forEach((data) => {
-      imageArr.push(data?.path);
-    });
+    for(var i = 0; i < req.files.length; i++){
+      var thumbnail = JSON.stringify(req.files[i]);
+     
+      productImages =  await Media.create({image:thumbnail});            
+      imageArr.push(productImages._id);
+      
+  }
 
    
 

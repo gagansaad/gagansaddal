@@ -33,6 +33,7 @@ require(`./model/posts/jobs`);
 require(`./model/posts/buy&sell`);
 require(`./model/posts/bizAndServices`);
 require(`./model/posts/babbysitter & nannis`);
+require(`./model/image/image`);
 // admin configuration
 require(`./model/accounts/admin/configuration`);
 

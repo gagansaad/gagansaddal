@@ -20,10 +20,10 @@ const BuySellSchema = new mongoose.Schema({
         //2 = inactive
         //3 = draft 
     },
-    isfeatured:{
+    isfeatured: {
         type: Boolean,
         required: true,
-        default:false
+        default: false
     },
     adsType: {
         type: mongoose.Schema.Types.ObjectId,
@@ -49,7 +49,7 @@ const BuySellSchema = new mongoose.Schema({
         },
 
         price: {
-            type:Number,
+            type: Number,
             required: true
         },
         descriptions: {
@@ -61,9 +61,9 @@ const BuySellSchema = new mongoose.Schema({
             required: true
         },
         image: [{
-            ...defaultStringConfig,
-            required: true
-        }]
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `media`,
+        }],
 
     },
     listerBasicInfo: {
@@ -73,17 +73,17 @@ const BuySellSchema = new mongoose.Schema({
             countryCode: defaultStringConfig,
             phoneNumber: defaultStringConfig
         },
-            
-        location:defaultStringConfig,
+
+        location: defaultStringConfig,
         hideAddress: defaultBooleanConfig,
         addressInfo: defaultStringConfig,
         preferableModeContact: {
             type: Number,
-            enum: [1,2,3]
+            enum: [1, 2, 3]
         }
 
     }
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('Buy & Sell',BuySellSchema);
+module.exports = mongoose.model('Buy & Sell', BuySellSchema);

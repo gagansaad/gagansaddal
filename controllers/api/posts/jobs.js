@@ -5,7 +5,7 @@ const mongoose = require("mongoose"),
     successJSONResponse,
     failureJSONResponse,
   } = require(`../../../handlers/jsonResponseHandlers`),
-  { fieldsToExclude,listerBasicInfo } = require(`../../../utils/mongoose`),
+  { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
     isValidString,
     isValidMongoObjId,
@@ -49,15 +49,15 @@ exports.getDnymicsData = async (req, res, next) => {
       `Arabic`,
       `French`,
       `Other`],
-    employment_type:[`full-time`,
+    employment_type: [`full-time`,
       `part-time`,
       `contract`,
       `temporary`,
       `please contact`],
     work_authorization: [`test`, `test1`],
     preferred_gender: [`Male`,
-    `Female`,
-    `Any gender`],
+      `Female`,
+      `Any gender`],
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -91,8 +91,8 @@ exports.validateJobAdsData = async (req, res, next) => {
 
     } = req.body;
 
-   
-     if (status && (status != `active` && status !=  `inactive` &&  status !=`draft` ))  return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
+
+    if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
     if (!isValidString(categories))
@@ -107,7 +107,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid job Role`,
       });
-      if (!isValidString(employment_type))
+    if (!isValidString(employment_type))
       return failureJSONResponse(res, {
         message: "Please provide us your employment type",
       });
@@ -127,15 +127,15 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide us the information about how many languages do you know`,
       });
-    
+
     if (isNaN(Number(salary)))
       return failureJSONResponse(res, { message: `Please provide us salary` });
     if (isNaN(Number(no_of_opening)))
       return failureJSONResponse(res, { message: "Please provide number of jobs opening" });
-      else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null || no_of_opening.includes(".") ) failureJSONResponse(res, { message: `Please provide valid number of job opening` });
-      if (isNaN(Number(preferred_gender)))
+    else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null || no_of_opening.includes(".")) failureJSONResponse(res, { message: `Please provide valid number of job opening` });
+    if (isNaN(Number(preferred_gender)))
       return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
-      else if (preferred_gender < 1 || preferred_gender > 3 || preferred_gender.includes(".")) return failureJSONResponse(res, { message: `Please enter preferred_gender between 1 to 3` });
+    else if (preferred_gender < 1 || preferred_gender > 3 || preferred_gender.includes(".")) return failureJSONResponse(res, { message: `Please enter preferred_gender between 1 to 3` });
     if (!isValidUrl(website))
       return failureJSONResponse(res, {
         message: `Please provide valid website`,
@@ -144,18 +144,18 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide us work authorization`,
       });
-      if (!isValidString(location))
+    if (!isValidString(location))
       return failureJSONResponse(res, {
         message: `Please provide us location`,
       });
-      
+
     return next();
   } catch (err) {
     console.log(err);
   }
 };
 exports.validateListerBasicinfo = async (req, res, next) => {
- 
+
   try {
     const {
       emailAddress,
@@ -164,38 +164,38 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
-  
+
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
     // });
-    if(preferableModeContact){
-      if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".") ){
+    if (preferableModeContact) {
+      if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".")) {
         return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
-      } else if (preferableModeContact != 1 && preferableModeContact != 2  && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });}
+      } else if (preferableModeContact != 1 && preferableModeContact != 2 && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` }); }
     }
-    if (preferableModeContact && isNaN(Number(preferableModeContact))){
+    if (preferableModeContact && isNaN(Number(preferableModeContact))) {
       return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
     }
-    if (emailAddress && !isValidEmailAddress(emailAddress)){
+    if (emailAddress && !isValidEmailAddress(emailAddress)) {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
     }
-      
-      // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
 
-    if(["true","false"].includes(hideAddress) == false){
-        return  failureJSONResponse(res, {
-          message: `Please provide us hide/show address (true/false)`
+    // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
+
+    if (["true", "false"].includes(hideAddress) == false) {
+      return failureJSONResponse(res, {
+        message: `Please provide us hide/show address (true/false)`
       })
     }
-     
-      // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
-      // return failureJSONResponse(res, {
-      //   message: `Please provide valid phone number`,
-      // });
-    
+
+    // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
+    // return failureJSONResponse(res, {
+    //   message: `Please provide valid phone number`,
+    // });
+
     return next();
   } catch (err) {
     console.log(err);
@@ -226,15 +226,20 @@ exports.createJobAds = async (req, res, next) => {
       preferred_gender,
       location,
     } = req.body;
- 
+
     const imageArr = [];
 
-    req.files.forEach((data) => {
-      imageArr.push(data?.path);
-    });
+    for (var i = 0; i < req.files.length; i++) {
+      var thumbnail = JSON.stringify(req.files[i]);
+
+      productImages = await Media.create({ image: thumbnail });
+      imageArr.push(productImages._id);
+
+    }
+
 
     const dataObj = {
-     
+
       status: status,
       isfeatured,
       adsType,
@@ -258,19 +263,19 @@ exports.createJobAds = async (req, res, next) => {
         image: imageArr,
       },
       userId: userId,
-    
- 
-     
+
+
+
     };
 
     const newJobPost = await postJobAd.create(dataObj);
 
     const postJobAdObjToSend = {};
-  
-  
+
+
 
     for (let key in newJobPost.toObject()) {
-      if (!fieldsToExclude.hasOwnProperty(String(key))&&!listerBasicInfo.hasOwnProperty(String(key))) {
+      if (!fieldsToExclude.hasOwnProperty(String(key)) && !listerBasicInfo.hasOwnProperty(String(key))) {
         postJobAdObjToSend[key] = newJobPost[key];
       }
     }
@@ -278,7 +283,7 @@ exports.createJobAds = async (req, res, next) => {
     if (newJobPost) {
       return successJSONResponse(res, {
         message: `success`,
-        postJobAdObjToSend:postJobAdObjToSend,
+        postJobAdObjToSend: postJobAdObjToSend,
       });
     } else {
       return failureJSONResponse(res, {
@@ -299,10 +304,11 @@ exports.editJobAds = async (req, res, next) => {
     console.log(req.files);
     const jobId = req?.params?.jobId;
     const validate_id = await postJobAd.findById(jobId)
-    if (!validate_id){
-    return failureJSONResponse(res, {
-      message: `Failed to find your job id`,
-    })}
+    if (!validate_id) {
+      return failureJSONResponse(res, {
+        message: `Failed to find your job id`,
+      })
+    }
 
     if (!jobId)
       return successJSONResponse(res, {
@@ -337,20 +343,25 @@ exports.editJobAds = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
-    console.log(req.body.hideAddress,"ddeedr");
+    console.log(req.body.hideAddress, "ddeedr");
     const imageArr = [];
 
-    req.files.forEach((data) => {
-      imageArr.push(data?.path);
-    });
-    
+    for (var i = 0; i < req.files.length; i++) {
+      var thumbnail = JSON.stringify(req.files[i]);
+
+      productImages = await Media.create({ image: thumbnail });
+      imageArr.push(productImages._id);
+
+    }
+
+
     console.log(`imageArr`, imageArr);
-   
+
     const dataObj = {},
       adsInfoObj = {},
       listerBasicInfoObj = {};
 
-    if (status) dataObj.status =status;
+    if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
     if (title) adsInfoObj.title = title;
@@ -370,10 +381,10 @@ exports.editJobAds = async (req, res, next) => {
     if (imageArr.length) adsInfoObj.image = imageArr;
 
     if (name) listerBasicInfoObj.name = name;
-   
+
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
-     
+
     }
 
     const dataObjq = {
@@ -399,7 +410,7 @@ exports.editJobAds = async (req, res, next) => {
       { $set: dataObjq },
       { new: true }
     );
-   let updateJobAdObjToSend ={}
+    let updateJobAdObjToSend = {}
     for (let key in updateJob.toObject()) {
       if (!fieldsToExclude.hasOwnProperty(String(key))) {
         updateJobAdObjToSend[key] = updateJob[key];
@@ -408,7 +419,7 @@ exports.editJobAds = async (req, res, next) => {
     if (updateJob) {
       return successJSONResponse(res, {
         message: `success`,
-        updateJobAdObjToSend:updateJobAdObjToSend,
+        updateJobAdObjToSend: updateJobAdObjToSend,
       });
     } else {
       return failureJSONResponse(res, {
@@ -468,24 +479,24 @@ exports.editJobStatus = async (req, res, next) => {
 exports.fetchAll = async (req, res, next) => {
   try {
     const isFeatured = req.query.isfeatured;
-    let dbQuery ={
-        status: 1
+    let dbQuery = {
+      status: 1
     };
 
-if(isFeatured) dbQuery.isfeatured = isFeatured;
-      let records = await postJobAd.find(dbQuery);
-      if (records) {
+    if (isFeatured) dbQuery.isfeatured = isFeatured;
+    let records = await postJobAd.find(dbQuery);
+    if (records) {
 
-          return successJSONResponse(res, {
-              message: `success`,
-              total:Object.keys(records).length,
-              records,
-              status: 200,
-          })
-      } else {
-          return failureJSONResponse(res, { message: `Room not Available` })
-      }
+      return successJSONResponse(res, {
+        message: `success`,
+        total: Object.keys(records).length,
+        records,
+        status: 200,
+      })
+    } else {
+      return failureJSONResponse(res, { message: `Room not Available` })
+    }
   } catch (err) {
-      return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, { message: `something went wrong` })
   }
 }

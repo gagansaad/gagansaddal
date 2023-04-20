@@ -13,7 +13,7 @@ const roomRentsSchema = new mongoose.Schema({
 
     status: {
         type: String,
-        enum: [`active`,`inactive`,`draft`],
+        enum: [`active`, `inactive`, `draft`],
         required: true,
         default: "draft"
 
@@ -21,19 +21,19 @@ const roomRentsSchema = new mongoose.Schema({
         //2 = inactive
         //3 = draft 
     },
-    is_featured:{
-        value:{
+    is_featured: {
+        value: {
             type: Boolean,
             required: true,
-            default:false
+            default: false
         },
-        started_at:{
-            
+        started_at: {
+
         },
-        end_at:{
-            
+        end_at: {
+
         }
-      
+
     },
     adsType: {
         type: mongoose.Schema.Types.ObjectId,
@@ -61,7 +61,7 @@ const roomRentsSchema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-        employment_type:{
+        employment_type: {
             ...defaultStringConfig,
             required: true
         },
@@ -91,10 +91,10 @@ const roomRentsSchema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-       
-        location:{
+
+        location: {
             ...defaultStringConfig,
-            required:true,
+            required: true,
         },
         preferred_gender: {
             type: Number,
@@ -103,9 +103,9 @@ const roomRentsSchema = new mongoose.Schema({
         },
 
         image: [{
-            ...defaultStringConfig,
-            required: true
-        }]
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `media`,
+        }],
 
     },
     listerBasicInfo: {
@@ -118,7 +118,7 @@ const roomRentsSchema = new mongoose.Schema({
         hideAddress: defaultBooleanConfig,
         preferableModeContact: {
             type: Number,
-            enum: [1,2,3]
+            enum: [1, 2, 3]
         }
 
     }

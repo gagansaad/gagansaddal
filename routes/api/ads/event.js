@@ -44,7 +44,7 @@ router.get(`/dynamics-data`,
     controllers.getDnymicsData
 );
 
-router.post(`/new-event`, upload.array('photos', 12),
+router.post(`/new-event`, upload.array('photos', 10),
     authMiddleware.ensureUserLoggedIn,
     controllers.validateEventAdsData,
     controllers.createEventAds

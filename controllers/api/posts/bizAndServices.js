@@ -6,7 +6,7 @@ const mongoose = require("mongoose"),
     successJSONResponse,
     failureJSONResponse,
   } = require(`../../../handlers/jsonResponseHandlers`),
-  { fieldsToExclude,listerBasicInfo } = require(`../../../utils/mongoose`),
+  { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
     isValidString,
     isValidMongoObjId,
@@ -19,9 +19,9 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
-    profession:[`Local Professional`,`Business Center / Local Retailer / Showroom`,`Brand`,`Agent`],
+    profession: [`Local Professional`, `Business Center / Local Retailer / Showroom`, `Brand`, `Agent`],
     categories: [`employed`, `self employed`, `engineer`],
-    preferableModeContact:[`Phone Number`,`Email`]
+    preferableModeContact: [`Phone Number`, `Email`]
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -37,25 +37,25 @@ exports.validatebizAdsData = async (req, res, next) => {
     const {
       status,
       adsType,
-        profession,
-        categories,
-        buisness_name,
-        tagline,
-        buisnesslocation,
-        price,
-        descriptions,
-        Additional_info,
-        image,
-      
+      profession,
+      categories,
+      buisness_name,
+      tagline,
+      buisnesslocation,
+      price,
+      descriptions,
+      Additional_info,
+      image,
+
     } = req.body;
-    
-    if (status && (status != `active` && status !=  `inactive`&&  status !=`draft` ))  return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
+
+    if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
     if (!isValidString(profession))
-    return failureJSONResponse(res, {
-      message: `Please provide valid profession`,
-    });
+      return failureJSONResponse(res, {
+        message: `Please provide valid profession`,
+      });
     if (!isValidString(categories))
       return failureJSONResponse(res, {
         message: `Please provide valid Category`,
@@ -84,7 +84,7 @@ exports.validatebizAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide us Additional_info`,
       });
-   
+
     return next();
   } catch (err) {
     console.log(err);
@@ -92,7 +92,7 @@ exports.validatebizAdsData = async (req, res, next) => {
 };
 //////////////
 exports.validateListerBasicinfo = async (req, res, next) => {
- 
+
   try {
     const {
       emailAddress,
@@ -101,39 +101,39 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
-   console.log(typeof(hideAddress),"yyyyyyyyyyyyyyyyyyyyyy");
-console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)",isValidBoolean(hideAddress))
+    console.log(typeof (hideAddress), "yyyyyyyyyyyyyyyyyyyyyy");
+    console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)", isValidBoolean(hideAddress))
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
     // });
-    if(preferableModeContact){
-      if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".") ){
+    if (preferableModeContact) {
+      if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".")) {
         return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
-      } else if (preferableModeContact != 1 && preferableModeContact != 2  && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });}
+      } else if (preferableModeContact != 1 && preferableModeContact != 2 && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` }); }
     }
-    if (preferableModeContact && isNaN(Number(preferableModeContact))){
+    if (preferableModeContact && isNaN(Number(preferableModeContact))) {
       return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
     }
-    if (emailAddress && !isValidEmailAddress(emailAddress)){
+    if (emailAddress && !isValidEmailAddress(emailAddress)) {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
     }
-      
-      // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
 
-    if(["true","false"].includes(hideAddress) == false){
-        return  failureJSONResponse(res, {
-          message: `Please provide us hide/show address (true/false)`
+    // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
+
+    if (["true", "false"].includes(hideAddress) == false) {
+      return failureJSONResponse(res, {
+        message: `Please provide us hide/show address (true/false)`
       })
     }
-     
-      // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
-      // return failureJSONResponse(res, {
-      //   message: `Please provide valid phone number`,
-      // });
-    
+
+    // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
+    // return failureJSONResponse(res, {
+    //   message: `Please provide valid phone number`,
+    // });
+
     return next();
   } catch (err) {
     console.log(err);
@@ -143,7 +143,7 @@ console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolea
 
 exports.createbizAds = async (req, res, next) => {
   try {
-    console.log(req.files,"dccdcdc");
+    console.log(req.files, "dccdcdc");
     const {
       isfeatured,
       status,
@@ -164,13 +164,18 @@ exports.createbizAds = async (req, res, next) => {
 
     const imageArr = [];
 
-    req.files.forEach((data) => {
-      imageArr.push(data?.path);
-    });
+    for (var i = 0; i < req.files.length; i++) {
+      var thumbnail = JSON.stringify(req.files[i]);
+
+      productImages = await Media.create({ image: thumbnail });
+      imageArr.push(productImages._id);
+
+    }
+
 
     const dataObj = {
       isfeatured,
-      status:status,
+      status: status,
       adsType,
       adsInfo: {
         profession,
@@ -182,9 +187,9 @@ exports.createbizAds = async (req, res, next) => {
         descriptions,
         Additional_info,
         image: imageArr,
-      
+
       },
-     
+
       userId: userId,
     };
 
@@ -193,14 +198,14 @@ exports.createbizAds = async (req, res, next) => {
     const bizAndServices = {};
 
     for (let key in newbizPost.toObject()) {
-      if (!fieldsToExclude.hasOwnProperty(String(key))&&(!listerBasicInfo.hasOwnProperty(String(key)))) {
+      if (!fieldsToExclude.hasOwnProperty(String(key)) && (!listerBasicInfo.hasOwnProperty(String(key)))) {
         bizAndServices[key] = newbizPost[key];
       }
     }
     if (newbizPost) {
       return successJSONResponse(res, {
         message: `success`,
-        bizAndServices:bizAndServices,
+        bizAndServices: bizAndServices,
       });
     } else {
       return failureJSONResponse(res, {
@@ -220,12 +225,13 @@ exports.editbizAds = async (req, res, next) => {
   try {
     console.log(req.files);
     const bizId = req?.params?.bizId;
-    
+
     const validate_id = await postbizAndServicesAd.findById(bizId)
-    if (!validate_id){
-    return failureJSONResponse(res, {
-      message: `Failed to find your loacl biz And Services id`,
-    })}
+    if (!validate_id) {
+      return failureJSONResponse(res, {
+        message: `Failed to find your loacl biz And Services id`,
+      })
+    }
 
     if (!bizId)
       return successJSONResponse(res, {
@@ -237,16 +243,16 @@ exports.editbizAds = async (req, res, next) => {
     const {
       status,
       adsType,
-     
+
       profession,
-        categories,
-        buisness_name,
-        tagline,
-        buisnesslocation,
-        price,
-        descriptions,
-        Additional_info,
-        image,
+      categories,
+      buisness_name,
+      tagline,
+      buisnesslocation,
+      price,
+      descriptions,
+      Additional_info,
+      image,
       location,
       name,
       emailAddress,
@@ -257,9 +263,14 @@ exports.editbizAds = async (req, res, next) => {
     } = req.body;
     const imageArr = [];
 
-    req.files.forEach((data) => {
-      imageArr.push(data?.path);
-    });
+    for (var i = 0; i < req.files.length; i++) {
+      var thumbnail = JSON.stringify(req.files[i]);
+
+      productImages = await Media.create({ image: thumbnail });
+      imageArr.push(productImages._id);
+
+    }
+
 
     console.log(`imageArr`, imageArr);
 
@@ -267,7 +278,7 @@ exports.editbizAds = async (req, res, next) => {
       adsInfoObj = {},
       listerBasicInfoObj = {};
 
-    if (status) dataObj.status =status;
+    if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
     if (profession) adsInfoObj.profession = profession;
@@ -279,7 +290,7 @@ exports.editbizAds = async (req, res, next) => {
     if (descriptions) adsInfoObj.descriptions = descriptions;
     if (Additional_info) adsInfoObj.Additional_info = Additional_info;
     if (imageArr.length) adsInfoObj.image = imageArr;
-    
+
 
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
@@ -306,7 +317,7 @@ exports.editbizAds = async (req, res, next) => {
       { $set: dataObjq },
       { new: true }
     );
-    let updatebizAdObjToSend ={}
+    let updatebizAdObjToSend = {}
     for (let key in updatebiz.toObject()) {
       if (!fieldsToExclude.hasOwnProperty(String(key))) {
         updatebizAdObjToSend[key] = updatebiz[key];
@@ -316,7 +327,7 @@ exports.editbizAds = async (req, res, next) => {
     if (updatebiz) {
       return successJSONResponse(res, {
         message: `success`,
-        updatebizAdObjToSend:updatebizAdObjToSend,
+        updatebizAdObjToSend: updatebizAdObjToSend,
       });
     } else {
       return failureJSONResponse(res, {
@@ -375,23 +386,23 @@ exports.editJobStatus = async (req, res, next) => {
 exports.fetchAll = async (req, res, next) => {
   try {
     const isFeatured = req.query.isfeatured;
-    let dbQuery ={
-        status: 1
+    let dbQuery = {
+      status: 1
     };
 
-if(isFeatured) dbQuery.isfeatured = isFeatured;
-      let records = await postJobAd.find(dbQuery);
-      if (records) {
-          return successJSONResponse(res, {
-              message: `success`,
-              total:Object.keys(records).length,
-              records,
-              status: 200,
-          })
-      } else {
-          return failureJSONResponse(res, { message: `Room not Available` })
-      }
+    if (isFeatured) dbQuery.isfeatured = isFeatured;
+    let records = await postJobAd.find(dbQuery);
+    if (records) {
+      return successJSONResponse(res, {
+        message: `success`,
+        total: Object.keys(records).length,
+        records,
+        status: 200,
+      })
+    } else {
+      return failureJSONResponse(res, { message: `Room not Available` })
+    }
   } catch (err) {
-      return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, { message: `something went wrong` })
   }
 }

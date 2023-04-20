@@ -1,7 +1,7 @@
 const { json } = require("express");
 
 const mongoose = require("mongoose"),
-postBuySellAd = mongoose.model("Buy & Sell"),
+  postBuySellAd = mongoose.model("Buy & Sell"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -20,10 +20,10 @@ postBuySellAd = mongoose.model("Buy & Sell"),
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
     categories: [`buy`, `sell `],
-    product_condition:[`New`,`Used`,`Good`,`Age-worn`],
-    user_type:[`Individual`,`Retailer`],
+    product_condition: [`New`, `Used`, `Good`, `Age-worn`],
+    user_type: [`Individual`, `Retailer`],
 
-    
+
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -49,20 +49,20 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       additional_info,
       image,
     } = req.body;
-    if (status && (status != `active` && status !=  `inactive`&&  status !=`draft` ))  return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
+    if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
     if (!isValidString(title))
-    return failureJSONResponse(res, {
-      message: "Pleae provide us your title",
-    });
-    
+      return failureJSONResponse(res, {
+        message: "Pleae provide us your title",
+      });
+
     if (!isValidString(descriptions))
       return failureJSONResponse(res, {
         message: `please provide valid description`,
       });
-      
+
     if (!isValidString(categories))
       return failureJSONResponse(res, {
         message: `Please provide valid category`,
@@ -75,21 +75,21 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid product_condition`,
       });
-      if (!price)
+    if (!price)
       return failureJSONResponse(res, {
-        message: `please provide valid price`,    
+        message: `please provide valid price`,
       });
-   
-   
-      if (isNaN(Number(price)))
+
+
+    if (isNaN(Number(price)))
       return failureJSONResponse(res, {
-        message: `please provide valid price`,    
+        message: `please provide valid price`,
       });
 
     if (!isValidString(additional_info))
       return failureJSONResponse(res, { message: `please provide valid additional_info` });
-      
-  
+
+
 
     return next();
   } catch (err) {
@@ -100,7 +100,7 @@ exports.validateBuySellAdsData = async (req, res, next) => {
 ///////////////
 
 exports.validateListerBasicinfo = async (req, res, next) => {
- 
+
   try {
     const {
       emailAddress,
@@ -109,39 +109,39 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
-   console.log(typeof(hideAddress),"yyyyyyyyyyyyyyyyyyyyyy");
-console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)",isValidBoolean(hideAddress))
+    console.log(typeof (hideAddress), "yyyyyyyyyyyyyyyyyyyyyy");
+    console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)", isValidBoolean(hideAddress))
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
     // });
-    if(preferableModeContact){
-      if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".") ){
+    if (preferableModeContact) {
+      if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".")) {
         return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
-      } else if (preferableModeContact != 1 && preferableModeContact != 2  && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });}
+      } else if (preferableModeContact != 1 && preferableModeContact != 2 && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` }); }
     }
-    if (preferableModeContact && isNaN(Number(preferableModeContact))){
+    if (preferableModeContact && isNaN(Number(preferableModeContact))) {
       return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
     }
-    if (emailAddress && !isValidEmailAddress(emailAddress)){
+    if (emailAddress && !isValidEmailAddress(emailAddress)) {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
     }
-      
-      // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
 
-    if(["true","false"].includes(hideAddress) == false){
-        return  failureJSONResponse(res, {
-          message: `Please provide us hide/show address (true/false)`
+    // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
+
+    if (["true", "false"].includes(hideAddress) == false) {
+      return failureJSONResponse(res, {
+        message: `Please provide us hide/show address (true/false)`
       })
     }
-     
-      // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
-      // return failureJSONResponse(res, {
-      //   message: `Please provide valid phone number`,
-      // });
-    
+
+    // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
+    // return failureJSONResponse(res, {
+    //   message: `Please provide valid phone number`,
+    // });
+
     return next();
   } catch (err) {
     console.log(err);
@@ -170,9 +170,14 @@ exports.createBuySellAds = async (req, res, next) => {
 
     const imageArr = [];
 
-    req.files.forEach((data) => {
-      imageArr.push(data?.path);
-    });
+    for (var i = 0; i < req.files.length; i++) {
+      var thumbnail = JSON.stringify(req.files[i]);
+
+      productImages = await Media.create({ image: thumbnail });
+      imageArr.push(productImages._id);
+
+    }
+
 
     const dataObj = {
       isfeatured,
@@ -196,7 +201,7 @@ exports.createBuySellAds = async (req, res, next) => {
     const postBuySellAdObjToSend = {};
 
     for (let key in newBuySellPost.toObject()) {
-      if (!fieldsToExclude.hasOwnProperty(String(key))&&!listerBasicInfo.hasOwnProperty(String(key))) {
+      if (!fieldsToExclude.hasOwnProperty(String(key)) && !listerBasicInfo.hasOwnProperty(String(key))) {
         postBuySellAdObjToSend[key] = newBuySellPost[key];
       }
     }
@@ -204,7 +209,7 @@ exports.createBuySellAds = async (req, res, next) => {
     if (newBuySellPost) {
       return successJSONResponse(res, {
         message: `success`,
-        postBuySellAdObjToSend:postBuySellAdObjToSend,
+        postBuySellAdObjToSend: postBuySellAdObjToSend,
       });
     } else {
       return failureJSONResponse(res, {
@@ -220,16 +225,17 @@ exports.createBuySellAds = async (req, res, next) => {
 ///--------------------------Edit buysell-----------------------------///
 
 exports.editBuySellAds = async (req, res, next) => {
- 
+
   try {
     console.log(req.params);
     const buyAndSellId = req?.params?.buyAndSellId;
 
     const validate_id = await postBuySellAd.findById(buyAndSellId)
-    if (!validate_id){
-    return failureJSONResponse(res, {
-      message: `Failed to find your buy sell id`,
-    })}
+    if (!validate_id) {
+      return failureJSONResponse(res, {
+        message: `Failed to find your buy sell id`,
+      })
+    }
 
     const {
       status,
@@ -253,9 +259,14 @@ exports.editBuySellAds = async (req, res, next) => {
     } = req.body;
     const imageArr = [];
 
-    req.files.forEach((data) => {
-      imageArr.push(data?.path);
-    });
+    for (var i = 0; i < req.files.length; i++) {
+      var thumbnail = JSON.stringify(req.files[i]);
+
+      productImages = await Media.create({ image: thumbnail });
+      imageArr.push(productImages._id);
+
+    }
+
 
     console.log(`imageArr`, imageArr);
 
@@ -308,7 +319,7 @@ exports.editBuySellAds = async (req, res, next) => {
       { new: true }
     );
 
-    let updateBuySellAdObjToSend ={}
+    let updateBuySellAdObjToSend = {}
     for (let key in updateProduct.toObject()) {
       if (!fieldsToExclude.hasOwnProperty(String(key))) {
         updateBuySellAdObjToSend[key] = updateProduct[key];
@@ -318,7 +329,7 @@ exports.editBuySellAds = async (req, res, next) => {
     if (updateProduct) {
       return successJSONResponse(res, {
         message: `success`,
-        updateBuySellAdObjToSend:updateBuySellAdObjToSend,
+        updateBuySellAdObjToSend: updateBuySellAdObjToSend,
       });
     } else {
       return failureJSONResponse(res, {
@@ -358,7 +369,7 @@ exports.editBuySellStatus = async (req, res, next) => {
     if (updateProduct) {
       return successJSONResponse(res, {
         message: `success`,
-        updateProductStatus:updateProduct,
+        updateProductStatus: updateProduct,
       });
     } else {
       return failureJSONResponse(res, {
@@ -379,23 +390,23 @@ exports.editBuySellStatus = async (req, res, next) => {
 exports.fetchAll = async (req, res, next) => {
   try {
     const isFeatured = req.query.isfeatured;
-    let dbQuery ={
-        status: 1
+    let dbQuery = {
+      status: 1
     };
 
-if(isFeatured) dbQuery.isfeatured = isFeatured;
-      let records = await postBuySellAd.find(dbQuery);
-      if (records) {
-          return successJSONResponse(res, {
-              message: `success`,
-              total:Object.keys(records).length,
-              records,
-              status: 200,
-          })
-      } else {
-          return failureJSONResponse(res, { message: `Room not Available` })
-      }
+    if (isFeatured) dbQuery.isfeatured = isFeatured;
+    let records = await postBuySellAd.find(dbQuery);
+    if (records) {
+      return successJSONResponse(res, {
+        message: `success`,
+        total: Object.keys(records).length,
+        records,
+        status: 200,
+      })
+    } else {
+      return failureJSONResponse(res, { message: `Room not Available` })
+    }
   } catch (err) {
-      return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, { message: `something went wrong` })
   }
 }

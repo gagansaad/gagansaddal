@@ -2,6 +2,7 @@ const { json } = require("express");
 
 const mongoose = require("mongoose"),
   eventAd = mongoose.model("event"),
+  Media = mongoose.model("media"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -160,10 +161,13 @@ exports.createEventAds = async (req, res, next) => {
 
     const imageArr = [];
 
-    req.files.forEach((data) => {
+    for(var i = 0; i < req.files.length; i++){
+      var thumbnail = JSON.stringify(req.files[i]);
+     
+      productImages =  await Media.create({image:thumbnail});            
+      imageArr.push(productImages._id);
       
-      imageArr.push(data?.path);
-    });
+  }
 
     const dataObj = {
       isfeatured,
@@ -213,7 +217,7 @@ exports.createEventAds = async (req, res, next) => {
 exports.editEventAds = async (req, res, next) => {
 
   try {
-    console.log(req.files);
+   
     const eventId = req?.params?.eventId;
  
     const validate_id = await eventAd.findById(eventId)
@@ -251,14 +255,17 @@ exports.editEventAds = async (req, res, next) => {
       addressInfo,
       preferableModeContact,
     } = req.body;
-    const imageArr = [];
 
-    req.files.forEach((data) => {
-      imageArr.push(data?.path);
-    });
-
-    console.log(`imageArr`, imageArr);
-
+    let imageArr =[]
+    for(var i = 0; i < req.files.length; i++){
+      var thumbnail = JSON.stringify(req.files[i]);
+     
+      productImages =  await Media.create({image:thumbnail});            
+      imageArr.push(productImages._id);
+      
+  }
+    
+    console.log(imageArr,"bahar wala")
     const dataObj = {},
       adsInfoObj = {},
       listerBasicInfoObj = {};

@@ -20,10 +20,10 @@ const babysitter_Schema = new mongoose.Schema({
         //2 = inactive
         //3 = draft 
     },
-    isfeatured:{
+    isfeatured: {
         type: Boolean,
         required: true,
-        default:false
+        default: false
     },
 
     adsType: {
@@ -44,10 +44,10 @@ const babysitter_Schema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-     image: [{
-            ...defaultStringConfig,
-            required: true
-        }]
+        image: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `media`,
+        }],
     },
     listerBasicInfo: {
         name: defaultStringConfig,
@@ -56,17 +56,17 @@ const babysitter_Schema = new mongoose.Schema({
             countryCode: defaultStringConfig,
             phoneNumber: defaultStringConfig
         },
-            
-        location:defaultStringConfig,
+
+        location: defaultStringConfig,
         hideAddress: defaultBooleanConfig,
-        addressInfo:defaultStringConfig,
+        addressInfo: defaultStringConfig,
         preferableModeContact: {
             type: Number,
-            enum: [1,2,3]
+            enum: [1, 2, 3]
         }
 
     }
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('babysitter & nannie',babysitter_Schema);
+module.exports = mongoose.model('babysitter & nannie', babysitter_Schema);

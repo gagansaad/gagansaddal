@@ -58,9 +58,8 @@ const events_Schema = new mongoose.Schema({
         },
        
         image: [{
-            ...defaultStringConfig,
-            required: true
-        
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `media`,
         }],
         location:defaultStringConfig
 
