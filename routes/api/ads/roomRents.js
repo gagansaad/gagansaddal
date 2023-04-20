@@ -47,7 +47,7 @@ router.get(`/dynamics-data`,
     controllers.fetchDynamicsData
 );
 
-router.post(`/`, upload.array('photos', 12),
+router.post(`/`, upload.array('photos', 10),
     authMiddleware.ensureUserLoggedIn,
     controllers.validateRoomRentsAdsData,
     controllers.creatingRoomRentsAds
@@ -56,7 +56,7 @@ router.post(`/`, upload.array('photos', 12),
 
 
 router.patch(`/edit/:roomRentId`,
-    upload.array('photos', 12),
+    upload.array('photos', 10),
     authMiddleware.ensureUserLoggedIn,
     controllers.validateListerBasicinfo,
     controllers.validateRoomRentsAdsData,
