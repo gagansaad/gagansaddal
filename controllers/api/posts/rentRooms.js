@@ -90,8 +90,7 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         } = req.body;
 
 
-        if (status && (status != `active` || status !=  `inactive`||  status !=`draft` ))  return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
-
+        if (status && (status != `active` && status !=  `inactive`&&  status !=`draft` ))  return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
         if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
         else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
