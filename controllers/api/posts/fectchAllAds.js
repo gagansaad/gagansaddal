@@ -1,16 +1,18 @@
 const { json } = require("express");
+const { find } = require("../../../model/posts/payment");
 
 const mongoose = require("mongoose"),
-eventAd = mongoose.model("event"),
-bizAd = mongoose.model("Local_biz & Service"),
-buysellAd = mongoose.model("Buy & Sell"),
-babysitterAd = mongoose.model("babysitter & nannie"),
-roomrentAd = mongoose.model("RoomRent"),
-jobsAd = mongoose.model("job"),
-category = mongoose.model("PostType"),
+  eventAd = mongoose.model("event"),
+  bizAd = mongoose.model("Local_biz & Service"),
+  buysellAd = mongoose.model("Buy & Sell"),
+  babysitterAd = mongoose.model("babysitter & nannie"),
+  roomrentAd = mongoose.model("RoomRent"),
+  jobsAd = mongoose.model("job"),
+  category = mongoose.model("PostType"),
   {
     successJSONResponse,
     failureJSONResponse,
+    successJSONResponseWithPagination,
   } = require(`../../../handlers/jsonResponseHandlers`),
   { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
@@ -34,105 +36,48 @@ exports.fetchAll = async (req, res, next) => {
 
   try {
     let adstype = req.query.adsType;
-    var perPage = 9 || parseInt(req.query.perpage)
-    var page = req.query.page || 1
-   
-    if (!adstype) return failureJSONResponse(res, { message: `Please provide post type  id` });
-      else if (adstype && !isValidMongoObjId(mongoose, adstype)) return failureJSONResponse(res, { message: `Please provide valid post type id` });
+    var perPage = 10 || parseInt(req.query.perpage)
+    var page = parseInt(req.query.page) || 1
 
-    let findCategory = await category.findOne({_id:adstype})
-   
-    if(!findCategory){
-      return  failureJSONResponse(res, {
+    if (!adstype) return failureJSONResponse(res, { message: `Please provide post type id` });
+    else if (adstype && !isValidMongoObjId(mongoose, adstype)) return failureJSONResponse(res, { message: `Please provide valid post type id` });
+
+    let findCategory = await category.findOne({ _id: adstype })
+
+    if (!findCategory) {
+      return failureJSONResponse(res, {
         message: `Category not found`
-    })
-    }
-     
-    if (findCategory.name === "Babysitters and Nannies"){
-      let babysitter = await babysitterAd.find({}).sort({createdAt:-1}) .skip((perPage * page) - perPage).limit(perPage)  
-      console.log(babysitter);
-      if(babysitter?.length){
-        return  successJSONResponse(res, {
-          message: `Record found successfully`,
-          records:babysitter
       })
-      }else{
-            return failureJSONResponse(res, {
-        message: `Record not found`
-    })
-      }
     }
-    if (findCategory.name === "Buy & Sell"){
-      let buysell = await buysellAd.find().sort({createdAt:-1}) .skip((perPage * page) - perPage).limit(perPage)
-      if(buysell){
-        return  successJSONResponse(res, {
-          message: `Record found successfully`,
-          records:buysell
-      })
-      }else{
-return failureJSONResponse(res, {
-        message: `Record not found`
-    })
-
-      }
+    console.log(findCategory.name);
+    switch (findCategory.name) {
+      case 'Babysitters and Nannies':
+        successJSONResponseWithPagination(res, babysitterAd, page, perPage)
+        break;
+      case 'Buy & Sell':
+        successJSONResponseWithPagination(res, buysellAd, page, perPage)
+        break;
+      case 'Local Biz and services':
+         successJSONResponseWithPagination(res, bizAd, page, perPage)
+        break;
+      case 'Events':
+         successJSONResponseWithPagination(res, eventAd, page, perPage)
+        break;
+      case 'Job':
+        successJSONResponseWithPagination(res, jobsAd, page, perPage)
+        break;
+        case "Room For Rent":
+           successJSONResponseWithPagination(res, roomrentAd, page, perPage)
+          break;
+      default:
+         failureJSONResponse(res, {
+          message: `Record not found`
+        })
+        break;
     }
-    if (findCategory.name === "Local Biz and services"){
-      let biz = await bizAd.find().sort({createdAt:-1}) .skip((perPage * page) - perPage).limit(perPage)
-      if(biz){
-        return  successJSONResponse(res, {
-          message: `Record found successfully`,
-          records:biz
-      })
-      }else{
-return failureJSONResponse(res, {
-        message: `Record not found`
-    })
-
-      }
-    }
-    if (findCategory.name === "Events"){
-      let event = await eventAd.find().sort({createdAt:-1}) .skip((perPage * page) - perPage).limit(perPage)
-      if(event){
-        return  successJSONResponse(res, {
-          message: `Record found successfully`,
-          records:event
-      })
-      }else{
-    return failureJSONResponse(res, {
-        message: `Record not found`
-    })  
-    }
-    }
-    if (findCategory.name  === "Job"){
-      let jobs = await jobsAd.find().sort({createdAt:-1}) .skip((perPage * page) - perPage).limit(perPage)
-      if(jobs){
-        return  successJSONResponse(res, {
-          message: `Record found successfully`,
-          records:jobs
-      })
-      }else{
-    return failureJSONResponse(res, {
-        message: `Record not found`
-    })  
-    }
-    }
-    if (findCategory.name === "Room For Rent"){
-      let roomrent = await roomrentAd.find().sort({createdAt:-1}) .skip((perPage * page) - perPage).limit(perPage)
-      if(roomrent){
-        return  successJSONResponse(res, {
-          message: `Record found successfully`,
-          records:roomrent
-      })
-      }else{
-    return failureJSONResponse(res, {
-        message: `Record not found`
-    })  
-    }
-    }
-   
   } catch (err) {
-    console.log(err);
-      return failureJSONResponse(res, { message: `something went wrong` },{error:err.message})
+    console.log(err)
+    return failureJSONResponse(res, { message: `something went wrong` }, { error: err.message })
   }
 }
 
