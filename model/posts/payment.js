@@ -13,12 +13,10 @@ const roomRentsSchema = new mongoose.Schema({
 
     status: {
         type: String,
-        enum: ["pending","success","rejected"],
+        enum: [`active`,`inactive`,`draft`],
         required: true,
-        default: "pending"
-        //1 = pending
-        //2 = success
-        //3 = rejected
+        default: "draft"
+      
     },  
     plan:{  
         type: mongoose.Schema.Types.ObjectId,

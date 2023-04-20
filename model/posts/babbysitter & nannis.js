@@ -11,10 +11,10 @@ const {
 const babysitter_Schema = new mongoose.Schema({
 
     status: {
-        type: Number,
-        enum: [1, 2, 3],
+        type: String,
+        enum: [`active`, `inactive`, `draft`],
         required: true,
-        default:3
+        default: "draft"
 
         //1 = active
         //2 = inactive

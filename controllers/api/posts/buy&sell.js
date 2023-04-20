@@ -49,9 +49,7 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       additional_info,
       image,
     } = req.body;
-    if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
-    else if (status < 1 || status > 3) failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
-    else if (status != 1 && status != 2 &&  status != 3)  return failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
+    if (status && (status != `active` || status !=  `inactive`||  status !=`draft` ))  return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
@@ -178,7 +176,7 @@ exports.createBuySellAds = async (req, res, next) => {
 
     const dataObj = {
       isfeatured,
-      status: parseInt(status),
+      status: status,
       adsType,
       adsInfo: {
         title,
@@ -265,7 +263,7 @@ exports.editBuySellAds = async (req, res, next) => {
       adsInfoObj = {},
       listerBasicInfoObj = {};
 
-    if (status) dataObj.status = parseInt(status);
+    if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
     if (title) adsInfoObj.title = title;

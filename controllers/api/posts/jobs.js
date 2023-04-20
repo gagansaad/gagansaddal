@@ -20,15 +20,44 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
-    categories: [`employed`, `self employed`, `engineer`],
-    role: [`male`,`female`,`couple`],
+    categories: [`Accounting and Finance`,
+      `Tax Services`,
+      `Bar and Restaurant`,
+      `Sales and Retail sales`,
+      `Child care`,
+      `Cleaning and House Keeping`,
+      `Construction and trades`,
+      `Customer Service`,
+      `Drivers and Security`,
+      `General Labour`,
+      `Graphic and Geb design`,
+      `Hair Stylist and Salon`,
+      `Health Care`,
+      `Office Manager and Receptionist`,
+      `Interns and Students`,
+      `Programmers and Computer`,
+      `TV, Media ,Fashion`,
+      `Other`],
 
-    type: [`Enginner`, `Plumber`],
+    type: [`Local Jobs`,
+      `Remote Jobs`],
 
-    language: [`English`, `Hindi`],
-
+    language: [`English`,
+      `Amharic`,
+      `Afan Oromo`,
+      `Tigrigna`,
+      `Arabic`,
+      `French`,
+      `Other`],
+    employment_type:[`full-time`,
+      `part-time`,
+      `contract`,
+      `temporary`,
+      `please contact`],
     work_authorization: [`test`, `test1`],
-    preferred_gender: [`male`, `female`],
+    preferred_gender: [`Male`,
+    `Female`,
+    `Any gender`],
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -49,6 +78,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       categories,
       type,
       role,
+      employment_type,
       experience,
       language,
       salary,
@@ -61,9 +91,8 @@ exports.validateJobAdsData = async (req, res, next) => {
 
     } = req.body;
 
-    if (isNaN(Number(status))) return failureJSONResponse(res, { message: `Please enter valid status` });
-    else if (status < 1 || status > 3)  return failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
-    else if (status != 1 && status != 2 &&  status != 3 || status.includes(".") )  return failureJSONResponse(res, { message: `Please enter status between 1 to 3` });
+   
+     if (status && (status != `active` || status !=  `inactive`||  status !=`draft` ))  return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
     if (!isValidString(categories))
@@ -77,6 +106,10 @@ exports.validateJobAdsData = async (req, res, next) => {
     if (!isValidString(role))
       return failureJSONResponse(res, {
         message: `Please provide valid job Role`,
+      });
+      if (!isValidString(employment_type))
+      return failureJSONResponse(res, {
+        message: "Please provide us your employment type",
       });
     if (!isValidString(title))
       return failureJSONResponse(res, {
@@ -131,8 +164,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
-   console.log(typeof(hideAddress),"yyyyyyyyyyyyyyyyyyyyyy");
-console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)",isValidBoolean(hideAddress))
+  
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
@@ -184,6 +216,7 @@ exports.createJobAds = async (req, res, next) => {
       categories,
       type,
       role,
+      employment_type,
       experience,
       language,
       salary,
@@ -202,7 +235,7 @@ exports.createJobAds = async (req, res, next) => {
 
     const dataObj = {
      
-      status: parseInt(status),
+      status: status,
       isfeatured,
       adsType,
       adsInfo: {
@@ -213,6 +246,7 @@ exports.createJobAds = async (req, res, next) => {
         categories,
         type,
         role,
+        employment_type,
         experience,
         language,
         salary,
@@ -285,6 +319,7 @@ exports.editJobAds = async (req, res, next) => {
       categories,
       type,
       role,
+      employment_type,
       experience,
       language,
       salary,
@@ -315,7 +350,7 @@ exports.editJobAds = async (req, res, next) => {
       adsInfoObj = {},
       listerBasicInfoObj = {};
 
-    if (status) dataObj.status = parseInt(status);
+    if (status) dataObj.status =status;
     if (adsType) dataObj.adsType = adsType;
 
     if (title) adsInfoObj.title = title;
@@ -323,6 +358,7 @@ exports.editJobAds = async (req, res, next) => {
     if (type) adsInfoObj.type = type;
     if (categories) adsInfoObj.categories = categories;
     if (role) adsInfoObj.role = role;
+    if (employment_type) adsInfoObj.employment_type = employment_type;
     if (experience) adsInfoObj.experience = experience;
     if (language) adsInfoObj.language = language;
     if (salary) adsInfoObj.salary = salary;

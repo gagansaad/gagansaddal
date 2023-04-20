@@ -11,9 +11,10 @@ const {
 const BuySellSchema = new mongoose.Schema({
 
     status: {
-        type: Number,
-        enum: [1, 2, 3],
-        required: true
+        type: String,
+        enum: [`active`, `inactive`, `draft`],
+        required: true,
+        default: "draft"
 
         //1 = active
         //2 = inactive
