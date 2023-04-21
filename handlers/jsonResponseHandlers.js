@@ -1,8 +1,8 @@
-exports.successJSONResponseWithPagination = async (res, responseModel, OnPage, perPage = 10, message = `Record found successfully`, data, httpStatusCode = 200) => {
+exports.successJSONResponseWithPagination = async (res, responseModel, OnPage, perPage = 10,dbQuery, message = `Record found successfully`, data, httpStatusCode = 200) => {
 
     if (res) {
         
-        let responseModelWithLimit = await responseModel.find({}).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
+        let responseModelWithLimit = await responseModel.find(dbQuery).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
         if (!responseModelWithLimit?.length) {
             return this.failureJSONResponse(res, {
                 message: `Record not found`
@@ -23,30 +23,7 @@ exports.successJSONResponseWithPagination = async (res, responseModel, OnPage, p
     }
 }
 
-exports.successJSONResponseWithPaginationforone = async (res, responseModel, OnPage, perPage = 10, message = `Record found successfully`, data, httpStatusCode = 200) => {
 
-    if (res) {
-        
-        let responseModelWithLimit = await responseModel.findOne({_id:req.query._id}).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
-        if (!responseModelWithLimit?.length) {
-            return this.failureJSONResponse(res, {
-                message: `Record not found`
-            })
-        }
-        const responseModelCount = await responseModel.count();
-        const mainData = {
-            message: message,
-            perPage: perPage,
-            totalPages: Math.ceil(responseModelCount / perPage),
-            currentPage: OnPage,
-            data: responseModelWithLimit
-        }
-        return res.status(httpStatusCode).json({
-            status: httpStatusCode,
-            ...mainData, ...data
-        });
-    }
-}
 exports.successJSONResponse = (res = null, data = null, httpStatusCode = null) => {
 
     if (res) {
