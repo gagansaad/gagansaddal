@@ -21,6 +21,9 @@ const mongoose = require("mongoose"),
 exports.fetchDynamicsData = async (req, res, next) => {
 
     const objtSend = {
+        rental_type:["Rooms for Rent", "Commercial Property for Rent", "Other Rentals"],
+        category_Room:["Apartment", "Condo", "Townhouse", "House", "Basement"],
+        category_Commercial_Property:["Commercial Building", "Office", "Parking Space", "Warehouse", "Venues"],
         roomType: [
             `Single`,
             `Double`,

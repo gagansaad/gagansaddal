@@ -23,7 +23,9 @@ const mongoose = require("mongoose"),
 
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
-    type: [`live`, `vanue based`],
+    type: ["Venue Based Event", "Live Event", "Both Venue based and Live Streaming Event"],
+    category:["Sport event", "Festival", "Religious", "Music concert", "Night party", "Health care advisor", "Food & drink", "Drama", "Markets & Auction", "Spritual", "Valantines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
+    platform:["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"]   
   };
   return successJSONResponse(res, {
     message: `success`,
