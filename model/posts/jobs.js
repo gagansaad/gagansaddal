@@ -93,7 +93,7 @@ const roomRentsSchema = new mongoose.Schema({
             required: true,
         },
         preferred_gender: {
-            type: Number,
+            ...defaultStringConfig,
             enum: [`Male`,`Female`,`Any gender`],
             required: true
         },
@@ -104,7 +104,6 @@ const roomRentsSchema = new mongoose.Schema({
         }],
         video: {
             ...defaultStringConfig,
-            required: true,
         },
 
     },

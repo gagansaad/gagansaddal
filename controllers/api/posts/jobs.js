@@ -135,14 +135,14 @@ exports.validateJobAdsData = async (req, res, next) => {
     if (isNaN(Number(no_of_opening)))
       return failureJSONResponse(res, { message: "Please provide number of jobs opening" });
     else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null || no_of_opening.includes(".")) failureJSONResponse(res, { message: `Please provide valid number of job opening` });
-    if (isNaN(Number(preferred_gender)))
+    if (!isValidString(preferred_gender))
       return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
-    else if (preferred_gender != 1 || preferred_gender > 3 || preferred_gender.includes(".")) return failureJSONResponse(res, { message: `Please enter preferred_gender between 1 to 3` });
+    else if (preferred_gender != `Male` && preferred_gender !=  `Female` && preferred_gender !=  `Any gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male , Female or Any gender` });
     if (!isValidUrl(website))
       return failureJSONResponse(res, {
         message: `Please provide valid website`,
       });
-      if (!isValidUrl(video))
+      if (video && !isValidUrl(video))
       return failureJSONResponse(res, {
         message: `Please provide valid video link`,
       });
@@ -265,7 +265,7 @@ exports.createJobAds = async (req, res, next) => {
         website,
         work_authorization,
         location,
-        preferred_gender: parseInt(preferred_gender),
+        preferred_gender: preferred_gender,
         image: imageArr,
       },
       userId: userId,
