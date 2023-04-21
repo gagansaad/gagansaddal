@@ -47,7 +47,11 @@ exports.validateEventAdsData = async (req, res, next) => {
       ticket_price,
       location,
       link,
+      organization_name,
+      hosted_by,
+      platform_link,
       image,
+
     } = req.body;
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
@@ -73,12 +77,21 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid ticket_price`,
       });
+      if (!isValidlink(platform_link))
+      return failureJSONResponse(res, { message: `please provide valid link` });
     if (!isValidlink(link))
       return failureJSONResponse(res, { message: `please provide valid link` });
 
     if (!isValidString(location))
       return failureJSONResponse(res, { message: `please provide valid location` });
-
+    if (!isValidString(organization_name))
+      return failureJSONResponse(res, {
+        message: `Please provide valid organization name`,
+      });
+    if (!isValidString(hosted_by))
+      return failureJSONResponse(res, {
+        message: `Please provide valid hosted by`,
+      });
 
     return next();
   } catch (err) {
@@ -156,6 +169,9 @@ exports.createEventAds = async (req, res, next) => {
       link,
       image,
       location,
+      organization_name,
+      hosted_by,
+      platform_link,
 
     } = req.body;
 
@@ -184,6 +200,9 @@ exports.createEventAds = async (req, res, next) => {
         link,
         image: imageArr,
         location,
+        organization_name,
+        hosted_by,
+        platform_link,
       },
 
       userId: userId,

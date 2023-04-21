@@ -54,7 +54,7 @@ const events_Schema = new mongoose.Schema({
             platform:{
                 ...defaultStringConfig,
             },
-            link:{
+            platform_link:{
                 ...defaultStringConfig,
             }
         },

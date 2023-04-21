@@ -222,7 +222,7 @@ exports.createJobAds = async (req, res, next) => {
       isfeatured,
       status,
       adsType,
-
+      listing_type,
       title,
       descriptions,
       categories,
@@ -256,6 +256,7 @@ exports.createJobAds = async (req, res, next) => {
       status: status,
       isfeatured,
       adsType,
+      listing_type,
       adsInfo: {
         title,
         descriptions,
@@ -334,6 +335,7 @@ exports.editJobAds = async (req, res, next) => {
     const {
       status,
       adsType,
+     
       title,
       descriptions,
       categories,
@@ -379,6 +381,7 @@ exports.editJobAds = async (req, res, next) => {
 
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
+   
 
     if (title) adsInfoObj.title = title;
     if (descriptions) adsInfoObj.descriptions = descriptions;

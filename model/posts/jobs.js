@@ -31,6 +31,9 @@ const roomRentsSchema = new mongoose.Schema({
         }
 
     },
+    listing_type:{
+        ...defaultStringConfig,
+    },
     adsType: {
         type: mongoose.Schema.Types.ObjectId,
         ref: `PostType`,
