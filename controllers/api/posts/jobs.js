@@ -84,6 +84,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       experience,
       language,
       salary,
+      salary_info,
       no_of_opening,
       website,
       work_authorization,
@@ -109,6 +110,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid job Role`,
       });
+
     if (!isValidString(employment_type))
       return failureJSONResponse(res, {
         message: "Please provide us your employment type",
@@ -132,6 +134,10 @@ exports.validateJobAdsData = async (req, res, next) => {
 
     if (isNaN(Number(salary)))
       return failureJSONResponse(res, { message: `Please provide us salary` });
+    if (!isValidString(salary_info))
+      return failureJSONResponse(res, {
+        message: `Please provide valid salary info`,
+      });
     if (isNaN(Number(no_of_opening)))
       return failureJSONResponse(res, { message: "Please provide number of jobs opening" });
     else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null || no_of_opening.includes(".")) failureJSONResponse(res, { message: `Please provide valid number of job opening` });
@@ -226,6 +232,7 @@ exports.createJobAds = async (req, res, next) => {
       experience,
       language,
       salary,
+      salary_info,
       no_of_opening,
       website,
       work_authorization,
@@ -261,6 +268,7 @@ exports.createJobAds = async (req, res, next) => {
         experience,
         language,
         salary,
+        salary_info,
         no_of_opening,
         website,
         work_authorization,
@@ -335,6 +343,7 @@ exports.editJobAds = async (req, res, next) => {
       experience,
       language,
       salary,
+      salary_info,
       no_of_opening,
       website,
       work_authorization,
@@ -380,6 +389,7 @@ exports.editJobAds = async (req, res, next) => {
     if (experience) adsInfoObj.experience = experience;
     if (language) adsInfoObj.language = language;
     if (salary) adsInfoObj.salary = salary;
+    if (salary_info) adsInfoObj.salary_info = salary_info;
     if (no_of_opening) adsInfoObj.no_of_opening = no_of_opening;
     if (website) adsInfoObj.website = website;
     if (work_authorization) adsInfoObj.work_authorization = work_authorization;

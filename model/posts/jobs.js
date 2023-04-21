@@ -74,6 +74,10 @@ const roomRentsSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
+        salary_info:{
+            ...defaultStringConfig,
+            required: true
+        },
         no_of_opening: {
             type: Number,
             required: true
