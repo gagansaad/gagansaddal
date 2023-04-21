@@ -58,17 +58,17 @@ const events_Schema = new mongoose.Schema({
                 ...defaultStringConfig,
             }
         },
-
         ticket_price: {
             type:Number,
             required: true
         },
-       
-       
         image: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: `media`,
         }],
+        video:{
+            ...defaultStringConfig,
+        },
         location:defaultStringConfig
 
     },
