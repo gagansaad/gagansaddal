@@ -238,6 +238,8 @@ exports.createJobAds = async (req, res, next) => {
       work_authorization,
       preferred_gender,
       location,
+      image,
+      video,
     } = req.body;
 
     const imageArr = [];
@@ -276,6 +278,7 @@ exports.createJobAds = async (req, res, next) => {
         location,
         preferred_gender: preferred_gender,
         image: imageArr,
+        video,
       },
       userId: userId,
 
