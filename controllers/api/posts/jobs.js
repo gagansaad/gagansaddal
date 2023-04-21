@@ -55,7 +55,7 @@ exports.getDnymicsData = async (req, res, next) => {
       `Contract`,
       `Temporary`,
       `Please contact`],
-    salary_info: ["/hour", "/week", "/month", "/day"],
+    salary_info: ["hour", "day", "week", "month"],
     work_authorization: [`test`, `test1`],
     preferred_gender: [`Male`,
       `Female`,
@@ -197,11 +197,11 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
     // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
 
-    if (["true", "false"].includes(hideAddress) == false) {
-      return failureJSONResponse(res, {
-        message: `Please provide us hide/show address (true/false)`
-      })
-    }
+    // if (["true", "false"].includes(hideAddress) == false) {
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide us hide/show address (true/false)`
+    //   })
+    // }
 
     // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
     // return failureJSONResponse(res, {

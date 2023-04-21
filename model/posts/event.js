@@ -47,15 +47,23 @@ const events_Schema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
+        venue_name :{
+            ...defaultStringConfig,
+        },
+        live_event:{
+            platform:{
+                ...defaultStringConfig,
+            },
+            link:{
+                ...defaultStringConfig,
+            }
+        },
 
         ticket_price: {
             type:Number,
             required: true
         },
-        link: {
-            ...defaultStringConfig,
-            required: true
-        },
+       
        
         image: [{
             type: mongoose.Schema.Types.ObjectId,
@@ -63,6 +71,24 @@ const events_Schema = new mongoose.Schema({
         }],
         location:defaultStringConfig
 
+    },
+    contactInfo:{
+        organization_name:{
+            ...defaultStringConfig,
+            required: true
+        },
+        hosted_by:{
+            ...defaultStringConfig,
+            required: true
+        },
+        mobileNumber: {
+            countryCode: defaultStringConfig,
+            phoneNumber: defaultStringConfig
+        },
+        link: {
+            ...defaultStringConfig,
+            required: true
+        },
     },
     listerBasicInfo: {
         

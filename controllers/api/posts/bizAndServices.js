@@ -102,8 +102,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
-    console.log(typeof (hideAddress), "yyyyyyyyyyyyyyyyyyyyyy");
-    console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)", isValidBoolean(hideAddress))
+    
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
@@ -124,11 +123,11 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
     // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
 
-    if (["true", "false"].includes(hideAddress) == false) {
-      return failureJSONResponse(res, {
-        message: `Please provide us hide/show address (true/false)`
-      })
-    }
+    // if (["true", "false"].includes(hideAddress) == false) {
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide us hide/show address (true/false)`
+    //   })
+    // }
 
     // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
     // return failureJSONResponse(res, {
