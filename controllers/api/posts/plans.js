@@ -9,13 +9,21 @@ const mongoose = require("mongoose"),
 exports.fetchPlanForAds = async (req, res, next) => {
 
     try {
+
+        let planObjectId ='';
+
+        if(req?.query?.adsId){
+            planObjectId = req?.query?.adsId
+        } else if(req?.body?.adsId){
+            planObjectId = req?.body?.adsId
+        }
         
-        // const {adsId} = req?.params?.adsId;
+        // const {adsId} = req?.params?.adsId;  
         const {adsId} = req.body;
         console.log("iadsid",req.query);
 
         AdsPlan.find({
-            ads_type: adsId
+            ads_type: planObjectId
         })
         .then(result => {
             console.log('result ',result);
