@@ -167,7 +167,7 @@ exports.createBuySellAds = async (req, res, next) => {
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = JSON.stringify(req.files[i].path);
+      var thumbnail = req.files[i].path
 
       productImages = await Media.create({ image: thumbnail });
       imageArr.push(productImages._id);
@@ -256,7 +256,7 @@ exports.editBuySellAds = async (req, res, next) => {
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = JSON.stringify(req.files[i].path);
+      var thumbnail = req.files[i].path
 
       productImages = await Media.create({ image: thumbnail });
       imageArr.push(productImages._id);

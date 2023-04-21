@@ -164,7 +164,7 @@ exports.createEventAds = async (req, res, next) => {
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = JSON.stringify(req.files[i].path);
+      var thumbnail = req.files[i].path
 
       productImages = await Media.create({ image: thumbnail });
       imageArr.push(productImages._id);
@@ -261,7 +261,7 @@ exports.editEventAds = async (req, res, next) => {
 
     let imageArr = []
     for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = JSON.stringify(req.files[i].path);
+      var thumbnail = req.files[i].path
 
       productImages = await Media.create({ image: thumbnail });
       imageArr.push(productImages._id);
