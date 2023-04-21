@@ -2,6 +2,7 @@ const { json } = require("express");
 
 const mongoose = require("mongoose"),
     RoomRentsAds = mongoose.model("RoomRent"),
+    Media = mongoose.model("media"),
     {
         successJSONResponse,
         failureJSONResponse
@@ -149,14 +150,14 @@ exports.validateListerBasicinfo = async (req, res, next) => {
         // return failureJSONResponse(res, {
         //   message: `Please provide valid country code`,
         // });
-        if (preferableModeContact) {
-            if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".")) {
-                return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
-            } else if (preferableModeContact != 1 && preferableModeContact != 2 && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` }); }
-        }
-        if (preferableModeContact && isNaN(Number(preferableModeContact))) {
-            return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
-        }
+        // if (preferableModeContact) {
+        //     if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".")) {
+        //         return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
+        //     } else if (preferableModeContact != 1 && preferableModeContact != 2 && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` }); }
+        // }
+        // if (preferableModeContact && isNaN(Number(preferableModeContact))) {
+        //     return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
+        // }
         if (emailAddress && !isValidEmailAddress(emailAddress)) {
             return failureJSONResponse(res, {
                 message: `Please provide valid email address`,
