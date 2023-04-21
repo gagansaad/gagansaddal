@@ -16,10 +16,6 @@ const roomRentsSchema = new mongoose.Schema({
         enum: [`active`, `inactive`, `draft`],
         required: true,
         default: "draft"
-
-        //1 = active
-        //2 = inactive
-        //3 = draft 
     },
     is_featured: {
         value: {
@@ -98,7 +94,7 @@ const roomRentsSchema = new mongoose.Schema({
         },
         preferred_gender: {
             type: Number,
-            enum: [1, 2, 3],
+            enum: [`Male`,`Female`,`Any gender`],
             required: true
         },
 
@@ -106,6 +102,10 @@ const roomRentsSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: `media`,
         }],
+        video: {
+            ...defaultStringConfig,
+            required: true,
+        },
 
     },
     listerBasicInfo: {

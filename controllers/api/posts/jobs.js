@@ -90,7 +90,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       location,
       preferred_gender,
       image,
-
+      video
     } = req.body;
 
 
@@ -137,10 +137,14 @@ exports.validateJobAdsData = async (req, res, next) => {
     else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null || no_of_opening.includes(".")) failureJSONResponse(res, { message: `Please provide valid number of job opening` });
     if (isNaN(Number(preferred_gender)))
       return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
-    else if (preferred_gender < 1 || preferred_gender > 3 || preferred_gender.includes(".")) return failureJSONResponse(res, { message: `Please enter preferred_gender between 1 to 3` });
+    else if (preferred_gender != 1 || preferred_gender > 3 || preferred_gender.includes(".")) return failureJSONResponse(res, { message: `Please enter preferred_gender between 1 to 3` });
     if (!isValidUrl(website))
       return failureJSONResponse(res, {
         message: `Please provide valid website`,
+      });
+      if (!isValidUrl(video))
+      return failureJSONResponse(res, {
+        message: `Please provide valid video link`,
       });
     if (!isValidString(work_authorization))
       return failureJSONResponse(res, {
@@ -337,6 +341,7 @@ exports.editJobAds = async (req, res, next) => {
       location,
       preferred_gender,
       image,
+      video,
 
       name,
       emailAddress,
@@ -381,7 +386,7 @@ exports.editJobAds = async (req, res, next) => {
     if (location) adsInfoObj.location = location;
     if (preferred_gender) adsInfoObj.preferred_gender = preferred_gender;
     if (imageArr.length) adsInfoObj.image = imageArr;
-
+    if (video) adsInfoObj.video = video;
     if (name) listerBasicInfoObj.name = name;
 
     if (adsInfoObj && Object.keys(adsInfoObj).length) {

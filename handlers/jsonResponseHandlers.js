@@ -3,11 +3,7 @@ console.log(responseModel)
     if (res) {
         
         let responseModelWithLimit = await responseModel.find(dbquery).populate({ path: 'adsInfo.image', strictPopulate: false ,select:'image'}).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
-        if (!responseModelWithLimit?.length) {
-            return this.successJSONResponse(res, {
-                message: `Record not found`
-            })
-        }
+       
         const responseModelCount = await responseModel.count();
         const mainData = {
             message: message,
