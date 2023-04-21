@@ -110,7 +110,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
-   
+
     // if (preferableModeContact) {
     //   if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".")) {
     //     return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
@@ -167,7 +167,7 @@ exports.createBuySellAds = async (req, res, next) => {
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = JSON.stringify(req.files[i]);
+      var thumbnail = JSON.stringify(req.files[i].path);
 
       productImages = await Media.create({ image: thumbnail });
       imageArr.push(productImages._id);
@@ -256,7 +256,7 @@ exports.editBuySellAds = async (req, res, next) => {
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = JSON.stringify(req.files[i]);
+      var thumbnail = JSON.stringify(req.files[i].path);
 
       productImages = await Media.create({ image: thumbnail });
       imageArr.push(productImages._id);

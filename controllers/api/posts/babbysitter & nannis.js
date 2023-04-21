@@ -7,7 +7,7 @@ const mongoose = require("mongoose"),
     successJSONResponse,
     failureJSONResponse,
   } = require(`../../../handlers/jsonResponseHandlers`),
-  { fieldsToExclude ,listerBasicInfo} = require(`../../../utils/mongoose`),
+  { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
     isValidString,
     isValidMongoObjId,
@@ -35,17 +35,17 @@ exports.getDnymicsData = async (req, res, next) => {
 ///-----------------------Validate Data---------------------------//
 
 exports.validateAdsData = async (req, res, next) => {
-    
+
   try {
     const {
       status,
       adsType,
-     option,
-     care_service,
-     sub_type
-      
+      option,
+      care_service,
+      sub_type
+
     } = req.body;
-    if (status && (status != `active` && status !=  `inactive` &&  status !=`draft` ))  return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
+    if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
@@ -61,7 +61,7 @@ exports.validateAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid sub-type`,
       });
-    
+
 
     return next();
   } catch (err) {
@@ -70,7 +70,7 @@ exports.validateAdsData = async (req, res, next) => {
 };
 //////////////
 exports.validateListerBasicinfo = async (req, res, next) => {
- 
+
   try {
     const {
       emailAddress,
@@ -79,8 +79,8 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
-   console.log(typeof(hideAddress),"yyyyyyyyyyyyyyyyyyyyyy");
-console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)",isValidBoolean(hideAddress))
+    console.log(typeof (hideAddress), "yyyyyyyyyyyyyyyyyyyyyy");
+    console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)", isValidBoolean(hideAddress))
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
@@ -93,25 +93,25 @@ console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolea
     // if (preferableModeContact && isNaN(Number(preferableModeContact))){
     //   return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
     // }
-    if (emailAddress && !isValidEmailAddress(emailAddress)){
+    if (emailAddress && !isValidEmailAddress(emailAddress)) {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
     }
-      
-      // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
 
-    if(["true","false"].includes(hideAddress) == false){
-        return  failureJSONResponse(res, {
-          message: `Please provide us hide/show address (true/false)`
+    // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
+
+    if (["true", "false"].includes(hideAddress) == false) {
+      return failureJSONResponse(res, {
+        message: `Please provide us hide/show address (true/false)`
       })
     }
-     
-      // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
-      // return failureJSONResponse(res, {
-      //   message: `Please provide valid phone number`,
-      // });
-    
+
+    // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
+    // return failureJSONResponse(res, {
+    //   message: `Please provide valid phone number`,
+    // });
+
     return next();
   } catch (err) {
     console.log(err);
@@ -130,31 +130,31 @@ exports.createAds = async (req, res, next) => {
       option,
       care_service,
       sub_type,
-       image
+      image
     } = req.body;
 
     const userId = req.userId;
     const imageArr = [];
-    for(var i = 0; i < req.files.length; i++){
-      var thumbnail = JSON.stringify(req.files[i]);
-     
-      productImages =  await Media.create({image:thumbnail});            
+    for (var i = 0; i < req.files.length; i++) {
+      var thumbnail = JSON.stringify(req.files[i].path);
+
+      productImages = await Media.create({ image: thumbnail });
       imageArr.push(productImages._id);
-      
-  }
-    
+
+    }
+
 
     const dataObj = {
       isfeatured,
       status: status,
       adsType,
       adsInfo: {
-          option,
-          care_service,
-          sub_type,
-          image: imageArr,
+        option,
+        care_service,
+        sub_type,
+        image: imageArr,
       },
-    
+
       userId: userId,
     };
 
@@ -163,7 +163,7 @@ exports.createAds = async (req, res, next) => {
     const Babysitter_Nannies = {};
 
     for (let key in newPost.toObject()) {
-      if (!fieldsToExclude.hasOwnProperty(String(key))&&!listerBasicInfo.hasOwnProperty(String(key))) {
+      if (!fieldsToExclude.hasOwnProperty(String(key)) && !listerBasicInfo.hasOwnProperty(String(key))) {
         Babysitter_Nannies[key] = newPost[key];
       }
     }
@@ -171,7 +171,7 @@ exports.createAds = async (req, res, next) => {
     if (newPost) {
       return successJSONResponse(res, {
         message: `success`,
-        Babysitter_Nannies:Babysitter_Nannies,
+        Babysitter_Nannies: Babysitter_Nannies,
       });
     } else {
       return failureJSONResponse(res, {
@@ -189,14 +189,15 @@ exports.createAds = async (req, res, next) => {
 exports.editAds = async (req, res, next) => {
   console.log(`kejhrjhyewgrjhew`);
   try {
-    
+
     const productId = req?.params?.productId;
 
     const validate_id = await postbabyAd.findById(productId)
-    if (!validate_id){
-    return failureJSONResponse(res, {
-      message: `Failed to find your babysitter and nannies id`,
-    })}
+    if (!validate_id) {
+      return failureJSONResponse(res, {
+        message: `Failed to find your babysitter and nannies id`,
+      })
+    }
     const {
       status,
       adsType,
@@ -213,15 +214,15 @@ exports.editAds = async (req, res, next) => {
       image
     } = req.body;
     const imageArr = [];
-    for(var i = 0; i < req.files.length; i++){
-      var thumbnail = JSON.stringify(req.files[i]);
-     
-      productImages =  await Media.create({image:thumbnail});            
-      imageArr.push(productImages._id);
-      
-  }
+    for (var i = 0; i < req.files.length; i++) {
+      var thumbnail = JSON.stringify(req.files[i].path);
 
-   
+      productImages = await Media.create({ image: thumbnail });
+      imageArr.push(productImages._id);
+
+    }
+
+
 
     const dataObj = {},
       adsInfoObj = {},
@@ -233,9 +234,9 @@ exports.editAds = async (req, res, next) => {
     if (option) adsInfoObj.option = option;
     if (care_service) adsInfoObj.care_service = care_service;
     if (sub_type) adsInfoObj.sub_type = sub_type;
-   
+
     if (location) listerBasicInfoObj.location = location;
-    
+
     if (name) listerBasicInfoObj.name = name;
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
@@ -259,14 +260,14 @@ exports.editAds = async (req, res, next) => {
       },
     };
 
- 
+
 
     const updateproduct = await postbabyAd.findByIdAndUpdate(
       { _id: productId },
       { $set: dataObjq },
       { new: true }
 
- 
+
     );
 
     // if(updateproduct && Object.keys(updateproduct).length){
@@ -278,8 +279,8 @@ exports.editAds = async (req, res, next) => {
     //     message: `object empty`
     // })
     // }
-    
-    let BabysitterNannies ={}
+
+    let BabysitterNannies = {}
 
     for (let key in updateproduct.toObject()) {
       if (!fieldsToExclude.hasOwnProperty(String(key))) {
@@ -290,7 +291,7 @@ exports.editAds = async (req, res, next) => {
     if (updateproduct) {
       return successJSONResponse(res, {
         message: `success`,
-        Babysitter_Nannies:BabysitterNannies,
+        Babysitter_Nannies: BabysitterNannies,
       });
     } else {
       return failureJSONResponse(res, {
@@ -349,23 +350,23 @@ exports.editAds = async (req, res, next) => {
 exports.fetchAll = async (req, res, next) => {
   try {
     const isFeatured = req.query.isfeatured;
-    let dbQuery ={
-        status: 1
+    let dbQuery = {
+      status: 1
     };
 
-if(isFeatured) dbQuery.isfeatured = isFeatured;
-      let records = await postbabyAd.find(dbQuery);
-      if (records) {
-          return successJSONResponse(res, {
-              message: `success`,
-              total:Object.keys(records).length,
-              records,
-              status: 200,
-          })
-      } else {
-          return failureJSONResponse(res, { message: `Room not Available` })
-      }
+    if (isFeatured) dbQuery.isfeatured = isFeatured;
+    let records = await postbabyAd.find(dbQuery);
+    if (records) {
+      return successJSONResponse(res, {
+        message: `success`,
+        total: Object.keys(records).length,
+        records,
+        status: 200,
+      })
+    } else {
+      return failureJSONResponse(res, { message: `Room not Available` })
+    }
   } catch (err) {
-      return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, { message: `something went wrong` })
   }
 }

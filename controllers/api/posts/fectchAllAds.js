@@ -39,7 +39,12 @@ exports.fetchAll = async (req, res, next) => {
     console.log(adstype);
     var perPage = 10 || parseInt(req.query.perpage)
     var page = parseInt(req.query.page) || 1
-
+    let dbquery = ``
+    if(req.query.userId){
+      dbquery =  req.body.userid
+    }else if(req.body.userId){
+      dbquery =  req.body.userid
+    }
     if (!adstype) return failureJSONResponse(res, { message: `Please provide post type id` });
     else if (adstype && !isValidMongoObjId(mongoose, adstype)) return failureJSONResponse(res, { message: `Please provide valid post type id` });
 

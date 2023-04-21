@@ -1,8 +1,8 @@
-exports.successJSONResponseWithPagination = async (res, responseModel, OnPage, perPage = 10,dbQuery, message = `Record found successfully`, data, httpStatusCode = 200) => {
-
+exports.successJSONResponseWithPagination = async (res, responseModel, OnPage, perPage = 10,dbquery, message = `Record found successfully`, data, httpStatusCode = 200) => {
+console.log(responseModel)
     if (res) {
         
-        let responseModelWithLimit = await responseModel.find(dbQuery).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
+        let responseModelWithLimit = await responseModel.find(dbquery).populate({ path: 'adsInfo.image', strictPopulate: false ,select:'image'}).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
         if (!responseModelWithLimit?.length) {
             return this.failureJSONResponse(res, {
                 message: `Record not found`

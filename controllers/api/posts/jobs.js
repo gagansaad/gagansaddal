@@ -55,7 +55,7 @@ exports.getDnymicsData = async (req, res, next) => {
       `Contract`,
       `Temporary`,
       `Please contact`],
-      salary_info:["/hour", "/week", "/month", "/day"],
+    salary_info: ["/hour", "/week", "/month", "/day"],
     work_authorization: [`test`, `test1`],
     preferred_gender: [`Male`,
       `Female`,
@@ -232,7 +232,7 @@ exports.createJobAds = async (req, res, next) => {
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = JSON.stringify(req.files[i]);
+      var thumbnail = JSON.stringify(req.files[i].path);
 
       productImages = await Media.create({ image: thumbnail });
       imageArr.push(productImages._id);
@@ -349,7 +349,7 @@ exports.editJobAds = async (req, res, next) => {
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = JSON.stringify(req.files[i]);
+      var thumbnail = JSON.stringify(req.files[i].path);
 
       productImages = await Media.create({ image: thumbnail });
       imageArr.push(productImages._id);

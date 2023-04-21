@@ -24,8 +24,8 @@ const mongoose = require("mongoose"),
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
     type: ["Venue Based Event", "Live Event", "Both Venue based and Live Streaming Event"],
-    category:["Sport event", "Festival", "Religious", "Music concert", "Night party", "Health care advisor", "Food & drink", "Drama", "Markets & Auction", "Spritual", "Valantines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
-    platform:["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"]   
+    category: ["Sport event", "Festival", "Religious", "Music concert", "Night party", "Health care advisor", "Food & drink", "Drama", "Markets & Auction", "Spritual", "Valantines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
+    platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"]
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -49,7 +49,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       link,
       image,
     } = req.body;
-    if (status && (status != `active` && status !=  `inactive`&&  status !=`draft` ))  return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
+    if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
@@ -75,10 +75,10 @@ exports.validateEventAdsData = async (req, res, next) => {
       });
     if (!isValidlink(link))
       return failureJSONResponse(res, { message: `please provide valid link` });
-      
-      if (!isValidString(location))
+
+    if (!isValidString(location))
       return failureJSONResponse(res, { message: `please provide valid location` });
-      
+
 
     return next();
   } catch (err) {
@@ -87,7 +87,7 @@ exports.validateEventAdsData = async (req, res, next) => {
 };
 
 exports.validateListerBasicinfo = async (req, res, next) => {
- 
+
   try {
     const {
       emailAddress,
@@ -96,8 +96,8 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
-   console.log(typeof(hideAddress),"yyyyyyyyyyyyyyyyyyyyyy");
-console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)",isValidBoolean(hideAddress))
+    console.log(typeof (hideAddress), "yyyyyyyyyyyyyyyyyyyyyy");
+    console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)", isValidBoolean(hideAddress))
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
@@ -110,26 +110,26 @@ console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolea
     // if (preferableModeContact && isNaN(Number(preferableModeContact))){
     //   return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
     // }
-   
-    if (emailAddress && !isValidEmailAddress(emailAddress)){
+
+    if (emailAddress && !isValidEmailAddress(emailAddress)) {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
     }
-      
-      // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
 
-    if(["true","false"].includes(hideAddress) == false){
-        return  failureJSONResponse(res, {
-          message: `Please provide us hide/show address (true/false)`
+    // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
+
+    if (["true", "false"].includes(hideAddress) == false) {
+      return failureJSONResponse(res, {
+        message: `Please provide us hide/show address (true/false)`
       })
     }
-     
-      // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
-      // return failureJSONResponse(res, {
-      //   message: `Please provide valid phone number`,
-      // });
-    
+
+    // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
+    // return failureJSONResponse(res, {
+    //   message: `Please provide valid phone number`,
+    // });
+
     return next();
   } catch (err) {
     console.log(err);
@@ -142,7 +142,7 @@ console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolea
 
 exports.createEventAds = async (req, res, next) => {
   try {
-    console.log(req.files,"dccdcdc");
+    console.log(req.files, "dccdcdc");
     const {
       isfeatured,
       status,
@@ -163,13 +163,13 @@ exports.createEventAds = async (req, res, next) => {
 
     const imageArr = [];
 
-    for(var i = 0; i < req.files.length; i++){
-      var thumbnail = JSON.stringify(req.files[i]);
-     
-      productImages =  await Media.create({image:thumbnail});            
+    for (var i = 0; i < req.files.length; i++) {
+      var thumbnail = JSON.stringify(req.files[i].path);
+
+      productImages = await Media.create({ image: thumbnail });
       imageArr.push(productImages._id);
-      
-  }
+
+    }
 
     const dataObj = {
       isfeatured,
@@ -185,7 +185,7 @@ exports.createEventAds = async (req, res, next) => {
         image: imageArr,
         location,
       },
-     
+
       userId: userId,
     };
 
@@ -194,14 +194,14 @@ exports.createEventAds = async (req, res, next) => {
     const postEventAdObjToSend = {};
 
     for (let key in newEventPost.toObject()) {
-      if (!fieldsToExclude.hasOwnProperty(String(key))&&(!listerBasicInfo.hasOwnProperty(String(key)))) {
+      if (!fieldsToExclude.hasOwnProperty(String(key)) && (!listerBasicInfo.hasOwnProperty(String(key)))) {
         postEventAdObjToSend[key] = newEventPost[key];
       }
     }
     if (newEventPost) {
       return successJSONResponse(res, {
         message: `success`,
-        postEventAdObjToSend:postEventAdObjToSend,
+        postEventAdObjToSend: postEventAdObjToSend,
       });
     } else {
       return failureJSONResponse(res, {
@@ -219,14 +219,15 @@ exports.createEventAds = async (req, res, next) => {
 exports.editEventAds = async (req, res, next) => {
 
   try {
-   
+
     const eventId = req?.params?.eventId;
- 
+
     const validate_id = await eventAd.findById(eventId)
-    if (!validate_id){
-    return failureJSONResponse(res, {
-      message: `Failed to find your event id`,
-    })}
+    if (!validate_id) {
+      return failureJSONResponse(res, {
+        message: `Failed to find your event id`,
+      })
+    }
 
     if (!eventId)
       return successJSONResponse(res, {
@@ -236,10 +237,10 @@ exports.editEventAds = async (req, res, next) => {
       });
 
     const {
-      
+
       status,
       adsType,
-     
+
       title,
       type,
       add_platform,
@@ -258,16 +259,16 @@ exports.editEventAds = async (req, res, next) => {
       preferableModeContact,
     } = req.body;
 
-    let imageArr =[]
-    for(var i = 0; i < req.files.length; i++){
-      var thumbnail = JSON.stringify(req.files[i]);
-     
-      productImages =  await Media.create({image:thumbnail});            
+    let imageArr = []
+    for (var i = 0; i < req.files.length; i++) {
+      var thumbnail = JSON.stringify(req.files[i].path);
+
+      productImages = await Media.create({ image: thumbnail });
       imageArr.push(productImages._id);
-      
-  }
-    
-    console.log(imageArr,"bahar wala")
+
+    }
+
+    console.log(imageArr, "bahar wala")
     const dataObj = {},
       adsInfoObj = {},
       listerBasicInfoObj = {};
@@ -290,12 +291,12 @@ exports.editEventAds = async (req, res, next) => {
     const dataObjq = {
       adsInfo: adsInfoObj,
       listerBasicInfo: {
-        
+
         name,
         emailAddress,
         phoneNumber,
         hideAddress,
-        
+
 
         mobileNumber: {
           countryCode,
@@ -310,7 +311,7 @@ exports.editEventAds = async (req, res, next) => {
       { $set: dataObjq },
       { new: true }
     );
-    let updateEventAdObjToSend ={}
+    let updateEventAdObjToSend = {}
     for (let key in updateEvent.toObject()) {
       if (!fieldsToExclude.hasOwnProperty(String(key))) {
         updateEventAdObjToSend[key] = updateEvent[key];
@@ -320,7 +321,7 @@ exports.editEventAds = async (req, res, next) => {
     if (updateEvent) {
       return successJSONResponse(res, {
         message: `success`,
-        updateEventAdObjToSend:updateEventAdObjToSend,
+        updateEventAdObjToSend: updateEventAdObjToSend,
       });
     } else {
       return failureJSONResponse(res, {
@@ -359,7 +360,7 @@ exports.editEventStatus = async (req, res, next) => {
     if (updateEvent) {
       return successJSONResponse(res, {
         message: `success`,
-        updateEvent:updateEvent,
+        updateEvent: updateEvent,
       });
     } else {
       return failureJSONResponse(res, {
@@ -378,23 +379,23 @@ exports.editEventStatus = async (req, res, next) => {
 exports.fetchAll = async (req, res, next) => {
   try {
     const isFeatured = req.query.isfeatured;
-    let dbQuery ={
-        status: 1
+    let dbQuery = {
+      status: 1
     };
 
-if(isFeatured) dbQuery.isfeatured = isFeatured;
-      let records = await eventAd.find(dbQuery);
-      if (records) {
-          return successJSONResponse(res, {
-              message: `success`,
-              total:Object.keys(records).length,
-              records,
-              status: 200,
-          })
-      } else {
-          return failureJSONResponse(res, { message: `Room not Available` })
-      }
+    if (isFeatured) dbQuery.isfeatured = isFeatured;
+    let records = await eventAd.find(dbQuery);
+    if (records) {
+      return successJSONResponse(res, {
+        message: `success`,
+        total: Object.keys(records).length,
+        records,
+        status: 200,
+      })
+    } else {
+      return failureJSONResponse(res, { message: `Room not Available` })
+    }
   } catch (err) {
-      return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, { message: `something went wrong` })
   }
 }
