@@ -62,7 +62,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       title,
       type,
       category,
-      add_platform,
+     
       details,
       ticket_price,
       vip_ticket_price,
@@ -103,10 +103,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid category`,
       });
-    if (!isValidString(add_platform))
-      return failureJSONResponse(res, {
-        message: `Please provide valid add_platform`,
-      });
+ 
     if (!isValidString(details))
       return failureJSONResponse(res, {
         message: "Please provide valid details",
