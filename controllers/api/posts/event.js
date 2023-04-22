@@ -258,7 +258,6 @@ exports.createEventAds = async (req, res, next) => {
       vip_ticket_price,
       regular_ticket,
       vip_ticket,
-      link,
       time_zone,
       start_date,
       end_date,
