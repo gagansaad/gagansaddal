@@ -61,6 +61,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       adsType,
       title,
       type,
+      category,
       add_platform,
       details,
       ticket_price,
