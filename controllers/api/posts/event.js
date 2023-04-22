@@ -98,6 +98,10 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid type`,
       });
+      if (!isValidString(category))
+      return failureJSONResponse(res, {
+        message: `Please provide valid category`,
+      });
     if (!isValidString(add_platform))
       return failureJSONResponse(res, {
         message: `Please provide valid add_platform`,

@@ -24,7 +24,7 @@ exports.fetchAll = async (req, res, next) => {
     };
 
 if(isFeatured) dbQuery.isfeatured = isFeatured;
-      let records = await postbabyAd.find(dbQuery);
+      let records = await postbabyAd.find();
       if (records) {
           return successJSONResponse(res, {
               message: `success`,
