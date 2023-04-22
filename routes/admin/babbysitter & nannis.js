@@ -38,7 +38,14 @@ const router = require(`express`).Router(),
         next();
     }
 
-router.get(`/fetchbabysitterads`,
+router.get(`/fetch-all-babysitter-ads`,
     controllers.fetchAll
+);
+
+router.get(`/view-babysitter-ads`,
+    controllers.fetchOne
+);
+router.delete(`/delete-babysitter-ads`,
+    controllers.fetchOneDelete
 );
 module.exports = router;

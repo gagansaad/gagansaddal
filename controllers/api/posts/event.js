@@ -245,6 +245,7 @@ exports.createEventAds = async (req, res, next) => {
 
       title,
       type,
+      category,
       add_platform,
       details,
      
@@ -293,6 +294,7 @@ exports.createEventAds = async (req, res, next) => {
       adsInfo: {
         title,
         type,
+        category,
         add_platform,
         details,
         ticket_price,
@@ -384,6 +386,7 @@ exports.editEventAds = async (req, res, next) => {
 
       title,
       type,
+      category,
       add_platform,
       details,
       ticket_price,
@@ -436,6 +439,7 @@ exports.editEventAds = async (req, res, next) => {
 
     if (title) adsInfoObj.title = title;
     if (type) adsInfoObj.type = type;
+    if (category) adsInfoObj.category = category;
     if (add_platform) adsInfoObj.add_platform = add_platform;
     if (details) adsInfoObj.details = details;
     if (time_zone) adsInfoObj.date_time.time_zone = time_zone;

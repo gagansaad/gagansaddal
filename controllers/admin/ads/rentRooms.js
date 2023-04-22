@@ -45,6 +45,50 @@ exports.fetchAll = async (req, res, next) => {
 
 
 
+exports.fetchOne = async (req, res, next) => {
+    try {
+      
+      let dbQuery ={
+        _id:req.query._id
+      };
+  
+        let records = await  RoomRentsAds.findOne(dbQuery);
+        if (records) {
+            return successJSONResponse(res, {
+                message: `success`,
+                records,
+                status: 200,
+            })
+        } else {
+            return failureJSONResponse(res, { message: `Ad not available` })
+        }
+    } catch (err) {
+        return failureJSONResponse(res, { message: `something went wrong` })
+    }
+  }
+  exports.fetchOneDelete = async (req, res, next) => {
+    try {
+      
+      let dbQuery ={
+        _id:req.query._id
+      };
+  
+        let records = await  RoomRentsAds.findOneAndDelete(dbQuery);
+        if (records) {
+            return successJSONResponse(res, {
+                message: `success`,
+                records,
+                status: 200,
+            })
+        } else {
+            return failureJSONResponse(res, { message: `Ad not available` })
+        }
+    } catch (err) {
+        return failureJSONResponse(res, { message: `something went wrong` })
+    }
+  }
+
+
 
 
 

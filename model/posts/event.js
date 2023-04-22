@@ -35,6 +35,10 @@ const events_Schema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
+        category:{
+            ...defaultStringConfig,
+            required: true
+        },
         title: {
             ...defaultStringConfig,
             required: true
