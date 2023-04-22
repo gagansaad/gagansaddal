@@ -27,7 +27,24 @@ exports.getDnymicsData = async (req, res, next) => {
     type: ["Venue Based Event", "Live Event", "Both Venue based and Live Streaming Event"],
     category: ["Sport event", "Festival", "Religious", "Music concert", "Night party", "Health care advisor", "Food & drink", "Drama", "Markets & Auction", "Spritual", "Valantines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
     platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"],
-    recurring_type:["Daily", "Weekly", "Monthly"]
+    recurring_type:["Daily", "Weekly", "Monthly"],
+    time_zone:[
+      'America/Santiago',
+      'America/Punta_Arenas',
+      'America/Bogota',
+      'America/Costa_Rica',
+      'America/Havana',
+      'America/Curacao',
+      'America/Santo_Domingo',
+      'America/Guayaquil',
+      'America/Cayenne',
+      'America/Jamaica',
+      'America/Martinique',
+      'America/Mexico_City',
+      'America/New_York',
+      'America/Los_Angeles',
+    ],
+    
   };
   return successJSONResponse(res, {
     message: `success`,
