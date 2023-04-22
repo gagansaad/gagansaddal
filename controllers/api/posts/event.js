@@ -64,6 +64,9 @@ exports.validateEventAdsData = async (req, res, next) => {
       add_platform,
       details,
       ticket_price,
+      vip_ticket_price,
+      regular_ticket,
+      vip_ticket,
       location,
       link,
       time_zone,
@@ -124,6 +127,11 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: "Please provide valid end date",
       });
+      if ((new Date(start_date) > new Date(end_date)) || (new Date(end_date) < new Date(start_date))) {
+        return failureJSONResponse(res, {
+          message: "End date should be greater than Start date",
+        });
+    }
       if (!isValidString(start_time))
       return failureJSONResponse(res, {
         message: "Please provide valid start time",
@@ -132,13 +140,26 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: "Please provide valid end time",
       });
+      
       if (!isValidString(recurring_type))
       return failureJSONResponse(res, {
         message: "Please provide valid recurring type",
       });
     if (isNaN(Number(ticket_price)))
       return failureJSONResponse(res, {
-        message: `please provide valid ticket_price`,
+        message: `please provide valid regular ticket price`,
+      });
+    if (isNaN(Number(vip_ticket)))
+      return failureJSONResponse(res, {
+        message: `please provide valid no. of vip ticket`,
+      });
+    if (isNaN(Number(regular_ticket)))
+      return failureJSONResponse(res, {
+        message: `please provide valid no. of regular ticket`,
+      });
+    if (isNaN(Number(vip_ticket_price)))
+      return failureJSONResponse(res, {
+        message: `please provide valid valid vip ticket price`,
       });
     if (platform_link && (!isValidPlink(platform_link))) return failureJSONResponse(res, { message: `please provide valid platform link` });
      
@@ -228,6 +249,9 @@ exports.createEventAds = async (req, res, next) => {
       details,
      
       ticket_price,
+      vip_ticket_price,
+      regular_ticket,
+      vip_ticket,
       link,
       time_zone,
       start_date,
@@ -272,6 +296,11 @@ exports.createEventAds = async (req, res, next) => {
         add_platform,
         details,
         ticket_price,
+        vip_ticket_price,
+        no_of_ticket:{
+          regular_ticket,
+          vip_ticket,
+        },
         recurring_type,
         image: imageArr,
         location,
@@ -358,6 +387,9 @@ exports.editEventAds = async (req, res, next) => {
       add_platform,
       details,
       ticket_price,
+      vip_ticket_price,
+      regular_ticket,
+      vip_ticket,
       link,
       time_zone,
       start_date,
@@ -416,6 +448,9 @@ exports.editEventAds = async (req, res, next) => {
     if (live_platform) adsInfoObj.live_platform = live_platform;
     if (platform_link) adsInfoObj.platform_link = platform_link;
     if (ticket_price) adsInfoObj.ticket_price = ticket_price;
+    if (vip_ticket) adsInfoObj.no_of_ticket.vip_ticket = vip_ticket;
+    if (regular_ticket) adsInfoObj.no_of_ticket.regular_ticket = regular_ticket;
+    if (vip_ticket_price) adsInfoObj.vip_ticket_price = vip_ticket_price;
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (location) adsInfoObj.location = location;
     if (video) adsInfoObj.video = video;

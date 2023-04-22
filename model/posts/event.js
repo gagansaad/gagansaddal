@@ -89,6 +89,19 @@ const events_Schema = new mongoose.Schema({
             type:Number,
             required: true
         },
+        vip_ticket_price:{
+            type:Number,
+            required: true
+        },
+        no_of_ticket:{
+            regular_ticket:{
+
+            },
+            vip_ticket:{
+
+            },
+       
+        },
         image: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: `media`,
