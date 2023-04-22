@@ -165,7 +165,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       });
     if (platform_link && (!isValidPlink(platform_link))) return failureJSONResponse(res, { message: `please provide valid platform link` });
      
-    if (!isValidlink(link))
+    if (link&&(!isValidlink(link)))
       return failureJSONResponse(res, { message: `please provide valid link` });
     if (!isValidString(location))
       return failureJSONResponse(res, { message: `please provide valid location` });

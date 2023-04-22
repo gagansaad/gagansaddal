@@ -50,14 +50,14 @@ const events_Schema = new mongoose.Schema({
         venue_name :{
             ...defaultStringConfig,
         },
-        live_event:{
-            live_platform:{
+        live_event:[{
+            live_platform:[{
                 ...defaultStringConfig,
-            },
-            platform_link:{
+            }],
+            platform_link:[{
                 ...defaultStringConfig,
-            }
-        },
+            }]
+        }],
         date_time:{
             time_zone:{
                 ...defaultStringConfig,
