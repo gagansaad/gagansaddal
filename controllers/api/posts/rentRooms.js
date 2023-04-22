@@ -39,8 +39,8 @@ exports.fetchDynamicsData = async (req, res, next) => {
         gender:["Male", "Female", "Any Gender"],
         preferd_age:["18-30", "18-50", "18-any"],
         whoAreU: [
-            `owner`,
-            `broker`
+            `Owner`,
+            `Broker`
         ],
         Accommodates: [
             `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`
@@ -48,11 +48,7 @@ exports.fetchDynamicsData = async (req, res, next) => {
         attachedBathRoom: [
             `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`
         ],
-        furnished: [
-            `Semi-furnished`,
-            `furnished`,
-            `fully-furnished`
-        ]
+        furnished: ["Not Furnished", "Semi Furnished", "Fully Furnished"]
     }
 
     return successJSONResponse(res, {
@@ -67,6 +63,8 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         const {
             status,
             adsType,
+            rental_type,
+            category,
             title,
             descriptions,
             roomType,
@@ -74,7 +72,8 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
             accommodates,
             furnished,
             attachedBath,
-            rent,
+            amount,
+            negotiable,
             isSmokingAllowed,
             isAlcoholAllowed,
             isPetFriendly,
@@ -94,7 +93,8 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
         if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
         else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
-
+        if (!isValidString(rental_type)) return failureJSONResponse(res, { message: `Please provide valid rental type` });
+        if (!isValidString(category)) return failureJSONResponse(res, { message: `Please provide valid category` });
         if (!isValidString(title)) return failureJSONResponse(res, { message: `Please provide valid title` });
         if (!isValidString(descriptions)) return failureJSONResponse(res, { message: `Please provide valid descriptions` });
         if (!isValidString(listerType)) return failureJSONResponse(res, { message: `Please provide valid listerType` });
@@ -103,9 +103,9 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         if (isNaN(Number(attachedBath))) return failureJSONResponse(res, { message: `Please provide valid attachedBath` });
         if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
         if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
-        if (isNaN(Number(rent)))
+        if (isNaN(Number(amount)))
             return failureJSONResponse(res, {
-                message: `please provide valid ticket_price`,
+                message: `please provide valid rent amount`,
             });
         // if (!( isfeatured)) return failureJSONResponse(res, { message: `Please provide valid isfeatured (true/false)` });
         // else if (typeof  isfeatured == "boolean") return failureJSONResponse(res, { message: `Please provide boolean value for isfeatured` });
@@ -191,14 +191,18 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
         isfeatured,
         status,
         adsType,
+        rental_type,
+        category,
         title,
         descriptions,
         roomType,
+        availability,
         listerType,
         accommodates,
         furnished,
         attachedBath,
-        rent,
+        amount,
+        negotiable,
         isSmokingAllowed,
         isAlcoholAllowed,
         isPetFriendly,
@@ -231,19 +235,25 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
         status: status,
         adsType,
         adsInfo: {
+            rental_type,
+            category,
             title,
             descriptions,
             roomType,
             furnished,
+            availability,
             listerType,
             accommodates,
             attachedBath,
-            rent,
+            rent:{
+                amount:amount,
+                negotiable:negotiable,
+            },
             isSmokingAllowed,
             isAlcoholAllowed,
             isPetFriendly,
             occupation,
-            preferredGender: parseInt(preferredGender),
+            preferredGender: preferredGender,
             location,
             image: imageArr
         },
@@ -310,6 +320,8 @@ exports.editRoomRentAds = async (req, res, next) => {
     const {
         status,
         adsType,
+        rental_type,
+        category,
         title,
         descriptions,
         roomType,
@@ -317,7 +329,9 @@ exports.editRoomRentAds = async (req, res, next) => {
         accommodates,
         furnished,
         attachedBath,
-        rent,
+        amount,
+        negotiable,
+        availability,
         isSmokingAllowed,
         isAlcoholAllowed,
         isPetFriendly,
@@ -351,6 +365,8 @@ exports.editRoomRentAds = async (req, res, next) => {
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
+    if (rental_type) adsInfoObj.rental_type = rental_type;
+    if (category) adsInfoObj.category = category;
     if (title) adsInfoObj.title = title;
 
     if (preferredGender) adsInfoObj.preferredGender = preferredGender;
@@ -360,7 +376,8 @@ exports.editRoomRentAds = async (req, res, next) => {
     if (listerType) adsInfoObj.listerType = listerType;
     if (accommodates) adsInfoObj.accommodates = accommodates;
     if (attachedBath) adsInfoObj.attachedBath = attachedBath;
-    if (rent) adsInfoObj.rent = rent;
+    if (amount) adsInfoObj.rent.amount = amount;
+    if (negotiable) adsInfoObj.rent.negotiable = negotiable;
     if (isSmokingAllowed) adsInfoObj.isSmokingAllowed = isSmokingAllowed;
     if (isAlcoholAllowed) adsInfoObj.isAlcoholAllowed = isAlcoholAllowed;
     if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFriendly;

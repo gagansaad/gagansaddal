@@ -51,12 +51,39 @@ const events_Schema = new mongoose.Schema({
             ...defaultStringConfig,
         },
         live_event:{
-            platform:{
+            live_platform:{
                 ...defaultStringConfig,
             },
             platform_link:{
                 ...defaultStringConfig,
             }
+        },
+        date_time:{
+            time_zone:{
+                ...defaultStringConfig,
+                required: true
+            },
+            start_date:{
+                ...defaultStringConfig,
+                required: true
+            },
+            end_date:{
+                ...defaultStringConfig,
+                required: true
+            },
+            start_time:{
+                ...defaultStringConfig,
+                required: true
+            },
+            end_time:{
+                ...defaultStringConfig,
+                required: true
+            },
+           
+        },
+        recurring_type:{
+            ...defaultStringConfig,
+            required: true
         },
         ticket_price: {
             type:Number,
@@ -69,8 +96,8 @@ const events_Schema = new mongoose.Schema({
         video:{
             ...defaultStringConfig,
         },
-        location:defaultStringConfig
-
+        location:{
+            ...defaultStringConfig}
     },
     contactInfo:{
         organization_name:{
@@ -81,9 +108,9 @@ const events_Schema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-        mobileNumber: {
-            countryCode: defaultStringConfig,
-            phoneNumber: defaultStringConfig
+        host_Number: {
+            host_countryCode: defaultStringConfig,
+            host_phoneNumber: defaultStringConfig
         },
         link: {
             ...defaultStringConfig,

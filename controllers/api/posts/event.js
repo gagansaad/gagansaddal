@@ -17,6 +17,7 @@ const mongoose = require("mongoose"),
     isValidIndianMobileNumber,
     isValidUrl,
     isValidlink,
+    isValidPlink
   } = require(`../../../utils/validators`);
 
 ///-----------------------Dynamic Data---------------------------////
@@ -25,7 +26,8 @@ exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
     type: ["Venue Based Event", "Live Event", "Both Venue based and Live Streaming Event"],
     category: ["Sport event", "Festival", "Religious", "Music concert", "Night party", "Health care advisor", "Food & drink", "Drama", "Markets & Auction", "Spritual", "Valantines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
-    platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"]
+    platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"],
+    recurring_type:["Daily", "Weekly", "Monthly"]
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -47,10 +49,21 @@ exports.validateEventAdsData = async (req, res, next) => {
       ticket_price,
       location,
       link,
+      time_zone,
+      start_date,
+      end_date,
+      start_time,
+      end_time,
+      recurring_type,
+      image,
+      venue_name,
+      live_platform,
+      platform_link,
       organization_name,
       hosted_by,
-      platform_link,
-      image,
+      host_countryCode,
+      host_phoneNumber,
+      video
 
     } = req.body;
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
@@ -73,15 +86,47 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: "Please provide valid details",
       });
+      
+      if (venue_name && (!isValidString(venue_name)))
+      return failureJSONResponse(res, {
+        message: `Please provide valid  venue name`,
+      });
+      if (live_platform && (!isValidString(live_platform)))
+      return failureJSONResponse(res, {
+        message: `Please provide valid live platform`,
+      });
+      if (!isValidString(time_zone))
+      return failureJSONResponse(res, {
+        message: "Please provide valid time zone",
+      });
+      if (!isValidString(start_date))
+      return failureJSONResponse(res, {
+        message: "Please provide valid start date",
+      });
+      if (!isValidString(end_date))
+      return failureJSONResponse(res, {
+        message: "Please provide valid end date",
+      });
+      if (!isValidString(start_time))
+      return failureJSONResponse(res, {
+        message: "Please provide valid start time",
+      });
+      if (!isValidString(end_time))
+      return failureJSONResponse(res, {
+        message: "Please provide valid end time",
+      });
+      if (!isValidString(recurring_type))
+      return failureJSONResponse(res, {
+        message: "Please provide valid recurring type",
+      });
     if (isNaN(Number(ticket_price)))
       return failureJSONResponse(res, {
         message: `please provide valid ticket_price`,
       });
-      if (!isValidlink(platform_link))
-      return failureJSONResponse(res, { message: `please provide valid link` });
+    if (platform_link && (!isValidPlink(platform_link))) return failureJSONResponse(res, { message: `please provide valid platform link` });
+     
     if (!isValidlink(link))
       return failureJSONResponse(res, { message: `please provide valid link` });
-
     if (!isValidString(location))
       return failureJSONResponse(res, { message: `please provide valid location` });
     if (!isValidString(organization_name))
@@ -109,8 +154,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
-    console.log(typeof (hideAddress), "yyyyyyyyyyyyyyyyyyyyyy");
-    console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)", isValidBoolean(hideAddress))
+   
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
@@ -165,13 +209,27 @@ exports.createEventAds = async (req, res, next) => {
       type,
       add_platform,
       details,
+     
       ticket_price,
       link,
+      time_zone,
+      start_date,
+      end_date,
+      start_time,
+      end_time,
+      recurring_type,
       image,
       location,
+      venue_name,
+      live_platform,
+      platform_link,
       organization_name,
       hosted_by,
-      platform_link,
+      host_countryCode,
+      host_phoneNumber,
+      video
+
+      
 
     } = req.body;
 
@@ -197,12 +255,30 @@ exports.createEventAds = async (req, res, next) => {
         add_platform,
         details,
         ticket_price,
-        link,
+        recurring_type,
         image: imageArr,
         location,
+        venue_name,
+        date_time:{time_zone,
+        start_date,
+        end_date,
+        start_time,
+        end_time,},
+        live_event:{
+        live_platform,
+        platform_link,
+        },
+        video
+        
+      },
+      contactInfo:{
         organization_name,
         hosted_by,
-        platform_link,
+        host_Number: {
+          host_countryCode,
+          host_phoneNumber,
+          },
+          link,
       },
 
       userId: userId,
@@ -266,11 +342,24 @@ exports.editEventAds = async (req, res, next) => {
       details,
       ticket_price,
       link,
+      time_zone,
+      start_date,
+      end_date,
+      start_time,
+      end_time,
+      recurring_type,
       image,
       location,
+      venue_name,
+      live_platform,
+      platform_link,
+      organization_name,
+      hosted_by,
+      host_countryCode,
+      host_phoneNumber,
+      video,
       name,
       emailAddress,
-
       phoneNumber,
       countryCode,
       hideAddress,
@@ -290,6 +379,7 @@ exports.editEventAds = async (req, res, next) => {
     console.log(imageArr, "bahar wala")
     const dataObj = {},
       adsInfoObj = {},
+   
       listerBasicInfoObj = {};
 
     if (status) dataObj.status = status;
@@ -299,16 +389,34 @@ exports.editEventAds = async (req, res, next) => {
     if (type) adsInfoObj.type = type;
     if (add_platform) adsInfoObj.add_platform = add_platform;
     if (details) adsInfoObj.details = details;
+    if (time_zone) adsInfoObj.date_time.time_zone = time_zone;
+    if (start_date) adsInfoObj.date_time.start_date = start_date;
+    if (end_date) adsInfoObj.date_time.end_date = end_date;
+    if (start_time) adsInfoObj.date_time.start_time = start_time;
+    if (end_time) adsInfoObj.date_time.end_time = end_time;
+    if (recurring_type) adsInfoObj.recurring_type = recurring_type;
+    if (venue_name) adsInfoObj.venue_name = venue_name;
+    if (live_platform) adsInfoObj.live_platform = live_platform;
+    if (platform_link) adsInfoObj.platform_link = platform_link;
     if (ticket_price) adsInfoObj.ticket_price = ticket_price;
-    if (link) adsInfoObj.link = link;
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (location) adsInfoObj.location = location;
+    if (video) adsInfoObj.video = video;
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
     }
 
     const dataObjq = {
       adsInfo: adsInfoObj,
+      contactInfo:{
+        organization_name,
+        hosted_by,
+        host_Number: {
+        host_countryCode,
+        host_phoneNumber,
+        },
+        link,
+      },
       listerBasicInfo: {
 
         name,

@@ -31,6 +31,16 @@ const roomRentsSchema = new mongoose.Schema({
         required: true
     },
     adsInfo: {
+         
+        rental_type: {
+            ...defaultStringConfig,
+            required: true
+        },
+         
+        category: {
+            ...defaultStringConfig,
+            required: true
+        },
         title: {
             ...defaultStringConfig,
             required: true
@@ -40,6 +50,10 @@ const roomRentsSchema = new mongoose.Schema({
             required: true
         },
         roomType: {
+            ...defaultStringConfig,
+            required: true
+        },
+        availability:{
             ...defaultStringConfig,
             required: true
         },
@@ -61,9 +75,15 @@ const roomRentsSchema = new mongoose.Schema({
             required: true
         },
         rent: {
+           amount:{
             type: Number,
-            required: true
+            required: true,
+           },
+            negotiable:{
+                type: Boolean,
+            },
         },
+        
         isSmokingAllowed: {
             type: Boolean,
             required: true
@@ -78,7 +98,7 @@ const roomRentsSchema = new mongoose.Schema({
         },
         occupation: {
             ...defaultStringConfig,
-            required: true
+           
         },
         preferredGender: {
             ...defaultStringConfig,

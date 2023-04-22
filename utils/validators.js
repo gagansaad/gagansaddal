@@ -35,6 +35,13 @@ exports.isValidlink = (link = null) => {
         && stringifiedWebsite
         && stringifiedWebsite.match(commonRegex.urlvalidate));
 }
+exports.isValidPlink = (platform_link = null) => {
+    const stringifiedWebsite = String(platform_link);
+
+    return Boolean(platform_link
+        && stringifiedWebsite
+        && stringifiedWebsite.match(commonRegex.urlvalidate));
+}
 exports.isValidIndianMobileNumber = (mobileNumber = null) => {
     return (mobileNumber
         && String(mobileNumber)
