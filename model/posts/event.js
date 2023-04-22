@@ -43,10 +43,6 @@ const events_Schema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-        add_platform: {
-            ...defaultStringConfig,
-            required: true
-        },
         details: {
             ...defaultStringConfig,
             required: true
