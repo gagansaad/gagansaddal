@@ -20,10 +20,10 @@ const events_Schema = new mongoose.Schema({
         //2 = inactive
         //3 = draft 
     },
-    isfeatured:{
+    isfeatured: {
         type: Boolean,
         required: true,
-        default:false
+        default: false
     },
     adsType: {
         type: mongoose.Schema.Types.ObjectId,
@@ -35,7 +35,7 @@ const events_Schema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-        category:{
+        category: {
             ...defaultStringConfig,
             required: true
         },
@@ -47,94 +47,88 @@ const events_Schema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-        venue_name :{
+        venue_name: {
             ...defaultStringConfig,
         },
-        live_event:[{
-            live_platform:[{
+        live_event: [{
+            live_platform: {
                 ...defaultStringConfig,
-            }],
-            platform_link:[{
+            },
+            platform_link: {
                 ...defaultStringConfig,
-            }]
+            }
         }],
-        date_time:{
-            time_zone:{
+        date_time: {
+            time_zone: {
                 ...defaultStringConfig,
                 required: true
             },
-            start_date:{
+            start_date: {
                 ...defaultStringConfig,
                 required: true
             },
-            end_date:{
+            end_date: {
                 ...defaultStringConfig,
                 required: true
             },
-            start_time:{
+            start_time: {
                 ...defaultStringConfig,
                 required: true
             },
-            end_time:{
+            end_time: {
                 ...defaultStringConfig,
                 required: true
             },
-           
+
         },
-        recurring_type:{
+        recurring_type: {
             ...defaultStringConfig,
             required: true
         },
         ticket_price: {
-            type:Number,
+            type: Number,
             required: true
         },
-        vip_ticket_price:{
-            type:Number,
+        vip_ticket_price: {
+            type: Number,
             required: true
         },
-        no_of_ticket:{
-            regular_ticket:{
+        no_of_ticket: {
+            regular_ticket: {
 
             },
-            vip_ticket:{
+            vip_ticket: {
 
             },
-       
+
         },
         image: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: `media`,
         }],
-        video:{
+        video: {
             ...defaultStringConfig,
         },
-        location:{
-            ...defaultStringConfig}
-    },
-    contactInfo:{
-        organization_name:{
-            ...defaultStringConfig,
-            required: true
-        },
-        hosted_by:{
-            ...defaultStringConfig,
-            required: true
-        },
-        host_Number: {
-            host_countryCode: defaultStringConfig,
-            host_phoneNumber: defaultStringConfig
-        },
-        link: {
-            ...defaultStringConfig,
-            required: true
-        },
+        location: {
+            ...defaultStringConfig
+        }
     },
     listerBasicInfo: {
-        
-        name: defaultStringConfig,
+        organization_name: {
+            ...defaultStringConfig,
+           
+        },
+        hosted_by: {
+            ...defaultStringConfig,
+           
+        },
+
+        link: {
+            ...defaultStringConfig,
+           
+        },
         emailAddress: defaultStringConfig,
-        
+
         mobileNumber: {
             countryCode: defaultStringConfig,
             phoneNumber: defaultStringConfig
@@ -143,11 +137,12 @@ const events_Schema = new mongoose.Schema({
         addressInfo: defaultStringConfig,
         preferableModeContact: {
             type: Number,
-            enum: [1,2,3]
+            enum: [1, 2, 3]
         }
 
     }
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('event',events_Schema);
+module.exports = mongoose.model('event', events_Schema);
+

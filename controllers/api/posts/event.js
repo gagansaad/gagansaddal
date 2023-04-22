@@ -80,10 +80,6 @@ exports.validateEventAdsData = async (req, res, next) => {
       venue_name,
       live_platform,
       platform_link,
-      organization_name,
-      hosted_by,
-      host_countryCode,
-      host_phoneNumber,
       video
 
     } = req.body;
@@ -169,14 +165,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, { message: `please provide valid link` });
     if (!isValidString(location))
       return failureJSONResponse(res, { message: `please provide valid location` });
-    if (!isValidString(organization_name))
-      return failureJSONResponse(res, {
-        message: `Please provide valid organization name`,
-      });
-    if (!isValidString(hosted_by))
-      return failureJSONResponse(res, {
-        message: `Please provide valid hosted by`,
-      });
+ 
 
     return next();
   } catch (err) {
@@ -188,13 +177,23 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
   try {
     const {
+      organization_name,
+      hosted_by,
+      link,
       emailAddress,
-      // phoneNumber,
-      // countryCode,
+      phoneNumber,
+      countryCode,
       hideAddress,
       preferableModeContact,
     } = req.body;
-   
+  //   if (organization_name&&(!isValidString(organization_name)))
+  //   return failureJSONResponse(res, {
+  //     message: `Please provide valid organization name`,
+  //   });
+  // if (hosted_by&&(!isValidString(hosted_by)))
+  //   return failureJSONResponse(res, {
+  //     message: `Please provide valid hosted by`,
+  //   });
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
@@ -244,12 +243,10 @@ exports.createEventAds = async (req, res, next) => {
       isfeatured,
       status,
       adsType,
-
       title,
       type,
       category,
       details,
-     
       ticket_price,
       vip_ticket_price,
       regular_ticket,
@@ -263,18 +260,54 @@ exports.createEventAds = async (req, res, next) => {
       image,
       location,
       venue_name,
-      live_platform,
-      platform_link,
-      organization_name,
-      hosted_by,
-      host_countryCode,
-      host_phoneNumber,
-      video
-
-      
+      video,
+      facebook_platform,
+      insta_platform,
+      zoom_platform,
+      youtube_platform,
+      tiktok_platform,
+      other_platform,
 
     } = req.body;
-
+    const livePlatform = ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"];
+    let platforms = [];
+    if(facebook_platform){
+      platforms.push({
+        live_platform : livePlatform[0],
+        platform_link : facebook_platform
+      })
+    }
+    if(insta_platform){
+      platforms.push({
+        live_platform : livePlatform[1],
+        platform_link : insta_platform
+      })
+    }
+    if(zoom_platform){
+      platforms.push({
+        live_platform : livePlatform[2],
+        platform_link : zoom_platform
+      })
+    }
+    if(youtube_platform){
+      platforms.push({
+        live_platform : livePlatform[3],
+        platform_link : youtube_platform
+      })
+    }
+    if(tiktok_platform){
+      platforms.push({
+        live_platform : livePlatform[4],
+        platform_link : tiktok_platform
+      })
+    }
+    if(other_platform){
+      platforms.push({
+        live_platform : livePlatform[5],
+        platform_link : other_platform
+      })
+    }
+   
     const userId = req.userId;
 
     const imageArr = [];
@@ -311,23 +344,10 @@ exports.createEventAds = async (req, res, next) => {
         end_date,
         start_time,
         end_time,},
-        live_event:{
-        live_platform,
-        platform_link,
-        },
+        live_event: platforms,
         video
         
       },
-      contactInfo:{
-        organization_name,
-        hosted_by,
-        host_Number: {
-          host_countryCode,
-          host_phoneNumber,
-          },
-          link,
-      },
-
       userId: userId,
     };
 
@@ -401,14 +421,15 @@ exports.editEventAds = async (req, res, next) => {
       image,
       location,
       venue_name,
-      live_platform,
-      platform_link,
+      facebook_platform,
+      instagram_platform,
+      zoom_platform,
+      youtube_platform,
+      tiktok_platform,
+      other_platform,
+      video,
       organization_name,
       hosted_by,
-      host_countryCode,
-      host_phoneNumber,
-      video,
-      name,
       emailAddress,
       phoneNumber,
       countryCode,
@@ -416,6 +437,45 @@ exports.editEventAds = async (req, res, next) => {
       addressInfo,
       preferableModeContact,
     } = req.body;
+    const livePlatform = ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"];
+    let platforms = [];
+    if(facebook_platform){
+      platforms.push({
+        live_platform : livePlatform[0],
+        platform_link : facebook_platform
+      })
+    }
+    if(instagram_platform){
+      platforms.push({
+        live_platform : livePlatform[1],  
+        platform_link : instagram_platform
+      })
+    }
+    if(zoom_platform){
+      platforms.push({
+        live_platform : livePlatform[2],
+        platform_link : zoom_platform
+      })
+    }
+    if(youtube_platform){
+      platforms.push({
+        live_platform : livePlatform[3],
+        platform_link : youtube_platform
+      })
+    }
+    if(tiktok_platform){
+      platforms.push({
+        live_platform : livePlatform[4],
+        platform_link : tiktok_platform
+      })
+    }
+    if(other_platform){
+      platforms.push({
+        live_platform : livePlatform[5],
+        platform_link : other_platform
+      })
+    }
+   
 
     let imageArr = []
     for (var i = 0; i < req.files.length; i++) {
@@ -428,51 +488,76 @@ exports.editEventAds = async (req, res, next) => {
 
     console.log(imageArr, "bahar wala")
     const dataObj = {},
-      adsInfoObj = {},
+      adsInfoObj = {
+            title,
+            type,
+            category,
+            details,
+            ticket_price,
+            vip_ticket_price,
+            no_of_ticket:{
+              regular_ticket,
+              vip_ticket,
+            },
+            recurring_type,
+            image: imageArr,
+            location,
+            venue_name,
+            date_time:{time_zone,
+            start_date,
+            end_date,
+            start_time,
+            end_time,},
+            live_event: platforms,
+            video,
+            organization_name,
+            hosted_by,
+            link,
+            emailAddress,
+            phoneNumber,
+            countryCode,
+            hideAddress,
+            addressInfo,
+            preferableModeContact,
+            
+          
+      },
    
       listerBasicInfoObj = {};
 
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
-    if (title) adsInfoObj.title = title;
-    if (type) adsInfoObj.type = type;
-    if (category) adsInfoObj.category = category;
-    if (details) adsInfoObj.details = details;
-    if (time_zone) adsInfoObj.date_time.time_zone = time_zone;
-    if (start_date) adsInfoObj.date_time.start_date = start_date;
-    if (end_date) adsInfoObj.date_time.end_date = end_date;
-    if (start_time) adsInfoObj.date_time.start_time = start_time;
-    if (end_time) adsInfoObj.date_time.end_time = end_time;
-    if (recurring_type) adsInfoObj.recurring_type = recurring_type;
-    if (venue_name) adsInfoObj.venue_name = venue_name;
-    if (live_platform) adsInfoObj.live_platform = live_platform;
-    if (platform_link) adsInfoObj.platform_link = platform_link;
-    if (ticket_price) adsInfoObj.ticket_price = ticket_price;
-    if (vip_ticket) adsInfoObj.no_of_ticket.vip_ticket = vip_ticket;
-    if (regular_ticket) adsInfoObj.no_of_ticket.regular_ticket = regular_ticket;
-    if (vip_ticket_price) adsInfoObj.vip_ticket_price = vip_ticket_price;
-    if (imageArr.length) adsInfoObj.image = imageArr;
-    if (location) adsInfoObj.location = location;
-    if (video) adsInfoObj.video = video;
-    if (adsInfoObj && Object.keys(adsInfoObj).length) {
-      dataObj.adsInfo = adsInfoObj;
-    }
+    // if (title) adsInfoObj.title = title;
+    // if (type) adsInfoObj.type = type;
+    // if (category) adsInfoObj.category = category;
+    // if (details) adsInfoObj.details = details;
+    // if (time_zone) adsInfoObj.date_time.time_zone = time_zone;
+    // if (start_date) adsInfoObj.date_time.start_date = start_date;
+    // if (end_date) adsInfoObj.date_time.end_date = end_date;
+    // if (start_time) adsInfoObj.date_time.start_time = start_time;
+    // if (end_time) adsInfoObj.date_time.end_time = end_time;
+    // if (recurring_type) adsInfoObj.recurring_type = recurring_type;
+    // if (venue_name) adsInfoObj.venue_name = venue_name;
+    // if (ticket_price) adsInfoObj.ticket_price = ticket_price;
+    // if (vip_ticket) adsInfoObj.no_of_ticket.vip_ticket = vip_ticket;
+    // if (regular_ticket) adsInfoObj.no_of_ticket.regular_ticket = regular_ticket;
+    // if (vip_ticket_price) adsInfoObj.vip_ticket_price = vip_ticket_price;
+    // if (imageArr.length) adsInfoObj.image = imageArr;
+    // if (platforms.length) adsInfoObj.live_event = platforms;
+    // if (location) adsInfoObj.location = location;
+    // if (video) adsInfoObj.video = video;
+    // if (adsInfoObj && Object.keys(adsInfoObj).length) {
+    //   dataObj.adsInfo = adsInfoObj;
+    // }
 
     const dataObjq = {
       adsInfo: adsInfoObj,
-      contactInfo:{
-        organization_name,
-        hosted_by,
-        host_Number: {
-        host_countryCode,
-        host_phoneNumber,
-        },
-        link,
-      },
       listerBasicInfo: {
 
-        name,
+        organization_name,
+        hosted_by,
+        link,
         emailAddress,
         phoneNumber,
         hideAddress,
