@@ -293,11 +293,12 @@ exports.editAds = async (req, res, next) => {
     const dataObj = {},
       adsInfoObj = {},
       listerBasicInfoObj = {};
-
+let category = {}
     if (status) dataObj.status = status;
     if (ads_type) dataObj.ads_type = ads_type;
-    if (category_name) adsInfoObj.category_name = category_name;
-    if (category_value) adsInfoObj.category_value = category_value;
+    if (category_name) category.category_name = category_name;
+    if (category_value) category.category_value = category_value;
+    if(category)adsInfoObj.category=category
     if (care_service) adsInfoObj.care_service = care_service;
     if (work_type) adsInfoObj.work_type = work_type;
     if (age_group) adsInfoObj.age_group = age_group;
