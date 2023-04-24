@@ -54,8 +54,13 @@ const roomRentsSchema = new mongoose.Schema({
             required: true
         },
         availability:{
+           custom_date:{
             ...defaultStringConfig,
-            required: true
+           },
+           immidiate:{
+            type: Boolean,
+            default:false
+           }
         },
         listerType: {
             ...defaultStringConfig,
@@ -64,10 +69,6 @@ const roomRentsSchema = new mongoose.Schema({
         },
         accommodates: {
             type: Number,
-            required: true
-        },
-        accommodates: {
-            type: String,
             required: true
         },
         attachedBath: {
@@ -81,20 +82,21 @@ const roomRentsSchema = new mongoose.Schema({
            },
             negotiable:{
                 type: Boolean,
+                default:false
             },
         },
         
         isSmokingAllowed: {
             type: Boolean,
-            required: true
+            default:false
         },
         isAlcoholAllowed: {
             type: Boolean,
-            required: true
+            default:false
         },
         isPetFriendly: {
             type: Boolean,
-            required: true
+           default:false
         },
         occupation: {
             ...defaultStringConfig,

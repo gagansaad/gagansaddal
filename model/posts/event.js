@@ -95,10 +95,12 @@ const events_Schema = new mongoose.Schema({
         },
         no_of_ticket: {
             regular_ticket: {
-
+                type: Number,
+                required: true
             },
             vip_ticket: {
-
+                type: Number,
+                required: true
             },
 
         },

@@ -25,7 +25,7 @@ const mongoose = require("mongoose"),
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
     type: ["Venue Based Event", "Live Event", "Both Venue based and Live Streaming Event"],
-    category: ["Sport event", "Festival", "Religious", "Music concert", "Night party", "Health care advisor", "Food & drink", "Drama", "Markets & Auction", "Spritual", "Valantines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
+    category: ["Sport event", "Festival", "Religious", "Political gatherings", "Community Gatherings", "Music concert", "Night party", "Health care advisor", "Education", "Training", "Food & drink", "Fund Raising", "Candlelight Vigil", "Drama", "Theatre", "Movie", "Wedding", "Funneral", "Anniversary", "Welcome", "Farewell", "Markets & Auction", "Spritual", "Valentines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
     platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"],
     recurring_type:["Daily", "Weekly", "Monthly"],
     time_zone:[
@@ -79,8 +79,13 @@ exports.validateEventAdsData = async (req, res, next) => {
       image,
       venue_name,
       live_platform,
-      platform_link,
-      video
+      video,
+      facebook_platform,
+      instagram_platform,
+      zoom_platform,
+      youtube_platform,
+      tiktok_platform,
+      other_platform,
 
     } = req.body;
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
@@ -159,7 +164,12 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid valid vip ticket price`,
       });
-    if (platform_link && (!isValidPlink(platform_link))) return failureJSONResponse(res, { message: `please provide valid platform link` });
+    if (facebook_platform && (!isValidPlink(facebook_platform))) return failureJSONResponse(res, { message: `please provide valid facebook link` });
+    if (youtube_platform && (!isValidPlink(youtube_platform))) return failureJSONResponse(res, { message: `please provide valid youtube link` });
+    if (instagram_platform && (!isValidPlink(instagram_platform))) return failureJSONResponse(res, { message: `please provide valid instagram link` });
+    if (zoom_platform && (!isValidPlink(zoom_platform))) return failureJSONResponse(res, { message: `please provide valid zoom link` });
+    if (tiktok_platform && (!isValidPlink(tiktok_platform))) return failureJSONResponse(res, { message: `please provide valid tiktok link` });
+    if (other_platform && (!isValidPlink(other_platform))) return failureJSONResponse(res, { message: `please provide valid other link` });
      
     if (link&&(!isValidlink(link)))
       return failureJSONResponse(res, { message: `please provide valid link` });
@@ -186,14 +196,14 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
-  //   if (organization_name&&(!isValidString(organization_name)))
-  //   return failureJSONResponse(res, {
-  //     message: `Please provide valid organization name`,
-  //   });
-  // if (hosted_by&&(!isValidString(hosted_by)))
-  //   return failureJSONResponse(res, {
-  //     message: `Please provide valid hosted by`,
-  //   });
+    if (organization_name&&(!isValidString(organization_name)))
+    return failureJSONResponse(res, {
+      message: `Please provide valid organization name`,
+    });
+    if (hosted_by&&(!isValidString(hosted_by)))
+      return failureJSONResponse(res, {
+      message: `Please provide valid hosted by`,
+    });
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
@@ -207,7 +217,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
     //   return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
     // }
 
-    if (emailAddress && !isValidEmailAddress(emailAddress)) {
+    if (emailAddress && (!isValidEmailAddress(emailAddress))) {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
@@ -262,7 +272,7 @@ exports.createEventAds = async (req, res, next) => {
       venue_name,
       video,
       facebook_platform,
-      insta_platform,
+      instagram_platform,
       zoom_platform,
       youtube_platform,
       tiktok_platform,
@@ -277,10 +287,10 @@ exports.createEventAds = async (req, res, next) => {
         platform_link : facebook_platform
       })
     }
-    if(insta_platform){
+    if(instagram_platform){
       platforms.push({
         live_platform : livePlatform[1],
-        platform_link : insta_platform
+        platform_link : instagram_platform
       })
     }
     if(zoom_platform){
@@ -485,8 +495,6 @@ exports.editEventAds = async (req, res, next) => {
       imageArr.push(productImages._id);
 
     }
-
-    console.log(imageArr, "bahar wala")
     const dataObj = {},
       adsInfoObj = {
             title,

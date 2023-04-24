@@ -39,27 +39,62 @@ exports.validateAdsData = async (req, res, next) => {
   try {
     const {
       status,
-      adsType,
-      option,
+      ads_type,
+      type_value,
+      type_name,
+      work_type,
       care_service,
-      sub_type
+      age_group,
+      prefered_language,
+      prefered_gender,
+      service_from_date,
+      description,
+      location
 
     } = req.body;
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
-    if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
-    else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
+    if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads type` });
+    else if (ads_type && !isValidMongoObjId(mongoose, ads_type)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
-    if (!isValidString(option))
+      if (!isValidString(type_name))
       return failureJSONResponse(res, {
-        message: `Please provide valid option`,
+        message: `Please provide valid type name`,
       });
-    if (!isValidString(care_service))
+      if (!isValidString(type_value))
+      return failureJSONResponse(res, {
+        message: `Please provide valid type value`,
+      });
+      if (!isValidString(work_type))
+      return failureJSONResponse(res, {
+        message: `Please provide valid work type`,
+      });
+      if (!isValidString(care_service))
       return failureJSONResponse(res, {
         message: `Please provide valid care service`,
       });
-    if (!isValidString(sub_type))
+      if (!isValidString(age_group))
       return failureJSONResponse(res, {
-        message: `Please provide valid sub-type`,
+        message: `Please provide valid age group`,
+      });
+      if (!isValidString(prefered_language))
+      return failureJSONResponse(res, {
+        message: `Please provide valid prefered language`,
+      });
+      if (!isValidString(prefered_gender))
+      return failureJSONResponse(res, {
+        message: `Please provide valid prefered gender`,
+      });
+      if (!isValidString(service_from_date))
+      return failureJSONResponse(res, {
+        message: `Please provide valid service starting date`,
+      });
+      if (!isValidString(description))
+      return failureJSONResponse(res, {
+        message: `Please provide valid description`,
+      });
+      if (!isValidString(location))
+      return failureJSONResponse(res, {
+        message: `Please provide valid location`,
       });
 
 
@@ -73,14 +108,12 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
   try {
     const {
-      emailAddress,
+      email_address,
       // phoneNumber,
       // countryCode,
-      hideAddress,
+      hide_adress,
       preferableModeContact,
     } = req.body;
-    console.log(typeof (hideAddress), "yyyyyyyyyyyyyyyyyyyyyy");
-    console.log("isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)", isValidBoolean(hideAddress))
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
@@ -93,7 +126,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
     // if (preferableModeContact && isNaN(Number(preferableModeContact))){
     //   return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
     // }
-    if (emailAddress && !isValidEmailAddress(emailAddress)) {
+    if (email_address && !isValidEmailAddress(email_address)) {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
@@ -125,16 +158,25 @@ exports.createAds = async (req, res, next) => {
     const {
       isfeatured,
       status,
-      adsType,
-
-      option,
+      ads_type,
+      type_value,
+      type_name,
+      work_type,
       care_service,
-      sub_type,
+      age_group,
+      prefered_language,
+      prefered_gender,
+      service_from_date,
+      transport_facilty,
+      description,
+      location,
       image
     } = req.body;
-
+console.log(req.body);
     const userId = req.userId;
     const imageArr = [];
+    
+    if(req.files.length){
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path
 
@@ -142,16 +184,26 @@ exports.createAds = async (req, res, next) => {
       imageArr.push(productImages._id);
 
     }
-
+  }
 
     const dataObj = {
       isfeatured,
       status: status,
-      adsType,
-      adsInfo: {
-        option,
+      ads_type,
+      ads_info: {
+        type:{
+          type_value:type_value,
+          type_name:type_name,
+        },
+        work_type,
         care_service,
-        sub_type,
+        age_group,
+        prefered_language,
+        prefered_gender,
+        service_from_date,
+        transport_facilty,
+        description,
+        location,
         image: imageArr,
       },
 
@@ -190,7 +242,7 @@ exports.editAds = async (req, res, next) => {
   console.log(`kejhrjhyewgrjhew`);
   try {
 
-    const productId = req?.params?.productId;
+    const productId = req?.params?.serviceid;
 
     const validate_id = await postbabyAd.findById(productId)
     if (!validate_id) {
@@ -200,17 +252,24 @@ exports.editAds = async (req, res, next) => {
     }
     const {
       status,
-      adsType,
-      option,
+      ads_type,
+      type_value,
+      type_name,
+      work_type,
       care_service,
-      sub_type,
-      name,
-      emailAddress,
-      phoneNumber,
-      hideAddress,
+      age_group,
+      prefered_language,
+      prefered_gender,
+      service_from_date,
+      transport_facilty,
+      description,
       location,
-      addressInfo,
-      preferableModeContact,
+      name,
+      email_address,
+      phone_number,
+      hide_address,
+      address_info,
+      preferable_contact_mode,
       image
     } = req.body;
     const imageArr = [];
@@ -229,34 +288,38 @@ exports.editAds = async (req, res, next) => {
       listerBasicInfoObj = {};
 
     if (status) dataObj.status = status;
-    if (adsType) dataObj.adsType = adsType;
-
-    if (option) adsInfoObj.option = option;
+    if (ads_type) dataObj.ads_type = ads_type;
+    if (type_name) adsInfoObj.type_name = type_name;
+    if (type_value) adsInfoObj.type_value = type_value;
     if (care_service) adsInfoObj.care_service = care_service;
-    if (sub_type) adsInfoObj.sub_type = sub_type;
-
-    if (location) listerBasicInfoObj.location = location;
+    if (work_type) adsInfoObj.work_type = work_type;
+    if (age_group) adsInfoObj.age_group = age_group;
+    if (prefered_language) adsInfoObj.prefered_language = prefered_language;
+    if (prefered_gender) adsInfoObj.prefered_gender = prefered_gender;
+    if (service_from_date) adsInfoObj.service_from_date = service_from_date;
+    if (transport_facilty) adsInfoObj.transport_facilty = transport_facilty;
+    if (description) adsInfoObj.description = description;
+    if (location) adsInfoObj.location = location;
 
     if (name) listerBasicInfoObj.name = name;
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
-      dataObj.adsInfo = adsInfoObj;
+      dataObj.ads_info = adsInfoObj;
     }
 
     const dataObjq = {
-      adsInfo: adsInfoObj,
-      listerBasicInfo: {
+      ads_info: adsInfoObj,
+      lister_basic_info: {
         name,
-        emailAddress,
-        phoneNumber,
-        hideAddress,
+        email_address,
+        hide_address,
         location,
-        addressInfo,
-        mobileNumber: {
-          countryCode: +91,
-          phoneNumber: phoneNumber,
+        address_info,
+        mobile_number: {
+          country_code: +91,
+          phone_number: phone_number,
         },
-        preferableModeContact: preferableModeContact,
+        preferable_contact_mode: preferable_contact_mode,
       },
     };
 

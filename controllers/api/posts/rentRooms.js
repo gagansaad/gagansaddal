@@ -37,7 +37,7 @@ exports.fetchDynamicsData = async (req, res, next) => {
             `engineer`,
         ],
         gender:["Male", "Female", "Any Gender"],
-        preferd_age:["18-30", "18-50", "18-any"],
+        prefered_age:["18-30", "18-50", "18-any"],
         whoAreU: [
             `Owner`,
             `Broker`
@@ -73,6 +73,7 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
             furnished,
             attachedBath,
             amount,
+            prefered_age,
             negotiable,
             isSmokingAllowed,
             isAlcoholAllowed,
@@ -99,10 +100,12 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         if (!isValidString(descriptions)) return failureJSONResponse(res, { message: `Please provide valid descriptions` });
         if (!isValidString(listerType)) return failureJSONResponse(res, { message: `Please provide valid listerType` });
         if (!isValidString(roomType)) return failureJSONResponse(res, { message: `Please provide valid roomType` });
-
+        if (!isValidString(prefered_age)) return failureJSONResponse(res, { message: `Please provide valid prefered_age` });
         if (isNaN(Number(attachedBath))) return failureJSONResponse(res, { message: `Please provide valid attachedBath` });
         if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
         if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
+        if (!isValidString(location)) return failureJSONResponse(res, { message: `Please provide valid location` });
+        if (!isValidString(preferredGender)) return failureJSONResponse(res, { message: `Please provide valid preferredGender` });
         if (isNaN(Number(amount)))
             return failureJSONResponse(res, {
                 message: `please provide valid rent amount`,
@@ -196,13 +199,14 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
         title,
         descriptions,
         roomType,
-        availability,
+        custom_date,
         listerType,
         accommodates,
         furnished,
         attachedBath,
         amount,
         negotiable,
+        prefered_age,
         isSmokingAllowed,
         isAlcoholAllowed,
         isPetFriendly,
@@ -227,8 +231,12 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
         imageArr.push(productImages._id);
 
     }
-
-
+let immidiate = false;
+if(!custom_date){
+    immidiate=true
+}else{
+    immidiate=false
+}
 
     const dataObj = {
         isfeatured,
@@ -241,7 +249,11 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
             descriptions,
             roomType,
             furnished,
-            availability,
+            availability:{
+            custom_date,
+            immidiate,
+        },
+            prefered_age,
             listerType,
             accommodates,
             attachedBath,
@@ -249,6 +261,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
                 amount:amount,
                 negotiable:negotiable,
             },
+            prefered_age,
             isSmokingAllowed,
             isAlcoholAllowed,
             isPetFriendly,
@@ -331,7 +344,8 @@ exports.editRoomRentAds = async (req, res, next) => {
         attachedBath,
         amount,
         negotiable,
-        availability,
+        
+        prefered_age,
         isSmokingAllowed,
         isAlcoholAllowed,
         isPetFriendly,
@@ -381,9 +395,10 @@ exports.editRoomRentAds = async (req, res, next) => {
     if (isSmokingAllowed) adsInfoObj.isSmokingAllowed = isSmokingAllowed;
     if (isAlcoholAllowed) adsInfoObj.isAlcoholAllowed = isAlcoholAllowed;
     if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFriendly;
+    if (availability) adsInfoObj.availability = availability;
     if (occupation) adsInfoObj.occupation = occupation;
-    if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFriendly;
-    if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFriendly;
+    if (prefered_age) adsInfoObj.prefered_age = prefered_age;
+   
     if (location) adsInfoObj.location = location;
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (name) listerBasicInfoObj.name = name;

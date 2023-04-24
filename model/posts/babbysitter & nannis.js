@@ -26,21 +26,57 @@ const babysitter_Schema = new mongoose.Schema({
         default: false
     },
 
-    adsType: {
+    ads_type: {
         type: mongoose.Schema.Types.ObjectId,
         ref: `PostType`,
         required: true
     },
-    adsInfo: {
-        option: {
+    ads_info: {
+        type: {
+            type_value:{
+                type:Number,
+                required: true
+            },
+           type_name:{
+            ...defaultStringConfig,
+            required: true
+           }
+           
+        },
+        work_type:{
             ...defaultStringConfig,
             required: true
         },
-        care_service: {
+        care_service: [{
+            ...defaultStringConfig,
+            required: true
+        }],
+        age_group: [{
+            ...defaultStringConfig,
+            required: true
+        }],
+        prefered_language:[{
+            ...defaultStringConfig,
+            required: true
+        }],
+        prefered_gender:{
             ...defaultStringConfig,
             required: true
         },
-        sub_type: {
+        service_from_date:{
+            ...defaultStringConfig,
+            required: true
+        },
+        transport_facilty:{
+            type: Boolean,
+            required: true,
+            default: false
+        },
+        description:{
+            ...defaultStringConfig,
+            required: true
+        },
+        location:{
             ...defaultStringConfig,
             required: true
         },
@@ -49,20 +85,21 @@ const babysitter_Schema = new mongoose.Schema({
             ref: `media`,
         }],
     },
-    listerBasicInfo: {
+    lister_basic_info: {
         name: defaultStringConfig,
-        emailAddress: defaultStringConfig,
-        mobileNumber: {
-            countryCode: defaultStringConfig,
-            phoneNumber: defaultStringConfig
+        email_address: defaultStringConfig,
+        mobile_number: {
+            country_code: defaultStringConfig,
+            phone_number: defaultStringConfig
         },
-
-        location: defaultStringConfig,
-        hideAddress: defaultBooleanConfig,
-        addressInfo: defaultStringConfig,
-        preferableModeContact: {
+        hide_address: defaultBooleanConfig,
+        address_info: defaultStringConfig,
+        preferable_contact_mode: {
             type: Number,
             enum: [1, 2, 3]
+            //   1:  Phone Number
+            //   2:  email Address
+            //   3:
         }
 
     }

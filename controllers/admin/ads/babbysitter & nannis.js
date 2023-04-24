@@ -33,7 +33,7 @@ if(isFeatured) dbQuery.isfeatured = isFeatured;
               status: 200,
           })
       } else {
-          return failureJSONResponse(res, { message: `Room not Available` })
+          return failureJSONResponse(res, { message: `ad not Available` })
       }
   } catch (err) {
       return failureJSONResponse(res, { message: `something went wrong` })

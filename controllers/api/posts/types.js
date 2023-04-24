@@ -28,7 +28,7 @@ exports.fetchPostsTypes = async (req, res, next) => {
 
 exports.createPostsTypes = async (req, res, next) => {
 
-    try {
+    try {       
         PostType.create(req.body)
             .then((newPostType) => {
 
