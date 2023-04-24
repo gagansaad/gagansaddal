@@ -152,6 +152,9 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid regular ticket price`,
       });
+  if(!ticket_price) return failureJSONResponse(res, {
+    message: `please provide valid regular ticket price`,
+  });
     if (isNaN(Number(vip_ticket)))
       return failureJSONResponse(res, {
         message: `please provide valid no. of vip ticket`,
