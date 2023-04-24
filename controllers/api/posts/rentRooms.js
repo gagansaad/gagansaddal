@@ -79,7 +79,7 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
             isAlcoholAllowed,
             isPetFriendly,
             occupation,
-            preferredGender,
+            preferedGender,
             location,
 
             name,
@@ -89,7 +89,7 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
             preferableModeContact
 
         } = req.body;
-
+console.log(req.body);
 
         if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
         if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
@@ -100,12 +100,12 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         if (!isValidString(descriptions)) return failureJSONResponse(res, { message: `Please provide valid descriptions` });
         if (!isValidString(listerType)) return failureJSONResponse(res, { message: `Please provide valid listerType` });
         if (!isValidString(roomType)) return failureJSONResponse(res, { message: `Please provide valid roomType` });
-        if (!isValidString(prefered_age)) return failureJSONResponse(res, { message: `Please provide valid prefered_age` });
         if (isNaN(Number(attachedBath))) return failureJSONResponse(res, { message: `Please provide valid attachedBath` });
         if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
         if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
         if (!isValidString(location)) return failureJSONResponse(res, { message: `Please provide valid location` });
-        if (!isValidString(preferredGender)) return failureJSONResponse(res, { message: `Please provide valid preferredGender` });
+        if (!isValidString(preferedGender)) return failureJSONResponse(res, { message: `Please provide valid preferredGender` });
+      else if (preferedGender != `Male` && preferedGender !=  `Female` && preferedGender !=  `Any gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male , Female or Any gender` });
         if (isNaN(Number(amount)))
             return failureJSONResponse(res, {
                 message: `please provide valid rent amount`,
@@ -211,7 +211,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
         isAlcoholAllowed,
         isPetFriendly,
         occupation,
-        preferredGender,
+        preferedGender,
         location,
 
 
@@ -261,12 +261,11 @@ if(!custom_date){
                 amount:amount,
                 negotiable:negotiable,
             },
-            prefered_age,
             isSmokingAllowed,
             isAlcoholAllowed,
             isPetFriendly,
             occupation,
-            preferredGender: preferredGender,
+            preferedGender: preferedGender,
             location,
             image: imageArr
         },
@@ -338,21 +337,20 @@ exports.editRoomRentAds = async (req, res, next) => {
         title,
         descriptions,
         roomType,
+        custom_date,
         listerType,
         accommodates,
         furnished,
         attachedBath,
         amount,
         negotiable,
-        
         prefered_age,
         isSmokingAllowed,
         isAlcoholAllowed,
         isPetFriendly,
         occupation,
-        preferredGender,
+        preferedGender,
         location,
-        image,
         name,
         emailAddress,
         countryCode,
@@ -373,29 +371,39 @@ exports.editRoomRentAds = async (req, res, next) => {
 
 
     const dataObj = {},
-        adsInfoObj = {},
+        adsInfoObj = {
+        },
         listerBasicInfoObj = {};
-
+        let immidiate= false;
+        if(!custom_date){
+            immidiate=true
+        }else{
+            immidiate=false
+        }
+        let rent ={
+        }
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
     if (rental_type) adsInfoObj.rental_type = rental_type;
     if (category) adsInfoObj.category = category;
     if (title) adsInfoObj.title = title;
-
-    if (preferredGender) adsInfoObj.preferredGender = preferredGender;
+    if(custom_date) adsInfoObj.custom_date = custom_date;
+    if(!custom_date) adsInfoObj.immidiate = immidiate;
+    if (preferedGender) adsInfoObj.preferedGender = preferedGender;
     if (descriptions) adsInfoObj.descriptions = descriptions;
     if (roomType) adsInfoObj.roomType = roomType;
     if (furnished) adsInfoObj.furnished = furnished;
     if (listerType) adsInfoObj.listerType = listerType;
     if (accommodates) adsInfoObj.accommodates = accommodates;
     if (attachedBath) adsInfoObj.attachedBath = attachedBath;
-    if (amount) adsInfoObj.rent.amount = amount;
-    if (negotiable) adsInfoObj.rent.negotiable = negotiable;
+    if (amount)rent.amount = amount;
+    if (negotiable)rent.negotiable = negotiable;
+    if(rent)adsInfoObj.rent=rent;
     if (isSmokingAllowed) adsInfoObj.isSmokingAllowed = isSmokingAllowed;
     if (isAlcoholAllowed) adsInfoObj.isAlcoholAllowed = isAlcoholAllowed;
     if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFriendly;
-    if (availability) adsInfoObj.availability = availability;
+ 
     if (occupation) adsInfoObj.occupation = occupation;
     if (prefered_age) adsInfoObj.prefered_age = prefered_age;
    
@@ -404,9 +412,9 @@ exports.editRoomRentAds = async (req, res, next) => {
     if (name) listerBasicInfoObj.name = name;
 
 
-    if (adsInfoObj && Object.keys(adsInfoObj).length) {
-        dataObj.adsInfo = adsInfoObj
-    }
+    // if (adsInfoObj && Object.keys(adsInfoObj).length) {
+    //     dataObj.adsInfo = adsInfoObj
+    // }
 
     const dataObjq = {
         adsInfo: adsInfoObj,
@@ -424,8 +432,10 @@ exports.editRoomRentAds = async (req, res, next) => {
     };
 
     console.log(dataObj)
-
+    let data = await RoomRentsAds.findById({ _id: roomRentId })
+console.log(data,"hfvhfdhvbdfhbvdhbvhdbhdbchbdhvbhd");
     const updateRoomRents = await RoomRentsAds.findByIdAndUpdate({ _id: roomRentId }, { $set: dataObjq }, { new: true })
+    console.log(updateRoomRents,"ebdhebhefcebcfheb");
     let updateRoomAdObjToSend = {}
     for (let key in updateRoomRents.toObject()) {
         if (!fieldsToExclude.hasOwnProperty(String(key))) {

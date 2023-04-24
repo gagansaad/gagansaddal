@@ -102,10 +102,13 @@ const roomRentsSchema = new mongoose.Schema({
             ...defaultStringConfig,
            
         },
-        preferredGender: {
+        preferedGender: {
             ...defaultStringConfig,
             enum: [`Male`,`Female`,`Any gender`],
             required: true
+        },
+        prefered_age:{
+            ...defaultStringConfig,
         },
         furnished: {
             ...defaultStringConfig,
