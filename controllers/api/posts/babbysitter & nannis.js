@@ -22,10 +22,12 @@ exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
     category:["I want a Baby sitter/Nanny","I am a Baby sitter/Nanny"],
     work_type: ["Live in", "Live in & out", "Live out"],
-    care_service:["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores", "Storytelling"],
+    care_service_need:["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores"],
+    care_service_offer:["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores", "Storytelling"],
     age_group: ["0-6 month", "6month-3years", "3-5 year", "5-10 year", "10-13 years", "above 13", "any age"],
     preferrd_languge:["English", "Amharic", "Afan Oromo", "Tigrigna", "Arabic", "French", "Other"],
-    preferrd_gender:["Male", "Female", "Any Gender"],
+    preferrd_gender_need:["Male", "Female", "Any Gender"],
+    preferrd_gender_offer:["Male", "Female"],
     transport_facilty:["Yes", "No"],
   };
   return successJSONResponse(res, {
