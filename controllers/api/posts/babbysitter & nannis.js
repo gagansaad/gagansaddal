@@ -20,11 +20,13 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
-    option: [`I offer care`, `I need care`],
-    care_service: [`Child care`, `Home care`, `Day care centers`],
-    Child_care: [`Nannies`, `Babysitter`],
-    Home_care: [`Housekeeping`, `Cooking`],
-    Elder_care: [`Enginner`, `Plumber`],
+    category:["I want a Baby sitter/Nanny","I am a Baby sitter/Nanny"],
+    work_type: ["Live in", "Live in & out", "Live out"],
+    care_service:["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores", "Storytelling"],
+    age_group: ["0-6 month", "6month-3years", "3-5 year", "5-10 year", "10-13 years", "above 13", "any age"],
+    preferrd_languge:["English", "Amharic", "Afan Oromo", "Tigrigna", "Arabic", "French", "Other"],
+    preferrd_gender:["Male", "Female", "Any Gender"],
+    transport_facilty:["Yes", "No"],
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -40,8 +42,8 @@ exports.validateAdsData = async (req, res, next) => {
     const {
       status,
       ads_type,
-      type_value,
-      type_name,
+      category_value,
+      category_name,
       work_type,
       care_service,
       age_group,
@@ -56,13 +58,13 @@ exports.validateAdsData = async (req, res, next) => {
     if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (ads_type && !isValidMongoObjId(mongoose, ads_type)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
-      if (!isValidString(type_name))
+      if (!isValidString(category_name))
       return failureJSONResponse(res, {
-        message: `Please provide valid type name`,
+        message: `Please provide valid category_name`,
       });
-      if (!isValidString(type_value))
+      if (!isValidString(category_value))
       return failureJSONResponse(res, {
-        message: `Please provide valid type value`,
+        message: `Please provide valid category_value`,
       });
       if (!isValidString(work_type))
       return failureJSONResponse(res, {
@@ -159,8 +161,8 @@ exports.createAds = async (req, res, next) => {
       isfeatured,
       status,
       ads_type,
-      type_value,
-      type_name,
+      category_value,
+      category_name,
       work_type,
       care_service,
       age_group,
@@ -176,7 +178,7 @@ console.log(req.body);
     const userId = req.userId;
     const imageArr = [];
     
-    if(req.files.length){
+    
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path
 
@@ -184,16 +186,16 @@ console.log(req.body);
       imageArr.push(productImages._id);
 
     }
-  }
+  
 
     const dataObj = {
       isfeatured,
       status: status,
       ads_type,
       ads_info: {
-        type:{
-          type_value:type_value,
-          type_name:type_name,
+        category:{
+          category_value,
+          category_name,
         },
         work_type,
         care_service,
@@ -209,7 +211,7 @@ console.log(req.body);
 
       userId: userId,
     };
-
+console.log(dataObj,"vhebjvbdsgjvhbesdvgbedhcvwsehjcbsdbvjhyudsbvghr");
     const newPost = await postbabyAd.create(dataObj);
 
     const Babysitter_Nannies = {};
@@ -253,8 +255,8 @@ exports.editAds = async (req, res, next) => {
     const {
       status,
       ads_type,
-      type_value,
-      type_name,
+      category_value,
+      category_name,
       work_type,
       care_service,
       age_group,
@@ -289,8 +291,8 @@ exports.editAds = async (req, res, next) => {
 
     if (status) dataObj.status = status;
     if (ads_type) dataObj.ads_type = ads_type;
-    if (type_name) adsInfoObj.type_name = type_name;
-    if (type_value) adsInfoObj.type_value = type_value;
+    if (category_name) adsInfoObj.category_name = category_name;
+    if (category_value) adsInfoObj.category_value = category_value;
     if (care_service) adsInfoObj.care_service = care_service;
     if (work_type) adsInfoObj.work_type = work_type;
     if (age_group) adsInfoObj.age_group = age_group;

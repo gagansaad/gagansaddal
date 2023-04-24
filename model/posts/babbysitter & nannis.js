@@ -32,12 +32,12 @@ const babysitter_Schema = new mongoose.Schema({
         required: true
     },
     ads_info: {
-        type: {
-            type_value:{
+        category: {
+            category_value:{
                 type:Number,
                 required: true
             },
-           type_name:{
+            category_name:{
             ...defaultStringConfig,
             required: true
            }

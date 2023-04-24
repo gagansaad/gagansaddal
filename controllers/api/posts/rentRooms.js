@@ -431,9 +431,7 @@ exports.editRoomRentAds = async (req, res, next) => {
         },
     };
 
-    console.log(dataObj)
-    let data = await RoomRentsAds.findById({ _id: roomRentId })
-console.log(data,"hfvhfdhvbdfhbvdhbvhdbhdbchbdhvbhd");
+    
     const updateRoomRents = await RoomRentsAds.findByIdAndUpdate({ _id: roomRentId }, { $set: dataObjq }, { new: true })
     console.log(updateRoomRents,"ebdhebhefcebcfheb");
     let updateRoomAdObjToSend = {}

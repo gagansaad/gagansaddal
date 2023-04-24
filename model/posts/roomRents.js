@@ -88,15 +88,15 @@ const roomRentsSchema = new mongoose.Schema({
         
         isSmokingAllowed: {
             type: Boolean,
-            default:false
+           
         },
         isAlcoholAllowed: {
             type: Boolean,
-            default:false
+          
         },
         isPetFriendly: {
             type: Boolean,
-           default:false
+          
         },
         occupation: {
             ...defaultStringConfig,
