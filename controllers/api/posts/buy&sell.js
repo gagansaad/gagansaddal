@@ -41,10 +41,10 @@ exports.getDnymicsData = async (req, res, next) => {
     categories_Arts:["Fine Art", "Advertising, Paper & Ephemera", "African Art", "Ethiopian Art", "Eritrean Art", "Flags", "Asian Antiques & Collectibles", "Bronze & Metalwork", "Cameras, Optics & Photography", "Carpets & Oriental Rugs", "Clocks, Barometers & Scientific Instruments", "Coins & Numismatics", "Decoys", "Fashion & Textiles", "Fine & Antique Toys", "Furniture", "General Collectibles", "Glass", "Jewelry", "Lamps", "Maps, Globes, and Atlases", "Militaria & Firearms", "Musical Instruments", "Native American & Ethnographic Arts", "Natural History", "Porcelain Art", "Pottery & Ceramics", "Silver", "Sports, Industry & Entertainment Memorabilia", "Whiskey", "Wines & Spirits", "Wristwatches and Chronometers"],
     categories_freestuff:["test1","test2"],
     categories_others:["test","testi"],
-
-    
-    product_condition: [`New`, `Used`, `Good`, `Age-worn`],
-    user_type: [`Individual`, `Retailer`],
+    payment_mode:["Cash less payment", "Cash accepted", "Not applicable"],
+    fullfilment:["Free shipping", "In person pickup", "Only local delivery", "Please contact", "Not applicable"],
+    product_condition:["New", "Used -  Like new", "Used -  Good", "Used -  Fair"],
+    // user_type: [`Individual`, `Retailer`],
 
 
   };
@@ -62,12 +62,16 @@ exports.validateBuySellAdsData = async (req, res, next) => {
     const {
       status,
       adsType,
+      category,
+      sub_category,
       title,
       descriptions,
-      categories,
-      user_type,
       product_condition,
-      price,
+      amount,
+      negoshiable,
+      quantity,
+      payment_mode,
+      fullfilment,
       location,
       additional_info,
       image,
