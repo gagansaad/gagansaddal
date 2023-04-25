@@ -61,7 +61,7 @@ exports.validateBuySellAdsData = async (req, res, next) => {
   try {
     const {
       status,
-      adsType,
+      ads_type,
       category,
       sub_category,
       title,
@@ -75,12 +75,12 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       fullfilment,
       location,
       tagline,
-      additional_info,
+      
       image,
     } = req.body;
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
-    if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
-    else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
+    if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads type` });
+    else if (ads_type && !isValidMongoObjId(mongoose, ads_type)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
     if (!isValidString(title))
       return failureJSONResponse(res, {
@@ -135,8 +135,7 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       return failureJSONResponse(res, { message: `please provide valid payment mode`});
     if (!isValidString(fullfilment))
       return failureJSONResponse(res, { message: `please provide valid fullfilment`});
-    if (!isValidString(additional_info))
-      return failureJSONResponse(res, { message: `please provide valid additional info`});
+   
      if (!isValidString(location))
       return failureJSONResponse(res, { message: `please provide valid location` });
       if (!isValidString(tagline))
@@ -200,14 +199,21 @@ exports.createBuySellAds = async (req, res, next) => {
     const {
       isfeatured,
       status,
-      adsType,
+      ads_type,
+      category,
+      sub_category,
       title,
       descriptions,
-      categories,
-      user_type,
       product_condition,
-      price,
-      additional_info,
+      product_model,
+      amount,
+      negotiable,
+      quantity,
+      payment_mode,
+      fullfilment,
+      location,
+      tagline,
+     
       image,
     } = req.body;
 
@@ -227,15 +233,22 @@ exports.createBuySellAds = async (req, res, next) => {
     const dataObj = {
       isfeatured,
       status: status,
-      adsType,
+      ads_type,
       adsInfo: {
-        title,
-        descriptions,
-        categories,
-        user_type,
-        product_condition,
-        price,
-        additional_info,
+      category,
+      sub_category,
+      title,
+      descriptions,
+      product_condition,
+      product_model,
+      amount,
+      negotiable,
+      quantity,
+      payment_mode,
+      fullfilment,
+      location,
+      tagline,
+      
         image: imageArr,
       },
       userId: userId,
@@ -284,23 +297,32 @@ exports.editBuySellAds = async (req, res, next) => {
 
     const {
       status,
-      adsType,
+      ads_type,
+      category,
+      sub_category,
       title,
       descriptions,
-      categories,
-      user_type,
       product_condition,
-      price,
-      additional_info,
+      product_model,
+      amount,
+      negotiable,
+      quantity,
+      payment_mode,
+      fullfilment,
+      location,
+      tagline,
       image,
 
       name,
-      emailAddress,
-      phoneNumber,
-      hideAddress,
-      location,
-      addressInfo,
-      preferableModeContact,
+      email_address,
+      primary_phone_number,
+      secondary_phone_number,
+      website_link,
+      hide_my_phone,
+      hide_my_email,
+      
+      // address_info,
+      // preferableModeContact,
     } = req.body;
     const imageArr = [];
 
@@ -320,16 +342,21 @@ exports.editBuySellAds = async (req, res, next) => {
       listerBasicInfoObj = {};
 
     if (status) dataObj.status = status;
-    if (adsType) dataObj.adsType = adsType;
-
+    if (ads_type) dataObj.ads_type = ads_type;
+    if (category) adsInfoObj.category = category;
+    if (sub_category) adsInfoObj.sub_category = sub_category;
     if (title) adsInfoObj.title = title;
     if (descriptions) adsInfoObj.descriptions = descriptions;
     if (user_type) adsInfoObj.user_type = user_type;
-    if (categories) adsInfoObj.categories = categories;
     if (product_condition) adsInfoObj.product_condition = product_condition;
-    if (price) adsInfoObj.price = price;
-    if (location) listerBasicInfo.location = location;
-    if (additional_info) adsInfoObj.additional_info = additional_info;
+    if (product_model) adsInfoObj.product_model = product_model;
+    if (amount) adsInfoObj.amount = amount;
+    if (negotiable) adsInfoObj.negotiable = negotiable;
+    if (quantity) adsInfoObj.quantity = quantity;
+    if (payment_mode) adsInfoObj.payment_mode = payment_mode;
+    if (fullfilment) adsInfoObj.fullfilment = fullfilment;
+    if (location) adsInfoObj.location = location;
+    if (tagline) adsInfoObj.tagline = tagline;
     if (imageArr.length) adsInfoObj.image = imageArr;
 
     if (name) listerBasicInfo.name = name;
@@ -340,18 +367,24 @@ exports.editBuySellAds = async (req, res, next) => {
 
     const dataObjq = {
       adsInfo: adsInfoObj,
-      listerBasicInfo: {
+      lister_basic_info: {
         name,
-        emailAddress,
-        phoneNumber,
-        hideAddress,
-        location,
-        mobileNumber: {
-          countryCode: +91,
-          phoneNumber: phoneNumber,
+        email_address,
+        website_link,
+        hide_my_phone,
+        hide_my_email,
+        address_info,
+        primary_mobile_number: {
+          country_code: +91,
+          primary_phone_number:primary_phone_number,
+
         },
-        addressInfo,
-        preferableModeContact: preferableModeContact,
+        secondary_mobile_number: {
+          country_code: +91,
+          secondary_phone_number:secondary_phone_number,
+
+        },
+        preferable_contact_mode: preferable_contact_mode,
       },
     };
 

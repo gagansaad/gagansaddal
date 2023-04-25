@@ -25,13 +25,17 @@ const BuySellSchema = new mongoose.Schema({
         required: true,
         default: false
     },
-    adsType: {
+    ads_type: {
         type: mongoose.Schema.Types.ObjectId,
         ref: `PostType`,
         required: true
     },
     adsInfo: {
-        categories: {
+        category: {
+            ...defaultStringConfig,
+            required: true
+        },
+        sub_category:{
             ...defaultStringConfig,
             required: true
         },
@@ -39,7 +43,15 @@ const BuySellSchema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
+        descriptions: {
+            ...defaultStringConfig,
+            required: true
+        },
         product_condition: {
+            ...defaultStringConfig,
+            required: true
+        },
+        product_model:{
             ...defaultStringConfig,
             required: true
         },
@@ -47,16 +59,27 @@ const BuySellSchema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-
-        price: {
+        amount: {
             type: Number,
             required: true
         },
-        descriptions: {
+        quantity:{
+            type: Number,
+            required: true
+        },
+        payment_mode:{
             ...defaultStringConfig,
             required: true
         },
-        additional_info: {
+        fullfilment:{
+            ...defaultStringConfig,
+            required: true
+        },
+        location:{
+            ...defaultStringConfig,
+            required: true
+        },
+        tagline:{
             ...defaultStringConfig,
             required: true
         },
@@ -68,19 +91,25 @@ const BuySellSchema = new mongoose.Schema({
     },
     listerBasicInfo: {
         name: defaultStringConfig,
-        emailAddress: defaultStringConfig,
-        mobileNumber: {
-            countryCode: defaultStringConfig,
-            phoneNumber: defaultStringConfig
-        },
-
-        location: defaultStringConfig,
-        hideAddress: defaultBooleanConfig,
-        addressInfo: defaultStringConfig,
-        preferableModeContact: {
-            type: Number,
-            enum: [1, 2, 3]
-        }
+        email_address: defaultStringConfig,
+        website_link: defaultStringConfig,
+        primary_mobile_number: {
+            country_code: defaultStringConfig,
+            primary_phone_number:defaultStringConfig,
+  
+          },
+          secondary_mobile_number: {
+            country_code: defaultStringConfig,
+            secondary_phone_number:defaultStringConfig,
+  
+          },
+        hide_my_email: defaultBooleanConfig,
+        hide_my_phone: defaultBooleanConfig,
+        // addressInfo: defaultStringConfig,
+        // preferableModeContact: {
+        //     type: Number,
+        //     enum: [1, 2, 3]
+        // }
 
     }
 
