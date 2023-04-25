@@ -22,17 +22,17 @@ exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
     category:["I want a Baby sitter/Nanny","I am a Baby sitter/Nanny"],
     work_type: ["Live in", "Live in & out", "Live out"],
-    care_service_need:["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores"],
+    care_service_need:["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores","need"],
     care_service_offer:["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores", "Storytelling"],
-    age_group_need: ["0-6 month", "6month-3years", "3-5 year", "5-10 year", "10-13 years", "above 13", "any age"],
+    age_group_need: ["0-6 month", "6month-3years", "3-5 year", "5-10 year", "10-13 years", "above 13", "any age","need"],
     age_group_offer: ["0-6 month", "6month-3years", "3-5 year", "5-10 year", "10-13 years", "above 13", "any age"],
-    preferrd_languge_need:["English", "Amharic", "Afan Oromo", "Tigrigna", "Arabic", "French", "Other"],
+    preferrd_languge_need:["English", "Amharic", "Afan Oromo", "Tigrigna", "Arabic", "French", "Other","need"],
     preferrd_languge_offer:["English", "Amharic", "Afan Oromo", "Tigrigna", "Arabic", "French", "Other"],
-    preferrd_gender_need:["Male", "Female", "Any Gender"],
+    preferrd_gender_need:["Male", "Female", "Any Gender","need"],
     preferrd_gender_offer:["Male", "Female"],
-    transport_facilty_need:["Yes", "No"],
+    transport_facilty_need:["Yes", "No","/need"],
     transport_facilty_offer:["Yes", "No"],
-    expected_salary_rate_need:["/hour", "/week", "/month", "/day"],
+    expected_salary_rate_need:["/hour", "/week", "/month", "/day","/need"],
     expected_salary_rate_offer:["/hour", "/week", "/month", "/day"],
   };
   return successJSONResponse(res, {
