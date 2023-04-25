@@ -272,7 +272,7 @@ exports.editAds = async (req, res, next) => {
   try {
 
     const productId = req?.params?.serviceid;
-console.log(productId);
+console.log(productId,"id dsso hai gi ja nhi ");
     const validate_id = await postbabyAd.findOne(productId)
     if (!validate_id) {
       return failureJSONResponse(res, {
