@@ -394,7 +394,6 @@ exports.editBuySellAds = async (req, res, next) => {
         website_link,
         hide_my_phone,
         hide_my_email,
-        address_info,
         primary_mobile_number: {
           country_code: +91,
           primary_phone_number:primary_phone_number,
