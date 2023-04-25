@@ -67,12 +67,14 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       title,
       descriptions,
       product_condition,
+      product_model,
       amount,
-      negoshiable,
+      negotiable,
       quantity,
       payment_mode,
       fullfilment,
       location,
+      tagline,
       additional_info,
       image,
     } = req.body;
@@ -90,9 +92,17 @@ exports.validateBuySellAdsData = async (req, res, next) => {
         message: `please provide valid description`,
       });
 
-    if (!isValidString(categories))
+    if (!isValidString(category))
       return failureJSONResponse(res, {
         message: `Please provide valid category`,
+      });
+    if (!isValidString(sub_category))
+      return failureJSONResponse(res, {
+        message: `Please provide valid sub_category`,
+      });
+      if (!isValidString(product_model))
+      return failureJSONResponse(res, {
+        message: `Please provide valid product_model`,
       });
     if (!isValidString(user_type))
       return failureJSONResponse(res, {
@@ -102,22 +112,35 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid product_condition`,
       });
-    if (!price)
+    if (!amount)
       return failureJSONResponse(res, {
         message: `please provide valid price`,
       });
-
-
-    if (isNaN(Number(price)))
+      if (!quantity)
       return failureJSONResponse(res, {
-        message: `please provide valid price`,
+        message: `please provide valid quantity`,
+      });
+    if (isNaN(Number(quantity)))
+      return failureJSONResponse(res, {
+        message: `please provide valid quantity`,
       });
 
+    if (isNaN(Number(amount)))
+      return failureJSONResponse(res, {
+        message: `please provide valid amount`,
+      });
+    if (!(negotiable)) return failureJSONResponse(res, { message: `Please provide valid negotiable value` });
+     else if (!isValidBoolean(negotiable)) return failureJSONResponse(res, { message: `Please provide boolean value for negotiable` });
+    if (!isValidString(payment_mode))
+      return failureJSONResponse(res, { message: `please provide valid payment mode`});
+    if (!isValidString(fullfilment))
+      return failureJSONResponse(res, { message: `please provide valid fullfilment`});
     if (!isValidString(additional_info))
-      return failureJSONResponse(res, { message: `please provide valid additional_info` });
-
-
-
+      return failureJSONResponse(res, { message: `please provide valid additional info`});
+     if (!isValidString(location))
+      return failureJSONResponse(res, { message: `please provide valid location` });
+      if (!isValidString(tagline))
+      return failureJSONResponse(res, { message: `please provide valid tagline` });
     return next();
   } catch (err) {
     console.log(err);

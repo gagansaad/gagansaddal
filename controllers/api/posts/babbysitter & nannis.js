@@ -80,10 +80,10 @@ exports.validateAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid work type`,
       });
-      if (!isValidString(care_service))
-      return failureJSONResponse(res, {
-        message: `Please provide valid care service`,
-      });
+      // if (!isValidString(care_service))
+      // return failureJSONResponse(res, {
+      //   message: `Please provide valid care service`,
+      // });
       if (!isValidString(age_group))
       return failureJSONResponse(res, {
         message: `Please provide valid age group`,
