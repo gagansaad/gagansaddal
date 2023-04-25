@@ -130,8 +130,9 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid amount`,
       });
+      // console.log(object);
     if (!(negotiable)) return failureJSONResponse(res, { message: `Please provide valid negotiable value` });
-     else if (!isValidBoolean(negotiable)) return failureJSONResponse(res, { message: `Please provide boolean value for negotiable` });
+    //  else if (!isValidBoolean(negotiable)) return failureJSONResponse(res, { message: `Please provide boolean value for negotiable` });
     if (!isValidString(payment_mode))
       return failureJSONResponse(res, { message: `please provide valid payment mode`});
     if (!isValidString(fullfilment))
@@ -231,7 +232,15 @@ exports.createBuySellAds = async (req, res, next) => {
 
     }
 
+    let boolean = false;
 
+    if(negotiable == "true"){
+      boolean = true
+    }else{
+      boolean = false
+    }
+
+ 
     const dataObj = {
       isfeatured,
       status: status,
@@ -245,7 +254,7 @@ exports.createBuySellAds = async (req, res, next) => {
       product_condition,
       product_model,
       amount,
-      negotiable,
+      negotiable:boolean,
       quantity,
       payment_mode,
       fullfilment,
@@ -344,7 +353,14 @@ exports.editBuySellAds = async (req, res, next) => {
     const dataObj = {},
       adsInfoObj = {},
       listerBasicInfoObj = {};
+      let boolean = false;
 
+      if(negotiable == "true"){
+        boolean = true
+      }else{
+        boolean = false
+      }
+  
     if (status) dataObj.status = status;
     if (ads_type) dataObj.ads_type = ads_type;
     if (category) adsInfoObj.category = category;
@@ -356,7 +372,7 @@ exports.editBuySellAds = async (req, res, next) => {
     if (product_condition) adsInfoObj.product_condition = product_condition;
     if (product_model) adsInfoObj.product_model = product_model;
     if (amount) adsInfoObj.amount = amount;
-    if (negotiable) adsInfoObj.negotiable = negotiable;
+    if (negotiable) adsInfoObj.negotiable = boolean;
     if (quantity) adsInfoObj.quantity = quantity;
     if (payment_mode) adsInfoObj.payment_mode = payment_mode;
     if (fullfilment) adsInfoObj.fullfilment = fullfilment;

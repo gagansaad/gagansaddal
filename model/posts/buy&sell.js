@@ -63,6 +63,10 @@ const BuySellSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
+        negotiable:{
+            type:Boolean,
+            default:false
+        },
         quantity:{
             type: Number,
             required: true
