@@ -68,6 +68,7 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       descriptions,
       product_condition,
       product_model,
+      user_type,
       amount,
       negotiable,
       quantity,
@@ -207,6 +208,7 @@ exports.createBuySellAds = async (req, res, next) => {
       product_condition,
       product_model,
       amount,
+      user_type,
       negotiable,
       quantity,
       payment_mode,
@@ -238,6 +240,7 @@ exports.createBuySellAds = async (req, res, next) => {
       category,
       sub_category,
       title,
+      user_type,
       descriptions,
       product_condition,
       product_model,
@@ -305,6 +308,7 @@ exports.editBuySellAds = async (req, res, next) => {
       product_condition,
       product_model,
       amount,
+      user_type,
       negotiable,
       quantity,
       payment_mode,
@@ -346,6 +350,7 @@ exports.editBuySellAds = async (req, res, next) => {
     if (category) adsInfoObj.category = category;
     if (sub_category) adsInfoObj.sub_category = sub_category;
     if (title) adsInfoObj.title = title;
+    if (user_type) adsInfoObj.user_type = user_type;
     if (descriptions) adsInfoObj.descriptions = descriptions;
     if (user_type) adsInfoObj.user_type = user_type;
     if (product_condition) adsInfoObj.product_condition = product_condition;
