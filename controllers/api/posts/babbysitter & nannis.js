@@ -84,14 +84,14 @@ exports.validateAdsData = async (req, res, next) => {
       // return failureJSONResponse(res, {
       //   message: `Please provide valid care service`,
       // });
-      if (!isValidString(age_group))
-      return failureJSONResponse(res, {
-        message: `Please provide valid age group`,
-      });
-      if (!isValidString(prefered_language))
-      return failureJSONResponse(res, {
-        message: `Please provide valid prefered language`,
-      });
+      // if (!isValidString(age_group))
+      // return failureJSONResponse(res, {
+      //   message: `Please provide valid age group`,
+      // });
+      // if (!isValidString(prefered_language))
+      // return failureJSONResponse(res, {
+      //   message: `Please provide valid prefered language`,
+      // });
       if (!isValidString(prefered_gender))
       return failureJSONResponse(res, {
         message: `Please provide valid prefered gender`,
