@@ -105,7 +105,7 @@ console.log(req.body);
         if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
         if (!isValidString(location)) return failureJSONResponse(res, { message: `Please provide valid location` });
         if (!isValidString(preferedGender)) return failureJSONResponse(res, { message: `Please provide valid preferredGender` });
-      else if (preferedGender != `Male` && preferedGender !=  `Female` && preferedGender !=  `Any Gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male , Female or Any gender` });
+      else if (preferedGender != `Male` && preferedGender !=  `Female` && preferedGender !=  "Any Gender") return failureJSONResponse(res, { message: `Please enter preferred_gender Male , Female or Any gender` });
         if (isNaN(Number(amount)))
             return failureJSONResponse(res, {
                 message: `please provide valid rent amount`,
