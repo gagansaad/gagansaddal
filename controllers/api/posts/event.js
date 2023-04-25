@@ -251,7 +251,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
 exports.createEventAds = async (req, res, next) => {
   try {
-    console.log(req.files, "dccdcdc");
+    console.log(req.body, "dccdcdc");
     const {
       isfeatured,
       status,
@@ -392,7 +392,7 @@ exports.createEventAds = async (req, res, next) => {
 ///--------------------------Edit event-----------------------------///
 
 exports.editEventAds = async (req, res, next) => {
-
+console.log(req.body,"body hai je body");
   try {
 
     const eventId = req?.params?.eventId;
