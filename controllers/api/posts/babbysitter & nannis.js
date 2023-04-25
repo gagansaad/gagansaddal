@@ -270,8 +270,8 @@ console.log(dataObj,"vhebjvbdsgjvhbesdvgbedhcvwsehjcbsdbvjhyudsbvghr");
 exports.editAds = async (req, res, next) => {
   console.log(`kejhrjhyewgrjhew`);
   try {
-
-    const productId = req?.params?.serviceid;
+console.log(req.params);
+    const productId = req?.params?.productId;
 console.log(productId,"id dsso hai gi ja nhi ");
     const validate_id = await postbabyAd.findById(productId)
     if (!validate_id) {
