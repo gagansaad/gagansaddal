@@ -72,6 +72,15 @@ const babysitter_Schema = new mongoose.Schema({
             required: true,
             default: false
         },
+        expected_salary_amount:{
+            amount:{type:Number,required:true},
+            currency:{type:String,default:"USD"},
+        },
+      expected_salary_rate:{
+        ...defaultStringConfig,
+        required: true
+      },
+
         description:{
             ...defaultStringConfig,
             required: true
@@ -88,11 +97,18 @@ const babysitter_Schema = new mongoose.Schema({
     lister_basic_info: {
         name: defaultStringConfig,
         email_address: defaultStringConfig,
-        mobile_number: {
+        primary_mobile_number: {
             country_code: defaultStringConfig,
-            phone_number: defaultStringConfig
-        },
-        hide_address: defaultBooleanConfig,
+            primary_phone_number:defaultStringConfig,
+  
+          },
+          secondary_mobile_number: {
+            country_code: defaultStringConfig,
+            secondary_phone_number:defaultStringConfig,
+  
+          },
+        hide_my_email: defaultBooleanConfig,
+        hide_my_phone: defaultBooleanConfig,
         address_info: defaultStringConfig,
         preferable_contact_mode: {
             type: Number,

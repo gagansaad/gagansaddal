@@ -32,6 +32,8 @@ exports.getDnymicsData = async (req, res, next) => {
     preferrd_gender_offer:["Male", "Female"],
     transport_facilty_need:["Yes", "No"],
     transport_facilty_offer:["Yes", "No"],
+    expected_salary_rate_need:["/hour", "/week", "/month", "/day"],
+    expected_salary_rate_offer:["/hour", "/week", "/month", "/day"],
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -55,8 +57,10 @@ exports.validateAdsData = async (req, res, next) => {
       prefered_language,
       prefered_gender,
       service_from_date,
+      amount,
       description,
-      location
+      location,
+      tagline,
 
     } = req.body;
     console.log(req.body,"ye boDY HAI");
@@ -96,6 +100,11 @@ exports.validateAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid service starting date`,
       });
+      if (isNaN(Number(amount)))
+      return failureJSONResponse(res, {
+        message: `please provide valid salary amount`,
+      });
+
       if (!isValidString(description))
       return failureJSONResponse(res, {
         message: `Please provide valid description`,
@@ -103,6 +112,10 @@ exports.validateAdsData = async (req, res, next) => {
       if (!isValidString(location))
       return failureJSONResponse(res, {
         message: `Please provide valid location`,
+      });
+      if (!isValidString(tagline))
+      return failureJSONResponse(res, {
+        message: `Please provide valid tagline`,
       });
 
 
@@ -176,8 +189,11 @@ exports.createAds = async (req, res, next) => {
       prefered_gender,
       service_from_date,
       transport_facilty,
+      amount,
+      expected_salary_rate,
       description,
       location,
+      tagline,
       image
     } = req.body;
 console.log(req.body);
@@ -210,8 +226,13 @@ console.log(req.body);
         prefered_gender,
         service_from_date,
         transport_facilty,
+        expected_salary_amount:{
+        amount,
+        },
+        expected_salary_rate,
         description,
         location,
+        tagline,
         image: imageArr,
       },
 
@@ -270,8 +291,11 @@ console.log(productId);
       prefered_gender,
       service_from_date,
       transport_facilty,
+      amount,
+      expected_salary_rate,
       description,
       location,
+      tagline,
       name,
       email_address,
       primary_phone_number,
@@ -298,12 +322,14 @@ console.log(productId);
     const dataObj = {},
       adsInfoObj = {},
       listerBasicInfoObj = {};
-let category = {}
+    let category = {}
+    let  expected_salary_amount= {}
+    
     if (status) dataObj.status = status;
     if (ads_type) dataObj.ads_type = ads_type;
     if (category_name) category.category_name = category_name;
     if (category_value) category.category_value = category_value;
-    if(category)adsInfoObj.category=category
+    if(category_name)adsInfoObj.category=category
     if (care_service) adsInfoObj.care_service = care_service;
     if (work_type) adsInfoObj.work_type = work_type;
     if (age_group) adsInfoObj.age_group = age_group;
@@ -311,6 +337,10 @@ let category = {}
     if (prefered_gender) adsInfoObj.prefered_gender = prefered_gender;
     if (service_from_date) adsInfoObj.service_from_date = service_from_date;
     if (transport_facilty) adsInfoObj.transport_facilty = transport_facilty;
+    if(amount)expected_salary_amount.amount =  amount;
+    if(tagline) adsInfoObj.tagline=tagline;
+    if(amount) adsInfoObj.expected_salary_amount= expected_salary_amount;
+    if(expected_salary_rate) adsInfoObj.expected_salary_rate =expected_salary_rate
     if (description) adsInfoObj.description = description;
     if (location) adsInfoObj.location = location;
 
@@ -325,12 +355,20 @@ let category = {}
       lister_basic_info: {
         name,
         email_address,
-        hide_address,
+        website_link,
+        hide_my_phone,
+        hide_my_email,
         location,
         address_info,
-        mobile_number: {
+        primary_mobile_number: {
           country_code: +91,
-          phone_number: phone_number,
+          primary_phone_number:primary_phone_number,
+
+        },
+        secondary_mobile_number: {
+          country_code: +91,
+          secondary_phone_number:secondary_phone_number,
+
         },
         preferable_contact_mode: preferable_contact_mode,
       },
