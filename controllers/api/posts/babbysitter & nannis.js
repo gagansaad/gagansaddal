@@ -251,8 +251,8 @@ exports.editAds = async (req, res, next) => {
   try {
 
     const productId = req?.params?.serviceid;
-
-    const validate_id = await postbabyAd.findById(productId)
+console.log(productId);
+    const validate_id = await postbabyAd.findOne(productId)
     if (!validate_id) {
       return failureJSONResponse(res, {
         message: `Failed to find your babysitter and nannies id`,
