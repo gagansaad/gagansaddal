@@ -20,9 +20,9 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
-    profession: [`Local Professional`, `Business Center / Local Retailer / Showroom`, `Brand`, `Agent`],
-    categories: [`employed`, `self employed`, `engineer`],
-    preferableModeContact: [`Phone Number`, `Email`]
+    profession: ["Local Professional - Individuals who offer services at customer doorstep (e.g., Plumber, Electrician)", "Business Center / Local Retailer / Showroom - Customers visit provider’s location to access service (e.g., Beauty salon, Grocery store)", "Brand - Customers are familiar with the brand of your service/product (e.g., Ethiopian Airlines).", "Agent - A mediator between user and service providers (e.g., Real estate agent)", "Other - Enter your profession"],
+    preferableModeContact: [`Phone Number`, `Email`],
+    buisness_experience:["0-5 Years", "5-15 Years", "Above 15 Years"],
   };
   return successJSONResponse(res, {
     message: `success`,

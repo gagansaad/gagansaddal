@@ -44,7 +44,7 @@ exports.getDnymicsData = async (req, res, next) => {
     payment_mode:           ["Cash less payment", "Cash accepted", "Not applicable"],
     fullfilment:            ["Free shipping", "In person pickup", "Only local delivery", "Please contact", "Not applicable"],
     product_condition:      ["New", "Used -  Like new", "Used -  Good", "Used -  Fair"],
-    // user_type: [`Individual`, `Retailer`],
+    user_type: [`Individual`, `Retailer`],
 
 
   };

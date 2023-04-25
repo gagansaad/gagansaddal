@@ -324,7 +324,6 @@ console.log(productId,"id dsso hai gi ja nhi ");
       listerBasicInfoObj = {};
     let category = {}
     let  expected_salary_amount= {}
-    
     if (status) dataObj.status = status;
     if (ads_type) dataObj.ads_type = ads_type;
     if (category_name) category.category_name = category_name;
