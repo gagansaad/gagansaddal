@@ -61,8 +61,8 @@ exports.validateAdsData = async (req, res, next) => {
     } = req.body;
     console.log(req.body,"ye boDY HAI");
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
-    // if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads type` });
-    // else if (ads_type && !isValidMongoObjId(mongoose, ads_type)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
+    if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads type` });
+    else if (ads_type && !isValidMongoObjId(mongoose, ads_type)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
       if (!isValidString(category_name))
       return failureJSONResponse(res, {
