@@ -87,6 +87,10 @@ const BuySellSchema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
+        video_link:{
+            ...defaultStringConfig,
+            required: true
+        },
         image: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: `media`,

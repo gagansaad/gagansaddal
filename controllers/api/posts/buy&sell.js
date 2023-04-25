@@ -216,7 +216,7 @@ exports.createBuySellAds = async (req, res, next) => {
       fullfilment,
       location,
       tagline,
-     
+      video_link,
       image,
     } = req.body;
 
@@ -260,7 +260,7 @@ exports.createBuySellAds = async (req, res, next) => {
       fullfilment,
       location,
       tagline,
-      
+      video_link,
         image: imageArr,
       },
       userId: userId,
@@ -324,6 +324,7 @@ exports.editBuySellAds = async (req, res, next) => {
       fullfilment,
       location,
       tagline,
+      video_link,
       image,
 
       name,
@@ -378,6 +379,7 @@ exports.editBuySellAds = async (req, res, next) => {
     if (fullfilment) adsInfoObj.fullfilment = fullfilment;
     if (location) adsInfoObj.location = location;
     if (tagline) adsInfoObj.tagline = tagline;
+    if (video_link) adsInfoObj.video_link = video_link;
     if (imageArr.length) adsInfoObj.image = imageArr;
 
     if (name) listerBasicInfo.name = name;
