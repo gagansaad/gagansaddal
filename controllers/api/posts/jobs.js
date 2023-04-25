@@ -59,7 +59,7 @@ exports.getDnymicsData = async (req, res, next) => {
     work_authorization: [`test`, `test1`],
     preferred_gender: [`Male`,
       `Female`,
-      `Any gender`],
+      `Any Gender`],
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -143,7 +143,7 @@ exports.validateJobAdsData = async (req, res, next) => {
     else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null || no_of_opening.includes(".")) failureJSONResponse(res, { message: `Please provide valid number of job opening` });
     if (!isValidString(preferred_gender))
       return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
-    else if (preferred_gender != `Male` && preferred_gender !=  `Female` && preferred_gender !=  `Any gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male , Female or Any gender` });
+    else if (preferred_gender != `Male` && preferred_gender !=  `Female` && preferred_gender !=  `Any Gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male , Female or Any gender` });
     if (website && (!isValidUrl(website)))
       return failureJSONResponse(res, {
         message: `Please provide valid website`,
