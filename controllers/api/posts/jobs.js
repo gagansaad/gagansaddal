@@ -145,6 +145,9 @@ exports.validateJobAdsData = async (req, res, next) => {
     if (!isValidString(preferred_gender))
       return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
     else if (preferred_gender != `Male` && preferred_gender !=  `Female` && preferred_gender !=  `Any Gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male , Female or Any gender` });
+    if(!job_website_link) return failureJSONResponse(res, {
+      message: `Please provide valid job website`,
+    });
     if (job_website_link && (!isValidUrl(job_website_link)))
       return failureJSONResponse(res, {
         message: `Please provide valid job website`,
