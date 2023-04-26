@@ -238,7 +238,7 @@ exports.createJobAds = async (req, res, next) => {
       salary,
       salary_info,
       no_of_opening,
-       job_website_link,
+      job_website_link,
       work_authorization,
       preferred_gender,
       location,
