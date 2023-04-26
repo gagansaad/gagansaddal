@@ -86,7 +86,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       salary,
       salary_info,
       no_of_opening,
-      website,
+      job_website_link,
       work_authorization,
       location,
       preferred_gender,
@@ -147,7 +147,7 @@ exports.validateJobAdsData = async (req, res, next) => {
     else if (preferred_gender != `Male` && preferred_gender !=  `Female` && preferred_gender !=  `Any Gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male , Female or Any gender` });
     if (website && (!isValidUrl(website)))
       return failureJSONResponse(res, {
-        message: `Please provide valid website`,
+        message: `Please provide valid job website`,
       });
       if (video && !isValidUrl(video))
       return failureJSONResponse(res, {
@@ -238,7 +238,7 @@ exports.createJobAds = async (req, res, next) => {
       salary,
       salary_info,
       no_of_opening,
-      website,
+       job_website_link,
       work_authorization,
       preferred_gender,
       location,
@@ -278,7 +278,7 @@ exports.createJobAds = async (req, res, next) => {
         salary,
         salary_info,
         no_of_opening,
-        website,
+        job_website_link,
         work_authorization,
         location,
         tagline,
@@ -356,7 +356,7 @@ exports.editJobAds = async (req, res, next) => {
       salary,
       salary_info,
       no_of_opening,
-      website,
+      job_website_link,
       work_authorization,
       location,
       preferred_gender,
@@ -406,7 +406,7 @@ exports.editJobAds = async (req, res, next) => {
     if (salary) adsInfoObj.salary = salary;
     if (salary_info) adsInfoObj.salary_info = salary_info;
     if (no_of_opening) adsInfoObj.no_of_opening = no_of_opening;
-    if (website) adsInfoObj.website = website;
+    if (job_website_link) adsInfoObj.job_website_link = job_website_link;
     if (work_authorization) adsInfoObj.work_authorization = work_authorization;
     if (location) adsInfoObj.location = location;
     if (preferred_gender) adsInfoObj.preferred_gender = preferred_gender;
@@ -427,7 +427,6 @@ exports.editJobAds = async (req, res, next) => {
         website_link,
         hide_my_phone,
         hide_my_email,
-        location,
         primary_mobile_number: {
           country_code: +91,
           primary_phone_number:primary_phone_number,

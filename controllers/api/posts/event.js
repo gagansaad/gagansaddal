@@ -69,7 +69,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       regular_ticket,
       vip_ticket,
       location,
-      link,
+      // link,
       time_zone,
       start_date,
       end_date,
@@ -176,8 +176,8 @@ exports.validateEventAdsData = async (req, res, next) => {
     if (tiktok_platform && (!isValidPlink(tiktok_platform))) return failureJSONResponse(res, { message: `please provide valid tiktok link` });
     if (other_platform && (!isValidPlink(other_platform))) return failureJSONResponse(res, { message: `please provide valid other link` });
      
-    if (link&&(!isValidlink(link)))
-      return failureJSONResponse(res, { message: `please provide valid link` });
+    // if (link&&(!isValidlink(link)))
+    //   return failureJSONResponse(res, { message: `please provide valid link` });
     if (!isValidString(location))
       return failureJSONResponse(res, { message: `please provide valid location` });
       if (!isValidString(tagline))
@@ -197,12 +197,9 @@ exports.validateListerBasicinfo = async (req, res, next) => {
     const {
       organization_name,
       hosted_by,
-      link,
+
       emailAddress,
-      phoneNumber,
-      countryCode,
-      hideAddress,
-      preferableModeContact,
+      
     } = req.body;
     if (organization_name&&(!isValidString(organization_name)))
     return failureJSONResponse(res, {
@@ -429,7 +426,6 @@ console.log(req.body,"body hai je body");
       vip_ticket_price,
       regular_ticket,
       vip_ticket,
-      link,
       time_zone,
       start_date,
       end_date,
@@ -573,18 +569,20 @@ console.log(req.body,"body hai je body");
 
         organization_name,
         hosted_by,
-        link,
         emailAddress,
-        phoneNumber,
-        hideAddress,
+        website_link,
+        hide_my_phone,
+        hide_my_email,
+        primary_mobile_number: {
+          country_code: +91,
+          primary_phone_number:primary_phone_number,
 
-
-        mobileNumber: {
-          countryCode,
-          phoneNumber: phoneNumber,
         },
-        addressInfo,
-        preferableModeContact: preferableModeContact,
+        secondary_mobile_number: {
+          country_code: +91,
+          secondary_phone_number:secondary_phone_number,
+
+        },
       },
     };
     const updateEvent = await eventAd.findByIdAndUpdate(
