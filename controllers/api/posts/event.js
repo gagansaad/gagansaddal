@@ -86,6 +86,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       youtube_platform,
       tiktok_platform,
       other_platform,
+      tagline
 
     } = req.body;
     console.log(req.body,"is validate ki body");
@@ -179,7 +180,10 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, { message: `please provide valid link` });
     if (!isValidString(location))
       return failureJSONResponse(res, { message: `please provide valid location` });
- 
+      if (!isValidString(tagline))
+      return failureJSONResponse(res, {
+        message: `Please provide us tagline`,
+      });
 
     return next();
   } catch (err) {

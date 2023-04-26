@@ -113,7 +113,11 @@ const events_Schema = new mongoose.Schema({
         },
         location: {
             ...defaultStringConfig
+        },
+        tagline: {
+            ...defaultStringConfig
         }
+
     },
     listerBasicInfo: {
         organization_name: {
@@ -125,22 +129,31 @@ const events_Schema = new mongoose.Schema({
            
         },
 
-        link: {
-            ...defaultStringConfig,
-           
-        },
+        website_link: defaultStringConfig,
         emailAddress: defaultStringConfig,
+        primary_mobile_number: {
+            country_code: defaultStringConfig,
+            primary_phone_number:defaultStringConfig,
+  
+          },
+          secondary_mobile_number: {
+            country_code: defaultStringConfig,
+            secondary_phone_number:defaultStringConfig,
+  
+          },
+        hide_my_email: defaultBooleanConfig,
+        hide_my_phone: defaultBooleanConfig,
 
-        mobileNumber: {
-            countryCode: defaultStringConfig,
-            phoneNumber: defaultStringConfig
-        },
-        hideAddress: defaultBooleanConfig,
-        addressInfo: defaultStringConfig,
-        preferableModeContact: {
-            type: Number,
-            enum: [1, 2, 3]
-        }
+        // mobileNumber: {
+        //     countryCode: defaultStringConfig,
+        //     phoneNumber: defaultStringConfig
+        // },
+        // hideAddress: defaultBooleanConfig,
+        // addressInfo: defaultStringConfig,
+        // preferableModeContact: {
+        //     type: Number,
+        //     enum: [1, 2, 3]
+        // }
 
     }
 

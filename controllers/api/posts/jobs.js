@@ -370,7 +370,7 @@ exports.editJobAds = async (req, res, next) => {
       website_link,
       hide_my_phone,
       hide_my_email,
-      preferableModeContact,
+      // preferableModeContact,
     } = req.body;
     console.log(req.body.hideAddress, "ddeedr");
     const imageArr = [];

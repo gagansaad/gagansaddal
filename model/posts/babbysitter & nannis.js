@@ -97,6 +97,7 @@ const babysitter_Schema = new mongoose.Schema({
     lister_basic_info: {
         name: defaultStringConfig,
         email_address: defaultStringConfig,
+        website_link: defaultStringConfig,
         primary_mobile_number: {
             country_code: defaultStringConfig,
             primary_phone_number:defaultStringConfig,

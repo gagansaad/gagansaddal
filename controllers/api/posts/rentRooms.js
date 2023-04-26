@@ -380,6 +380,7 @@ exports.editRoomRentAds = async (req, res, next) => {
         occupation,
         preferedGender,
         location,
+        tagliine,
         name,
         email_address,
         primary_phone_number,
@@ -457,6 +458,7 @@ if(negotiable == 'true'){
     if (rental_type) adsInfoObj.rental_type = rental_type;
     if (category) adsInfoObj.category = category;
     if (title) adsInfoObj.title = title;
+    if (tagline) adsInfoObj.tagline = tagline;
     if(custom_date) adsInfoObj.custom_date = custom_date;
     if(!custom_date) adsInfoObj.immidiate = immidiate;
     if (preferedGender) adsInfoObj.preferedGender = preferedGender;
