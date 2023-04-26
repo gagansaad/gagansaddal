@@ -120,7 +120,7 @@ console.log(req.body);
                 message: `please provide valid rent amount`,
             });
         if (!negotiable) return failureJSONResponse(res, { message: `Please provide valid negotiable (true/false)` });
-        else if (negotiable !== true && negotiable !== false) return failureJSONResponse(res, { message: `Please provide valid negotiable (true/false)` });
+        else if (negotiable != true && negotiable != false) return failureJSONResponse(res, { message: `Please provide valid negotiable (true/false)` });
 
         
         //  if (!isValidBoolean(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide boolean value for Smoking Allowed` });
