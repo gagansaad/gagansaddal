@@ -106,9 +106,9 @@ console.log(req.body);
         if (!isValidString(listerType)) return failureJSONResponse(res, { message: `Please provide valid listerType` });
         if (!isValidString(roomType)) return failureJSONResponse(res, { message: `Please provide valid roomType` });
         if(!attachedBath) return failureJSONResponse(res, { message: `Please provide valid attachedBath` });
-        if (isNaN(Number(attachedBath))) return failureJSONResponse(res, { message: `Please provide valid attachedBath` });
+        if (isNaN(Number(attachedBath))) return failureJSONResponse(res, { message: `Please provide valid no. of attached Bath` });
         if(!accommodates) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
-        if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
+        if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid no. of accommodates` });
         if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
         if (!isValidString(location)) return failureJSONResponse(res, { message: `Please provide valid location` });
         if (!isValidString(tagline)) return failureJSONResponse(res, { message: `Please provide valid tagline` });
@@ -406,7 +406,19 @@ exports.editRoomRentAds = async (req, res, next) => {
 let  isSmokin =false;
 let  isAlcoho =false
 let  isPetFr = false
+let my_phone = false;
+let my_email = false;
+if(hide_my_phone == "true"){
+    my_phone = true
+}else if(hide_my_phone == 'false'){
+    my_phone = false
+}
 
+if(hide_my_email == "true"){
+    my_email = true
+}else if(hide_my_email == 'false'){
+    my_email = false
+}
        
 if(isSmokingAllowed == 'true'){
     isSmokin =true
@@ -479,8 +491,8 @@ if(negotiable == 'true'){
             name,
             email_address,
             website_link,
-            hide_my_phone,
-            hide_my_email,
+            hide_my_phone:my_phone,
+            hide_my_email:my_email,
             location,
             primary_mobile_number: {
               country_code: +91,
