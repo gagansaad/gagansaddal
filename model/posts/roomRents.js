@@ -96,7 +96,7 @@ const roomRentsSchema = new mongoose.Schema({
         },
         isPetFriendly: {
             type: Boolean,
-          
+            default:false
         },
         occupation: {
             ...defaultStringConfig,
