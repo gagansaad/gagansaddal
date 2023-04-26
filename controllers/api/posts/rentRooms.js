@@ -141,7 +141,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
     try {
         const {
-            emailAddress,
+            email_address,
             // phoneNumber,
             // countryCode,
             hideAddress,
@@ -161,7 +161,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
         // if (preferableModeContact && isNaN(Number(preferableModeContact))) {
         //     return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
         // }
-        if (emailAddress && !isValidEmailAddress(emailAddress)) {
+        if (email_address && !isValidEmailAddress(email_address)) {
             return failureJSONResponse(res, {
                 message: `Please provide valid email address`,
             });
@@ -390,6 +390,7 @@ exports.editRoomRentAds = async (req, res, next) => {
         hide_my_email,
 
     } = req.body;
+    
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
@@ -444,14 +445,18 @@ if(negotiable == 'true'){
 }else{
     negotible = false
 }
-        let immidiate= false;
+        let immidiate = false;
         if(!custom_date){
-            immidiate=true
+            immidiate = true
+            console.log(1);
         }else{
-            immidiate=false
+            immidiate = false
+            console.log(2);
         }
+        console.log(immidiate);
         let rent ={
         }
+       let availability ={};
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
@@ -459,8 +464,9 @@ if(negotiable == 'true'){
     if (category) adsInfoObj.category = category;
     if (title) adsInfoObj.title = title;
     if (tagline) adsInfoObj.tagline = tagline;
-    if(custom_date) adsInfoObj.custom_date = custom_date;
-    if(!custom_date) adsInfoObj.immidiate = immidiate;
+    if(custom_date) availability.custom_date = custom_date;
+    if(!custom_date) availability.immidiate = immidiate;
+    if(availability)adsInfoObj.availability=availability;
     if (preferedGender) adsInfoObj.preferedGender = preferedGender;
     if (descriptions) adsInfoObj.descriptions = descriptions;
     if (roomType) adsInfoObj.roomType = roomType;
@@ -498,12 +504,12 @@ if(negotiable == 'true'){
             location,
             primary_mobile_number: {
               country_code: +91,
-              primary_phone_number:parseInt(primary_phone_number),
+              primary_phone_number:primary_phone_number,
     
             },
             secondary_mobile_number: {
               country_code: +91,
-              secondary_phone_number:parseInt(secondary_phone_number),
+              secondary_phone_number:secondary_phone_number,
     
             },
            
