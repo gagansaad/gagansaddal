@@ -85,7 +85,7 @@ const roomRentsSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
-        website: {
+        job_website_link: {
             ...defaultStringConfig,
             required: true
         },
