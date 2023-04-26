@@ -232,6 +232,14 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
         imageArr.push(productImages._id);
 
     }
+
+let negotible = false;
+if(negotiable == 'true'){
+    negotible = true;
+}else{
+    negotible = false
+}
+
 let immidiate = false;
 if(!custom_date){
     immidiate=true
@@ -260,13 +268,13 @@ if(!custom_date){
             attachedBath,
             rent:{
                 amount:amount,
-                negotiable:negotiable,
+                negotiable:negotible,
             },
             isSmokingAllowed,
             isAlcoholAllowed,
             isPetFriendly,
             occupation,
-            preferedGender: preferedGender,
+            preferedGender:preferedGender,
             location,
             tagline,
             image: imageArr
@@ -377,6 +385,13 @@ exports.editRoomRentAds = async (req, res, next) => {
         adsInfoObj = {
         },
         listerBasicInfoObj = {};
+
+        let negotible = false;
+if(negotiable == 'true'){
+    negotible = true;
+}else{
+    negotible = false
+}
         let immidiate= false;
         if(!custom_date){
             immidiate=true
@@ -401,8 +416,8 @@ exports.editRoomRentAds = async (req, res, next) => {
     if (accommodates) adsInfoObj.accommodates = accommodates;
     if (attachedBath) adsInfoObj.attachedBath = attachedBath;
     if (amount)rent.amount = amount;
-    if (negotiable)rent.negotiable = negotiable;
-    if(rent)adsInfoObj.rent=rent;
+    if (negotiable)rent.negotiable = negotible;
+    if(amount)adsInfoObj.rent=rent;
     if (isSmokingAllowed) adsInfoObj.isSmokingAllowed = isSmokingAllowed;
     if (isAlcoholAllowed) adsInfoObj.isAlcoholAllowed = isAlcoholAllowed;
     if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFriendly;
