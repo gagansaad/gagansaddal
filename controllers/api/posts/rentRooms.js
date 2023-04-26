@@ -81,12 +81,7 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
             occupation,
             preferedGender,
             location,
-
-            name,
-            emailAddress,
-            phoneNumber,
-            hideAddress,
-            preferableModeContact
+            tagline,
 
         } = req.body;
 console.log(req.body);
@@ -104,6 +99,7 @@ console.log(req.body);
         if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
         if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
         if (!isValidString(location)) return failureJSONResponse(res, { message: `Please provide valid location` });
+        if (!isValidString(tagline)) return failureJSONResponse(res, { message: `Please provide valid location` });
         if (!isValidString(preferedGender)) return failureJSONResponse(res, { message: `Please provide valid preferredGender` });
       else if (preferedGender != `Male` && preferedGender !=  `Female` && preferedGender !=  "Any Gender") return failureJSONResponse(res, { message: `Please enter preferred_gender Male , Female or Any gender` });
         if (isNaN(Number(amount)))
@@ -213,6 +209,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
         occupation,
         preferedGender,
         location,
+        tagline
 
 
 
@@ -267,6 +264,7 @@ if(!custom_date){
             occupation,
             preferedGender: preferedGender,
             location,
+            tagline,
             image: imageArr
         },
 
@@ -352,11 +350,12 @@ exports.editRoomRentAds = async (req, res, next) => {
         preferedGender,
         location,
         name,
-        emailAddress,
-        countryCode,
-        phoneNumber,
-        hideAddress,
-        preferableModeContact
+        email_address,
+        primary_phone_number,
+        secondary_phone_number,
+        website_link,
+        hide_my_phone,
+        hide_my_email,
 
     } = req.body;
     const imageArr = [];
@@ -418,17 +417,26 @@ exports.editRoomRentAds = async (req, res, next) => {
 
     const dataObjq = {
         adsInfo: adsInfoObj,
-        listerBasicInfo: {
+        lister_basic_info: {
             name,
-            emailAddress,
-            phoneNumber,
-            hideAddress,
-            mobileNumber: {
-                countryCode: countryCode || ``,
-                phoneNumber: phoneNumber || ``,
+            email_address,
+            website_link,
+            hide_my_phone,
+            hide_my_email,
+            location,
+            address_info,
+            primary_mobile_number: {
+              country_code: +91,
+              primary_phone_number:primary_phone_number,
+    
             },
-            preferableModeContact: preferableModeContact,
-        },
+            secondary_mobile_number: {
+              country_code: +91,
+              secondary_phone_number:secondary_phone_number,
+    
+            },
+           
+          },
     };
 
     

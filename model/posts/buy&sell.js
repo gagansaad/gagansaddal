@@ -113,11 +113,7 @@ const BuySellSchema = new mongoose.Schema({
           },
         hide_my_email: defaultBooleanConfig,
         hide_my_phone: defaultBooleanConfig,
-        // addressInfo: defaultStringConfig,
-        // preferableModeContact: {
-        //     type: Number,
-        //     enum: [1, 2, 3]
-        // }
+
 
     }
 

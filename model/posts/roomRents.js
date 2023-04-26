@@ -124,18 +124,27 @@ const roomRentsSchema = new mongoose.Schema({
         }],
 
     },
-    listerBasicInfo: {
+    lister_basic_info: {
         name: defaultStringConfig,
-        emailAddress: defaultStringConfig,
-        mobileNumber: {
-            countryCode: defaultStringConfig,
-            phoneNumber: defaultStringConfig
-        },
-        hideAddress: defaultBooleanConfig,
-
-        preferableModeContact: {
+        email_address: defaultStringConfig,
+        primary_mobile_number: {
+            country_code: defaultStringConfig,
+            primary_phone_number:defaultStringConfig,
+  
+          },
+          secondary_mobile_number: {
+            country_code: defaultStringConfig,
+            secondary_phone_number:defaultStringConfig,
+  
+          },
+        hide_my_email: defaultBooleanConfig,
+        hide_my_phone: defaultBooleanConfig,
+        preferable_contact_mode: {
             type: Number,
             enum: [1, 2, 3]
+            //   1:  Phone Number
+            //   2:  email Address
+            //   3:
         }
 
     },

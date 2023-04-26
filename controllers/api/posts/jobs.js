@@ -91,7 +91,8 @@ exports.validateJobAdsData = async (req, res, next) => {
       location,
       preferred_gender,
       image,
-      video
+      video,
+      tagline,
     } = req.body;
 
 
@@ -160,7 +161,10 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide us location`,
       });
-
+      if (!isValidString(tagline))
+      return failureJSONResponse(res, {
+        message: `Please provide us tagline`,
+      });
     return next();
   } catch (err) {
     console.log(err);
@@ -170,11 +174,11 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
   try {
     const {
-      emailAddress,
+      email_address,
       // phoneNumber,
       // countryCode,
       hideAddress,
-      preferableModeContact,
+    
     } = req.body;
 
     // if (countryCode && isNaN(Number(countryCode)))
@@ -189,7 +193,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
     // if (preferableModeContact && isNaN(Number(preferableModeContact))) {
     //   return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
     // }
-    if (emailAddress && !isValidEmailAddress(emailAddress)) {
+    if (email_address && !isValidEmailAddress(email_address)) {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
@@ -238,6 +242,7 @@ exports.createJobAds = async (req, res, next) => {
       work_authorization,
       preferred_gender,
       location,
+      tagline,
       image,
       video,
     } = req.body;
@@ -276,6 +281,7 @@ exports.createJobAds = async (req, res, next) => {
         website,
         work_authorization,
         location,
+        tagline,
         preferred_gender: preferred_gender,
         image: imageArr,
         video,
@@ -356,12 +362,14 @@ exports.editJobAds = async (req, res, next) => {
       preferred_gender,
       image,
       video,
-
+      tagline,
       name,
-      emailAddress,
-      phoneNumber,
-      countryCode,
-      hideAddress,
+      email_address,
+      primary_phone_number,
+      secondary_phone_number,
+      website_link,
+      hide_my_phone,
+      hide_my_email,
       preferableModeContact,
     } = req.body;
     console.log(req.body.hideAddress, "ddeedr");
@@ -387,6 +395,7 @@ exports.editJobAds = async (req, res, next) => {
    
 
     if (title) adsInfoObj.title = title;
+    if (tagline) adsInfoObj.tagline = tagline;
     if (descriptions) adsInfoObj.descriptions = descriptions;
     if (type) adsInfoObj.type = type;
     if (categories) adsInfoObj.categories = categories;
@@ -412,16 +421,25 @@ exports.editJobAds = async (req, res, next) => {
 
     const dataObjq = {
       adsInfo: adsInfoObj,
-      listerBasicInfo: {
+      lister_basic_info: {
         name,
-        emailAddress,
-        phoneNumber,
-        hideAddress,
-        mobileNumber: {
-          countryCode,
-          phoneNumber: phoneNumber,
+        email_address,
+        website_link,
+        hide_my_phone,
+        hide_my_email,
+        location,
+        address_info,
+        primary_mobile_number: {
+          country_code: +91,
+          primary_phone_number:primary_phone_number,
+
         },
-        preferableModeContact: preferableModeContact,
+        secondary_mobile_number: {
+          country_code: +91,
+          secondary_phone_number:secondary_phone_number,
+
+        },
+        preferable_contact_mode: preferable_contact_mode,
       },
     };
 
