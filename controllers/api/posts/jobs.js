@@ -101,10 +101,10 @@ exports.validateJobAdsData = async (req, res, next) => {
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
-    if (!isValidString(listing_type))
-    return failureJSONResponse(res, {
-      message: `Please provide valid listing type`,
-    });
+    // if (!isValidString(listing_type))
+    // return failureJSONResponse(res, {
+    //   message: `Please provide valid listing type`,
+    // });
     if (!isValidString(categories))
       return failureJSONResponse(res, {
         message: `Please provide valid job Category`,
@@ -164,10 +164,10 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid job website`,
       });
-      if (!video && !isValidUrl(video))
-      return failureJSONResponse(res, {
-        message: `Please provide valid video link`,
-      });
+      // if (!video && !isValidUrl(video))
+      // return failureJSONResponse(res, {
+      //   message: `Please provide valid video link`,
+      // });
     if (!isValidString(work_authorization))
       return failureJSONResponse(res, {
         message: `Please provide us work authorization`,

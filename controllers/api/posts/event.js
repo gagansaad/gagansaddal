@@ -182,9 +182,9 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide us tagline`,
       });
-    if (!video && (!isValidUrl(video)))return failureJSONResponse(res, {
-      message: `Please provide valid video link`,
-    });
+    // if (!video && (!isValidUrl(video)))return failureJSONResponse(res, {
+    //   message: `Please provide valid video link`,
+    // });
 
     return next();
   } catch (err) {
