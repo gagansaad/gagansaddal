@@ -85,6 +85,16 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
 
         } = req.body;
 console.log(req.body);
+// accommodates: '',
+// attachedBath: '',
+// amount: '',
+// negotiable: '',
+// prefered_age: '',
+// isSmokingAllowed: '',
+// isAlcoholAllowed: '',
+// isPetFriendly: '',
+// occupation: ''
+
 
         if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
         if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
@@ -95,36 +105,30 @@ console.log(req.body);
         if (!isValidString(descriptions)) return failureJSONResponse(res, { message: `Please provide valid descriptions` });
         if (!isValidString(listerType)) return failureJSONResponse(res, { message: `Please provide valid listerType` });
         if (!isValidString(roomType)) return failureJSONResponse(res, { message: `Please provide valid roomType` });
+        if(!attachedBath) return failureJSONResponse(res, { message: `Please provide valid attachedBath` });
         if (isNaN(Number(attachedBath))) return failureJSONResponse(res, { message: `Please provide valid attachedBath` });
+        if(!accommodates) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
         if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
         if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
         if (!isValidString(location)) return failureJSONResponse(res, { message: `Please provide valid location` });
         if (!isValidString(tagline)) return failureJSONResponse(res, { message: `Please provide valid tagline` });
         if (!isValidString(preferedGender)) return failureJSONResponse(res, { message: `Please provide valid preferredGender` });
-      else if (preferedGender != `Male` && preferedGender !=  `Female` && preferedGender !=  "Any Gender") return failureJSONResponse(res, { message: `Please enter preferred_gender Male , Female or Any gender` });
+        else if (preferedGender != `Male` && preferedGender !=  `Female` && preferedGender !=  "Any Gender") return failureJSONResponse(res, { message: `Please enter preferred_gender Male,Female or Any Gender` });
+        if (!amount)return failureJSONResponse(res, { message: `Please provide valid amount` });
         if (isNaN(Number(amount)))
             return failureJSONResponse(res, {
                 message: `please provide valid rent amount`,
             });
-        // if (!( isfeatured)) return failureJSONResponse(res, { message: `Please provide valid isfeatured (true/false)` });
-        // else if (typeof  isfeatured == "boolean") return failureJSONResponse(res, { message: `Please provide boolean value for isfeatured` });
+        if (!negotiable) return failureJSONResponse(res, { message: `Please provide valid negotiable (true/false)` });
+        else if (typeof  negotiable == "boolean") return failureJSONResponse(res, { message: `Please provide boolean value for negotiable` });
 
-        // if (!(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide valid isSmokingAllowed` });
-        // else if (!isValidBoolean(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide boolean value for Smoking Allowed` });
-
-
-
-        // if (!rent) {
-        //     return failureJSONResponse(res, { message: `Please provide rent` });
-        // }
-        // else {
-        //     const amount = rent?.amount,
-        //         currency = rent?.currency;
-
-        //     if (!amount) missingData.push(`purchase price`);
-        //     else if (amount && isNaN(amount)) invalidData.push(`purchase price`);
+        
+         if (!isValidBoolean(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide boolean value for Smoking Allowed` });
+         if (!isValidBoolean(isAlcoholAllowed)) return failureJSONResponse(res, { message: `Please provide boolean value for Alcohol Allowed` });
+         if (!isValidBoolean(isPetFriendly)) return failureJSONResponse(res, { message: `Please provide boolean value for PetFriendly` });
 
 
+      
         return next();
     }
     catch (err) {
