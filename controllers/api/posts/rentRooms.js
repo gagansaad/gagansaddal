@@ -236,10 +236,29 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
 let negotible = false;
 if(negotiable == 'true'){
     negotible = true;
-}else{
+}else if(negotiable == 'false'){
     negotible = false
 }
+let  isSmokin =false
+let  isAlcoho =false
+let  isPetFr = false
 
+       
+if(isSmokingAllowed == 'true'){
+    isSmokin =true
+}else if(isSmokingAllowed == 'false'){
+    isSmokin =false
+}
+if(isAlcoholAllowed == 'true'){
+    isAlcoho =true
+}else if(isAlcoholAllowed == 'false'){
+    isAlcoho =false
+}
+if(isPetFriendly == 'true'){
+    isPetFr = true
+}else if(isPetFriendly == 'false'){
+    isPetFr = false
+}
 let immidiate = false;
 if(!custom_date){
     immidiate=true
@@ -270,9 +289,9 @@ if(!custom_date){
                 amount:amount,
                 negotiable:negotible,
             },
-            isSmokingAllowed,
-            isAlcoholAllowed,
-            isPetFriendly,
+            isSmokingAllowed:isSmokin,
+            isAlcoholAllowed:isAlcoho,
+            isPetFriendly:isPetFr,
             occupation,
             preferedGender:preferedGender,
             location,
@@ -382,9 +401,29 @@ exports.editRoomRentAds = async (req, res, next) => {
 
 
     const dataObj = {},
-        adsInfoObj = {
-        },
+        adsInfoObj = {},
         listerBasicInfoObj = {};
+let  isSmokin =false;
+let  isAlcoho =false
+let  isPetFr = false
+
+       
+if(isSmokingAllowed == 'true'){
+    isSmokin =true
+}else if(isSmokingAllowed == 'false'){
+    isSmokin =false
+}
+if(isAlcoholAllowed == 'true'){
+    isAlcoho =true
+}else if(isAlcoholAllowed == 'false'){
+    isAlcoho =false
+}
+if(isPetFriendly == 'true'){
+    isPetFr = true
+}else if(isPetFriendly == 'false'){
+    isPetFr = false
+}
+        
 
         let negotible = false;
 if(negotiable == 'true'){
@@ -418,9 +457,9 @@ if(negotiable == 'true'){
     if (amount)rent.amount = amount;
     if (negotiable)rent.negotiable = negotible;
     if(amount)adsInfoObj.rent=rent;
-    if (isSmokingAllowed) adsInfoObj.isSmokingAllowed = isSmokingAllowed;
-    if (isAlcoholAllowed) adsInfoObj.isAlcoholAllowed = isAlcoholAllowed;
-    if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFriendly;
+    if (isSmokingAllowed) adsInfoObj.isSmokingAllowed = isSmokin;
+    if (isAlcoholAllowed) adsInfoObj.isAlcoholAllowed = isAlcoho;
+    if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFr;
  
     if (occupation) adsInfoObj.occupation = occupation;
     if (prefered_age) adsInfoObj.prefered_age = prefered_age;
