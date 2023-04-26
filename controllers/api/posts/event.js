@@ -505,7 +505,19 @@ console.log(req.body,"body hai je body");
       listerBasicInfoObj = {};
       let no_of_ticket={}
       let date_time ={}
-
+      let my_phone = false;
+      let my_email = false;
+      if(hide_my_phone == "true"){
+          my_phone = true
+      }else if(hide_my_phone == 'false'){
+          my_phone = false
+      }
+      
+      if(hide_my_email == "true"){
+          my_email = true
+      }else if(hide_my_email == 'false'){
+          my_email = false
+      }
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
@@ -542,8 +554,8 @@ console.log(req.body,"body hai je body");
         hosted_by,
         emailAddress,
         website_link,
-        hide_my_phone,
-        hide_my_email,
+        hide_my_phone:my_phone,
+        hide_my_email:my_email,
         primary_mobile_number: {
           country_code: +91,
           primary_phone_number:primary_phone_number,
