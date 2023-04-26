@@ -445,11 +445,11 @@ console.log(req.body,"body hai je body");
       organization_name,
       hosted_by,
       emailAddress,
-      phoneNumber,
-      countryCode,
-      hideAddress,
-      addressInfo,
-      preferableModeContact,
+      website_link,
+      hide_my_phone,
+      hide_my_email,
+      primary_phone_number,
+      secondary_phone_number,
     } = req.body;
     const livePlatform = ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"];
     let platforms = [];
@@ -500,65 +500,36 @@ console.log(req.body,"body hai je body");
 
     }
     const dataObj = {},
-      adsInfoObj = {
-            title,
-            type,
-            category,
-            details,
-            ticket_price,
-            vip_ticket_price,
-            no_of_ticket:{
-              regular_ticket,
-              vip_ticket,
-            },
-            recurring_type,
-            image: imageArr,
-            location,
-            venue_name,
-            date_time:{time_zone,
-            start_date,
-            end_date,
-            start_time,
-            end_time,},
-            live_event: platforms,
-            video,
-            organization_name,
-            hosted_by,
-            link,
-            emailAddress,
-            phoneNumber,
-            countryCode,
-            hideAddress,
-            addressInfo,
-            preferableModeContact,
-            
-          
-      },
+      adsInfoObj = {},
    
       listerBasicInfoObj = {};
+      let no_of_ticket={}
+      let date_time ={}
 
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
-    // if (title) adsInfoObj.title = title;
-    // if (type) adsInfoObj.type = type;
-    // if (category) adsInfoObj.category = category;
-    // if (details) adsInfoObj.details = details;
-    // if (time_zone) adsInfoObj.date_time.time_zone = time_zone;
-    // if (start_date) adsInfoObj.date_time.start_date = start_date;
-    // if (end_date) adsInfoObj.date_time.end_date = end_date;
-    // if (start_time) adsInfoObj.date_time.start_time = start_time;
-    // if (end_time) adsInfoObj.date_time.end_time = end_time;
-    // if (recurring_type) adsInfoObj.recurring_type = recurring_type;
-    // if (venue_name) adsInfoObj.venue_name = venue_name;
-    // if (ticket_price) adsInfoObj.ticket_price = ticket_price;
-    // if (vip_ticket) adsInfoObj.no_of_ticket.vip_ticket = vip_ticket;
-    // if (regular_ticket) adsInfoObj.no_of_ticket.regular_ticket = regular_ticket;
-    // if (vip_ticket_price) adsInfoObj.vip_ticket_price = vip_ticket_price;
-    // if (imageArr.length) adsInfoObj.image = imageArr;
-    // if (platforms.length) adsInfoObj.live_event = platforms;
-    // if (location) adsInfoObj.location = location;
-    // if (video) adsInfoObj.video = video;
+    if (title) adsInfoObj.title = title;
+    if (type) adsInfoObj.type = type;
+    if (category) adsInfoObj.category = category;
+    if (details) adsInfoObj.details = details;
+    if (time_zone) date_time.time_zone = time_zone;
+    if (start_date) date_time.start_date = start_date;
+    if (end_date) date_time.end_date = end_date;
+    if (start_time) date_time.start_time = start_time;
+    if (end_time) date_time.end_time = end_time;
+    if (date_time)adsInfoObj.date_time=date_time;
+    if (recurring_type) adsInfoObj.recurring_type = recurring_type;
+    if (venue_name) adsInfoObj.venue_name = venue_name;
+    if (ticket_price) adsInfoObj.ticket_price = ticket_price;
+    if (vip_ticket)no_of_ticket.vip_ticket = vip_ticket;
+    if (regular_ticket)no_of_ticket.regular_ticket = regular_ticket;
+    if (no_of_ticket) adsInfoObj.no_of_ticket=no_of_ticket;
+    if (vip_ticket_price) adsInfoObj.vip_ticket_price = vip_ticket_price;
+    if (imageArr.length) adsInfoObj.image = imageArr;
+    if (platforms.length) adsInfoObj.live_event = platforms;
+    if (location) adsInfoObj.location = location;
+    if (video) adsInfoObj.video = video;
     // if (adsInfoObj && Object.keys(adsInfoObj).length) {
     //   dataObj.adsInfo = adsInfoObj;
     // }
