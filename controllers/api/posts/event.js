@@ -62,14 +62,12 @@ exports.validateEventAdsData = async (req, res, next) => {
       title,
       type,
       category,
-     
       details,
       ticket_price,
       vip_ticket_price,
       regular_ticket,
       vip_ticket,
       location,
-      // link,
       time_zone,
       start_date,
       end_date,
@@ -184,6 +182,9 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide us tagline`,
       });
+    if (!video && (!isValidUrl(video)))return failureJSONResponse(res, {
+      message: `Please provide valid video link`,
+    });
 
     return next();
   } catch (err) {

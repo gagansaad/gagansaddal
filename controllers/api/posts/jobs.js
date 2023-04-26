@@ -60,6 +60,7 @@ exports.getDnymicsData = async (req, res, next) => {
     preferred_gender: [`Male`,
       `Female`,
       `Any Gender`],
+      list_type:["Offering - I have a job to offer","Wanted - I am looking for a job"]
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -75,6 +76,7 @@ exports.validateJobAdsData = async (req, res, next) => {
     const {
       status,
       adsType,
+      listing_type,
       title,
       descriptions,
       categories,
@@ -99,6 +101,10 @@ exports.validateJobAdsData = async (req, res, next) => {
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
+    if (!isValidString(listing_type))
+    return failureJSONResponse(res, {
+      message: `Please provide valid listing type`,
+    });
     if (!isValidString(categories))
       return failureJSONResponse(res, {
         message: `Please provide valid job Category`,
@@ -109,7 +115,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       });
     if (!isValidString(role))
       return failureJSONResponse(res, {
-        message: `Please provide valid job Role`,
+        message: `Please provide valid job Role/Skills`,
       });
 
     if (!isValidString(employment_type))
@@ -124,6 +130,10 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid job Description`,
       });
+    if(!experience)  return failureJSONResponse(res, {
+      message: `Please provide us your experience`,
+    });
+  
     if (isNaN(Number(experience)))
       return failureJSONResponse(res, {
         message: `Please provide us your experience`,
@@ -132,7 +142,9 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide us the information about how many languages do you know`,
       });
-
+      if(!salary)  return failureJSONResponse(res, {
+        message: `Please provide us your salary`,
+      });
     if (isNaN(Number(salary)))
       return failureJSONResponse(res, { message: `Please provide us salary` });
     if (!isValidString(salary_info))
@@ -144,7 +156,7 @@ exports.validateJobAdsData = async (req, res, next) => {
     else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null || no_of_opening.includes(".")) failureJSONResponse(res, { message: `Please provide valid number of job opening` });
     if (!isValidString(preferred_gender))
       return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
-    else if (preferred_gender != `Male` && preferred_gender !=  `Female` && preferred_gender !=  `Any Gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male , Female or Any gender` });
+    else if (preferred_gender != `Male` && preferred_gender !=  `Female` && preferred_gender !=  `Any Gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male,Female or Any Gender` });
     if(!job_website_link) return failureJSONResponse(res, {
       message: `Please provide valid job website`,
     });
@@ -152,7 +164,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid job website`,
       });
-      if (video && !isValidUrl(video))
+      if (!video && !isValidUrl(video))
       return failureJSONResponse(res, {
         message: `Please provide valid video link`,
       });
