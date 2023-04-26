@@ -380,7 +380,7 @@ exports.editRoomRentAds = async (req, res, next) => {
         occupation,
         preferedGender,
         location,
-        tagliine,
+        tagline,
         name,
         email_address,
         primary_phone_number,
