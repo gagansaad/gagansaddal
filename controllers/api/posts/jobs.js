@@ -438,7 +438,6 @@ exports.editJobAds = async (req, res, next) => {
           secondary_phone_number:secondary_phone_number,
 
         },
-        preferable_contact_mode: preferable_contact_mode,
       },
     };
 
