@@ -428,7 +428,6 @@ exports.editJobAds = async (req, res, next) => {
         hide_my_phone,
         hide_my_email,
         location,
-        address_info,
         primary_mobile_number: {
           country_code: +91,
           primary_phone_number:primary_phone_number,
