@@ -498,12 +498,12 @@ if(negotiable == 'true'){
             location,
             primary_mobile_number: {
               country_code: +91,
-              primary_phone_number:primary_phone_number,
+              primary_phone_number:parseInt(primary_phone_number),
     
             },
             secondary_mobile_number: {
               country_code: +91,
-              secondary_phone_number:secondary_phone_number,
+              secondary_phone_number:parseInt(secondary_phone_number),
     
             },
            

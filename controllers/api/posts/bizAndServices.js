@@ -149,6 +149,7 @@ exports.createbizAds = async (req, res, next) => {
       status,
       adsType,
       profession,
+      
       categories,
       buisness_name,
       tagline,
