@@ -99,7 +99,7 @@ console.log(req.body);
         if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
         if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
         if (!isValidString(location)) return failureJSONResponse(res, { message: `Please provide valid location` });
-        if (!isValidString(tagline)) return failureJSONResponse(res, { message: `Please provide valid location` });
+        if (!isValidString(tagline)) return failureJSONResponse(res, { message: `Please provide valid tagline` });
         if (!isValidString(preferedGender)) return failureJSONResponse(res, { message: `Please provide valid preferredGender` });
       else if (preferedGender != `Male` && preferedGender !=  `Female` && preferedGender !=  "Any Gender") return failureJSONResponse(res, { message: `Please enter preferred_gender Male , Female or Any gender` });
         if (isNaN(Number(amount)))
