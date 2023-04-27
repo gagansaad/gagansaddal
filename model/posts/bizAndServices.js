@@ -53,7 +53,7 @@ const bizAndServices = new mongoose.Schema({
         working_hours:{
             type: [{is_status:Boolean,is_24_hour:Boolean,day_name: String, open_at: String, close_at: String}],
         },
-        buisness_location: {
+        business_location: {
             ...defaultStringConfig,
             required: true
         },
