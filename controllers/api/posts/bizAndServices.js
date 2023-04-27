@@ -56,34 +56,34 @@ exports.validatebizAdsData = async (req, res, next) => {
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
   
-    if (!isValidString(categories))
-      return failureJSONResponse(res, {
-        message: `Please provide valid Category`,
-      });
-    if (!isValidString(business_name))
-      return failureJSONResponse(res, {
-        message: `Please provide valid business_name`,
-      });
-    if (!isValidString(tagline))
-      return failureJSONResponse(res, {
-        message: `Please provide valid tagline`,
-      });
-    if (!isValidString(business_location))
-      return failureJSONResponse(res, {
-        message: "Pleae provide us your buisness location",
-      });
-    if (!isValidString(descriptions))
-      return failureJSONResponse(res, {
-        message: `please provide valid Description`,
-      });
-    // if (isNaN(Number(price)))
+    // if (!isValidString(categories))
     //   return failureJSONResponse(res, {
-    //     message: `Please provide valid price`,
+    //     message: `Please provide valid Category`,
     //   });
-    if (!isValidString(Additional_info))
-      return failureJSONResponse(res, {
-        message: `Please provide us Additional_info`,
-      });
+    // if (!isValidString(business_name))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide valid business_name`,
+    //   });
+    // if (!isValidString(tagline))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide valid tagline`,
+    //   });
+    // if (!isValidString(business_location))
+    //   return failureJSONResponse(res, {
+    //     message: "Pleae provide us your buisness location",
+    //   });
+    // if (!isValidString(descriptions))
+    //   return failureJSONResponse(res, {
+    //     message: `please provide valid Description`,
+    //   });
+    // // if (isNaN(Number(price)))
+    // //   return failureJSONResponse(res, {
+    // //     message: `Please provide valid price`,
+    // //   });
+    // if (!isValidString(Additional_info))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide us Additional_info`,
+    //   });
 
     return next();
   } catch (err) {
