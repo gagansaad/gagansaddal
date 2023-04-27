@@ -242,7 +242,7 @@ exports.createBuySellAds = async (req, res, next) => {
     }else{
       boolean = false
     }
-    console.log(`skjdfjhefw`,req.body));
+    console.log(`skjdfjhefw`,req.body);
     console.log(`skjdfjhefw`,typeof(payment_mode));
     console.log(`fbhjerhf`,payment_mode)
     const dataObj = {
