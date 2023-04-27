@@ -109,7 +109,7 @@ console.log(req.body);
         if (isNaN(Number(attachedBath))) return failureJSONResponse(res, { message: `Please provide valid no. of attached Bath` });
         if(!accommodates) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
         if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid no. of accommodates` });
-        if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
+        // if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
         if (!isValidString(location)) return failureJSONResponse(res, { message: `Please provide valid location` });
         if (!isValidString(tagline)) return failureJSONResponse(res, { message: `Please provide valid tagline` });
         if (!isValidString(preferedGender)) return failureJSONResponse(res, { message: `Please provide valid preferredGender` });

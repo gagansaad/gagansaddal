@@ -42,6 +42,8 @@ exports.validatebizAdsData = async (req, res, next) => {
       categories,
       buisness_name,
       tagline,
+      experience,
+      working_hours,
       buisnesslocation,
       price,
       descriptions,
@@ -152,15 +154,24 @@ exports.createbizAds = async (req, res, next) => {
       
       categories,
       buisness_name,
+      experience,
+      day_name,
       tagline,
       buisnesslocation,
+      Sunday,
+      Monday,
+      Tuesday,
+      Wednesday,
+      Thursday,
+      Friday,
+      Saturday,
       price,
       descriptions,
       Additional_info,
       image,
 
     } = req.body;
-
+    let days_count = [Sunday, Monday,Tuesday, Wednesday,Thursday,Friday,Saturday];
     const userId = req.userId;
 
     const imageArr = [];
@@ -173,7 +184,7 @@ exports.createbizAds = async (req, res, next) => {
 
     }
 
-
+// let dat =  day_name.substring(1, day_name.length-1).split(",")
     const dataObj = {
       isfeatured,
       status: status,
@@ -182,6 +193,10 @@ exports.createbizAds = async (req, res, next) => {
         profession,
         categories,
         buisness_name,
+        experience,
+        working_hours:{
+          day_name
+        },
         tagline,
         buisnesslocation,
         price,

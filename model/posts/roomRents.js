@@ -110,10 +110,10 @@ const roomRentsSchema = new mongoose.Schema({
         prefered_age:{
             ...defaultStringConfig,
         },
-        furnished: {
-            ...defaultStringConfig,
-            required: true
-        },
+        // furnished: {
+        //     ...defaultStringConfig,
+        //     required: true
+        // },
         location: {
             ...defaultStringConfig,
             required: true
