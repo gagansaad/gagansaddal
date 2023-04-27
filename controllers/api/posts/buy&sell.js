@@ -220,8 +220,8 @@ exports.createBuySellAds = async (req, res, next) => {
       image,
     } = req.body;
 
-    let data =JSON.stringify(payment_mode)
-    console.log(data)
+    // let data =JSON.stringify(payment_mode)
+    // console.log(data)
 
     const userId = req.userId;
 
@@ -242,6 +242,8 @@ exports.createBuySellAds = async (req, res, next) => {
     }else{
       boolean = false
     }
+
+    console.log(payment_mode)
     const dataObj = {
       isfeatured,
       status: status,
@@ -268,7 +270,8 @@ exports.createBuySellAds = async (req, res, next) => {
     };
 
     const newBuySellPost = await postBuySellAd.create(dataObj);
-console.log(newBuySellPost);
+console.log(newBuySellPost,"bde");
+console.log(typeof(payment_mode));
     const postBuySellAdObjToSend = {};
 
     for (let key in newBuySellPost.toObject()) {
