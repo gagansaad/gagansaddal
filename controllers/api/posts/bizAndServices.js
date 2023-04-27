@@ -195,7 +195,10 @@ exports.createbizAds = async (req, res, next) => {
         buisness_name,
         experience,
         working_hours:{
-          day_name
+          day_name,
+          day_name,
+          open_at,
+          close_at
         },
         tagline,
         buisnesslocation,

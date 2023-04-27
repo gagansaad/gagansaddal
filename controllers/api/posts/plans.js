@@ -21,7 +21,8 @@ exports.fetchPlanForAds = async (req, res, next) => {
         // const {adsId} = req?.params?.adsId;  
         const {adsId} = req.body;
         console.log("iadsid",req.query);
-
+        console.log("iadsid",adsId);
+        
         AdsPlan.find({
             ads_type: planObjectId
         })
