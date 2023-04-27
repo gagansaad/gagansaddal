@@ -242,8 +242,8 @@ exports.createBuySellAds = async (req, res, next) => {
     }else{
       boolean = false
     }
-
-    console.log(payment_mode)
+    console.log(`skjdfjhefw`,typeof(payment_mode));
+    console.log(`fbhjerhf`,payment_mode)
     const dataObj = {
       isfeatured,
       status: status,
@@ -268,6 +268,7 @@ exports.createBuySellAds = async (req, res, next) => {
       },
       userId: userId,
     };
+
 
     const newBuySellPost = await postBuySellAd.create(dataObj);
 console.log(newBuySellPost,"bde");
