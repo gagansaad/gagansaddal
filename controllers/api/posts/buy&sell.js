@@ -47,7 +47,7 @@ exports.getDnymicsData = async (req, res, next) => {
     user_type: [`Individual`, `Retailer`],
 
 
-  };
+  };     
   return successJSONResponse(res, {
     message: `success`,
     data: dynamicsData,
