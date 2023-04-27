@@ -37,7 +37,7 @@ const bizAndServices = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-        buisness_name: {
+        business_name: {
             ...defaultStringConfig,
             required: true
         },
