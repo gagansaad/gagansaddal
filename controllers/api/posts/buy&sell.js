@@ -240,7 +240,7 @@ exports.createBuySellAds = async (req, res, next) => {
       boolean = false
     }
 
-    console.log(JSON.parse(payment_mode))
+    console.log(payment_mode)
     const dataObj = {
       isfeatured,
       status: status,
