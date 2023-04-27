@@ -76,10 +76,10 @@ exports.validatebizAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid Description`,
       });
-    if (isNaN(Number(price)))
-      return failureJSONResponse(res, {
-        message: `Please provide valid price`,
-      });
+    // if (isNaN(Number(price)))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide valid price`,
+    //   });
     if (!isValidString(Additional_info))
       return failureJSONResponse(res, {
         message: `Please provide us Additional_info`,
@@ -205,65 +205,65 @@ exports.createbizAds = async (req, res, next) => {
      close_at :"",
     }
 
-    if(is_status_monday == 'true' ||  open_at_monday || close_at_monday){
+    if(is_status_monday == 'true' &&  open_at_monday && close_at_monday){
       time_records.is_status=true, 
       time_records.day_name="monday",
       time_records.open_at= open_at_monday,
-      time_records.close_at= '24:00:00'
+      time_records.close_at= close_at_monday,
       work_hour.push(time_records)
     }else{
       console.log("closed")
     }
-    if(is_status_tuesday == 'true' || open_at_tuesday || close_at_tuesday){
+    if(is_status_tuesday == 'true' && open_at_tuesday && close_at_tuesday){
       time_records.is_status=true, 
-      time_records.day_name[1]= "tuesday",
-      time_records.open_at[1]= open_at_tuesday,
-      time_records.close_at[1]= '24:00:00'// 24hr
+      time_records.day_name= "tuesday",
+      time_records.open_at= open_at_tuesday,
+      time_records.close_at=close_at_tuesday,// 24hr
       work_hour.push(time_records)
     }else{
       console.log("closed")
     }
-    if(is_status_wednesday == 'true' || open_at_wednesday || close_at_wednesday){
+    if(is_status_wednesday == 'true' && open_at_wednesday && close_at_wednesday){
       time_records.is_status=false, 
-      time_records.day_name[2]= "wednesday",
-      time_records.open_at[2]  = open_at_wednesday,
-      time_records.close_at[2]= '24:00:00'// 24hr
+      time_records.day_name= "wednesday",
+      time_records.open_at  = open_at_wednesday,
+      time_records.close_at=close_at_wednesday,// 24hr
       work_hour.push(time_records)
     }else{
       console.log("closed")
     }
-    if(is_status_thursday == 'true' || open_at_thursday || close_at_thursday){
+    if(is_status_thursday == 'true' && open_at_thursday && close_at_thursday){
       time_records.is_status=true, 
-      time_records.day_name[3]= "thursday",
-      time_records.open_at[3]= open_at_thursday,
-      time_records.close_at[3]= '24:00:00'// 24hr
+      time_records.day_name= "thursday",
+      time_records.open_at= open_at_thursday,
+      time_records.close_at=close_at_thursday,// 24hr
       work_hour.push(time_records)
     }else{
       console.log("closed")
     }
-    if(is_status_friday == 'true' || open_at_friday || close_at_friday){
+    if(is_status_friday == 'true' && open_at_friday && close_at_friday){
       time_records.is_status=true, 
-      time_records.day_name[4]= "friday",
-      time_records.open_at[4]= open_at_friday,
-      time_records.close_at[4]= '24:00:00'// 24hr
+      time_records.day_name= "friday",
+      time_records.open_at= open_at_friday,
+      time_records.close_at=close_at_friday,// 24hr
       work_hour.push(time_records)
     }else{
       console.log("closed")
     }
-    if(is_status_saturday == 'true' || open_at_saturday || close_at_saturday){
+    if(is_status_saturday == 'true' && open_at_saturday && close_at_saturday){
       time_records.is_status=true, 
-      time_records.day_name[5]= "saturday",
-      time_records.open_at[5]= open_at_saturday,
-      time_records.close_at[5]= '24:00:00'// 24hr
+      time_records.day_name= "saturday",
+      time_records.open_at= open_at_saturday,
+      time_records.close_at=close_at_saturday,// 24hr
       work_hour.push(time_records)
     }else{
       console.log("closed")
     }
-    if(is_status_sunday == 'true' || open_at_sunday || close_at_sunday){
+    if(is_status_sunday == 'true' && open_at_sunday && close_at_sunday){
       time_records.is_status=true, 
-      time_records.day_name[6]= "sunday",
-      time_records.open_at[6]= open_at_sunday,
-      time_records.close_at[6]= '24:00:00'// 24hr
+      time_records.day_name= "sunday",
+      time_records.open_at= open_at_sunday,
+      time_records.close_at= close_at_sunday,// 24hr
       work_hour.push(time_records)
     }else{
       console.log( "sclosed")
