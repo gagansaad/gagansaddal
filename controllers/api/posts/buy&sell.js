@@ -240,7 +240,7 @@ exports.createBuySellAds = async (req, res, next) => {
       boolean = false
     }
 
- 
+    console.log(JSON.parse(payment_mode))
     const dataObj = {
       isfeatured,
       status: status,
@@ -267,7 +267,7 @@ exports.createBuySellAds = async (req, res, next) => {
     };
 
     const newBuySellPost = await postBuySellAd.create(dataObj);
-
+console.log(newBuySellPost);
     const postBuySellAdObjToSend = {};
 
     for (let key in newBuySellPost.toObject()) {
