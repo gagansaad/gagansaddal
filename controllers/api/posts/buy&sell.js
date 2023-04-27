@@ -242,8 +242,8 @@ exports.createBuySellAds = async (req, res, next) => {
     }else{
       boolean = false
     }
-    // let mode_payment = 
-    let cash_mode = JSON.parse(payment_mode.substring(1, payment_mode.length-1).split(","))
+    let mode_payment = payment_mode.substring(1, payment_mode.length-1).split(",")
+    let cash_mode = JSON.parse(mode_payment)
     console.log(`skjdfjhefw`,req.body);
     console.log(`skjdfjhefw`,typeof(cash_mode));
     console.log(`fbhjerhf`,payment_mode)
