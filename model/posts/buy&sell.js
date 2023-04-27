@@ -71,14 +71,14 @@ const BuySellSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
-        payment_mode:{
+        payment_mode:[{
             ...defaultStringConfig,
             required: true
-        },
-        fullfilment:{
+        }],
+        fullfilment:[{
             ...defaultStringConfig,
             required: true
-        },
+        }],
         location:{
             ...defaultStringConfig,
             required: true
