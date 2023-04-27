@@ -158,20 +158,66 @@ exports.createbizAds = async (req, res, next) => {
       day_name,
       tagline,
       buisnesslocation,
-      Sunday,
-      Monday,
-      Tuesday,
-      Wednesday,
-      Thursday,
-      Friday,
-      Saturday,
+
+      is_status_monday,
+      is_status_tuesday,
+      is_status_wednesday,
+      is_status_thursday,
+      is_status_friday,
+      is_status_saturday,
+      is_status_sunday,
+
+      is_24hour_monday,
+      is_24hour_tuesday,
+      is_24hour_wednesday,
+      is_24hour_thursday,
+      is_24hour_friday,
+      is_24hour_saturday,
+      is_24hour_sunday,
+
+      open_at_monday,
+      open_at_tuesday,
+      open_at_wednesday,
+      open_at_thursday,
+      open_at_friday,
+      open_at_saturday,
+      open_at_sunday,
+      
+      close_at_monday,
+      close_at_tuesday,
+      close_at_wednesday,
+      close_at_thursday,
+      close_at_friday,
+      close_at_saturday,
+      close_at_sunday,
+
       price,
       descriptions,
       Additional_info,
       image,
 
     } = req.body;
-    let days_count = [Sunday, Monday,Tuesday, Wednesday,Thursday,Friday,Saturday];
+    if(is_status_monday == 'true' ){
+
+    }
+    if(is_status_tuesday == 'true'){
+
+    }
+    if(is_status_wednesday == 'true'){
+
+    }
+    if(is_status_thursday == 'true'){
+
+    }
+    if(is_status_friday == 'true'){
+
+    }
+    if(is_status_saturday == 'true'){
+
+    }
+    if(is_status_sunday == 'true'){
+
+    }
     const userId = req.userId;
 
     const imageArr = [];
@@ -196,9 +242,10 @@ exports.createbizAds = async (req, res, next) => {
         experience,
         working_hours:{
           day_name,
-          day_name,
           open_at,
-          close_at
+          close_at,
+          is_status,
+          is_24_hour,
         },
         tagline,
         buisnesslocation,
