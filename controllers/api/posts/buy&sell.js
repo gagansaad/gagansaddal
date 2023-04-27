@@ -220,7 +220,7 @@ exports.createBuySellAds = async (req, res, next) => {
       image,
     } = req.body;
 
-    let data =JSON.parse(payment_mode)
+    let data =JSON.stringify(payment_mode)
     console.log(data)
 
     const userId = req.userId;
