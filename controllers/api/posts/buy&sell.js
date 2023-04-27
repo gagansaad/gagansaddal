@@ -242,8 +242,10 @@ exports.createBuySellAds = async (req, res, next) => {
     }else{
       boolean = false
     }
+    // let mode_payment = 
+    let cash_mode = JSON.parse(payment_mode.substring(1, payment_mode.length-1).split(","))
     console.log(`skjdfjhefw`,req.body);
-    console.log(`skjdfjhefw`,typeof(payment_mode));
+    console.log(`skjdfjhefw`,typeof(cash_mode));
     console.log(`fbhjerhf`,payment_mode)
     const dataObj = {
       isfeatured,
@@ -260,7 +262,7 @@ exports.createBuySellAds = async (req, res, next) => {
       amount,
       negotiable:boolean,
       quantity,
-      payment_mode:payment_mode.substring(1, payment_mode.length-1).split(","),
+      payment_mode:cash_mode,
       fullfilment,
       location,
       tagline,
