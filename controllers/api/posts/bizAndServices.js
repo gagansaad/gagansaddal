@@ -40,11 +40,11 @@ exports.validatebizAdsData = async (req, res, next) => {
       adsType,
       profession,
       categories,
-      buisness_name,
+      business_name,
       tagline,
       experience,
       working_hours,
-      buisnesslocation,
+      business_location,
       price,
       descriptions,
       Additional_info,
@@ -55,23 +55,20 @@ exports.validatebizAdsData = async (req, res, next) => {
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
-    if (!isValidString(profession))
-      return failureJSONResponse(res, {
-        message: `Please provide valid profession`,
-      });
+  
     if (!isValidString(categories))
       return failureJSONResponse(res, {
         message: `Please provide valid Category`,
       });
-    if (!isValidString(buisness_name))
+    if (!isValidString(business_name))
       return failureJSONResponse(res, {
-        message: `Please provide valid buisness_name`,
+        message: `Please provide valid business_name`,
       });
     if (!isValidString(tagline))
       return failureJSONResponse(res, {
         message: `Please provide valid tagline`,
       });
-    if (!isValidString(buisnesslocation))
+    if (!isValidString(business_location))
       return failureJSONResponse(res, {
         message: "Pleae provide us your buisness location",
       });
@@ -150,14 +147,16 @@ exports.createbizAds = async (req, res, next) => {
       isfeatured,
       status,
       adsType,
-      profession,
+      
       
       categories,
-      buisness_name,
+      business_name,
       experience,
-      day_name,
+    
       tagline,
-      buisnesslocation,
+      business_location,
+      business_service,
+      accreditation_file,
 
       is_status_monday,
       is_status_tuesday,
@@ -197,26 +196,77 @@ exports.createbizAds = async (req, res, next) => {
       image,
 
     } = req.body;
-    if(is_status_monday == 'true' ){
 
+    let work_hour=[]
+    let time_records = {
+      is_status:false,
+     day_name:"",
+      open_at :"",
+     close_at :"",
     }
-    if(is_status_tuesday == 'true'){
 
+    if(is_status_monday == 'true' ||  open_at_monday || close_at_monday){
+      time_records.is_status=true, 
+      time_records.day_name="monday",
+      time_records.open_at= open_at_monday,
+      time_records.close_at= '24:00:00'
+      work_hour.push(time_records)
+    }else{
+      console.log("closed")
     }
-    if(is_status_wednesday == 'true'){
-
+    if(is_status_tuesday == 'true' || open_at_tuesday || close_at_tuesday){
+      time_records.is_status=true, 
+      time_records.day_name[1]= "tuesday",
+      time_records.open_at[1]= open_at_tuesday,
+      time_records.close_at[1]= '24:00:00'// 24hr
+      work_hour.push(time_records)
+    }else{
+      console.log("closed")
     }
-    if(is_status_thursday == 'true'){
-
+    if(is_status_wednesday == 'true' || open_at_wednesday || close_at_wednesday){
+      time_records.is_status=false, 
+      time_records.day_name[2]= "wednesday",
+      time_records.open_at[2]  = open_at_wednesday,
+      time_records.close_at[2]= '24:00:00'// 24hr
+      work_hour.push(time_records)
+    }else{
+      console.log("closed")
     }
-    if(is_status_friday == 'true'){
-
+    if(is_status_thursday == 'true' || open_at_thursday || close_at_thursday){
+      time_records.is_status=true, 
+      time_records.day_name[3]= "thursday",
+      time_records.open_at[3]= open_at_thursday,
+      time_records.close_at[3]= '24:00:00'// 24hr
+      work_hour.push(time_records)
+    }else{
+      console.log("closed")
     }
-    if(is_status_saturday == 'true'){
-
+    if(is_status_friday == 'true' || open_at_friday || close_at_friday){
+      time_records.is_status=true, 
+      time_records.day_name[4]= "friday",
+      time_records.open_at[4]= open_at_friday,
+      time_records.close_at[4]= '24:00:00'// 24hr
+      work_hour.push(time_records)
+    }else{
+      console.log("closed")
     }
-    if(is_status_sunday == 'true'){
-
+    if(is_status_saturday == 'true' || open_at_saturday || close_at_saturday){
+      time_records.is_status=true, 
+      time_records.day_name[5]= "saturday",
+      time_records.open_at[5]= open_at_saturday,
+      time_records.close_at[5]= '24:00:00'// 24hr
+      work_hour.push(time_records)
+    }else{
+      console.log("closed")
+    }
+    if(is_status_sunday == 'true' || open_at_sunday || close_at_sunday){
+      time_records.is_status=true, 
+      time_records.day_name[6]= "sunday",
+      time_records.open_at[6]= open_at_sunday,
+      time_records.close_at[6]= '24:00:00'// 24hr
+      work_hour.push(time_records)
+    }else{
+      console.log( "sclosed")
     }
     const userId = req.userId;
 
@@ -236,19 +286,14 @@ exports.createbizAds = async (req, res, next) => {
       status: status,
       adsType,
       adsInfo: {
-        profession,
+       
         categories,
-        buisness_name,
+        business_name,
         experience,
-        working_hours:{
-          day_name,
-          open_at,
-          close_at,
-          is_status,
-          is_24_hour,
-        },
+        working_hours:work_hour,
         tagline,
-        buisnesslocation,
+        business_location,
+        business_service,
         price,
         descriptions,
         Additional_info,
@@ -312,9 +357,9 @@ exports.editbizAds = async (req, res, next) => {
 
       profession,
       categories,
-      buisness_name,
+      business_name,
       tagline,
-      buisnesslocation,
+      business_location,
       price,
       descriptions,
       Additional_info,
@@ -349,9 +394,9 @@ exports.editbizAds = async (req, res, next) => {
 
     if (profession) adsInfoObj.profession = profession;
     if (categories) adsInfoObj.categories = categories;
-    if (buisness_name) adsInfoObj.buisness_name = buisness_name;
+    if (business_name) adsInfoObj.business_name = business_name;
     if (tagline) adsInfoObj.tagline = tagline;
-    if (buisnesslocation) adsInfoObj.buisnesslocation = buisnesslocation;
+    if (business_location) adsInfoObj.business_location = business_location;
     if (price) adsInfoObj.price = price;
     if (descriptions) adsInfoObj.descriptions = descriptions;
     if (Additional_info) adsInfoObj.Additional_info = Additional_info;
