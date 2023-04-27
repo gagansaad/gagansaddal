@@ -260,7 +260,7 @@ exports.createBuySellAds = async (req, res, next) => {
       amount,
       negotiable:boolean,
       quantity,
-      payment_mode,
+      payment_mode:payment_mode.substring(1, payment_mode.length-1).split(","),
       fullfilment,
       location,
       tagline,
