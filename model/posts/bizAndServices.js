@@ -37,6 +37,10 @@ const bizAndServices = new mongoose.Schema({
             ...defaultStringConfig,
             // required: true
         },
+        profession: {
+            ...defaultStringConfig,
+            // required: true
+        },
         business_name: {
             ...defaultStringConfig,
             // required: true
@@ -61,8 +65,14 @@ const bizAndServices = new mongoose.Schema({
             ...defaultStringConfig,
             // required: true
         },
-        accreditation_file:{
-            ...defaultStringConfig,
+        accreditation_file: {
+            accreditation_name:[{
+
+            }],
+        accreditation_files:[{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: `media`,
+            }]
         },
         price: {
             type: Number,

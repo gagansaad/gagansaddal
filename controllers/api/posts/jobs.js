@@ -60,7 +60,7 @@ exports.getDnymicsData = async (req, res, next) => {
     preferred_gender: [`Male`,
       `Female`,
       `Any Gender`],
-      list_type:["Offering - I have a job to offer","Wanted - I am looking for a job"]
+    list_type: ["Offering - I have a job to offer", "Wanted - I am looking for a job"]
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -130,10 +130,10 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid job Description`,
       });
-    if(!experience)  return failureJSONResponse(res, {
+    if (!experience) return failureJSONResponse(res, {
       message: `Please provide us your experience`,
     });
-  
+
     if (isNaN(Number(experience)))
       return failureJSONResponse(res, {
         message: `Please provide us your experience`,
@@ -142,9 +142,9 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide us the information about how many languages do you know`,
       });
-      if(!salary)  return failureJSONResponse(res, {
-        message: `Please provide us your salary`,
-      });
+    if (!salary) return failureJSONResponse(res, {
+      message: `Please provide us your salary`,
+    });
     if (isNaN(Number(salary)))
       return failureJSONResponse(res, { message: `Please provide us salary` });
     if (!isValidString(salary_info))
@@ -156,18 +156,18 @@ exports.validateJobAdsData = async (req, res, next) => {
     else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null || no_of_opening.includes(".")) failureJSONResponse(res, { message: `Please provide valid number of job opening` });
     if (!isValidString(preferred_gender))
       return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
-    else if (preferred_gender != `Male` && preferred_gender !=  `Female` && preferred_gender !=  `Any Gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male,Female or Any Gender` });
-    if(!job_website_link) return failureJSONResponse(res, {
+    else if (preferred_gender != `Male` && preferred_gender != `Female` && preferred_gender != `Any Gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male,Female or Any Gender` });
+    if (!job_website_link) return failureJSONResponse(res, {
       message: `Please provide valid job website`,
     });
     if (job_website_link && (!isValidUrl(job_website_link)))
       return failureJSONResponse(res, {
         message: `Please provide valid job website`,
       });
-      // if (!video && !isValidUrl(video))
-      // return failureJSONResponse(res, {
-      //   message: `Please provide valid video link`,
-      // });
+    // if (!video && !isValidUrl(video))
+    // return failureJSONResponse(res, {
+    //   message: `Please provide valid video link`,
+    // });
     if (!isValidString(work_authorization))
       return failureJSONResponse(res, {
         message: `Please provide us work authorization`,
@@ -176,7 +176,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide us location`,
       });
-      if (!isValidString(tagline))
+    if (!isValidString(tagline))
       return failureJSONResponse(res, {
         message: `Please provide us tagline`,
       });
@@ -193,7 +193,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       // phoneNumber,
       // countryCode,
       hideAddress,
-    
+
     } = req.body;
 
     // if (countryCode && isNaN(Number(countryCode)))
@@ -267,7 +267,7 @@ exports.createJobAds = async (req, res, next) => {
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path
 
-      productImages = await Media.create({ image: thumbnail });
+      productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
       imageArr.push(productImages._id);
 
     }
@@ -359,7 +359,7 @@ exports.editJobAds = async (req, res, next) => {
     const {
       status,
       adsType,
-     
+
       title,
       descriptions,
       categories,
@@ -393,7 +393,7 @@ exports.editJobAds = async (req, res, next) => {
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path
 
-      productImages = await Media.create({ image: thumbnail });
+      productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
       imageArr.push(productImages._id);
 
     }
@@ -407,7 +407,7 @@ exports.editJobAds = async (req, res, next) => {
 
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
-   
+
 
     if (title) adsInfoObj.title = title;
     if (tagline) adsInfoObj.tagline = tagline;
@@ -444,12 +444,12 @@ exports.editJobAds = async (req, res, next) => {
         hide_my_email,
         primary_mobile_number: {
           country_code: +91,
-          primary_phone_number:primary_phone_number,
+          primary_phone_number: primary_phone_number,
 
         },
         secondary_mobile_number: {
           country_code: +91,
-          secondary_phone_number:secondary_phone_number,
+          secondary_phone_number: secondary_phone_number,
 
         },
       },

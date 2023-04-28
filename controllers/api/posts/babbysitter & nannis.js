@@ -20,20 +20,20 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
-    category:["I want a Baby sitter/Nanny","I am a Baby sitter/Nanny"],
+    category: ["I want a Baby sitter/Nanny", "I am a Baby sitter/Nanny"],
     work_type: ["Live in", "Live in & out", "Live out"],
-    care_service_need:["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores"],
-    care_service_offer:["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores", "Storytelling"],
+    care_service_need: ["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores"],
+    care_service_offer: ["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores", "Storytelling"],
     age_group_need: ["0-6 month", "6 month - 3 years", "3-5 years", "5-10 years", "10-13 years", "above 13", "any age"],
     age_group_offer: ["0-6 month", "6 month - 3 years", "3-5 years", "5-10 years", "10-13 years", "above 13", "any age"],
-    preferrd_languge_need:["English", "Amharic", "Afan Oromo", "Tigrigna", "Arabic", "French", "Other"],
-    preferrd_languge_offer:["English", "Amharic", "Afan Oromo", "Tigrigna", "Arabic", "French", "Other"],
-    preferrd_gender_need:["Male", "Female", "Any Gender"],
-    preferrd_gender_offer:["Male", "Female"],
-    transport_facilty_need:["Yes", "No"],
-    transport_facilty_offer:["Yes", "No"],
-    expected_salary_rate_need:["/hour", "/week", "/month", "/day"],
-    expected_salary_rate_offer:["/hour", "/week", "/month", "/day"],
+    preferrd_languge_need: ["English", "Amharic", "Afan Oromo", "Tigrigna", "Arabic", "French", "Other"],
+    preferrd_languge_offer: ["English", "Amharic", "Afan Oromo", "Tigrigna", "Arabic", "French", "Other"],
+    preferrd_gender_need: ["Male", "Female", "Any Gender"],
+    preferrd_gender_offer: ["Male", "Female"],
+    transport_facilty_need: ["Yes", "No"],
+    transport_facilty_offer: ["Yes", "No"],
+    expected_salary_rate_need: ["/hour", "/week", "/month", "/day"],
+    expected_salary_rate_offer: ["/hour", "/week", "/month", "/day"],
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -63,57 +63,57 @@ exports.validateAdsData = async (req, res, next) => {
       tagline,
 
     } = req.body;
-    console.log(req.body,"ye boDY HAI");
+    console.log(req.body, "ye boDY HAI");
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (ads_type && !isValidMongoObjId(mongoose, ads_type)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
-      if (!isValidString(category_name))
+    if (!isValidString(category_name))
       return failureJSONResponse(res, {
         message: `Please provide valid category_name`,
       });
-      if (!isValidString(category_value))
+    if (!isValidString(category_value))
       return failureJSONResponse(res, {
         message: `Please provide valid category_value`,
       });
-      if (!isValidString(work_type))
+    if (!isValidString(work_type))
       return failureJSONResponse(res, {
         message: `Please provide valid work type`,
       });
-      // if (!isValidString(care_service))
-      // return failureJSONResponse(res, {
-      //   message: `Please provide valid care service`,
-      // });
-      // if (!isValidString(age_group))
-      // return failureJSONResponse(res, {
-      //   message: `Please provide valid age group`,
-      // });
-      // if (!isValidString(prefered_language))
-      // return failureJSONResponse(res, {
-      //   message: `Please provide valid prefered language`,
-      // });
-      if (!isValidString(prefered_gender))
+    // if (!isValidString(care_service))
+    // return failureJSONResponse(res, {
+    //   message: `Please provide valid care service`,
+    // });
+    // if (!isValidString(age_group))
+    // return failureJSONResponse(res, {
+    //   message: `Please provide valid age group`,
+    // });
+    // if (!isValidString(prefered_language))
+    // return failureJSONResponse(res, {
+    //   message: `Please provide valid prefered language`,
+    // });
+    if (!isValidString(prefered_gender))
       return failureJSONResponse(res, {
         message: `Please provide valid prefered gender`,
       });
-      if (!isValidString(service_from_date))
+    if (!isValidString(service_from_date))
       return failureJSONResponse(res, {
         message: `Please provide valid service starting date`,
       });
-      if (isNaN(Number(amount)))
+    if (isNaN(Number(amount)))
       return failureJSONResponse(res, {
         message: `please provide valid salary amount`,
       });
 
-      if (!isValidString(description))
+    if (!isValidString(description))
       return failureJSONResponse(res, {
         message: `Please provide valid description`,
       });
-      if (!isValidString(location))
+    if (!isValidString(location))
       return failureJSONResponse(res, {
         message: `Please provide valid location`,
       });
-      if (!isValidString(tagline))
+    if (!isValidString(tagline))
       return failureJSONResponse(res, {
         message: `Please provide valid tagline`,
       });
@@ -196,26 +196,26 @@ exports.createAds = async (req, res, next) => {
       tagline,
       image
     } = req.body;
-console.log(req.body);
+    console.log(req.body);
     const userId = req.userId;
     const imageArr = [];
-    
-    
+
+
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path
 
-      productImages = await Media.create({ image: thumbnail });
+      productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
       imageArr.push(productImages._id);
 
     }
-  
+
 
     const dataObj = {
       isfeatured,
       status: status,
       ads_type,
       ads_info: {
-        category:{
+        category: {
           category_value,
           category_name,
         },
@@ -226,8 +226,8 @@ console.log(req.body);
         prefered_gender,
         service_from_date,
         transport_facilty,
-        expected_salary_amount:{
-        amount,
+        expected_salary_amount: {
+          amount,
         },
         expected_salary_rate,
         description,
@@ -238,7 +238,7 @@ console.log(req.body);
 
       userId: userId,
     };
-console.log(dataObj,"vhebjvbdsgjvhbesdvgbedhcvwsehjcbsdbvjhyudsbvghr");
+    console.log(dataObj, "vhebjvbdsgjvhbesdvgbedhcvwsehjcbsdbvjhyudsbvghr");
     const newPost = await postbabyAd.create(dataObj);
 
     const Babysitter_Nannies = {};
@@ -270,9 +270,9 @@ console.log(dataObj,"vhebjvbdsgjvhbesdvgbedhcvwsehjcbsdbvjhyudsbvghr");
 exports.editAds = async (req, res, next) => {
   console.log(`kejhrjhyewgrjhew`);
   try {
-console.log(req.params);
+    console.log(req.params);
     const productId = req?.params?.productId;
-console.log(productId,"id dsso hai gi ja nhi ");
+    console.log(productId, "id dsso hai gi ja nhi ");
     const validate_id = await postbabyAd.findById(productId)
     if (!validate_id) {
       return failureJSONResponse(res, {
@@ -312,7 +312,7 @@ console.log(productId,"id dsso hai gi ja nhi ");
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path
 
-      productImages = await Media.create({ image: thumbnail });
+      productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
       imageArr.push(productImages._id);
 
     }
@@ -323,12 +323,12 @@ console.log(productId,"id dsso hai gi ja nhi ");
       adsInfoObj = {},
       listerBasicInfoObj = {};
     let category = {}
-    let  expected_salary_amount= {}
+    let expected_salary_amount = {}
     if (status) dataObj.status = status;
     if (ads_type) dataObj.ads_type = ads_type;
     if (category_name) category.category_name = category_name;
     if (category_value) category.category_value = category_value;
-    if(category_name)adsInfoObj.category=category
+    if (category_name) adsInfoObj.category = category
     if (care_service) adsInfoObj.care_service = care_service;
     if (work_type) adsInfoObj.work_type = work_type;
     if (age_group) adsInfoObj.age_group = age_group;
@@ -336,10 +336,10 @@ console.log(productId,"id dsso hai gi ja nhi ");
     if (prefered_gender) adsInfoObj.prefered_gender = prefered_gender;
     if (service_from_date) adsInfoObj.service_from_date = service_from_date;
     if (transport_facilty) adsInfoObj.transport_facilty = transport_facilty;
-    if(amount)expected_salary_amount.amount =  amount;
-    if(tagline) adsInfoObj.tagline=tagline;
-    if(amount) adsInfoObj.expected_salary_amount= expected_salary_amount;
-    if(expected_salary_rate) adsInfoObj.expected_salary_rate =expected_salary_rate
+    if (amount) expected_salary_amount.amount = amount;
+    if (tagline) adsInfoObj.tagline = tagline;
+    if (amount) adsInfoObj.expected_salary_amount = expected_salary_amount;
+    if (expected_salary_rate) adsInfoObj.expected_salary_rate = expected_salary_rate
     if (description) adsInfoObj.description = description;
     if (location) adsInfoObj.location = location;
 
@@ -361,12 +361,12 @@ console.log(productId,"id dsso hai gi ja nhi ");
         address_info,
         primary_mobile_number: {
           country_code: +91,
-          primary_phone_number:primary_phone_number,
+          primary_phone_number: primary_phone_number,
 
         },
         secondary_mobile_number: {
           country_code: +91,
-          secondary_phone_number:secondary_phone_number,
+          secondary_phone_number: secondary_phone_number,
 
         },
         preferable_contact_mode: preferable_contact_mode,

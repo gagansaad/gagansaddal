@@ -25,7 +25,7 @@ const storage = new CloudinaryStorage({
 });
 
 
-const upload = multer({ storage: storage, });
+const upload = multer({ storage: storage,limits: { fileSize: 1024 * 1024 * 5 } });
 
 function validateImage(req, res, next) {
 
@@ -44,15 +44,18 @@ router.get(`/dynamics-data`,
     controllers.getDnymicsData
 );
 
-router.post(`/create-service`, upload.array('photos', 10),
+router.post(`/create-service`, upload.fields([
+    { name: 'photos', maxCount: 10 },
+    { name: 'accreditation_document', maxCount: 5 }]),
     authMiddleware.ensureUserLoggedIn,
     controllers.validatebizAdsData,
     controllers.createbizAds
 )
 
 
-router.patch(`/edit/:bizId`,
-    upload.array('photos', 10),
+router.patch(`/edit/:bizId`,upload.fields([
+    { name: 'photos', maxCount: 10 },
+    { name: 'accreditation_document', maxCount: 5 }]),
     authMiddleware.ensureUserLoggedIn,
     controllers.validatebizAdsData,
     controllers.validateListerBasicinfo,

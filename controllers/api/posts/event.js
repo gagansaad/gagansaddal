@@ -27,8 +27,8 @@ exports.getDnymicsData = async (req, res, next) => {
     type: ["Venue Based Event", "Live Event", "Both Venue based and Live Streaming Event"],
     category: ["Sport event", "Festival", "Religious", "Political gatherings", "Community Gatherings", "Music concert", "Night party", "Health care advisor", "Education", "Training", "Food & drink", "Fund Raising", "Candlelight Vigil", "Drama", "Theatre", "Movie", "Wedding", "Funneral", "Anniversary", "Welcome", "Farewell", "Markets & Auction", "Spritual", "Valentines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
     platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"],
-    recurring_type:["Daily", "Weekly", "Monthly"],
-    time_zone:[
+    recurring_type: ["Daily", "Weekly", "Monthly"],
+    time_zone: [
       'America/Santiago',
       'America/Punta_Arenas',
       'America/Bogota',
@@ -44,7 +44,7 @@ exports.getDnymicsData = async (req, res, next) => {
       'America/New_York',
       'America/Los_Angeles',
     ],
-    
+
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -87,7 +87,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       tagline
 
     } = req.body;
-    console.log(req.body,"is validate ki body");
+    console.log(req.body, "is validate ki body");
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     // else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
@@ -100,51 +100,51 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid type`,
       });
-      if (!isValidString(category))
+    if (!isValidString(category))
       return failureJSONResponse(res, {
         message: `Please provide valid category`,
       });
- 
+
     if (!isValidString(details))
       return failureJSONResponse(res, {
         message: "Please provide valid details",
       });
-      
-      if (venue_name && (!isValidString(venue_name)))
+
+    if (venue_name && (!isValidString(venue_name)))
       return failureJSONResponse(res, {
         message: `Please provide valid  venue name`,
       });
-      if (live_platform && (!isValidString(live_platform)))
+    if (live_platform && (!isValidString(live_platform)))
       return failureJSONResponse(res, {
         message: `Please provide valid live platform`,
       });
-      if (!isValidString(time_zone))
+    if (!isValidString(time_zone))
       return failureJSONResponse(res, {
         message: "Please provide valid time zone",
       });
-      if (!isValidString(start_date))
+    if (!isValidString(start_date))
       return failureJSONResponse(res, {
         message: "Please provide valid start date",
       });
-      if (!isValidString(end_date))
+    if (!isValidString(end_date))
       return failureJSONResponse(res, {
         message: "Please provide valid end date",
       });
-      if ((new Date(start_date) > new Date(end_date)) || (new Date(end_date) < new Date(start_date))) {
-        return failureJSONResponse(res, {
-          message: "End date should be greater than Start date",
-        });
+    if ((new Date(start_date) > new Date(end_date)) || (new Date(end_date) < new Date(start_date))) {
+      return failureJSONResponse(res, {
+        message: "End date should be greater than Start date",
+      });
     }
-      if (!isValidString(start_time))
+    if (!isValidString(start_time))
       return failureJSONResponse(res, {
         message: "Please provide valid start time",
       });
-      if (!isValidString(end_time))
+    if (!isValidString(end_time))
       return failureJSONResponse(res, {
         message: "Please provide valid end time",
       });
-      
-      if (!isValidString(recurring_type))
+
+    if (!isValidString(recurring_type))
       return failureJSONResponse(res, {
         message: "Please provide valid recurring type",
       });
@@ -152,9 +152,9 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid regular ticket price`,
       });
-  if(!ticket_price) return failureJSONResponse(res, {
-    message: `please provide valid regular ticket price`,
-  });
+    if (!ticket_price) return failureJSONResponse(res, {
+      message: `please provide valid regular ticket price`,
+    });
     if (isNaN(Number(vip_ticket)))
       return failureJSONResponse(res, {
         message: `please provide valid no. of vip ticket`,
@@ -173,12 +173,12 @@ exports.validateEventAdsData = async (req, res, next) => {
     if (zoom_platform && (!isValidPlink(zoom_platform))) return failureJSONResponse(res, { message: `please provide valid zoom link` });
     if (tiktok_platform && (!isValidPlink(tiktok_platform))) return failureJSONResponse(res, { message: `please provide valid tiktok link` });
     if (other_platform && (!isValidPlink(other_platform))) return failureJSONResponse(res, { message: `please provide valid other link` });
-     
+
     // if (link&&(!isValidlink(link)))
     //   return failureJSONResponse(res, { message: `please provide valid link` });
     if (!isValidString(location))
       return failureJSONResponse(res, { message: `please provide valid location` });
-      if (!isValidString(tagline))
+    if (!isValidString(tagline))
       return failureJSONResponse(res, {
         message: `Please provide us tagline`,
       });
@@ -200,16 +200,16 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hosted_by,
 
       emailAddress,
-      
+
     } = req.body;
-    if (organization_name&&(!isValidString(organization_name)))
-    return failureJSONResponse(res, {
-      message: `Please provide valid organization name`,
-    });
-    if (hosted_by&&(!isValidString(hosted_by)))
+    if (organization_name && (!isValidString(organization_name)))
       return failureJSONResponse(res, {
-      message: `Please provide valid hosted by`,
-    });
+        message: `Please provide valid organization name`,
+      });
+    if (hosted_by && (!isValidString(hosted_by)))
+      return failureJSONResponse(res, {
+        message: `Please provide valid hosted by`,
+      });
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
@@ -287,43 +287,43 @@ exports.createEventAds = async (req, res, next) => {
     } = req.body;
     const livePlatform = ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"];
     let platforms = [];
-    if(facebook_platform){
+    if (facebook_platform) {
       platforms.push({
-        live_platform : livePlatform[0],
-        platform_link : facebook_platform
+        live_platform: livePlatform[0],
+        platform_link: facebook_platform
       })
     }
-    if(instagram_platform){
+    if (instagram_platform) {
       platforms.push({
-        live_platform : livePlatform[1],
-        platform_link : instagram_platform
+        live_platform: livePlatform[1],
+        platform_link: instagram_platform
       })
     }
-    if(zoom_platform){
+    if (zoom_platform) {
       platforms.push({
-        live_platform : livePlatform[2],
-        platform_link : zoom_platform
+        live_platform: livePlatform[2],
+        platform_link: zoom_platform
       })
     }
-    if(youtube_platform){
+    if (youtube_platform) {
       platforms.push({
-        live_platform : livePlatform[3],
-        platform_link : youtube_platform
+        live_platform: livePlatform[3],
+        platform_link: youtube_platform
       })
     }
-    if(tiktok_platform){
+    if (tiktok_platform) {
       platforms.push({
-        live_platform : livePlatform[4],
-        platform_link : tiktok_platform
+        live_platform: livePlatform[4],
+        platform_link: tiktok_platform
       })
     }
-    if(other_platform){
+    if (other_platform) {
       platforms.push({
-        live_platform : livePlatform[5],
-        platform_link : other_platform
+        live_platform: livePlatform[5],
+        platform_link: other_platform
       })
     }
-   
+
     const userId = req.userId;
 
     const imageArr = [];
@@ -331,7 +331,7 @@ exports.createEventAds = async (req, res, next) => {
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path
 
-      productImages = await Media.create({ image: thumbnail });
+      productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
       imageArr.push(productImages._id);
 
     }
@@ -347,7 +347,7 @@ exports.createEventAds = async (req, res, next) => {
         details,
         ticket_price,
         vip_ticket_price,
-        no_of_ticket:{
+        no_of_ticket: {
           regular_ticket,
           vip_ticket,
         },
@@ -355,14 +355,16 @@ exports.createEventAds = async (req, res, next) => {
         image: imageArr,
         location,
         venue_name,
-        date_time:{time_zone,
-        start_date,
-        end_date,
-        start_time,
-        end_time,},
+        date_time: {
+          time_zone,
+          start_date,
+          end_date,
+          start_time,
+          end_time,
+        },
         live_event: platforms,
         video
-        
+
       },
       userId: userId,
     };
@@ -395,7 +397,7 @@ exports.createEventAds = async (req, res, next) => {
 ///--------------------------Edit event-----------------------------///
 
 exports.editEventAds = async (req, res, next) => {
-console.log(req.body,"body hai je body");
+  console.log(req.body, "body hai je body");
   try {
 
     const eventId = req?.params?.eventId;
@@ -454,71 +456,71 @@ console.log(req.body,"body hai je body");
     } = req.body;
     const livePlatform = ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"];
     let platforms = [];
-    if(facebook_platform){
+    if (facebook_platform) {
       platforms.push({
-        live_platform : livePlatform[0],
-        platform_link : facebook_platform
+        live_platform: livePlatform[0],
+        platform_link: facebook_platform
       })
     }
-    if(instagram_platform){
+    if (instagram_platform) {
       platforms.push({
-        live_platform : livePlatform[1],  
-        platform_link : instagram_platform
+        live_platform: livePlatform[1],
+        platform_link: instagram_platform
       })
     }
-    if(zoom_platform){
+    if (zoom_platform) {
       platforms.push({
-        live_platform : livePlatform[2],
-        platform_link : zoom_platform
+        live_platform: livePlatform[2],
+        platform_link: zoom_platform
       })
     }
-    if(youtube_platform){
+    if (youtube_platform) {
       platforms.push({
-        live_platform : livePlatform[3],
-        platform_link : youtube_platform
+        live_platform: livePlatform[3],
+        platform_link: youtube_platform
       })
     }
-    if(tiktok_platform){
+    if (tiktok_platform) {
       platforms.push({
-        live_platform : livePlatform[4],
-        platform_link : tiktok_platform
+        live_platform: livePlatform[4],
+        platform_link: tiktok_platform
       })
     }
-    if(other_platform){
+    if (other_platform) {
       platforms.push({
-        live_platform : livePlatform[5],
-        platform_link : other_platform
+        live_platform: livePlatform[5],
+        platform_link: other_platform
       })
     }
-   
+
 
     let imageArr = []
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path
 
-      productImages = await Media.create({ image: thumbnail });
+      productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
       imageArr.push(productImages._id);
 
     }
     const dataObj = {},
       adsInfoObj = {},
-   
+
       listerBasicInfoObj = {};
-      let no_of_ticket={}
-      let date_time ={}
-      let my_phone = false;
-      let my_email = false;
-      if(hide_my_phone == "true"){
-          my_phone = true
-      }else if(hide_my_phone == 'false'){
-          my_phone = false
-      }
-      
-      if(hide_my_email == "true"){
-          my_email = true
-      }else if(hide_my_email == 'false'){
-          my_email = false
-      }
+    let no_of_ticket = {}
+    let date_time = {}
+    let my_phone = false;
+    let my_email = false;
+    if (hide_my_phone == "true") {
+      my_phone = true
+    } else if (hide_my_phone == 'false') {
+      my_phone = false
+    }
+
+    if (hide_my_email == "true") {
+      my_email = true
+    } else if (hide_my_email == 'false') {
+      my_email = false
+    }
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
@@ -531,13 +533,13 @@ console.log(req.body,"body hai je body");
     if (end_date) date_time.end_date = end_date;
     if (start_time) date_time.start_time = start_time;
     if (end_time) date_time.end_time = end_time;
-    if (date_time)adsInfoObj.date_time=date_time;
+    if (date_time) adsInfoObj.date_time = date_time;
     if (recurring_type) adsInfoObj.recurring_type = recurring_type;
     if (venue_name) adsInfoObj.venue_name = venue_name;
     if (ticket_price) adsInfoObj.ticket_price = ticket_price;
-    if (vip_ticket)no_of_ticket.vip_ticket = vip_ticket;
-    if (regular_ticket)no_of_ticket.regular_ticket = regular_ticket;
-    if (no_of_ticket) adsInfoObj.no_of_ticket=no_of_ticket;
+    if (vip_ticket) no_of_ticket.vip_ticket = vip_ticket;
+    if (regular_ticket) no_of_ticket.regular_ticket = regular_ticket;
+    if (no_of_ticket) adsInfoObj.no_of_ticket = no_of_ticket;
     if (vip_ticket_price) adsInfoObj.vip_ticket_price = vip_ticket_price;
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (platforms.length) adsInfoObj.live_event = platforms;
@@ -555,16 +557,16 @@ console.log(req.body,"body hai je body");
         hosted_by,
         emailAddress,
         website_link,
-        hide_my_phone:my_phone,
-        hide_my_email:my_email,
+        hide_my_phone: my_phone,
+        hide_my_email: my_email,
         primary_mobile_number: {
           country_code: +91,
-          primary_phone_number:primary_phone_number,
+          primary_phone_number: primary_phone_number,
 
         },
         secondary_mobile_number: {
           country_code: +91,
-          secondary_phone_number:secondary_phone_number,
+          secondary_phone_number: secondary_phone_number,
 
         },
       },
