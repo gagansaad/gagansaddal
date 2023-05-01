@@ -288,7 +288,7 @@ exports.createbizAds = async (req, res, next) => {
 
     if (req.files.photos) {
       for (var i = 0; i < req.files.photos.length; i++) {
-
+console.log(req.files.photos);
 
         if (req.files.photos[i].fieldname === `photos`) {
           let type_of_file = req.files.photos[i].mimetype;
