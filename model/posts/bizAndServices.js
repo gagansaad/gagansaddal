@@ -35,80 +35,92 @@ const bizAndServices = new mongoose.Schema({
        
         categories: {
             ...defaultStringConfig,
-            // required: true
+            required: true
         },
-        sub_category: {
+        sub_categories: {
             ...defaultStringConfig,
-            // required: true
+            required: true
         },
         business_name: {
             ...defaultStringConfig,
-            // required: true
+            required: true
         },
 
         tagline: {
             ...defaultStringConfig,
-            // required: true
+            required: true
         },
         experience:{
             ...defaultStringConfig,
-            // required: true
+            required: true
         },
         working_hours:{
             type: [{is_status:Boolean,is_24_hour:Boolean,day_name: String, open_at: String, close_at: String}],
         },
         business_location: {
             ...defaultStringConfig,
-            // required: true
+            required: true
         },
-        business_service:{
-            ...defaultStringConfig,
-            // required: true
-        },
+        // business_service:{
+        //     ...defaultStringConfig,
+        //     // required: true
+        // },
         accreditation_file: {
             accreditation_name:[{
-
+                ...defaultStringConfig,
             }],
         accreditation_files:[{
                 type: mongoose.Schema.Types.ObjectId,
                 ref: `media`,
             }]
         },
-        price: {
-            type: Number,
-            // required: true
-        },
+        // price: {
+        //     type: Number,
+        //     // required: true
+        // },
         descriptions: {
             ...defaultStringConfig,
-            // required: true
+            required: true
         },
-        Additional_info: {
-            ...defaultStringConfig,
-            // required: true
-        },
+        // Additional_info: {
+        //     ...defaultStringConfig,
+        //     // required: true
+        // },
         image: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: `media`,
         }],
-
-    },
-    listerBasicInfo: {
-        name: defaultStringConfig,
-        emailAddress: defaultStringConfig,
-        mobileNumber: {
-            countryCode: defaultStringConfig,
-            phoneNumber: defaultStringConfig
-        },
-
-        location: defaultStringConfig,
-        hideAddress: defaultBooleanConfig,
-        addressInfo: defaultStringConfig,
-        preferableModeContact: {
-            type: Number,
-            enum: [1, 2, 3]
+        video:{
+            ...defaultStringConfig,
+            required:true,
         }
 
-    }
+    },
+    lister_basic_info: {
+        name: defaultStringConfig,
+        email_address: defaultStringConfig,
+        website_link:defaultStringConfig,
+        primary_mobile_number: {
+            country_code: defaultStringConfig,
+            primary_phone_number:defaultStringConfig,
+  
+          },
+          secondary_mobile_number: {
+            country_code: defaultStringConfig,
+            secondary_phone_number:defaultStringConfig,
+  
+          },
+        hide_my_email: defaultBooleanConfig,
+        hide_my_phone: defaultBooleanConfig,
+        preferable_contact_mode: {
+            type: Number,
+            enum: [1, 2, 3]
+            //   1:  Phone Number
+            //   2:  email Address
+            //   3:
+        }
+
+    },
 
 }, { timestamps: true });
 

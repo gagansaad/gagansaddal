@@ -15,15 +15,16 @@ const mongoose = require("mongoose"),
     isValidDate,
     isValidEmailAddress,
     isValidIndianMobileNumber,
+    isValidUrl,
   } = require(`../../../utils/validators`);
 
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
-    categories: ["Business & Office", "Childcare", "Clothing", "Computers & Telecoms", "Entertainment", "Finance & Legal", "Food & Drink", "Goods Suppliers & Retailers", "Health & Beauty", "Automotive Services", "Property Maintenance and Construction", "Transport", "Travel & Tourism", "Tuition & Classes", "Weddings", "Funneral Services", "Photography & Video", "Pets", "Other"],
+    categories:       ["Business & Office", "Childcare", "Clothing", "Computers & Telecoms", "Entertainment", "Finance & Legal", "Food & Drink", "Goods Suppliers & Retailers", "Health & Beauty", "Automotive Services", "Property Maintenance and Construction", "Transport", "Travel & Tourism", "Tuition & Classes", "Weddings", "Funneral Services", "Photography & Video", "Pets", "Other"],
     business_Office: ["Accounting", "Advertising Agencies", "Courier services", "Funeral directors", "Tax Service", "Insurance Agencies", "Translation Service", "Realestate", "Realtor", "Marketing", "Printing", "Recuriment", "Shipping", "Shredding service", "Sign makers", "Storage", "Writing and litterature", "Other bussines and office service"],
-    childcare: ["Daycare", "Kindergarton", "Childeren's activity", "Child care agencies", "Nursery school", "Parent support", "Other childeren service"],
-    clothing: ["Dry cleaning and loundery", "Fashion designers", "Printing", "Seamstress/tailors", "Stylists"],
+    childcare:         ["Daycare", "Kindergarton", "Childeren's activity", "Child care agencies", "Nursery school", "Parent support", "Other childeren service"],
+    clothing:            ["Dry cleaning and loundery", "Fashion designers", "Printing", "Seamstress/tailors", "Stylists"],
     computers_Telecoms: ["Computer network", "Computer repair", "Computer services", "Computer support", "Online content providers", "Phone and tablet repair", "Software application development", "Telecom and internet service provider", "Web development", "Web service", "Website design", "Other computer service"],
     entertainment: ["Bands and  musicians", "Cake makers", "Catering", "DJ and disco hire", "Cultural music", "Entertainers", "Venues and nightclubs", "Other entertainments"],
     finance_Legal: ["Loan Service", "Financial Advice", "Insolvency Practitioners", "Insurance", "Legal Service", "Money transfer", "Mortgage brokers", "Solicitors and conveyancing", "Visa and immigration", "Other finance and legal Service"],
@@ -69,12 +70,13 @@ exports.validatebizAdsData = async (req, res, next) => {
       business_name,
       tagline,
       experience,
-      working_hours,
+      // working_hours,
       business_location,
-      price,
+      // price,
       descriptions,
-      Additional_info,
+     
       image,
+      video_link
     } = req.body;
 
     if (
@@ -93,34 +95,38 @@ exports.validatebizAdsData = async (req, res, next) => {
         message: `Please provide valid ads type`,
       });
 
-    // if (!isValidString(categories))
-    //   return failureJSONResponse(res, {
-    //     message: `Please provide valid Category`,
-    //   });
-    // if (!isValidString(business_name))
-    //   return failureJSONResponse(res, {
-    //     message: `Please provide valid business_name`,
-    //   });
-    // if (!isValidString(tagline))
-    //   return failureJSONResponse(res, {
-    //     message: `Please provide valid tagline`,
-    //   });
-    // if (!isValidString(business_location))
-    //   return failureJSONResponse(res, {
-    //     message: "Pleae provide us your buisness location",
-    //   });
-    // if (!isValidString(descriptions))
-    //   return failureJSONResponse(res, {
-    //     message: `please provide valid Description`,
-    //   });
+    if (!isValidString(categories))
+      return failureJSONResponse(res, {
+        message: `Please provide valid Category`,
+      });
+    if (!isValidString(business_name))
+      return failureJSONResponse(res, {
+        message: `Please provide valid business_name`,
+      });
+    if (!isValidString(tagline))
+      return failureJSONResponse(res, {
+        message: `Please provide valid tagline`,
+      });
+    if (!isValidString(business_location))
+      return failureJSONResponse(res, {
+        message: "Pleae provide us your buisness location",
+      });
+    if (!isValidString(descriptions))
+      return failureJSONResponse(res, {
+        message: `please provide valid Description`,
+      });
     // // if (isNaN(Number(price)))
     // //   return failureJSONResponse(res, {
     // //     message: `Please provide valid price`,
     // //   });
-    // if (!isValidString(Additional_info))
-    //   return failureJSONResponse(res, {
-    //     message: `Please provide us Additional_info`,
-    //   });
+    if (!isValidString(experience))
+      return failureJSONResponse(res, {
+        message: `Please provide us experience`,
+      });
+      if (!isValidUrl(video_link)) 
+      return failureJSONResponse(res, {
+        message: `Please provide valid video link`,
+      });
 
     return next();
   } catch (err) {
@@ -131,7 +137,7 @@ exports.validatebizAdsData = async (req, res, next) => {
 exports.validateListerBasicinfo = async (req, res, next) => {
   try {
     const {
-      emailAddress,
+      email_address,
       // phoneNumber,
       // countryCode,
       hideAddress,
@@ -189,13 +195,12 @@ exports.createbizAds = async (req, res, next) => {
       experience,
       tagline,
       business_location,
-      business_service,
       accreditation_name,
       accreditation_files,
-      price,
+      // price,
       descriptions,
-      Additional_info,
       image,
+      video_link,
     } = req.body;
 
     let work_hour = [];
@@ -329,10 +334,8 @@ exports.createbizAds = async (req, res, next) => {
         working_hours: work_hour,
         tagline,
         business_location,
-        business_service,
-        price,
+        // price,
         descriptions,
-        Additional_info,
         image: imageArr,
         accreditation_file: {
           accreditation_name,
@@ -402,19 +405,21 @@ exports.editbizAds = async (req, res, next) => {
       business_name,
       tagline,
       business_location,
-      price,
+      // price,
       descriptions,
-      Additional_info,
+    
       image,
+      video_link,
       accreditation_name,
       accreditation_files,
       location,
       name,
-      emailAddress,
-      phoneNumber,
-      hideAddress,
-      addressInfo,
-      preferableModeContact,
+      email_address,
+      primary_phone_number,
+      secondary_phone_number,
+      website_link,
+      hide_my_phone,
+      hide_my_email,
     } = req.body;
 
     let work_hour = [];
@@ -538,7 +543,19 @@ exports.editbizAds = async (req, res, next) => {
     const dataObj = {},
       adsInfoObj = {},
       accreditation_data = {};
-
+      let my_phone = false;
+      let my_email = false;
+      if (hide_my_phone == "true") {
+          my_phone = true
+      } else if (hide_my_phone == 'false') {
+          my_phone = false
+      }
+  
+      if (hide_my_email == "true") {
+          my_email = true
+      } else if (hide_my_email == 'false') {
+          my_email = false
+      }
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
@@ -547,9 +564,9 @@ exports.editbizAds = async (req, res, next) => {
     if (business_name) adsInfoObj.business_name = business_name;
     if (tagline) adsInfoObj.tagline = tagline;
     if (business_location) adsInfoObj.business_location = business_location;
-    if (price) adsInfoObj.price = price;
+    // if (price) adsInfoObj.price = price;
     if (descriptions) adsInfoObj.descriptions = descriptions;
-    if (Additional_info) adsInfoObj.Additional_info = Additional_info;
+  
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (accreditationArr.length) accreditation_data.accreditation_files = accreditationArr;
     if (accreditation_name) accreditation_data.accreditation_name = accreditation_name;
@@ -561,19 +578,25 @@ exports.editbizAds = async (req, res, next) => {
 
     const dataObjq = {
       adsInfo: adsInfoObj,
-      listerBasicInfo: {
-        location,
+      lister_basic_info: {
         name,
-        emailAddress,
-        phoneNumber,
-        hideAddress,
-        mobileNumber: {
-          countryCode: +91,
-          phoneNumber: phoneNumber,
+        email_address,
+        website_link,
+        hide_my_phone: my_phone,
+        hide_my_email: my_email,
+        location,
+        primary_mobile_number: {
+            country_code: +91,
+            primary_phone_number: primary_phone_number,
+
         },
-        addressInfo,
-        preferableModeContact: preferableModeContact,
-      },
+        secondary_mobile_number: {
+            country_code: +91,
+            secondary_phone_number: secondary_phone_number,
+
+        },
+
+    },
     };
     const updatebiz = await postbizAndServicesAd.findByIdAndUpdate(
       { _id: bizId },
