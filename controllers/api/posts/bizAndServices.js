@@ -292,7 +292,7 @@ console.log(req.files.photos);
 
         if (req.files.photos[i].fieldname === `photos`) {
           let type_of_file = req.files.photos[i].mimetype;
-          if (type_of_file === 'image/png' || type_of_file === 'image/jpeg' ||  type_of_file === 'image/jpg' ) {
+          if (type_of_file === 'image/png' || type_of_file === 'application/octet-stream' ||  type_of_file === 'image/jpg' || type_of_file === 'image/jpg' ) {
             var thumbnail = req.files.photos[i].path;
             productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
             imageArr.push(productImages._id);
