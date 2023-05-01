@@ -74,7 +74,8 @@ exports.validatebizAdsData = async (req, res, next) => {
       business_location,
       // price,
       descriptions,
-     
+      accreditation_files,
+      accreditation_name,
       image,
       video_link
     } = req.body;
@@ -107,6 +108,9 @@ exports.validatebizAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid business_name`,
       });
+    // if(req.files.accreditation_document && !accreditation_name)return failureJSONResponse(res, {
+    //   message: `Please provide accreditation file name`,
+    // });
     if (!isValidString(tagline))
       return failureJSONResponse(res, {
         message: `Please provide valid tagline`,
@@ -309,16 +313,16 @@ console.log(req.files.photos);
       for (var i = 0; i < req.files.accreditation_document.length; i++) {
         if (req.files.accreditation_document[i].fieldname === `accreditation_document`) {
           let type_of_files = req.files.accreditation_document[i].mimetype;
-          if (type_of_files === 'application/pdf' || type_of_files === 'image/jpg' ||  type_of_file === 'application/octet-stream' || type_of_files === 'image/jpeg') {
+          // if (type_of_files === 'application/pdf' || type_of_files === 'image/jpg' ||  type_of_file === 'application/octet-stream' || type_of_files === 'image/jpeg') {
             var doc = req.files.accreditation_document[i].path;
             productDoc = await Media.create({ url: doc, url_type: type_of_files });
             console.log(productDoc, "hdhcbdhh");
             accreditationArr.push(productDoc._id);
-          } else {
-            return failureJSONResponse(res, {
-              message: `Please provide only pdf,png`,
-            });
-          }
+          // } else {
+          //   return failureJSONResponse(res, {
+          //     message: `Please provide only pdf,png`,
+          //   });
+          // }
         }
       }
 
@@ -510,15 +514,15 @@ exports.editbizAds = async (req, res, next) => {
 
         if (req.files.photos[i].fieldname === `photos`) {
           let type_of_file = req.files.photos[i].mimetype;
-          if (type_of_file === 'image/png' || type_of_file === 'image/jpeg') {
+          // if (type_of_file === 'image/png' || type_of_file === 'image/jpeg') {
             var thumbnail = req.files.photos[i].path;
             productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
             imageArr.push(productImages._id);
-          } else {
-            return failureJSONResponse(res, {
-              message: `Please provide only png,jpg`,
-            });
-          }
+          // } else {
+          //   return failureJSONResponse(res, {
+          //     message: `Please provide only png,jpg`,
+          //   });
+          // }
         }
       }
     }
