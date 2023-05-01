@@ -298,7 +298,7 @@ console.log(req.files.photos);
           let type_of_file = req.files.photos[i].mimetype;
           if (type_of_file === 'image/png' || type_of_file === 'application/octet-stream' ||  type_of_file === 'image/jpg' || type_of_file === 'image/jpg' ) {
             var thumbnail = req.files.photos[i].path;
-            productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
+            productImages = await Media.create({ url: thumbnail });
             imageArr.push(productImages._id);
           } else {
             return failureJSONResponse(res, {

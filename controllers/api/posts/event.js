@@ -331,7 +331,7 @@ exports.createEventAds = async (req, res, next) => {
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path
 
-      productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
+      productImages = await Media.create({ url: thumbnail});
       imageArr.push(productImages._id);
 
     }
@@ -498,7 +498,7 @@ exports.editEventAds = async (req, res, next) => {
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path
 
-      productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
+      productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
 
     }
