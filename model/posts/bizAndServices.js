@@ -90,7 +90,7 @@ const bizAndServices = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: `media`,
         }],
-        video:{
+        video_link:{
             ...defaultStringConfig,
             required:true,
         }

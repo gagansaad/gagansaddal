@@ -97,7 +97,11 @@ exports.validatebizAdsData = async (req, res, next) => {
 
     if (!isValidString(categories))
       return failureJSONResponse(res, {
-        message: `Please provide valid Category`,
+        message: `Please provide valid category`,
+      });
+      if (!isValidString(sub_categories))
+      return failureJSONResponse(res, {
+        message: `Please provide valid sub category`,
       });
     if (!isValidString(business_name))
       return failureJSONResponse(res, {
@@ -156,7 +160,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
     // if (preferableModeContact && isNaN(Number(preferableModeContact))) {
     //   return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
     // }
-    if (emailAddress && !isValidEmailAddress(emailAddress)) {
+    if (email_address && !isValidEmailAddress(email_address)) {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
@@ -337,6 +341,7 @@ exports.createbizAds = async (req, res, next) => {
         // price,
         descriptions,
         image: imageArr,
+        video_link,
         accreditation_file: {
           accreditation_name,
           accreditation_files: accreditationArr
@@ -400,18 +405,18 @@ exports.editbizAds = async (req, res, next) => {
       status,
       adsType,
 
-      sub_categories,
       categories,
+      sub_categories,
       business_name,
+      experience,
       tagline,
       business_location,
-      // price,
-      descriptions,
-    
-      image,
-      video_link,
       accreditation_name,
       accreditation_files,
+      // price,
+      descriptions,
+      image,
+      video_link,
       location,
       name,
       email_address,
@@ -564,10 +569,11 @@ exports.editbizAds = async (req, res, next) => {
     if (business_name) adsInfoObj.business_name = business_name;
     if (tagline) adsInfoObj.tagline = tagline;
     if (business_location) adsInfoObj.business_location = business_location;
-    // if (price) adsInfoObj.price = price;
+     if (experience) adsInfoObj.experience = experience;
     if (descriptions) adsInfoObj.descriptions = descriptions;
   
     if (imageArr.length) adsInfoObj.image = imageArr;
+    if (video_link) adsInfoObj.video_link = video_link;
     if (accreditationArr.length) accreditation_data.accreditation_files = accreditationArr;
     if (accreditation_name) accreditation_data.accreditation_name = accreditation_name;
     if (accreditation_files) adsInfoObj.accreditation_file = accreditation_data;
