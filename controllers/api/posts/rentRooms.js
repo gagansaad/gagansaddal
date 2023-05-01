@@ -392,7 +392,7 @@ exports.editRoomRentAds = async (req, res, next) => {
     } = req.body;
 
     const imageArr = [];
-
+let productImages;
     for (var i = 0; i < req.files.length; i++) {
         var thumbnail = req.files[i].path
 
@@ -400,8 +400,8 @@ exports.editRoomRentAds = async (req, res, next) => {
         imageArr.push(productImages._id);
 
     }
-
-
+console.log(productImages);
+console.log(imageArr);
     const dataObj = {},
         adsInfoObj = {},
         listerBasicInfoObj = {};
