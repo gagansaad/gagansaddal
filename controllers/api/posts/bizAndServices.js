@@ -20,13 +20,34 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
-    profession: [
-      "Local Professional - Individuals who offer services at customer doorstep (e.g., Plumber, Electrician)",
-      "Business Center / Local Retailer / Showroom - Customers visit provider’s location to access service (e.g., Beauty salon, Grocery store)",
-      "Brand - Customers are familiar with the brand of your service/product (e.g., Ethiopian Airlines).",
-      "Agent - A mediator between user and service providers (e.g., Real estate agent)",
-      "Other - Enter your profession",
-    ],
+    categories: ["Business & Office", "Childcare", "Clothing", "Computers & Telecoms", "Entertainment", "Finance & Legal", "Food & Drink", "Goods Suppliers & Retailers", "Health & Beauty", "Automotive Services", "Property Maintenance and Construction", "Transport", "Travel & Tourism", "Tuition & Classes", "Weddings", "Funneral Services", "Photography & Video", "Pets", "Other"],
+    business_Office: ["Accounting", "Advertising Agencies", "Courier services", "Funeral directors", "Tax Service", "Insurance Agencies", "Translation Service", "Realestate", "Realtor", "Marketing", "Printing", "Recuriment", "Shipping", "Shredding service", "Sign makers", "Storage", "Writing and litterature", "Other bussines and office service"],
+    childcare: ["Daycare", "Kindergarton", "Childeren's activity", "Child care agencies", "Nursery school", "Parent support", "Other childeren service"],
+    clothing: ["Dry cleaning and loundery", "Fashion designers", "Printing", "Seamstress/tailors", "Stylists"],
+    computers_Telecoms: ["Computer network", "Computer repair", "Computer services", "Computer support", "Online content providers", "Phone and tablet repair", "Software application development", "Telecom and internet service provider", "Web development", "Web service", "Website design", "Other computer service"],
+    entertainment: ["Bands and  musicians", "Cake makers", "Catering", "DJ and disco hire", "Cultural music", "Entertainers", "Venues and nightclubs", "Other entertainments"],
+    finance_Legal: ["Loan Service", "Financial Advice", "Insolvency Practitioners", "Insurance", "Legal Service", "Money transfer", "Mortgage brokers", "Solicitors and conveyancing", "Visa and immigration", "Other finance and legal Service"],
+    food_Drink: ["Bakery", "Bars and Restaurants", "Cafes", "Takeaways", "Other foods and drinks"],
+    suppliers_Retailers: ["Grocery Store", "Wholesale Distributors", "Accessories", "Bike shops", "Clotheing Stores", "Electrical", "Florists", "Footwear", "Health products", "Jewellers", "Mobile phone", "Office furnitures", "Home Furnitures", "other good and suppliers and retailers"],
+
+    health_Beauty: ["Alternative therapies", "Beauty treatments", "Chiropodists and podiatrists", "Dentists", "Doctors and Clinics", "Hair Salon", "Life coaching", "Makeup artist", "Massages", "Model and actors", "Nursing and care", "Opticians", "Personal trainers", "Pregnancy and child care", "Tatooing and piercing", "Other health and beauty services"],
+    automotive_Services: ["Body repair", "Car breakers", "Car servicing and repair", "Car valeting", "Car wash", "Garage and mechanic service", "MOT testing", "Tyer fitting", "Vehicle recovery service", "Windshield repair", "Other Automotive Services"],
+    maintenance_and_Construction: ["Cleaners", "Commercial proprerty agents", "Drain and pipe cleaning", "Lawn and Garden", "Housekeapers", "Interior design", "Heating and Air conditioning", "Plumbers", "Remodeling", "Electricians", "Satellite, cable and TV", "Security service", "architect", "Bathroom fitter", "Bedroom fitters", "Other Property Maintenance and Construction Services"],
+    transport: ["Trucking Serices", "Chauffeur & Limousine Hire", "Bus & Coach", "Other transport Services"],
+    travel_Tourism: ["Travel Agents", "Group Travel Coordinators", "Other travel and tourism"],
+    tuition_Classes: ["Academic", "Arts & Crafts", "Business", "Construction", "Cookery Classes", "Dance Classes", "Driving Lessons & Instructors", "Health & Fitness", "IT & Computing", "Language", "Music", "Other Classes"],
+    weddings: ["Cars & Transportation", "Catering & Services", "Dress & Suit Hire", "Entertainment", "Florists", "Hairdressers", "Hen & Stag Planners", "Honeymoons", "Marquee Hire", "Organisers & Planners", "Photography & Film", "Wedding & Reception Venues", "Weddings Abroad", "Other Wedding Services"],
+    funneral_Services: ["funneral_Services"],
+    photography_Video: ["photography_Video"],
+    pets: ["pets"],
+    other: ["other"],
+    // sub_categories: [
+    //   "Local sub_categoriesal - Individuals who offer services at customer doorstep (e.g., Plumber, Electrician)",
+    //   "Business Center / Local Retailer / Showroom - Customers visit provider’s location to access service (e.g., Beauty salon, Grocery store)",
+    //   "Brand - Customers are familiar with the brand of your service/product (e.g., Ethiopian Airlines).",
+    //   "Agent - A mediator between user and service providers (e.g., Real estate agent)",
+    //   "Other - Enter your sub_categories",
+    // ],
     preferableModeContact: [`Phone Number`, `Email`],
     buisness_experience: ["0-5 Years", "5-15 Years", "Above 15 Years"],
   };
@@ -43,7 +64,7 @@ exports.validatebizAdsData = async (req, res, next) => {
     const {
       status,
       adsType,
-      profession,
+      sub_categories,
       categories,
       business_name,
       tagline,
@@ -163,7 +184,7 @@ exports.createbizAds = async (req, res, next) => {
       status,
       adsType,
       categories,
-      profession,
+      sub_categories,
       business_name,
       experience,
       tagline,
@@ -255,44 +276,46 @@ exports.createbizAds = async (req, res, next) => {
 
     const imageArr = [];
     const accreditationArr = [];
-    
-    if(req.files.photos){
-    for (var i = 0; i < req.files.photos.length; i++) {
-       
-     
-      if (req.files.photos[i].fieldname === `photos`) {
-        let type_of_file = req.files.photos[i].mimetype;
-        if (type_of_file === 'image/png' || type_of_file === 'image/jpeg') {
-          var thumbnail = req.files.photos[i].path;
-          productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
-          imageArr.push(productImages._id);
-        } else {
-          return failureJSONResponse(res, {
-            message: `Please provide only png,jpg`,
-          });
-        }
-      } }}
-      if(req.files.accreditation_document){
-      
-      for (var i = 0; i < req.files.accreditation_document.length; i++) {
-      if (req.files.accreditation_document[i].fieldname === `accreditation_document`){
-        let type_of_files = req.files.accreditation_document[i].mimetype;
-        if (type_of_files === 'application/pdf' || type_of_files === 'image/jpg' || type_of_files === 'image/jpeg') {
-          var doc = req.files.accreditation_document[i].path;
-          productDoc = await Media.create({ url: doc, url_type: type_of_files });
-          console.log(productDoc,"hdhcbdhh");
-          accreditationArr.push(productDoc._id);
-        } else {
-          return failureJSONResponse(res, {
-            message: `Please provide only pdf,png`,
-          });
+
+    if (req.files.photos) {
+      for (var i = 0; i < req.files.photos.length; i++) {
+
+
+        if (req.files.photos[i].fieldname === `photos`) {
+          let type_of_file = req.files.photos[i].mimetype;
+          if (type_of_file === 'image/png' || type_of_file === 'image/jpeg') {
+            var thumbnail = req.files.photos[i].path;
+            productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
+            imageArr.push(productImages._id);
+          } else {
+            return failureJSONResponse(res, {
+              message: `Please provide only png,jpg`,
+            });
+          }
         }
       }
-      }
-     
     }
-    
-    console.log(work_hour.length,"dcdnjchnbjbc");
+    if (req.files.accreditation_document) {
+
+      for (var i = 0; i < req.files.accreditation_document.length; i++) {
+        if (req.files.accreditation_document[i].fieldname === `accreditation_document`) {
+          let type_of_files = req.files.accreditation_document[i].mimetype;
+          if (type_of_files === 'application/pdf' || type_of_files === 'image/jpg' || type_of_files === 'image/jpeg') {
+            var doc = req.files.accreditation_document[i].path;
+            productDoc = await Media.create({ url: doc, url_type: type_of_files });
+            console.log(productDoc, "hdhcbdhh");
+            accreditationArr.push(productDoc._id);
+          } else {
+            return failureJSONResponse(res, {
+              message: `Please provide only pdf,png`,
+            });
+          }
+        }
+      }
+
+    }
+
+    console.log(work_hour.length, "dcdnjchnbjbc");
 
     const dataObj = {
       isfeatured,
@@ -300,7 +323,7 @@ exports.createbizAds = async (req, res, next) => {
       adsType,
       adsInfo: {
         categories,
-        profession,
+        sub_categories,
         business_name,
         experience,
         working_hours: work_hour,
@@ -311,10 +334,10 @@ exports.createbizAds = async (req, res, next) => {
         descriptions,
         Additional_info,
         image: imageArr,
-        accreditation_file:{
-        accreditation_name,
-        accreditation_files:accreditationArr
-      }
+        accreditation_file: {
+          accreditation_name,
+          accreditation_files: accreditationArr
+        }
       },
 
       userId: userId,
@@ -374,7 +397,7 @@ exports.editbizAds = async (req, res, next) => {
       status,
       adsType,
 
-      profession,
+      sub_categories,
       categories,
       business_name,
       tagline,
@@ -404,7 +427,7 @@ exports.editbizAds = async (req, res, next) => {
       "Saturday",
       "Sunday",
     ];
-    
+
 
     for (i = 0; i <= days.length - 1; i++) {
       let monday = {
@@ -466,47 +489,49 @@ exports.editbizAds = async (req, res, next) => {
       work_hour.push(monday);
     }
 
-console.log(work_hour.length,"dcdnjchnbjbc");
+    console.log(work_hour.length, "dcdnjchnbjbc");
 
     const imageArr = [];
     const accreditationArr = [];
-    
-    if(req.files.photos){
-    for (var i = 0; i < req.files.photos.length; i++) {
-       
-     
-      if (req.files.photos[i].fieldname === `photos`) {
-        let type_of_file = req.files.photos[i].mimetype;
-        if (type_of_file === 'image/png' || type_of_file === 'image/jpeg') {
-          var thumbnail = req.files.photos[i].path;
-          productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
-          imageArr.push(productImages._id);
-        } else {
-          return failureJSONResponse(res, {
-            message: `Please provide only png,jpg`,
-          });
-        }
-      } }}
-      if(req.files.accreditation_document){
-      
-      for (var i = 0; i < req.files.accreditation_document.length; i++) {
-      if (req.files.accreditation_document[i].fieldname === `accreditation_document`){
-        let type_of_files = req.files.accreditation_document[i].mimetype;
-        if (type_of_files === 'application/pdf' || type_of_files === 'image/jpg' || type_of_files === 'image/jpeg') {
-          var doc = req.files.accreditation_document[i].path;
-          productDoc = await Media.create({ url: doc, url_type: type_of_files });
-          console.log(productDoc,"hdhcbdhh");
-          accreditationArr.push(productDoc._id);
-        } else {
-          return failureJSONResponse(res, {
-            message: `Please provide only pdf,png`,
-          });
+
+    if (req.files.photos) {
+      for (var i = 0; i < req.files.photos.length; i++) {
+
+
+        if (req.files.photos[i].fieldname === `photos`) {
+          let type_of_file = req.files.photos[i].mimetype;
+          if (type_of_file === 'image/png' || type_of_file === 'image/jpeg') {
+            var thumbnail = req.files.photos[i].path;
+            productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
+            imageArr.push(productImages._id);
+          } else {
+            return failureJSONResponse(res, {
+              message: `Please provide only png,jpg`,
+            });
+          }
         }
       }
-      }
-     
     }
-    
+    if (req.files.accreditation_document) {
+
+      for (var i = 0; i < req.files.accreditation_document.length; i++) {
+        if (req.files.accreditation_document[i].fieldname === `accreditation_document`) {
+          let type_of_files = req.files.accreditation_document[i].mimetype;
+          if (type_of_files === 'application/pdf' || type_of_files === 'image/jpg' || type_of_files === 'image/jpeg') {
+            var doc = req.files.accreditation_document[i].path;
+            productDoc = await Media.create({ url: doc, url_type: type_of_files });
+            console.log(productDoc, "hdhcbdhh");
+            accreditationArr.push(productDoc._id);
+          } else {
+            return failureJSONResponse(res, {
+              message: `Please provide only pdf,png`,
+            });
+          }
+        }
+      }
+
+    }
+
 
 
 
@@ -517,7 +542,7 @@ console.log(work_hour.length,"dcdnjchnbjbc");
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
-    if (profession) adsInfoObj.profession = profession;
+    if (sub_categories) adsInfoObj.sub_categories = sub_categories;
     if (categories) adsInfoObj.categories = categories;
     if (business_name) adsInfoObj.business_name = business_name;
     if (tagline) adsInfoObj.tagline = tagline;
@@ -526,9 +551,9 @@ console.log(work_hour.length,"dcdnjchnbjbc");
     if (descriptions) adsInfoObj.descriptions = descriptions;
     if (Additional_info) adsInfoObj.Additional_info = Additional_info;
     if (imageArr.length) adsInfoObj.image = imageArr;
-    if (accreditationArr.length)accreditation_data.accreditation_files = accreditationArr;
-    if (accreditation_name)accreditation_data.accreditation_name=accreditation_name;
-    if (accreditation_files)adsInfoObj.accreditation_file = accreditation_data;
+    if (accreditationArr.length) accreditation_data.accreditation_files = accreditationArr;
+    if (accreditation_name) accreditation_data.accreditation_name = accreditation_name;
+    if (accreditation_files) adsInfoObj.accreditation_file = accreditation_data;
     if (work_hour.length == 7) adsInfoObj.working_hours = work_hour;
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;

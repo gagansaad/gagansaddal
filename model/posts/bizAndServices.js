@@ -37,7 +37,7 @@ const bizAndServices = new mongoose.Schema({
             ...defaultStringConfig,
             // required: true
         },
-        profession: {
+        sub_category: {
             ...defaultStringConfig,
             // required: true
         },
