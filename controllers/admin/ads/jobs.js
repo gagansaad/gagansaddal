@@ -23,13 +23,13 @@ const mongoose = require("mongoose"),
 
 exports.fetchAll = async (req, res, next) => {
   try {
-    const isFeatured = req.query.isfeatured;
-    let dbQuery ={
-        status: 1
-    };
+    // const isFeatured = req.query.isfeatured;
+    // let dbQuery ={
+    //     status: 1
+    // };
 
-if(isFeatured) dbQuery.isfeatured = isFeatured;
-      let records = await postJobAd.find(dbQuery);
+// if(isFeatured) dbQuery.isfeatured = isFeatured;dbQuery
+      let records = await postJobAd.find();
       if (records) {
 
           return successJSONResponse(res, {
