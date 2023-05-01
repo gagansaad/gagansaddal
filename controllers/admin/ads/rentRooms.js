@@ -33,7 +33,7 @@ exports.fetchAll = async (req, res, next) => {
             return successJSONResponse(res, {
                 message: `success`,
                 total:Object.keys(records).length,
-                records,
+                records,    
                 status: 200,
             })
         } else {
