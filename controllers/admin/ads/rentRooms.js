@@ -22,12 +22,13 @@ exports.fetchAll = async (req, res, next) => {
     
     try {
         const isFeatured = req.query.isfeatured;
-        let dbQuery ={
-            status: 1
-        };
+        // let dbQuery ={
+        //     status: 
+        // };
 
-    if(isFeatured) dbQuery.isfeatured = isFeatured;
-        let records = await RoomRentsAds.find(dbQuery);
+    // if(isFeatured) dbQuery.isfeatured = isFeatured;
+    // dbQuery
+        let records = await RoomRentsAds.find();
         if (records) {
             return successJSONResponse(res, {
                 message: `success`,
