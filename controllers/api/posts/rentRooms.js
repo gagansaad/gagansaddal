@@ -393,15 +393,17 @@ exports.editRoomRentAds = async (req, res, next) => {
 
     const imageArr = [];
 let productImages;
+
+
     for (var i = 0; i < req.files.length; i++) {
         var thumbnail = req.files[i].path
 
         productImages = await Media.create({ url: thumbnail });
         imageArr.push(productImages._id);
-
+        console.log(productImages);
     }
-console.log(productImages);
-console.log(imageArr);
+console.log(productImages,"fvhfbbbbbbbbbbbvvbfhvfbhvbfhbvf");
+// console.log(imageArr.map());
     const dataObj = {},
         adsInfoObj = {},
         listerBasicInfoObj = {};
