@@ -23,7 +23,7 @@ const MobileNumberVerificationOTP = (mobile_number = NaN, name = ``, code) => {
             })
             .then(message => console.log(message.sid))
             .catch((error) => {
-                // console.log(`dfsfds`)
+                // console.log(error)
                 console.log('something went wrong1!');
 
             });

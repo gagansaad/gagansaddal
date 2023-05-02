@@ -8,7 +8,7 @@ const router = require(`express`).Router(),
 
 
 router.get(`/all-ads`,
-authMiddleware.ensureUserLoggedIn,
+// authMiddleware.ensureUserLoggedIn,
     controllers.fetchAll
 );
 

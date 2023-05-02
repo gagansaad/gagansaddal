@@ -2,8 +2,8 @@ exports.successJSONResponseWithPagination = async (res, responseModel, OnPage, p
 console.log(responseModel)
     if (res) {
         
-        let responseModelWithLimit = await responseModel.find(dbquery).populate({ path: 'adsInfo.image', strictPopulate: false ,select:'image'}).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
-       
+        let responseModelWithLimit = await responseModel.find(dbquery).populate({ path: 'adsInfo.image', strictPopulate: false ,select:'url'}).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
+       console.log(responseModelWithLimit);
         const responseModelCount = await responseModel.count();
         const mainData = {
             message: message,
