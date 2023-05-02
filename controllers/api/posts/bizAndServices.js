@@ -288,7 +288,7 @@ exports.createbizAds = async (req, res, next) => {
     const userId = req.userId;
 
     const imageArr = [];
-    const accreditationArr = [];
+    let accreditationArr = [];
 
     if (req.files.photos) {
       for (var i = 0; i < req.files.photos.length; i++) {
@@ -309,7 +309,11 @@ console.log(req.files.photos);
       }
     }
     if (req.files.accreditation_document) {
-
+if(!accreditation_name){
+  return failureJSONResponse(res, {
+        message: `Please provide accreditation name`,
+      });
+}
       for (var i = 0; i < req.files.accreditation_document.length; i++) {
         if (req.files.accreditation_document[i].fieldname === `accreditation_document`) {
           let type_of_files = req.files.accreditation_document[i].mimetype;
@@ -317,7 +321,11 @@ console.log(req.files.photos);
             var doc = req.files.accreditation_document[i].path;
             productDoc = await Media.create({ url: doc, url_type: type_of_files });
             console.log(productDoc, "hdhcbdhh");
-            accreditationArr.push(productDoc._id);
+            let acrredationn = {
+              accreditation_name:accreditation_name,
+              accreditation_files: productDoc._id
+            }
+            accreditationArr.push(acrredationn);
           // } else {
           //   return failureJSONResponse(res, {
           //     message: `Please provide only pdf,png`,
@@ -346,10 +354,7 @@ console.log(req.files.photos);
         descriptions,
         image: imageArr,
         video_link,
-        accreditation_file: {
-          accreditation_name,
-          accreditation_files: accreditationArr
-        }
+        accreditation_file:accreditationArr,
       },
 
       userId: userId,
