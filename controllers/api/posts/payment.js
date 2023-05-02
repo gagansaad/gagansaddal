@@ -28,9 +28,9 @@ category = mongoose.model("PostType"),
     isValidlink,
   } = require(`../../../utils/validators`);
 
-//   const env = require('dotenv').config({path: '../../'});
+  const env = require('dotenv').config({path: '../../'});
 
-  // const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+  const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 
 
@@ -69,12 +69,11 @@ exports.validatepaymentData = async (req, res, next) => {
  exports.plan_payment = async (req, res) => {
   // featured_price,paymentMethodType,paymentMethodOptions
   try{
-    const {status,isfeatured_price,plan,total_amount,price,ads,adstype,user,customer} = req.body;
+    const {isfeatured_price,plan,total_amount,price,ads,adstype,user,customer} = req.body;
 
     let totalprice;
     let coins;
     let dbQuery = {
-      status: 1,
       _id:ads
     };
     let findCategory = await category.find({_id:adstype})
@@ -86,7 +85,7 @@ exports.validatepaymentData = async (req, res, next) => {
     }
 
     if (findCategory && findCategory.find((adsname) => adsname.name === "Babysitters and Nannies")){
-      let babysitter = await babysitterAd.find(dbQuery);
+      let babysitter = await babysitterAd.findById(dbQuery);
       if(!babysitter){
         return  failureJSONResponse(res, {
           message: `Please provide valid ads id`
@@ -94,7 +93,7 @@ exports.validatepaymentData = async (req, res, next) => {
       }
     }
     if (findCategory && findCategory.find((adsname) => adsname.name === "Buy & Sell")){
-      let buysell = await buysellAd.find(dbQuery);
+      let buysell = await buysellAd.findById(dbQuery);
       if(!buysell){
         return  failureJSONResponse(res, {
           message: `Please provide valid ads id`
@@ -102,7 +101,7 @@ exports.validatepaymentData = async (req, res, next) => {
       }
     }
     if (findCategory && findCategory.find((adsname) => adsname.name === "Local Biz and services")){
-      let biz = await bizAd.find(dbQuery);
+      let biz = await bizAd.findById(dbQuery);
       if(!biz){
         return  failureJSONResponse(res, {
           message: `Please provide valid ads id`
@@ -110,7 +109,7 @@ exports.validatepaymentData = async (req, res, next) => {
       }
     }
     if (findCategory && findCategory.find((adsname) => adsname.name === "Events")){
-      let event = await eventAd.find(dbQuery);
+      let event = await eventAd.findById(dbQuery);
       if(!event){
         return  failureJSONResponse(res, {
           message: `Please provide valid ads id`
@@ -118,7 +117,7 @@ exports.validatepaymentData = async (req, res, next) => {
       }
     }
     if (findCategory && findCategory.find((adsname) => adsname.name  === "Job")){
-      let jobs = await jobsAd.find(dbQuery);
+      let jobs = await jobsAd.findById(dbQuery);
       if(!jobs){
         return  failureJSONResponse(res, {
           message: `Please provide valid ads id`
@@ -126,7 +125,7 @@ exports.validatepaymentData = async (req, res, next) => {
       }
     }
     if (findCategory && findCategory.find((adsname) => adsname.name === "Room For Rent")){
-      let roomrent = await roomrentAd.find(dbQuery);
+      let roomrent = await roomrentAd.findById(dbQuery);
       if(!roomrent){
         return  failureJSONResponse(res, {
           message: `Please provide valid ads id`
@@ -148,10 +147,9 @@ exports.validatepaymentData = async (req, res, next) => {
        totalprice= selectplan.price.amount
       }
     }
-    let customerName = await USER.findById({_id:req.userId}).select({ "userInfo.name": 1, "_id": 0});
+    // let customerName = await USER.findById({_id:req.userId}).select({ "userInfo.name": 1, "_id": 1});
    
     const dataObj = {
-      status,
       isfeatured_price,
       plan,
       total_amount:totalprice,
@@ -162,25 +160,26 @@ exports.validatepaymentData = async (req, res, next) => {
       ads,
       ads_type:findCategory[0].name,
       user:userId,
-      customer:customerName.userInfo.name
+      // customer:customerName.userInfo.name
     }
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: dataObj.total_amount,
+      currency: 'usd',
+      automatic_payment_methods: {enabled: true},
+     
+    });
     const newJobPost = await payment.create(dataObj);
 
-    const postJobAdObjToSend = {};
   
   
 
-    for (let key in newJobPost.toObject()) {
-      if (!fieldsToExclude.hasOwnProperty(String(key))&&!listerBasicInfo.hasOwnProperty(String(key))) {
-        postJobAdObjToSend[key] = newJobPost[key];
-      }
-    }
 
-    if (newJobPost) {
+    if (paymentIntent && newJobPost) {
       return successJSONResponse(res, {
         message: `success`,
-        postJobAdObjToSend:postJobAdObjToSend,
-      });
+        clientsecret:paymentIntent.client_secret,
+        nextAction: paymentIntent.next_action
+         });
     } else {
       return failureJSONResponse(res, {
         message: `Something went wrong`,

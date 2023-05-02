@@ -65,16 +65,16 @@ const bizAndServices = new mongoose.Schema({
         //     ...defaultStringConfig,
         //     // required: true
         // },
-        accreditation_file: {
-            accreditation_name:[{
+        accreditation_file: [{
+            accreditation_name:{
                 ...defaultStringConfig,
-            }],
-            accreditation_files:[{
+            },
+            accreditation_files:{
                 type: mongoose.Schema.Types.ObjectId,
                 ref: `media`,
-            }],
+            },
             
-        },
+        }],
         // price: {
         //     type: Number,
         //     // required: true
