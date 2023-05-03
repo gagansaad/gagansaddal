@@ -302,7 +302,7 @@ console.log(req.files.photos);
             imageArr.push(productImages._id);
           } else {
             return failureJSONResponse(res, {
-              message: `Please provide only png,jpg,jpeg,octet-stream`,
+              message: `Please provide only png,jpg,jpeg,octet-stream`, 
             });
           }
         }
@@ -311,7 +311,7 @@ console.log(req.files.photos);
     if (req.files.accreditation_document) {
 if(!accreditation_name){
   return failureJSONResponse(res, {
-        message: `Please provide accreditation name`,
+        message: `Please provide accreditation_name`,
       });
 }
       for (var i = 0; i < req.files.accreditation_document.length; i++) {
@@ -531,25 +531,52 @@ exports.editbizAds = async (req, res, next) => {
         }
       }
     }
+  
+    // if (req.files.accreditation_document) {
+    //   for (var i = 0; i < req.files.accreditation_document.length; i++) {
+    //        if (req.files.accreditation_document[i].fieldname === `accreditation_document`) {
+    //       let type_of_file = req.files.accreditation_document[i].mimetype;
+    //       let name = req.body.accreditation_name[i]
+    //       // if (type_of_file === 'image/png' || type_of_file === 'image/jpeg') {
+    //         var thumbnail = req.files.accreditation_document[i].path;
+    //         productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
+    //         accreditationArr.push({accreditation_name:name},{accreditation_files:productImages._id});
+    //       // } else {
+    //       //   return failureJSONResponse(res, {
+    //       //     message: `Please provide only png,jpg`,
+    //       //   });
+    //       // }
+    //     }
+    //   }
+    // }
+    if(accreditation_name){
     if (req.files.accreditation_document) {
+      console.log(req.files.accreditation_document,accreditation_name);
+      // for (var i = 0; i < req.files.accreditation_document.length; i++) {
+        // if (req.files.accreditation_document.fieldname === `accreditation_document`) {
+          let type_of_files = req.files.accreditation_document.mimetype;
+          // if (type_of_files === 'application/pdf' || type_of_files === 'image/jpg' || type_of_files === 'image/jpeg') {
+            var doc = req.files[0].path
+            console.log(doc);
+           let productDoc = await Media.create({ url: doc, url_type: type_of_files });
+           console.log(productDoc,"gagan"); 
+           let upd ={accreditation_name:accreditation_name, accreditation_files:productDoc._id}
+            let addpush = await postbizAndServicesAd.findByIdAndUpdate({_id:bizId}, {$push:{"adsInfo.accreditation_file":upd}},{upsert:true})
 
-      for (var i = 0; i < req.files.accreditation_document.length; i++) {
-        if (req.files.accreditation_document[i].fieldname === `accreditation_document`) {
-          let type_of_files = req.files.accreditation_document[i].mimetype;
-          if (type_of_files === 'application/pdf' || type_of_files === 'image/jpg' || type_of_files === 'image/jpeg') {
-            var doc = req.files.accreditation_document[i].path;
-            productDoc = await Media.create({ url: doc, url_type: type_of_files });
-            console.log(productDoc, "hdhcbdhh");
-            accreditationArr.push(productDoc._id);
-          } else {
-            return failureJSONResponse(res, {
-              message: `Please provide only pdf,png`,
-            });
-          }
-        }
-      }
+            console.log(addpush, "hdhcbdhh");
+          //  await accreditationArr.push();
+          //   console.log(accreditationArr);
+          // } else {
+          //   return failureJSONResponse(res, {
+          //     message: `Please provide only pdf,png`,
+          //   });
+          // }
+        // }
+      // }
 
     }
+  }
+  
 
 
 
@@ -583,9 +610,9 @@ exports.editbizAds = async (req, res, next) => {
   
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (video_link) adsInfoObj.video_link = video_link;
-    if (accreditationArr.length) accreditation_data.accreditation_files = accreditationArr;
-    if (accreditation_name) accreditation_data.accreditation_name = accreditation_name;
-    if (accreditation_files) adsInfoObj.accreditation_file = accreditation_data;
+    // if (accreditationArr.length) accreditation_data.accreditation_files = accreditationArr;
+    // if (accreditation_name) accreditation_data.accreditation_name = accreditation_name;
+     if (accreditationArr.length) adsInfoObj.accreditation_file = accreditationArr;
     if (work_hour.length == 7) adsInfoObj.working_hours = work_hour;
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;

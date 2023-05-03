@@ -1833,7 +1833,7 @@ module.exports = {
         return failureJSONResponse(res, { message: `please provide user id` });
 
       User.findById({ _id: userId })
-        .select(`userInfo userBasicInfo`)
+        .select(`userInfo userBasicInfo, createdAt`)
         .then((user) => {
           console.log(user)
           if (!user)
@@ -1841,6 +1841,7 @@ module.exports = {
               message: `something went worng`,
             });
           else {
+            console.log
 
             const data = {
               name: user?.userInfo?.name || null,
@@ -1854,6 +1855,7 @@ module.exports = {
               address: user?.userBasicInfo?.location?.address || null,
               lat: user?.userBasicInfo?.location?.coordinates?.coordinates?.[0] || null,
               long: user?.userBasicInfo?.location?.coordinates?.coordinates?.[1] || null,
+              createdAt: user?.createdAt || null,
             };
             return successJSONResponse(res, { user: data });
           }

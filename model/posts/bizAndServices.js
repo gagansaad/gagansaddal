@@ -35,31 +35,31 @@ const bizAndServices = new mongoose.Schema({
        
         categories: {
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         sub_categories: {
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         business_name: {
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
 
         tagline: {
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         experience:{
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         working_hours:{
             type: [{is_status:Boolean,is_24_hour:Boolean,day_name: String, open_at: String, close_at: String}],
         },
         business_location: {
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         // business_service:{
         //     ...defaultStringConfig,
@@ -81,7 +81,7 @@ const bizAndServices = new mongoose.Schema({
         // },
         descriptions: {
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         // Additional_info: {
         //     ...defaultStringConfig,
@@ -93,7 +93,7 @@ const bizAndServices = new mongoose.Schema({
         }],
         video_link:{
             ...defaultStringConfig,
-            required:true,
+            // required:true,
         }
 
     },
