@@ -1576,13 +1576,13 @@ module.exports = {
     try {
       const userId = req.userId;
      
-      let new_email = req?.body?.new_email_address?.toLowerCase()
+      // let new_email = req?.body?.new_email_address?.toLowerCase()
       // console.log(new_email);
-      let find_new_email = await User.findOne({"userInfo.email_address":new_email})
+      // let find_new_email = await User.findOne({"userInfo.email_address":new_email})
       // return console.log(find_new_email,"cfhbchf");
-      if(find_new_email) return failureJSONResponse(res, {
-          message: `email address already exist`,
-        });
+      // if(find_new_email) return failureJSONResponse(res, {
+      //     message: `email address already exist`,
+      //   });
       
       find_old_email = await User.findById({"_id":userId})
 //  return console.log(find_old_email.userInfo.email_address,"dnxdjdnj");
