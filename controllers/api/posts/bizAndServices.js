@@ -397,7 +397,6 @@ exports.editbizAds = async (req, res, next) => {
     const bizId = req?.params?.bizId;
 
     const validate_id = await postbizAndServicesAd.findById(bizId);
-
     if (!validate_id) {
       return failureJSONResponse(res, {
         message: `Failed to find your loacl biz And Services id`,
@@ -509,7 +508,7 @@ exports.editbizAds = async (req, res, next) => {
       work_hour.push(monday);
     }
 
-
+    console.log(work_hour.length, "dcdnjchnbjbc");
 
     const imageArr = [];
     const accreditationArr = [];
@@ -550,36 +549,33 @@ exports.editbizAds = async (req, res, next) => {
     //     }
     //   }
     // }
-    if(accreditation_name){
-    if (req.files.accreditation_document) {
+  //   if(accreditation_name){
+  //   if (req.files.accreditation_document) {
+  //     console.log(req.files.accreditation_document,accreditation_name);
+  //     // for (var i = 0; i < req.files.accreditation_document.length; i++) {
+  //       // if (req.files.accreditation_document.fieldname === `accreditation_document`) {
+  //         let type_of_files = req.files.accreditation_document.mimetype;
+  //         // if (type_of_files === 'application/pdf' || type_of_files === 'image/jpg' || type_of_files === 'image/jpeg') {
+  //           var doc = req.files.accreditation_document.path;
+  //          let productDoc = await Media.create({ url: doc, url_type: type_of_files });
+  //           let addpush = await postbizAndServicesAd.findByIdAndUpdate({_id:bizId},{$push:{adsInfo:{accreditation_file:{accreditation_name:accreditation_name,
+  //             accreditation_files:productDoc._id}}}},{upsert:true})
 
-      // for (var i = 0; i < req.files.accreditation_document.length; i++) {
-        // if (req.files.accreditation_document.fieldname === `accreditation_document`) {
-          let type_of_files = req.files.accreditation_document[0].mimetype;
-          // if (type_of_files === 'application/pdf' || type_of_files === 'image/jpg' || type_of_files === 'image/jpeg') {
-            var doc = req.files.accreditation_document[0].path;
+  //           console.log(addpush, "hdhcbdhh");
+  //         //  await accreditationArr.push({accreditation_name:accreditation_name,
+  //         //   accreditation_files:productDoc._id});
+  //         //   console.log(accreditationArr);
+  //         // } else {
+  //         //   return failureJSONResponse(res, {
+  //         //     message: `Please provide only pdf,png`,
+  //         //   });
+  //         // }
+  //       // }
+  //     // }
 
-            console.log(`bizId`,bizId)
-  
-           let productDoc = await Media.create({ url: doc, url_type: type_of_files });
-
-            const  addpush = await postbizAndServicesAd.updateOne({_id:bizId},   { $set:{"adsInfo.video_link":`lkdjfks` }},{new:true})
-
-          console.log(addpush)
-
-          //  await accreditationArr.push();
-          //   console.log(accreditationArr);
-          // } else {
-          //   return failureJSONResponse(res, {
-          //     message: `Please provide only pdf,png`,
-          //   });
-          // }
-        // }
-      // }
-
-    }
-  }
-  
+  //   }
+  // }
+    
 
 
 
@@ -615,7 +611,7 @@ exports.editbizAds = async (req, res, next) => {
     if (video_link) adsInfoObj.video_link = video_link;
     // if (accreditationArr.length) accreditation_data.accreditation_files = accreditationArr;
     // if (accreditation_name) accreditation_data.accreditation_name = accreditation_name;
-    //  if (accreditationArr.length) adsInfoObj.accreditation_file = accreditationArr;
+     if (accreditationArr.length) adsInfoObj.accreditation_file = accreditationArr;
     if (work_hour.length == 7) adsInfoObj.working_hours = work_hour;
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;

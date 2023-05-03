@@ -1575,11 +1575,20 @@ module.exports = {
 
     try {
       const userId = req.userId;
-
+     
+      let new_email = req?.body?.new_email_address?.toLowerCase()
+      // console.log(new_email);
+      let find_new_email = await User.findOne({"userInfo.email_address":new_email})
+      // return console.log(find_new_email,"cfhbchf");
+      if(find_new_email) return failureJSONResponse(res, {
+          message: `email address already exist`,
+        });
       
-
+      find_old_email = await User.findById({"_id":userId})
+//  return console.log(find_old_email.userInfo.email_address,"dnxdjdnj");
       const source = Math.abs(req?.body?.source),
-        email_address = req?.body?.email_address?.toLowerCase(),
+        new_email_address = req?.body?.new_email_address?.toLowerCase(),
+        old_email_address = find_old_email.userInfo.email_address,
         phone_number = req?.body?.phone_number;
 
       if (!source)
@@ -1626,11 +1635,11 @@ module.exports = {
             //     return failureJSONResponse(res, { message: `something went wrong` });
             // })
           } else if (Number(source) === Number(2)) {
-            if (!email_address)
+            if (!new_email_address)
               return failureJSONResponse(res, {
                 message: `please provide email address`,
               });
-            else if (!isValidEmailAddress(email_address))
+            else if (!isValidEmailAddress(new_email_address))
               return failureJSONResponse(res, {
                 message: `please provide valid phone number`,
               });
@@ -1638,7 +1647,7 @@ module.exports = {
             OTP.create({
               is_active: true,
               code: generateOTP(4),
-              email_address:  email_address.toLowerCase(),
+              email_address:  new_email_address.toLowerCase(),
               used_for: 2,
               user: userId,
               for: 2,
@@ -1660,6 +1669,32 @@ module.exports = {
                   message: `something went wrong`,
                 });
               });
+
+              OTP.create({
+                is_active: true,
+                code: generateOTP(4),
+                email_address:  old_email_address.toLowerCase(),
+                used_for: 2,
+                user: userId,
+                for: 2,
+              })
+                .then((foundOTP) => {
+                  console.log(foundOTP);
+                  if (!foundOTP) {
+                    return failureJSONResponse(res, {
+                      message: `something went wrong`,
+                    });
+                  } else {
+                    EmailOTPVerification(user?.userInfo?.email_address, `Hi`, foundOTP?.code);
+                    return successJSONResponse(res, { message: `success` });
+                  }
+                })
+                .catch((err) => {
+                  console.log(err);
+                  return failureJSONResponse(res, {
+                    message: `something went wrong`,
+                  });
+                });
           }
 
         }).catch((err)=>{
