@@ -57,8 +57,8 @@ router.patch(`/edit/:bizId`,upload.fields([
     { name: 'photos', maxCount: 10 },
     { name: 'accreditation_document', maxCount: 5 }]),
     authMiddleware.ensureUserLoggedIn,
-    controllers.validatebizAdsData,
-    controllers.validateListerBasicinfo,
+    // controllers.validatebizAdsData,
+    // controllers.validateListerBasicinfo,
     controllers.editbizAds
 );
 // router.patch(`/edit-role/:buyAndSellId`,

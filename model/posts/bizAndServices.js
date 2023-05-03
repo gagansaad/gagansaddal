@@ -32,7 +32,7 @@ const bizAndServices = new mongoose.Schema({
         required: true
     },
     adsInfo: {
-       
+
         categories: {
             ...defaultStringConfig,
             // required: true
@@ -50,12 +50,12 @@ const bizAndServices = new mongoose.Schema({
             ...defaultStringConfig,
             // required: true
         },
-        experience:{
+        experience: {
             ...defaultStringConfig,
             // required: true
         },
-        working_hours:{
-            type: [{is_status:Boolean,is_24_hour:Boolean,day_name: String, open_at: String, close_at: String}],
+        working_hours: {
+            type: [{ is_status: Boolean, is_24_hour: Boolean, day_name: String, open_at: String, close_at: String }],
         },
         business_location: {
             ...defaultStringConfig,
@@ -65,16 +65,18 @@ const bizAndServices = new mongoose.Schema({
         //     ...defaultStringConfig,
         //     // required: true
         // },
-        accreditation_file: [{
-            accreditation_name:{
-                ...defaultStringConfig,
-            },
-            accreditation_files:{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: `media`,
-            },
-            
-        }],
+        accreditation_file: {
+            type:[{
+                name: {
+                    ...defaultStringConfig,
+                },
+                url: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: `media`,
+                },
+    
+            }]
+        },
         // price: {
         //     type: Number,
         //     // required: true
@@ -91,7 +93,7 @@ const bizAndServices = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: `media`,
         }],
-        video_link:{
+        video_link: {
             ...defaultStringConfig,
             // required:true,
         }
@@ -100,17 +102,17 @@ const bizAndServices = new mongoose.Schema({
     lister_basic_info: {
         name: defaultStringConfig,
         email_address: defaultStringConfig,
-        website_link:defaultStringConfig,
+        website_link: defaultStringConfig,
         primary_mobile_number: {
             country_code: defaultStringConfig,
-            primary_phone_number:defaultStringConfig,
-  
-          },
-          secondary_mobile_number: {
+            primary_phone_number: defaultStringConfig,
+
+        },
+        secondary_mobile_number: {
             country_code: defaultStringConfig,
-            secondary_phone_number:defaultStringConfig,
-  
-          },
+            secondary_phone_number: defaultStringConfig,
+
+        },
         hide_my_email: defaultBooleanConfig,
         hide_my_phone: defaultBooleanConfig,
         preferable_contact_mode: {
