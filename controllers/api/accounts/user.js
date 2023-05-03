@@ -1185,13 +1185,13 @@ module.exports = {
 
   ////////////
   //////////////
-  verifiy_otps: async function (req, res, next) {
+  verifiy_otp_for_email_update: async function (req, res, next) {
 
     const { otp_for_email, otp_for_new_email, otp_for_mobile_number } = req.body;
 
 
 
-    if (otp_for_mobile_number) {
+    if (otp_for_email) {
       OTP.findOne({
         $and: [{ is_active: true },
         { user: req.userId },
@@ -1215,27 +1215,27 @@ module.exports = {
         OTP.findOne({
           user: req.userId,
           used_for: 2,
-          code: otp_for_mobile_number,
+          code: otp_for_new_email,
           for: 1,
-        }).then(async (foundMobileOTP) => {
-          if (!foundMobileOTP) {
+        }).then(async (foundNewEmailOTP) => {
+          if (!foundNewEmailOTP) {
             invalidOTP = 2;
           }
 
-          if (!foundEmailOTP && !foundMobileOTP) {
+          if (!foundEmailOTP && !foundNewEmailOTP) {
             invalidOTP = 3;
           }
 
           if (invalidOTP === 0) {
 
-            await OTP.deleteMany({ _id: { $in: [foundMobileOTP._id, foundEmailOTP._id] } });
+            await OTP.deleteMany({ _id: { $in: [foundNewEmailOTP._id, foundEmailOTP._id] } });
 
             User.update(
               { _id: req.userId },
               {
                 $set: {
                   "userInfo.is_active": true,
-                  "userInfo.mobile_number.is_verified": true,
+                  // "userInfo.mobile_number.is_verified": true,
                   "userInfo.is_verified_email": true,
                 },
               }
