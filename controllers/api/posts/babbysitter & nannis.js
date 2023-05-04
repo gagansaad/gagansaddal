@@ -20,7 +20,7 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
-    category: ["I want a Baby sitter/Nanny", "I am a Baby sitter/Nanny"],
+    category: ["I want a Babysitter/Nanny", "I am a Babysitter/Nanny"],
     work_type: ["Live in", "Live in & out", "Live out"],
     care_service_need: ["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores"],
     care_service_offer: ["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores", "Storytelling"],
@@ -68,6 +68,8 @@ exports.validateAdsData = async (req, res, next) => {
     if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (ads_type && !isValidMongoObjId(mongoose, ads_type)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
+
+    // if(category_name)
     if (!isValidString(category_name))
       return failureJSONResponse(res, {
         message: `Please provide valid category_name`,
@@ -76,7 +78,7 @@ exports.validateAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid category_value`,
       });
-    if (!isValidString(work_type))
+    if ( work_type && !isValidString(work_type))
       return failureJSONResponse(res, {
         message: `Please provide valid work type`,
       });
