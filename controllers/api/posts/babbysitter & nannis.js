@@ -103,7 +103,7 @@ exports.validateAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid service starting date`,
       });
-    if (isNaN(Number(amount)))
+    if (amount && isNaN(Number(amount)))
       return failureJSONResponse(res, {
         message: `please provide valid salary amount`,
       });
