@@ -45,11 +45,9 @@ const babysitter_Schema = new mongoose.Schema({
         },
         work_type:{
             ...defaultStringConfig,
-            required: true
         },
         care_service: [{
             ...defaultStringConfig,
-            required: true
         }],
         age_group: [{
             ...defaultStringConfig,
@@ -57,7 +55,6 @@ const babysitter_Schema = new mongoose.Schema({
         }],
         prefered_language:[{
             ...defaultStringConfig,
-            required: true
         }],
         prefered_gender:{
             ...defaultStringConfig,
@@ -65,11 +62,9 @@ const babysitter_Schema = new mongoose.Schema({
         },
         service_from_date:{
             ...defaultStringConfig,
-            required: true
         },
         transport_facilty:{
             type: Boolean,
-            required: true,
             default: false
         },
         expected_salary_amount:{
