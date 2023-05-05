@@ -64,7 +64,7 @@ exports.validateAdsData = async (req, res, next) => {
       tagline,
 
     } = req.body;
-    console.log(req.body, "ye boDY HAI");
+    // console.log(req.body, "ye boDY HAI");
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (ads_type && !isValidMongoObjId(mongoose, ads_type)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
@@ -193,6 +193,7 @@ exports.createAds = async (req, res, next) => {
       service_from_date,
       transport_facilty,
       amount,
+      currency,
       expected_salary_rate,
       description,
       location,
@@ -231,6 +232,7 @@ exports.createAds = async (req, res, next) => {
         transport_facilty,
         expected_salary_amount: {
           amount,
+          currency
         },
         expected_salary_rate,
         description,

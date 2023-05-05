@@ -44,6 +44,7 @@ exports.getDnymicsData = async (req, res, next) => {
       'America/New_York',
       'America/Los_Angeles',
     ],
+    currency: ["USD", "INR"],
 
   };
   return successJSONResponse(res, {
@@ -87,7 +88,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       tagline
 
     } = req.body;
-    console.log(req.body, "is validate ki body");
+    // console.log(req.body, "is validate ki body");
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     // else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
@@ -144,10 +145,10 @@ exports.validateEventAdsData = async (req, res, next) => {
         message: "Please provide valid end time",
       });
 
-    if (!isValidString(recurring_type))
-      return failureJSONResponse(res, {
-        message: "Please provide valid recurring type",
-      });
+    // if (!isValidString(recurring_type))
+    //   return failureJSONResponse(res, {
+    //     message: "Please provide valid recurring type",
+    //   });
     if (isNaN(Number(ticket_price)))
       return failureJSONResponse(res, {
         message: `please provide valid regular ticket price`,
@@ -267,6 +268,7 @@ exports.createEventAds = async (req, res, next) => {
       vip_ticket_price,
       regular_ticket,
       vip_ticket,
+      currency,
       time_zone,
       start_date,
       end_date,
@@ -346,6 +348,7 @@ exports.createEventAds = async (req, res, next) => {
         category,
         details,
         ticket_price,
+        currency,
         vip_ticket_price,
         no_of_ticket: {
           regular_ticket,
@@ -427,6 +430,7 @@ exports.editEventAds = async (req, res, next) => {
       details,
       ticket_price,
       vip_ticket_price,
+      currency,
       regular_ticket,
       vip_ticket,
       time_zone,
@@ -535,6 +539,7 @@ exports.editEventAds = async (req, res, next) => {
     if (end_time) date_time.end_time = end_time;
     if (date_time) adsInfoObj.date_time = date_time;
     if (recurring_type) adsInfoObj.recurring_type = recurring_type;
+    if (acuurency) adsInfoObj.acuurency = acuurency;
     if (venue_name) adsInfoObj.venue_name = venue_name;
     if (ticket_price) adsInfoObj.ticket_price = ticket_price;
     if (vip_ticket) no_of_ticket.vip_ticket = vip_ticket;
