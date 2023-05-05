@@ -68,7 +68,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       employment_type,
       experience,
       language,
-      salary,
+      amount,
       salary_info,
       no_of_opening,
       job_website_link,
