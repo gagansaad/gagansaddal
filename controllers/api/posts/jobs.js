@@ -39,7 +39,7 @@ exports.getDnymicsData = async (req, res, next) => {
       `Contract`,
       `Temporary`,
       `Please contact`],
-    salary_info: ["/hour, /day, /week, /month, /biweekly, /sqft, fixed amount, OBO, Negotiable"],
+    salary_info: ["/hour", "/day", "/week", "/month", "/biweekly", "/sqft", "fixed amount", "OBO", "Negotiable"],
     work_authorization: ["Citizen", "Green Card", "Work Permit", "Visa, Any Type"],
     preferred_gender: [`Male`,
       `Female`,],

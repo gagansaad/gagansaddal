@@ -43,7 +43,7 @@ exports.getDnymicsData = async (req, res, next) => {
     categories_others: ["test", "testi"],
     payment_mode: ["Cash less payment", "Cash accepted", "Not applicable"],
     fullfilment: ["Free shipping", "In person pickup", "Only local delivery", "Please contact", "Not applicables"],
-    product_condition: ["New", "Used -  Like new", "Used -  Good", "Used -  Fair"],
+    product_condition: ["New", "Used - Like new", "Used - Good", "Used - Fair"],
     user_type: [`Individual`, `Retailer`],
 
 
