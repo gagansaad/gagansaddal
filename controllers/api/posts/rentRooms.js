@@ -25,6 +25,7 @@ exports.fetchDynamicsData = async (req, res, next) => {
         category_Room: ["Apartment", "Condo", "Townhouse", "House", "Basement"],
         category_Commercial_Property: ["Commercial Building", "Office", "Parking Space", "Warehouse", "Venues"],
         category_Other: ["Limousine", "Trucks", "Wedding Appliances", "Wedding Clothes", "Cars", "DJ Equipment", "Event Decorations", "Other"],
+        currency: ["USD", "INR"],
         roomType: [
             `Single`,
             `Double`,

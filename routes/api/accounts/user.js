@@ -69,7 +69,10 @@ router.post(`/verify-otp`,
     authMiddleware.ensureUserLoggedIn,
     controllers.verifiy_otps
 );
-
+router.post(`/verify-otp-new-email`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.verifiy_otp_for_email_update
+);
 router.post(`/forget-password`, controllers.forget_password);
 router.post(`/verify-forget-password-otp`, controllers.verify_forget_password_otp);
 

@@ -113,15 +113,15 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid job Type`,
       });
-    if (!isValidString(role))
-      return failureJSONResponse(res, {
-        message: `Please provide valid job Role/Skills`,
-      });
+    // if (!isValidString(role))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide valid job Role/Skills`,
+    //   });
 
-    if (!isValidString(employment_type))
-      return failureJSONResponse(res, {
-        message: "Please provide us your employment type",
-      });
+    // if (!isValidString(employment_type))
+    //   return failureJSONResponse(res, {
+    //     message: "Please provide us your employment type",
+    //   });
     if (!isValidString(title))
       return failureJSONResponse(res, {
         message: "Please provide us your job Title",
@@ -130,56 +130,56 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid job Description`,
       });
-    if (!experience) return failureJSONResponse(res, {
-      message: `Please provide us your experience`,
-    });
+    // if (!experience) return failureJSONResponse(res, {
+    //   message: `Please provide us your experience`,
+    // });
 
-    if (isNaN(Number(experience)))
-      return failureJSONResponse(res, {
-        message: `Please provide us your experience`,
-      });
-    if (!isValidString(language))
-      return failureJSONResponse(res, {
-        message: `Please provide us the information about how many languages do you know`,
-      });
-    if (!salary) return failureJSONResponse(res, {
-      message: `Please provide us your salary`,
-    });
-    if (isNaN(Number(salary)))
-      return failureJSONResponse(res, { message: `Please provide us salary` });
-    if (!isValidString(salary_info))
-      return failureJSONResponse(res, {
-        message: `Please provide valid salary info`,
-      });
+    // if (isNaN(Number(experience)))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide us your experience`,
+    //   });
+    // if (!isValidString(language))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide us the information about how many languages do you know`,
+    //   });
+    // if (!salary) return failureJSONResponse(res, {
+    //   message: `Please provide us your salary`,
+    // });
+    // if (isNaN(Number(salary)))
+    //   return failureJSONResponse(res, { message: `Please provide us salary` });
+    // if (!isValidString(salary_info))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide valid salary info`,
+    //   });
     if (isNaN(Number(no_of_opening)))
       return failureJSONResponse(res, { message: "Please provide number of jobs opening" });
     else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null || no_of_opening.includes(".")) failureJSONResponse(res, { message: `Please provide valid number of job opening` });
-    if (!isValidString(preferred_gender))
-      return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
-    else if (preferred_gender != `Male` && preferred_gender != `Female` && preferred_gender != `Any Gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male,Female or Any Gender` });
-    if (!job_website_link) return failureJSONResponse(res, {
-      message: `Please provide valid job website`,
-    });
-    if (job_website_link && (!isValidUrl(job_website_link)))
-      return failureJSONResponse(res, {
-        message: `Please provide valid job website`,
-      });
+    // if (!isValidString(preferred_gender))
+    //   return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
+    // else if (preferred_gender != `Male` && preferred_gender != `Female` && preferred_gender != `Any Gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male,Female or Any Gender` });
+    // if (!job_website_link) return failureJSONResponse(res, {
+    //   message: `Please provide valid job website`,
+    // });
+    // if (job_website_link && (!isValidUrl(job_website_link)))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide valid job website`,
+    //   });
     // if (!video && !isValidUrl(video))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid video link`,
     // });
-    if (!isValidString(work_authorization))
-      return failureJSONResponse(res, {
-        message: `Please provide us work authorization`,
-      });
+    // if (!isValidString(work_authorization))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide us work authorization`,
+    //   });
     if (!isValidString(location))
       return failureJSONResponse(res, {
         message: `Please provide us location`,
       });
-    if (!isValidString(tagline))
-      return failureJSONResponse(res, {
-        message: `Please provide us tagline`,
-      });
+    // if (!isValidString(tagline))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide us tagline`,
+    //   });
     return next();
   } catch (err) {
     console.log(err);

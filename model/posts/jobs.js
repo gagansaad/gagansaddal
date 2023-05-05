@@ -58,28 +58,28 @@ const roomRentsSchema = new mongoose.Schema({
         },
         role: {
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         employment_type: {
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         experience: {
             type: Number,
-            required: true
+            // required: true
         },
         language: {
             ...defaultStringConfig,
-            required: true
+            // required: true
 
         },
         salary: {
             type: Number,
-            required: true
+            // required: true
         },
         salary_info:{
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         no_of_opening: {
             type: Number,
@@ -92,7 +92,7 @@ const roomRentsSchema = new mongoose.Schema({
 
         work_authorization: {
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
 
         location: {
@@ -101,12 +101,12 @@ const roomRentsSchema = new mongoose.Schema({
         },
         tagline:{
             ...defaultStringConfig,
-            required: true,
+            // required: true,
         },
         preferred_gender: {
             ...defaultStringConfig,
             enum: [`Male`,`Female`,`Any Gender`],
-            required: true
+            // required: true
         },
 
         image: [{

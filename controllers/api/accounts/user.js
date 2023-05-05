@@ -1216,7 +1216,7 @@ module.exports = {
           user: req.userId,
           used_for: 2,
           code: otp_for_new_email,
-          for: 1,
+          for: 2,
         }).then(async (foundNewEmailOTP) => {
           if (!foundNewEmailOTP) {
             invalidOTP = 2;
@@ -1227,50 +1227,14 @@ module.exports = {
           }
 
           if (invalidOTP === 0) {
-
+            // await User.findByIdAndUpdate({_id:userId},{"userInfo.email_address":})
             await OTP.deleteMany({ _id: { $in: [foundNewEmailOTP._id, foundEmailOTP._id] } });
+            return res.json({
+              status: 200,
+              invalidOTP,
+              message: `success`,
+            });
 
-            User.update(
-              { _id: req.userId },
-              {
-                $set: {
-                  "userInfo.is_active": true,
-                  // "userInfo.mobile_number.is_verified": true,
-                  "userInfo.is_verified_email": true,
-                },
-              }
-            )
-              .then(async (data) => {
-                if (data) {
-                  let foundUser = await User.findById({ _id: req.userId }, { userInfo: 1 });
-
-
-                  if (foundUser && Object.keys(foundUser).length) {
-                    WelcomeEmail(foundUser.userInfo.email_address, foundUser.userInfo.name)
-                  }
-
-                  return res.json({
-                    status: 200,
-                    invalidOTP,
-                    message: `success!`,
-                  });
-
-
-                } else {
-                  return res.json({
-                    status: 400,
-                    invalidOTP,
-                    message: `something went wrong`,
-                  });
-                }
-              })
-              .catch((err) => {
-                return res.json({
-                  status: 400,
-                  invalidOTP,
-                  message: `Invalid OTP`,
-                });
-              });
           } else if (invalidOTP === 1) {
             return res.json({
               status: 200,
@@ -1292,78 +1256,6 @@ module.exports = {
           }
         });
       });
-    } else {
-      OTP.findOne({
-        $and: [{ is_active: true },
-        { user: req.userId },
-        { used_for: 2 },
-        { code: otp_for_email },
-        { for: 2 }
-        ]
-        // is_active: true,
-        // user: req.userId,
-        // code: otp_for_email,
-        // source: 2
-      })
-        .then(async (foundOTP) => {
-          if (foundOTP) {
-            await OTP.findByIdAndDelete({ _id: foundOTP._id });
-
-            User.update(
-              { _id: req.userId },
-              {
-                $set: {
-                  "userInfo.is_active": true,
-                  "userInfo.is_verified_email": true,
-                },
-              }
-            )
-              .then(async (data) => {
-
-                if (data) {
-
-                  let foundUser = await User.findById({ _id: req.userId }, { userInfo: 1 });
-
-                  if (foundUser && Object.keys(foundUser).length) {
-                    WelcomeEmail(foundUser.userInfo.email_address, foundUser.userInfo.name)
-                  }
-
-                  return res.json({
-                    status: 200,
-                    invalidOTP: 0,
-                    message: `success!`,
-                  });
-
-                } else {
-                  return res.json({
-                    status: 400,
-                    invalidOTP: 1,
-                    message: `something went wrong`,
-                  });
-                }
-              })
-              .catch((err) => {
-                return res.json({
-                  status: 400,
-                  invalidOTP: 1,
-                  message: `something went wrong`,
-                });
-              });
-          } else {
-            return res.json({
-              status: 400,
-              invalidOTP: 1,
-              message: `Invalid OTP`,
-            });
-          }
-        })
-        .catch((err) => {
-          res.json({
-            status: 400,
-            invalidOTP: 3,
-            message: `something went wrong`,
-          });
-        });
     }
   },
   /////////////
