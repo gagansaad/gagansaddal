@@ -77,7 +77,7 @@ const BuySellSchema = new mongoose.Schema({
         },
         payment_mode:[{
             ...defaultStringConfig,
-            required: true
+            // required: true
         }],
         fullfilment:[{
             ...defaultStringConfig,
@@ -88,7 +88,7 @@ const BuySellSchema = new mongoose.Schema({
             required: true
         },
         tagline:{
-            ...defaultStringConfig,
+            type:Array,
             // required: true
         },
         video_link:{

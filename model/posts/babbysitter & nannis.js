@@ -84,6 +84,9 @@ const babysitter_Schema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
+        tagline:{
+            type:Array
+        },
         image: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: `media`,

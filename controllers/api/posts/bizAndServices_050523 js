@@ -205,45 +205,87 @@ exports.createbizAds = async (req, res, next) => {
       business_location,
       accreditation_name,
       accreditation_files,
-      week_day,
-      week_end,
-      weekday_start,
-      weekday_end,
-      weekend_start,
-      weekend_end,
-      weekday_24,
-      
       // price,
       descriptions,
       image,
       video_link,
     } = req.body;
 
+    let work_hour = [];
+    let days = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+    let mondayObj = {};
 
-    
- let weekday={
-  is_available:false,
-  open_at:"",
-  close_at:"",
-  is_24_hour:false,
- };
+    for (i = 0; i <= days.length - 1; i++) {
+      let monday = {
+        is_24hour: false,
+        is_status: false,
+        day_name: "",
+        open_at: "",
+        close_at: "",
+      };
+      let day_s = `is_status_${days[i].toLocaleLowerCase()}`;
+      let day_24 = `is_24_hour_${days[i].toLocaleLowerCase()}`;
+      let day_o = `open_at_${days[i].toLocaleLowerCase()}`;
+      let day_c = `close_at_${days[i].toLocaleLowerCase()}`;
+      let day_n = `day_name_${days[i].toLocaleLowerCase()}`;
+      let day_status;
+      let day_24_hour;
+      var day_open;
+      let day_close;
+      let day_Name;
+      if (day_s in req.body) {
+        day_status = req.body[day_s];
+      }
+      if (day_24 in req.body) {
+        day_24_hour = req.body[day_24];
+      }
+      if (day_o in req.body) {
+        day_open = req.body[day_o];
+      }
+      if (day_c in req.body) {
+        day_close = req.body[day_c];
+      }
+      if (day_n in req.body) {
+        day_Name = req.body[day_n];
+      }
+
+      if (day_status == `true`) {
+        if (!work_hour[day_Name]) {
+          monday.is_status = day_status;
+          monday.day_name = day_Name;
+          if (day_24_hour == `true`) {
+            monday.is_24_hour = true;
+            monday.open_at = "00:00:00";
+            monday.close_at = "23:59:00";
+          } else {
+            monday.is_24_hour = false;
+            monday.day_name = day_Name;
+            monday.open_at = day_open;
+            monday.close_at = day_close;
+          }
+        }
+      } else {
+
+        monday.is_status = false;
+        monday.day_name = day_Name;
+        monday.open_at = null;
+        monday.close_at = null;
+        monday.is_24_hour = false;
+      }
+      work_hour.push(monday);
+    }
+
+
 
     const userId = req.userId;
-    if(week_day == "true"){
-      weekday={
-        is_available: true,
-        open_at:weekday_start,
-        close_at:weekday_end,
-        is_24_hour:false,
-       };
-        
-    }
-console.log(weekday,"cdmcdm");
-    if(week_end == `true`){
-
-    }
-
-
 
     const imageArr = [];
     let accreditationArr = [];
@@ -294,7 +336,7 @@ if(!accreditation_name){
 
     }
 
-    // console.log(work_hour.length, "dcdnjchnbjbc");
+    console.log(work_hour.length, "dcdnjchnbjbc");
 
     const dataObj = {
       isfeatured,
@@ -305,10 +347,7 @@ if(!accreditation_name){
         sub_categories,
         business_name,
         experience,
-        working_hour:{
-          weekdays:weekday
-        },
-
+        working_hours: work_hour,
         tagline,
         business_location,
         // price,

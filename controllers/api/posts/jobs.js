@@ -283,10 +283,8 @@ if(req.files){
           amount,
           currency,
         },
-       
         salary_info,
         no_of_opening,
-        
         work_authorization,
         location,
         tagline,

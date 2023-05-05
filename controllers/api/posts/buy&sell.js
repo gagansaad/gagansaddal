@@ -17,7 +17,7 @@ const mongoose = require("mongoose"),
     isValidIndianMobileNumber,
   } = require(`../../../utils/validators`);
 
-///-----------------------Dynamic Data---------------------------////
+////-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
     categories: ["Furniture and Home decore", "Baby & Kids stuff", "Home and Kitchen Appliance", "Real Estate", "Electronics appliance", "Computers & Accsosories", "Books", "Musical instrument", "Phones", "Clothing and Footwear", "Pets", "Fashion & Jewllery", "Home, Lawn & Garden", "Video Games & Consoles", "Bikes & Moterbikes", "Sport & Health product", "Cars", "Arts & Collectabiles", "Free Stuffs", "Other"],
@@ -125,7 +125,6 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid quantity`,
       });
-
     if (isNaN(Number(amount)))
       return failureJSONResponse(res, {
         message: `please provide valid amount`,
@@ -133,8 +132,8 @@ exports.validateBuySellAdsData = async (req, res, next) => {
     // console.log(object);
     if (!(negotiable)) return failureJSONResponse(res, { message: `Please provide valid negotiable value` });
     //  else if (!isValidBoolean(negotiable)) return failureJSONResponse(res, { message: `Please provide boolean value for negotiable` });
-    if (!isValidString(payment_mode))
-      return failureJSONResponse(res, { message: `please provide valid payment mode` });
+    // if (!isValidString(payment_mode))
+    //   return failureJSONResponse(res, { message: `please provide valid payment mode` });
     if (!isValidString(fullfilment))
       return failureJSONResponse(res, { message: `please provide valid fullfilment` });
 
@@ -334,7 +333,6 @@ exports.editBuySellAds = async (req, res, next) => {
       tagline,
       video_link,
       image,
-
       name,
       email_address,
       primary_phone_number,

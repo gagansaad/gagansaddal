@@ -116,7 +116,7 @@ const events_Schema = new mongoose.Schema({
             required: true
         },
         tagline: {
-            ...defaultStringConfig
+            type:Array
         }
 
     },
