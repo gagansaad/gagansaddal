@@ -101,10 +101,10 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid sub_category`,
       });
-    if (!isValidString(product_model))
-      return failureJSONResponse(res, {
-        message: `Please provide valid product_model`,
-      });
+    // if (!isValidString(product_model))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide valid product_model`,
+    //   });
     if (!isValidString(user_type))
       return failureJSONResponse(res, {
         message: `Please provide valid user_type`,
@@ -140,8 +140,8 @@ exports.validateBuySellAdsData = async (req, res, next) => {
 
     if (!isValidString(location))
       return failureJSONResponse(res, { message: `please provide valid location` });
-    if (!isValidString(tagline))
-      return failureJSONResponse(res, { message: `please provide valid tagline` });
+    // if (!isValidString(tagline))
+    //   return failureJSONResponse(res, { message: `please provide valid tagline` });
     return next();
   } catch (err) {
     console.log(err);

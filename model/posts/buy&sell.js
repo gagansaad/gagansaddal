@@ -53,7 +53,7 @@ const BuySellSchema = new mongoose.Schema({
         },
         product_model:{
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         user_type: {
             ...defaultStringConfig,
@@ -89,11 +89,11 @@ const BuySellSchema = new mongoose.Schema({
         },
         tagline:{
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         video_link:{
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         image: [{
             type: mongoose.Schema.Types.ObjectId,
