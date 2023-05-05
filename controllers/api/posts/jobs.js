@@ -21,24 +21,7 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
-    categories: [`Accounting and Finance`,
-      `Tax Services`,
-      `Bar and Restaurant`,
-      `Sales and Retail sales`,
-      `Child care`,
-      `Cleaning and House Keeping`,
-      `Construction and trades`,
-      `Customer Service`,
-      `Drivers and Security`,
-      `General Labour`,
-      `Graphic and Geb design`,
-      `Hair Stylist and Salon`,
-      `Health Care`,
-      `Office Manager and Receptionist`,
-      `Interns and Students`,
-      `Programmers and Computer`,
-      `TV, Media ,Fashion`,
-      `Other`],
+    categories:["Accounting and Finance", "Tax Services", "Bar and Restaurant", "Catering", "Cook", "Cheif", "Sales and Retail sales", "Day care", "Home Care", "Nursing Home", "Agent", "Cleaning and House Keeping", "Construction and trades", "Lawn and Garden", "Plumber", "Electrician", "Customer Service", "Drivers and Security", "Auto Mechanic", "General Labour", "Graphic and Geb design", "Hair Stylist and Salon", "Health Care", "Volunters", "NGO", "Real Estate", "Education", "Training", "Office Manager and Receptionist", "Interns and Students", "Programmers and Computer", "TV, Media ,Fashion", "Movie", "Other"],
 
     type: [`Local Jobs`,
       `Remote Jobs`],
@@ -56,11 +39,10 @@ exports.getDnymicsData = async (req, res, next) => {
       `Contract`,
       `Temporary`,
       `Please contact`],
-    salary_info: ["/hour", "/day", "/week", "/month"],
+    salary_info: ["/hour, /day, /week, /month, /biweekly, /sqft, fixed amount, OBO, Negotiable"],
     work_authorization: ["Citizen", "Green Card", "Work Permit", "Visa, Any Type"],
     preferred_gender: [`Male`,
-      `Female`,
-      `Any Gender`],
+      `Female`,],
     list_type: ["Offering - I have a job to offer", "Wanted - I am looking for a job"]
   };
   return successJSONResponse(res, {
@@ -143,19 +125,24 @@ exports.validateJobAdsData = async (req, res, next) => {
     //   return failureJSONResponse(res, {
     //     message: `Please provide us the information about how many languages do you know`,
     //   });
-    // if (!salary) return failureJSONResponse(res, {
-    //   message: `Please provide us your salary`,
-    // });
-    // if (isNaN(Number(salary)))
-    //   return failureJSONResponse(res, { message: `Please provide us salary` });
+     if (amount) {
+      if (isNaN(Number(amount)))
+      return failureJSONResponse(res, { message: `Please provide us valid salary amount` });
+     };
+   
     // if (!isValidString(salary_info))
     //   return failureJSONResponse(res, {
     //     message: `Please provide valid salary info`,
     //   });
-    if (isNaN(Number(no_of_opening)))
+    if(no_of_opening){
+      if (isNaN(Number(no_of_opening)))
       return failureJSONResponse(res, { message: "Please provide number of jobs opening" });
     else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null || no_of_opening.includes(".")) failureJSONResponse(res, { message: `Please provide valid number of job opening` });
+    
+    }
+   
     // if (!isValidString(preferred_gender))
+
     //   return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
     // else if (preferred_gender != `Male` && preferred_gender != `Female` && preferred_gender != `Any Gender`) return failureJSONResponse(res, { message: `Please enter preferred_gender Male,Female or Any Gender` });
     // if (!job_website_link) return failureJSONResponse(res, {
@@ -255,7 +242,7 @@ exports.createJobAds = async (req, res, next) => {
       currency,
       salary_info,
       no_of_opening,
-      job_website_link,
+      
       work_authorization,
       preferred_gender,
       location,
@@ -299,7 +286,7 @@ if(req.files){
        
         salary_info,
         no_of_opening,
-        job_website_link,
+        
         work_authorization,
         location,
         tagline,
@@ -378,7 +365,7 @@ exports.editJobAds = async (req, res, next) => {
       currency,
       salary_info,
       no_of_opening,
-      job_website_link,
+      
       work_authorization,
       location,
       preferred_gender,
@@ -391,6 +378,7 @@ exports.editJobAds = async (req, res, next) => {
       secondary_phone_number,
       website_link,
       hide_my_phone,
+      hide_my_secondary_phone,
       hide_my_email,
       // preferableModeContact,
     } = req.body;
@@ -431,7 +419,7 @@ let salry={
     if (amount) adsInfoObj.salary = salry;
     if (salary_info) adsInfoObj.salary_info = salary_info;
     if (no_of_opening) adsInfoObj.no_of_opening = no_of_opening;
-    if (job_website_link) adsInfoObj.job_website_link = job_website_link;
+
     if (work_authorization) adsInfoObj.work_authorization = work_authorization;
     if (location) adsInfoObj.location = location;
     if (preferred_gender) adsInfoObj.preferred_gender = preferred_gender;
@@ -451,6 +439,7 @@ let salry={
         email_address,
         website_link,
         hide_my_phone,
+        hide_my_secondary_phone,
         hide_my_email,
         primary_mobile_number: {
           country_code: +91,

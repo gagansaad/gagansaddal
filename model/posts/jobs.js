@@ -62,7 +62,7 @@ const roomRentsSchema = new mongoose.Schema({
             // required: true
         },
         employment_type: {
-            ...defaultStringConfig,
+            type:Array
             // required: true
         },
         experience: {
@@ -70,7 +70,7 @@ const roomRentsSchema = new mongoose.Schema({
             // required: true
         },
         language: {
-            ...defaultStringConfig,
+            type:Array
             // required: true
 
         },
@@ -84,12 +84,12 @@ const roomRentsSchema = new mongoose.Schema({
         },
         no_of_opening: {
             type: Number,
-            required: true
-        },
-        job_website_link: {
-            ...defaultStringConfig,
             // required: true
         },
+        // job_website_link: {
+        //     ...defaultStringConfig,
+        //     // required: true
+        // },
 
         work_authorization: {
             ...defaultStringConfig,
@@ -101,7 +101,7 @@ const roomRentsSchema = new mongoose.Schema({
             required: true,
         },
         tagline:{
-            ...defaultStringConfig,
+            type:Array,
             // required: true,
         },
         preferred_gender: {
@@ -114,16 +114,16 @@ const roomRentsSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: `media`,
         }],
-        video: {
-            ...defaultStringConfig,
-        },
+        // video: {
+        //     ...defaultStringConfig,
+        // },
 
     },
 
     lister_basic_info: {
         name: defaultStringConfig,
         email_address: defaultStringConfig,
-        website_link: defaultStringConfig,
+        // website_link: defaultStringConfig,
         primary_mobile_number: {
             country_code: defaultStringConfig,
             primary_phone_number:defaultStringConfig,
@@ -136,6 +136,7 @@ const roomRentsSchema = new mongoose.Schema({
           },
         hide_my_email: defaultBooleanConfig,
         hide_my_phone: defaultBooleanConfig,
+        hide_my_secondary_phone: defaultBooleanConfig,
         preferable_contact_mode: {
             type: Number,
             enum: [1, 2, 3]

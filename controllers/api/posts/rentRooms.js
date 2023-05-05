@@ -41,7 +41,8 @@ exports.fetchDynamicsData = async (req, res, next) => {
         prefered_age: ["18-30", "18-50", "18-any"],
         whoAreU: [
             `Owner`,
-            `Broker`
+            `Broker`,
+            `Company`
         ],
         Accommodates: [
             `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`
