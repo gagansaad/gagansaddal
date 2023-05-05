@@ -75,8 +75,8 @@ const roomRentsSchema = new mongoose.Schema({
 
         },
         salary: {
-            type: Number,
-            // required: true
+            amount:{type:Number},
+            currency:{type:String,default:"USD"},
         },
         salary_info:{
             ...defaultStringConfig,
@@ -106,7 +106,7 @@ const roomRentsSchema = new mongoose.Schema({
         },
         preferred_gender: {
             ...defaultStringConfig,
-            enum: [`Male`,`Female`,`Any Gender`],
+            // enum: [`Male`,`Female`,`Any Gender`],
             // required: true
         },
 
