@@ -101,10 +101,10 @@ exports.validateJobAdsData = async (req, res, next) => {
     if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
     if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
-    // if (!isValidString(listing_type))
-    // return failureJSONResponse(res, {
-    //   message: `Please provide valid listing type`,
-    // });
+    if (!isValidString(listing_type))
+    return failureJSONResponse(res, {
+      message: `Please provide valid listing type`,
+    });
     if (!isValidString(categories))
       return failureJSONResponse(res, {
         message: `Please provide valid job Category`,
@@ -263,7 +263,7 @@ exports.createJobAds = async (req, res, next) => {
     } = req.body;
 
     const imageArr = [];
-
+if(req.files){
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path
 
@@ -271,7 +271,7 @@ exports.createJobAds = async (req, res, next) => {
       imageArr.push(productImages._id);
 
     }
-
+  }
 
     const dataObj = {
 

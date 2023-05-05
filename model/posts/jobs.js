@@ -33,6 +33,7 @@ const roomRentsSchema = new mongoose.Schema({
     },
     listing_type:{
         ...defaultStringConfig,
+        required: true
     },
     adsType: {
         type: mongoose.Schema.Types.ObjectId,
@@ -87,7 +88,7 @@ const roomRentsSchema = new mongoose.Schema({
         },
         job_website_link: {
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
 
         work_authorization: {
