@@ -51,7 +51,7 @@ const roomRentsSchema = new mongoose.Schema({
         },
         roomType: {
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         availability:{
            custom_date:{
@@ -105,16 +105,16 @@ const roomRentsSchema = new mongoose.Schema({
         },
         preferedGender: {
             ...defaultStringConfig,
-            enum: [`Male`,`Female`,`Any Gender`],
-            required: true
+            // enum: [`Male`,`Female`,`Any Gender`],
+            // required: true
         },
         prefered_age:{
             ...defaultStringConfig,
         },
-        // furnished: {
-        //     ...defaultStringConfig,
-        //     required: true
-        // },
+        furnished: {
+            ...defaultStringConfig,
+            // required: true
+        },
         location: {
             ...defaultStringConfig,
             required: true

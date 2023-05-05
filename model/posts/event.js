@@ -83,7 +83,7 @@ const events_Schema = new mongoose.Schema({
         },
         recurring_type: {
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         ticket_price: {
             type: Number,
@@ -91,16 +91,16 @@ const events_Schema = new mongoose.Schema({
         },
         vip_ticket_price: {
             type: Number,
-            required: true
+            // required: true
         },
         no_of_ticket: {
             regular_ticket: {
                 type: Number,
-                required: true
+                // required: true
             },
             vip_ticket: {
                 type: Number,
-                required: true
+                // required: true
             },
 
         },
@@ -112,7 +112,8 @@ const events_Schema = new mongoose.Schema({
             ...defaultStringConfig,
         },
         location: {
-            ...defaultStringConfig
+            ...defaultStringConfig,
+            required: true
         },
         tagline: {
             ...defaultStringConfig
@@ -129,7 +130,7 @@ const events_Schema = new mongoose.Schema({
            
         },
 
-        website_link: defaultStringConfig,
+        // website_link: defaultStringConfig,
         emailAddress: defaultStringConfig,
         primary_mobile_number: {
             country_code: defaultStringConfig,

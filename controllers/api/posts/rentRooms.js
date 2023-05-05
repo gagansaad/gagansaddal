@@ -108,7 +108,7 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         if (!isValidString(title)) return failureJSONResponse(res, { message: `Please provide valid title` });
         if (!isValidString(descriptions)) return failureJSONResponse(res, { message: `Please provide valid descriptions` });
         if (!isValidString(listerType)) return failureJSONResponse(res, { message: `Please provide valid listerType` });
-        if (!isValidString(roomType)) return failureJSONResponse(res, { message: `Please provide valid roomType` });
+        // if (!isValidString(roomType)) return failureJSONResponse(res, { message: `Please provide valid roomType` });
         if (!attachedBath) return failureJSONResponse(res, { message: `Please provide valid attachedBath` });
         if (isNaN(Number(attachedBath))) return failureJSONResponse(res, { message: `Please provide valid no. of attached Bath` });
         if (!accommodates) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
@@ -116,8 +116,8 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         // if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
         if (!isValidString(location)) return failureJSONResponse(res, { message: `Please provide valid location` });
         if (!isValidString(tagline)) return failureJSONResponse(res, { message: `Please provide valid tagline` });
-        if (!isValidString(preferedGender)) return failureJSONResponse(res, { message: `Please provide valid preferredGender` });
-        else if (preferedGender != `Male` && preferedGender != `Female` && preferedGender != "Any Gender") return failureJSONResponse(res, { message: `Please enter preferred_gender Male,Female or Any Gender` });
+        // if (!isValidString(preferedGender)) return failureJSONResponse(res, { message: `Please provide valid preferredGender` });
+        // else if (preferedGender != `Male` && preferedGender != `Female` && preferedGender != "Any Gender") return failureJSONResponse(res, { message: `Please enter preferred_gender Male,Female or Any Gender` });
         if (!amount) return failureJSONResponse(res, { message: `Please provide valid amount` });
         if (isNaN(Number(amount)))
             return failureJSONResponse(res, {

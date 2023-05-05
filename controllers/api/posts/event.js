@@ -155,18 +155,18 @@ exports.validateEventAdsData = async (req, res, next) => {
     if (!ticket_price) return failureJSONResponse(res, {
       message: `please provide valid regular ticket price`,
     });
-    if (isNaN(Number(vip_ticket)))
-      return failureJSONResponse(res, {
-        message: `please provide valid no. of vip ticket`,
-      });
-    if (isNaN(Number(regular_ticket)))
-      return failureJSONResponse(res, {
-        message: `please provide valid no. of regular ticket`,
-      });
-    if (isNaN(Number(vip_ticket_price)))
-      return failureJSONResponse(res, {
-        message: `please provide valid valid vip ticket price`,
-      });
+    // if (isNaN(Number(vip_ticket)))
+    //   return failureJSONResponse(res, {
+    //     message: `please provide valid no. of vip ticket`,
+    //   });
+    // if (isNaN(Number(regular_ticket)))
+    //   return failureJSONResponse(res, {
+    //     message: `please provide valid no. of regular ticket`,
+    //   });
+    // if (isNaN(Number(vip_ticket_price)))
+    //   return failureJSONResponse(res, {
+    //     message: `please provide valid valid vip ticket price`,
+    //   });
     if (facebook_platform && (!isValidPlink(facebook_platform))) return failureJSONResponse(res, { message: `please provide valid facebook link` });
     if (youtube_platform && (!isValidPlink(youtube_platform))) return failureJSONResponse(res, { message: `please provide valid youtube link` });
     if (instagram_platform && (!isValidPlink(instagram_platform))) return failureJSONResponse(res, { message: `please provide valid instagram link` });
@@ -178,10 +178,10 @@ exports.validateEventAdsData = async (req, res, next) => {
     //   return failureJSONResponse(res, { message: `please provide valid link` });
     if (!isValidString(location))
       return failureJSONResponse(res, { message: `please provide valid location` });
-    if (!isValidString(tagline))
-      return failureJSONResponse(res, {
-        message: `Please provide us tagline`,
-      });
+    // if (!isValidString(tagline))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide us tagline`,
+    //   });
     // if (!video && (!isValidUrl(video)))return failureJSONResponse(res, {
     //   message: `Please provide valid video link`,
     // });
