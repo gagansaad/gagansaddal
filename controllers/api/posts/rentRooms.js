@@ -107,24 +107,24 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         if (!isValidString(category)) return failureJSONResponse(res, { message: `Please provide valid category` });
         if (!isValidString(title)) return failureJSONResponse(res, { message: `Please provide valid title` });
         if (!isValidString(descriptions)) return failureJSONResponse(res, { message: `Please provide valid descriptions` });
-        if (!isValidString(listerType)) return failureJSONResponse(res, { message: `Please provide valid listerType` });
+        // if (!isValidString(listerType)) return failureJSONResponse(res, { message: `Please provide valid listerType` });
         // if (!isValidString(roomType)) return failureJSONResponse(res, { message: `Please provide valid roomType` });
-        if (!attachedBath) return failureJSONResponse(res, { message: `Please provide valid attachedBath` });
-        if (isNaN(Number(attachedBath))) return failureJSONResponse(res, { message: `Please provide valid no. of attached Bath` });
-        if (!accommodates) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
-        if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid no. of accommodates` });
+        // if (!attachedBath) return failureJSONResponse(res, { message: `Please provide valid attachedBath` });
+        // if (isNaN(Number(attachedBath))) return failureJSONResponse(res, { message: `Please provide valid no. of attached Bath` });
+        // if (!accommodates) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
+        // if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid no. of accommodates` });
         // if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
         if (!isValidString(location)) return failureJSONResponse(res, { message: `Please provide valid location` });
-        if (!isValidString(tagline)) return failureJSONResponse(res, { message: `Please provide valid tagline` });
+        // if (!isValidString(tagline)) return failureJSONResponse(res, { message: `Please provide valid tagline` });
         // if (!isValidString(preferedGender)) return failureJSONResponse(res, { message: `Please provide valid preferredGender` });
         // else if (preferedGender != `Male` && preferedGender != `Female` && preferedGender != "Any Gender") return failureJSONResponse(res, { message: `Please enter preferred_gender Male,Female or Any Gender` });
-        if (!amount) return failureJSONResponse(res, { message: `Please provide valid amount` });
-        if (isNaN(Number(amount)))
-            return failureJSONResponse(res, {
-                message: `please provide valid rent amount`,
-            });
-        if (!negotiable) return failureJSONResponse(res, { message: `Please provide valid negotiable (true/false)` });
-        else if (negotiable != `true` && negotiable != `false`) return failureJSONResponse(res, { message: `Please provide valid negotiable (true/false)` });
+        // if (!amount) return failureJSONResponse(res, { message: `Please provide valid amount` });
+        // if (isNaN(Number(amount)))
+        //     return failureJSONResponse(res, {
+        //         message: `please provide valid rent amount`,
+        //     });
+        // if (!negotiable) return failureJSONResponse(res, { message: `Please provide valid negotiable (true/false)` });
+        // else if (negotiable != `true` && negotiable != `false`) return failureJSONResponse(res, { message: `Please provide valid negotiable (true/false)` });
 
 
         //  if (!isValidBoolean(isSmokingAllowed)) return failureJSONResponse(res, { message: `Please provide boolean value for Smoking Allowed` });
