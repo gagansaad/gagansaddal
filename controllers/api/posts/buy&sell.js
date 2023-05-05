@@ -45,7 +45,7 @@ exports.getDnymicsData = async (req, res, next) => {
     fullfilment: ["Free shipping", "In person pickup", "Only local delivery", "Please contact"],
     product_condition: ["New", "Used - Like new", "Used - Good", "Used - Fair"],
     user_type: [`Individual`, `Business`],
-
+    currency: ["USD", "INR"],
 
   };
   return successJSONResponse(res, {
@@ -209,6 +209,7 @@ exports.createBuySellAds = async (req, res, next) => {
       product_condition,
       product_model,
       amount,
+      currency,
       user_type,
       negotiable,
       quantity,
@@ -256,7 +257,10 @@ exports.createBuySellAds = async (req, res, next) => {
         descriptions,
         product_condition,
         product_model,
-        amount,
+        price:{
+          amount,
+          currency
+        },
         negotiable: boolean,
         quantity,
         payment_mode: mode_payment,

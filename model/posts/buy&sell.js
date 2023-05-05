@@ -59,10 +59,14 @@ const BuySellSchema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-        amount: {
-            type: Number,
-            required: true
+        price:{
+            amount: {
+                type: Number,
+                required: true
+            },
+            currency:{type:String,default:"USD"},
         },
+       
         negotiable:{
             type:Boolean,
             default:false

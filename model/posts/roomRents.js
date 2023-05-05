@@ -64,16 +64,16 @@ const roomRentsSchema = new mongoose.Schema({
         },
         listerType: {
             ...defaultStringConfig,
-            required: true
+            // required: true
 
         },
         accommodates: {
             type: Number,
-            required: true
+            // required: true
         },
         attachedBath: {
             type: Number,
-            required: true
+            // required: true
         },
         rent: {
            amount:{
@@ -84,16 +84,17 @@ const roomRentsSchema = new mongoose.Schema({
                 type: Boolean,
                 default:false
             },
+            currency:{type:String,default:"USD"},
         },
         
         isSmokingAllowed: {
             type: Boolean,
             default:false
         },
-        isAlcoholAllowed: {
-            type: Boolean,
-            default:false
-        },
+        // isAlcoholAllowed: {
+        //     type: Boolean,
+        //     default:false
+        // },
         isPetFriendly: {
             type: Boolean,
             default:false

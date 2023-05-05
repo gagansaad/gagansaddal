@@ -209,6 +209,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
         furnished,
         attachedBath,
         amount,
+        currency,
         negotiable,
         prefered_age,
         isSmokingAllowed,
@@ -292,6 +293,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
             rent: {
                 amount: amount,
                 negotiable: negotible,
+                currency:currency,
             },
             isSmokingAllowed: isSmokin,
             isAlcoholAllowed: isAlcoho,
