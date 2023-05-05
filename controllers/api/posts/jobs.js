@@ -251,7 +251,8 @@ exports.createJobAds = async (req, res, next) => {
       employment_type,
       experience,
       language,
-      salary,
+      amount,
+      currency,
       salary_info,
       no_of_opening,
       job_website_link,
@@ -291,7 +292,11 @@ if(req.files){
         employment_type,
         experience,
         language,
-        salary,
+        salary:{
+          amount,
+          currency,
+        },
+       
         salary_info,
         no_of_opening,
         job_website_link,
@@ -369,7 +374,8 @@ exports.editJobAds = async (req, res, next) => {
       employment_type,
       experience,
       language,
-      salary,
+      amount,
+      currency,
       salary_info,
       no_of_opening,
       job_website_link,
@@ -405,7 +411,10 @@ exports.editJobAds = async (req, res, next) => {
     const dataObj = {},
       adsInfoObj = {},
       listerBasicInfoObj = {};
-
+let salry={
+  amount: amount,
+  currency:currency
+}
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
@@ -419,7 +428,7 @@ exports.editJobAds = async (req, res, next) => {
     if (employment_type) adsInfoObj.employment_type = employment_type;
     if (experience) adsInfoObj.experience = experience;
     if (language) adsInfoObj.language = language;
-    if (salary) adsInfoObj.salary = salary;
+    if (amount) adsInfoObj.salary = salry;
     if (salary_info) adsInfoObj.salary_info = salary_info;
     if (no_of_opening) adsInfoObj.no_of_opening = no_of_opening;
     if (job_website_link) adsInfoObj.job_website_link = job_website_link;
