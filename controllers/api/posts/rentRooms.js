@@ -49,7 +49,9 @@ exports.fetchDynamicsData = async (req, res, next) => {
         attachedBathRoom: [
             `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`
         ],
-        furnished: ["Not Furnished", "Semi Furnished", "Fully Furnished"]
+        furnished: ["Not Furnished", "Semi Furnished", "Fully Furnished"],
+        
+
     }
 
     return successJSONResponse(res, {
