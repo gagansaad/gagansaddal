@@ -329,6 +329,7 @@ exports.editBuySellAds = async (req, res, next) => {
       product_condition,
       product_model,
       amount,
+      currency,
       user_type,
       negotiable,
       quantity,
@@ -372,7 +373,7 @@ exports.editBuySellAds = async (req, res, next) => {
     } else {
       boolean = false
     }
-
+let price={}
     if (status) dataObj.status = status;
     if (ads_type) dataObj.ads_type = ads_type;
     if (category) adsInfoObj.category = category;
@@ -383,7 +384,9 @@ exports.editBuySellAds = async (req, res, next) => {
     if (user_type) adsInfoObj.user_type = user_type;
     if (product_condition) adsInfoObj.product_condition = product_condition;
     if (product_model) adsInfoObj.product_model = product_model;
-    if (amount) adsInfoObj.amount = amount;
+    if (amount) price.amount = amount;
+    if (currency) price.currency = currency;
+    if (price) adsInfoObj.price = price;
     if (negotiable) adsInfoObj.negotiable = boolean;
     if (quantity) adsInfoObj.quantity = quantity;
     if (payment_mode) adsInfoObj.payment_mode = payment_mode;
