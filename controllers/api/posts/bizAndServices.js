@@ -214,6 +214,7 @@ exports.createbizAds = async (req, res, next) => {
       weekend_close_at,
       weekend_24,
       appointment,
+      is_appointment,
       // price,
       descriptions,
       image,
@@ -266,7 +267,7 @@ exports.createbizAds = async (req, res, next) => {
         week_ends:weekend  
       }
     }
-    if(Object.keys(appointment).length){
+    if(is_appointment == "true"){
       working_hour={
         appointment:appointment   
       }
