@@ -364,7 +364,7 @@ if(!accreditation_name){
     };
 
     const newbizPost = await postbizAndServicesAd.create(dataObj);
-    // console.log(newbizPost);
+    console.log(newbizPost);
     const bizAndServices = {};
 
     for (let key in newbizPost.toObject()) {
