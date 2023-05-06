@@ -330,7 +330,7 @@ if(!accreditation_name){
         let tags = await tagline_keywords.findOne({keywords:taglines[i]})
         if(!tags){
           let tag = {
-            keywords:tags.keywords,
+            keywords:taglines[i],
             ads_type:adsType
         }
           await tagline_keywords.create(tag)

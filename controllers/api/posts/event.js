@@ -64,7 +64,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       type,
       category,
       details,
-      ticket_price,
+      regular_ticket_price,
       vip_ticket_price,
       regular_ticket,
       vip_ticket,
@@ -149,11 +149,11 @@ exports.validateEventAdsData = async (req, res, next) => {
     //   return failureJSONResponse(res, {
     //     message: "Please provide valid recurring type",
     //   });
-    if (isNaN(Number(ticket_price)))
+    if (isNaN(Number(regular_ticket_price)))
       return failureJSONResponse(res, {
         message: `please provide valid regular ticket price`,
       });
-    if (!ticket_price) return failureJSONResponse(res, {
+    if (!regular_ticket_price) return failureJSONResponse(res, {
       message: `please provide valid regular ticket price`,
     });
     // if (isNaN(Number(vip_ticket)))
@@ -264,7 +264,7 @@ exports.createEventAds = async (req, res, next) => {
       type,
       category,
       details,
-      ticket_price,
+      regular_ticket_price,
       vip_ticket_price,
       regular_ticket,
       vip_ticket,
@@ -347,9 +347,12 @@ exports.createEventAds = async (req, res, next) => {
         type,
         category,
         details,
-        ticket_price,
-        currency,
-        vip_ticket_price,
+        ticket_price:{
+          regular_ticket_price,
+          currency,
+          vip_ticket_price,
+        },
+        
         no_of_ticket: {
           regular_ticket,
           vip_ticket,
@@ -508,7 +511,7 @@ exports.editEventAds = async (req, res, next) => {
     }
     const dataObj = {},
       adsInfoObj = {},
-
+      ticketPrice={},
       listerBasicInfoObj = {};
     let no_of_ticket = {}
     let date_time = {}
@@ -541,11 +544,13 @@ exports.editEventAds = async (req, res, next) => {
     if (recurring_type) adsInfoObj.recurring_type = recurring_type;
     if (acuurency) adsInfoObj.acuurency = acuurency;
     if (venue_name) adsInfoObj.venue_name = venue_name;
-    if (ticket_price) adsInfoObj.ticket_price = ticket_price;
+    if (regular_ticket_price)ticketPrice.regular_ticket_price = regular_ticket_price;
     if (vip_ticket) no_of_ticket.vip_ticket = vip_ticket;
     if (regular_ticket) no_of_ticket.regular_ticket = regular_ticket;
     if (no_of_ticket) adsInfoObj.no_of_ticket = no_of_ticket;
-    if (vip_ticket_price) adsInfoObj.vip_ticket_price = vip_ticket_price;
+    if (vip_ticket_price) ticketPrice.vip_ticket_price = vip_ticket_price;
+    if (currency) ticketPrice.currency = currency;
+    if (ticketPrice)adsInfoObj.ticket_price = ticketPrice;
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (platforms.length) adsInfoObj.live_event = platforms;
     if (location) adsInfoObj.location = location;
