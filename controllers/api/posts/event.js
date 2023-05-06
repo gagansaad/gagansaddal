@@ -66,8 +66,8 @@ exports.validateEventAdsData = async (req, res, next) => {
       details,
       regular_ticket_price,
       vip_ticket_price,
-      regular_ticket,
-      vip_ticket,
+      no_of_regular_ticket,
+      no_of_vip_ticket,
       location,
       time_zone,
       start_date,
@@ -266,8 +266,8 @@ exports.createEventAds = async (req, res, next) => {
       details,
       regular_ticket_price,
       vip_ticket_price,
-      regular_ticket,
-      vip_ticket,
+      no_of_regular_ticket,
+      no_of_vip_ticket,
       currency,
       time_zone,
       start_date,
@@ -354,8 +354,8 @@ exports.createEventAds = async (req, res, next) => {
         },
         
         no_of_ticket: {
-          regular_ticket,
-          vip_ticket,
+           no_of_regular_ticket,
+           no_of_vip_ticket,
         },
         recurring_type,
         image: imageArr,
@@ -431,11 +431,11 @@ exports.editEventAds = async (req, res, next) => {
       type,
       category,
       details,
-      ticket_price,
+      regular_ticket_price,
       vip_ticket_price,
       currency,
-      regular_ticket,
-      vip_ticket,
+      no_of_regular_ticket,
+      no_of_vip_ticket,
       time_zone,
       start_date,
       end_date,
@@ -545,8 +545,8 @@ exports.editEventAds = async (req, res, next) => {
     if (acuurency) adsInfoObj.acuurency = acuurency;
     if (venue_name) adsInfoObj.venue_name = venue_name;
     if (regular_ticket_price)ticketPrice.regular_ticket_price = regular_ticket_price;
-    if (vip_ticket) no_of_ticket.vip_ticket = vip_ticket;
-    if (regular_ticket) no_of_ticket.regular_ticket = regular_ticket;
+    if (no_of_vip_ticket) no_of_ticket.no_of_vip_ticket = no_of_vip_ticket;
+    if (no_of_regular_ticket) no_of_ticket.no_of_regular_ticket = no_of_regular_ticket;
     if (no_of_ticket) adsInfoObj.no_of_ticket = no_of_ticket;
     if (vip_ticket_price) ticketPrice.vip_ticket_price = vip_ticket_price;
     if (currency) ticketPrice.currency = currency;
