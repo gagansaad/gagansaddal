@@ -378,7 +378,7 @@ if(!accreditation_name){
     if (newbizPost) {
       return successJSONResponse(res, {
         message: `success`,
-        newbizPost: newbizPost,
+        bizAndServices: bizAndServices,
       });
     } else {
       return failureJSONResponse(res, {
