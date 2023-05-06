@@ -234,7 +234,7 @@ exports.createBuySellAds = async (req, res, next) => {
         if(!tags){
           let tag = {
             keywords:taglines[i],
-            ads_type:adsType
+            ads_type:ads_type
         }
           await tagline_keywords.create(tag)
         }
@@ -370,7 +370,7 @@ exports.editBuySellAds = async (req, res, next) => {
         if(!tags){
           let tag = {
             keywords:taglines[i],
-            ads_type:adsType
+            ads_type:ads_type
         }
           await tagline_keywords.create(tag)
         }
