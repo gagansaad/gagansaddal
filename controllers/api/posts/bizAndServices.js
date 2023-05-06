@@ -111,10 +111,10 @@ exports.validatebizAdsData = async (req, res, next) => {
     // if(req.files.accreditation_document && !accreditation_name)return failureJSONResponse(res, {
     //   message: `Please provide accreditation file name`,
     // });
-    if (!isValidString(tagline))
-      return failureJSONResponse(res, {
-        message: `Please provide valid tagline`,
-      });
+    // if (!isValidString(tagline))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide valid tagline`,
+    //   });
     if (!isValidString(business_location))
       return failureJSONResponse(res, {
         message: "Pleae provide us your buisness location",
