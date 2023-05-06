@@ -207,8 +207,8 @@ exports.createbizAds = async (req, res, next) => {
       accreditation_files,
       week_day,
       week_end,
-      weekday_start,
-      weekday_end,
+      weekday_open_at,
+      weekday_close_at,
       weekday_24,
       weekend_open_at,
       weekend_close_at,
@@ -240,8 +240,8 @@ exports.createbizAds = async (req, res, next) => {
     if(week_day == "true"){
       weekday={
         is_available: true,
-        open_at:weekday_start,
-        close_at:weekday_end,
+        open_at:weekday_open_at,
+        close_at:weekday_close_at,
         is_24_hour:weekday_24,
        
        }; 
