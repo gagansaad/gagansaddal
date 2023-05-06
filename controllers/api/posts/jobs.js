@@ -256,6 +256,21 @@ exports.createJobAds = async (req, res, next) => {
       video,
     } = req.body;
 
+    let taglines = tagline
+    if(taglines){
+      for(i=0;i<taglines.length;i++){
+        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
+        if(!tags){
+          let tag = {
+            keywords:taglines[i],
+            ads_type:adsType
+        }
+          await tagline_keywords.create(tag)
+        }
+       
+      }
+    }
+
     const imageArr = [];
 if(req.files){
     for (var i = 0; i < req.files.length; i++) {
@@ -385,6 +400,22 @@ exports.editJobAds = async (req, res, next) => {
       hide_my_email,
       // preferableModeContact,
     } = req.body;
+
+    let taglines = tagline
+    if(taglines){
+      for(i=0;i<taglines.length;i++){
+        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
+        if(!tags){
+          let tag = {
+            keywords:taglines[i],
+            ads_type:adsType
+        }
+          await tagline_keywords.create(tag)
+        }
+       
+      }
+    }
+    
     console.log(req.body.hideAddress, "ddeedr");
     const imageArr = [];
 

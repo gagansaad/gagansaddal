@@ -228,6 +228,21 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
 
     } = req.body;
 
+    let taglines = tagline
+    if(taglines){
+      for(i=0;i<taglines.length;i++){
+        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
+        if(!tags){
+          let tag = {
+            keywords:taglines[i],
+            ads_type:adsType
+        }
+          await tagline_keywords.create(tag)
+        }
+       
+      }
+    }
+
     const userId = req.userId;
 
     const imageArr = [];
@@ -400,7 +415,20 @@ exports.editRoomRentAds = async (req, res, next) => {
         hide_my_email,
 
     } = req.body;
-
+    let taglines = tagline
+    if(taglines){
+      for(i=0;i<taglines.length;i++){
+        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
+        if(!tags){
+          let tag = {
+            keywords:taglines[i],
+            ads_type:adsType
+        }
+          await tagline_keywords.create(tag)
+        }
+       
+      }
+    }
     const imageArr = [];
 let productImages;
 

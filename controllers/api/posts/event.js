@@ -292,6 +292,22 @@ exports.createEventAds = async (req, res, next) => {
       other_platform,
 
     } = req.body;
+
+    let taglines = tagline
+    if(taglines){
+      for(i=0;i<taglines.length;i++){
+        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
+        if(!tags){
+          let tag = {
+            keywords:taglines[i],
+            ads_type:adsType
+        }
+          await tagline_keywords.create(tag)
+        }
+       
+      }
+    }
+
     const livePlatform = ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"];
     let platforms = [];
     if (facebook_platform) {
@@ -466,6 +482,22 @@ exports.editEventAds = async (req, res, next) => {
       primary_phone_number,
       secondary_phone_number,
     } = req.body;
+
+    let taglines = tagline
+    if(taglines){
+      for(i=0;i<taglines.length;i++){
+        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
+        if(!tags){
+          let tag = {
+            keywords:taglines[i],
+            ads_type:adsType
+        }
+          await tagline_keywords.create(tag)
+        }
+       
+      }
+    }
+    
     const livePlatform = ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"];
     let platforms = [];
     if (facebook_platform) {

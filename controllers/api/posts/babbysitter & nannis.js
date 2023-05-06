@@ -209,7 +209,20 @@ exports.createAds = async (req, res, next) => {
     const userId = req.userId;
     const imageArr = [];
 
-
+    let taglines = tagline
+    if(taglines){
+      for(i=0;i<taglines.length;i++){
+        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
+        if(!tags){
+          let tag = {
+            keywords:taglines[i],
+            ads_type:adsType
+        }
+          await tagline_keywords.create(tag)
+        }
+       
+      }
+    }
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path
 
@@ -318,6 +331,21 @@ exports.editAds = async (req, res, next) => {
       preferable_contact_mode,
       image
     } = req.body;
+console.log(tagline,"vdhvdbhdbvhdbvhdvdbdhvbdh----------------------------------------");
+    let taglines = tagline
+    if(taglines){
+      for(i=0;i<taglines.length;i++){
+        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
+        if(!tags){
+          let tag = {
+            keywords:taglines[i],
+            ads_type:adsType
+        }
+          await tagline_keywords.create(tag)
+        }
+       
+      }
+    }
     const imageArr = [];
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path

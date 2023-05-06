@@ -227,7 +227,20 @@ exports.createBuySellAds = async (req, res, next) => {
 
     // let data =JSON.stringify(payment_mode)
     // console.log(data)
-
+    let taglines = tagline
+    if(taglines){
+      for(i=0;i<taglines.length;i++){
+        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
+        if(!tags){
+          let tag = {
+            keywords:taglines[i],
+            ads_type:adsType
+        }
+          await tagline_keywords.create(tag)
+        }
+       
+      }
+    }
     const userId = req.userId;
 
     const imageArr = [];
@@ -350,6 +363,20 @@ exports.editBuySellAds = async (req, res, next) => {
       // address_info,
       // preferableModeContact,
     } = req.body;
+    let taglines = tagline
+    if(taglines){
+      for(i=0;i<taglines.length;i++){
+        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
+        if(!tags){
+          let tag = {
+            keywords:taglines[i],
+            ads_type:adsType
+        }
+          await tagline_keywords.create(tag)
+        }
+       
+      }
+    }
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
