@@ -365,16 +365,16 @@ if(!accreditation_name){
 
     const newbizPost = await postbizAndServicesAd.create(dataObj);
     // console.log(newbizPost);
-    // const bizAndServices = {};
+    const bizAndServices = {};
 
-    // for (let key in newbizPost.toObject()) {
-    //   if (
-    //     !fieldsToExclude.hasOwnProperty(String(key)) &&
-    //     !listerBasicInfo.hasOwnProperty(String(key))
-    //   ) {
-    //     bizAndServices[key] = newbizPost[key];
-    //   }
-    // }
+    for (let key in newbizPost.toObject()) {
+      if (
+        !fieldsToExclude.hasOwnProperty(String(key)) &&
+        !listerBasicInfo.hasOwnProperty(String(key))
+      ) {
+        bizAndServices[key] = newbizPost[key];
+      }
+    }
     if (newbizPost) {
       return successJSONResponse(res, {
         message: `success`,
