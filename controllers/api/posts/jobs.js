@@ -122,10 +122,10 @@ exports.validateJobAdsData = async (req, res, next) => {
     //   message: `Please provide us your experience`,
     // });
 
-    if (experience && (isNaN(Number(experience))))
-      return failureJSONResponse(res, {
-        message: `Please provide us your experience`,
-      });
+    // if (experience && (isNaN(Number(experience))))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide us your experience`,
+    //   });
     // if (!isValidString(language))
     //   return failureJSONResponse(res, {
     //     message: `Please provide us the information about how many languages do you know`,
