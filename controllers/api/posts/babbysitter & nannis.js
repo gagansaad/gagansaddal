@@ -3,6 +3,7 @@ const { json } = require("express");
 const mongoose = require("mongoose"),
   postbabyAd = mongoose.model("babysitter & nannie"),
   Media = mongoose.model("media"),
+  tagline_keywords = mongoose.model("keywords"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -19,7 +20,11 @@ const mongoose = require("mongoose"),
 
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
+  let adtype = req.body.adType
+    let records = await tagline_keywords.find({ads_type:adtype}).select({"keywords":1,"_id":1});
+
   const dynamicsData = {
+    records,
     category: ["I want a Babysitter/Nanny", "I am a Babysitter/Nanny"],
     currency: ["USD", "INR"],
     work_type: ["Live in", "Live in & out", "Live out"],

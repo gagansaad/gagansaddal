@@ -3,6 +3,7 @@ const { json } = require("express");
 const mongoose = require("mongoose"),
   eventAd = mongoose.model("event"),
   Media = mongoose.model("media"),
+  tagline_keywords = mongoose.model("keywords"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -23,7 +24,11 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 
 exports.getDnymicsData = async (req, res, next) => {
+  let adtype = req.body.adType
+    let records = await tagline_keywords.find({adType:adtype}).select({"keywords":1,"_id":1});
+
   const dynamicsData = {
+    records,
     type: ["Venue Based Event", "Live Event", "Both Venue based and Live Streaming Event"],
     category: ["Sport event", "Festival", "Religious", "Political gatherings", "Community Gatherings", "Music concert", "Night party", "Health care advisor", "Education", "Training", "Food & drink", "Fund Raising", "Candlelight Vigil", "Drama", "Theatre", "Movie", "Wedding", "Funneral", "Anniversary", "Welcome", "Farewell", "Markets & Auction", "Spritual", "Valentines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
     platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"],

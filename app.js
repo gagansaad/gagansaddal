@@ -60,7 +60,7 @@ const babysitterRoutes = require('./routes/api/ads/babbysitter & nannis');
 const eventRoutes = require(`./routes/api/ads/event`)
 const paymentRoutes = require(`./routes/api/ads/payment`)
 const AllAdsRoutes = require(`./routes/api/ads/fetchAllAds`)
-
+const All_Tags = require(`./routes/api/ads/tagline`)
 //admin
 
 const adminroomRentsRoutes = require('./routes/admin/roomRents');
@@ -100,7 +100,7 @@ app.use('/admin/v1/api/ads/jobs',adminjobsRoutes);
 app.use('/admin/v1/api/ads/buysell',adminbuySellRoutes);
 app.use('/admin/v1/api/ads/babysitter',adminbabysitterRoutes);
 app.use('/admin/v1/api/ads/events',admineventRoutes);
-
+app.use('/v1/api/posts/', All_Tags);
 app.use('/v1/api/posts/types', postTypeRoutes);
 app.use('/v1/api/posts/room-rents', roomRentsRoutes);
 app.use('/v1/api/posts/events',eventRoutes);

@@ -3,6 +3,7 @@ const { json } = require("express");
 const mongoose = require("mongoose"),
   postBuySellAd = mongoose.model("Buy & Sell"),
   Media = mongoose.model("media"),
+  tagline_keywords = mongoose.model("keywords"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -19,7 +20,11 @@ const mongoose = require("mongoose"),
 
 ////-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
+  let adtype = req.body.adType
+    let records = await tagline_keywords.find({ads_type:adtype}).select({"keywords":1,"_id":1});
+
   const dynamicsData = {
+    records,
     categories: ["Furniture and Home decore", "Baby & Kids stuff", "Home and Kitchen Appliance", "Real Estate", "Electronics appliance", "Computers & Accsosories", "Books", "Musical instrument", "Phones", "Clothing and Footwear", "Pets", "Fashion & Jewllery", "Home, Lawn & Garden", "Video Games & Consoles", "Bikes & Moterbikes", "Sport & Health product", "Cars", "Arts & Collectabiles", "Free Stuffs", "Other"],
     categories_Furniture: ["Tea table", "Sudy table", "Double bed", "Curtains", "Book shelf", "Center table", "Dining table and chairs", "Coffee tables", "Drawers", "Television stand", "Office furniture", "Bed & Bedroom furniture", "Chairs", "Computer table", "Cabinets", "Doors", "Couch", "Modular kitchen", "Windows", "Other"],
     categories_Baby: ["Baby toilet seat", "Drawing bed", "Swing", "Bags", "Clothes", "Feeding botles & nepples", "Toddler bed", "Bicycles & Tricycles", "Kids bath tube", "Shoe and boots", "Toys", "Breast pump", "Diapers", "Stroller", "Walker", "Kids Party Wear", "Other"],
