@@ -505,7 +505,57 @@ exports.editbizAds = async (req, res, next) => {
 
   //   }
   // }
-    
+  let working_hour;
+  let weekday={
+   is_available:false,
+   open_at:"",
+   close_at:"",
+ 
+  };
+  let weekend={
+   is_available:false,
+   open_at:"",
+   close_at:"",
+  
+  };
+     if(week_day == "true"){
+       weekday={
+         is_available: true,
+         open_at:weekday_open_at,
+         close_at:weekday_close_at,
+         is_24_hour:JSON.parse(weekday_24_hour),
+        }; 
+        working_hour={
+         week_days:weekday   
+       }
+     }
+     if(week_end == "true"){
+       weekend={
+         is_available: true,
+         open_at:weekend_open_at,
+         close_at:weekend_close_at,
+         is_24_hour:JSON.parse(weekend_24_hour),
+        }; 
+        working_hour={
+         week_ends:weekend   
+       }
+     }
+     if(week_end == "true" && week_day == "true"){
+       working_hour={
+         week_days:weekday,
+         week_ends:weekend  
+       }
+     }
+     if(is_24_seven == "true"){
+       working_hour={
+         is_24_seven:true   
+       }  
+     }
+     if(is_appointment == "true"){
+       working_hour={
+         appointment:appointment   
+       }
+     }
 
 
 
@@ -542,7 +592,7 @@ exports.editbizAds = async (req, res, next) => {
     // if (accreditationArr.length) accreditation_data.accreditation_files = accreditationArr;
     // if (accreditation_name) accreditation_data.accreditation_name = accreditation_name;
      if (accreditationArr.length) adsInfoObj.accreditation_file = accreditationArr;
-    if (work_hour.length == 7) adsInfoObj.working_hours = work_hour;
+    if (working_hour) adsInfoObj.working_hours = working_hour;
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
     }
