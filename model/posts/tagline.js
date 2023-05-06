@@ -11,10 +11,10 @@ const {
 const { Task } = require("twilio/lib/twiml/VoiceResponse");
 
 const tagline = new mongoose.Schema({
-tagline_text:{
+keywords:{
     ...defaultStringConfig
 },
-adstype:{
+ads_type:{
     type: mongoose.Schema.Types.ObjectId,
     ref: `PostType`,
     required: true

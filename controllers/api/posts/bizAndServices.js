@@ -3,6 +3,7 @@ const { json } = require("express");
 const mongoose = require("mongoose"),
   Media = mongoose.model("media"),
   postbizAndServicesAd = mongoose.model("Local_biz & Service"),
+  tagline_keywords = mongoose.model("keywords"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -192,7 +193,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
 exports.createbizAds = async (req, res, next) => {
   try {
-
+console.log(req.body,"this is body data ");
     const {
       isfeatured,
       status,
@@ -209,10 +210,9 @@ exports.createbizAds = async (req, res, next) => {
       week_end,
       weekday_open_at,
       weekday_close_at,
-      weekday_24,
       weekend_open_at,
       weekend_close_at,
-      weekend_24,
+      is_24_seven,
       appointment,
       is_appointment,
       // price,
@@ -220,30 +220,26 @@ exports.createbizAds = async (req, res, next) => {
       image,
       video_link,
     } = req.body;
+    const userId = req.userId;
 
-
-    let working_hour;
+let working_hour;
  let weekday={
   is_available:false,
   open_at:"",
   close_at:"",
-  is_24_hour:false,
+
  };
  let weekend={
   is_available:false,
   open_at:"",
   close_at:"",
-  is_24_hour:false,
+ 
  };
-
-    const userId = req.userId;
     if(week_day == "true"){
       weekday={
         is_available: true,
         open_at:weekday_open_at,
         close_at:weekday_close_at,
-        is_24_hour:weekday_24,
-       
        }; 
        working_hour={
         week_days:weekday   
@@ -254,7 +250,6 @@ exports.createbizAds = async (req, res, next) => {
         is_available: true,
         open_at:weekend_open_at,
         close_at:weekend_close_at,
-        is_24_hour:weekend_24,
        }; 
        working_hour={
         week_ends:weekend   
@@ -266,6 +261,11 @@ exports.createbizAds = async (req, res, next) => {
         week_days:weekday,
         week_ends:weekend  
       }
+    }
+    if(is_24_seven == "true"){
+      working_hour={
+        is_24_seven:true   
+      }  
     }
     if(is_appointment == "true"){
       working_hour={
@@ -320,6 +320,17 @@ if(!accreditation_name){
       }
 
     }
+    console.log(tagline,"this is tagline array")
+    let taglines = tagline
+    if(taglines){
+      for(i=0;i<taglines.length;i++){
+        let tag = {
+          keywords:taglines[i],
+          ads_type:adsType
+      }
+        await tagline_keywords.create(tag)
+      }
+    }
 
     // console.log(work_hour.length, "dcdnjchnbjbc");
 
@@ -346,26 +357,25 @@ if(!accreditation_name){
     };
 
     const newbizPost = await postbizAndServicesAd.create(dataObj);
-    console.log(newbizPost);
-    const bizAndServices = {};
+    // console.log(newbizPost);
+    // const bizAndServices = {};
 
-    for (let key in newbizPost.toObject()) {
-      if (
-        !fieldsToExclude.hasOwnProperty(String(key)) &&
-        !listerBasicInfo.hasOwnProperty(String(key))
-      ) {
-        bizAndServices[key] = newbizPost[key];
-      }
-    }
+    // for (let key in newbizPost.toObject()) {
+    //   if (
+    //     !fieldsToExclude.hasOwnProperty(String(key)) &&
+    //     !listerBasicInfo.hasOwnProperty(String(key))
+    //   ) {
+    //     bizAndServices[key] = newbizPost[key];
+    //   }
+    // }
     if (newbizPost) {
       return successJSONResponse(res, {
         message: `success`,
-        bizAndServices: bizAndServices,
+        newbizPost: newbizPost,
       });
     } else {
       return failureJSONResponse(res, {
         message: `Something went wrong`,
-        bizAndServices: null,
       });
     }
   } catch (err) {
@@ -421,79 +431,7 @@ exports.editbizAds = async (req, res, next) => {
       hide_my_email,
     } = req.body;
 
-    let work_hour = [];
-    let days = [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ];
-
-
-    for (i = 0; i <= days.length - 1; i++) {
-      let monday = {
-        is_24hour: false,
-        is_status: false,
-        day_name: "",
-        open_at: "",
-        close_at: "",
-      };
-      let day_s = `is_status_${days[i].toLocaleLowerCase()}`;
-      let day_24 = `is_24_hour_${days[i].toLocaleLowerCase()}`;
-      let day_o = `open_at_${days[i].toLocaleLowerCase()}`;
-      let day_c = `close_at_${days[i].toLocaleLowerCase()}`;
-      let day_n = `day_name_${days[i].toLocaleLowerCase()}`;
-      let day_status;
-      let day_24_hour;
-      var day_open;
-      let day_close;
-      let day_Name;
-      if (day_s in req.body) {
-        day_status = req.body[day_s];
-      }
-      if (day_24 in req.body) {
-        day_24_hour = req.body[day_24];
-      }
-      if (day_o in req.body) {
-        day_open = req.body[day_o];
-      }
-      if (day_c in req.body) {
-        day_close = req.body[day_c];
-      }
-      if (day_n in req.body) {
-        day_Name = req.body[day_n];
-      }
-
-      if (day_status == `true`) {
-        if (!work_hour[day_Name]) {
-          monday.is_status = day_status;
-          monday.day_name = day_Name;
-          if (day_24_hour == `true`) {
-            monday.is_24_hour = true;
-            monday.open_at = "00:00:00";
-            monday.close_at = "23:59:00";
-          } else {
-            monday.is_24_hour = false;
-            monday.day_name = day_Name;
-            monday.open_at = day_open;
-            monday.close_at = day_close;
-          }
-        }
-      } else {
-
-        monday.is_status = false;
-        monday.day_name = day_Name;
-        monday.open_at = null;
-        monday.close_at = null;
-        monday.is_24_hour = false;
-      }
-      work_hour.push(monday);
-    }
-
-    console.log(work_hour.length, "dcdnjchnbjbc");
+    
 
     const imageArr = [];
     const accreditationArr = [];
