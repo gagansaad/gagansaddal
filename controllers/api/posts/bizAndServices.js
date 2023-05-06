@@ -127,14 +127,14 @@ exports.validatebizAdsData = async (req, res, next) => {
     // //   return failureJSONResponse(res, {
     // //     message: `Please provide valid price`,
     // //   });
-    if (!isValidString(experience))
-      return failureJSONResponse(res, {
-        message: `Please provide us experience`,
-      });
-      if (!isValidUrl(video_link)) 
-      return failureJSONResponse(res, {
-        message: `Please provide valid video link`,
-      });
+    // if (!isValidString(experience))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide us experience`,
+    //   });
+      // if (!isValidUrl(video_link)) 
+      // return failureJSONResponse(res, {
+      //   message: `Please provide valid video link`,
+      // });
 
     return next();
   } catch (err) {
