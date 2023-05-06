@@ -38,10 +38,10 @@ exports.getDnymicsData = async (req, res, next) => {
     travel_Tourism: ["Travel Agents", "Group Travel Coordinators", "Other travel and tourism"],
     tuition_Classes: ["Academic", "Arts & Crafts", "Business", "Construction", "Cookery Classes", "Dance Classes", "Driving Lessons & Instructors", "Health & Fitness", "IT & Computing", "Language", "Music", "Other Classes"],
     weddings: ["Cars & Transportation", "Catering & Services", "Dress & Suit Hire", "Entertainment", "Florists", "Hairdressers", "Hen & Stag Planners", "Honeymoons", "Marquee Hire", "Organisers & Planners", "Photography & Film", "Wedding & Reception Venues", "Weddings Abroad", "Other Wedding Services"],
-    funneral_Services: ["funneral_Services"],
-    photography_Video: ["photography_Video"],
-    pets: ["pets"],
-    other: ["other"],
+    funneral_Services: [],
+    photography_Video: [],
+    pets: [],
+    other: [],
     // sub_categories: [
     //   "Local sub_categoriesal - Individuals who offer services at customer doorstep (e.g., Plumber, Electrician)",
     //   "Business Center / Local Retailer / Showroom - Customers visit provider’s location to access service (e.g., Beauty salon, Grocery store)",
@@ -209,10 +209,11 @@ exports.createbizAds = async (req, res, next) => {
       week_end,
       weekday_start,
       weekday_end,
-      weekend_start,
-      weekend_end,
       weekday_24,
-      
+      weekend_open_at,
+      weekend_close_at,
+      weekend_24,
+      appointment,
       // price,
       descriptions,
       image,
@@ -220,8 +221,14 @@ exports.createbizAds = async (req, res, next) => {
     } = req.body;
 
 
-    
+    let working_hour;
  let weekday={
+  is_available:false,
+  open_at:"",
+  close_at:"",
+  is_24_hour:false,
+ };
+ let weekend={
   is_available:false,
   open_at:"",
   close_at:"",
@@ -234,17 +241,36 @@ exports.createbizAds = async (req, res, next) => {
         is_available: true,
         open_at:weekday_start,
         close_at:weekday_end,
-        is_24_hour:false,
-       };
-        
+        is_24_hour:weekday_24,
+       
+       }; 
+       working_hour={
+        week_days:weekday   
+      }
     }
-console.log(weekday,"cdmcdm");
-    if(week_end == `true`){
-
+    if(week_end == "true"){
+      weekend={
+        is_available: true,
+        open_at:weekend_open_at,
+        close_at:weekend_close_at,
+        is_24_hour:weekend_24,
+       }; 
+       working_hour={
+        week_ends:weekend   
+      }
     }
-
-
-
+    if(week_end == "true" && week_day == "true"){
+   
+      working_hour={
+        week_days:weekday,
+        week_ends:weekend  
+      }
+    }
+    if(appointment.length){
+      working_hour={
+        appointment:appointment   
+      }
+    }
     const imageArr = [];
     let accreditationArr = [];
 
@@ -305,10 +331,7 @@ if(!accreditation_name){
         sub_categories,
         business_name,
         experience,
-        working_hour:{
-          weekdays:weekday
-        },
-
+        working_hours:working_hour,
         tagline,
         business_location,
         // price,

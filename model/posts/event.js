@@ -50,6 +50,10 @@ const events_Schema = new mongoose.Schema({
         venue_name: {
             ...defaultStringConfig,
         },
+        location: {
+            ...defaultStringConfig,
+            // required: true
+        },
         live_event: [{
             live_platform: {
                 ...defaultStringConfig,
@@ -111,10 +115,7 @@ const events_Schema = new mongoose.Schema({
         video: {
             ...defaultStringConfig,
         },
-        location: {
-            ...defaultStringConfig,
-            required: true
-        },
+       
         tagline: {
             type:Array
         }

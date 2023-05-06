@@ -59,8 +59,11 @@ const bizAndServices = new mongoose.Schema({
             week_days:{
                 is_available: Boolean, is_24_hour: Boolean, open_at: String, close_at: String 
             },
-            week_end:{
+            week_ends:{
                 is_available: Boolean, is_24_hour: Boolean, open_at: String, close_at: String 
+            },
+            appointment:{
+                ...defaultStringConfig
             }
 
         },
