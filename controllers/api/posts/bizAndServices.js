@@ -210,8 +210,10 @@ console.log(req.body,"this is body data ");
       week_end,
       weekday_open_at,
       weekday_close_at,
+      weekday_24_hour,
       weekend_open_at,
       weekend_close_at,
+      weekend_24_hour,
       is_24_seven,
       appointment,
       is_appointment,
@@ -240,6 +242,7 @@ let working_hour;
         is_available: true,
         open_at:weekday_open_at,
         close_at:weekday_close_at,
+        is_24_hour:JSON.parse(weekday_24_hour),
        }; 
        working_hour={
         week_days:weekday   
@@ -250,13 +253,13 @@ let working_hour;
         is_available: true,
         open_at:weekend_open_at,
         close_at:weekend_close_at,
+        is_24_hour:JSON.parse(weekend_24_hour),
        }; 
        working_hour={
         week_ends:weekend   
       }
     }
     if(week_end == "true" && week_day == "true"){
-   
       working_hour={
         week_days:weekday,
         week_ends:weekend  
@@ -324,11 +327,15 @@ if(!accreditation_name){
     let taglines = tagline
     if(taglines){
       for(i=0;i<taglines.length;i++){
-        let tag = {
-          keywords:taglines[i],
-          ads_type:adsType
-      }
-        await tagline_keywords.create(tag)
+        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
+        if(!tags){
+          let tag = {
+            keywords:tags.keywords,
+            ads_type:adsType
+        }
+          await tagline_keywords.create(tag)
+        }
+       
       }
     }
 
