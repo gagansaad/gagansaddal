@@ -227,7 +227,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
 
 
     } = req.body;
-
+console.log(tagline,"tagggggggggggg");
     let taglines = tagline
     if(taglines){
       for(i=0;i<taglines.length;i++){

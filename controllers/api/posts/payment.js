@@ -168,7 +168,7 @@ exports.validatepaymentData = async (req, res, next) => {
       automatic_payment_methods: {enabled: true},
      
     });
-    const newJobPost = await payment.create(dataObj);
+    // const newJobPost = await payment.create(dataObj);
 
   
   
