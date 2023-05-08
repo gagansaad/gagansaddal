@@ -280,6 +280,7 @@ exports.createEventAds = async (req, res, next) => {
       start_time,
       end_time,
       recurring_type,
+      tagline,
       image,
       location,
       venue_name,
@@ -497,7 +498,7 @@ exports.editEventAds = async (req, res, next) => {
        
       }
     }
-    
+
     const livePlatform = ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"];
     let platforms = [];
     if (facebook_platform) {
