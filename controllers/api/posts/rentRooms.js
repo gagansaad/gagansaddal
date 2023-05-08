@@ -20,7 +20,7 @@ const mongoose = require("mongoose"),
 
 
 exports.fetchDynamicsData = async (req, res, next) => {
-    let adtype = req.body.adType
+    let adtype = req.query.adsType
     let records = await tagline_keywords.find({adType:adtype}).select({"keywords":1,"_id":1});
 
     const objtSend = {

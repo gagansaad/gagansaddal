@@ -20,7 +20,7 @@ const mongoose = require("mongoose"),
 
 ////-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
-  let adtype = req.body.adType
+  let adtype = req.query.ads_type
     let records = await tagline_keywords.find({ads_type:adtype}).select({"keywords":1,"_id":1});
 
   const dynamicsData = {
@@ -231,13 +231,15 @@ exports.createBuySellAds = async (req, res, next) => {
     if(taglines){
       for(i=0;i<taglines.length;i++){
         let tags = await tagline_keywords.findOne({keywords:taglines[i]})
+        console.log(tags);
         if(!tags){
           let tag = {
             keywords:taglines[i],
             ads_type:ads_type
         }
-          await tagline_keywords.create(tag)
-        }
+         let ja= await tagline_keywords.create(tag)
+         console.log(ja,"jaj");
+        } 
        
       }
     }
