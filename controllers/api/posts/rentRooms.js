@@ -123,10 +123,10 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
         // if (!isValidString(preferedGender)) return failureJSONResponse(res, { message: `Please provide valid preferredGender` });
         // else if (preferedGender != `Male` && preferedGender != `Female` && preferedGender != "Any Gender") return failureJSONResponse(res, { message: `Please enter preferred_gender Male,Female or Any Gender` });
         // if (!amount) return failureJSONResponse(res, { message: `Please provide valid amount` });
-        // if (isNaN(Number(amount)))
-        //     return failureJSONResponse(res, {
-        //         message: `please provide valid rent amount`,
-        //     });
+        if (amount && (isNaN(Number(amount))))
+            return failureJSONResponse(res, {
+                message: `please provide valid rent amount`,
+            });
         // if (!negotiable) return failureJSONResponse(res, { message: `Please provide valid negotiable (true/false)` });
         // else if (negotiable != `true` && negotiable != `false`) return failureJSONResponse(res, { message: `Please provide valid negotiable (true/false)` });
 
