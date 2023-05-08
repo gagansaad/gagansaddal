@@ -226,7 +226,7 @@ exports.createBuySellAds = async (req, res, next) => {
     } = req.body;
 
     // let data =JSON.stringify(payment_mode)
-    // console.log(data)
+     console.log(tagline,"jncdncjdncjdndjcndjn xcmnj bjxjcnk")
     let taglines = tagline
     if(taglines){
       for(i=0;i<taglines.length;i++){
