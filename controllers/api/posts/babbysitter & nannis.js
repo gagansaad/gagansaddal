@@ -38,8 +38,8 @@ exports.getDnymicsData = async (req, res, next) => {
     preferrd_gender_offer: ["Male", "Female"],
     transport_facilty_need: ["Yes", "No"],
     transport_facilty_offer: ["Yes", "No"],
-    expected_salary_rate_need: ["/hour", "/week", "/month", "/day"],
-    expected_salary_rate_offer: ["/hour", "/week", "/month", "/day"],
+    expected_salary_rate_need:["/hour", "/day", "/week", "/month", "/biweekly", "/sqft", "fixed amount", "OBO", "Negotiable"],
+    expected_salary_rate_offer: ["/hour", "/day", "/week", "/month", "/biweekly", "/sqft", "fixed amount", "OBO", "Negotiable"],
   };
   return successJSONResponse(res, {
     message: `success`,
