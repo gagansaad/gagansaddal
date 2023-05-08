@@ -325,6 +325,7 @@ exports.editAds = async (req, res, next) => {
       secondary_phone_number,
       website_link,
       hide_my_phone,
+      hide_my_secondary_phone,
       hide_my_email,
       // hide_address,
       address_info,
@@ -355,7 +356,26 @@ console.log(tagline,"vdhvdbhdbvhdbvhdvdbdhvbdh----------------------------------
 
     }
 
+    let my_phone = false;
+    let my_email = false;
+    let secondary_phone = false
 
+if (hide_my_secondary_phone == "true") {
+secondary_phone = true
+} else if (hide_my_secondary_phone == 'false') {
+secondary_phone = false
+}
+    if (hide_my_phone == "true") {
+        my_phone = true
+    } else if (hide_my_phone == 'false') {
+        my_phone = false
+    }
+
+    if (hide_my_email == "true") {
+        my_email = true
+    } else if (hide_my_email == 'false') {
+        my_email = false
+    }
 
     const dataObj = {},
       adsInfoObj = {},
@@ -393,8 +413,9 @@ console.log(tagline,"vdhvdbhdbvhdbvhdvdbdhvbdh----------------------------------
         name,
         email_address,
         website_link,
-        hide_my_phone,
-        hide_my_email,
+        hide_my_phone: my_phone,
+        hide_my_email: my_email,
+        hide_my_secondary_phone:secondary_phone,
         location,
         address_info,
         primary_mobile_number: {

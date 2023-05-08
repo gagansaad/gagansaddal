@@ -412,6 +412,7 @@ exports.editRoomRentAds = async (req, res, next) => {
         secondary_phone_number,
         website_link,
         hide_my_phone,
+        hide_my_secondary_phone,
         hide_my_email,
 
     } = req.body;
@@ -450,6 +451,15 @@ console.log(productImages,"fvhfbbbbbbbbbbbvvbfhvfbhvbfhbvf");
     let isPetFr = false
     let my_phone = false;
     let my_email = false;
+    let secondary_phone = false
+    
+    if (hide_my_secondary_phone == "true") {
+        secondary_phone = true
+    } else if (hide_my_secondary_phone == 'false') {
+        secondary_phone = false
+    }
+
+    
     if (hide_my_phone == "true") {
         my_phone = true
     } else if (hide_my_phone == 'false') {
@@ -541,6 +551,7 @@ console.log(productImages,"fvhfbbbbbbbbbbbvvbfhvfbhvbfhbvf");
             website_link,
             hide_my_phone: my_phone,
             hide_my_email: my_email,
+            hide_my_secondary_phone:secondary_phone,
             location,
             primary_mobile_number: {
                 country_code: +91,

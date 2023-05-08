@@ -93,9 +93,10 @@ const babysitter_Schema = new mongoose.Schema({
         }],
     },
     lister_basic_info: {
+
         name: defaultStringConfig,
         email_address: defaultStringConfig,
-        website_link: defaultStringConfig,
+        // website_link: defaultStringConfig,
         primary_mobile_number: {
             country_code: defaultStringConfig,
             primary_phone_number:defaultStringConfig,
@@ -108,14 +109,16 @@ const babysitter_Schema = new mongoose.Schema({
           },
         hide_my_email: defaultBooleanConfig,
         hide_my_phone: defaultBooleanConfig,
-        address_info: defaultStringConfig,
-        preferable_contact_mode: {
-            type: Number,
-            enum: [1, 2, 3]
-            //   1:  Phone Number
-            //   2:  email Address
-            //   3:
-        }
+        hide_my_secondary_phone: defaultBooleanConfig,
+        // preferable_contact_mode: {
+        //     type: Number,
+        //     enum: [1, 2, 3]
+        //     //   1:  Phone Number
+        //     //   2:  email Address
+        //     //   3:
+        // }
+
+    
 
     }
 

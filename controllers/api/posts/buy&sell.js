@@ -360,6 +360,7 @@ exports.editBuySellAds = async (req, res, next) => {
       secondary_phone_number,
       website_link,
       hide_my_phone,
+      hide_my_secondary_phone,
       hide_my_email,
 
       // address_info,
@@ -403,6 +404,29 @@ exports.editBuySellAds = async (req, res, next) => {
       boolean = false
     }
 let price={}
+
+let my_phone = false;
+let my_email = false;
+let secondary_phone = false
+
+if (hide_my_secondary_phone == "true") {
+  secondary_phone = true
+} else if (hide_my_secondary_phone == 'false') {
+  secondary_phone = false
+}
+if (hide_my_phone == "true") {
+  my_phone = true
+} else if (hide_my_phone == 'false') {
+  my_phone = false
+}
+
+if (hide_my_email == "true") {
+  my_email = true
+} else if (hide_my_email == 'false') {
+  my_email = false
+}
+
+
     if (status) dataObj.status = status;
     if (ads_type) dataObj.ads_type = ads_type;
     if (category) adsInfoObj.category = category;
@@ -437,8 +461,9 @@ let price={}
         name,
         email_address,
         website_link,
-        hide_my_phone,
-        hide_my_email,
+        hide_my_phone: my_phone,
+        hide_my_email: my_email,
+        hide_my_secondary_phone:secondary_phone,
         primary_mobile_number: {
           country_code: +91,
           primary_phone_number: primary_phone_number,

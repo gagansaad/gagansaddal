@@ -481,6 +481,7 @@ exports.editEventAds = async (req, res, next) => {
       website_link,
       hide_my_phone,
       hide_my_email,
+      hide_my_secondary_phone,
       primary_phone_number,
       secondary_phone_number,
     } = req.body;
@@ -556,6 +557,13 @@ exports.editEventAds = async (req, res, next) => {
     let date_time = {}
     let my_phone = false;
     let my_email = false;
+    let secondary_phone = false
+    
+    if (hide_my_secondary_phone == "true") {
+      secondary_phone = true
+    } else if (hide_my_secondary_phone == 'false') {
+      secondary_phone = false
+    }
     if (hide_my_phone == "true") {
       my_phone = true
     } else if (hide_my_phone == 'false') {
@@ -607,7 +615,8 @@ exports.editEventAds = async (req, res, next) => {
         emailAddress,
         website_link,
         hide_my_phone: my_phone,
-        hide_my_email: my_email,
+            hide_my_email: my_email,
+            hide_my_secondary_phone:secondary_phone,
         primary_mobile_number: {
           country_code: +91,
           primary_phone_number: primary_phone_number,

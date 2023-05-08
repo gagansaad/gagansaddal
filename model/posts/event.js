@@ -152,7 +152,7 @@ const events_Schema = new mongoose.Schema({
           },
         hide_my_email: defaultBooleanConfig,
         hide_my_phone: defaultBooleanConfig,
-
+        hide_my_secondary_phone: defaultBooleanConfig,
         // mobileNumber: {
         //     countryCode: defaultStringConfig,
         //     phoneNumber: defaultStringConfig
@@ -163,6 +163,7 @@ const events_Schema = new mongoose.Schema({
         //     type: Number,
         //     enum: [1, 2, 3]
         // }
+        
 
     }
 
