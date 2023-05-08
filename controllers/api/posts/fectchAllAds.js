@@ -73,7 +73,6 @@ exports.fetchAll = async (req, res, next) => {
         successJSONResponseWithPagination(res, jobsAd, page, perPage)
         break;
         case "Rentals":
-           
            successJSONResponseWithPagination(res, roomrentAd, page, perPage)
           break;
       default:

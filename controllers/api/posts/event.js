@@ -28,7 +28,7 @@ exports.getDnymicsData = async (req, res, next) => {
     let records = await tagline_keywords.find({adType:adtype}).select({"keywords":1,"_id":1});
 
   const dynamicsData = {
-    records,
+    tagline:records,
     type: ["Venue Based Event", "Live Event", "Both Venue based and Live Streaming Event"],
     category: ["Sport event", "Festival", "Religious", "Political gatherings", "Community Gatherings", "Music concert", "Night party", "Health care advisor", "Education", "Training", "Food & drink", "Fund Raising", "Candlelight Vigil", "Drama", "Theatre", "Movie", "Wedding", "Funneral", "Anniversary", "Welcome", "Farewell", "Markets & Auction", "Spritual", "Valentines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
     platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"],
