@@ -118,10 +118,7 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid product_condition`,
       });
-    if (!amount)
-      return failureJSONResponse(res, {
-        message: `please provide valid price`,
-      });
+    
     if (!quantity)
       return failureJSONResponse(res, {
         message: `please provide valid quantity`,
@@ -130,12 +127,12 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid quantity`,
       });
-    if (isNaN(Number(amount)))
+      if (amount && (isNaN(Number(amount))))
       return failureJSONResponse(res, {
-        message: `please provide valid amount`,
+          message: `please provide valid amount`,
       });
     // console.log(object);
-    if (!(negotiable)) return failureJSONResponse(res, { message: `Please provide valid negotiable value` });
+    // if (!(negotiable)) return failureJSONResponse(res, { message: `Please provide valid negotiable value` });
     //  else if (!isValidBoolean(negotiable)) return failureJSONResponse(res, { message: `Please provide boolean value for negotiable` });
     // if (!isValidString(payment_mode))
     //   return failureJSONResponse(res, { message: `please provide valid payment mode` });

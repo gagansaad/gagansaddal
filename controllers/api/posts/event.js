@@ -154,13 +154,14 @@ exports.validateEventAdsData = async (req, res, next) => {
     //   return failureJSONResponse(res, {
     //     message: "Please provide valid recurring type",
     //   });
-    if (isNaN(Number(regular_ticket_price)))
-      return failureJSONResponse(res, {
-        message: `please provide valid regular ticket price`,
-      });
-    if (!regular_ticket_price) return failureJSONResponse(res, {
-      message: `please provide valid regular ticket price`,
-    });
+    if (regular_ticket_price && (isNaN(Number(regular_ticket_price))))
+            return failureJSONResponse(res, {
+                message: `please provide valid regular_ticket_price`,
+            });
+            if (vip_ticket_price && (isNaN(Number(vip_ticket_price))))
+            return failureJSONResponse(res, {
+                message: `please provide valid vip_ticket_price`,
+            });
     // if (isNaN(Number(vip_ticket)))
     //   return failureJSONResponse(res, {
     //     message: `please provide valid no. of vip ticket`,
