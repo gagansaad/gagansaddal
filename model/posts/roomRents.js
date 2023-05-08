@@ -79,9 +79,6 @@ const roomRentsSchema = new mongoose.Schema({
            amount:{
             type: Number,
             required: true,
-            min: 0.01,
-            max: 99999.99,
-          
            },
             negotiable:{
                 type: Boolean,
