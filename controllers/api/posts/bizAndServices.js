@@ -25,7 +25,7 @@ exports.getDnymicsData = async (req, res, next) => {
     let records = await tagline_keywords.find({adType:adtype}).select({"keywords":1,"_id":1});
 
   const dynamicsData = {
-    tagline:records,
+   
     categories:       ["Business & Office", "Childcare", "Clothing", "Computers & Telecoms", "Entertainment", "Finance & Legal", "Food & Drink", "Goods Suppliers & Retailers", "Health & Beauty", "Automotive Services", "Property Maintenance and Construction", "Transport", "Travel & Tourism", "Tuition & Classes", "Weddings", "Funneral Services", "Photography & Video", "Pets", "Other"],
     business_Office: ["Accounting", "Advertising Agencies", "Courier services", "Funeral directors", "Tax Service", "Insurance Agencies", "Translation Service", "Realestate", "Realtor", "Marketing", "Printing", "Recuriment", "Shipping", "Shredding service", "Sign makers", "Storage", "Writing and litterature", "Other bussines and office service"],
     childcare:         ["Daycare", "Kindergarton", "Childeren's activity", "Child care agencies", "Nursery school", "Parent support", "Other childeren service"],
@@ -59,6 +59,7 @@ exports.getDnymicsData = async (req, res, next) => {
   };
   return successJSONResponse(res, {
     message: `success`,
+    tagline:records,
     data: dynamicsData,
   });
 };

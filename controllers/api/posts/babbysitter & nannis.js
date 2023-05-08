@@ -24,7 +24,7 @@ exports.getDnymicsData = async (req, res, next) => {
     let records = await tagline_keywords.find({ads_type:adtype}).select({"keywords":1,"_id":1});
 
   const dynamicsData = {
-    tagline:records,
+  
     category: ["I want a Babysitter/Nanny", "I am a Babysitter/Nanny"],
     currency: ["USD", "INR"],
     work_type: ["Live in", "Live in & out", "Live out"],
@@ -43,6 +43,7 @@ exports.getDnymicsData = async (req, res, next) => {
   };
   return successJSONResponse(res, {
     message: `success`,
+    tagline:records,
     data: dynamicsData,
   });
 };
