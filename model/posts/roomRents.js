@@ -102,10 +102,10 @@ const roomRentsSchema = new mongoose.Schema({
             type: Boolean,
             default:false
         },
-        occupation: {
-            ...defaultStringConfig,
+        // occupation: {
+        //     ...defaultStringConfig,
            
-        },
+        // },
         preferedGender: {
             ...defaultStringConfig,
             // enum: [`Male`,`Female`,`Any Gender`],

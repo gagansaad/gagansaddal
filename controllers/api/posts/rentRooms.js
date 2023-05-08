@@ -36,11 +36,11 @@ exports.fetchDynamicsData = async (req, res, next) => {
             `Triple`,
             `Quad`
         ],
-        occupation: [
-            `employed`,
-            `self employed`,
-            `engineer`,
-        ],
+        // occupation: [
+        //     `employed`,
+        //     `self employed`,
+        //     `engineer`,
+        // ],
         gender: ["Male", "Female", "Any Gender","Not Selected"],
         prefered_age: ["18-30", "18-50", "18-any"],
         whoAreU: [
@@ -86,7 +86,7 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
             isSmokingAllowed,
             isAlcoholAllowed,
             isPetFriendly,
-            occupation,
+            // occupation,
             preferedGender,
             location,
             tagline,
@@ -219,7 +219,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
         isSmokingAllowed,
         isAlcoholAllowed,
         isPetFriendly,
-        occupation,
+        // occupation,
         preferedGender,
         location,
         tagline
@@ -317,7 +317,7 @@ console.log(tagline,"tagggggggggggg");
             isSmokingAllowed: isSmokin,
             isAlcoholAllowed: isAlcoho,
             isPetFriendly: isPetFr,
-            occupation,
+            // occupation,
             preferedGender: preferedGender,
             location,
             tagline,
@@ -402,7 +402,7 @@ exports.editRoomRentAds = async (req, res, next) => {
         isSmokingAllowed,
         isAlcoholAllowed,
         isPetFriendly,
-        occupation,
+        // occupation,
         preferedGender,
         location,
         tagline,
@@ -531,7 +531,7 @@ console.log(productImages,"fvhfbbbbbbbbbbbvvbfhvfbhvbfhbvf");
     if (isAlcoholAllowed) adsInfoObj.isAlcoholAllowed = isAlcoho;
     if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFr;
 
-    if (occupation) adsInfoObj.occupation = occupation;
+    // if (occupation) adsInfoObj.occupation = occupation;
     if (prefered_age) adsInfoObj.prefered_age = prefered_age;
 
     if (location) adsInfoObj.location = location;
