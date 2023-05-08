@@ -24,7 +24,7 @@ exports.fetchDynamicsData = async (req, res, next) => {
     let records = await tagline_keywords.find({adType:adtype}).select({"keywords":1,"_id":1});
 
     const objtSend = {
-       
+        tagline:records,
         rental_type: ["Rooms for Rent", "Commercial Property for Rent", "Other Rentals"],
         category_Room: ["Apartment", "Condo", "Townhouse", "House", "Basement"],
         category_Commercial_Property: ["Commercial Building", "Office", "Parking Space", "Warehouse", "Venues"],
@@ -61,7 +61,6 @@ exports.fetchDynamicsData = async (req, res, next) => {
    
     return successJSONResponse(res, {
         message: `success`,
-        tagline:records,
         data: objtSend
     })
 
