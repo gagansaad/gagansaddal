@@ -78,7 +78,10 @@ const roomRentsSchema = new mongoose.Schema({
         rent: {
            amount:{
             type: Number,
-            float:true,
+            min: 0.01,
+            max: 99999.99,
+            set: (value) => value.toFixed(2),
+            get: (value) => value.toFixed(2),
             required: true,
            },
             negotiable:{
