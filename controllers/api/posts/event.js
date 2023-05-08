@@ -464,6 +464,7 @@ exports.editEventAds = async (req, res, next) => {
       start_time,
       end_time,
       recurring_type,
+      tagline,
       image,
       location,
       venue_name,
