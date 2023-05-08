@@ -326,7 +326,7 @@ console.log(tagline,"tagggggggggggg");
 
         userId: userId
     }
-
+console.log(dataObj,"jdnjd");
     const newRoomRentPost = await RoomRentsAds.create(dataObj);
 
 
