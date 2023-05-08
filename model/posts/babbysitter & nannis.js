@@ -120,6 +120,10 @@ const babysitter_Schema = new mongoose.Schema({
 
     
 
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
     }
 
 }, { timestamps: true });
