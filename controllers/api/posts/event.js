@@ -581,7 +581,7 @@ exports.editEventAds = async (req, res, next) => {
     if (end_time) date_time.end_time = end_time;
     if (date_time) adsInfoObj.date_time = date_time;
     if (recurring_type) adsInfoObj.recurring_type = recurring_type;
-    if (acuurency) adsInfoObj.acuurency = acuurency;
+    // if (acuurency) adsInfoObj.acuurency = acuurency;
     if (venue_name) adsInfoObj.venue_name = venue_name;
     if (regular_ticket_price)ticketPrice.regular_ticket_price = regular_ticket_price;
     if (no_of_vip_ticket) no_of_ticket.no_of_vip_ticket = no_of_vip_ticket;
