@@ -100,7 +100,7 @@ const events_Schema = new mongoose.Schema({
             },
             regular_ticket_price:{
             type: Number,
-            required: true
+            // required: true
             }
         },
        

@@ -48,7 +48,8 @@ exports.getDnymicsData = async (req, res, next) => {
     work_authorization: ["Citizen", "Green Card", "Work Permit", "Visa", "Any Type"],
     preferred_gender: [`Male`,
       `Female`,],
-    list_type: ["Offering - I have a job to offer", "Wanted - I am looking for a job"]
+    list_type: ["Offering - I have a job to offer", "Wanted - I am looking for a job"],
+    
   };
   return successJSONResponse(res, {
     message: `success`,

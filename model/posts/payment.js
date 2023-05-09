@@ -18,7 +18,7 @@ const roomRentsSchema = new mongoose.Schema({
         default: "draft"
       
     },  
-    plan:{  
+    plan_id:{  
         type: mongoose.Schema.Types.ObjectId,
         ref: `adsplan`,
         required: true
