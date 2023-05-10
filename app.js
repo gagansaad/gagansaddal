@@ -91,7 +91,7 @@ app.use('/admin/login',adminSignIp);
 app.use('/api/admin/users',usercontrol);
 
 app.use('/v1/api/configurations', configurationsRoute);
-app.use('/admin/v1/api/configurations1', adminconfigurationsRoute);
+app.use('/admin/v1/api/configurations', adminconfigurationsRoute);
 app.use('/admin/v1/api/configurations', adminconfigurationsRoute1);
 app.use('/admin/v1/api/ads/dashboard',dashboardRoute);
 app.use('/admin/v1/api/ads/room-rents',adminroomRentsRoutes);

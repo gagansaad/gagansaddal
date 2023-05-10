@@ -10,7 +10,7 @@ const router = require(`express`).Router(),
 router.post(`/create-payment-intent`,
 authMiddleware.ensureUserLoggedIn,
     controllers.validatepaymentData,
-    controllers.plan_payment
+    controllers.create_payment_intent
 );
 
 
