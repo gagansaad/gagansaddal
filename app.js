@@ -29,6 +29,7 @@ require(`./model/posts/event`)
 require(`./model/configurations/privacy`);
 require(`./model/configurations/termAndCondition`);
 require(`./model/plan/plan`);
+require(`./model/plan/plan copy`);
 require(`./model/posts/jobs`);
 require(`./model/posts/buy&sell`);
 require(`./model/posts/bizAndServices`);

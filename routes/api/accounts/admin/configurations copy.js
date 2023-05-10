@@ -1,5 +1,5 @@
 const router = require(`express`).Router(),
-controllers = require(`../../../../controllers/api/accounts/admin/configurations`);
+controllers = require(`../../../../controllers/api/accounts/admin/configurations copy`);
 
 router.post('/1',
     controllers.postconfigurations
