@@ -8,7 +8,6 @@ const mongoose = require("mongoose"),
 
 
 exports.fetchPostsTypes = async (req, res, next) => {
-
     try {
         PostType.find({
             is_active: true
@@ -22,7 +21,6 @@ exports.fetchPostsTypes = async (req, res, next) => {
     } catch (err) {
         return failureJSONResponse(res, { message: `something went wrong`,error:err.message })
     }
-
 }
 
 

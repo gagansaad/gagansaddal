@@ -45,6 +45,7 @@ const signUp = require('./routes/api/accounts/user');
 
 const adminSignIp = require('./routes/accounts/admin/admin_login');
 const adminconfigurationsRoute = require('./routes/api/accounts/admin/configurations');
+const adminconfigurationsRoute2 = require('./routes/api/accounts/admin/configurations copy');
 const dashboardRoute = require('./routes/admin/dashboard');
 const usercontrol = require('./routes/accounts/admin/users_control');
 const configurationsRoute = require('./routes/api/configurations');
@@ -91,8 +92,9 @@ app.use('/admin/login',adminSignIp);
 app.use('/api/admin/users',usercontrol);
 
 app.use('/v1/api/configurations', configurationsRoute);
-app.use('/admin/v1/api/configurations', adminconfigurationsRoute);
+app.use('/admin/v1/api/configurations1', adminconfigurationsRoute);
 app.use('/admin/v1/api/configurations', adminconfigurationsRoute1);
+app.use('/admin/v1/api/configurations', adminconfigurationsRoute2);
 app.use('/admin/v1/api/ads/dashboard',dashboardRoute);
 app.use('/admin/v1/api/ads/room-rents',adminroomRentsRoutes);
 app.use('/admin/v1/api/ads/biz',adminbizRoutes);

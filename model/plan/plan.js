@@ -1,104 +1,52 @@
 const mongoose = require("mongoose");
 const {
-  defaultStringConfig,
-  defaultPriceProperty,
-  defaultCurrencyProperty,
-  defaultBooleanConfig,
+    defaultStringConfig,
+    defaultPriceProperty,
+    defaultCurrencyProperty,
+    defaultBooleanConfig
 } = require(`../../utils/mongoose`);
 
-const addPlanSchema = new mongoose.Schema(
-  {
+
+const addPlanSchema = new mongoose.Schema({
+
     entity: {
-      ...defaultStringConfig,
-      default: `adsPlan`,
-      required: true,
-      immutable: true,
+        ...defaultStringConfig,
+        default: `adsPlan`,
+        required: true,
+        immutable: true
     },
 
     is_active: {
-      ...defaultBooleanConfig,
-      required: true,
+        ...defaultBooleanConfig,
+        required: true
     },
     visible: {
-      ...defaultBooleanConfig,
-      required: true,
+        ...defaultBooleanConfig,
+        required: true
     },
     name: {
-      ...defaultStringConfig,
-      required: true,
+        ...defaultStringConfig,
+        required: true
     },
     duration: {
-      type: Number,
-      required: true,
+        type: Number, 
+        required: true
     },
     ads_type: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: `PostType`,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `PostType`
     },
-    add_ons: {
-      top_ad: {
-        isfree:defaultBooleanConfig,
-        name: defaultStringConfig,
+    featured_price: {
         amount: defaultPriceProperty,
         currency: defaultCurrencyProperty,
-        
-      },
-      bump_up: {
-        isfree:defaultBooleanConfig,
-        name: defaultStringConfig,
-        amount: defaultPriceProperty,
-        currency: defaultCurrencyProperty,
-      },
-      highlight: {
-        isfree:defaultBooleanConfig,
-        name: defaultStringConfig,
-        amount: defaultPriceProperty,
-        currency: defaultCurrencyProperty,
-      },
-      urgent_reduced: {
-        isfree:defaultBooleanConfig,
-        name: defaultStringConfig,
-        amount: defaultPriceProperty,
-        currency: defaultCurrencyProperty,
-      },
-      homepage_gallery: {
-        name: defaultStringConfig,
-        amount: defaultPriceProperty,
-        currency: defaultCurrencyProperty,
-      },
-      featured_ad: {
-        isfree:defaultBooleanConfig,
-        name: defaultStringConfig,
-        amount: defaultPriceProperty,
-        currency: defaultCurrencyProperty,
-      },
-      link_to_your_website: {
-        isfree:defaultBooleanConfig,
-        name: defaultStringConfig,
-        amount: defaultPriceProperty,
-        currency: defaultCurrencyProperty,
-      },
-      urgent_ad: {
-        isfree:defaultBooleanConfig,
-        name: defaultStringConfig,
-        amount: defaultPriceProperty,
-        currency: defaultCurrencyProperty,
-      },
-      spotlight_ad: {
-        isfree:defaultBooleanConfig,
-        name: defaultStringConfig,
-        amount: defaultPriceProperty,
-        currency: defaultCurrencyProperty,
-      },
     },
 
     price: {
-      isfree:defaultBooleanConfig,
-      amount: defaultPriceProperty,
-      currency: defaultCurrencyProperty,
-    },
-  },
-  { timestamps: true }
-);
+        amount: defaultPriceProperty,
+        currency: defaultCurrencyProperty,
 
-module.exports = mongoose.model("adsplan", addPlanSchema);
+    },
+
+}, { timestamps: true });
+
+module.exports = mongoose.model('adsplan', addPlanSchema);

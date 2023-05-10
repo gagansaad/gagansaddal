@@ -23,17 +23,18 @@ const toExport = {
         // All price amounts to be stored in smallest unit of the current we're using. So if we're using INR, then store price amount in Indian paisa
         type: Number,
         default: 0,
-        required: true,
+        // required: true,
         min: 0
     },
 
     get defaultCurrencyProperty() {
         return {
             ...this.defaultStringConfig,
-            required: true,
+            // required: true,
             uppercase: true,
+            enum: [`INR`],
             default: `INR`, // must be ISO code
-            enum: [`INR`] // must be ISO codes
+            // must be ISO codes
         }
     },
 
