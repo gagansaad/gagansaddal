@@ -1,6 +1,6 @@
 
 const mongoose = require("mongoose"),
-    AdsPlan = mongoose.model("adsplan"),
+    AdsPlan = mongoose.model("addons_plan"),
     {
         successJSONResponse,
         failureJSONResponse
