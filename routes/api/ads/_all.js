@@ -6,5 +6,5 @@ const roomRentsRoutes = require(`./roomRents`),
 
 router.use(`/room-rents`, roomRentsRoutes);
 router.use(`/ads-plan`, PlansRoutes);
-router.use(`/ads-plan1`, PlansRoutes1);
+router.use(`/ads-plan-copy`, PlansRoutes1);
 module.exports = router;
