@@ -31,7 +31,7 @@ exports.getDnymicsData = async (req, res, next) => {
     tagline:records,
     type: ["Venue Based Event", "Live Event", "Both Venue based and Live Streaming Event"],
     category: ["Sport event", "Festival", "Religious", "Political gatherings", "Community Gatherings", "Music concert", "Night party", "Health care advisor", "Education", "Training", "Food & drink", "Fund Raising", "Candlelight Vigil", "Drama", "Theatre", "Movie", "Wedding", "Funneral", "Anniversary", "Welcome", "Farewell", "Markets & Auction", "Spritual", "Valentines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
-    platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"],
+    platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok","Google meet","Microsoft teams","other"],
     recurring_type: ["Daily", "Weekly", "Monthly"],
     time_zone: ["Hawaii Standard Time", "Hawaii-Aleutian Daylight Time", "Alaska Daylight Time", "Pacific Daylight Time", "Mountain Standard Time", "Mountain Daylight Time", "Central Daylight Time", "Eastern Daylight Time"],
     currency: ["AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USD", "USN"],
