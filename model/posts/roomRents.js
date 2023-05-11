@@ -84,6 +84,10 @@ const roomRentsSchema = new mongoose.Schema({
                 type: Boolean,
                 default:false
             },
+            is_contact:{
+                type: Boolean,
+                default:false
+            },
             currency:{type:String,default:"USD"},
         },
         

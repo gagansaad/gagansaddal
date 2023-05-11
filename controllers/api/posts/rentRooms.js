@@ -216,6 +216,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
         amount,
         currency,
         negotiable,
+        is_contact,
         prefered_age,
         isSmokingAllowed,
         isAlcoholAllowed,
@@ -257,7 +258,13 @@ console.log(tagline,"tagggggggggggg");
         imageArr.push(productImages._id);
 
     }
-
+    
+    let iscontact = false;
+    if (is_contact == 'true') {
+        iscontact = true;
+    } else if (is_contact == 'false') {
+        iscontact = false
+    }
     let negotible = false;
     if (negotiable == 'true') {
         negotible = true;
@@ -313,6 +320,7 @@ console.log(tagline,"tagggggggggggg");
             rent: {
                 amount: amount,
                 negotiable: negotible,
+                is_contact:iscontact,
                 currency:currency,
             },
             isSmokingAllowed: isSmokin,
