@@ -49,7 +49,7 @@ exports.getDnymicsData = async (req, res, next) => {
       'America/New_York',
       'America/Los_Angeles',
     ],
-    currency: ["USD", "INR"],
+    currency: ["AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USD", "USN"],
 
   };
   return successJSONResponse(res, {

@@ -38,7 +38,7 @@ exports.getDnymicsData = async (req, res, next) => {
       `Arabic`,
       `French`,
       `Other`],
-      currency: ["USD", "INR"],
+      currency: ["AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USD", "USN"],
     employment_type: [`Full-time`,
       `Part-time`,
       `Contract`,
@@ -242,7 +242,9 @@ exports.createJobAds = async (req, res, next) => {
       type,
       role,
       employment_type,
-      experience,
+      company_name,
+      experience_title,
+      no_of_experience,
       language,
       amount,
       currency,
@@ -256,7 +258,7 @@ exports.createJobAds = async (req, res, next) => {
       image,
       video,
     } = req.body;
-
+console.log(req.body,"nhvdfhbvu");
     let taglines = tagline
     if(taglines){
       for(i=0;i<taglines.length;i++){
@@ -298,7 +300,11 @@ if(req.files){
         type,
         role,
         employment_type,
-        experience,
+        experience:[{
+          company_name:company_name,
+          experience_title:experience_title,
+          no_of_experience: JSON.parse(no_of_experience)
+        }],
         language,
         salary:{
           amount,
@@ -378,7 +384,9 @@ exports.editJobAds = async (req, res, next) => {
       type,
       role,
       employment_type,
-      experience,
+      company_name,
+      experience_title,
+      no_of_experience,
       language,
       amount,
       currency,
@@ -457,7 +465,9 @@ if (hide_my_email == "true") {
   my_email = true
 } else if (hide_my_email == 'false') {
   my_email = false
+
 }
+let exp = {}
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
 
@@ -469,12 +479,15 @@ if (hide_my_email == "true") {
     if (categories) adsInfoObj.categories = categories;
     if (role) adsInfoObj.role = role;
     if (employment_type) adsInfoObj.employment_type = employment_type;
-    if (experience) adsInfoObj.experience = experience;
+
     if (language) adsInfoObj.language = language;
     if (amount) adsInfoObj.salary = salry;
     if (salary_info) adsInfoObj.salary_info = salary_info;
     if (no_of_opening) adsInfoObj.no_of_opening = no_of_opening;
-
+    if (company_name)     exp.company_name = company_name;
+    if (experience_title) exp.experience_title = experience_title;
+    if (no_of_experience) exp.no_of_experience = no_of_experience;
+    if (exp.length) adsInfoObj.experience = exp;
     if (work_authorization) adsInfoObj.work_authorization = work_authorization;
     if (location) adsInfoObj.location = location;
     if (preferred_gender) adsInfoObj.preferred_gender = preferred_gender;
