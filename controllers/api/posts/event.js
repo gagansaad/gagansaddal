@@ -33,22 +33,7 @@ exports.getDnymicsData = async (req, res, next) => {
     category: ["Sport event", "Festival", "Religious", "Political gatherings", "Community Gatherings", "Music concert", "Night party", "Health care advisor", "Education", "Training", "Food & drink", "Fund Raising", "Candlelight Vigil", "Drama", "Theatre", "Movie", "Wedding", "Funneral", "Anniversary", "Welcome", "Farewell", "Markets & Auction", "Spritual", "Valentines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
     platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"],
     recurring_type: ["Daily", "Weekly", "Monthly"],
-    time_zone: [
-      'America/Santiago',
-      'America/Punta_Arenas',
-      'America/Bogota',
-      'America/Costa_Rica',
-      'America/Havana',
-      'America/Curacao',
-      'America/Santo_Domingo',
-      'America/Guayaquil',
-      'America/Cayenne',
-      'America/Jamaica',
-      'America/Martinique',
-      'America/Mexico_City',
-      'America/New_York',
-      'America/Los_Angeles',
-    ],
+    time_zone: ["Hawaii Standard Time", "Hawaii-Aleutian Daylight Time", "Alaska Daylight Time", "Pacific Daylight Time", "Mountain Standard Time", "Mountain Daylight Time", "Central Daylight Time", "Eastern Daylight Time"],
     currency: ["AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USD", "USN"],
 
   };
