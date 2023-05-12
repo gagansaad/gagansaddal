@@ -167,10 +167,11 @@ exports.create_payment_intent = async (req, res) => {
         message: `Something went wrong`,
       });
     }
-  } catch (e) {
+  } catch (err) {
+    console.log(err,"hggvhvhvhvhggbhgjhvghjbhnghjvhv bgvbnbvhvbghvnbvnbv nbvbn  bmb hjbjb nhv bvnbcbn bv")
     return res.status(400).send({
       error: {
-        message: e.message,
+        message: err.message,
       },
     });
   }
