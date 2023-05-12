@@ -216,7 +216,7 @@ exports.stripe_webhooks = async   (request, response) => {
   let event;
 
   try {
-    event =await stripe.webhooks.constructEvent(payloadString, header, endpointSecret);
+    event =await stripe.webhooks.constructEvent(payloadString, header,secret);
     expect(event.id).to.equal(payload.id);
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);
