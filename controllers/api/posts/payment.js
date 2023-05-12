@@ -198,8 +198,8 @@ exports.create_payment_intent = async (req, res) => {
 //
 
 exports.stripe_webhooks = async (request, response) => {
-  console.log(request,'string');
-  console.log(response,'slkjnslkjnslkjnstring');
+  console.log(request, 'string');
+  console.log(response, 'slkjnslkjnslkjnstring');
   // console.log(response);
   // const sig = request.headers['stripe-signature'];
   const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
@@ -230,24 +230,24 @@ exports.stripe_webhooks = async (request, response) => {
 
   let event;
 
-
-  const payloadString = JSON.stringify(request.body, null, 2);
-  
-  const header = stripe.webhooks.generateTestHeaderString({
-    payload: payloadString,
-    endpointSecret,
-  });
-  console.log('sss-------------',request.body,"req.body-------------------",payloadString,'---------****paylod string***',header, "****header**")
-
-
-
   try {
+
+    const payloadString = JSON.stringify(request.body, null, 2);
+
+    const header = stripe.webhooks.generateTestHeaderString({
+      payload: payloadString,
+      endpointSecret,
+    });
+    console.log('sss-------------', request.body, "req.body-------------------", payloadString, '---------****paylod string***', header, "****header**")
+
+
+
     event = stripe.webhooks.constructEvent(payloadString, header, endpointSecret);
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
-  console.log(event,"event");
+  console.log(event, "event");
   // Handle the event
   switch (event.type) {
     case 'payment_intent.canceled':
@@ -278,7 +278,7 @@ exports.stripe_webhooks = async (request, response) => {
       break;
     // ... handle other event types
     default:
-      // console.log(`Unhandled event type ${event.type}`);
+    // console.log(`Unhandled event type ${event.type}`);
   }
   console.log(event);
   await payment_logs.create({ payment_intent: event })
