@@ -154,7 +154,7 @@ exports.create_payment_intent = async (req, res) => {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: dataObj.total_amount,
       currency: currency,
-      payment_method_types: "card",
+      payment_method_types: ["card"],
     });
     if (paymentIntent) {
       return successJSONResponse(res, {
