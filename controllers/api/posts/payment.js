@@ -229,9 +229,20 @@ exports.stripe_webhooks = async (request, response) => {
   const sig = request.headers['stripe-signature'];
 
   let event;
-  console.log('sss-------------',request.body,"req.body-------------------",request.body.payload,"req.body.payload-------------------",request.payload,"req.payload-------------------" ,sig, "sig----------------------",endpointSecret)
+
+
+  const payloadString = JSON.stringify(request.body, null, 2);
+  
+  const header = stripe.webhooks.generateTestHeaderString({
+    payload: payloadString,
+    endpointSecret,
+  });
+  console.log('sss-------------',request.body,"req.body-------------------",payloadString,'---------****paylod string***',header, "****header**")
+
+
+
   try {
-    event = stripe.webhooks.constructEvent(request.payload, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(payloadString, header, endpointSecret);
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);
     return;
