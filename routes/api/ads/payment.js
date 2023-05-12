@@ -13,5 +13,9 @@ authMiddleware.ensureUserLoggedIn,
     controllers.create_payment_intent
 );
 
-
+router.post(`/payment-status`,
+// authMiddleware.ensureUserLoggedIn,
+//     controllers.validatepaymentData,
+    controllers.stripe_webhooks
+);
 module.exports = router;
