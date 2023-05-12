@@ -35,6 +35,7 @@ require(`./model/posts/buy&sell`);
 require(`./model/posts/bizAndServices`);
 require(`./model/posts/babbysitter & nannis`);
 require(`./model/image/image`);
+require(`./model/posts/payment_logs`);
 require('./model/posts/tagline')
 // admin configuration
 require(`./model/accounts/admin/configuration`);

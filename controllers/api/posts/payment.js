@@ -14,6 +14,7 @@ const mongoose = require("mongoose"),
   jobsAd = mongoose.model("job"),
   USER = mongoose.model("user"),
   category = mongoose.model("PostType"),
+  payment_logs = require("../../../model/posts/payment_logs"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -194,6 +195,8 @@ exports.create_payment_intent = async (req, res) => {
 // };
 
 //
+  // const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
+  const endpointSecret = "we_1N6uqKC0EBCSuFeAGcscCZCF";
 exports.stripe_webhooks = async   (request, response) => {
   const sig = request.headers['stripe-signature'];
 
@@ -233,6 +236,7 @@ exports.stripe_webhooks = async   (request, response) => {
       console.log(`Unhandled event type ${event.type}`);
   }
 
+  await payment_logs.create({payment_intent:JSON.parse(event)})
   // Return a 200 response to acknowledge receipt of the event
   response.send();
 };

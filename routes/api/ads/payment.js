@@ -13,7 +13,7 @@ authMiddleware.ensureUserLoggedIn,
     controllers.create_payment_intent
 );
 
-router.post(`/payment-status`,
+router.get(`/payment-status`,
 // authMiddleware.ensureUserLoggedIn,
 //     controllers.validatepaymentData,
     controllers.stripe_webhooks
