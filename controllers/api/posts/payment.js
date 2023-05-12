@@ -208,7 +208,7 @@ exports.stripe_webhooks = async   (request, response) => {
   const payloadString = JSON.stringify(payload, null, 2);
   const secret = 'we_1N6uqKC0EBCSuFeAGcscCZCF';
   
-  const header = stripe.webhooks.generateTestHeaderString({
+  const header =await stripe.webhooks.generateTestHeaderString({
     payload: payloadString,
     secret,
   });
@@ -216,7 +216,7 @@ exports.stripe_webhooks = async   (request, response) => {
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(payloadString, header, endpointSecret);
+    event =await stripe.webhooks.constructEvent(payloadString, header, endpointSecret);
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);
     return;
