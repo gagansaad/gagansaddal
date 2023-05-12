@@ -206,7 +206,7 @@ exports.stripe_webhooks = async   (request, response) => {
   };
   
   const payloadString = JSON.stringify(payload, null, 2);
-  const secret = 'we_1N6uqKC0EBCSuFeAGcscCZCF';
+  const secret = 'whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a';
   
   const header =await stripe.webhooks.generateTestHeaderString({
     payload: payloadString,
