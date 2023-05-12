@@ -198,6 +198,9 @@ exports.create_payment_intent = async (req, res) => {
 //
 
 exports.stripe_webhooks = async (request, response) => {
+  console.log(request,'string');
+  console.log(response,'slkjnslkjnslkjnstring');
+  // console.log(response);
   // const sig = request.headers['stripe-signature'];
   const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
   // const endpointSecret = "";
@@ -206,7 +209,7 @@ exports.stripe_webhooks = async (request, response) => {
     object: 'event',
   };
 
-  const payloadString = JSON.stringify(payload, null, 2);
+  const payloadString = JSON.stringify(request, null, 2);
   const secret = 'whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a';
 
   const header = await stripe.webhooks.generateTestHeaderString({
@@ -254,7 +257,7 @@ exports.stripe_webhooks = async (request, response) => {
       break;
     // ... handle other event types
     default:
-      console.log(`Unhandled event type ${event.type}`);
+      // console.log(`Unhandled event type ${event.type}`);
   }
   console.log(event);
   await payment_logs.create({ payment_intent: event })
