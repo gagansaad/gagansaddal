@@ -168,7 +168,7 @@ exports.create_payment_intent = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err,"hggvhvhvhvhggbhgjhvghjbhnghjvhv bgvbnbvhvbghvnbvnbv nbvbn  bmb hjbjb nhv bvnbcbn bv")
+    console.log(err, "hggvhvhvhvhggbhgjhvghjbhnghjvhv bgvbnbvhvbghvnbvnbv nbvbn  bmb hjbjb nhv bvnbcbn bv")
     return res.status(400).send({
       error: {
         message: err.message,
@@ -197,19 +197,19 @@ exports.create_payment_intent = async (req, res) => {
 
 //
 
-exports.stripe_webhooks = async   (request, response) => {
+exports.stripe_webhooks = async (request, response) => {
   // const sig = request.headers['stripe-signature'];
   const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
   // const endpointSecret = "";
   const payload = {
-    id:"evt_3N6vjIC0EBCSuFeA15YP35FV",
+    id: "evt_3N6vjIC0EBCSuFeA15YP35FV",
     object: 'event',
   };
-  
+
   const payloadString = JSON.stringify(payload, null, 2);
   const secret = 'whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a';
-  
-  const header =await stripe.webhooks.generateTestHeaderString({
+
+  const header = await stripe.webhooks.generateTestHeaderString({
     payload: payloadString,
     secret,
   });
@@ -217,7 +217,7 @@ exports.stripe_webhooks = async   (request, response) => {
   let event;
 
   try {
-    event =await stripe.webhooks.constructEvent(payloadString, header,secret);
+    event = await stripe.webhooks.constructEvent(payloadString, header, secret);
 
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);
@@ -244,14 +244,20 @@ exports.stripe_webhooks = async   (request, response) => {
     case 'payment_intent.succeeded':
       const paymentIntentSucceeded = event.data.object;
       // Then define and call a function to handle the event payment_intent.succeeded
-        console.log("payment success");
+      console.log("payment success");
+      break;
+    case 'payment_intent.created':
+      // const paymentIntentSucceeded = event.data.object;
+      // Then define and call a function to handle the event payment_intent.succeeded
+      console.log("payment created");
+      console.log(event.data.object);
       break;
     // ... handle other event types
     default:
       console.log(`Unhandled event type ${event.type}`);
   }
-
-  await payment_logs.create({payment_intent:event})
+  console.log(event);
+  await payment_logs.create({ payment_intent: event })
   // Return a 200 response to acknowledge receipt of the event
   response.send();
 };
