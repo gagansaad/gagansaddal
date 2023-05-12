@@ -198,11 +198,10 @@ exports.create_payment_intent = async (req, res) => {
 //
 
 exports.stripe_webhooks = async (request, response) => {
-  console.log(request, 'string');
-  console.log(response, 'slkjnslkjnslkjnstring');
+
   // console.log(response);
   // const sig = request.headers['stripe-signature'];
-  const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
+  
 
   // const endpointSecret = "";
   // const payload = {
@@ -226,18 +225,19 @@ exports.stripe_webhooks = async (request, response) => {
   //   response.status(400).send(`Webhook Error: ${err.message}`);
   //   return;
   // }
-  const sig = request.headers['stripe-signature'];
-
-  let event;
+  
 
   try {
+    const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
+    const sig = request.headers['stripe-signature'];
 
-    const payloadString = JSON.stringify(request.body, null, 2);
+    let event;
+    // const payloadString = JSON.stringify(request.rawBody, null, 2);
 
-    const header = stripe.webhooks.generateTestHeaderString({
-      payload: payloadString,
-      endpointSecret,
-    });
+    // const header = stripe.webhooks.generateTestHeaderString({
+    //   payload: payloadString,
+    //   endpointSecret,
+    // });
     console.log('sss-------------', request.body, "req.body-------------------", payloadString, '---------****paylod string***', header, "****header**")
 
 
