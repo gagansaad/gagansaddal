@@ -1,3 +1,4 @@
+const { buffer } = require('micro')
 const { json } = require("express");
 const {
   EventListInstance,
@@ -240,9 +241,10 @@ exports.stripe_webhooks = async (request, response) => {
     });
     console.log('sss-------------', request.body, "req.body-------------------", payloadString, '---------****paylod string***', header, "****header**")
 
+    const reqBuffer = await buffer(request.body)
 
 
-    event = stripe.webhooks.constructEvent(payloadString, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(reqBuffer, sig, endpointSecret);
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);
     return;
