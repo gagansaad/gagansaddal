@@ -47,7 +47,7 @@ exports.getDnymicsData = async (req, res, next) => {
     salary_info: ["/hour", "/day", "/week", "/month", "/biweekly", "/sqft", "fixed amount", "OBO", "Negotiable"],
     work_authorization: ["Citizen", "Green Card", "Work Permit", "Visa", "Any Type"],
     preferred_gender: [`Male`,
-      `Female`,],
+      `Female`],
     list_type: ["Offering - I have a job to offer", "Wanted - I am looking for a job"],
     
   };
