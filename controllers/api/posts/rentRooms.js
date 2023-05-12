@@ -42,8 +42,8 @@ exports.fetchDynamicsData = async (req, res, next) => {
             `self employed`,
             `engineer`,
         ],
-        gender: ["Male", "Female", "Any Gender","Not Selected"],
-        prefered_age: ["18-30", "18-50", "18-any"],
+        gender: ["Male", "Female", "Any Gender"],
+        prefered_age: ["18-30", "18-50", "18-Any"],
         whoAreU: [
             `Owner`,
             `Broker`,
