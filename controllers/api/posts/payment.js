@@ -195,8 +195,8 @@ exports.create_payment_intent = async (req, res) => {
 // };
 
 //
-  // const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
-  const endpointSecret = "we_1N6uqKC0EBCSuFeAGcscCZCF";
+  const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
+  // const endpointSecret = "we_1N6uqKC0EBCSuFeAGcscCZCF";
 exports.stripe_webhooks = async   (request, response) => {
   const sig = request.headers['stripe-signature'];
 
