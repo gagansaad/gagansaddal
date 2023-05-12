@@ -203,29 +203,40 @@ exports.stripe_webhooks = async (request, response) => {
   // console.log(response);
   // const sig = request.headers['stripe-signature'];
   const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
-  // const endpointSecret = "";
-  const payload = {
-    id: "evt_3N6vjIC0EBCSuFeA15YP35FV",
-    object: 'event',
-  };
-  const payloadString = JSON.stringify(payload, null, 2);
-  const secret = 'whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a';
 
-  const header = await stripe.webhooks.generateTestHeaderString({
-    payload: payloadString,
-    secret,
-  });
+  // const endpointSecret = "";
+  // const payload = {
+  //   id: "evt_3N6vjIC0EBCSuFeA15YP35FV",
+  //   object: 'event',
+  // };
+  // const payloadString = JSON.stringify(payload, null, 2);
+  // const secret = 'whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a';
+
+  // const header = await stripe.webhooks.generateTestHeaderString({
+  //   payload: payloadString,
+  //   secret,
+  // });
+
+  // let event;
+
+  // try {
+  //   event = await stripe.webhooks.constructEvent(payloadString, header, secret);
+
+  // } catch (err) {
+  //   response.status(400).send(`Webhook Error: ${err.message}`);
+  //   return;
+  // }
+  const sig = request.headers['stripe-signature'];
 
   let event;
-
+  console.log(request.body,"req.body-------------------" ,sig, "sig----------------------",endpointSecret)
   try {
-    event = await stripe.webhooks.constructEvent(payloadString, header, secret);
-
+    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
-
+  console.log(event,"event");
   // Handle the event
   switch (event.type) {
     case 'payment_intent.canceled':
