@@ -238,7 +238,7 @@ exports.stripe_webhooks = async (request, response) => {
     //   payload: payloadString,
     //   endpointSecret,
     // });
-    console.log('sss-------------', request.body, "req.body-------------------",'---------****paylod string***', header, "****header**")
+    console.log('sss-------------', request.rawBody,)
 
 
 
