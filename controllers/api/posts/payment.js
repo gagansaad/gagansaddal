@@ -251,7 +251,7 @@ exports.stripe_webhooks = async   (request, response) => {
       console.log(`Unhandled event type ${event.type}`);
   }
 
-  // await payment_logs.create({payment_intent:JSON.parse(event)})
+  await payment_logs.create({payment_intent:event})
   // Return a 200 response to acknowledge receipt of the event
   response.send();
 };
