@@ -208,8 +208,7 @@ exports.stripe_webhooks = async (request, response) => {
     id: "evt_3N6vjIC0EBCSuFeA15YP35FV",
     object: 'event',
   };
-
-  const payloadString = JSON.stringify(request, null, 2);
+  const payloadString = JSON.stringify(payload, null, 2);
   const secret = 'whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a';
 
   const header = await stripe.webhooks.generateTestHeaderString({
