@@ -35,7 +35,7 @@ exports.getDnymicsData = async (req, res, next) => {
     preferrd_languge_need: ["English", "Amharic", "Afan Oromo", "Tigrigna", "Arabic", "French", "Other"],
     preferrd_languge_offer: ["English", "Amharic", "Afan Oromo", "Tigrigna", "Arabic", "French", "Other"],
     preferrd_gender_need: ["Male", "Female", "Any Gender"],
-    preferrd_gender_offer: ["Male", "Female","Any Gender"],
+    preferrd_gender_offer: ["Male", "Female"],
     transport_facilty_need: ["Yes", "No"],
     transport_facilty_offer: ["Yes", "No"],
     expected_salary_rate_need:  ["/hour", "/day", "/week", "/month", "/biweekly", "fixed amount"],
