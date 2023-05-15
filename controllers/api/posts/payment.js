@@ -246,7 +246,7 @@ exports.stripe_webhooks = async (request, response) => {
     //   endpointSecret,
     // });
   
-    const buf = await getRawBody(request);
+    const buf = await getRawBody(request.body);
 
 console.log(buf,"bufffffffffffffffffffff");
     event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
