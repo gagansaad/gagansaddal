@@ -185,7 +185,7 @@ const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c7
 exports.webhooks = async (request, response) => {
   try{ 
      const sig = request.headers['stripe-signature'];
-console.log(request.body,"ye iski body hai");
+console.log(JSON.parse(request.body),"ye iski body hai");
   let event;
 
   try {
