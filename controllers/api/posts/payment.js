@@ -177,80 +177,18 @@ exports.create_payment_intent = async (req, res) => {
   }
 };
 
-///
 
-// exports.retrive_intent = async (req, res) => {
-//   const intent = await stripe.paymentIntents.retrieve(
-//     req.query.payment_intent,
-//     {
-//       expand: ["payment_method"],
-//     }
-//   );
 
-//   res.redirect(`/success?payment_intent_client_secret=${intent.client_secret}`);
-// };
+// This is your Stripe CLI webhook secret for testing your endpoint locally.
+const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
 
-// exports.success_url = async (req, res) => {
-//   const path = resolve(process.env.STATIC_DIR + "/success.html");
-//   res.sendFile(path);
-// };
+exports.webhooks = async (request, response) => {
+  const sig = request.headers['stripe-signature'];
 
-//
-  //  function getRawBody(request) {
-  //     return new Promise(resolve => {
-  //       const chunks = [];
-  //       request.on('data', chunk => chunks.push(chunk));
-  //       request.on('end', () => resolve(Buffer.concat(chunks)));
-  //     });
-  //   }
-
-exports.stripe_webhooks = async (request, response) => {
-
-  // console.log(response);
-  // const sig = request.headers['stripe-signature'];
-  
-
-  // const endpointSecret = "";
-  // const payload = {
-  //   id: "evt_3N6vjIC0EBCSuFeA15YP35FV",
-  //   object: 'event',
-  // };
-  // const payloadString = JSON.stringify(payload, null, 2);
-  // const secret = 'whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a';
-
-  // const header = await stripe.webhooks.generateTestHeaderString({
-  //   payload: payloadString,
-  //   secret,
-  // });
-
-  // let event;
-
-  // try {
-  //   event = await stripe.webhooks.constructEvent(payloadString, header, secret);
-
-  // } catch (err) {
-  //   response.status(400).send(`Webhook Error: ${err.message}`);
-  //   return;
-  // }
-  
+  let event;
 
   try {
- 
-    const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
-    const sig = request.headers['stripe-signature'];
-
-    var event;
-    // const payloadString = JSON.stringify(request.rawBody, null, 2);
-
-    // const header = stripe.webhooks.generateTestHeaderString({
-    //   payload: payloadString,
-    //   endpointSecret,
-    // });
-  
-    // const buf = await getRawBody(request.body);
-
-// console.log(buf,"bufffffffffffffffffffff");
-    event = stripe.webhooks.constructEvent(request, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);
     return;
@@ -258,38 +196,64 @@ exports.stripe_webhooks = async (request, response) => {
 
   // Handle the event
   switch (event.type) {
+    case 'payment_intent.amount_capturable_updated':
+      const paymentIntentAmountCapturableUpdated = event.data.object;
+      // Then define and call a function to handle the event payment_intent.amount_capturable_updated
+      break;
     case 'payment_intent.canceled':
       const paymentIntentCanceled = event.data.object;
-      console.log("payment cancel");
       // Then define and call a function to handle the event payment_intent.canceled
+      break;
+    case 'payment_intent.created':
+      const paymentIntentCreated = event.data.object;
+      // Then define and call a function to handle the event payment_intent.created
+      break;
+    case 'payment_intent.partially_funded':
+      const paymentIntentPartiallyFunded = event.data.object;
+      // Then define and call a function to handle the event payment_intent.partially_funded
       break;
     case 'payment_intent.payment_failed':
       const paymentIntentPaymentFailed = event.data.object;
-      console.log("payment failed");
       // Then define and call a function to handle the event payment_intent.payment_failed
+      break;
+    case 'payment_intent.processing':
+      const paymentIntentProcessing = event.data.object;
+      // Then define and call a function to handle the event payment_intent.processing
       break;
     case 'payment_intent.requires_action':
       const paymentIntentRequiresAction = event.data.object;
-      console.log("payment .requires_action");
       // Then define and call a function to handle the event payment_intent.requires_action
       break;
     case 'payment_intent.succeeded':
       const paymentIntentSucceeded = event.data.object;
       // Then define and call a function to handle the event payment_intent.succeeded
-      console.log("payment success");
       break;
-    case 'payment_intent.created':
-      // const paymentIntentSucceeded = event.data.object;
-      // Then define and call a function to handle the event payment_intent.succeeded
-      console.log("payment created");
-      console.log(event.data.object);
+    case 'setup_intent.canceled':
+      const setupIntentCanceled = event.data.object;
+      // Then define and call a function to handle the event setup_intent.canceled
+      break;
+    case 'setup_intent.created':
+      const setupIntentCreated = event.data.object;
+      // Then define and call a function to handle the event setup_intent.created
+      break;
+    case 'setup_intent.requires_action':
+      const setupIntentRequiresAction = event.data.object;
+      // Then define and call a function to handle the event setup_intent.requires_action
+      break;
+    case 'setup_intent.setup_failed':
+      const setupIntentSetupFailed = event.data.object;
+      // Then define and call a function to handle the event setup_intent.setup_failed
+      break;
+    case 'setup_intent.succeeded':
+      const setupIntentSucceeded = event.data.object;
+      // Then define and call a function to handle the event setup_intent.succeeded
       break;
     // ... handle other event types
     default:
-    // console.log(`Unhandled event type ${event.type}`);
+      console.log(`Unhandled event type ${event.type}`);
   }
-  console.log(event);
-  await payment_logs.create({ payment_intent: event })
+
   // Return a 200 response to acknowledge receipt of the event
-  response.send();
-};
+  response.send({status:200});
+});
+
