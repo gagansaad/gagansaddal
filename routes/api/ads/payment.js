@@ -13,9 +13,8 @@ authMiddleware.ensureUserLoggedIn,
     controllers.create_payment_intent
 );
 
-router.post(`/paymentstatus`,
-// authMiddleware.ensureUserLoggedIn,
-// controllers.validatepaymentData,
+router.post(`/paymentstatus`,express.raw({type: 'application/json'}),
+
     controllers.webhooks
 );
 module.exports = router;
