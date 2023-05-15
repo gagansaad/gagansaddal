@@ -196,13 +196,13 @@ exports.create_payment_intent = async (req, res) => {
 // };
 
 //
-   function getRawBody(request) {
-      return new Promise(resolve => {
-        const chunks = [];
-        request.on('data', chunk => chunks.push(chunk));
-        request.on('end', () => resolve(Buffer.concat(chunks)));
-      });
-    }
+  //  function getRawBody(request) {
+  //     return new Promise(resolve => {
+  //       const chunks = [];
+  //       request.on('data', chunk => chunks.push(chunk));
+  //       request.on('end', () => resolve(Buffer.concat(chunks)));
+  //     });
+  //   }
 
 exports.stripe_webhooks = async (request, response) => {
 
@@ -247,10 +247,10 @@ exports.stripe_webhooks = async (request, response) => {
     //   endpointSecret,
     // });
   
-    const buf = await getRawBody(request.body);
+    // const buf = await getRawBody(request.body);
 
-console.log(buf,"bufffffffffffffffffffff");
-    event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
+// console.log(buf,"bufffffffffffffffffffff");
+    event = stripe.webhooks.constructEvent(request, sig, endpointSecret);
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);
     return;
