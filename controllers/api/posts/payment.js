@@ -183,8 +183,9 @@ exports.create_payment_intent = async (req, res) => {
 const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
 
 exports.webhooks = async (request, response) => {
-  try{  const sig = request.headers['stripe-signature'];
-
+  try{ 
+     const sig = request.headers['stripe-signature'];
+console.log(request.body,"ye iski body hai");
   let event;
 
   try {
