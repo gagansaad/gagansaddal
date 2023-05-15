@@ -196,11 +196,11 @@ exports.create_payment_intent = async (req, res) => {
 // };
 
 //
-function getRawBody(req) {
+function getRawBody(request) {
   return new Promise(resolve => {
     const chunks = [];
-    req.on('data', chunk => chunks.push(chunk));
-    req.on('end', () => resolve(Buffer.concat(chunks)));
+    request.on('data', chunk => chunks.push(chunk));
+    request.on('end', () => resolve(Buffer.concat(chunks)));
   });
 }
 exports.stripe_webhooks = async (request, response) => {
@@ -245,7 +245,7 @@ exports.stripe_webhooks = async (request, response) => {
     //   endpointSecret,
     // });
   
-    const buf = await getRawBody(req);
+    const buf = await getRawBody(request);
 
 
     event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
