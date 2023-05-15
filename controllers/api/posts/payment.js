@@ -183,7 +183,7 @@ exports.create_payment_intent = async (req, res) => {
 const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
 
 exports.webhooks = async (request, response) => {
-  const sig = request.headers['stripe-signature'];
+  try{  const sig = request.headers['stripe-signature'];
 
   let event;
 
@@ -255,5 +255,12 @@ exports.webhooks = async (request, response) => {
 
   // Return a 200 response to acknowledge receipt of the event
   response.send({status:200});
-});
-
+}
+  catch(error){
+    return res.status(400).send({
+      error: {
+        message: error.message,
+      },
+    });
+  }
+}
