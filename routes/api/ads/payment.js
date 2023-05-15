@@ -1,4 +1,4 @@
-let express = require("express]");
+let express = require("express");
 const router = require(`express`).Router(),
     authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
     controllers = require(`../../../controllers/api/posts/payment`);
