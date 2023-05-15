@@ -196,13 +196,7 @@ exports.create_payment_intent = async (req, res) => {
 // };
 
 //
-function getRawBody(request) {
-  return new Promise(resolve => {
-    const chunks = [];
-    request.on('data', chunk => chunks.push(chunk));
-    request.on('end', () => resolve(Buffer.concat(chunks)));
-  });
-}
+
 exports.stripe_webhooks = async (request, response) => {
 
   // console.log(response);
@@ -234,6 +228,13 @@ exports.stripe_webhooks = async (request, response) => {
   
 
   try {
+    function getRawBody(request) {
+      return new Promise(resolve => {
+        const chunks = [];
+        request.on('data', chunk => chunks.push(chunk));
+        request.on('end', () => resolve(Buffer.concat(chunks)));
+      });
+    }
     const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
     const sig = request.headers['stripe-signature'];
 
@@ -247,7 +248,7 @@ exports.stripe_webhooks = async (request, response) => {
   
     const buf = await getRawBody(request);
 
-
+console.log(buf,"bufffffffffffffffffffff");
     event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);
