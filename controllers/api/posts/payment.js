@@ -189,7 +189,7 @@ exports.webhooks = async (request, response) => {
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(JSON.stringify(request.body), sig, endpointSecret);
     console.log(event,"yeh event ka postmortem hua");
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);
