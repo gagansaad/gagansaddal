@@ -196,13 +196,13 @@ exports.create_payment_intent = async (req, res) => {
 // };
 
 //
-function getRawBody(request) {
-  return new Promise(resolve => {
-    const chunks = [];
-    request.on('data', chunk => chunks.push(chunk));
-    request.on('end', () => resolve(Buffer.concat(chunks)));
-  });
-}
+   function getRawBody(request) {
+      return new Promise(resolve => {
+        const chunks = [];
+        request.on('data', chunk => chunks.push(chunk));
+        request.on('end', () => resolve(Buffer.concat(chunks)));
+      });
+    }
 
 exports.stripe_webhooks = async (request, response) => {
 
