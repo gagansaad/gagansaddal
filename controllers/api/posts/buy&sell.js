@@ -102,10 +102,10 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid category`,
       });
-    if (!isValidString(sub_category))
-      return failureJSONResponse(res, {
-        message: `Please provide valid sub_category`,
-      });
+    // if (!isValidString(sub_category))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide valid sub_category`,
+    //   });
     // if (!isValidString(product_model))
     //   return failureJSONResponse(res, {
     //     message: `Please provide valid product_model`,

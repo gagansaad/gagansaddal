@@ -37,7 +37,7 @@ const BuySellSchema = new mongoose.Schema({
         },
         sub_category:{
             ...defaultStringConfig,
-            required: true
+            // required: true
         },
         title: {
             ...defaultStringConfig,
