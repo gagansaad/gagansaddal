@@ -258,7 +258,7 @@ console.log(JSON.parse(request.body),"ye iski body hai");
   response.send({status:200});
 }
   catch(error){
-    return res.status(400).send({
+    return response.status(400).send({
       error: {
         message: error.message,
       },
