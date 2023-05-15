@@ -1,7 +1,8 @@
 const router = require(`express`).Router(),
     authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
     controllers = require(`../../../controllers/api/posts/payment`);
-let express = require("express")
+
+    
     
     
 
@@ -12,7 +13,7 @@ authMiddleware.ensureUserLoggedIn,
     controllers.create_payment_intent
 );
 
-router.post(`/payment-status`,express.raw({ type: 'application/json' }),
+router.post(`/payment-status`,
 // authMiddleware.ensureUserLoggedIn,
 //     controllers.validatepaymentData,
     controllers.stripe_webhooks
