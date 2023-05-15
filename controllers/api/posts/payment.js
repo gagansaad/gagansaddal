@@ -196,6 +196,13 @@ exports.create_payment_intent = async (req, res) => {
 // };
 
 //
+function getRawBody(request) {
+  return new Promise(resolve => {
+    const chunks = [];
+    request.on('data', chunk => chunks.push(chunk));
+    request.on('end', () => resolve(Buffer.concat(chunks)));
+  });
+}
 
 exports.stripe_webhooks = async (request, response) => {
 
@@ -228,13 +235,7 @@ exports.stripe_webhooks = async (request, response) => {
   
 
   try {
-    function getRawBody(request) {
-      return new Promise(resolve => {
-        const chunks = [];
-        request.on('data', chunk => chunks.push(chunk));
-        request.on('end', () => resolve(Buffer.concat(chunks)));
-      });
-    }
+ 
     const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
     const sig = request.headers['stripe-signature'];
 
