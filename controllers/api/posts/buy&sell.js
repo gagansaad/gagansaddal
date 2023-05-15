@@ -46,7 +46,7 @@ exports.getDnymicsData = async (req, res, next) => {
     categories_Arts: ["Fine Art", "Advertising, Paper & Ephemera", "African Art", "Ethiopian Art", "Eritrean Art", "Flags", "Asian Antiques & Collectibles", "Bronze & Metalwork", "Cameras, Optics & Photography", "Carpets & Oriental Rugs", "Clocks, Barometers & Scientific Instruments", "Coins & Numismatics", "Decoys", "Fashion & Textiles", "Fine & Antique Toys", "Furniture", "General Collectibles", "Glass", "Jewelry", "Lamps", "Maps, Globes, and Atlases", "Militaria & Firearms", "Musical Instruments", "Native American & Ethnographic Arts", "Natural History", "Porcelain Art", "Pottery & Ceramics", "Silver", "Sports, Industry & Entertainment Memorabilia", "Whiskey", "Wines & Spirits", "Wristwatches and Chronometers"],
     categories_freestuff: [],
     categories_others: [],
-    payment_mode: ["Cash less payment", "Cash accepted"],
+    payment_mode: ["Cashless payment", "Cash accepted"],
     fullfilment: ["Free shipping", "In person pickup", "Only local delivery", "Please contact"],
     product_condition: ["New", "Used - Like new", "Used - Good", "Used - Fair"],
     user_type: [`Individual`, `Business`],
