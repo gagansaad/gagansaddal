@@ -240,7 +240,7 @@ exports.stripe_webhooks = async (req, res) => {
     // });
   
 
-
+console.log(req.body,"fdssfvgsdfgsgfdfdg");
 
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err) {
