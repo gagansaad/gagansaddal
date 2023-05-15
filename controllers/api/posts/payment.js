@@ -197,7 +197,7 @@ exports.create_payment_intent = async (req, res) => {
 
 //
 
-exports.stripe_webhooks = async (request, response) => {
+exports.stripe_webhooks = async (req, res) => {
 
   // console.log(response);
   // const sig = request.headers['stripe-signature'];
@@ -229,7 +229,7 @@ exports.stripe_webhooks = async (request, response) => {
 
   try {
     const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
-    const sig = request.headers['stripe-signature'];
+    const sig = req.headers['stripe-signature'];
 
     var event;
     // const payloadString = JSON.stringify(request.rawBody, null, 2);
@@ -242,9 +242,9 @@ exports.stripe_webhooks = async (request, response) => {
 
 
 
-    event = stripe.webhooks.constructEvent(request.rawBody, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
   } catch (err) {
-    response.status(400).send(`Webhook Error: ${err.message}`);
+    res.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
 
@@ -278,10 +278,10 @@ exports.stripe_webhooks = async (request, response) => {
       break;
     // ... handle other event types
     default:
-    // console.log(`Unhandled event type ${event.type}`);
+    console.log(`Unhandled event type ${event.type}`);
   }
   console.log(event);
   await payment_logs.create({ payment_intent: event })
   // Return a 200 response to acknowledge receipt of the event
-  response.send();
+  res.send();
 };

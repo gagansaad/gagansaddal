@@ -100,10 +100,10 @@ exports.validateAdsData = async (req, res, next) => {
     // return failureJSONResponse(res, {
     //   message: `Please provide valid prefered language`,
     // });
-    if (!isValidString(prefered_gender))
-      return failureJSONResponse(res, {
-        message: `Please provide valid prefered gender`,
-      });
+    // if (!isValidString(prefered_gender))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide valid prefered gender`,
+    //   });
     if ( service_from_date && !isValidString(service_from_date))
       return failureJSONResponse(res, {
         message: `Please provide valid service starting date`,
