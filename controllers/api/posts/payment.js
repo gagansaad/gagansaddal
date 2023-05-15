@@ -231,14 +231,14 @@ exports.stripe_webhooks = async (request, response) => {
     const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
     const sig = request.headers['stripe-signature'];
 
-    let event;
+    var event;
     // const payloadString = JSON.stringify(request.rawBody, null, 2);
 
     // const header = stripe.webhooks.generateTestHeaderString({
     //   payload: payloadString,
     //   endpointSecret,
     // });
-    console.log('sss-------------', request.rawBody,)
+  
 
 
 
@@ -247,7 +247,7 @@ exports.stripe_webhooks = async (request, response) => {
     response.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
-  console.log(event, "event");
+
   // Handle the event
   switch (event.type) {
     case 'payment_intent.canceled':
