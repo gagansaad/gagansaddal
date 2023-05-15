@@ -185,11 +185,11 @@ const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c7
 exports.webhooks = async (request, response) => {
   try{ 
      const sig = request.headers['stripe-signature'];
-// console.log(,"ye iski body hai");
+console.log(request.rawBody,"ye iski body hai",request.rawbody,"dkvjvmkvcfdmvjfd");
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(JSON.stringify(request.body), sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(request.rawBody, sig, endpointSecret);
     console.log(event,"yeh event ka postmortem hua");
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);

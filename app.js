@@ -118,7 +118,7 @@ app.use('/v1/api/posts/ads', AllAdsRoutes)
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))
 }
-app.use(express.raw({ type: 'application/json' }));
+
 
 // Routes
 const routes = require(`./routes/_all`);
