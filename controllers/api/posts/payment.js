@@ -190,13 +190,15 @@ exports.webhooks = async (request, response) => {
   let event;
 
   try {
-    event = await stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
-    console.log(event,"yeh event ka postmortem hua");
+    const requestBody = JSON.stringify(request.body); // Convert the request body to a string
+    event = await stripe.webhooks.constructEvent(requestBody, sig, endpointSecret);
+    console.log(event, "yeh event ka postmortem hua");
   } catch (err) {
-    console.log(err,"fadli");
+    console.log(err, "fadli");
     response.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
+  
 
   // Handle the event
   switch (event.type) {
