@@ -45,4 +45,5 @@ const router = require(`express`).Router(),
 // );
 router.post(`/create-category-data`,controllers.createNewCategories)
 router.get(`/fetch-category-data`,controllers.fetchNewCategories)
+router.post(`/delete-category`,controllers.deleteNewCategories)
 module.exports = router;

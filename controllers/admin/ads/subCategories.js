@@ -17,31 +17,31 @@ exports.createNewSubCategories = async (req, res, next) => {
 
         const {
             name,
-            categoryId,
+            category_id,
         } = req.body
 
         if (!isValidString(name)) return failureJSONResponse(res, { message: `Please provide name` });
         if (!adsId) return failureJSONResponse(res, { message: `Please provide ads id` });
-        let checking = await AdsSubCategory.findOne({"name":name})
-        if(checking){
+        let checking = await AdsSubCategory.findOne({ "name": name })
+        if (checking) {
             return failureJSONResponse(res, { message: `sub category already exist` });
         }
-else{
-        const dataObj = {}
-        if (name) dataObj.name = name;
-        if (categoryId) dataObj.category = categoryId;
+        else {
+            const dataObj = {}
+            if (name) dataObj.name = name;
+            if (category_id) dataObj.category = category_id;
 
 
-        AdsSubCategory.create(dataObj)
-        .then((newCategory)=>{
-            if(!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
-            else {
-                return successJSONResponse(res, { message: "Success" });
-            }
-        }).catch((err)=>{
-            return failureJSONResponse(res, { message: `Something went wrong` });
-        })
-    }
+            AdsSubCategory.create(dataObj)
+                .then((newCategory) => {
+                    if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
+                    else {
+                        return successJSONResponse(res, { message: "Success" });
+                    }
+                }).catch((err) => {
+                    return failureJSONResponse(res, { message: `Something went wrong` });
+                })
+        }
     } catch (err) {
         return failureJSONResponse(res, { message: `something went wrong` })
     }
@@ -54,23 +54,54 @@ exports.fetchNewSubCategories = async (req, res, next) => {
     try {
 
         const {
-          
-            categoryId,
+
+            category_id,
         } = req.body
 
-    
-        if (!categoryId) return failureJSONResponse(res, { message: `Please provide ads id` });
-    
 
-        AdsSubCategory.find({"category":categoryId})
-        .then((newCategory)=>{
-            if(!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
-            else {
-                return successJSONResponse(res, { message: "Success",newCategory:newCategory});
-            }
-        }).catch((err)=>{
-            return failureJSONResponse(res, { message: `Something went wrong` });
-        })
+        if (!category_id) return failureJSONResponse(res, { message: `Please provide ads id` });
+
+
+        AdsSubCategory.find({ "category": category_id })
+            .then((newCategory) => {
+                if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
+                else {
+                    return successJSONResponse(res, { message: "Success", newCategory: newCategory });
+                }
+            }).catch((err) => {
+                return failureJSONResponse(res, { message: `Something went wrong` });
+            })
+
+    } catch (err) {
+        return failureJSONResponse(res, { message: `something went wrong` })
+    }
+}
+
+
+
+
+
+exports.deleteNewSubCategories = async (req, res, next) => {
+    try {
+
+        const {
+
+            category_id,
+        } = req.body
+
+
+        if (!category_id) return failureJSONResponse(res, { message: `Please provide ads id` });
+
+
+        AdsSubCategory.findOneAndDelete({ "_id": sub_category_id })
+            .then((newCategory) => {
+                if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
+                else {
+                    return successJSONResponse(res, { message: "Success", newCategory: newCategory });
+                }
+            }).catch((err) => {
+                return failureJSONResponse(res, { message: `Something went wrong` });
+            })
 
     } catch (err) {
         return failureJSONResponse(res, { message: `something went wrong` })
