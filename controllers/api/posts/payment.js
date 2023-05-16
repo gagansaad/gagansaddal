@@ -189,7 +189,7 @@ console.log(request.rawBody,"ye iski body hai",request.rawbody,"dkvjvmkvcfdmvjfd
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(request.rawBody, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(JSON.stringify(request.body), JSON.stringify(sig), endpointSecret);
     console.log(event,"yeh event ka postmortem hua");
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);
