@@ -43,7 +43,7 @@ const router = require(`express`).Router(),
     
 //     controllers.fetchAll
 // );
-router.post(`/create-dynamic-data`,controllers.createNewSubCategories)
-router.post(`/fetch-dynamic-data`,controllers.fetchNewSubCategories)
+router.post(`/create-sub-category-data`,controllers.createNewSubCategories)
+router.get(`/fetch-sub-category-data`,controllers.fetchNewSubCategories)
 
 module.exports = router;
