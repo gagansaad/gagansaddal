@@ -1874,11 +1874,6 @@
   "resolved" "https://registry.npmjs.org/smart-buffer/-/smart-buffer-4.2.0.tgz"
   "version" "4.2.0"
 
-"social-media-url-validator@^1.0.3":
-  "integrity" "sha512-cyafa+PH5svzOTfaJ0pUgcA/9vZMLnREqoY/Ow7vD50jXP2LNALl0+zBn0mjsEh8VgjQdDyIw/kxTGYTDPOVAQ=="
-  "resolved" "https://registry.npmjs.org/social-media-url-validator/-/social-media-url-validator-1.0.3.tgz"
-  "version" "1.0.3"
-
 "socks-proxy-agent@^5.0.0", "socks-proxy-agent@5":
   "integrity" "sha512-vZdmnjb9a2Tz6WEQVIurybSwElwPxMZaIc7PzqbJTrezcKNznv6giT7J7tZDZ1BojVaa1jvO/UiUdhDVB0ACoQ=="
   "resolved" "https://registry.npmjs.org/socks-proxy-agent/-/socks-proxy-agent-5.0.1.tgz"

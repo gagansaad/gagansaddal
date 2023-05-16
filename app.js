@@ -37,6 +37,8 @@ require(`./model/posts/babbysitter & nannis`);
 require(`./model/image/image`);
 require(`./model/posts/payment_logs`);
 require('./model/posts/tagline')
+require(`./model/posts/adsCategories`);
+require('./model/posts/adsSubCategories')
 // admin configuration
 require(`./model/accounts/admin/configuration`);
 
@@ -65,7 +67,8 @@ const paymentRoutes = require(`./routes/api/ads/payment`)
 const AllAdsRoutes = require(`./routes/api/ads/fetchAllAds`)
 const All_Tags = require(`./routes/api/ads/tagline`)
 //admin
-
+const adsCategoriesRoutes = require('./routes/admin/categories');
+const adsSubCategoriesRoutes = require('./routes/admin/sub_categories');
 const adminroomRentsRoutes = require('./routes/admin/roomRents');
 const adminbizRoutes = require('./routes/admin/bizAndServices');
 const adminjobsRoutes = require('./routes/admin/jobs');
@@ -104,6 +107,9 @@ app.use('/admin/v1/api/ads/jobs',adminjobsRoutes);
 app.use('/admin/v1/api/ads/buysell',adminbuySellRoutes);
 app.use('/admin/v1/api/ads/babysitter',adminbabysitterRoutes);
 app.use('/admin/v1/api/ads/events',admineventRoutes);
+app.use('/admin/v1/api/ads/categories',adsCategoriesRoutes);
+app.use('/admin/v1/api/ads/sub-categories',adsSubCategoriesRoutes);
+
 app.use('/v1/api/posts/', All_Tags);
 app.use('/v1/api/posts/types', postTypeRoutes);
 app.use('/v1/api/posts/room-rents', roomRentsRoutes);
