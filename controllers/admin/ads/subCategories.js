@@ -22,8 +22,10 @@ exports.createNewSubCategories = async (req, res, next) => {
 
         if (!isValidString(name)) return failureJSONResponse(res, { message: `Please provide name` });
         if (!adsId) return failureJSONResponse(res, { message: `Please provide ads id` });
-    
-
+        let checking = await AdsSubCategory.findOne({name:name})
+        if(checking){
+            return failureJSONResponse(res, { message: `sub category already ` });
+        }
 
         const dataObj = {}
         if (name) dataObj.name = name;

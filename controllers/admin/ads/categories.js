@@ -30,7 +30,10 @@ exports.createNewCategories = async (req, res, next) => {
         const dataObj = {}
         if (name) dataObj.name = name;
         if (adsId) dataObj.adsId = adsId;
-
+        let checking = await AdsCategories.findOne({name:name})
+        if(checking){
+            return failureJSONResponse(res, { message: `category already ` });
+        }
 
         AdsCategories.create(dataObj)
         .then((newCategory)=>{
