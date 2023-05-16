@@ -29,7 +29,7 @@ exports.createNewCategories = async (req, res, next) => {
 
         const dataObj = {}
         if (name) dataObj.name = name;
-        if (adsId) dataObj.adsId = adsId;
+        if (adsId) dataObj.ads_type = adsId;
         let checking = await AdsCategories.findOne({"name":name})
         if(checking){
             return failureJSONResponse(res, { message: `category already exist` });
@@ -61,11 +61,11 @@ exports.fetchNewCategories = async (req, res, next) => {
        
 
 
-        AdsCategories.findById({ads_type:adsId})
+        AdsCategories.find({"ads_type":adsId})
         .then((newCategory)=>{
             if(!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
             else {
-                return successJSONResponse(res, { message: "Success" });
+                return successJSONResponse(res, { message: "Success" ,newCategory:newCategory});
             }
         }).catch((err)=>{
             return failureJSONResponse(res, { message: `Something went wrong` });

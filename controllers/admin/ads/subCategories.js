@@ -24,7 +24,7 @@ exports.createNewSubCategories = async (req, res, next) => {
         if (!adsId) return failureJSONResponse(res, { message: `Please provide ads id` });
         let checking = await AdsSubCategory.findOne({"name":name})
         if(checking){
-            return failureJSONResponse(res, { message: `sub category already ` });
+            return failureJSONResponse(res, { message: `sub category already exist` });
         }
 else{
         const dataObj = {}
@@ -62,11 +62,11 @@ exports.fetchNewSubCategories = async (req, res, next) => {
         if (!categoryId) return failureJSONResponse(res, { message: `Please provide ads id` });
     
 
-        AdsSubCategory.findById({category:categoryId})
+        AdsSubCategory.find({"category":categoryId})
         .then((newCategory)=>{
             if(!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
             else {
-                return successJSONResponse(res, { message: "Success" });
+                return successJSONResponse(res, { message: "Success",newCategory:newCategory});
             }
         }).catch((err)=>{
             return failureJSONResponse(res, { message: `Something went wrong` });
