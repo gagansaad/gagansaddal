@@ -44,5 +44,5 @@ const router = require(`express`).Router(),
 //     controllers.fetchAll
 // );
 router.post(`/create-dynamic-data`,controllers.createNewCategories)
-
+router.get(`/fetch-dynamic-data`,controllers.fetchNewCategories)
 module.exports = router;

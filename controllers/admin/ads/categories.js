@@ -47,3 +47,28 @@ exports.createNewCategories = async (req, res, next) => {
     }
 }
 
+exports.fetchNewCategories = async (req, res, next) => {
+    try {
+
+        const {
+            adsId,
+        } = req.body
+
+        if (!adsId) return failureJSONResponse(res, { message: `Please provide ads id` });
+       
+
+
+        AdsCategories.findById({ads_type:adsId})
+        .then((newCategory)=>{
+            if(!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
+            else {
+                return successJSONResponse(res, { message: "Success" });
+            }
+        }).catch((err)=>{
+            return failureJSONResponse(res, { message: `Something went wrong` });
+        })
+
+    } catch (err) {
+        return failureJSONResponse(res, { message: `something went wrong` })
+    }
+}

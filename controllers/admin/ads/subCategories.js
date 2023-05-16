@@ -22,9 +22,7 @@ exports.createNewSubCategories = async (req, res, next) => {
 
         if (!isValidString(name)) return failureJSONResponse(res, { message: `Please provide name` });
         if (!adsId) return failureJSONResponse(res, { message: `Please provide ads id` });
-        // else if(adsId){
-        //     const 
-        // }
+    
 
 
         const dataObj = {}
@@ -47,3 +45,32 @@ exports.createNewSubCategories = async (req, res, next) => {
     }
 }
 
+
+
+
+exports.fetchNewSubCategories = async (req, res, next) => {
+    try {
+
+        const {
+          
+            categoryId,
+        } = req.body
+
+    
+        if (!categoryId) return failureJSONResponse(res, { message: `Please provide ads id` });
+    
+
+        AdsSubCategory.findById({category:categoryId})
+        .then((newCategory)=>{
+            if(!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
+            else {
+                return successJSONResponse(res, { message: "Success" });
+            }
+        }).catch((err)=>{
+            return failureJSONResponse(res, { message: `Something went wrong` });
+        })
+
+    } catch (err) {
+        return failureJSONResponse(res, { message: `something went wrong` })
+    }
+}
