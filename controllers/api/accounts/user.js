@@ -1463,6 +1463,7 @@ module.exports = {
         gender,
         short_bio,
         my_website,
+        phone_number,
         location,
       } = req.body;
       // console.log(vali(Date(date_of_birth)));
@@ -1482,7 +1483,7 @@ module.exports = {
         "userInfo.name": name,
         "userInfo.date_of_birth": date_of_birth,
         "userInfo.gender": gender,
-
+        "userInfo.mobile_number.phone_number":phone_number,
         "userBasicInfo.short_bio": short_bio,
         "userBasicInfo.my_website": my_website,
         "userBasicInfo.location": data.location
