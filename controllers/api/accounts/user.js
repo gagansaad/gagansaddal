@@ -1654,7 +1654,7 @@ module.exports = {
 
     try {
       const userId = req.userId;
-console.log(req.body,"body hai ye to");
+console.log(req.body,"body hai ye");
       // let new_email = req?.body?.new_email_address?.toLowerCase()
       // console.log(new_email);
       // let find_new_email = await User.findOne({"userInfo.email_address":new_email})
@@ -2205,7 +2205,117 @@ console.log(req.body,"body hai ye to");
 
 
   ///////////////////////////////
-  
+  generate_otp_for_signup_email_mobile: async function (req, res) {
+    try {
+      const userId = req.userId;
+console.log(req.body,"body hai ye");
+      // let new_email = req?.body?.new_email_address?.toLowerCase()
+      // console.log(new_email);
+      // let find_new_email = await User.findOne({"userInfo.email_address":new_email})
+      // return console.log(find_new_email,"cfhbchf");
+      // if(find_new_email) return failureJSONResponse(res, {
+      //     message: `email address already exist`,
+      //   });
+
+      find_old_email = await User.findById({ "_id": userId })
+      //  return console.log(find_old_email.userInfo.email_address,"dnxdjdnj");
+      const source = Math.abs(req?.body?.source),
+        email_address = req?.body?.email_address?.toLowerCase(),
+        phone_number = req?.body?.phone_number;
+
+      if (!source)
+        return failureJSONResponse(res, { message: `please provide soruce` });
+      else if (source && isNaN(source))
+        return failureJSONResponse(res, {
+          message: `please provide valid source `,
+        });
+      else if (source && (source < 1 || source > 2))
+        return failureJSONResponse(res, {
+          message: `please provide source between 1-2`,
+        });
+
+      User.findById({ _id: userId }).then((user) => {
+
+        if (!user) return failureJSONResponse(res, { message: `User not exits` });
+
+        if (Number(source) === Number(1)) {
+          console.log(`working`);
+          if (!phone_number)
+            return failureJSONResponse(res, {
+              message: `please provide phone number`,
+            });
+
+
+          MobileNumberVerificationOTPByUserId(user?._id, null);
+          return successJSONResponse(res, { message: `success` });
+          // OTP.create({
+          //     code: generateOTP(4),
+          //     phone_number: phone_number,
+          //     user: userId,
+          //     for: 1
+
+          // }).then((foundOTP) => {
+
+          //     if (!foundOTP) {
+          //         return failureJSONResponse(res, { message: `something went wrong` });
+          //     } else {
+          //         MobileNumberVerificationOTP(phone_number, `hi`, foundOTP?.code)
+          //         return successJSONResponse(res, { message: `success` });
+          //     }
+
+          // }).catch((err) => {
+          //     return failureJSONResponse(res, { message: `something went wrong` });
+          // })
+        } else if (Number(source) === Number(2)) {
+          if (!email_address){
+            // console.log("yes i am error !");
+            return failureJSONResponse(res, {
+              message: `please provide email address`,
+            });}
+          else if (email_address && !isValidEmailAddress(email_address))
+            return failureJSONResponse(res, {
+              message: `please provide valid  email address`,
+            });
+
+          OTP.create({
+            is_active: true,
+            code: generateOTP(4),
+            email_address: email_address.toLowerCase(),
+            used_for: 2,
+            user: userId,
+            for: 2,
+          })
+            .then((foundOTP) => {
+              console.log(foundOTP);
+              if (!foundOTP) {
+                return failureJSONResponse(res, {
+                  message: `something went wrong`,
+                });
+              } else {
+
+
+                EmailOTPVerification(user?.userInfo?.email_address, `Hi`, foundOTP?.code);
+                // return successJSONResponse(res, { message: `success` });
+
+            
+              }
+            }).catch((err) => {
+              console.log(err);
+              console.log("3");
+              return failureJSONResponse(res, {
+                message: `something went wrong`,
+              });
+            });
+        }
+      }).catch((err) => {
+        return failureJSONResponse(res, { message: `something went wrong` });
+      })
+
+    } catch (err) {
+      console.log(err);
+      return failureJSONResponse(res, { message: `something went wrong` });
+    }
+  },
 };
 
 

@@ -93,6 +93,11 @@ router.post(`/generate_otp`,
 );
 
 
+router.post(`/generate_signup_otp`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.generate_otp_for_signup_email_mobile
+);
+
 router.post(`/update_email_or_password`,
     authMiddleware.ensureUserLoggedIn,
     controllers.update_email_or_phone_number
