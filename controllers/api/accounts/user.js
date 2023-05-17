@@ -1951,7 +1951,7 @@ module.exports = {
       User.findById({ _id: userId })
         .select(`userInfo userBasicInfo, createdAt`)
         .then((user) => {
-          console.log(user)
+          console.log(user.userBasicInfo)
           if (!user)
             return failureJSONResponse(res, {
               message: `something went worng`,
