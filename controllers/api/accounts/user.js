@@ -1949,7 +1949,7 @@ module.exports = {
         return failureJSONResponse(res, { message: `please provide user id` });
 
       User.findById({ _id: userId })
-        .select(`userInfo userBasicInfo, createdAt`)
+        .select(`userInfo userBasicInfo createdAt`)
         .then((user) => {
           console.log(user)
           if (!user)
