@@ -33,6 +33,7 @@ const {
 
 
 module.exports = {
+
   validate_signup_data: async function (req, res, next) {
     try {
       const { email, password, name, phone_number, device_token, device_type } =
@@ -1046,7 +1047,7 @@ module.exports = {
 
             await OTP.deleteMany({ _id: { $in: [foundMobileOTP._id, foundEmailOTP._id] } });
 
-            User.update(
+            User.updateOne(
               { _id: req.userId },
               {
                 $set: {
@@ -1753,6 +1754,7 @@ module.exports = {
                   .then((foundOTP) => {
                     console.log(foundOTP);
                     if (!foundOTP) {
+                      console.log("1");
                       return failureJSONResponse(res, {
                         message: `something went wrong`,
                       });
@@ -1763,6 +1765,7 @@ module.exports = {
                   })
                   .catch((err) => {
                     console.log(err);
+                    console.log("2");
                     return failureJSONResponse(res, {
                       message: `something went wrong`,
                     });
@@ -1771,6 +1774,7 @@ module.exports = {
             })
             .catch((err) => {
               console.log(err);
+              console.log("3");
               return failureJSONResponse(res, {
                 message: `something went wrong`,
               });
@@ -1780,11 +1784,13 @@ module.exports = {
         }
 
       }).catch((err) => {
+        console.log(err,"fdleya");
         return failureJSONResponse(res, { message: `something went wrong` });
       })
 
     } catch (err) {
       console.log(err);
+      console.log("4");
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
