@@ -1675,7 +1675,13 @@ if(!new_email_address){
         new_email_address = req?.body?.email_address?.toLowerCase(),
         old_email_address = find_old_email.userInfo.email_address,
         phone_number = req?.body?.phone_number;
-
+      let check_email = await User.find({"email_address":new_email_address}) 
+      if(check_email){
+        return failureJSONResponse(res, {
+          message: `please provide this email already exist`,
+        });
+      }
+      
       if (!source)
         return failureJSONResponse(res, { message: `please provide soruce` });
       else if (source && isNaN(source))
