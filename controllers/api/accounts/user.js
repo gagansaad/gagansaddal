@@ -1675,10 +1675,7 @@ if(!new_email_address){
         new_email_address = req?.body?.email_address?.toLowerCase(),
         old_email_address = find_old_email.userInfo.email_address,
         phone_number = req?.body?.phone_number;
-      if(new_email_address == old_email_address)  return failureJSONResponse(res, {
-        message: `Your current email and new email same`,
-      });
-      
+  
       
       
       if (!source)
