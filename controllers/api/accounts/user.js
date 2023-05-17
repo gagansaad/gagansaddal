@@ -2303,7 +2303,7 @@ console.log(req.body,"body hai ye");
 
 
                 EmailOTPVerification(user?.userInfo?.email_address , `Hi`, foundOTP?.code);
-                // return successJSONResponse(res, { message: `success` });
+                return successJSONResponse(res, { message: `success` });
 
             
               }
