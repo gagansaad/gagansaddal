@@ -1714,10 +1714,11 @@ module.exports = {
           //     return failureJSONResponse(res, { message: `something went wrong` });
           // })
         } else if (Number(source) === Number(2)) {
-          if (!new_email_address)
+          if (!new_email_address){
+            console.log("yes i am error !");
             return failureJSONResponse(res, {
               message: `please provide email address`,
-            });
+            });}
           else if (!isValidEmailAddress(new_email_address))
             return failureJSONResponse(res, {
               message: `please provide valid phone number`,
