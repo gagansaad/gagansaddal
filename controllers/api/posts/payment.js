@@ -191,7 +191,7 @@ exports.webhooks = async (request, response) => {
 
   try {
     const requestBody = JSON.stringify(request.body); // Convert the request body to a string
-    event = await stripe.webhooks.constructEvent(requestBody, sig, endpointSecret);
+    event = await stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
     console.log(event, "yeh event ka postmortem hua");
   } catch (err) {
     console.log(err, "fadli");

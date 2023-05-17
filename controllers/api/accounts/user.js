@@ -1957,7 +1957,7 @@ module.exports = {
               message: `something went worng`,
             });
           else {
-            console.log
+           
 
             const data = {
               name: user?.userInfo?.name || null,
@@ -1973,6 +1973,7 @@ module.exports = {
               long: user?.userBasicInfo?.location?.coordinates?.coordinates?.[1] || null,
               createdAt: user?.createdAt || null,
             };
+            console.log("haigi aaa ",user?.userBasicInfo?.profile_image)
             return successJSONResponse(res, { user: data });
           }
         })
