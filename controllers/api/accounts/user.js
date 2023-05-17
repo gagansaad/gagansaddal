@@ -1188,8 +1188,14 @@ module.exports = {
   //////////////
   verifiy_otp_for_email_update: async function (req, res, next) {
 
-    const { otp_for_email, otp_for_new_email, otp_for_mobile_number } = req.body;
-
+    const { otp_for_email, otp_for_new_email, otp_for_mobile_number,new_email_address} = req.body;
+if(!new_email_address){
+  return res.json({
+    status: 200,
+    invalidOTP,
+    message: `please provide new email address`,
+  });
+}
 
 
     if (otp_for_email) {
@@ -1228,14 +1234,13 @@ module.exports = {
           }
 
           if (invalidOTP === 0) {
-            // await User.findByIdAndUpdate({_id:userId},{"userInfo.email_address":})
             await OTP.deleteMany({ _id: { $in: [foundNewEmailOTP._id, foundEmailOTP._id] } });
+            await User.findByIdAndUpdate({_id:userId},{"userInfo.email_address":new_email_address})
             return res.json({
               status: 200,
               invalidOTP,
               message: `success`,
             });
-
           } else if (invalidOTP === 1) {
             return res.json({
               status: 200,
@@ -1260,7 +1265,7 @@ module.exports = {
     }
   },
   /////////////
-  ///////////////
+  ////////////
   forget_password: async function (req, res, next) {
     console.log(req.body);
     const email_address = (req?.body?.email_address).toLowerCase();
@@ -1654,7 +1659,7 @@ module.exports = {
 
     try {
       const userId = req.userId;
-console.log(req.body,"body hai ye");
+
       // let new_email = req?.body?.new_email_address?.toLowerCase()
       // console.log(new_email);
       // let find_new_email = await User.findOne({"userInfo.email_address":new_email})
