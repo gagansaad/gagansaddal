@@ -1951,7 +1951,7 @@ module.exports = {
       User.findById({ _id: userId })
         .select(`userInfo userBasicInfo, createdAt`)
         .then((user) => {
-          console.log(user.userBasicInfo)
+          console.log(user)
           if (!user)
             return failureJSONResponse(res, {
               message: `something went worng`,
@@ -1973,7 +1973,7 @@ module.exports = {
               long: user?.userBasicInfo?.location?.coordinates?.coordinates?.[1] || null,
               createdAt: user?.createdAt || null,
             };
-            console.log("haigi aaa ",user?.userBasicInfo?.profile_image)
+            console.log("haigi aaa ",data)
             return successJSONResponse(res, { user: data });
           }
         })
