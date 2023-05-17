@@ -1666,7 +1666,7 @@ console.log(req.body,"body hai ye");
       find_old_email = await User.findById({ "_id": userId })
       //  return console.log(find_old_email.userInfo.email_address,"dnxdjdnj");
       const source = Math.abs(req?.body?.source),
-        new_email_address = req?.body?.new_email_address?.toLowerCase(),
+        new_email_address = req?.body?.email_address?.toLowerCase(),
         old_email_address = find_old_email.userInfo.email_address,
         phone_number = req?.body?.phone_number;
 
