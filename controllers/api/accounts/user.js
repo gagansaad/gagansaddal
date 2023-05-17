@@ -1654,7 +1654,7 @@ module.exports = {
 
     try {
       const userId = req.userId;
-
+console.log(req.body,"body hai ye to");
       // let new_email = req?.body?.new_email_address?.toLowerCase()
       // console.log(new_email);
       // let find_new_email = await User.findOne({"userInfo.email_address":new_email})
@@ -2202,4 +2202,11 @@ module.exports = {
     }
 
   },
+
+
+  ///////////////////////////////
+  
 };
+
+
+
