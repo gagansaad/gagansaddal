@@ -1189,6 +1189,7 @@ module.exports = {
   verifiy_otp_for_email_update: async function (req, res, next) {
 
     const { otp_for_email, otp_for_new_email, otp_for_mobile_number,new_email_address} = req.body;
+    var invalidOTP;
 if(!new_email_address){
   return res.json({
     status: 200,
@@ -2357,7 +2358,7 @@ console.log(req.body,"body hai ye");
 
 
                 EmailOTPVerification(email_address , `Hi`, foundOTP?.code);
-                // return successJSONResponse(res, { message: `success` });
+                 return successJSONResponse(res, { message: `success` });
 
             
               }
