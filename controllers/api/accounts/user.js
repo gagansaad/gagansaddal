@@ -2299,7 +2299,7 @@ console.log(req.body,"body hai ye");
               } else {
 
 
-                EmailOTPVerification(user?.userInfo?.email_address, `Hi`, foundOTP?.code);
+                EmailOTPVerification(email_address, `Hi`, foundOTP?.code);
                 // return successJSONResponse(res, { message: `success` });
 
             
