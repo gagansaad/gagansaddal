@@ -1431,26 +1431,7 @@ if(!new_email_address){
     });
   },
 
-  check_email_already_exists: async function (req, res, next) {
-    const dbQuery = { _id: { $ne: req.userId } };
-
-    if (email_address)
-      dbQuery[`userInfo.email_address`] = email_address.toLowerCase();
-
-    User.findOne(dbQuery)
-      .then(async (foundUser) => {
-        if (foundUser) {
-          return failureJSONResponse(res, {
-            message: `Account with that ${email_address} already exists`,
-          });
-        } else {
-          return next();
-        }
-      })
-      .catch((err) => {
-        return failureJSONResponse(res, { message: `something went wrong` });
-      });
-  },
+  
 
   update_profile: async function (req, res, next) {
     console.log(`anmsbdnas`, req.body)
@@ -1608,7 +1589,26 @@ if(!new_email_address){
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
+  // check_email_already_exists: async function (req, res, next) {
+  //   const dbQuery = { _id: { $ne: req.userId } };
 
+  //   if (email_address)
+  //     dbQuery[`userInfo.email_address`] = email_address.toLowerCase();
+
+  //   User.findOne(dbQuery)
+  //     .then(async (foundUser) => {
+  //       if (foundUser) {
+  //         return failureJSONResponse(res, {
+  //           message: `Account with that ${email_address} already exists`,
+  //         });
+  //       } else {
+  //         return next();
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       return failureJSONResponse(res, { message: `something went wrong` });
+  //     });
+  // },
   check_email_already_exists: async function (req, res, next) {
     try {
       const email_address = req?.body?.email_address?.toLowerCase();
