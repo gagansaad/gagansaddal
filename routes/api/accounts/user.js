@@ -98,6 +98,11 @@ router.post(`/generate_signup_otp`,
     controllers.generate_otp_for_signup_email_mobile
 );
 
+router.post(`/resend-otp`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.resend_otp_email
+);
+
 router.post(`/update_email_or_password`,
     authMiddleware.ensureUserLoggedIn,
     controllers.update_email_or_phone_number
