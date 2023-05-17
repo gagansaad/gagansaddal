@@ -1240,19 +1240,19 @@ module.exports = {
             return res.json({
               status: 200,
               invalidOTP,
-              message: `success`,
+              message: `please provide valid old email otp`,
             });
           } else if (invalidOTP === 2) {
             return res.json({
               status: 200,
               invalidOTP,
-              message: `success`,
+              message: `please provide valid new email otp`,
             });
           } else if (invalidOTP === 3) {
             return res.json({
               status: 200,
               invalidOTP,
-              message: `success`,
+              message: `please provide valid old email & new email otp`,
             });
           }
         });
