@@ -163,7 +163,7 @@ exports.gettypeconfigurations = async (req, res, next) => {
         // if(plans){
             let addons = await AdsPlan.find().populate("add_ons")
             if(addons){
-                return successJSONResponse(res, {plan:plans,addonsplan:addons});
+                return successJSONResponse(res, {message:"success",addonsplan:addons});
             }else{
                 return failureJSONResponse(res, { message: `something went wrong1` });
             }
