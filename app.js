@@ -30,6 +30,7 @@ require(`./model/configurations/privacy`);
 require(`./model/configurations/termAndCondition`);
 require(`./model/plan/plan`);
 require(`./model/plan/plan copy`);
+require(`./model/plan/plan_adons`);
 require(`./model/posts/jobs`);
 require(`./model/posts/buy&sell`);
 require(`./model/posts/bizAndServices`);
@@ -64,6 +65,7 @@ const buySellRoutes = require('./routes/api/ads/buysell');
 const babysitterRoutes = require('./routes/api/ads/babbysitter & nannis');
 const eventRoutes = require(`./routes/api/ads/event`)
 const paymentRoutes = require(`./routes/api/ads/payment`)
+const planRoutes = require(`./routes/api/ads/plans copy`)
 const AllAdsRoutes = require(`./routes/api/ads/fetchAllAds`)
 const All_Tags = require(`./routes/api/ads/tagline`)
 //admin
@@ -120,6 +122,7 @@ app.use('/v1/api/posts/babysitter', babysitterRoutes);
 app.use('/v1/api/posts/biz', bizRoutes);
 app.use('/v1/api/posts/payment', paymentRoutes)
 app.use('/v1/api/posts/ads', AllAdsRoutes)
+app.use('/v1/api/posts/ads', planRoutes)
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))
