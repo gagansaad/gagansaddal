@@ -1236,7 +1236,7 @@ module.exports = {
             phone_number: phoneNumber,
             country_code: countryCode
           } })
-          return successJSONResponse(res, { message: "Phone number chnage successfully" })
+          return successJSONResponse(res, { message: "Phone number change successfully" })
         }
 
       })
