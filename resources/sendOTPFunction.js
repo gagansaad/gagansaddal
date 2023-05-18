@@ -71,6 +71,7 @@ const MobileNumberVerificationOTPByUserId = (userId, phone_number=null) => {
           
             })
             .catch((error) => {
+                console.log(error)
                 console.log('something went wrong3!');
 
             })
