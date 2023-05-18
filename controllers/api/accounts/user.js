@@ -1325,8 +1325,7 @@ module.exports = {
 
     }
   },
-  /////////////
-  ////////////
+ 
   forget_password: async function (req, res, next) {
     console.log(req.body);
     const email_address = (req?.body?.email_address).toLowerCase();
@@ -1756,11 +1755,7 @@ module.exports = {
       } else if (source === 2) {
 
 
-        const oldEmailAddress = foundUser?.userInfo?.email_address?.toLowerCase();
-
-        if (!oldEmailAddress) return failureJSONResponse(res, { message: `please provide old email address` });
-        else if (!isValidEmailAddress(oldEmailAddress)) return failureJSONResponse(res, { message: `please provide valid old email address` });
-
+       
         if (!newEmailAddress) return failureJSONResponse(res, { message: `please provide new email address` });
         else if (!isValidEmailAddress(newEmailAddress)) return failureJSONResponse(res, { message: `please provide valid new email address` });
 
@@ -1802,6 +1797,13 @@ module.exports = {
 
         } else if (emailType === 2) {
 
+
+          const oldEmailAddress = foundUser?.userInfo?.email_address?.toLowerCase();
+
+          if (!oldEmailAddress) return failureJSONResponse(res, { message: `please provide old email address` });
+          else if (!isValidEmailAddress(oldEmailAddress)) return failureJSONResponse(res, { message: `please provide valid old email address` });
+  
+
           OTP.create({
             is_active: true,
             code: generateOTP(4),
@@ -1826,6 +1828,12 @@ module.exports = {
         }
 
         else if (emailType === 3) {
+
+             const oldEmailAddress = foundUser?.userInfo?.email_address?.toLowerCase();
+
+          if (!oldEmailAddress) return failureJSONResponse(res, { message: `please provide old email address` });
+          else if (!isValidEmailAddress(oldEmailAddress)) return failureJSONResponse(res, { message: `please provide valid old email address` });
+  
 
           let OTPCreatedForBoth = false;
 
