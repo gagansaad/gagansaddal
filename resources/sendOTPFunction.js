@@ -64,6 +64,7 @@ const MobileNumberVerificationOTPByUserId = (userId, phone_number=null) => {
                         MobileNumberVerificationOTP(fullNumber, name = ``, data.code)
                     })
                         .catch((error) => {
+                            console.log(error)
                             console.log('something went wrong2!');
                         })
                 }
