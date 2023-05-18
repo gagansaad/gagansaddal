@@ -1817,7 +1817,7 @@ module.exports = {
 
               if (!foundOTP) return failureJSONResponse(res, { message: `something went wrong` });
               else {
-                EmailOTPVerification(newEmailAddress, `Hi`, foundOTP?.code);
+                EmailOTPVerification(oldEmailAddress, `Hi`, foundOTP?.code);
                 return successJSONResponse(res, { message: `OTP send successfully on ${oldEmailAddress}` });
               }
             })
