@@ -161,12 +161,12 @@ exports.gettypeconfigurations = async (req, res, next) => {
 
         // let plans = await AdsPlan.findOne({"_id":req.body.plan_id})
         // if(plans){
-            // let addons = await AdsPlan.find({"plan_id":req.body.plan_id}).populate("add_ons")
-            // if(addons){
-            //     return successJSONResponse(res, {addonsplan:addons});
-            // }else{
-            //     return failureJSONResponse(res, { message: `something went wrong1` });
-            // }
+            let addons = await AdsPlan.find({"plan_id":req.body.plan_id}).populate("plan_addons")
+            if(addons){
+                return successJSONResponse(res, {plan:plans,addonsplan:addons});
+            }else{
+                return failureJSONResponse(res, { message: `something went wrong1` });
+            }
         // }
         // else{
         //     return failureJSONResponse(res, { message: `something went wrong` });
