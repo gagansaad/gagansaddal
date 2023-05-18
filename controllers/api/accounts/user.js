@@ -1722,7 +1722,7 @@ module.exports = {
             is_active: true,
             code: generateOTP(4),
             email_address: newEmailAddress.toLowerCase(),
-            used_for: 3,
+            used_for: 2,
             user: userId,
             for: 2,
           })
@@ -1746,7 +1746,7 @@ module.exports = {
             is_active: true,
             code: generateOTP(4),
             email_address: oldEmailAddress.toLowerCase(),
-            used_for: 3,
+            used_for: 2,
             user: userId,
             for: 2,
           })
@@ -1774,7 +1774,7 @@ module.exports = {
               is_active: true,
               code: generateOTP(4),
               email_address: newEmailAddress.toLowerCase(),
-              used_for: 3,
+              used_for: 2,
               user: userId,
               for: 2,
             });
@@ -1796,7 +1796,7 @@ module.exports = {
               is_active: true,
               code: generateOTP(4),
               email_address: oldEmailAddress.toLowerCase(),
-              used_for: 3,
+              used_for: 2,
               user: userId,
               for: 2,
             });
@@ -2035,6 +2035,8 @@ module.exports = {
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
+
+
 
   fetchProfileDetails: async function (req, res) {
     try {
@@ -2405,60 +2407,6 @@ module.exports = {
     }
   },
 
-
-
-
-
-  resend_otp_email: async function (req, res) {
-    try {
-      const userId = req.userId;
-      const email_address = req?.body?.email_address?.toLowerCase();
-
-      if (!email_address) return failureJSONResponse(res, {
-        message: `please provide email address`,
-      });
-      else if (email_address && !isValidEmailAddress(email_address))
-        return failureJSONResponse(res, {
-          message: `please provide valid  email address`,
-        });
-
-      OTP.create({
-        is_active: true,
-        code: generateOTP(4),
-        email_address: email_address.toLowerCase(),
-        used_for: 2,
-        user: userId,
-        for: 2,
-      })
-        .then((foundOTP) => {
-          console.log(foundOTP);
-          if (!foundOTP) {
-            return failureJSONResponse(res, {
-              message: `something went wrong`,
-            });
-          } else {
-
-
-            EmailOTPVerification(email_address, `Hi`, foundOTP?.code);
-            return successJSONResponse(res, { message: `success` });
-
-
-          }
-        }).catch((err) => {
-          console.log(err);
-          console.log("3");
-          return failureJSONResponse(res, {
-            message: `something went wrong`,
-          });
-        });
-
-
-
-    } catch (err) {
-      console.log(err);
-      return failureJSONResponse(res, { message: `something went wrong` });
-    }
-  },
 };
 
 
