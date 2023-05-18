@@ -1190,14 +1190,7 @@ module.exports = {
 
     const { otp_for_email, otp_for_new_email, otp_for_mobile_number, new_email_address } = req.body;
     var invalidOTP;
-    if (!new_email_address) {
-      return res.json({
-        status: 200,
-        invalidOTP,
-        message: `please provide new email address`,
-      });
-    }
-
+ 
 
     if (otp_for_email) {
       OTP.findOne({
@@ -1688,7 +1681,7 @@ module.exports = {
         if (!phoneNumber) return failureJSONResponse(res, { message: `please provide phone number` });
         else {
 
-          MobileNumberVerificationOTPByUserId(foundUser?._id, null);
+          MobileNumberVerificationOTPByUserId(foundUser?._id, phoneNumber);
           return successJSONResponse(res, { message: `OTP send successfully` });
 
         }
