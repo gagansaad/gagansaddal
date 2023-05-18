@@ -40,8 +40,7 @@ const MobileNumberVerificationOTP = (mobile_number = NaN, name = ``, code) => {
 const MobileNumberVerificationOTPByUserId = (userId, phone_number=null) => {
 
     try {
-        console.log('----------------------------------------------------')
-        console.log(userId)
+   
         User.findById({
             _id: userId
         })
@@ -69,8 +68,7 @@ const MobileNumberVerificationOTPByUserId = (userId, phone_number=null) => {
                         })
                 }
 
-                // console.log(foundUser)
-                // MobileNumberVerificationOTP()
+          
             })
             .catch((error) => {
                 console.log('something went wrong3!');
@@ -80,7 +78,6 @@ const MobileNumberVerificationOTPByUserId = (userId, phone_number=null) => {
     } catch (error) {
         console.log(`dfsfds`)
     }
-    // res.send(`hghjgj`)
 
 };
 

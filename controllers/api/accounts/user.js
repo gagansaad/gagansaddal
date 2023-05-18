@@ -1661,19 +1661,22 @@ module.exports = {
     try {
 
 
-
       const userId = req.userId,
         source = Number(Math.abs(req?.body?.source)),
         emailType = req?.body?.emailType,
         newEmailAddress = String(req?.body?.email_address).toLowerCase(),
         phoneNumber = req?.body?.phone_number;
 
-
-      // old_email_address = find_old_email.userInfo.email_address,
-
       const foundUser = await User.findById({ "_id": userId });
       if (!foundUser) return failureJSONResponse(res, { message: `User not found` });
       else if (foundUser && !(foundUser?.userInfo?.email_address)) return failureJSONResponse(res, { message: `Old  email not found` });
+
+            /*
+      source :-
+
+      1: phone number
+      2: phone number
+      */
 
       if (!source) return failureJSONResponse(res, { message: `Please provide soruce` });
       else if (source && isNaN(source)) return failureJSONResponse(res, { message: `please provide valid source` });
@@ -1701,6 +1704,13 @@ module.exports = {
         if (!newEmailAddress) return failureJSONResponse(res, { message: `please provide new email address` });
         else if (!isValidEmailAddress(newEmailAddress)) return failureJSONResponse(res, { message: `please provide valid new email address` });
 
+        /*
+        emailType :-
+
+        1: Old Email
+        2: New Email
+        3: Both
+        */
         if (!emailType) return failureJSONResponse(res, { message: `Please provide email type` });
         else if (emailType && isNaN(emailType)) return failureJSONResponse(res, { message: `please provide valid email type` });
         else if (emailType && (emailType < 1 || emailType > 3)) return failureJSONResponse(res, { message: `please provide email type between 1-3`, });
@@ -1717,7 +1727,6 @@ module.exports = {
             for: 2,
           })
             .then((foundOTP) => {
-              console.log(foundOTP)
 
               if (!foundOTP) {
                 return failureJSONResponse(res, { message: `something went wrong` });
@@ -1742,7 +1751,7 @@ module.exports = {
             for: 2,
           })
             .then((foundOTP) => {
-              console.log(`foundOTP`,foundOTP)
+              console.log(`foundOTP`, foundOTP)
 
               if (!foundOTP) return failureJSONResponse(res, { message: `something went wrong` });
               else {
@@ -1759,7 +1768,7 @@ module.exports = {
         else if (emailType === 3) {
 
           let OTPCreatedForBoth = false;
-          
+
           const newOTPForNewEmail = await OTP.create(
             {
               is_active: true,
@@ -1770,41 +1779,41 @@ module.exports = {
               for: 2,
             });
 
-            console.log(`OTPForOldEmail`, newOTPForNewEmail)
+          console.log(`OTPForOldEmail`, newOTPForNewEmail)
 
-            if(!newOTPForNewEmail){
-              OTPCreatedForBoth = false;
-              return failureJSONResponse(res, { message: `something went wrong`});
-            } 
-            else {
-              OTPCreatedForBoth = true;
-              EmailOTPVerification(newEmailAddress, `Hi`, newOTPForNewEmail?.code);
-              // return successJSONResponse(res, { message: `OTP send successfully on ${newOTPForNewEmail}` });
-            }
+          if (!newOTPForNewEmail) {
+            OTPCreatedForBoth = false;
+            return failureJSONResponse(res, { message: `something went wrong` });
+          }
+          else {
+            OTPCreatedForBoth = true;
+            EmailOTPVerification(newEmailAddress, `Hi`, newOTPForNewEmail?.code);
+            // return successJSONResponse(res, { message: `OTP send successfully on ${newOTPForNewEmail}` });
+          }
 
-            const OTPForOldEmail = await OTP.create(
-              {
-                is_active: true,
-                code: generateOTP(4),
-                email_address: oldEmailAddress.toLowerCase(),
-                used_for: 3,
-                user: userId,
-                for: 2,
-              });
+          const OTPForOldEmail = await OTP.create(
+            {
+              is_active: true,
+              code: generateOTP(4),
+              email_address: oldEmailAddress.toLowerCase(),
+              used_for: 3,
+              user: userId,
+              for: 2,
+            });
 
-              console.log(`OTPForOldEmail`, OTPForOldEmail)
-  
-              if(!OTPForOldEmail) {
-                OTPCreatedForBoth = false;
-                return failureJSONResponse(res, { message: `something went wrong`});
-              }
-              else {
-                OTPCreatedForBoth = true;
-                EmailOTPVerification(oldEmailAddress, `Hi`, OTPForOldEmail?.code);
-              }
+          console.log(`OTPForOldEmail`, OTPForOldEmail)
 
-              if(OTPCreatedForBoth)  return successJSONResponse(res, { message: `OTP send successfully` });
-              else return failureJSONResponse(res, { message: `something went wrong`});
+          if (!OTPForOldEmail) {
+            OTPCreatedForBoth = false;
+            return failureJSONResponse(res, { message: `something went wrong` });
+          }
+          else {
+            OTPCreatedForBoth = true;
+            EmailOTPVerification(oldEmailAddress, `Hi`, OTPForOldEmail?.code);
+          }
+
+          if (OTPCreatedForBoth) return successJSONResponse(res, { message: `OTP send successfully` });
+          else return failureJSONResponse(res, { message: `something went wrong` });
           // OTP.create({
           //   is_active: true,
           //   code: generateOTP(4),
