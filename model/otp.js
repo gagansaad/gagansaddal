@@ -26,6 +26,7 @@ const otpSchema = new mongoose.Schema({
 
         //1= forget password
         //2= sign up
+         //3= change email address or phone number
 
      
     },

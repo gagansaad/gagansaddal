@@ -23,6 +23,7 @@ const MobileNumberVerificationOTP = (mobile_number = NaN, name = ``, code) => {
             })
             .then(message => console.log(message.sid))
             .catch((error) => {
+                console.log(error)
                 // console.log(error)
                 console.log('something went wrong1!');
 
@@ -37,11 +38,10 @@ const MobileNumberVerificationOTP = (mobile_number = NaN, name = ``, code) => {
 
 };
 
-const MobileNumberVerificationOTPByUserId = (userId, phone_number=null) => {
+const MobileNumberVerificationOTPByUserId = (userId, phone_number=null, OTPfor = null) => {
 
     try {
-        console.log('----------------------------------------------------')
-        console.log(userId)
+   
         User.findById({
             _id: userId
         })
@@ -56,7 +56,7 @@ const MobileNumberVerificationOTPByUserId = (userId, phone_number=null) => {
                     OTP.create({
                         is_active: true,
                         code: generateOTP(4),
-                        used_for: 2,
+                        used_for: OTPfor || 2,
                         phone_number: phone_number ? phone_number:  foundUser?.userInfo?.mobile_number?.phone_number,
                         user: userId,
                         for: 1
@@ -65,14 +65,15 @@ const MobileNumberVerificationOTPByUserId = (userId, phone_number=null) => {
                         MobileNumberVerificationOTP(fullNumber, name = ``, data.code)
                     })
                         .catch((error) => {
+                            console.log(error)
                             console.log('something went wrong2!');
                         })
                 }
 
-                // console.log(foundUser)
-                // MobileNumberVerificationOTP()
+          
             })
             .catch((error) => {
+                console.log(error)
                 console.log('something went wrong3!');
 
             })
@@ -80,7 +81,6 @@ const MobileNumberVerificationOTPByUserId = (userId, phone_number=null) => {
     } catch (error) {
         console.log(`dfsfds`)
     }
-    // res.send(`hghjgj`)
 
 };
 
