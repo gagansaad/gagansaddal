@@ -69,9 +69,9 @@ router.post(`/verify-otp`,
     authMiddleware.ensureUserLoggedIn,
     controllers.verifiy_otps
 );
-router.post(`/verify-otp-new-email`,
+router.post(`/verify-otp-for-email-mobile-change`,
     authMiddleware.ensureUserLoggedIn,
-    controllers.verifiy_otp_for_email_update
+    controllers.verifiy_otp_for_email_phone_change
 );
 router.post(`/forget-password`, controllers.forget_password);
 router.post(`/verify-forget-password-otp`, controllers.verify_forget_password_otp);
@@ -86,7 +86,7 @@ router.patch(`/update-profile`,
 );
 
 
-router.post(`/generate_otp_for_email_change`,
+router.post(`/generate-otp-for-mobile-email-change`,
     authMiddleware.ensureUserLoggedIn,
     controllers.check_email_already_exists,
     controllers.generate_otp_for_change_email_mobile

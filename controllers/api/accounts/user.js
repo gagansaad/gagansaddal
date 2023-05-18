@@ -1186,26 +1186,89 @@ module.exports = {
 
   ////////////
   //////////////
-  verifiy_otp_for_email_update: async function (req, res, next) {
+  verifiy_otp_for_email_phone_change: async function (req, res, next) {
 
-    const { otp_for_email, otp_for_new_email, otp_for_mobile_number, new_email_address } = req.body;
-    var invalidOTP;
- 
+    const userId = req.userId,
+      source = Number(Math.abs(req?.body?.source)),
+      newEmailOTP = req?.body?.new_email_otp,
+      oldEmailOTP = req?.body?.old_email_otp,
+      countryCode = req?.body?.country_code,
+      phoneNumberOTP = req?.body?.phone_number_otp,
+      newEmailAddress = String(req?.body?.email_address).toLowerCase(),
+      phoneNumber = req?.body?.phone_number;
 
-    if (otp_for_email) {
+    const foundUser = await User.findById({ "_id": userId });
+    if (!foundUser) return failureJSONResponse(res, { message: `User not found` });
+    else if (foundUser && !(foundUser?.userInfo?.email_address)) return failureJSONResponse(res, { message: `Old  email not found` });
+
+    /*
+    source :-
+  
+    1: phone number
+    2: phone number
+    */
+
+    if (!source) return failureJSONResponse(res, { message: `Please provide soruce` });
+    else if (source && isNaN(source)) return failureJSONResponse(res, { message: `please provide valid source` });
+    else if (source && (source < 1 || source > 2)) return failureJSONResponse(res, { message: `please provide source between 1-2`, });
+
+
+    if (source === 1) {
+
+
+      if (!phoneNumber) return failureJSONResponse(res, { message: `please provide phone number` });
+      else if (phoneNumber && isNaN(phoneNumber)) return failureJSONResponse(res, { message: `please provide valid phone number` });
+      if (!phoneNumberOTP) return failureJSONResponse(res, { message: `please provide otp for phone number` });
+      if (!isValidString(countryCode)) return failureJSONResponse(res, { message: `please provide country code` });
+
+      OTP.findOne({
+        user: req.userId,
+        phone_number: phoneNumber,
+        used_for: 3,
+        code: phoneNumberOTP,
+        for: 1,
+      }).then(async (foundMobileOTP) => {
+
+        if (!foundMobileOTP) return failureJSONResponse(res, { message: `invalid OTP` })
+        else {
+          await OTP.deleteMany({ _id: { $in: [foundMobileOTP._id] } });
+          await User.findByIdAndUpdate({ _id: userId }, { "userInfo.mobile_number": {
+            phone_number: phoneNumber,
+            country_code: countryCode
+          } })
+          return successJSONResponse(res, { message: "Phone number chnage successfully" })
+        }
+
+      })
+        .catch((err) => {
+          console.log(err)
+          return failureJSONResponse(res, { message: `Something went wrong` })
+        })
+
+
+    } else if (source === 2) {
+
+      const oldEmailAddress = foundUser?.userInfo?.email_address?.toLowerCase();
+
+      if (!oldEmailAddress) return failureJSONResponse(res, { message: `please provide old email address` });
+      else if (!isValidEmailAddress(oldEmailAddress)) return failureJSONResponse(res, { message: `please provide valid old email address` });
+
+      if (!newEmailAddress) return failureJSONResponse(res, { message: `please provide new email address` });
+      else if (!isValidEmailAddress(newEmailAddress)) return failureJSONResponse(res, { message: `please provide valid new email address` });
+
+
+      if (!oldEmailOTP) return failureJSONResponse(res, { message: `please provide old email otp` });
+      if (!newEmailOTP) return failureJSONResponse(res, { message: `please provide new email otp` });
+      
       OTP.findOne({
         $and: [{ is_active: true },
         { user: req.userId },
-        { used_for: 2 },
-        { code: otp_for_email },
+        { email_address: oldEmailAddress },
+        { used_for: 3 },
+        { code: oldEmailOTP },
         { for: 2 }
-
         ]
 
-        // is_active: true,
-        // user: req.userId,
-        // code: otp_for_email,
-        // for: 2,
       }).then((foundEmailOTP) => {
         let invalidOTP = 0;
 
@@ -1214,10 +1277,13 @@ module.exports = {
         }
 
         OTP.findOne({
-          user: req.userId,
-          used_for: 2,
-          code: otp_for_new_email,
-          for: 2,
+          $and: [{ is_active: true },
+            { user: req.userId },
+            { email_address: newEmailAddress },
+            { used_for: 3 },
+            { code: newEmailOTP },
+            { for: 2 }
+            ]
         }).then(async (foundNewEmailOTP) => {
           if (!foundNewEmailOTP) {
             invalidOTP = 2;
@@ -1256,6 +1322,8 @@ module.exports = {
           }
         });
       });
+
+
     }
   },
   /////////////
@@ -1664,7 +1732,7 @@ module.exports = {
       if (!foundUser) return failureJSONResponse(res, { message: `User not found` });
       else if (foundUser && !(foundUser?.userInfo?.email_address)) return failureJSONResponse(res, { message: `Old  email not found` });
 
-            /*
+      /*
       source :-
 
       1: phone number
@@ -1681,7 +1749,7 @@ module.exports = {
         if (!phoneNumber) return failureJSONResponse(res, { message: `please provide phone number` });
         else {
 
-          MobileNumberVerificationOTPByUserId(foundUser?._id, phoneNumber);
+          MobileNumberVerificationOTPByUserId(foundUser?._id, phoneNumber, 3);
           return successJSONResponse(res, { message: `OTP send successfully` });
 
         }
@@ -1715,7 +1783,7 @@ module.exports = {
             is_active: true,
             code: generateOTP(4),
             email_address: newEmailAddress.toLowerCase(),
-            used_for: 2,
+            used_for: 3,
             user: userId,
             for: 2,
           })
@@ -1739,7 +1807,7 @@ module.exports = {
             is_active: true,
             code: generateOTP(4),
             email_address: oldEmailAddress.toLowerCase(),
-            used_for: 2,
+            used_for: 3,
             user: userId,
             for: 2,
           })
@@ -1767,7 +1835,7 @@ module.exports = {
               is_active: true,
               code: generateOTP(4),
               email_address: newEmailAddress.toLowerCase(),
-              used_for: 2,
+              used_for: 3,
               user: userId,
               for: 2,
             });
@@ -1789,7 +1857,7 @@ module.exports = {
               is_active: true,
               code: generateOTP(4),
               email_address: oldEmailAddress.toLowerCase(),
-              used_for: 2,
+              used_for: 3,
               user: userId,
               for: 2,
             });
