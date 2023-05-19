@@ -69,113 +69,136 @@ exports.validatepaymentData = async (req, res, next) => {
 
 /////------------payment intent ----///////
 exports.create_payment_intent = async (req, res) => {
-  try {
-    const {
-      isfeatured_price,
-      plan_id,
-      total_amount,
-      price,
-      ads,
-      adstype,
-      user,
-      customer,
-      paymentMethodType,
-      currency,
-    } = req.body;
+  // Use an existing Customer ID if this is a returning customer.
+  const customer = await stripe.customers.create();
+  const ephemeralKey = await stripe.ephemeralKeys.create(
+    {customer: customer.id},
+    {apiVersion: '2022-11-15'}
+  );
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: 1099,
+    currency: 'USD',
+    customer: customer.id,
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
 
-    let totalprice;
-    let coins;
-    let dbQuery = {
-      _id: ads,
-    };
-    let findCategory = await category.find({ _id: adstype });
+  res.json({
+    paymentIntent: paymentIntent.client_secret,
+    ephemeralKey: ephemeralKey.secret,
+    customer: customer.id,
+    
+  });
+}
+// async (req, res) => {
+//   try {
+//     const {
+//       isfeatured_price,
+//       plan_id,
+//       total_amount,
+//       price,
+//       ads,
+//       adstype,
+//       user,
+//       customer,
+//       paymentMethodType,
+//       currency,
+//     } = req.body;
 
-    if (!findCategory) {
-      return failureJSONResponse(res, {
-        message: `Please provide valid ads id`,
-      });
-    }
-    const adsTypes = [
-      { type: "Babysitters and Nannies", model: babysitterAd },
-      { type: "Buy & Sell", model: buysellAd },
-      { type: "Local Biz and services", model: bizAd },
-      { type: "Events", model: eventAd },
-      { type: "Job", model: jobsAd },
-      { type: "Room For Rent", model: roomrentAd },
-    ];
+//     let totalprice;
+//     let coins;
+//     let dbQuery = {
+//       _id: ads,
+//     };
+//     let findCategory = await category.find({ _id: adstype });
 
-    const adModel = adsTypes.find(
-      (adType) => adType.type === findCategory?.[0]?.name
-    )?.model;
-    console.log(adModel);
-    if (!adModel) {
-      return failureJSONResponse(res, {
-        message: `Please provide valid adstype`,
-      });
-    }
+//     if (!findCategory) {
+//       return failureJSONResponse(res, {
+//         message: `Please provide valid ads id`,
+//       });
+//     }
+//     const adsTypes = [
+//       { type: "Babysitters and Nannies", model: babysitterAd },
+//       { type: "Buy & Sell", model: buysellAd },
+//       { type: "Local Biz and services", model: bizAd },
+//       { type: "Events", model: eventAd },
+//       { type: "Job", model: jobsAd },
+//       { type: "Room For Rent", model: roomrentAd },
+//     ];
 
-    const ad = await adModel.findById(dbQuery);
-    console.log(ad);
-    if (!ad) {
-      return failureJSONResponse(res, {
-        message: `Please provide valid ads id`,
-      });
-    }
-    let selectplan = await AdsPlan.findById({ _id: plan_id });
-    if (!selectplan) {
-      return failureJSONResponse(res, {
-        message: `Please provide plan id`,
-      });
-    } else {
-      coins = selectplan.price.currency;
-      if (isfeatured_price == "true") {
-        totalprice = selectplan.featured_price.amount + selectplan.price.amount;
-      } else {
-        totalprice = selectplan.price.amount;
-      }
-    }
-    // let customerName = await USER.findById({_id:req.userId}).select({ "userInfo.name": 1, "_id": 1});
-    // if (customerName?.userInfo?.name) {
-    //   dataObj.customer = customerName.userInfo.name;
-    // }
-    const dataObj = {
-      isfeatured_price,
-      plan_id,
-      total_amount: totalprice,
-      price: {
-        featured_price: selectplan.featured_price,
-        post_price: selectplan.price,
-      },
-      ads,
-      ads_type: findCategory?.[0]?.name,
-      user: userId,
-    };
+//     const adModel = adsTypes.find(
+//       (adType) => adType.type === findCategory?.[0]?.name
+//     )?.model;
+//     console.log(adModel);
+//     if (!adModel) {
+//       return failureJSONResponse(res, {
+//         message: `Please provide valid adstype`,
+//       });
+//     }
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: dataObj.total_amount,
-      currency: currency,
-      payment_method_types: ["card"],
-    });
-    if (paymentIntent) {
-      return successJSONResponse(res, {
-        message: `success`,
-        clientsecret: paymentIntent.client_secret,
-        nextAction: paymentIntent.next_action,
-      });
-    } else {
-      return failureJSONResponse(res, {
-        message: `Something went wrong`,
-      });
-    }
-  } catch (err) {
-    console.log(err, "hggvhvhvhvhggbhgjhvghjbhnghjvhv bgvbnbvhvbghvnbvnbv nbvbn  bmb hjbjb nhv bvnbcbn bv")
-    return res.status(400).send({
-      error: {
-        message: err.message,
-      },
-    });
-  }
-};
+//     const ad = await adModel.findById(dbQuery);
+//     console.log(ad);
+//     if (!ad) {
+//       return failureJSONResponse(res, {
+//         message: `Please provide valid ads id`,
+//       });
+//     }
+//     let selectplan = await AdsPlan.findById({ _id: plan_id });
+//     if (!selectplan) {
+//       return failureJSONResponse(res, {
+//         message: `Please provide plan id`,
+//       });
+//     } else {
+//       coins = selectplan.price.currency;
+//       if (isfeatured_price == "true") {
+//         totalprice = selectplan.featured_price.amount + selectplan.price.amount;
+//       } else {
+//         totalprice = selectplan.price.amount;
+//       }
+//     }
+//     // let customerName = await USER.findById({_id:req.userId}).select({ "userInfo.name": 1, "_id": 1});
+//     // if (customerName?.userInfo?.name) {
+//     //   dataObj.customer = customerName.userInfo.name;
+//     // }
+//     const dataObj = {
+//       isfeatured_price,
+//       plan_id,
+//       total_amount: totalprice,
+//       price: {
+//         featured_price: selectplan.featured_price,
+//         post_price: selectplan.price,
+//       },
+//       ads,
+//       ads_type: findCategory?.[0]?.name,
+//       user: userId,
+//     };
+
+//     const paymentIntent = await stripe.paymentIntents.create({
+//       amount: dataObj.total_amount,
+//       currency: currency,
+//       payment_method_types: ["card"],
+//     });
+//     if (paymentIntent) {
+//       return successJSONResponse(res, {
+//         message: `success`,
+//         clientsecret: paymentIntent.client_secret,
+//         nextAction: paymentIntent.next_action,
+//       });
+//     } else {
+//       return failureJSONResponse(res, {
+//         message: `Something went wrong`,
+//       });
+//     }
+//   } catch (err) {
+//     console.log(err, "hggvhvhvhvhggbhgjhvghjbhnghjvhv bgvbnbvhvbghvnbvnbv nbvbn  bmb hjbjb nhv bvnbcbn bv")
+//     return res.status(400).send({
+//       error: {
+//         message: err.message,
+//       },
+//     });
+//   }
+// };
 
 
 
