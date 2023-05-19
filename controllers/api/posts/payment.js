@@ -78,7 +78,7 @@ exports.create_payment_intent = async (req, res) => {
   let adstype = find_ads_type[0].ads_type
   let plan_price = find_ads_type[0].price.amount
   // let addonsId = 
-  return res.send(find_ads_type,"object",adstype,plan_price);
+  return res.send({find_ads_type:find_ads_type,mgg:"object", adstype:adstype,plan_price:plan_price});
   let customerStripeId = null;
 
   if (userInfoModel.stripe_id == "" && userInfoModel.stripe_id == null) {
