@@ -77,10 +77,14 @@ exports.create_payment_intent = async (req, res) => {
   let find_ads_type = await AdsPlan.find({ "_id": planId }).populate("add_ons")
   let adstype = find_ads_type[0].ads_type
   let plan_price = find_ads_type[0].price.amount
-  // let addonsId = 
+  let addonsId = ['64660ac0356a2b0932d172bc','64660c78356a2b0932d172dc',"64660ca0356a2b0932d172ed"]
+  for(i = 0; i<addonsId.length; i++){
+    console.log(addonsId[i]);
+  }
+
   return res.send({ find_ads_type: find_ads_type, mgg: "object", adstype: adstype, plan_price: plan_price });
   let customerStripeId = null;
-
+// {"price._id": ObjectId('64660ac0356a2b0932d172bc') }
   if (userInfoModel.stripe_id == "" && userInfoModel.stripe_id == null) {
     const customer = await stripe.customers.create({
       name: userInfoModel.name,
