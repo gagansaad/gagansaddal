@@ -74,20 +74,14 @@ exports.create_payment_intent = async (req, res) => {
   let userInfoModel = await UserModel.findOne({ "_id": userID });
   userInfoModel = userInfoModel.userInfo;
   let planId= req.body.planId
-  let find_ads_type = await AdsPlan.find({"_id":planId})
-  let adstype = find_ads_type.find_ads_type
-  let plan_price = find_ads_type.price.amount
-  return console.log("object",adstype,plan_price);
+  let find_ads_type = await AdsPlan.find({"_id":planId}).populate("add_ons")
+  let adstype = find_ads_type[0].ads_type
+  let plan_price = find_ads_type[0].price.amount
+  // let addonsId = 
+  return console.log(find_ads_type,"object",adstype,plan_price);
   let customerStripeId = null;
-  // console.log(userInfo.stripe_id);
-  // console.log(userInfoModel.name,'****** **** *');
-  // console.log(userInfo.userInfo.name,'userindo****** **** *');
-  // console.log(userInfo.email);
-  // console.log(userInfoModel);
-  // return;
+
   if (userInfoModel.stripe_id == "" && userInfoModel.stripe_id == null) {
-    // Use an existing Customer ID if this is a returning customer.
-    // console.log("ifx");
     const customer = await stripe.customers.create({
       name: userInfoModel.name,
       email: userInfoModel.email_address,
