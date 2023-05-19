@@ -73,12 +73,12 @@ exports.create_payment_intent = async (req, res) => {
   let userID = req.userId;
   let userInfoModel = await UserModel.findOne({ "_id": userID });
   userInfoModel = userInfoModel.userInfo;
-  let planId= req.body.planId
-  let find_ads_type = await AdsPlan.find({"_id":planId}).populate("add_ons")
+  let planId = req.body.planId
+  let find_ads_type = await AdsPlan.find({ "_id": planId }).populate("add_ons")
   let adstype = find_ads_type[0].ads_type
   let plan_price = find_ads_type[0].price.amount
   // let addonsId = 
-  return res.send({find_ads_type:find_ads_type,mgg:"object", adstype:adstype,plan_price:plan_price});
+  return res.send({ find_ads_type: find_ads_type, mgg: "object", adstype: adstype, plan_price: plan_price });
   let customerStripeId = null;
 
   if (userInfoModel.stripe_id == "" && userInfoModel.stripe_id == null) {
@@ -86,10 +86,10 @@ exports.create_payment_intent = async (req, res) => {
       name: userInfoModel.name,
       email: userInfoModel.email_address,
     });
-    let userInfoModelUpdate = await UserModel.findOneAndUpdate({ "_id": userID }, { $set: { 'userInfo.stripe_id': customer.id } }); 
+    let userInfoModelUpdate = await UserModel.findOneAndUpdate({ "_id": userID }, { $set: { 'userInfo.stripe_id': customer.id } });
     customerStripeId = customer.id;
   } else {
-    customerStripeId =  userInfoModel.stripe_id;
+    customerStripeId = userInfoModel.stripe_id;
     // console.log("else");
   }
   // console.log(userInfo, customerStripeId);
