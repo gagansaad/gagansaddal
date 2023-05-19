@@ -6,7 +6,7 @@ const payment = require("../../../model/posts/payment");
 const UserModel = require("../../../model/accounts/users");
 
 const mongoose = require("mongoose"),
-  AdsPlan = mongoose.model("adsplan"),
+  AdsPlan = mongoose.model("plan"),
   eventAd = mongoose.model("event"),
   bizAd = mongoose.model("Local_biz & Service"),
   buysellAd = mongoose.model("Buy & Sell"),
@@ -73,6 +73,10 @@ exports.create_payment_intent = async (req, res) => {
   let userID = req.userId;
   let userInfoModel = await UserModel.findOne({ "_id": userID });
   userInfoModel = userInfoModel.userInfo;
+  let planId= req.body.planId
+  let find_ads_type = await AdsPlan.find({"_id":planId})
+  
+  return console.log("object",find_ads_type );
   let customerStripeId = null;
   // console.log(userInfo.stripe_id);
   // console.log(userInfoModel.name,'****** **** *');
