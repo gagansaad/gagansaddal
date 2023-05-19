@@ -75,8 +75,9 @@ exports.create_payment_intent = async (req, res) => {
   userInfoModel = userInfoModel.userInfo;
   let planId= req.body.planId
   let find_ads_type = await AdsPlan.find({"_id":planId})
-  
-  return console.log("object",find_ads_type );
+  let adstype = find_ads_type.find_ads_type
+  let plan_price = find_ads_type.price.amount
+  return console.log("object",adstype,plan_price);
   let customerStripeId = null;
   // console.log(userInfo.stripe_id);
   // console.log(userInfoModel.name,'****** **** *');
