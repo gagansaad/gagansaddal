@@ -11,46 +11,44 @@ const {
 
 const roomRentsSchema = new mongoose.Schema({
 
-    status: {
+    status:{
         type: String,
-        enum: [`active`,`inactive`,`draft`],
+        enum: [`active`, `inactive`, `draft`],
         required: true,
         default: "draft"
-      
-    },  
-    plan_id:{  
+
+    },
+    plan_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: `adsplan`,
         required: true
-      
+
     },
-    total_amount:{
-        type: Number,
-    },
-    price:{
-        featured_price:{
-            amount:{type:Number},
-            currency:{type:String},
-        },
-        post_price:{
-            amount:{type:Number},
-            currency:{type:String},
-        }
-            },
+
+    plan_addons: [{
+        name:defaultStringConfig,
+        price:defaultPriceProperty,
+        currency:defaultCurrencyProperty,
+    }],
+    plan_price:defaultPriceProperty,
+    coupan_discount:defaultPriceProperty,
+    total_amount:defaultPriceProperty,
     
-    ads:{
-        type:mongoose.Schema.Types.ObjectId,
+
+    ads: {
+        type: mongoose.Schema.Types.ObjectId,
     },
-    ads_type:{...defaultStringConfig},
-    user:{
-        type:mongoose.Schema.Types.ObjectId,
+    ads_type: { ...defaultStringConfig },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: `user`,
         required: true
     },
-    payment_intent:{
+    payment_status:defaultStringConfig,
+    payment_intent: {
 
-    }
-    
+    },
+
 
 }, { timestamps: true });
 

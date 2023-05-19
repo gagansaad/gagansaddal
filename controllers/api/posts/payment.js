@@ -3,6 +3,7 @@ const {
   EventListInstance,
 } = require("twilio/lib/rest/taskrouter/v1/workspace/event");
 const payment = require("../../../model/posts/payment");
+const UserModel = require("../../../model/accounts/users");
 
 const mongoose = require("mongoose"),
   AdsPlan = mongoose.model("adsplan"),
@@ -69,16 +70,39 @@ exports.validatepaymentData = async (req, res, next) => {
 
 /////------------payment intent ----///////
 exports.create_payment_intent = async (req, res) => {
-  // Use an existing Customer ID if this is a returning customer.
-  const customer = await stripe.customers.create();
+  let userID = req.userId;
+  let userInfoModel = await UserModel.findOne({ "_id": userID });
+  userInfoModel = userInfoModel.userInfo;
+  let customerStripeId = null;
+  // console.log(userInfo.stripe_id);
+  // console.log(userInfoModel.name,'****** **** *');
+  // console.log(userInfo.userInfo.name,'userindo****** **** *');
+  // console.log(userInfo.email);
+  // console.log(userInfoModel);
+  // return;
+  if (userInfoModel.stripe_id == "" && userInfoModel.stripe_id == null) {
+    // Use an existing Customer ID if this is a returning customer.
+    // console.log("ifx");
+    const customer = await stripe.customers.create({
+      name: userInfoModel.name,
+      email: userInfoModel.email_address,
+    });
+    let userInfoModelUpdate = await UserModel.findOneAndUpdate({ "_id": userID }, { $set: { 'userInfo.stripe_id': customer.id } }); 
+    customerStripeId = customer.id;
+  } else {
+    customerStripeId =  userInfoModel.stripe_id;
+    // console.log("else");
+  }
+  // console.log(userInfo, customerStripeId);
+  // return res.send("done");
   const ephemeralKey = await stripe.ephemeralKeys.create(
-    {customer: customer.id},
-    {apiVersion: '2022-11-15'}
+    { customer: customerStripeId },
+    { apiVersion: '2022-11-15' }
   );
   const paymentIntent = await stripe.paymentIntents.create({
     amount: 1099,
     currency: 'USD',
-    customer: customer.id,
+    customer: customerStripeId,
     automatic_payment_methods: {
       enabled: true,
     },
@@ -88,7 +112,6 @@ exports.create_payment_intent = async (req, res) => {
     paymentIntent: paymentIntent.client_secret,
     ephemeralKey: ephemeralKey.secret,
     customer: customer.id,
-    
   });
 }
 // async (req, res) => {
@@ -206,88 +229,88 @@ exports.create_payment_intent = async (req, res) => {
 
 
 exports.webhooks = async (request, response) => {
-  try{ 
-    const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
-     const sig = request.headers['stripe-signature'];
-// console.log(request.rawBody,"ye iski body hai",request.rawbody,"dkvjvmkvcfdmvjfd");
-  let event;
-
   try {
-    const requestBody = request.body.toString('utf8');
-    // console.log(requestBody); 
-    // Convert the request body to a string
-    event = await stripe.webhooks.constructEvent(requestBody, sig, endpointSecret);
-    console.log(event, "yeh event ka postmortem hua");
-  } catch (err) {
-    console.log(err, "fadli");
-    response.status(400).send(`Webhook Error: ${err.message}`);
-    return;
-  }
-  
+    const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
+    const sig = request.headers['stripe-signature'];
+    // console.log(request.rawBody,"ye iski body hai",request.rawbody,"dkvjvmkvcfdmvjfd");
+    let event;
 
-  // Handle the event
-  switch (event.type) {
-    case 'payment_intent.amount_capturable_updated':
-      const paymentIntentAmountCapturableUpdated = event.data.object;
-      // Then define and call a function to handle the event payment_intent.amount_capturable_updated
-      break;
-    case 'payment_intent.canceled':
-      const paymentIntentCanceled = event.data.object;
-      // Then define and call a function to handle the event payment_intent.canceled
-      break;
-    case 'payment_intent.created':
-      const paymentIntentCreated = event.data.object;
-      // Then define and call a function to handle the event payment_intent.created
-      break;
-    case 'payment_intent.partially_funded':
-      const paymentIntentPartiallyFunded = event.data.object;
-      // Then define and call a function to handle the event payment_intent.partially_funded
-      break;
-    case 'payment_intent.payment_failed':
-      const paymentIntentPaymentFailed = event.data.object;
-      // Then define and call a function to handle the event payment_intent.payment_failed
-      break;
-    case 'payment_intent.processing':
-      const paymentIntentProcessing = event.data.object;
-      // Then define and call a function to handle the event payment_intent.processing
-      break;
-    case 'payment_intent.requires_action':
-      const paymentIntentRequiresAction = event.data.object;
-      // Then define and call a function to handle the event payment_intent.requires_action
-      break;
-    case 'payment_intent.succeeded':
-      const paymentIntentSucceeded = event.data.object;
-      // Then define and call a function to handle the event payment_intent.succeeded
-      break;
-    case 'setup_intent.canceled':
-      const setupIntentCanceled = event.data.object;
-      // Then define and call a function to handle the event setup_intent.canceled
-      break;
-    case 'setup_intent.created':
-      const setupIntentCreated = event.data.object;
-      // Then define and call a function to handle the event setup_intent.created
-      break;
-    case 'setup_intent.requires_action':
-      const setupIntentRequiresAction = event.data.object;
-      // Then define and call a function to handle the event setup_intent.requires_action
-      break;
-    case 'setup_intent.setup_failed':
-      const setupIntentSetupFailed = event.data.object;
-      // Then define and call a function to handle the event setup_intent.setup_failed
-      break;
-    case 'setup_intent.succeeded':
-      const setupIntentSucceeded = event.data.object;
-      // Then define and call a function to handle the event setup_intent.succeeded
-      break;
-    // ... handle other event types
-    default:
-      console.log(`Unhandled event type ${event.type}`);
-  }
+    try {
+      const requestBody = request.body.toString('utf8');
+      // console.log(requestBody); 
+      // Convert the request body to a string
+      event = await stripe.webhooks.constructEvent(requestBody, sig, endpointSecret);
+      console.log(event, "yeh event ka postmortem hua");
+    } catch (err) {
+      console.log(err, "fadli");
+      response.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
 
-  // Return a 200 response to acknowledge receipt of the event
-  response.send({status:200});
-}
-  catch(error){
+
+    // Handle the event
+    switch (event.type) {
+      case 'payment_intent.amount_capturable_updated':
+        const paymentIntentAmountCapturableUpdated = event.data.object;
+        // Then define and call a function to handle the event payment_intent.amount_capturable_updated
+        break;
+      case 'payment_intent.canceled':
+        const paymentIntentCanceled = event.data.object;
+        // Then define and call a function to handle the event payment_intent.canceled
+        break;
+      case 'payment_intent.created':
+        const paymentIntentCreated = event.data.object;
+        // Then define and call a function to handle the event payment_intent.created
+        break;
+      case 'payment_intent.partially_funded':
+        const paymentIntentPartiallyFunded = event.data.object;
+        // Then define and call a function to handle the event payment_intent.partially_funded
+        break;
+      case 'payment_intent.payment_failed':
+        const paymentIntentPaymentFailed = event.data.object;
+        // Then define and call a function to handle the event payment_intent.payment_failed
+        break;
+      case 'payment_intent.processing':
+        const paymentIntentProcessing = event.data.object;
+        // Then define and call a function to handle the event payment_intent.processing
+        break;
+      case 'payment_intent.requires_action':
+        const paymentIntentRequiresAction = event.data.object;
+        // Then define and call a function to handle the event payment_intent.requires_action
+        break;
+      case 'payment_intent.succeeded':
+        const paymentIntentSucceeded = event.data.object;
+        // Then define and call a function to handle the event payment_intent.succeeded
+        break;
+      case 'setup_intent.canceled':
+        const setupIntentCanceled = event.data.object;
+        // Then define and call a function to handle the event setup_intent.canceled
+        break;
+      case 'setup_intent.created':
+        const setupIntentCreated = event.data.object;
+        // Then define and call a function to handle the event setup_intent.created
+        break;
+      case 'setup_intent.requires_action':
+        const setupIntentRequiresAction = event.data.object;
+        // Then define and call a function to handle the event setup_intent.requires_action
+        break;
+      case 'setup_intent.setup_failed':
+        const setupIntentSetupFailed = event.data.object;
+        // Then define and call a function to handle the event setup_intent.setup_failed
+        break;
+      case 'setup_intent.succeeded':
+        const setupIntentSucceeded = event.data.object;
+        // Then define and call a function to handle the event setup_intent.succeeded
+        break;
+      // ... handle other event types
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+    }
+
+    // Return a 200 response to acknowledge receipt of the event
+    response.send({ status: 200 });
+  }
+  catch (error) {
     return response.status(400).send({
       error: {
         message: error.message,
