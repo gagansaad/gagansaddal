@@ -72,17 +72,20 @@ exports.validatepaymentData = async (req, res, next) => {
 };
 
 /////------------payment intent ----///////
+
 exports.create_payment_intent = async (req, res) => {
   let userID = req.userId;
   let userInfoModel = await UserModel.findOne({ _id: userID });
   userInfoModel = userInfoModel.userInfo;
   let planId = req.body.planId;
+  //-----find plan -----//
   let find_ads_type = await AdsPlan.find({ _id: planId }).populate("add_ons");
   let adstype = find_ads_type[0].ads_type;
   let plan_price = find_ads_type[0].price.amount;
   let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
   let addonsId = req.body.add_ons;
   let foundObjects = [];
+  //-----find add ons -----//
   let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
   addonsId.forEach((targetId) => {
     result.forEach((item) => {
@@ -119,7 +122,9 @@ exports.create_payment_intent = async (req, res) => {
     ads: req.body.postId,
     payment_status: "pending",
   });
-  console.log(paymentModelInfo);
+  // console.log();
+  let paymentIntentClientSecret = null;
+  let statusCode = 200
   if (paymentModelInfo == null || paymentModelInfo == "") {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: (totalprice.toFixed(2) * 100).toFixed(0),
@@ -137,49 +142,45 @@ exports.create_payment_intent = async (req, res) => {
       ads: req.body.postId,
       ads_type: adstype,
       user: userID,
-      payment_status:"pending",
+      payment_status: "pending",
       payment_intent: paymentIntent,
     };
     await PaymentModel.create(dataobj);
-    res.json({
-      paymentIntent: paymentIntent.client_secret,
-      ephemeralKey: ephemeralKey.secret,
-      customer: customerStripeId,
-      PaymentModel: PaymentModel,
-    });
+    paymentIntentClientSecret = paymentIntent.client_secret;
+    statusCode=201;
   } else {
-    return console.log(paymentModelInfo, "njnjvnjndjnjdnvjd");
+    paymentIntentClientSecret = paymentModelInfo.payment_intent.client_secret;
   }
-
-  // res.json({
-  //   paymentIntent: paymentIntent.client_secret,
-  //   ephemeralKey: ephemeralKey.secret,
-  //   customer: customerStripeId,
-  // });
+  return successJSONResponse(res, {
+    status: statusCode,
+    message: `success`,
+    paymentIntent: paymentIntentClientSecret,
+    ephemeralKey: ephemeralKey.secret,
+  })
 };
 exports.webhooks = async (request, response) => {
   try {
     const endpointSecret =
       "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
     const sig = request.headers["stripe-signature"];
-    // console.log(request.rawBody,"ye iski body hai",request.rawbody,"dkvjvmkvcfdmvjfd");
-    let event;
+   return console.log(request,'sss********',sig);
+    // let event;
 
-    try {
-      const requestBody = request.body.toString("utf8");
-      // console.log(requestBody);
-      // Convert the request body to a string
-      event = await stripe.webhooks.constructEvent(
-        requestBody,
-        sig,
-        endpointSecret
-      );
-      console.log(event, "yeh event ka postmortem hua");
-    } catch (err) {
-      console.log(err, "fadli");
-      response.status(400).send(`Webhook Error: ${err.message}`);
-      return;
-    }
+    // try {
+    //   const requestBody = request.body.toString("utf8");
+    //   // console.log(requestBody);
+    //   // Convert the request body to a string
+    //   event = await stripe.webhooks.constructEvent(
+    //     requestBody,
+    //     sig,
+    //     endpointSecret
+    //   );
+    //   // console.log(event, "yeh event ka postmortem hua");
+    // } catch (err) {
+    //   console.log(err, "fadli");
+    //   response.status(400).send(`Webhook Error: ${err.message}`);
+    //   return;
+    // }
 
     // Handle the event
     switch (event.type) {

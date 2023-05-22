@@ -8,16 +8,16 @@ const {
     getAlphaNumID,
     defaultBooleanConfig
 } = require(`../../utils/mongoose`);
-
+// const defaultPaymentStatus="pending";
 const roomRentsSchema = new mongoose.Schema({
 
-    status:{
-        type: String,
-        enum: [`active`, `inactive`, `draft`],
-        required: true,
-        default: "draft"
+    // status:{
+    //     type: String,
+    //     enum: [`active`, `inactive`, `draft`],
+    //     required: true,
+    //     default: "draft"
 
-    },
+    // },
     plan_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: `adsplan`,
@@ -42,7 +42,12 @@ const roomRentsSchema = new mongoose.Schema({
         ref: `user`,
         required: true
     },
-    payment_status:defaultStringConfig,
+    payment_status:{
+        type: String,
+        enum: [`pending`, `paid`, `confirmed`,`expired`],
+        required: true,
+        default: "pending"
+    },
     payment_intent: {
 
     },
