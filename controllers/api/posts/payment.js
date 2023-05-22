@@ -74,136 +74,141 @@ exports.validatepaymentData = async (req, res, next) => {
 /////------------payment intent ----///////
 
 exports.create_payment_intent = async (req, res) => {
- try{
-  let userID = req.userId;
-  let userInfoModel = await UserModel.findOne({ _id: userID });
-  userInfoModel = userInfoModel.userInfo;
-  let planId = req.body.planId;
-  //-----find plan -----//
-  let find_ads_type = await AdsPlan.find({ _id: planId }).populate("add_ons");
-  let adstype = find_ads_type[0].ads_type;
-  let plan_price = find_ads_type[0].price.amount;
-  let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
-  let addonsId = req.body.add_ons;
-  let foundObjects = [];
-  //-----find add ons -----//
-  let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
-  addonsId.forEach((targetId) => {
-    result.forEach((item) => {
-      const priceArray = item.price;
-      const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
-      if (foundObj) {
-        foundObjects.push(foundObj);
-      }
+  try {
+    let userID = req.userId;
+    let userInfoModel = await UserModel.findOne({ _id: userID });
+    userInfoModel = userInfoModel.userInfo;
+    let planId = req.body.planId;
+    //-----find plan -----//
+    let find_ads_type = await AdsPlan.find({ _id: planId }).populate("add_ons");
+    let adstype = find_ads_type[0].ads_type;
+    let plan_price = find_ads_type[0].price.amount;
+    let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
+    let addonsId = req.body.add_ons;
+    let foundObjects = [];
+    //-----find add ons -----//
+    let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
+    addonsId.forEach((targetId) => {
+      result.forEach((item) => {
+        const priceArray = item.price;
+        const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
+        if (foundObj) {
+          foundObjects.push(foundObj);
+        }
+      });
     });
-  });
-  const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
-  let totalprice = plan_price + totalAmount;
-  let customerStripeId = null;
-  if (userInfoModel.stripe_id == "" && userInfoModel.stripe_id == null) {
-    const customer = await stripe.customers.create({
-      name: userInfoModel.name,
-      email: userInfoModel.email_address,
-    });
-    await UserModel.findOneAndUpdate(
-      { _id: userID },
-      { $set: { "userInfo.stripe_id": customer.id } }
-    );
-    customerStripeId = customer.id;
-  } else {
-    customerStripeId = userInfoModel.stripe_id;
-  }
+    const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
+    let totalprice = plan_price + totalAmount;
+    let customerStripeId = null;
+    if (userInfoModel.stripe_id == "" && userInfoModel.stripe_id == null) {
+      const customer = await stripe.customers.create({
+        name: userInfoModel.name,
+        email: userInfoModel.email_address,
+      });
+      await UserModel.findOneAndUpdate(
+        { _id: userID },
+        { $set: { "userInfo.stripe_id": customer.id } }
+      );
+      customerStripeId = customer.id;
+    } else {
+      customerStripeId = userInfoModel.stripe_id;
+    }
 
-  
 
-  // const ephemeralKey = await stripe.ephemeralKeys.create(
-  //   { customer: customerStripeId },
-  //   { apiVersion: "2022-11-15" }
-  // );
 
-  let paymentModelInfo = await PaymentModel.findOne({
-    ads: req.body.postId,
-    payment_status: "pending",
-  });
-  // console.log();
-  let paymentIntentClientSecret = null;
-  let statusCode = 200
-  if (paymentModelInfo == null || paymentModelInfo == "") {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: (totalprice.toFixed(2) * 100).toFixed(0),
-      currency: "usd",
-      customer: customerStripeId,
-      payment_method_types:[
-        'card',
-      ]
-      // automatic_payment_methods: {
-      //   enabled: true,
-      // },
-    });
-    let dataobj = {
-      plan_id: planId,
-      plan_addons: foundObjects,
-      plan_price: plan_price,
-      total_amount: JSON.parse(totalprice.toFixed(2)),
+    // const ephemeralKey = await stripe.ephemeralKeys.create(
+    //   { customer: customerStripeId },
+    //   { apiVersion: "2022-11-15" }
+    // );
+
+    let paymentModelInfo = await PaymentModel.findOne({
       ads: req.body.postId,
-      ads_type: adstype,
-      user: userID,
       payment_status: "pending",
-      payment_intent: paymentIntent,
-    };
-    await PaymentModel.create(dataobj);
-    paymentIntentClientSecret = paymentIntent.client_secret;
-    statusCode=201;
-  } else {
-    paymentIntentClientSecret = paymentModelInfo.payment_intent.client_secret;
+    });
+    // console.log();
+    let paymentIntentClientSecret = null;
+    let statusCode = 200
+    if (paymentModelInfo == null || paymentModelInfo == "") {
+
+      let dataobj = {
+        plan_id: planId,
+        plan_addons: foundObjects,
+        plan_price: plan_price,
+        total_amount: JSON.parse(totalprice.toFixed(2)),
+        ads: req.body.postId,
+        ads_type: adstype,
+        user: userID,
+        payment_status: "pending",
+        // ,
+      };
+      PaymentModelInfo = await PaymentModel.create(dataobj);
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: (totalprice.toFixed(2) * 100).toFixed(0),
+        currency: "usd",
+        customer: customerStripeId,
+        metadata: {
+          payment_id:PaymentModelInfo._id
+        },
+        payment_method_types: [
+          'card',
+        ]
+        // automatic_payment_methods: {
+        //   enabled: true,
+        // },
+      });
+      PaymentModelInfo = await PaymentModel.findOneAndUpdate({"_id":PaymentModelInfo._id},{"payment_intent": paymentIntent},{upsert:true});
+      paymentIntentClientSecret = paymentIntent.client_secret;
+      statusCode = 201;
+    } else {
+      paymentIntentClientSecret = paymentModelInfo.payment_intent.client_secret;
+    }
+    return successJSONResponse(res, {
+      status: statusCode,
+      message: `success`,
+      paymentIntent: paymentIntentClientSecret,
+      // ephemeralKey: ephemeralKey.secret,
+    })
+  } catch (error) {
+    return failureJSONResponse(res, {
+      message: `Something went wrong`,
+      error: error
+    });
   }
-  return successJSONResponse(res, {
-    status: statusCode,
-    message: `success`,
-    paymentIntent: paymentIntentClientSecret,
-    // ephemeralKey: ephemeralKey.secret,
-  })
- }catch (error) {
-  return failureJSONResponse(res, {
-    message: `Something went wrong`,
-    error:error
-  });
-}
 };
 exports.webhooks = async (request, response) => {
   try {
-    const payload = {
-      id: 'evt_test_webhook',
-      object: 'event',
-    };
-    
-    const payloadString = JSON.stringify(payload, null, 2);
-    const secret = 'whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a';
-    
-    const header = stripe.webhooks.generateTestHeaderString({
-      payload: payloadString,
-      secret,
-    });
-    
-    let event ;
-  //   const endpointSecret =
-  //     "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
-  //   const sig = request.headers["stripe-signature"];
-  //  //return console.log(request.body,'sss********',sig);
-  //   let event;
+    //   const payload = {
+    //     id: 'evt_test_webhook',
+    //     object: 'event',
+    //   };
 
-    try {
-      event = await stripe.webhooks.constructEvent(payloadString, header, secret);
-    
-      // Do something with mocked signed event
-      // expect(event.id).to.equal(payload.id);
-      return console.log(event, "yeh event ka postmortem hua",request.body);
-    } catch (err) {
-      console.log(err, "this error of webhook");
-      response.status(400).send(`Webhook Error: ${err.message}`);
-      return;
-    }
-    
+    //   const payloadString = JSON.stringify(payload, null, 2);
+    //   const secret = 'whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a';
+
+    //   const header = stripe.webhooks.generateTestHeaderString({
+    //     payload: payloadString,
+    //     secret,
+    //   });
+
+    //   let event ;
+    // //   const endpointSecret =
+    // //     "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
+    // //   const sig = request.headers["stripe-signature"];
+    // //  //return console.log(request.body,'sss********',sig);
+    // //   let event;
+
+    //   try {
+    //     event = await stripe.webhooks.constructEvent(payloadString, header, secret);
+
+    //     // Do something with mocked signed event
+    //     // expect(event.id).to.equal(payload.id);
+    //     return console.log(event, "yeh event ka postmortem hua",request.body);
+    //   } catch (err) {
+    //     console.log(err, "this error of webhook");
+    //     response.status(400).send(`Webhook Error: ${err.message}`);
+    //     return;
+    //   }
+    let event = request.body;
 
     // Handle the event
     switch (event.type) {
