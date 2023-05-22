@@ -74,6 +74,7 @@ exports.validatepaymentData = async (req, res, next) => {
 /////------------payment intent ----///////
 
 exports.create_payment_intent = async (req, res) => {
+ try{
   let userID = req.userId;
   let userInfoModel = await UserModel.findOne({ _id: userID });
   userInfoModel = userInfoModel.userInfo;
@@ -131,7 +132,7 @@ exports.create_payment_intent = async (req, res) => {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: (totalprice.toFixed(2) * 100).toFixed(0),
       currency: "usd",
-      // customer: customerStripeId,
+      customer: customerStripeId,
       payment_method_types:[
         'card',
       ]
@@ -162,30 +163,37 @@ exports.create_payment_intent = async (req, res) => {
     paymentIntent: paymentIntentClientSecret,
     ephemeralKey: ephemeralKey.secret,
   })
+ }catch (error) {
+  return response.status(400).send({
+    error: {
+      message: error.message,
+    },
+  });
+}
 };
 exports.webhooks = async (request, response) => {
   try {
-    // const endpointSecret =
-    //   "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
+    const endpointSecret =
+      "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
     const sig = request.headers["stripe-signature"];
-   return console.log(request.body,'sss********',sig);
-    // let event;
+   //return console.log(request.body,'sss********',sig);
+    let event;
 
-    // try {
-    //   const requestBody = request.body.toString("utf8");
-    //   // console.log(requestBody);
-    //   // Convert the request body to a string
-    //   event = await stripe.webhooks.constructEvent(
-    //     requestBody,
-    //     sig,
-    //     endpointSecret
-    //   );
-    //   // console.log(event, "yeh event ka postmortem hua");
-    // } catch (err) {
-    //   console.log(err, "fadli");
-    //   response.status(400).send(`Webhook Error: ${err.message}`);
-    //   return;
-    // }
+    try {
+      const requestBody = request.body.toString("utf8");
+      // console.log(requestBody);
+      // Convert the request body to a string
+      event = await stripe.webhooks.constructEvent(
+        requestBody,
+        sig,
+        endpointSecret
+      );
+      // console.log(event, "yeh event ka postmortem hua");
+    } catch (err) {
+      console.log(err, "fadli");
+      response.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
 
     // Handle the event
     switch (event.type) {
