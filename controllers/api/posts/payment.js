@@ -159,7 +159,8 @@ exports.create_payment_intent = async (req, res) => {
       });
       PaymentModelInfo = await PaymentModel.findOneAndUpdate({"_id":PaymentModelId._id});
       console.log("object,",PaymentModelInfo,"------=-===========+");
-      PaymentModelInfo = await PaymentModel.findOneAndUpdate({"_id":PaymentModelId._id},{"payment_intent": paymentIntent},{upsert:true});
+      PaymentModelInfo = await PaymentModel.findOneAndUpdate({"_id":PaymentModelId._id},{$set:{"payment_intent": paymentIntent}},{upsert:true});
+      console.log(PaymentModelInfo,"hghdegfh");
 
       paymentIntentClientSecret = paymentIntent.client_secret;
       statusCode = 201;
