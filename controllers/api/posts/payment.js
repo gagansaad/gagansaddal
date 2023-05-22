@@ -147,7 +147,7 @@ exports.create_payment_intent = async (req, res) => {
         currency: "usd",
         customer: customerStripeId,
         metadata: {
-          payment_id:PaymentModelInfo._id
+          "payment_id":PaymentModelInfo._id
         },
         payment_method_types: [
           'card',
