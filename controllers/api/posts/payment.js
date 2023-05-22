@@ -116,11 +116,11 @@ exports.create_payment_intent = async (req, res) => {
 
   
 
-  const ephemeralKey = await stripe.ephemeralKeys.create(
-    { customer: customerStripeId },
-    { apiVersion: "2022-11-15" }
-  );
-  console.log(req.body, "body");
+  // const ephemeralKey = await stripe.ephemeralKeys.create(
+  //   { customer: customerStripeId },
+  //   { apiVersion: "2022-11-15" }
+  // );
+
   let paymentModelInfo = await PaymentModel.findOne({
     ads: req.body.postId,
     payment_status: "pending",
