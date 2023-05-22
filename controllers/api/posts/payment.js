@@ -139,9 +139,9 @@ exports.create_payment_intent = async (req, res) => {
         ads_type: adstype,
         user: userID,
         payment_status: "pending",
-        // ,
+       
       };
-      PaymentModelId = await PaymentModel.create(dataobj);
+      let PaymentModelId = await PaymentModel.create(dataobj);
       const paymentIntent = await stripe.paymentIntents.create({
         amount: (totalprice.toFixed(2) * 100).toFixed(0),
         currency: "usd",
