@@ -38,7 +38,7 @@ exports.getDnymicsData = async (req, res, next) => {
       `Arabic`,
       `French`,
       `Other`],
-      currency: ["AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USD", "USN"],
+      currency: ["USD", "AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USN"],
     employment_type: [`Full-time`,
       `Part-time`,
       `Contract`,

@@ -26,9 +26,7 @@ const roomRentsSchema = new mongoose.Schema({
     },
 
     plan_addons: [{
-        name:defaultStringConfig,
-        price:defaultPriceProperty,
-        currency:defaultCurrencyProperty,
+        type:String,
     }],
     plan_price:defaultPriceProperty,
     coupan_discount:defaultPriceProperty,

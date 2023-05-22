@@ -50,7 +50,7 @@ exports.getDnymicsData = async (req, res, next) => {
     fullfilment: ["Free shipping", "In person pickup", "Only local delivery", "Please contact"],
     product_condition: ["New", "Used - Like new", "Used - Good", "Used - Fair"],
     user_type: [`Individual`, `Business`],
-    currency:  ["AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USD", "USN"],
+    currency:  ["USD", "AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USN"],
 
   };
   return successJSONResponse(res, {

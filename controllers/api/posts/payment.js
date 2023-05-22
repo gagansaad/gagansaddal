@@ -1,12 +1,15 @@
 const { json } = require("express");
+const { ObjectId } = require("mongodb");
 const {
   EventListInstance,
 } = require("twilio/lib/rest/taskrouter/v1/workspace/event");
 const payment = require("../../../model/posts/payment");
 const UserModel = require("../../../model/accounts/users");
+const PaymentModel = require("../../../model/posts/payment");
 
 const mongoose = require("mongoose"),
   AdsPlan = mongoose.model("plan"),
+  AddOns = mongoose.model("plan_addons"),
   eventAd = mongoose.model("event"),
   bizAd = mongoose.model("Local_biz & Service"),
   buysellAd = mongoose.model("Buy & Sell"),
@@ -71,178 +74,106 @@ exports.validatepaymentData = async (req, res, next) => {
 /////------------payment intent ----///////
 exports.create_payment_intent = async (req, res) => {
   let userID = req.userId;
-  let userInfoModel = await UserModel.findOne({ "_id": userID });
+  let userInfoModel = await UserModel.findOne({ _id: userID });
   userInfoModel = userInfoModel.userInfo;
-  let planId = req.body.planId
-  let find_ads_type = await AdsPlan.find({ "_id": planId }).populate("add_ons")
-  let adstype = find_ads_type[0].ads_type
-  let plan_price = find_ads_type[0].price.amount
-  let addonsId = ['64660ac0356a2b0932d172bc','64660c78356a2b0932d172dc',"64660ca0356a2b0932d172ed"]
-  for(i = 0; i<addonsId.length; i++){
-    console.log(addonsId[i]);
-  }
-
-  return res.send({ find_ads_type: find_ads_type, mgg: "object", adstype: adstype, plan_price: plan_price });
+  let planId = req.body.planId;
+  let find_ads_type = await AdsPlan.find({ _id: planId }).populate("add_ons");
+  let adstype = find_ads_type[0].ads_type;
+  let plan_price = find_ads_type[0].price.amount;
+  let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
+  let addonsId = req.body.add_ons;
+  let foundObjects = [];
+  let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
+  addonsId.forEach((targetId) => {
+    result.forEach((item) => {
+      const priceArray = item.price;
+      const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
+      if (foundObj) {
+        foundObjects.push(foundObj);
+      }
+    });
+  });
+  const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
+  let totalprice = plan_price + totalAmount;
   let customerStripeId = null;
-// {"price._id": ObjectId('64660ac0356a2b0932d172bc') }
   if (userInfoModel.stripe_id == "" && userInfoModel.stripe_id == null) {
     const customer = await stripe.customers.create({
       name: userInfoModel.name,
       email: userInfoModel.email_address,
     });
-    let userInfoModelUpdate = await UserModel.findOneAndUpdate({ "_id": userID }, { $set: { 'userInfo.stripe_id': customer.id } });
+    await UserModel.findOneAndUpdate(
+      { _id: userID },
+      { $set: { "userInfo.stripe_id": customer.id } }
+    );
     customerStripeId = customer.id;
   } else {
     customerStripeId = userInfoModel.stripe_id;
-    // console.log("else");
   }
-  // console.log(userInfo, customerStripeId);
-  // return res.send("done");
+
   const ephemeralKey = await stripe.ephemeralKeys.create(
     { customer: customerStripeId },
-    { apiVersion: '2022-11-15' }
+    { apiVersion: "2022-11-15" }
   );
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: 1099,
-    currency: 'USD',
-    customer: customerStripeId,
-    automatic_payment_methods: {
-      enabled: true,
-    },
+  console.log(req.body, "body");
+  let paymentModelInfo = await PaymentModel.findOne({
+    ads: req.body.postId,
+    payment_status: "pending",
   });
+  console.log(paymentModelInfo);
+  if (paymentModelInfo == null || paymentModelInfo == "") {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: (totalprice.toFixed(2) * 100).toFixed(0),
+      currency: "usd",
+      customer: customerStripeId,
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+    let dataobj = {
+      plan_id: planId,
+      plan_addons: foundObjects,
+      plan_price: plan_price,
+      total_amount: JSON.parse(totalprice.toFixed(2)),
+      ads: req.body.postId,
+      ads_type: adstype,
+      user: userID,
+      payment_status:"pending",
+      payment_intent: paymentIntent,
+    };
+    await PaymentModel.create(dataobj);
+    res.json({
+      paymentIntent: paymentIntent.client_secret,
+      ephemeralKey: ephemeralKey.secret,
+      customer: customerStripeId,
+      PaymentModel: PaymentModel,
+    });
+  } else {
+    return console.log(paymentModelInfo, "njnjvnjndjnjdnvjd");
+  }
 
-  res.json({
-    paymentIntent: paymentIntent.client_secret,
-    ephemeralKey: ephemeralKey.secret,
-    customer: customer.id,
-  });
-}
-// async (req, res) => {
-//   try {
-//     const {
-//       isfeatured_price,
-//       plan_id,
-//       total_amount,
-//       price,
-//       ads,
-//       adstype,
-//       user,
-//       customer,
-//       paymentMethodType,
-//       currency,
-//     } = req.body;
-
-//     let totalprice;
-//     let coins;
-//     let dbQuery = {
-//       _id: ads,
-//     };
-//     let findCategory = await category.find({ _id: adstype });
-
-//     if (!findCategory) {
-//       return failureJSONResponse(res, {
-//         message: `Please provide valid ads id`,
-//       });
-//     }
-//     const adsTypes = [
-//       { type: "Babysitters and Nannies", model: babysitterAd },
-//       { type: "Buy & Sell", model: buysellAd },
-//       { type: "Local Biz and services", model: bizAd },
-//       { type: "Events", model: eventAd },
-//       { type: "Job", model: jobsAd },
-//       { type: "Room For Rent", model: roomrentAd },
-//     ];
-
-//     const adModel = adsTypes.find(
-//       (adType) => adType.type === findCategory?.[0]?.name
-//     )?.model;
-//     console.log(adModel);
-//     if (!adModel) {
-//       return failureJSONResponse(res, {
-//         message: `Please provide valid adstype`,
-//       });
-//     }
-
-//     const ad = await adModel.findById(dbQuery);
-//     console.log(ad);
-//     if (!ad) {
-//       return failureJSONResponse(res, {
-//         message: `Please provide valid ads id`,
-//       });
-//     }
-//     let selectplan = await AdsPlan.findById({ _id: plan_id });
-//     if (!selectplan) {
-//       return failureJSONResponse(res, {
-//         message: `Please provide plan id`,
-//       });
-//     } else {
-//       coins = selectplan.price.currency;
-//       if (isfeatured_price == "true") {
-//         totalprice = selectplan.featured_price.amount + selectplan.price.amount;
-//       } else {
-//         totalprice = selectplan.price.amount;
-//       }
-//     }
-//     // let customerName = await USER.findById({_id:req.userId}).select({ "userInfo.name": 1, "_id": 1});
-//     // if (customerName?.userInfo?.name) {
-//     //   dataObj.customer = customerName.userInfo.name;
-//     // }
-//     const dataObj = {
-//       isfeatured_price,
-//       plan_id,
-//       total_amount: totalprice,
-//       price: {
-//         featured_price: selectplan.featured_price,
-//         post_price: selectplan.price,
-//       },
-//       ads,
-//       ads_type: findCategory?.[0]?.name,
-//       user: userId,
-//     };
-
-//     const paymentIntent = await stripe.paymentIntents.create({
-//       amount: dataObj.total_amount,
-//       currency: currency,
-//       payment_method_types: ["card"],
-//     });
-//     if (paymentIntent) {
-//       return successJSONResponse(res, {
-//         message: `success`,
-//         clientsecret: paymentIntent.client_secret,
-//         nextAction: paymentIntent.next_action,
-//       });
-//     } else {
-//       return failureJSONResponse(res, {
-//         message: `Something went wrong`,
-//       });
-//     }
-//   } catch (err) {
-//     console.log(err, "hggvhvhvhvhggbhgjhvghjbhnghjvhv bgvbnbvhvbghvnbvnbv nbvbn  bmb hjbjb nhv bvnbcbn bv")
-//     return res.status(400).send({
-//       error: {
-//         message: err.message,
-//       },
-//     });
-//   }
-// };
-
-
-
-// This is your Stripe CLI webhook secret for testing your endpoint locally.
-
-
+  // res.json({
+  //   paymentIntent: paymentIntent.client_secret,
+  //   ephemeralKey: ephemeralKey.secret,
+  //   customer: customerStripeId,
+  // });
+};
 exports.webhooks = async (request, response) => {
   try {
-    const endpointSecret = "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
-    const sig = request.headers['stripe-signature'];
+    const endpointSecret =
+      "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
+    const sig = request.headers["stripe-signature"];
     // console.log(request.rawBody,"ye iski body hai",request.rawbody,"dkvjvmkvcfdmvjfd");
     let event;
 
     try {
-      const requestBody = request.body.toString('utf8');
-      // console.log(requestBody); 
+      const requestBody = request.body.toString("utf8");
+      // console.log(requestBody);
       // Convert the request body to a string
-      event = await stripe.webhooks.constructEvent(requestBody, sig, endpointSecret);
+      event = await stripe.webhooks.constructEvent(
+        requestBody,
+        sig,
+        endpointSecret
+      );
       console.log(event, "yeh event ka postmortem hua");
     } catch (err) {
       console.log(err, "fadli");
@@ -250,58 +181,57 @@ exports.webhooks = async (request, response) => {
       return;
     }
 
-
     // Handle the event
     switch (event.type) {
-      case 'payment_intent.amount_capturable_updated':
+      case "payment_intent.amount_capturable_updated":
         const paymentIntentAmountCapturableUpdated = event.data.object;
         // Then define and call a function to handle the event payment_intent.amount_capturable_updated
         break;
-      case 'payment_intent.canceled':
+      case "payment_intent.canceled":
         const paymentIntentCanceled = event.data.object;
         // Then define and call a function to handle the event payment_intent.canceled
         break;
-      case 'payment_intent.created':
+      case "payment_intent.created":
         const paymentIntentCreated = event.data.object;
         // Then define and call a function to handle the event payment_intent.created
         break;
-      case 'payment_intent.partially_funded':
+      case "payment_intent.partially_funded":
         const paymentIntentPartiallyFunded = event.data.object;
         // Then define and call a function to handle the event payment_intent.partially_funded
         break;
-      case 'payment_intent.payment_failed':
+      case "payment_intent.payment_failed":
         const paymentIntentPaymentFailed = event.data.object;
         // Then define and call a function to handle the event payment_intent.payment_failed
         break;
-      case 'payment_intent.processing':
+      case "payment_intent.processing":
         const paymentIntentProcessing = event.data.object;
         // Then define and call a function to handle the event payment_intent.processing
         break;
-      case 'payment_intent.requires_action':
+      case "payment_intent.requires_action":
         const paymentIntentRequiresAction = event.data.object;
         // Then define and call a function to handle the event payment_intent.requires_action
         break;
-      case 'payment_intent.succeeded':
+      case "payment_intent.succeeded":
         const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
-      case 'setup_intent.canceled':
+      case "setup_intent.canceled":
         const setupIntentCanceled = event.data.object;
         // Then define and call a function to handle the event setup_intent.canceled
         break;
-      case 'setup_intent.created':
+      case "setup_intent.created":
         const setupIntentCreated = event.data.object;
         // Then define and call a function to handle the event setup_intent.created
         break;
-      case 'setup_intent.requires_action':
+      case "setup_intent.requires_action":
         const setupIntentRequiresAction = event.data.object;
         // Then define and call a function to handle the event setup_intent.requires_action
         break;
-      case 'setup_intent.setup_failed':
+      case "setup_intent.setup_failed":
         const setupIntentSetupFailed = event.data.object;
         // Then define and call a function to handle the event setup_intent.setup_failed
         break;
-      case 'setup_intent.succeeded':
+      case "setup_intent.succeeded":
         const setupIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event setup_intent.succeeded
         break;
@@ -312,12 +242,11 @@ exports.webhooks = async (request, response) => {
 
     // Return a 200 response to acknowledge receipt of the event
     response.send({ status: 200 });
-  }
-  catch (error) {
+  } catch (error) {
     return response.status(400).send({
       error: {
         message: error.message,
       },
     });
   }
-}
+};

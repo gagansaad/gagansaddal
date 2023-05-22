@@ -26,7 +26,7 @@ exports.getDnymicsData = async (req, res, next) => {
   const dynamicsData = {
     tagline:records,
     category: ["I want a Babysitter/Nanny", "I am a Babysitter/Nanny"],
-    currency:  ["AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USD", "USN"],
+    currency:  ["USD", "AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USN"],
     work_type: ["Live in", "Live in & out", "Live out"],
     care_service_need: ["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores"],
     care_service_offer: ["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores", "Storytelling"],
