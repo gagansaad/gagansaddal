@@ -161,7 +161,7 @@ exports.create_payment_intent = async (req, res) => {
     status: statusCode,
     message: `success`,
     paymentIntent: paymentIntentClientSecret,
-    ephemeralKey: ephemeralKey.secret,
+    // ephemeralKey: ephemeralKey.secret,
   })
  }catch (error) {
   return failureJSONResponse(res, {
@@ -189,7 +189,7 @@ exports.webhooks = async (request, response) => {
       );
       // console.log(event, "yeh event ka postmortem hua");
     } catch (err) {
-      console.log(err, "fadli");
+      console.log(err, "this error of webhook");
       response.status(400).send(`Webhook Error: ${err.message}`);
       return;
     }
