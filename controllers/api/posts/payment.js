@@ -113,6 +113,8 @@ exports.create_payment_intent = async (req, res) => {
     customerStripeId = userInfoModel.stripe_id;
   }
 
+  
+
   const ephemeralKey = await stripe.ephemeralKeys.create(
     { customer: customerStripeId },
     { apiVersion: "2022-11-15" }
