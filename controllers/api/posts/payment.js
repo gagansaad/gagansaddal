@@ -157,8 +157,8 @@ exports.create_payment_intent = async (req, res) => {
         //   enabled: true,
         // },
       });
-      PaymentModelInfo = await PaymentModel.findOneAndUpdate({"_id":PaymentModelId._id});
-      console.log("object,",PaymentModelInfo,"------=-===========+");
+      // PaymentModelInfo = await PaymentModel.findOneAndUpdate({"_id":PaymentModelId._id});
+      // console.log("object,",PaymentModelInfo,"------=-===========+");
       PaymentModelInf = await PaymentModel.findOneAndUpdate({"_id":PaymentModelId._id},{"payment_intent": paymentIntent});
       console.log(PaymentModelInf.payment_intent,"hghdegfh");
 
