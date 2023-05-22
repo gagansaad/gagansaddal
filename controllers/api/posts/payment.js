@@ -172,21 +172,31 @@ exports.create_payment_intent = async (req, res) => {
 };
 exports.webhooks = async (request, response) => {
   try {
-    const endpointSecret =
-      "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
-    const sig = request.headers["stripe-signature"];
-   //return console.log(request.body,'sss********',sig);
-    let event;
+    const payload = {
+      id: 'evt_test_webhook',
+      object: 'event',
+    };
+    
+    const payloadString = JSON.stringify(payload, null, 2);
+    const secret = 'whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a';
+    
+    const header = stripe.webhooks.generateTestHeaderString({
+      payload: payloadString,
+      secret,
+    });
+    
+    let event ;
+  //   const endpointSecret =
+  //     "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
+  //   const sig = request.headers["stripe-signature"];
+  //  //return console.log(request.body,'sss********',sig);
+  //   let event;
 
     try {
-      const requestBody = request.body.toString("utf8");
-      // console.log(requestBody);
-      // Convert the request body to a string
-      event = await stripe.webhooks.constructEvent(
-        requestBody,
-        sig,
-        endpointSecret
-      );
+      event = await stripe.webhooks.constructEvent(payloadString, header, secret);
+    
+      // Do something with mocked signed event
+      expect(event.id).to.equal(payload.id);
       // console.log(event, "yeh event ka postmortem hua");
     } catch (err) {
       console.log(err, "this error of webhook");
