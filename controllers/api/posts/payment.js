@@ -197,12 +197,13 @@ exports.webhooks = async (request, response) => {
     
       // Do something with mocked signed event
       // expect(event.id).to.equal(payload.id);
-      // console.log(event, "yeh event ka postmortem hua");
+      return console.log(event, "yeh event ka postmortem hua");
     } catch (err) {
       console.log(err, "this error of webhook");
       response.status(400).send(`Webhook Error: ${err.message}`);
       return;
     }
+    
 
     // Handle the event
     switch (event.type) {
