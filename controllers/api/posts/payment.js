@@ -129,7 +129,7 @@ exports.create_payment_intent = async (req, res) => {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: (totalprice.toFixed(2) * 100).toFixed(0),
       currency: "usd",
-      customer: customerStripeId,
+      // customer: customerStripeId,
       payment_method_types:[
         'card',
       ]
