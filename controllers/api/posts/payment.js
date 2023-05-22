@@ -164,10 +164,9 @@ exports.create_payment_intent = async (req, res) => {
     ephemeralKey: ephemeralKey.secret,
   })
  }catch (error) {
-  return response.status(400).send({
-    error: {
-      message: error.message,
-    },
+  return failureJSONResponse(res, {
+    message: `Something went wrong`,
+    error:error
   });
 }
 };
