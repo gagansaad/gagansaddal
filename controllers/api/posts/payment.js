@@ -130,9 +130,12 @@ exports.create_payment_intent = async (req, res) => {
       amount: (totalprice.toFixed(2) * 100).toFixed(0),
       currency: "usd",
       customer: customerStripeId,
-      automatic_payment_methods: {
-        enabled: true,
-      },
+      payment_method_types:[
+        'card',
+      ]
+      // automatic_payment_methods: {
+      //   enabled: true,
+      // },
     });
     let dataobj = {
       plan_id: planId,
