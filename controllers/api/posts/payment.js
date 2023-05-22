@@ -163,10 +163,10 @@ exports.create_payment_intent = async (req, res) => {
 };
 exports.webhooks = async (request, response) => {
   try {
-    const endpointSecret =
-      "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
+    // const endpointSecret =
+    //   "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
     const sig = request.headers["stripe-signature"];
-   return console.log(request,'sss********',sig);
+   return console.log(request.body,'sss********',sig);
     // let event;
 
     // try {
