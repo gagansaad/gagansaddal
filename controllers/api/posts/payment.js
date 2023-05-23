@@ -6,7 +6,7 @@ const {
 const payment = require("../../../model/posts/payment");
 const UserModel = require("../../../model/accounts/users");
 const PaymentModel = require("../../../model/posts/payment");
-const PaymentEventModel = require("../../../model/posts/payment_logs");
+const PaymentEventModel = require("../../../model/posts/paymentEvent");
 const mongoose = require("mongoose"),
   AdsPlan = mongoose.model("plan"),
   AddOns = mongoose.model("plan_addons"),
@@ -18,7 +18,7 @@ const mongoose = require("mongoose"),
   jobsAd = mongoose.model("job"),
   USER = mongoose.model("user"),
   category = mongoose.model("PostType"),
-  payment_logs = require("../../../model/posts/payment_logs"),
+  payment_logs = require("../../../model/posts/paymentEvent"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -154,8 +154,8 @@ exports.create_payment_intent = async (req, res) => {
           'card',
         ]
       });
-  
-      // PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
+
+      PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
 
       paymentIntentClientSecret = paymentIntent.client_secret;
       statusCode = 201;
@@ -209,8 +209,10 @@ exports.webhooks = async (request, response) => {
     //     return;
     //   }
     let event = request.body;
-console.log(event,"vdfkjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjnh");
+    let payment_id = event.data.object.metadata.payment_id;
     // Handle the event
+    let paymentStatus ="pending";
+    // [`pending`, `paid`, `confirmed`,`expired`]
     switch (event.type) {
       case "payment_intent.amount_capturable_updated":
         const paymentIntentAmountCapturableUpdated = event.data.object;
@@ -244,36 +246,17 @@ console.log(event,"vdfkjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjnh
         const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
-      case "setup_intent.canceled":
-        const setupIntentCanceled = event.data.object;
-        // Then define and call a function to handle the event setup_intent.canceled
-        break;
-      case "setup_intent.created":
-        const setupIntentCreated = event.data.object;
-        // Then define and call a function to handle the event setup_intent.created
-        break;
-      case "setup_intent.requires_action":
-        const setupIntentRequiresAction = event.data.object;
-        // Then define and call a function to handle the event setup_intent.requires_action
-        break;
-      case "setup_intent.setup_failed":
-        const setupIntentSetupFailed = event.data.object;
-        // Then define and call a function to handle the event setup_intent.setup_failed
-        break;
-      case "setup_intent.succeeded":
-        const setupIntentSucceeded = event.data.object;
-        // Then define and call a function to handle the event setup_intent.succeeded
-        break;
       // ... handle other event types
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
-console.log(event.data.object.metadata,"vdfkjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjnh");
 
-// let dataobj ={
-
-// }
-//     let PaymentEventInfo = await PaymentEventModel.create();
+    let dataobj = {
+      payment_id: payment_id,
+      payment_status:paymentStatus,
+      payment_intent: event
+    }
+    let PaymentEventInfo = await PaymentEventModel.create(dataobj);
     // Return a 200 response to acknowledge receipt of the event
     response.send({ status: 200 });
   } catch (error) {
