@@ -223,7 +223,10 @@ exports.webhooks = async (request, response) => {
         break;
       case "payment_intent.created":
       let paymentDetails = await PaymentModel.find()
-        console.log("payment details",paymentDetails,"payment details");
+      let plan_id = paymentDetails.plan_id;
+      let ads_id = paymentDetails.ads;
+      let ads_type = paymentDetails.ads_type;
+        console.log("payment details",paymentDetails,"payment details",ads_type,"cfdvd",ads_id,"vdvdv",plan_id);
 
         paymentStatus="confirmed"
         const paymentIntentCreated = event.data.object;
