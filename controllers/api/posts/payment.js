@@ -268,7 +268,7 @@ console.log(event,"vdfkjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjnh
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
-console.log(event,"vdfkjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjnh");
+console.log(event.metadata,"vdfkjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjnh");
 
 // let dataobj ={
 
