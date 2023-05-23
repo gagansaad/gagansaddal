@@ -14,7 +14,7 @@ const mongoose = require("mongoose"),
   bizAd = mongoose.model("Local_biz & Service"),
   buysellAd = mongoose.model("Buy & Sell"),
   babysitterAd = mongoose.model("babysitter & nannie"),
-  rentals = mongoose.model("Rental"),
+  rentals = mongoose.model("rental"),
   jobsAd = mongoose.model("job"),
   USER = mongoose.model("user"),
   category = mongoose.model("PostType"),
@@ -216,8 +216,8 @@ exports.webhooks = async (request, response) => {
     let ads_type = paymentDetails[0].ads_type;
     let findModelName = await category.findById({ "_id": ads_type })
     let ModelName = rentals
-    let data = ModelName.findById({"_id":ads_id})
-    console.log(data,"jmmmmmmmmmmmmmmmmmmmm mc ccccccccccccccccccccccccccccccccccccccccc mmmmmmmmm@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    let data = ModelName.findById({ "_id": ads_id })
+    console.log(data, "jmmmmmmmmmmmmmmmmmmmm mc ccccccccccccccccccccccccccccccccccccccccc mmmmmmmmm@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     // switch (findModelName.name) {
     //   case "Rentals":
     //     break;

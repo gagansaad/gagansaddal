@@ -174,4 +174,4 @@ const roomRentsSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('Rental', roomRentsSchema);
+module.exports = mongoose.model('rental', roomRentsSchema);
