@@ -14,7 +14,7 @@ const mongoose = require("mongoose"),
   bizAd = mongoose.model("Local_biz & Service"),
   buysellAd = mongoose.model("Buy & Sell"),
   babysitterAd = mongoose.model("babysitter & nannie"),
-  rentals= mongoose.model("Rental"),
+  rentals = mongoose.model("Rental"),
   jobsAd = mongoose.model("job"),
   USER = mongoose.model("user"),
   category = mongoose.model("PostType"),
@@ -215,10 +215,27 @@ exports.webhooks = async (request, response) => {
     let ads_id = paymentDetails[0].ads;
     let ads_type = paymentDetails[0].ads_type;
     let findModelName = await category.findById({ "_id": ads_type })
-    let ModelName = findModelName.name.toLowerCase()
-
-    let findAd = await ModelName.findById({"_id":ads_id})
-    console.log("payment details", paymentDetails, "payment details", ads_type, "cfdvd", ads_id, "vdvdv", plan_id, "cvbnbvcx", findModelName.name.toLowerCase(),"mvvmfkvmfi",findAd);
+    let ModelName = rentals
+    let data = ModelName.findById({"_id":ads_id})
+    console.log(data,"jmmmmmmmmmmmmmmmmmmmm mc ccccccccccccccccccccccccccccccccccccccccc mmmmmmmmm@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    // switch (findModelName.name) {
+    //   case "Rentals":
+    //     break;
+    //   case "Jobs":
+    //     break;
+    //   case "Local Biz & Services":
+    //     break;
+    //   case "Events":
+    //     break;
+    //   case "Buy & Sell":
+    //     break;
+    //   case "Babysitters & Nannies":
+    //     break;
+    //   default:
+    //     console.log(`Unhandled event type ${event.type}`);
+    // }
+    // let findAd = await ModelName.findById({"_id":ads_id})
+    console.log("payment details", paymentDetails, "payment details", ads_type, "cfdvd", ads_id, "vdvdv", plan_id, "cvbnbvcx", findModelName.name.toLowerCase(), "mvvmfkvmfi", findAd);
     // Handle the event
     let paymentStatus = "pending";
     switch (event.type) {
