@@ -37,6 +37,7 @@ require(`./model/posts/bizAndServices`);
 require(`./model/posts/babbysitter & nannis`);
 require(`./model/image/image`);
 require(`./model/posts/payment_logs`);
+require(`./model/posts/payment`);
 require('./model/posts/tagline')
 require(`./model/posts/adsCategories`);
 require('./model/posts/adsSubCategories')

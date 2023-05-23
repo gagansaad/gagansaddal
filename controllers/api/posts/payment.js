@@ -6,7 +6,7 @@ const {
 const payment = require("../../../model/posts/payment");
 const UserModel = require("../../../model/accounts/users");
 const PaymentModel = require("../../../model/posts/payment");
-
+const PaymentEventModel = require("../../../model/posts/payment_logs");
 const mongoose = require("mongoose"),
   AdsPlan = mongoose.model("plan"),
   AddOns = mongoose.model("plan_addons"),
@@ -154,9 +154,8 @@ exports.create_payment_intent = async (req, res) => {
           'card',
         ]
       });
-      PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id });
-
-      PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
+  
+      // PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
 
       paymentIntentClientSecret = paymentIntent.client_secret;
       statusCode = 201;
@@ -210,7 +209,7 @@ exports.webhooks = async (request, response) => {
     //     return;
     //   }
     let event = request.body;
-
+console.log(event,"vdfkjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjnh");
     // Handle the event
     switch (event.type) {
       case "payment_intent.amount_capturable_updated":
@@ -269,7 +268,12 @@ exports.webhooks = async (request, response) => {
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
+console.log(event,"vdfkjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjnh");
 
+// let dataobj ={
+
+// }
+//     let PaymentEventInfo = await PaymentEventModel.create();
     // Return a 200 response to acknowledge receipt of the event
     response.send({ status: 200 });
   } catch (error) {

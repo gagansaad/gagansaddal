@@ -10,14 +10,6 @@ const {
 } = require(`../../utils/mongoose`);
 // const defaultPaymentStatus="pending";
 const roomRentsSchema = new mongoose.Schema({
-
-    // status:{
-    //     type: String,
-    //     enum: [`active`, `inactive`, `draft`],
-    //     required: true,
-    //     default: "draft"
-
-    // },
     plan_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: `adsplan`,
