@@ -93,7 +93,7 @@ exports.create_payment_intent = async (req, res) => {
         const priceArray = item.price;
         const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
         if (foundObj) {
-          foundObjects.push(JSON.parse(foundObj));
+          foundObjects.push(foundObj);
         }
       });
     });
