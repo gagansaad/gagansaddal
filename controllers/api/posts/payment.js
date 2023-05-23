@@ -222,6 +222,9 @@ exports.webhooks = async (request, response) => {
         // Then define and call a function to handle the event payment_intent.canceled
         break;
       case "payment_intent.created":
+      let paymentDetails = await PaymentModel.find()
+        console.log("payment details",paymentDetails,"payment details");
+
         paymentStatus="confirmed"
         const paymentIntentCreated = event.data.object;
         // Then define and call a function to handle the event payment_intent.created
