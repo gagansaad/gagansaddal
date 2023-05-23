@@ -209,33 +209,40 @@ exports.webhooks = async (request, response) => {
     //     return;
     //   }
     let event = request.body;
+
     let payment_id = event.data.object.metadata.payment_id;
-    let paymentDetails = await PaymentModel.find()
+    let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
+    console.log(paymentDetails,"yessssssssssssssssssssssssss===========================-00000000000000000000099999999999---------------------");
     let plan_id = paymentDetails[0].plan_id;
     let ads_id = paymentDetails[0].ads;
     let ads_type = paymentDetails[0].ads_type;
     let findModelName = await category.findById({ "_id": ads_type })
-    let ModelName = rentals
-    let data =await ModelName.findById({ "_id": ads_id })
-    console.log(data, "jmmmmmmmmmmmmmmmmmmmm mc ccccccccccccccccccccccccccccccccccccccccc mmmmmmmmm@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    // switch (findModelName.name) {
-    //   case "Rentals":
-    //     break;
-    //   case "Jobs":
-    //     break;
-    //   case "Local Biz & Services":
-    //     break;
-    //   case "Events":
-    //     break;
-    //   case "Buy & Sell":
-    //     break;
-    //   case "Babysitters & Nannies":
-    //     break;
-    //   default:
-    //     console.log(`Unhandled event type ${event.type}`);
-    // }
-    // let findAd = await ModelName.findById({"_id":ads_id})
-    console.log("payment details", paymentDetails, "payment details", ads_type, "cfdvd", ads_id, "vdvdv", plan_id, "cvbnbvcx", findModelName.name.toLowerCase(), "mvvmfkvmfi", findAd);
+    let ModelName;
+
+    switch (findModelName.name) {
+      case "Rentals":
+        ModelName = rentals
+        break;
+      case "Jobs":
+        ModelName = jobsAd
+        break;
+      case "Local Biz & Services":
+        ModelName = bizAd
+        break;
+      case "Events":
+        ModelName = eventAd
+        break;
+      case "Buy & Sell":
+        ModelName = buysellAd
+        break;
+      case "Babysitters & Nannies":
+        ModelName = babysitterAd
+        break;
+      default:
+        console.log(`Please provide valid ads id`);
+    }
+    let findAd = await ModelName.findById({"_id":ads_id})
+
     // Handle the event
     let paymentStatus = "pending";
     switch (event.type) {
