@@ -14,7 +14,7 @@ const mongoose = require("mongoose"),
   bizAd = mongoose.model("Local_biz & Service"),
   buysellAd = mongoose.model("Buy & Sell"),
   babysitterAd = mongoose.model("babysitter & nannie"),
-  roomrentAd = mongoose.model("RoomRent"),
+  roomrentAd = mongoose.model("Rental"),
   jobsAd = mongoose.model("job"),
   USER = mongoose.model("user"),
   category = mongoose.model("PostType"),
@@ -214,10 +214,12 @@ exports.webhooks = async (request, response) => {
     let plan_id = paymentDetails[0].plan_id;
     let ads_id = paymentDetails[0].ads;
     let ads_type = paymentDetails[0].ads_type;
-    let findModelName = await category.findById({"_id":ads_type})
-      console.log("payment details",paymentDetails,"payment details",ads_type,"cfdvd",ads_id,"vdvdv",plan_id,"cvbnbvcx",findModelName);
+    let findModelName = await category.findById({ "_id": ads_type })
+    let ModelName = findModelName.name.toLowerCase()
+    // let findAd = await
+    console.log("payment details", paymentDetails, "payment details", ads_type, "cfdvd", ads_id, "vdvdv", plan_id, "cvbnbvcx", findModelName.name.toLowerCase(),);
     // Handle the event
-    let paymentStatus ="pending";
+    let paymentStatus = "pending";
     switch (event.type) {
       case "payment_intent.amount_capturable_updated":
         const paymentIntentAmountCapturableUpdated = event.data.object;
@@ -228,14 +230,14 @@ exports.webhooks = async (request, response) => {
         // Then define and call a function to handle the event payment_intent.canceled
         break;
       case "payment_intent.created":
- 
 
-        paymentStatus="confirmed"
+
+        paymentStatus = "confirmed"
         const paymentIntentCreated = event.data.object;
         // Then define and call a function to handle the event payment_intent.created
         break;
       case "payment_intent.payment_failed":
-        paymentStatus="failed"
+        paymentStatus = "failed"
         const paymentIntentPaymentFailed = event.data.object;
         // Then define and call a function to handle the event payment_intent.payment_failed
         break;
@@ -243,9 +245,9 @@ exports.webhooks = async (request, response) => {
         const paymentIntentProcessing = event.data.object;
         // Then define and call a function to handle the event payment_intent.processing
         break;
-     
+
       case "payment_intent.succeeded":
-        paymentStatus="confirmed"
+        paymentStatus = "confirmed"
         const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
@@ -256,7 +258,7 @@ exports.webhooks = async (request, response) => {
 
     let dataobj = {
       payment_id: payment_id,
-      payment_status:paymentStatus,
+      payment_status: paymentStatus,
       payment_intent: event
     }
     let PaymentEventInfo = await PaymentEventModel.create(dataobj);

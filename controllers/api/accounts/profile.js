@@ -1,7 +1,7 @@
 const { json } = require("express");
 
 const mongoose = require("mongoose"),
-    RoomRentsAds = mongoose.model("RoomRent"),
+    RoomRentsAds = mongoose.model("Rental"),
     {
         successJSONResponse,
         failureJSONResponse
