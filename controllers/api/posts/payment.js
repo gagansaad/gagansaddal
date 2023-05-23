@@ -171,7 +171,7 @@ exports.create_payment_intent = async (req, res) => {
   } catch (error) {
     return failureJSONResponse(res, {
       message: `Something went wrong`,
-      error: error
+      error: error.message
     });
   }
 };
