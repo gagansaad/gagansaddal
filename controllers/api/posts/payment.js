@@ -214,14 +214,10 @@ exports.webhooks = async (request, response) => {
 
     let payment_id = event.data.object.metadata.payment_id;
     let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
-    console.log(paymentDetails,"yessssssssssssssssssssssssss===",paymentDetails.plan_addons,"dncdjncjd")
-    // Parse the array elements as JSON objects
-const parsedObjects = paymentDetails.plan_addons.map(objString => JSON.parse(objString));
-console.log(parsedObjects,"thissss is s parsed dataaa");
-// Extract the _id values from the parsed objects
-const _idValues = parsedObjects.map(obj => obj._id);
+    console.log(paymentDetails,"yessssssssssssssssssssssssss===","dncdjncjd")
+    const ids = paymentDetails.plan_addons.map(obj => obj._id);
 
-    console.log(paymentDetails,"yessssssssssssssssssssssssss========",_idValues,"===================-00000000000000000000099999999999---------------------");
+    console.log(ids,"kjbnvlkj g");
     let plan_id = paymentDetails[0].plan_id;
     let ads_id = paymentDetails[0].ads;
     let ads_type = paymentDetails[0].ads_type;
