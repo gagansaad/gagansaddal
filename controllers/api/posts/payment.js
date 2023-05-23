@@ -141,50 +141,34 @@ exports.create_payment_intent = async (req, res) => {
         payment_status: "pending",
 
       };
-      PaymentModel.create(dataobj).then((PaymentModelId) => {
+      let PaymentModelId = await PaymentModel.create(dataobj);
+      // console.log(PaymentModelId._id, "id ------id---------id---------id");
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: (totalprice.toFixed(2) * 100).toFixed(0),
+        currency: "usd",
+        customer: customerStripeId,
+        metadata: {
+          "payment_id": PaymentModelId._id.toString()
+        },
+        payment_method_types: [
+          'card',
+        ]
+      });
+      PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id });
 
-        console.log(PaymentModelId._id, "id ------id---------id---------id",PaymentModelId._id.toString(),'*****************');
-        stripe.paymentIntents.create({
-          amount: (totalprice.toFixed(2) * 100).toFixed(0),
-          currency: "usd",
-          customer: customerStripeId,
-          metadata: {
-            "payment_id": PaymentModelId._id.toString()
-          },
-          payment_method_types: [
-            'card',
-          ]
-          // automatic_payment_methods: {
-          //   enabled: true,
-          // },
-        }).then(async (paymentIntent) => {
-          console.log('thrn',paymentIntent,'sss');
-          if(paymentIntent){
-           await  PaymentModel.findByIdAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent })
-            paymentIntentClientSecret = paymentIntent.client_secret;
-            statusCode = 201;
-            return successJSONResponse(res, {
-              status: statusCode,
-              message: `success`,
-              paymentIntent: paymentIntentClientSecret,
-              // ephemeralKey: ephemeralKey.secret,
-            })
-          }
-        
-        }).catch(error => {
-          console.log(error);
-        })
-      })
+      PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
+
+      paymentIntentClientSecret = paymentIntent.client_secret;
+      statusCode = 201;
     } else {
       paymentIntentClientSecret = paymentModelInfo.payment_intent.client_secret;
-      return successJSONResponse(res, {
-        status: statusCode,
-        message: `success`,
-        paymentIntent: paymentIntentClientSecret,
-        // ephemeralKey: ephemeralKey.secret,
-      })
     }
-   
+    return successJSONResponse(res, {
+      status: statusCode,
+      message: `success`,
+      paymentIntent: paymentIntentClientSecret,
+      // ephemeralKey: ephemeralKey.secret,
+    })
   } catch (error) {
     return failureJSONResponse(res, {
       message: `Something went wrong`,
