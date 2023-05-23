@@ -142,6 +142,7 @@ exports.create_payment_intent = async (req, res) => {
         payment_status: "pending",
 
       };
+      console.log("kooooooooooowwwwwwwwqqqqiiiiioooooo",dataobj.plan_addons);
       let PaymentModelId = await PaymentModel.create(dataobj);
       // console.log(PaymentModelId._id, "id ------id---------id---------id");
       const paymentIntent = await stripe.paymentIntents.create({
