@@ -18,7 +18,7 @@ const roomRentsSchema = new mongoose.Schema({
     },
     payment_status:{
         type: String,
-        enum: [`pending`, `paid`, `confirmed`,`expired`],
+        enum: [`pending`, `paid`,`failed`,`confirmed`,`expired`],
         required: true,
         default: "pending"
     },

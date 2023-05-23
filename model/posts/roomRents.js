@@ -19,6 +19,15 @@ const roomRentsSchema = new mongoose.Schema({
         //2 = inactive
         //3 = draft 
     },
+    plan_validity:{
+        active_on:{type:String,trim:true},
+        expired_on:{type:String,trim:true},
+    },
+    addons_validity:[{
+        name:{type:String,trim:true},
+        active_on:{type:String,trim:true},
+        expired_on:{type:String,trim:true},
+    }],
     isfeatured: {
         type: Boolean,
         required: true,

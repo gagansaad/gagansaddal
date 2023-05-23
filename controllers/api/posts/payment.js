@@ -212,7 +212,6 @@ exports.webhooks = async (request, response) => {
     let payment_id = event.data.object.metadata.payment_id;
     // Handle the event
     let paymentStatus ="pending";
-    // [`pending`, `paid`, `confirmed`,`expired`]
     switch (event.type) {
       case "payment_intent.amount_capturable_updated":
         const paymentIntentAmountCapturableUpdated = event.data.object;
@@ -223,14 +222,12 @@ exports.webhooks = async (request, response) => {
         // Then define and call a function to handle the event payment_intent.canceled
         break;
       case "payment_intent.created":
+        paymentStatus="confirmed"
         const paymentIntentCreated = event.data.object;
         // Then define and call a function to handle the event payment_intent.created
         break;
-      case "payment_intent.partially_funded":
-        const paymentIntentPartiallyFunded = event.data.object;
-        // Then define and call a function to handle the event payment_intent.partially_funded
-        break;
       case "payment_intent.payment_failed":
+        paymentStatus="failed"
         const paymentIntentPaymentFailed = event.data.object;
         // Then define and call a function to handle the event payment_intent.payment_failed
         break;
@@ -238,11 +235,9 @@ exports.webhooks = async (request, response) => {
         const paymentIntentProcessing = event.data.object;
         // Then define and call a function to handle the event payment_intent.processing
         break;
-      case "payment_intent.requires_action":
-        const paymentIntentRequiresAction = event.data.object;
-        // Then define and call a function to handle the event payment_intent.requires_action
-        break;
+     
       case "payment_intent.succeeded":
+        paymentStatus="confirmed"
         const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
