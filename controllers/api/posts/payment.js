@@ -14,7 +14,7 @@ const mongoose = require("mongoose"),
   bizAd = mongoose.model("Local_biz & Service"),
   buysellAd = mongoose.model("Buy & Sell"),
   babysitterAd = mongoose.model("babysitter & nannie"),
-  roomrentAd = mongoose.model("Rental"),
+  rentals= mongoose.model("Rental"),
   jobsAd = mongoose.model("job"),
   USER = mongoose.model("user"),
   category = mongoose.model("PostType"),
@@ -216,8 +216,9 @@ exports.webhooks = async (request, response) => {
     let ads_type = paymentDetails[0].ads_type;
     let findModelName = await category.findById({ "_id": ads_type })
     let ModelName = findModelName.name.toLowerCase()
-    // let findAd = await
-    console.log("payment details", paymentDetails, "payment details", ads_type, "cfdvd", ads_id, "vdvdv", plan_id, "cvbnbvcx", findModelName.name.toLowerCase(),);
+
+    let findAd = await ModelName.findById({"_id":ads_id})
+    console.log("payment details", paymentDetails, "payment details", ads_type, "cfdvd", ads_id, "vdvdv", plan_id, "cvbnbvcx", findModelName.name.toLowerCase(),"mvvmfkvmfi",findAd);
     // Handle the event
     let paymentStatus = "pending";
     switch (event.type) {
