@@ -214,7 +214,7 @@ exports.webhooks = async (request, response) => {
 
     let payment_id = event.data.object.metadata.payment_id;
     let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
-    // console.log(paymentDetails,"yessssssssssssssssssssssssss===",paymentDetails.plan_addons,"dncdjncjd")
+    console.log(paymentDetails,"yessssssssssssssssssssssssss===",paymentDetails.plan_addons,"dncdjncjd")
     // Parse the array elements as JSON objects
 const parsedObjects = paymentDetails.plan_addons.map(objString => JSON.parse(objString));
 console.log(parsedObjects,"thissss is s parsed dataaa");
