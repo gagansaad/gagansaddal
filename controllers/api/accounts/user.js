@@ -1540,7 +1540,6 @@ module.exports = {
 
 
       if (req.file && Object.keys(req.file).length) {
-        console.log(`jhsadsadhsa dashdhgasfdhgasdahsdfhasgda hgasdhga`)
         dataObj["userBasicInfo.profile_image"] = picture
       } else {
         dataObj["userBasicInfo.profile_image"] = req?.body?.picture
@@ -1750,7 +1749,7 @@ module.exports = {
         else {
 
           MobileNumberVerificationOTPByUserId(foundUser?._id, phoneNumber, 3);
-          return successJSONResponse(res, { message: `OTP send successfully` });
+          return successJSONResponse(res, { message: `A new OTP has successfully sent out to your phone number` });
 
         }
 
