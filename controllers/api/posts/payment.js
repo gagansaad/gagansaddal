@@ -216,7 +216,7 @@ exports.webhooks = async (request, response) => {
     let ads_type = paymentDetails[0].ads_type;
     let findModelName = await category.findById({ "_id": ads_type })
     let ModelName = rentals
-    let data =await rentals.findById({ "_id": ads_id })
+    let data =await ModelName.findById({ "_id": ads_id })
     console.log(data, "jmmmmmmmmmmmmmmmmmmmm mc ccccccccccccccccccccccccccccccccccccccccc mmmmmmmmm@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     // switch (findModelName.name) {
     //   case "Rentals":
