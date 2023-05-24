@@ -232,9 +232,9 @@ exports.webhooks = async (request, response) => {
   let addons_duration= []
   console.log(ids,"kjbnvlkj g",duration);
 
-    let plan_id = paymentDetails[0].plan_id;
-    let ads_id = paymentDetails[0].ads;
-    let ads_type = paymentDetails[0].ads_type;
+    let plan_id = paymentDetails[0]?.plan_id;
+    let ads_id = paymentDetails[0]?.ads;
+    let ads_type = paymentDetails[0]?.ads_type;
     let findModelName = await category.findById({ "_id": ads_type })
     let ModelName;
 
