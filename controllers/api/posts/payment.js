@@ -308,6 +308,7 @@ exports.webhooks = async (request, response) => {
     // Return a 200 response to acknowledge receipt of the event
     response.send({ status: 200 });
   } catch (error) {
+    console.log(error);
     return response.status(400).send({
       error: {
         message: error.message,
