@@ -98,17 +98,11 @@ exports.create_payment_intent = async (req, res) => {
         addonsId = JSON.parse(req.body.add_ons);
       }
     let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
-      console.log(    result,"resultmmmm---------------" );
     addonsId.forEach((targetId) => {
-      // console.log(targetId,"target id");
       result.forEach((item) => {
-        // console.log(item.name,"item id ");
         const priceArray = item.price;
         const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
-        console.log("-------------------------------------------------------------------------------",typeof(foundObj),"foundObj");
-        
         if (foundObj) {
-          destinationObject = Object.assign({}, foundObj);
           foundObjects.push(foundObj);
         }
       });
@@ -198,45 +192,15 @@ exports.create_payment_intent = async (req, res) => {
 };
 exports.webhooks = async (request, response) => {
   try {
-    //   const payload = {
-    //     id: 'evt_test_webhook',
-    //     object: 'event',
-    //   };
-
-    //   const payloadString = JSON.stringify(payload, null, 2);
-    //   const secret = 'whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a';
-
-    //   const header = stripe.webhooks.generateTestHeaderString({
-    //     payload: payloadString,
-    //     secret,
-    //   });
-
-    //   let event ;
-    // //   const endpointSecret =
-    // //     "whsec_696141ac9d635a84600297927449a311dca524c6dc3bffe6c79fd2e745d7eb1a";
-    // //   const sig = request.headers["stripe-signature"];
-    // //  //return console.log(request.body,'sss********',sig);
-    // //   let event;
-
-    //   try {
-    //     event = await stripe.webhooks.constructEvent(payloadString, header, secret);
-
-    //     // Do something with mocked signed event
-    //     // expect(event.id).to.equal(payload.id);
-    //     return console.log(event, "yeh event ka postmortem hua",request.body);
-    //   } catch (err) {
-    //     console.log(err, "this error of webhook");
-    //     response.status(400).send(`Webhook Error: ${err.message}`);
-    //     return;
-    //   }
+  
     let event = request.body;
 
     let payment_id = event.data.object.metadata.payment_id;
     let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
-    // const ids = paymentDetails?.plan_addons?.map(obj => obj?._id); 
+    const ids = paymentDetails?.plan_addons 
     // const duration = paymentDetails?.plan_addons?.map(obj => obj?.duration); 
   let addons_duration= []
-  // console.log(ids,"kjbnvlkj g",duration);
+  console.log(ids,"kjbnvlkj g","duration");
   let plan_id ;
   let ads_id ;
   let ads_type;
