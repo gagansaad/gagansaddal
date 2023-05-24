@@ -99,9 +99,9 @@ exports.create_payment_intent = async (req, res) => {
     addonsId.forEach((targetId) => {
       console.log(targetId,"target id");
       result.forEach((item) => {
-        console.log(item,"item id ");
+        console.log(item.name,"item id ");
         const priceArray = item.price;
-        const foundObj = priceArray.find((priceObj) => priceObj._id == targetId,item.name);
+        const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
         if (foundObj) {
           foundObjects.push(foundObj);
         }
