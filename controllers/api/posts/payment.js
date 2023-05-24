@@ -224,7 +224,7 @@ exports.webhooks = async (request, response) => {
     const ids = paymentDetails.plan_addons.map(obj => obj._id); 
     const duration = paymentDetails.plan_addons.map(obj => obj.duration); 
   let addons_duration= []
-  
+  console.log(ids,"kjbnvlkj g",duration);
   await AddOns.find({ _id: { $in: ids } }, (err, foundData) => {
   if (err) {
     console.error(err);
