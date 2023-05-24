@@ -202,7 +202,7 @@ exports.webhooks = async (request, response) => {
       let { amount, duration,_id } = obj;
       const currentDate = new Date();
       duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
-      let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
+      let result = await AddOns.find({ "price._id": { $in:_id } }).exec();
       console.log(result.name,"jjjejijnnomxs.kjknv k nvkjnvfkji  uidhinbv");
       return { amount, duration ,_id};
     });
