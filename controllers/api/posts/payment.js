@@ -89,6 +89,7 @@ exports.create_payment_intent = async (req, res) => {
 
     // console.log(addonsId,"arraya ");
     let foundObjects = [];
+    let objto ={};
     //-----find add ons -----//
     let totalprice = plan_price
     if(addonsId.length){
@@ -104,14 +105,15 @@ exports.create_payment_intent = async (req, res) => {
         const priceArray = item.price;
         const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
         console.log("-------------------------------------------------------------------------------",foundObj,"foundObj");
-        foundObj.name=item.name
+        
         if (foundObj) {
+          objto = foundObj
           foundObjects.push(foundObj);
         }
       });
     });
 
-    console.log(foundObjects,"hhhhhjjjjjj00000");
+    console.log(foundObjects,"hhhhhjjjjjj00000",objto);
     const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
     totalprice = plan_price + totalAmount;
   }
