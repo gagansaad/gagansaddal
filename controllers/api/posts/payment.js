@@ -107,6 +107,7 @@ exports.create_payment_intent = async (req, res) => {
         }
       });
     });
+    console.log(foundObjects,"hhhhhjjjjjj00000");
     const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
     totalprice = plan_price + totalAmount;
   }
