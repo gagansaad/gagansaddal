@@ -199,6 +199,7 @@ exports.webhooks = async (request, response) => {
     let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
     const selectedKeysArray = paymentDetails?.plan_addons?.map(obj => {
       let { amount, duration } = obj;
+      const currentDate = new Date();
       duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];;
       return { amount, duration };
     });
