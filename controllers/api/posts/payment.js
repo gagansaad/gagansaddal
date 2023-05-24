@@ -85,13 +85,16 @@ exports.create_payment_intent = async (req, res) => {
     let plan_price = find_ads_type[0].price.amount;
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
     let addonsId = req.body.add_ons;
-    if (!Array.isArray(req.body.add_ons)) {
-      addonsId = JSON.parse(req.body.add_ons);
-    }
+    
 
     // console.log(addonsId,"arraya ");
     let foundObjects = [];
     //-----find add ons -----//
+    let totalprice = plan_price
+    if(addonsId.length()){
+      if (!Array.isArray(req.body.add_ons)) {
+        addonsId = JSON.parse(req.body.add_ons);
+      }
     let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
     addonsId.forEach((targetId) => {
       result.forEach((item) => {
@@ -105,7 +108,8 @@ exports.create_payment_intent = async (req, res) => {
     });
     // console.log(foundObjects,"found object of isdsc")
     const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
-    let totalprice = plan_price + totalAmount;
+    totalprice = plan_price + totalAmount;
+  }
     let customerStripeId = null;
     if (userInfoModel.stripe_id == "" && userInfoModel.stripe_id == null) {
       const customer = await stripe.customers.create({
