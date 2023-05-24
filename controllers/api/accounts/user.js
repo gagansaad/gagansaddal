@@ -2396,7 +2396,7 @@ module.exports = {
 
 
           MobileNumberVerificationOTPByUserId(user?._id, null);
-          return successJSONResponse(res, { message: `success` });
+          return successJSONResponse(res, { message: `A new OTP has successfully sent out to your phone number` });
           // OTP.create({
           //     code: generateOTP(4),
           //     phone_number: phone_number,
