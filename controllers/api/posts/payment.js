@@ -7,6 +7,7 @@ const payment = require("../../../model/posts/payment");
 const UserModel = require("../../../model/accounts/users");
 const PaymentModel = require("../../../model/posts/payment");
 const PaymentEventModel = require("../../../model/posts/paymentEvent");
+const plan_adons = require("../../../model/plan/plan_adons");
 const mongoose = require("mongoose"),
   AdsPlan = mongoose.model("plan"),
   AddOns = mongoose.model("plan_addons"),
@@ -197,11 +198,12 @@ exports.webhooks = async (request, response) => {
 
     let payment_id = event.data.object.metadata.payment_id;
     let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
-    const selectedKeysArray = paymentDetails?.plan_addons?.map(obj => {
+    const selectedKeysArray = paymentDetails?.plan_addons?.map(async obj => {
       let { amount, duration,_id } = obj;
       const currentDate = new Date();
       duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
-      
+      let getnameofaddons = await plan_adons.findById({"_id":_id.toString()})
+      console.log(getnameofaddons,"jjjejijnnomxs.kjknv k nvkjnvfkji  uidhinbv");
       return { amount, duration ,_id};
     });
     console.log(selectedKeysArray,"nhfnjkkndjvufnjivjs");
