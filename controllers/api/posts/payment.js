@@ -84,7 +84,7 @@ exports.create_payment_intent = async (req, res) => {
     let adstype = find_ads_type[0].ads_type;
     let plan_price = find_ads_type[0].price.amount;
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
-    let addonsId = JSON.parse(req.body.add_ons);
+    let addonsId = req.body.add_ons;
     // console.log(addonsId,"arraya ");
     let foundObjects = [];
     //-----find add ons -----//
