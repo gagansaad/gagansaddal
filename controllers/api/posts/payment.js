@@ -226,12 +226,12 @@ exports.webhooks = async (request, response) => {
 
     let payment_id = event.data.object.metadata.payment_id;
     let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
-  //   const ids = paymentDetails?.plan_addons?.map(obj => obj?._id); 
-  //   const duration = paymentDetails?.plan_addons?.map(obj => obj?.duration); 
-  // let addons_duration= []
-  // console.log(ids,"kjbnvlkj g",duration);
+    const ids = paymentDetails?.plan_addons?.map(obj => obj?._id); 
+    const duration = paymentDetails?.plan_addons?.map(obj => obj?.duration); 
+  let addons_duration= []
+  console.log(ids,"kjbnvlkj g",duration);
 
-    let plan_id = paymentDetails[0].plan_id;
+    // let plan_id = paymentDetails[0].plan_id;
     let ads_id = paymentDetails[0].ads;
     let ads_type = paymentDetails[0].ads_type;
     let findModelName = await category.findById({ "_id": ads_type })
