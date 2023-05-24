@@ -89,7 +89,8 @@ exports.create_payment_intent = async (req, res) => {
 
     // console.log(addonsId,"arraya ");
     let foundObjects = [];
-    let objto ={};
+    let destinationObject;
+    
     //-----find add ons -----//
     let totalprice = plan_price
     if(addonsId.length){
@@ -107,13 +108,13 @@ exports.create_payment_intent = async (req, res) => {
         console.log("-------------------------------------------------------------------------------",typeof(foundObj),"foundObj");
         
         if (foundObj) {
-          objto = foundObj
+          destinationObject = Object.assign({}, foundObj);
           foundObjects.push(foundObj);
         }
       });
     });
 
-    console.log(foundObjects,"hhhhhjjjjjj00000",objto);
+    console.log(foundObjects,"hhhhhjjjjjj00000",destinationObject);
     const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
     totalprice = plan_price + totalAmount;
   }
