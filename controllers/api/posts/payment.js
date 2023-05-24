@@ -230,16 +230,7 @@ exports.webhooks = async (request, response) => {
     const duration = paymentDetails.plan_addons.map(obj => obj.duration); 
   let addons_duration= []
   console.log(ids,"kjbnvlkj g",duration);
-  await AddOns.find({ _id: { $in: ids } }, (err, foundData) => {
-  if (err) {
-    console.error(err);
-    // Handle the error appropriately
-  } else {
-    console.log(foundData,"jndjnbcdbhdvchdvchd.......[[[[[[[[[[[[]]]]]]]]]======================");
-    // Handle the found data as needed
-  }
-});
-    console.log(ids,"kjbnvlkj g",duration);
+
     let plan_id = paymentDetails[0].plan_id;
     let ads_id = paymentDetails[0].ads;
     let ads_type = paymentDetails[0].ads_type;
