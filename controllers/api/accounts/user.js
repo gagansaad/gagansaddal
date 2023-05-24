@@ -1359,7 +1359,7 @@ module.exports = {
           return res.json({
             status: 200,
             userId: foundUser._id,
-            message: `success`,
+            message: `A new OTP has successfully sent out to your email address`,
           });
         } else {
           return res.json({
