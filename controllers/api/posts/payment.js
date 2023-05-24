@@ -87,8 +87,7 @@ exports.create_payment_intent = async (req, res) => {
     let addonsId = req.body.add_ons;
     if (!Array.isArray(req.body.add_ons)) {
       return failureJSONResponse(res, {
-        message: `Please provide valid addons array`,
-        error: error.message
+        message: `Please provide valid addons array`
       });
     }
 
