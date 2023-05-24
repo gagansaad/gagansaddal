@@ -104,8 +104,11 @@ exports.create_payment_intent = async (req, res) => {
         const priceArray = item.price;
         const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
         console.log(foundObj,"foundObj");
-        if (foundObj) {
-          foundObjects.push(foundObj);
+        if (foundObj  && foundObj.keys(foundObj).length) {
+          foundObjects.push({
+            ...foundObj,
+            name: item.name
+          });
         }
       });
     });
