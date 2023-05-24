@@ -197,7 +197,7 @@ exports.webhooks = async (request, response) => {
 
     let payment_id = event.data.object.metadata.payment_id;
     let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
-    const selectedKeysArray = paymentDetails.map(obj => {
+    const selectedKeysArray = paymentDetails?.plan_addons?.map(obj => {
       const { amount, duration } = obj;
       return { amount, duration };
     });
