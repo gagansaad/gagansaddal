@@ -2445,7 +2445,7 @@ module.exports = {
 
 
                 EmailOTPVerification(user?.userInfo?.email_address, `Hi`, foundOTP?.code);
-                return successJSONResponse(res, { message: `success` });
+                return successJSONResponse(res, { message: `A new OTP has successfully sent out to your email address` });
 
 
               }
