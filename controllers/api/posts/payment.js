@@ -85,6 +85,7 @@ exports.create_payment_intent = async (req, res) => {
     let plan_price = find_ads_type[0].price.amount;
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
     let addonsId = req.body.add_ons;
+    console.log(addonsId,"arraya ");
     let foundObjects = [];
     //-----find add ons -----//
     let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
@@ -171,6 +172,7 @@ exports.create_payment_intent = async (req, res) => {
       // ephemeralKey: ephemeralKey.secret,
     })
   } catch (error) {
+    console.log(error.message,"bbooklakituramu");
     return failureJSONResponse(res, {
       message: `Something went wrong`,
       error: error.message
@@ -215,7 +217,8 @@ exports.webhooks = async (request, response) => {
     let payment_id = event.data.object.metadata.payment_id;
     let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
     console.log(paymentDetails,"yessssssssssssssssssssssssss===","dncdjncjd")
-    const ids = paymentDetails.plan_addons.map(obj => obj._id);
+    const ids = paymentDetails.plan_addons.map(obj => obj._id); 
+    const duration = paymentDetails.plan_addons.map(obj => obj.duration); 
 
     console.log(ids,"kjbnvlkj g");
     let plan_id = paymentDetails[0].plan_id;

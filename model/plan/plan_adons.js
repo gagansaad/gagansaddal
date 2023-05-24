@@ -11,9 +11,9 @@ const addPlanSchema = new mongoose.Schema({
     name: defaultStringConfig,
     price: [{
          isfree:defaultBooleanConfig,
-         amount: {type:Number},
+         amount:defaultPriceProperty,
          currency: defaultCurrencyProperty,
-         duration:{type:String},
+         duration:{type:Number},
          
        }],
     plan_id:{
