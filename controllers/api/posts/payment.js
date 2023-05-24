@@ -96,17 +96,20 @@ exports.create_payment_intent = async (req, res) => {
         addonsId = JSON.parse(req.body.add_ons);
       }
     let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
+      console.log(    result,"resultmmmm---------------" );
     addonsId.forEach((targetId) => {
       console.log(targetId,"target id");
       result.forEach((item) => {
         console.log(item.name,"item id ");
         const priceArray = item.price;
         const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
+        console.log(foundObj,"foundObj");
         if (foundObj) {
           foundObjects.push(foundObj);
         }
       });
     });
+
     console.log(foundObjects,"hhhhhjjjjjj00000");
     const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
     totalprice = plan_price + totalAmount;
