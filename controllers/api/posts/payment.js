@@ -217,10 +217,19 @@ exports.webhooks = async (request, response) => {
 
     let payment_id = event.data.object.metadata.payment_id;
     let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
-    console.log(paymentDetails,"yessssssssssssssssssssssssss===","dncdjncjd")
     const ids = paymentDetails.plan_addons.map(obj => obj._id); 
     const duration = paymentDetails.plan_addons.map(obj => obj.duration); 
-
+  let addons_duration= []
+  
+  await AddOns.find({ "_id": { $in: ids } }, (err, foundData) => {
+  if (err) {
+    console.error(err);
+    // Handle the error appropriately
+  } else {
+    console.log(foundData);
+    // Handle the found data as needed
+  }
+});
     console.log(ids,"kjbnvlkj g",duration);
     let plan_id = paymentDetails[0].plan_id;
     let ads_id = paymentDetails[0].ads;
