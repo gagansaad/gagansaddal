@@ -120,10 +120,10 @@ exports.validateBuySellAdsData = async (req, res, next) => {
         message: `Please provide valid product_condition`,
       });
     
-    if (!quantity)
-      return failureJSONResponse(res, {
-        message: `please provide valid quantity`,
-      });
+    // if (!quantity)
+    //   return failureJSONResponse(res, {
+    //     message: `please provide valid quantity`,
+    //   });
     if (isNaN(Number(quantity)))
       return failureJSONResponse(res, {
         message: `please provide valid quantity`,

@@ -73,7 +73,7 @@ const BuySellSchema = new mongoose.Schema({
         },
         quantity:{
             type: Number,
-            required: true
+            // required: true
         },
         payment_mode:[{
             ...defaultStringConfig,
