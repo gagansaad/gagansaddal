@@ -91,7 +91,7 @@ exports.create_payment_intent = async (req, res) => {
     let foundObjects = [];
     //-----find add ons -----//
     let totalprice = plan_price
-    if(addonsId.length()){
+    if(addonsId.length){
       if (!Array.isArray(req.body.add_ons)) {
         addonsId = JSON.parse(req.body.add_ons);
       }
