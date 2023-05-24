@@ -241,7 +241,7 @@ exports.webhooks = async (request, response) => {
   if (paymentDetails) {
     plan_id = paymentDetails.plan_id;
     ads_id = paymentDetails.ads;
-    ads_type = paymentDetails[0].ads_type
+    ads_type = paymentDetails.ads_type
     // Continue with your logic...
   }
    
