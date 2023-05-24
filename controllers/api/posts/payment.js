@@ -86,9 +86,7 @@ exports.create_payment_intent = async (req, res) => {
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
     let addonsId = req.body.add_ons;
     if (!Array.isArray(req.body.add_ons)) {
-      return failureJSONResponse(res, {
-        message: `Please provide valid addons array`
-      });
+      addonsId = JSON.parse(req.body.add_ons);
     }
 
     // console.log(addonsId,"arraya ");
@@ -227,12 +225,12 @@ exports.webhooks = async (request, response) => {
     const duration = paymentDetails.plan_addons.map(obj => obj.duration); 
   let addons_duration= []
   
-  await AddOns.find({ "_id": { $in: ids } }, (err, foundData) => {
+  await AddOns.find({ _id: { $in: ids } }, (err, foundData) => {
   if (err) {
     console.error(err);
     // Handle the error appropriately
   } else {
-    console.log(foundData);
+    console.log(foundData,"jndjnbcdbhdvchdvchd.......[[[[[[[[[[[[]]]]]]]]]======================");
     // Handle the found data as needed
   }
 });
