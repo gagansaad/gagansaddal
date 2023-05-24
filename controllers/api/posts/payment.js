@@ -93,13 +93,13 @@ exports.create_payment_intent = async (req, res) => {
       result.forEach((item) => {
         const priceArray = item.price;
         const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
-        console.log(foundObj,"holaojl");
+        // console.log(foundObj,"holaojl");
         if (foundObj) {
           foundObjects.push(foundObj);
         }
       });
     });
-    console.log(foundObjects,"found object of isdsc")
+    // console.log(foundObjects,"found object of isdsc")
     const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
     let totalprice = plan_price + totalAmount;
     let customerStripeId = null;
