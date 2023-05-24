@@ -1996,7 +1996,7 @@ module.exports = {
                 .then((updatedUser) => {
                   if (updatedUser) {
                     return successJSONResponse(res, {
-                      message: `success`,
+                      message: `A new OTP has successfully sent out to your phone number`,
                       data: { phone_number },
                     });
                   } else {
