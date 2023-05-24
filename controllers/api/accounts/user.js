@@ -916,7 +916,7 @@ module.exports = {
                     return res.json({
                       status: 205,
                       data: data,
-                      message: `success`,
+                      message: `A new OTP has successfully sent out to your phone number`,
                       token: createJWT(checkUserDetail[0]._id),
                     });
 
