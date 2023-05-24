@@ -89,7 +89,7 @@ exports.create_payment_intent = async (req, res) => {
 
     // console.log(addonsId,"arraya ");
     let foundObjects = [];
-    let destinationObject;
+   
     
     //-----find add ons -----//
     let totalprice = plan_price
@@ -108,7 +108,7 @@ exports.create_payment_intent = async (req, res) => {
       });
     });
 
-    console.log(foundObjects,"hhhhhjjjjjj00000",destinationObject);
+    console.log(foundObjects,"hhhhhjjjjjj00000");
     const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
     totalprice = plan_price + totalAmount;
   }
@@ -197,10 +197,15 @@ exports.webhooks = async (request, response) => {
 
     let payment_id = event.data.object.metadata.payment_id;
     let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
-    const ids = paymentDetails?.plan_addons?.map(obj => obj); 
-    const duration = paymentDetails?.plan_addons?.map(obj => obj?.duration); 
+    const selectedKeysArray = paymentDetails.map(obj => {
+      const { amount, duration } = obj;
+      return { amount, duration };
+    });
+    console.log(selectedKeysArray,"nhfnjkkndjvufnjivjs");
+    // const ids = paymentDetails?.plan_addons?.map(obj => obj); 
+    // const duration = paymentDetails?.plan_addons?.map(obj => obj?.duration); 
   let addons_duration= []
-  console.log(ids,"kjbnvlkj g",duration);
+  
   let plan_id ;
   let ads_id ;
   let ads_type;
