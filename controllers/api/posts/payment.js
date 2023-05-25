@@ -195,7 +195,7 @@ exports.webhooks = async (request, response) => {
   try {
   
     let event = request.body;
-
+    let successArr = []
     let payment_id = event.data.object.metadata.payment_id;
     let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
     paymentDetails?.plan_addons?.map(async obj => {
@@ -204,10 +204,10 @@ exports.webhooks = async (request, response) => {
       duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
       let result = await AddOns.find({ "price._id": { $in:_id.toString() } }).select("name").exec();
       let name = result[0].name;
-      console.log({ name,amount, duration , currentDate},"jai ho bhawani")
+      successArr.push({ name,amount, duration , currentDate})
       return { name,amount, duration , currentDate};
     });
-  
+  console.log(successArr,"ruuvbbydsjkkkmmmmnjueu");
     // const ids = paymentDetails?.plan_addons?.map(obj => obj); 
     // const duration = paymentDetails?.plan_addons?.map(obj => obj?.duration); 
   let addons_duration= []
