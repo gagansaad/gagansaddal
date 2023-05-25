@@ -211,7 +211,7 @@ exports.webhooks = async (request, response) => {
     let planArr = []
     const currentDate = new Date()
 
-    let planDuration = await AdsPlan.findById({"_id":plan_id}).select("duration")
+    let planDuration = await AdsPlan.findById({"_id":plan_id.toString}).select("duration")
     Duration = new Date(currentDate.getTime() + (planDuration.duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
 
     console.log(planDuration,"plan mill gya hai muje ");
