@@ -73,7 +73,28 @@ exports.validatepaymentData = async (req, res, next) => {
 };
 
 /////------------payment intent ----///////
+const paymentIntentCreate = async (dataobj, totalprice, customerStripeId) => {
 
+
+  let PaymentModelId = await PaymentModel.create(dataobj);
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: (totalprice.toFixed(2) * 100).toFixed(0),
+    currency: "usd",
+    customer: customerStripeId,
+    metadata: {
+      "payment_id": PaymentModelId._id.toString()
+    },
+    payment_method_types: [
+      'card',
+    ]
+  });
+
+  PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
+
+  // paymentIntentClientSecret = paymentIntent.client_secret;
+  // statusCode = 201;
+  return paymentIntent.client_secret;
+}
 exports.create_payment_intent = async (req, res) => {
   try {
     let userID = req.userId;
@@ -86,33 +107,33 @@ exports.create_payment_intent = async (req, res) => {
     let plan_price = find_ads_type[0].price.amount;
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
     let addonsId = req.body.add_ons;
-    
+
 
     // console.log(addonsId,"arraya ");
     let foundObjects = [];
-   
-    
+
+
     //-----find add ons -----//
     let totalprice = plan_price
-    if(addonsId.length){
+    if (addonsId.length) {
       if (!Array.isArray(req.body.add_ons)) {
         addonsId = JSON.parse(req.body.add_ons);
       }
-    let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
-    addonsId.forEach((targetId) => {
-      result.forEach((item) => {
-        const priceArray = item.price;
-        const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
-        if (foundObj) {
-          foundObjects.push(foundObj);
-        }
+      let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
+      addonsId.forEach((targetId) => {
+        result.forEach((item) => {
+          const priceArray = item.price;
+          const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
+          if (foundObj) {
+            foundObjects.push(foundObj);
+          }
+        });
       });
-    });
 
-    console.log(foundObjects,"hhhhhjjjjjj00000");
-    const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
-    totalprice = plan_price + totalAmount;
-  }
+      console.log(foundObjects, "hhhhhjjjjjj00000");
+      const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
+      totalprice = plan_price + totalAmount;
+    }
     let customerStripeId = null;
     if (userInfoModel.stripe_id == "" && userInfoModel.stripe_id == null) {
       const customer = await stripe.customers.create({
@@ -121,7 +142,7 @@ exports.create_payment_intent = async (req, res) => {
       });
       await UserModel.findOneAndUpdate(
         { _id: userID },
-        { $set: { "userInfo.stripe_id": customer.id} }
+        { $set: { "userInfo.stripe_id": customer.id } }
       );
       customerStripeId = customer.id;
     } else {
@@ -143,36 +164,14 @@ exports.create_payment_intent = async (req, res) => {
     let paymentIntentClientSecret = null;
     let statusCode = 200
     if (paymentModelInfo == null || paymentModelInfo == "") {
-
-      let dataobj = {
-        plan_id: planId,
-        plan_addons: foundObjects,
-        plan_price: plan_price,
-        total_amount: JSON.parse(totalprice.toFixed(2)),
-        ads: req.body.postId,
-        ads_type: adstype,
-        user: userID,
-        payment_status: "pending",
-
-      };
-     
-      let PaymentModelId = await PaymentModel.create(dataobj);
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: (totalprice.toFixed(2) * 100).toFixed(0),
-        currency: "usd",
-        customer: customerStripeId,
-        metadata: {
-          "payment_id": PaymentModelId._id.toString()
-        },
-        payment_method_types: [
-          'card',
-        ]
-      });
-
-      PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
-
-      paymentIntentClientSecret = paymentIntent.client_secret;
-      statusCode = 201;
+      //payment intene
+      let dataObj = { plan_id: planId, plan_addons: foundObjects, plan_price: plan_price, total_amount: JSON.parse(totalprice.toFixed(2)), ads: req.body.postId, ads_type: adstype, user: userID, payment_status: "pending" };
+      paymentIntentClientSecret = await paymentIntentCreate(dataObj, totalprice, customerStripeId);
+      statusCode=201;
+    } else if (paymentModelInfo.totalprice != totalprice) {
+      let dataObj = { plan_id: planId, plan_addons: foundObjects, plan_price: plan_price, total_amount: JSON.parse(totalprice.toFixed(2)), ads: req.body.postId, ads_type: adstype, user: userID, payment_status: "pending" };
+      statusCode=201;
+      paymentIntentClientSecret = await  paymentIntentCreate(dataObj, totalprice, customerStripeId);
     } else {
       paymentIntentClientSecret = paymentModelInfo.payment_intent.client_secret;
     }
@@ -183,7 +182,7 @@ exports.create_payment_intent = async (req, res) => {
       // ephemeralKey: ephemeralKey.secret,
     })
   } catch (error) {
-    console.log(error.message,"bbooklakituramu");
+    console.log(error.message, "bbooklakituramu");
     return failureJSONResponse(res, {
       message: `Something went wrong`,
       error: error.message
@@ -192,39 +191,39 @@ exports.create_payment_intent = async (req, res) => {
 };
 exports.webhooks = async (request, response) => {
   try {
-  
+
     let event = request.body;
-    
+
     let payment_id = event.data.object.metadata.payment_id;
-    let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
-    let plan_id ;
-    let ads_id ;
+    let paymentDetails = await PaymentModel.findById({ "_id": payment_id })
+    let plan_id;
+    let ads_id;
     let ads_type;
     if (paymentDetails) {
       plan_id = paymentDetails.plan_id;
       ads_id = paymentDetails.ads;
       ads_type = paymentDetails.ads_type
       // Continue with your logic...
-    }  
+    }
     let AddOnsArr = []
     let currentDate = new Date()
-    let activedate =currentDate.toISOString().split('T')[0]
-    let planDuration = await AdsPlan.findById({"_id":plan_id}).select("duration")
+    let activedate = currentDate.toISOString().split('T')[0]
+    let planDuration = await AdsPlan.findById({ "_id": plan_id }).select("duration")
     let plan_obj = {
-      plan_id:planDuration._id.toString(),
-      active_on:activedate,
+      plan_id: planDuration._id.toString(),
+      active_on: activedate,
       expired_on: new Date(currentDate.getTime() + (planDuration.duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
     }
     await Promise.all(paymentDetails?.plan_addons?.map(async obj => {
-      let { amount, duration,_id } = obj;
-      duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
-      let result = await AddOns.find({ "price._id": { $in:_id.toString() } }).select("name").exec();
+      let { amount, duration, _id } = obj;
+      duration = new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
+      let result = await AddOns.find({ "price._id": { $in: _id.toString() } }).select("name").exec();
       let name = result[0].name;
-      return AddOnsArr.push({add_ons_id:_id.toString(), name:name,amount:amount, duration:duration ,currentDate:currentDate.toISOString().split('T')[0]});
+      return AddOnsArr.push({ add_ons_id: _id.toString(), name: name, amount: amount, duration: duration, currentDate: currentDate.toISOString().split('T')[0] });
     }));
- 
 
- 
+
+
     let findModelName = await category.findById({ "_id": ads_type })
     let ModelName;
 
@@ -250,13 +249,7 @@ exports.webhooks = async (request, response) => {
       default:
         console.log(`Please provide valid ads id`);
     }
-   let data_Obj={
-    status:'active',
-    plan_validity:plan_obj,
-    addons_validity:AddOnsArr,
-    }
-  
-    let findAd = await ModelName.findByIdAndUpdate({"_id":ads_id},{$set:data_Obj})
+
     // Handle the event
     let paymentStatus = "pending";
     switch (event.type) {
@@ -286,12 +279,14 @@ exports.webhooks = async (request, response) => {
         break;
 
       case "payment_intent.succeeded":
-        let dataobj = {
-          payment_id: payment_id,
-          payment_status: paymentStatus,
-          payment_intent: event
+        let data_Obj = {
+          status: 'active',
+          plan_validity: plan_obj,
+          addons_validity: AddOnsArr,
         }
-        let PaymentEventInfo = await PaymentEventModel.create(dataobj);
+
+        ModelName.findByIdAndUpdate({ "_id": ads_id }, { $set: data_Obj }).then()
+
         const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
@@ -299,8 +294,13 @@ exports.webhooks = async (request, response) => {
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
+    let dataobj = {
+      payment_id: payment_id,
+      payment_status: paymentStatus,
+      payment_intent: event
+    }
+    let PaymentEventInfo = await PaymentEventModel.create(dataobj);
 
-    
     // Return a 200 response to acknowledge receipt of the event
     response.send({ status: 200 });
   } catch (error) {
@@ -312,5 +312,4 @@ exports.webhooks = async (request, response) => {
     });
   }
 };
-
 
