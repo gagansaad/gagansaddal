@@ -195,10 +195,11 @@ exports.webhooks = async (request, response) => {
   try {
   
     let event = request.body;
-    let successArr = []
+    
     let payment_id = event.data.object.metadata.payment_id;
     let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
-    paymentDetails?.plan_addons?.map(async obj => {
+    let successArr = []
+    await Promise.all(paymentDetails?.plan_addons?.map(async obj => {
       let { amount, duration,_id } = obj;
       const currentDate = new Date();
       duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
@@ -206,7 +207,7 @@ exports.webhooks = async (request, response) => {
       let name = result[0].name;
      
       return successArr.push({ name:name,amount:amount, duration:duration ,currentDate:currentDate});
-    });
+    }));
   console.log(successArr,"ruuvbbydsjkkkmmmmnjueu");
     // const ids = paymentDetails?.plan_addons?.map(obj => obj); 
     // const duration = paymentDetails?.plan_addons?.map(obj => obj?.duration); 
