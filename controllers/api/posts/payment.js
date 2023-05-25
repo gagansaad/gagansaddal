@@ -258,7 +258,7 @@ exports.webhooks = async (request, response) => {
     addons_validity:AddOnsArr,
     }
     console.log(data_Obj,"data object nu console kitta");
-    let findAd = await ModelName.findByIdAndUpdate({"_id":ads_id},{$set:{data_Obj}})
+    let findAd = await rentals.findByIdAndUpdate({"_id":ads_id},{$set:{data_Obj}})
 console.log(findAd,"jhogya");
     // Handle the event
     let paymentStatus = "pending";
