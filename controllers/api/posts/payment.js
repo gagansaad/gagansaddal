@@ -177,7 +177,12 @@ exports.create_payment_intent = async (req, res) => {
       let dataObj = { plan_id: planId, plan_addons: foundObjects, plan_price: plan_price, total_amount: JSON.parse(totalprice.toFixed(2)), ads: req.body.postId, ads_type: adstype, user: userID, payment_status: "pending" };
       statusCode=201;
       paymentIntentClientSecret = await  paymentIntentCreate(dataObj, totalprice, customerStripeId);
-    } else {
+    }
+    else if (paymentModelInfo.totalprice == 0) {
+      let dataObj = { plan_id: planId, plan_addons: foundObjects, plan_price: plan_price, total_amount: JSON.parse(totalprice.toFixed(2)), ads: req.body.postId, ads_type: adstype, user: userID, payment_status: "pending" };
+      statusCode=201;
+      paymentIntentClientSecret = null;
+    }  else {
       paymentIntentClientSecret = paymentModelInfo.payment_intent.client_secret;
     }
     return successJSONResponse(res, {
