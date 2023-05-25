@@ -76,32 +76,24 @@ exports.validatepaymentData = async (req, res, next) => {
 const paymentIntentCreate = async (dataobj, totalprice, customerStripeId) => {
 
   let PaymentModelId = await PaymentModel.create(dataobj);
-  if(PaymentModelId.payment_status == 'pending'){
-    if (dataobj.total_amount == 0) {
-      await paymentSuccessModelUpdate(PaymentModelId._id);
-      return null;
-    }
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: (totalprice.toFixed(2) * 100).toFixed(0),
-      currency: "usd",
-      customer: customerStripeId,
-      metadata: {
-        "payment_id": PaymentModelId._id.toString()
-      },
-      payment_method_types: [
-        'card',
-      ]
-    });
-  
-    PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
-    return paymentIntent.client_secret;
-  }else{
-    return failureJSONResponse(res, {
-      message: `Something went wrong`,
-      error: error.message
-    });
+  if (dataobj.total_amount == 0) {
+    await paymentSuccessModelUpdate(PaymentModelId._id);
+    return null;
   }
- 
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: (totalprice.toFixed(2) * 100).toFixed(0),
+    currency: "usd",
+    customer: customerStripeId,
+    metadata: {
+      "payment_id": PaymentModelId._id.toString()
+    },
+    payment_method_types: [
+      'card',
+    ]
+  });
+
+  PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
+  return paymentIntent.client_secret;
 }
 
 exports.create_payment_intent = async (req, res) => {
@@ -117,7 +109,14 @@ exports.create_payment_intent = async (req, res) => {
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
     let addonsId = req.body.add_ons;
 
-
+    let ModelName = await getModelNameByAdsType(adstype);
+    let adsModel = await ModelName.findOne({
+      ads: req.body.postId,
+      // status: "draft",
+    });
+    if (adsModel.status =='active') {
+       throw new Error('Add is already active');
+    }
     // console.log(addonsId,"arraya ");
     let foundObjects = [];
 
@@ -288,9 +287,22 @@ const paymentSuccessModelUpdate = async (payment_id) => {
     duration = new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
     let result = await AddOns.find({ "price._id": { $in: _id.toString() } }).select("name").exec();
     let name = result[0].name;
-    return AddOnsArr.push({ add_ons_id: _id.toString(), name: name, amount: amount, duration: duration, currentDate:            
-    currentDate.toISOString().split('T')[0] });
+    return AddOnsArr.push({
+      add_ons_id: _id.toString(), name: name, amount: amount, duration: duration, currentDate:
+        currentDate.toISOString().split('T')[0]
+    });
   }));
+
+  let data_Obj = {
+    status: 'active',
+    plan_validity: plan_obj,
+    addons_validity: AddOnsArr,
+  }
+  let ModelName = await getModelNameByAdsType(ads_type);
+  await ModelName.findByIdAndUpdate({ "_id": ads_id }, { $set: data_Obj });
+  return true;
+}
+const getModelNameByAdsType = async (ads_type) => {
   let findModelName = await category.findById({ "_id": ads_type })
   let ModelName;
 
@@ -316,12 +328,5 @@ const paymentSuccessModelUpdate = async (payment_id) => {
     default:
       console.log(`Please provide valid ads id`);
   }
-  let data_Obj = {
-    status: 'active',
-    plan_validity: plan_obj,
-    addons_validity: AddOnsArr,
-  }
-
-  ModelName.findByIdAndUpdate({ "_id": ads_id }, { $set: data_Obj }).then();
-  return true;
+  return ModelName;
 }
