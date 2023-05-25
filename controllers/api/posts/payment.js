@@ -205,7 +205,7 @@ exports.webhooks = async (request, response) => {
       let result = await AddOns.find({ "price._id": { $in:_id.toString() } }).select("name").exec();
       let name = result[0].name;
      
-      return successArr.push({ name,amount, duration , currentDate});
+      return successArr.push({ name:name,amount:amount, duration:duration ,currentDate:currentDate});
     });
   console.log(successArr,"ruuvbbydsjkkkmmmmnjueu");
     // const ids = paymentDetails?.plan_addons?.map(obj => obj); 
