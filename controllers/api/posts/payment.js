@@ -203,8 +203,8 @@ exports.webhooks = async (request, response) => {
       const currentDate = new Date();
       duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
       let result = await AddOns.find({ "price._id": { $in:_id.toString() } }).select("name").exec();
-      console.log(result[0].name,"jjjejijnnomxs.kjknv k nvkjnvfkji  uidhinbv");
-      return { amount, duration ,_id};
+      let name =result[0].name;
+      return { name,amount, duration , currentDate};
     });
     console.log(selectedKeysArray,"nhfnjkkndjvufnjivjs");
     // const ids = paymentDetails?.plan_addons?.map(obj => obj); 
