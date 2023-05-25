@@ -212,8 +212,8 @@ exports.webhooks = async (request, response) => {
     const currentDate = new Date()
 
     let planDuration = await AdsPlan.findById({"_id":plan_id}).select("duration")
-    planDuration = new Date(currentDate.getTime() + (planDuration.duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
-    
+    Duration = new Date(currentDate.getTime() + (planDuration.duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
+
     console.log(planDuration,"plan mill gya hai muje ");
     await Promise.all(paymentDetails?.plan_addons?.map(async obj => {
       let { amount, duration,_id } = obj;
