@@ -198,12 +198,12 @@ exports.webhooks = async (request, response) => {
 
     let payment_id = event.data.object.metadata.payment_id;
     let paymentDetails = await PaymentModel.findById({ "_id":payment_id})
-    const selectedKeysArray = paymentDetails?.plan_addons?.map(async obj => {
+    const selectedKeysArray = await paymentDetails?.plan_addons?.map(async obj => {
       let { amount, duration,_id } = obj;
       const currentDate = new Date();
-      duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
+      duration= await new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
       let result = await AddOns.find({ "price._id": { $in:_id.toString() } }).select("name").exec();
-      let name =result[0].name;
+      let name = result[0].name;
       return { name,amount, duration , currentDate};
     });
     console.log(selectedKeysArray,"nhfnjkkndjvufnjivjs");
