@@ -78,7 +78,7 @@ const paymentIntentCreate = async (dataobj, totalprice, customerStripeId) => {
   let PaymentModelId = await PaymentModel.create(dataobj);
   
 if(totalprice == 0){
-  PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert:true});
+  PaymentModelInfo = await PaymentModel.findOne({ "_id": PaymentModelId._id });
 }else{
   const paymentIntent = await stripe.paymentIntents.create({
     amount: (totalprice.toFixed(2) * 100).toFixed(0),
