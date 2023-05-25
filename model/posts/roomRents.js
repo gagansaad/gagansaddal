@@ -23,11 +23,7 @@ const roomRentsSchema = new mongoose.Schema({
         active_on:{type:String,trim:true},
         expired_on:{type:String,trim:true},
     },
-    addons_validity:[{
-        name:{type:String,trim:true},
-        active_on:{type:String,trim:true},
-        expired_on:{type:String,trim:true},
-    }],
+    addons_validity:[{}],
     isfeatured: {
         type: Boolean,
         required: true,
