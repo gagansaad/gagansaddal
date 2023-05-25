@@ -76,24 +76,32 @@ exports.validatepaymentData = async (req, res, next) => {
 const paymentIntentCreate = async (dataobj, totalprice, customerStripeId) => {
 
   let PaymentModelId = await PaymentModel.create(dataobj);
-  if (dataobj.total_amount == 0) {
-    await paymentSuccessModelUpdate(PaymentModelId._id);
-    return null;
+  if(PaymentModelId.payment_status == 'pending'){
+    if (dataobj.total_amount == 0) {
+      await paymentSuccessModelUpdate(PaymentModelId._id);
+      return null;
+    }
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: (totalprice.toFixed(2) * 100).toFixed(0),
+      currency: "usd",
+      customer: customerStripeId,
+      metadata: {
+        "payment_id": PaymentModelId._id.toString()
+      },
+      payment_method_types: [
+        'card',
+      ]
+    });
+  
+    PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
+    return paymentIntent.client_secret;
+  }else{
+    return failureJSONResponse(res, {
+      message: `Something went wrong`,
+      error: error.message
+    });
   }
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: (totalprice.toFixed(2) * 100).toFixed(0),
-    currency: "usd",
-    customer: customerStripeId,
-    metadata: {
-      "payment_id": PaymentModelId._id.toString()
-    },
-    payment_method_types: [
-      'card',
-    ]
-  });
-
-  PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
-  return paymentIntent.client_secret;
+ 
 }
 
 exports.create_payment_intent = async (req, res) => {
@@ -280,7 +288,8 @@ const paymentSuccessModelUpdate = async (payment_id) => {
     duration = new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
     let result = await AddOns.find({ "price._id": { $in: _id.toString() } }).select("name").exec();
     let name = result[0].name;
-    return AddOnsArr.push({ add_ons_id: _id.toString(), name: name, amount: amount, duration: duration, currentDate: currentDate.toISOString().split('T')[0] });
+    return AddOnsArr.push({ add_ons_id: _id.toString(), name: name, amount: amount, duration: duration, currentDate:            
+    currentDate.toISOString().split('T')[0] });
   }));
   let findModelName = await category.findById({ "_id": ads_type })
   let ModelName;
