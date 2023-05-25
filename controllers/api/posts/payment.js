@@ -248,7 +248,7 @@ exports.webhooks = async (request, response) => {
       default:
         console.log(`Please provide valid ads id`);
     }
-    let findAd = await ModelName.findByIdAndUpdate({"_id":ads_id},{$set:{addons_validity:successArr}})
+    let findAd = await ModelName.findByIdAndUpdate({"_id":ads_id},{$set:{"addons_validity":successArr}})
 console.log(findAd,"jhogya");
     // Handle the event
     let paymentStatus = "pending";
