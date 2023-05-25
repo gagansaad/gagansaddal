@@ -75,8 +75,11 @@ exports.validatepaymentData = async (req, res, next) => {
 /////------------payment intent ----///////
 const paymentIntentCreate = async (dataobj, totalprice, customerStripeId) => {
 
-
   let PaymentModelId = await PaymentModel.create(dataobj);
+  
+if(totalprice == 0){
+  PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert:true});
+}else{
   const paymentIntent = await stripe.paymentIntents.create({
     amount: (totalprice.toFixed(2) * 100).toFixed(0),
     currency: "usd",
@@ -89,11 +92,13 @@ const paymentIntentCreate = async (dataobj, totalprice, customerStripeId) => {
     ]
   });
 
-  PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
+  PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert:true});
 
   // paymentIntentClientSecret = paymentIntent.client_secret;
   // statusCode = 201;
   return paymentIntent.client_secret;
+}
+
 }
 exports.create_payment_intent = async (req, res) => {
   try {
@@ -180,7 +185,7 @@ exports.create_payment_intent = async (req, res) => {
       message: `success`,
       paymentIntent: paymentIntentClientSecret,
       // ephemeralKey: ephemeralKey.secret,
-    })
+    },statusCode)
   } catch (error) {
     console.log(error.message, "bbooklakituramu");
     return failureJSONResponse(res, {
@@ -302,7 +307,7 @@ exports.webhooks = async (request, response) => {
     let PaymentEventInfo = await PaymentEventModel.create(dataobj);
 
     // Return a 200 response to acknowledge receipt of the event
-    response.send({ status: 200 });
+    response.send({ status: 200 }).status(200);
   } catch (error) {
     console.log(error);
     return response.status(400).send({
