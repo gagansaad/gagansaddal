@@ -192,7 +192,7 @@ exports.create_payment_intent = async (req, res) => {
       // ephemeralKey: ephemeralKey.secret,
     },statusCode)
   } catch (error) {
-    console.log(error.message, "bbooklakituramu");
+    console.log(error, "bbooklakituramu");
     return failureJSONResponse(res, {
       message: `Something went wrong`,
       error: error.message
