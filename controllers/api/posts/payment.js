@@ -201,12 +201,12 @@ exports.webhooks = async (request, response) => {
     let successArr = []
     await Promise.all(paymentDetails?.plan_addons?.map(async obj => {
       let { amount, duration,_id } = obj;
-      const currentDate = new Date().toISOString().split('T')[0];
+      const currentDate = new Date();
       duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
       let result = await AddOns.find({ "price._id": { $in:_id.toString() } }).select("name").exec();
       let name = result[0].name;
      
-      return successArr.push({ name:name,amount:amount, duration:duration ,currentDate:currentDate});
+      return successArr.push({ name:name,amount:amount, duration:duration ,currentDate:currentDate.toISOString().split('T')[0]});
     }));
   console.log(successArr,"ruuvbbydsjkkkmmmmnjueu");
     // const ids = paymentDetails?.plan_addons?.map(obj => obj); 
