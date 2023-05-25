@@ -209,7 +209,7 @@ exports.webhooks = async (request, response) => {
     }  
     let AddOnsArr = []
     let planArr = []
-    let planDuration = await Adsplan.findById({"_id":plan_id})
+    let planDuration = await AdsPlan.findById({"_id":plan_id})
     console.log(planDuration,"plan mill gya hai muje ");
     await Promise.all(paymentDetails?.plan_addons?.map(async obj => {
       let { amount, duration,_id } = obj;
