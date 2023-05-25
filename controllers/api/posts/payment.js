@@ -212,16 +212,17 @@ exports.webhooks = async (request, response) => {
     const currentDate = new Date()
 
     let planDuration = await AdsPlan.findById({"_id":plan_id}).select("duration")
-    Duration = new Date(currentDate.getTime() + (planDuration.duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
-
-    console.log(planDuration,"plan mill gya hai muje ");
+    let plan_obj = {
+      plan_id:planDuration._id.toString(),
+      active_on:currentDate.toISOString().split('T')[0],
+      expire_on: new Date(currentDate.getTime() + (planDuration.duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
+    }
     await Promise.all(paymentDetails?.plan_addons?.map(async obj => {
       let { amount, duration,_id } = obj;
       duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
       let result = await AddOns.find({ "price._id": { $in:_id.toString() } }).select("name").exec();
       let name = result[0].name;
-     
-      return AddOnsArr.push({ name:name,amount:amount, duration:duration ,currentDate:currentDate.toISOString().split('T')[0]});
+      return AddOnsArr.push({add_ons_id:_id.toString(), name:name,amount:amount, duration:duration ,currentDate:currentDate.toISOString().split('T')[0]});
     }));
   console.log(AddOnsArr,"ruuvbbydsjkkkmmmmnjueu");
     // const ids = paymentDetails?.plan_addons?.map(obj => obj); 
@@ -254,7 +255,12 @@ exports.webhooks = async (request, response) => {
       default:
         console.log(`Please provide valid ads id`);
     }
-    let findAd = await ModelName.findByIdAndUpdate({"_id":ads_id},{$set:{"addons_validity":AddOnsArr}})
+   let data_Obj={
+    status:'active',
+    plan_validity:plan_obj,
+    addons_validity:AddOnsArr,
+    }
+    let findAd = await ModelName.findByIdAndUpdate({"_id":ads_id},{$set:{data_Obj}})
 console.log(findAd,"jhogya");
     // Handle the event
     let paymentStatus = "pending";
