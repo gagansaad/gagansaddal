@@ -258,6 +258,9 @@ exports.webhooks = async (request, response) => {
     addons_validity:AddOnsArr,
     }
     console.log(data_Obj,"data object nu console kitta");
+    console.log(ads_id,"id mill gyio hai humko ");
+    let findid = await rentals.findById({"_id":ads_id})
+    console.log(findid,"rentel bhi  milil gyio hai humko ");
     let findAd = await rentals.findByIdAndUpdate({"_id":ads_id},{$set:{data_Obj}})
 console.log(findAd,"jhogya");
     // Handle the event
