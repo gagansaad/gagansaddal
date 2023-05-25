@@ -216,7 +216,7 @@ exports.webhooks = async (request, response) => {
       active_on:currentDate.toISOString().split('T')[0],
       expire_on: new Date(currentDate.getTime() + (planDuration.duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
     }
-    console.log(plan_Obj,"ye plan ka o=bke kiya");
+    console.log(plan_obj,"ye plan ka o=bke kiya");
     await Promise.all(paymentDetails?.plan_addons?.map(async obj => {
       let { amount, duration,_id } = obj;
       duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
