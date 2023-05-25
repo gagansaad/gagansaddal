@@ -208,7 +208,6 @@ exports.webhooks = async (request, response) => {
       // Continue with your logic...
     }  
     let AddOnsArr = []
-    let planArr = []
     const currentDate = new Date()
 
     let planDuration = await AdsPlan.findById({"_id":plan_id}).select("duration")
@@ -217,6 +216,7 @@ exports.webhooks = async (request, response) => {
       active_on:currentDate.toISOString().split('T')[0],
       expire_on: new Date(currentDate.getTime() + (planDuration.duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
     }
+    console.log(plan_Obj,"ye plan ka o=bke kiya");
     await Promise.all(paymentDetails?.plan_addons?.map(async obj => {
       let { amount, duration,_id } = obj;
       duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
@@ -225,10 +225,7 @@ exports.webhooks = async (request, response) => {
       return AddOnsArr.push({add_ons_id:_id.toString(), name:name,amount:amount, duration:duration ,currentDate:currentDate.toISOString().split('T')[0]});
     }));
   console.log(AddOnsArr,"ruuvbbydsjkkkmmmmnjueu");
-    // const ids = paymentDetails?.plan_addons?.map(obj => obj); 
-    // const duration = paymentDetails?.plan_addons?.map(obj => obj?.duration); 
-  let addons_duration= []
-  
+
  
     let findModelName = await category.findById({ "_id": ads_type })
     let ModelName;
@@ -260,6 +257,7 @@ exports.webhooks = async (request, response) => {
     plan_validity:plan_obj,
     addons_validity:AddOnsArr,
     }
+    console.log(dataobj,"data object nu console kitta");
     let findAd = await ModelName.findByIdAndUpdate({"_id":ads_id},{$set:{data_Obj}})
 console.log(findAd,"jhogya");
     // Handle the event
