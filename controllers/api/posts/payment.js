@@ -209,12 +209,13 @@ exports.webhooks = async (request, response) => {
     }  
     let AddOnsArr = []
     const currentDate = new Date()
-
+    let activedate =currentDate.toISOString().split('T')[0]
+    let expiryDate =new Date(currentDate.getTime() + (planDuration.duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
     let planDuration = await AdsPlan.findById({"_id":plan_id}).select("duration")
     let plan_obj = {
       plan_id:planDuration._id.toString(),
-      active_on:currentDate.toISOString().split('T')[0],
-      expire_on: new Date(currentDate.getTime() + (planDuration.duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
+      active_on:activedate,
+      expired_on:expiryDate
     }
     console.log(plan_obj,"ye plan ka o=bke kiya");
     await Promise.all(paymentDetails?.plan_addons?.map(async obj => {
