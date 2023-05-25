@@ -204,8 +204,8 @@ exports.webhooks = async (request, response) => {
       duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
       let result = await AddOns.find({ "price._id": { $in:_id.toString() } }).select("name").exec();
       let name = result[0].name;
-      successArr.push({ name,amount, duration , currentDate})
-      return { name,amount, duration , currentDate};
+     
+      return successArr.push({ name,amount, duration , currentDate});
     });
   console.log(successArr,"ruuvbbydsjkkkmmmmnjueu");
     // const ids = paymentDetails?.plan_addons?.map(obj => obj); 
