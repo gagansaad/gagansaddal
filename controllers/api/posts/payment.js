@@ -257,7 +257,7 @@ exports.webhooks = async (request, response) => {
     plan_validity:plan_obj,
     addons_validity:AddOnsArr,
     }
-    console.log(dataobj,"data object nu console kitta");
+    console.log(data_Obj,"data object nu console kitta");
     let findAd = await ModelName.findByIdAndUpdate({"_id":ads_id},{$set:{data_Obj}})
 console.log(findAd,"jhogya");
     // Handle the event
