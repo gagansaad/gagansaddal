@@ -208,7 +208,7 @@ exports.webhooks = async (request, response) => {
      
       return successArr.push({ name:name,amount:amount, duration:duration ,currentDate:currentDate.toISOString().split('T')[0]});
     }));
-  // console.log(successArr,"ruuvbbydsjkkkmmmmnjueu");
+  console.log(successArr,"ruuvbbydsjkkkmmmmnjueu");
     // const ids = paymentDetails?.plan_addons?.map(obj => obj); 
     // const duration = paymentDetails?.plan_addons?.map(obj => obj?.duration); 
   let addons_duration= []
