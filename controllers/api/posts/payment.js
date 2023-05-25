@@ -121,7 +121,7 @@ exports.create_payment_intent = async (req, res) => {
       });
       await UserModel.findOneAndUpdate(
         { _id: userID },
-        { $set: { "userInfo.stripe_id": customer.id } }
+        { $set: { "userInfo.stripe_id": customer.id} }
       );
       customerStripeId = customer.id;
     } else {
@@ -157,7 +157,6 @@ exports.create_payment_intent = async (req, res) => {
       };
      
       let PaymentModelId = await PaymentModel.create(dataobj);
-      // console.log(PaymentModelId._id, "id ------id---------id---------id");
       const paymentIntent = await stripe.paymentIntents.create({
         amount: (totalprice.toFixed(2) * 100).toFixed(0),
         currency: "usd",
@@ -208,7 +207,7 @@ exports.webhooks = async (request, response) => {
       // Continue with your logic...
     }  
     let AddOnsArr = []
-    const currentDate = new Date()
+    let currentDate = new Date()
     let activedate =currentDate.toISOString().split('T')[0]
     let planDuration = await AdsPlan.findById({"_id":plan_id}).select("duration")
     let plan_obj = {
@@ -216,7 +215,6 @@ exports.webhooks = async (request, response) => {
       active_on:activedate,
       expired_on: new Date(currentDate.getTime() + (planDuration.duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
     }
-    console.log(plan_obj,"ye plan ka o=bke kiya");
     await Promise.all(paymentDetails?.plan_addons?.map(async obj => {
       let { amount, duration,_id } = obj;
       duration=  new Date(currentDate.getTime() + (duration * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
@@ -224,7 +222,7 @@ exports.webhooks = async (request, response) => {
       let name = result[0].name;
       return AddOnsArr.push({add_ons_id:_id.toString(), name:name,amount:amount, duration:duration ,currentDate:currentDate.toISOString().split('T')[0]});
     }));
-  console.log(AddOnsArr,"ruuvbbydsjkkkmmmmnjueu");
+ 
 
  
     let findModelName = await category.findById({ "_id": ads_type })
@@ -257,12 +255,8 @@ exports.webhooks = async (request, response) => {
     plan_validity:plan_obj,
     addons_validity:AddOnsArr,
     }
-    console.log(data_Obj,"data object nu console kitta");
-    console.log(ads_id,"id mill gyio hai humko ");
-    let findid = await rentals.findById({"_id":ads_id})
-    console.log(findid,"rentel bhi  milil gyio hai humko ");
-    let findAd = await rentals.findByIdAndUpdate({"_id":ads_id},{$set:data_Obj})
-console.log(findAd,"jhogya");
+  
+    let findAd = await ModelName.findByIdAndUpdate({"_id":ads_id},{$set:data_Obj})
     // Handle the event
     let paymentStatus = "pending";
     switch (event.type) {
@@ -292,7 +286,12 @@ console.log(findAd,"jhogya");
         break;
 
       case "payment_intent.succeeded":
-        paymentStatus = "confirmed"
+        let dataobj = {
+          payment_id: payment_id,
+          payment_status: paymentStatus,
+          payment_intent: event
+        }
+        let PaymentEventInfo = await PaymentEventModel.create(dataobj);
         const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
@@ -301,12 +300,7 @@ console.log(findAd,"jhogya");
         console.log(`Unhandled event type ${event.type}`);
     }
 
-    let dataobj = {
-      payment_id: payment_id,
-      payment_status: paymentStatus,
-      payment_intent: event
-    }
-    let PaymentEventInfo = await PaymentEventModel.create(dataobj);
+    
     // Return a 200 response to acknowledge receipt of the event
     response.send({ status: 200 });
   } catch (error) {
@@ -318,3 +312,5 @@ console.log(findAd,"jhogya");
     });
   }
 };
+
+
