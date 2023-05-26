@@ -65,13 +65,16 @@ exports.fetchNewCategories = async (req, res, next) => {
             .then((newCategory) => {
                 if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
                 else {
+                    console.log(newCategory,"jvhjrfbv");
                     return successJSONResponse(res, { message: "Success", newCategory: newCategory });
                 }
             }).catch((err) => {
+                console.log(err,"*******-------------++++++++");
                 return failureJSONResponse(res, { message: `Something went wrong` });
             })
 
     } catch (err) {
+        console.log(err,"**catch eroor*****---------++++++");
         return failureJSONResponse(res, { message: `something went wrong` })
     }
 }
