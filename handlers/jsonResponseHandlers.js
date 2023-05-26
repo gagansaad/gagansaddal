@@ -1,9 +1,9 @@
-exports.successJSONResponseWithPagination = async (res, responseModel, OnPage, perPage = 10,dbquery, message = `Record found successfully`, data, httpStatusCode = 200) => {
-console.log(responseModel)
+exports.successJSONResponseWithPagination = async (res, responseModel, OnPage, perPage = 10, dbquery, message = `Record found successfully`, data, httpStatusCode = 200) => {
+    console.log(responseModel)
     if (res) {
-        
-        let responseModelWithLimit = await responseModel.find(dbquery).populate({ path: 'adsInfo.image', strictPopulate: false ,select:'url'}).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
-       console.log(responseModelWithLimit);
+
+        let responseModelWithLimit = await responseModel.find(dbquery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
+        console.log(responseModelWithLimit);
         const responseModelCount = await responseModel.count();
         const mainData = {
             message: message,
@@ -33,12 +33,13 @@ exports.successJSONResponse = (res = null, data = null, httpStatusCode = null) =
     }
 }
 
-exports.failureJSONResponse = (res = null, data = null, httpStatusCode = null) => {
+exports.failureJSONResponse = (res = null, data = null, httpStatusCode = 400) => {
     if (res) {
-        let httpStatusCodeToUse = 400;
-        if (httpStatusCode && Number(httpStatusCode)) httpStatusCodeToUse = Number(httpStatusCode);
+        // let httpStatusCodeToUse = 400;
+        if (httpStatusCode && Number(httpStatusCode))
+            httpStatusCodeToUse = Number(httpStatusCode);
 
-        return res.status(200).json({
+        return res.status(httpStatusCodeToUse).json({
             status: httpStatusCodeToUse,
             ...data
         });
