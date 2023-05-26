@@ -21,7 +21,7 @@ exports.createNewSubCategories = async (req, res, next) => {
         } = req.body
 
         if (!isValidString(name)) return failureJSONResponse(res, { message: `Please provide name` });
-        if (!adsId) return failureJSONResponse(res, { message: `Please provide ads id` });
+        if (!category_id) return failureJSONResponse(res, { message: `Please provide category id` });
         let checking = await AdsSubCategory.findOne({ "name": name })
         if (checking) {
             return failureJSONResponse(res, { message: `sub category already exist` });
