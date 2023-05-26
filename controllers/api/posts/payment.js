@@ -74,7 +74,8 @@ exports.validatepaymentData = async (req, res, next) => {
 
 /////------------payment intent ----///////
 const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeId, deviceType = null) => {
-
+  if (deviceType != null)
+    dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
   if (dataobj.total_amount == 0) {
     await paymentSuccessModelUpdate(PaymentModelId._id);
@@ -134,7 +135,12 @@ exports.create_payment_session = async (req, res) => {
 }
 exports.create_payment_intent = async (req, res) => {
   try {
-    let deviceType = req.headers['m-device-type'];
+    let deviceType = null;
+    if (req.headers['m-device-type'] == 'web')
+      deviceType = 'web';
+    else
+      deviceType = 'mobile';
+
     let userID = req.userId;
     let userInfoModel = await UserModel.findOne({ _id: userID });
     userInfoModel = userInfoModel.userInfo;
@@ -205,12 +211,13 @@ exports.create_payment_intent = async (req, res) => {
     let paymentModelInfo = await PaymentModel.findOne({
       ads: req.body.postId,
       payment_status: "pending",
+      device_type: deviceType,
     });
     // console.log();
 
     let paymentIntentClientSecret = null;
     let statusCode = 200
-    // return console.log(paymentModelInfo,(paymentModelInfo == null || paymentModelInfo == ""),(paymentModelInfo.total_amount != totalprice),'**/*//////****',totalprice,'*****',paymentModelInfo.total_amount);
+    // return console.log(paymentModelInfo, paymentModelInfo.payment_intent.client_secret, (paymentModelInfo == null || paymentModelInfo == ""), (paymentModelInfo.total_amount != totalprice), '**/*//////****', totalprice, '*****', paymentModelInfo.total_amount);
     if (paymentModelInfo == null || paymentModelInfo == "") {
       //payment intene
       let dataObj = { plan_id: planId, plan_addons: foundObjects, plan_price: plan_price, total_amount: JSON.parse(totalprice.toFixed(2)), ads: req.body.postId, ads_type: adstype, user: userID, payment_status: "pending" };

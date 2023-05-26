@@ -40,6 +40,12 @@ const roomRentsSchema = new mongoose.Schema({
         required: true,
         default: "pending"
     },
+     device_type:{
+        type: String,
+        enum: [`mobile`, `web`],
+        required: true,
+        default: "mobile"
+    },
     payment_intent: {
 
     },
