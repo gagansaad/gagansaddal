@@ -56,7 +56,7 @@ exports.fetchNewSubCategories = async (req, res, next) => {
         const {
 
             category_id,
-        } = req.body
+        } = req.query
 
 
         if (!category_id) return failureJSONResponse(res, { message: `Please provide ads id` });

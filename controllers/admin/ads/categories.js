@@ -55,7 +55,7 @@ exports.fetchNewCategories = async (req, res, next) => {
 
         const {
             ads_type,
-        } = req.body
+        } = req.query
 
         if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads id` });
 
