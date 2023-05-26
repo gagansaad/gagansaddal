@@ -98,7 +98,6 @@ const paymentIntentCreate = async (dataobj, totalprice, customerStripeId) => {
 
 exports.create_payment_intent = async (req, res) => {
   try {
-    return console.log(req.headers['user-agent']);
     let userID = req.userId;
     let userInfoModel = await UserModel.findOne({ _id: userID });
     userInfoModel = userInfoModel.userInfo;
