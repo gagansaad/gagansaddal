@@ -262,9 +262,6 @@ exports.webhooks = async (request, response) => {
 
     let payment_id = event.data.object.metadata.payment_id;
 
-
-
-
     // Handle the event
     let paymentStatus = "pending";
     switch (event.type) {
@@ -298,6 +295,9 @@ exports.webhooks = async (request, response) => {
 
         const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
+        break;
+      case "checkout.session.completed":
+        paymentSuccessModelUpdate(payment_id);
         break;
       // ... handle other event types
       default:
