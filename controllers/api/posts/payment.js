@@ -73,33 +73,68 @@ exports.validatepaymentData = async (req, res, next) => {
 };
 
 /////------------payment intent ----///////
-const paymentIntentCreate = async (dataobj, totalprice, customerStripeId) => {
+const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeId, deviceType = null) => {
 
   let PaymentModelId = await PaymentModel.create(dataobj);
   if (dataobj.total_amount == 0) {
     await paymentSuccessModelUpdate(PaymentModelId._id);
     return null;
   }
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: (totalprice.toFixed(2) * 100).toFixed(0),
-    currency: "usd",
-    customer: customerStripeId,
-    metadata: {
-      "payment_id": PaymentModelId._id.toString()
-    },
-    payment_method_types: [
-      'card',
-    ]
-  });
+  let paymentIntent = null;
+  if (deviceType == 'web') {
+    let findModelName = await category.findById({ "_id": dataobj.ads_type.toString() })
+    let sessionName = findModelName.name;
+    if (request.body.add_ons.length > 0)
+      sessionName += ' and ' + request.body.add_ons.length.toString() + ' addons';
+    paymentIntent = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: sessionName,
+            },
+            // unit_amount: totalprice,
+            unit_amount: (totalprice.toFixed(2) * 100).toFixed(0),
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      customer: customerStripeId,
+      metadata: {
+        "payment_id": PaymentModelId._id.toString()
+      },
+      success_url: 'http://localhost:4242/success',
+      cancel_url: 'http://localhost:4242/cancel',
+    });
+  } else {
+    paymentIntent = await stripe.paymentIntents.create({
+      amount: (totalprice.toFixed(2) * 100).toFixed(0),
+      currency: "usd",
+      customer: customerStripeId,
+      metadata: {
+        "payment_id": PaymentModelId._id.toString()
+      },
+      payment_method_types: [
+        'card',
+      ]
+    });
+  }
 
-  PaymentModelInfo = await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
-  return paymentIntent.client_secret;
+  await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
+  if (deviceType == 'web') {
+    return paymentIntent.url
+  } else {
+    return paymentIntent.client_secret;
+  }
 }
 
 exports.create_payment_session = async (req, res) => {
 }
 exports.create_payment_intent = async (req, res) => {
   try {
+    let deviceType = req.headers['m-device-type'];
     let userID = req.userId;
     let userInfoModel = await UserModel.findOne({ _id: userID });
     userInfoModel = userInfoModel.userInfo;
@@ -115,10 +150,10 @@ exports.create_payment_intent = async (req, res) => {
       '_id': req.body.postId,
     });
     // console.log(adstype,"**",ModelName,"&&&&",req.body.postId,"***",adsModel"adsmodal",adsModel.status);
-    if (adsModel.status =='active') {
-       return failureJSONResponse(res, {
+    if (adsModel.status == 'active') {
+      return failureJSONResponse(res, {
         message: 'Add is already active',
-      },422);
+      }, 422);
     }
     // console.log(addonsId,"arraya ");
     let foundObjects = [];
@@ -172,19 +207,31 @@ exports.create_payment_intent = async (req, res) => {
       payment_status: "pending",
     });
     // console.log();
+
     let paymentIntentClientSecret = null;
     let statusCode = 200
+    // return console.log(paymentModelInfo,(paymentModelInfo == null || paymentModelInfo == ""),(paymentModelInfo.total_amount != totalprice),'**/*//////****',totalprice,'*****',paymentModelInfo.total_amount);
     if (paymentModelInfo == null || paymentModelInfo == "") {
       //payment intene
       let dataObj = { plan_id: planId, plan_addons: foundObjects, plan_price: plan_price, total_amount: JSON.parse(totalprice.toFixed(2)), ads: req.body.postId, ads_type: adstype, user: userID, payment_status: "pending" };
-      paymentIntentClientSecret = await paymentIntentCreate(dataObj, totalprice, customerStripeId);
+      paymentIntentClientSecret = await paymentIntentCreate(req, dataObj, totalprice, customerStripeId, deviceType);
       statusCode = 201;
-    } else if (paymentModelInfo.totalprice != totalprice) {
+    } else if (paymentModelInfo.total_amount != totalprice) {
       let dataObj = { plan_id: planId, plan_addons: foundObjects, plan_price: plan_price, total_amount: JSON.parse(totalprice.toFixed(2)), ads: req.body.postId, ads_type: adstype, user: userID, payment_status: "pending" };
       statusCode = 201;
-      paymentIntentClientSecret = await paymentIntentCreate(dataObj, totalprice, customerStripeId);
+      paymentIntentClientSecret = await paymentIntentCreate(req, dataObj, totalprice, customerStripeId, deviceType);
     } else {
-      paymentIntentClientSecret = paymentModelInfo.payment_intent.client_secret;
+      if (deviceType == 'web') {
+        paymentIntentClientSecret = paymentModelInfo.payment_intent.url;
+      } else {
+        paymentIntentClientSecret = paymentModelInfo.payment_intent.client_secret;
+      }
+    }
+    // return console.log(paymentIntentClientSecret,statusCode,(paymentIntentClientSecret == null || paymentIntentClientSecret ==''));
+    if (paymentIntentClientSecret == null || paymentIntentClientSecret == '' || paymentIntentClientSecret == undefined) {
+      let dataObj = { plan_id: planId, plan_addons: foundObjects, plan_price: plan_price, total_amount: JSON.parse(totalprice.toFixed(2)), ads: req.body.postId, ads_type: adstype, user: userID, payment_status: "pending" };
+      paymentIntentClientSecret = await paymentIntentCreate(req, dataObj, totalprice, customerStripeId, deviceType);
+      statusCode = 201;
     }
     return successJSONResponse(res, {
       status: statusCode,
@@ -192,6 +239,7 @@ exports.create_payment_intent = async (req, res) => {
       paymentIntent: paymentIntentClientSecret,
       // ephemeralKey: ephemeralKey.secret,
     }, statusCode)
+
   } catch (error) {
     console.log(error, "bbooklakituramu");
     return failureJSONResponse(res, {
@@ -301,15 +349,15 @@ const paymentSuccessModelUpdate = async (payment_id) => {
     plan_validity: plan_obj,
     addons_validity: AddOnsArr,
   }
-  
+
   let ModelName = await getModelNameByAdsType(ads_type);
   await ModelName.findByIdAndUpdate({ "_id": ads_id }, { $set: data_Obj });
   return true;
 }
 const getModelNameByAdsType = async (ads_type) => {
-  
+
   let findModelName = await category.findById({ "_id": ads_type.toString() })
-  
+
   let ModelName;
 
   switch (findModelName.name) {
