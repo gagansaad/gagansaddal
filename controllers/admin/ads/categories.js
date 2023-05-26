@@ -17,19 +17,19 @@ exports.createNewCategories = async (req, res, next) => {
 
         const {
             name,
-            ads_id,
+            ads_type,
         } = req.body
-
+console.log(req.body);
         if (!isValidString(name)) return failureJSONResponse(res, { message: `Please provide name` });
-        if (!ads_id) return failureJSONResponse(res, { message: `Please provide ads id` });
-        // else if(ads_id){
+        if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads id` });
+        // else if(){
         //     const 
         // }
 
 
         const dataObj = {}
         if (name) dataObj.name = name;
-        if (ads_id) dataObj.ads_type = ads_id;
+        if (ads_type) dataObj.ads_type = ads_type;
         let checking = await AdsCategories.findOne({ "name": name })
         if (checking) {
             return failureJSONResponse(res, { message: `category already exist` });
@@ -54,14 +54,14 @@ exports.fetchNewCategories = async (req, res, next) => {
     try {
 
         const {
-            ads_id,
+            ads_type,
         } = req.body
 
-        if (!ads_id) return failureJSONResponse(res, { message: `Please provide ads id` });
+        if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads id` });
 
 
 
-        AdsCategories.find({ "ads_type": ads_id })
+        AdsCategories.find({ "ads_type": ads_type })
             .then((newCategory) => {
                 if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
                 else {
@@ -80,10 +80,10 @@ exports.deleteNewCategories = async (req, res, next) => {
     try {
 
         const {
-            ads_id,
+            ads_type,
         } = req.body
 
-        if (!ads_id) return failureJSONResponse(res, { message: `Please provide ads id` });
+        if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads id` });
 
 
 

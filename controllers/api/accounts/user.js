@@ -916,7 +916,7 @@ module.exports = {
                     return res.json({
                       status: 205,
                       data: data,
-                      message: `success`,
+                      message: `A new OTP has successfully sent out to your phone number`,
                       token: createJWT(checkUserDetail[0]._id),
                     });
 
@@ -1357,7 +1357,7 @@ module.exports = {
           return res.json({
             status: 200,
             userId: foundUser._id,
-            message: `success`,
+            message: `A new OTP has successfully sent out to your email address`,
           });
         } else {
           return res.json({
@@ -1538,7 +1538,6 @@ module.exports = {
 
 
       if (req.file && Object.keys(req.file).length) {
-        console.log(`jhsadsadhsa dashdhgasfdhgasdahsdfhasgda hgasdhga`)
         dataObj["userBasicInfo.profile_image"] = picture
       } else {
         dataObj["userBasicInfo.profile_image"] = req?.body?.picture
@@ -1748,7 +1747,7 @@ module.exports = {
         else {
 
           MobileNumberVerificationOTPByUserId(foundUser?._id, phoneNumber, 3);
-          return successJSONResponse(res, { message: `OTP send successfully` });
+          return successJSONResponse(res, { message: `A new OTP has successfully sent out to your phone number` });
 
         }
 
@@ -2004,7 +2003,7 @@ module.exports = {
                 .then((updatedUser) => {
                   if (updatedUser) {
                     return successJSONResponse(res, {
-                      message: `success`,
+                      message: `A new OTP has successfully sent out to your phone number`,
                       data: { phone_number },
                     });
                   } else {
@@ -2404,7 +2403,7 @@ module.exports = {
 
 
           MobileNumberVerificationOTPByUserId(user?._id, null);
-          return successJSONResponse(res, { message: `success` });
+          return successJSONResponse(res, { message: `A new OTP has successfully sent out to your phone number` });
           // OTP.create({
           //     code: generateOTP(4),
           //     phone_number: phone_number,
@@ -2453,7 +2452,7 @@ module.exports = {
 
 
                 EmailOTPVerification(user?.userInfo?.email_address, `Hi`, foundOTP?.code);
-                return successJSONResponse(res, { message: `success` });
+                return successJSONResponse(res, { message: `A new OTP has successfully sent out to your email address` });
 
 
               }

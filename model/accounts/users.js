@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
             type: String,
            
         },
+         stripe_id: {
+            type: String,
+           
+        },
         is_verified_email:{
             type: Boolean,
             default: false

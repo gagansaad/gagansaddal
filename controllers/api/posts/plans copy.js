@@ -1,6 +1,6 @@
 
 const mongoose = require("mongoose"),
-    AdsPlan = mongoose.model("addons_plan"),
+    AdsPlan = mongoose.model("plan"),
     {
         successJSONResponse,
         failureJSONResponse
@@ -25,7 +25,7 @@ exports.fetchPlanForAds = async (req, res, next) => {
         
         AdsPlan.find({
             ads_type: planObjectId
-        })
+        }).populate("add_ons")
         .then(result => {
             console.log('result ',result);
 

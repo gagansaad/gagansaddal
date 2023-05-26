@@ -6,7 +6,7 @@ const mongoose = require("mongoose"),
   bizAd = mongoose.model("Local_biz & Service"),
   buysellAd = mongoose.model("Buy & Sell"),
   babysitterAd = mongoose.model("babysitter & nannie"),
-  roomrentAd = mongoose.model("RoomRent"),
+  roomrentAd = mongoose.model("rental"),
   jobsAd = mongoose.model("job"),
   category = mongoose.model("PostType"),
   {
@@ -40,10 +40,10 @@ exports.fetchAll = async (req, res, next) => {
     var perPage = 10 || parseInt(req.query.perpage)
     var page = parseInt(req.query.page) || 1
     let dbquery = ``
-    if(req.query.userId){
-      dbquery =  req.body.userid
-    }else if(req.body.userId){
-      dbquery =  req.body.userid
+    if (req.query.userId) {
+      dbquery = req.body.userid
+    } else if (req.body.userId) {
+      dbquery = req.body.userid
     }
     if (!adstype) return failureJSONResponse(res, { message: `Please provide post type id` });
     else if (adstype && !isValidMongoObjId(mongoose, adstype)) return failureJSONResponse(res, { message: `Please provide valid post type id` });
@@ -64,19 +64,19 @@ exports.fetchAll = async (req, res, next) => {
         successJSONResponseWithPagination(res, buysellAd, page, perPage)
         break;
       case 'Local Biz and services':
-         successJSONResponseWithPagination(res, bizAd, page, perPage)
+        successJSONResponseWithPagination(res, bizAd, page, perPage)
         break;
       case 'Events':
-         successJSONResponseWithPagination(res, eventAd, page, perPage)
+        successJSONResponseWithPagination(res, eventAd, page, perPage)
         break;
       case 'Job':
         successJSONResponseWithPagination(res, jobsAd, page, perPage)
         break;
-        case "Rentals":
-           successJSONResponseWithPagination(res, roomrentAd, page, perPage)
-          break;
+      case "Rentals":
+        successJSONResponseWithPagination(res, roomrentAd, page, perPage)
+        break;
       default:
-         failureJSONResponse(res, {
+        failureJSONResponse(res, {
           message: `Record not found`
         })
         break;

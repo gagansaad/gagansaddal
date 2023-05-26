@@ -34,7 +34,7 @@ exports.getDnymicsData = async (req, res, next) => {
     platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok","Google Meet","Microsoft Teams","other"],
     recurring_type: ["Daily", "Weekly", "Monthly"],
     time_zone: ["Hawaii Standard Time", "Hawaii-Aleutian Daylight Time", "Alaska Daylight Time", "Pacific Daylight Time", "Mountain Standard Time", "Mountain Daylight Time", "Central Daylight Time", "Eastern Daylight Time"],
-    currency: ["AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USD", "USN"],
+    currency: ["USD","AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR", "USN"],
 
   };
   return successJSONResponse(res, {

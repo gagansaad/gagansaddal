@@ -32,8 +32,8 @@ const toExport = {
             ...this.defaultStringConfig,
             // required: true,
             uppercase: true,
-            enum: [`INR`],
-            default: `INR`, // must be ISO code
+            enum: [`INR`,`USD`],
+            default: `USD`, // must be ISO code
             // must be ISO codes
         }
     },

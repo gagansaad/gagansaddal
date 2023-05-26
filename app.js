@@ -30,12 +30,14 @@ require(`./model/configurations/privacy`);
 require(`./model/configurations/termAndCondition`);
 require(`./model/plan/plan`);
 require(`./model/plan/plan copy`);
+require(`./model/plan/plan_adons`);
 require(`./model/posts/jobs`);
 require(`./model/posts/buy&sell`);
 require(`./model/posts/bizAndServices`);
 require(`./model/posts/babbysitter & nannis`);
 require(`./model/image/image`);
-require(`./model/posts/payment_logs`);
+require(`./model/posts/paymentEvent`);
+require(`./model/posts/payment`);
 require('./model/posts/tagline')
 require(`./model/posts/adsCategories`);
 require('./model/posts/adsSubCategories')
@@ -64,6 +66,7 @@ const buySellRoutes = require('./routes/api/ads/buysell');
 const babysitterRoutes = require('./routes/api/ads/babbysitter & nannis');
 const eventRoutes = require(`./routes/api/ads/event`)
 const paymentRoutes = require(`./routes/api/ads/payment`)
+const planRoutes = require(`./routes/api/ads/plans copy`)
 const AllAdsRoutes = require(`./routes/api/ads/fetchAllAds`)
 const All_Tags = require(`./routes/api/ads/tagline`)
 //admin
@@ -88,38 +91,39 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 
-app.get('/', (req,res)=>{
-    res.json({message: `msbdhsmb`})
+app.get('/', (req, res) => {
+    res.json({ message: `msbdhsmb` })
 });
 
 app.use('/v1/api/', signUp);
-app.use('/admin/login',adminSignIp);
-app.use('/api/admin/users',usercontrol);
+app.use('/admin/login', adminSignIp);
+app.use('/api/admin/users', usercontrol);
 
 app.use('/v1/api/configurations', configurationsRoute);
 app.use('/admin/v1/api/configurations1', adminconfigurationsRoute);
 app.use('/admin/v1/api/configurations', adminconfigurationsRoute1);
 app.use('/admin/v1/api/configurations', adminconfigurationsRoute2);
-app.use('/admin/v1/api/ads/dashboard',dashboardRoute);
-app.use('/admin/v1/api/ads/room-rents',adminroomRentsRoutes);
-app.use('/admin/v1/api/ads/biz',adminbizRoutes);
-app.use('/admin/v1/api/ads/jobs',adminjobsRoutes);
-app.use('/admin/v1/api/ads/buysell',adminbuySellRoutes);
-app.use('/admin/v1/api/ads/babysitter',adminbabysitterRoutes);
-app.use('/admin/v1/api/ads/events',admineventRoutes);
-app.use('/admin/v1/api/ads/categories',adsCategoriesRoutes);
-app.use('/admin/v1/api/ads/sub-categories',adsSubCategoriesRoutes);
+app.use('/admin/v1/api/ads/dashboard', dashboardRoute);
+app.use('/admin/v1/api/ads/room-rents', adminroomRentsRoutes);
+app.use('/admin/v1/api/ads/biz', adminbizRoutes);
+app.use('/admin/v1/api/ads/jobs', adminjobsRoutes);
+app.use('/admin/v1/api/ads/buysell', adminbuySellRoutes);
+app.use('/admin/v1/api/ads/babysitter', adminbabysitterRoutes);
+app.use('/admin/v1/api/ads/events', admineventRoutes);
+app.use('/admin/v1/api/ads/categories', adsCategoriesRoutes);
+app.use('/admin/v1/api/ads/sub-categories', adsSubCategoriesRoutes);
 
 app.use('/v1/api/posts/', All_Tags);
 app.use('/v1/api/posts/types', postTypeRoutes);
 app.use('/v1/api/posts/room-rents', roomRentsRoutes);
-app.use('/v1/api/posts/events',eventRoutes);
+app.use('/v1/api/posts/events', eventRoutes);
 app.use('/v1/api/posts/jobs', jobsRoutes);
 app.use('/v1/api/posts/buysell', buySellRoutes);
 app.use('/v1/api/posts/babysitter', babysitterRoutes);
 app.use('/v1/api/posts/biz', bizRoutes);
 app.use('/v1/api/posts/payment', paymentRoutes)
 app.use('/v1/api/posts/ads', AllAdsRoutes)
+app.use('/v1/api/posts/ads', planRoutes)
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))
@@ -134,12 +138,12 @@ app.use(routes);
 app.use((err, req, res, next) => {
     console.log(err)
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-        
+
         // handle the error in a custom way
-        res.status(400).send({ 
+        res.status(400).send({
             status: 400,
             error: 'Invalid JSON'
-         });
+        });
     }
 });
 
@@ -148,7 +152,7 @@ app.use((err, req, res, next) => {
 app.use((req, res, next) => {
     res.status(404).json({
         status: 404,
-        message:'Sorry,end point not found.'
+        message: 'Sorry,end point not found.'
     });
 });
 

@@ -10,29 +10,11 @@ const {
 } = require(`../../utils/mongoose`);
 // const defaultPaymentStatus="pending";
 const roomRentsSchema = new mongoose.Schema({
-    plan_id: {
+    payment_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: `adsplan`,
+        ref: `payment`,
         required: true
 
-    },
-
-    plan_addons:[{
-        
-    }],
-    plan_price:defaultPriceProperty,
-    coupan_discount:defaultPriceProperty,
-    total_amount:defaultPriceProperty,
-    
-
-    ads: {
-        type: mongoose.Schema.Types.ObjectId,
-    },
-    ads_type: { ...defaultStringConfig },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `user`,
-        required: true
     },
     payment_status:{
         type: String,
@@ -47,4 +29,4 @@ const roomRentsSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('payment', roomRentsSchema);
+module.exports = mongoose.model('payment_event', roomRentsSchema);

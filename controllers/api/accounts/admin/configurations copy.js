@@ -5,8 +5,12 @@ const mongoose = require("mongoose"),
         failureJSONResponse,
     } = require(`../../../../handlers/jsonResponseHandlers`);
 const PostType = mongoose.model("PostType");
-const AdsPlan = mongoose.model("addons_plan");
+const AdsPlan = mongoose.model("plan");
+const addons_plan = mongoose.model("plan_addons");
 
+
+
+//////////------------------//////////
 exports.postconfigurations = async (req, res, next) => {
     try {
         // console.log(req.body);
@@ -60,6 +64,10 @@ exports.postconfigurations = async (req, res, next) => {
         return failureJSONResponse(res, { message: `something went wrong` });
     }
 };
+
+//////////------------------//////////
+
+
 exports.posttypeconfigurations = async (req, res, next) => {
     try {
         // console.log(req.body);
@@ -72,132 +80,9 @@ exports.posttypeconfigurations = async (req, res, next) => {
             price_amount,
             price_currency,
             duration,
-            top_isfree,
-            top_price,
-            top_currency,
-            top_name,
-            bump_isfree,
-            bump_price,
-            bump_currency,
-            bump_name,
-            highlight_isfree,
-            highlight_price,
-            highlight_currency,
-            highlight_name,
-            urgent_reduced_isfree,
-            urgent_reduced_price,
-            urgent_reduced_currency,
-            urgent_reduced_name,
-            homepage_gallery_isfree,
-            homepage_gallery_price,
-            homepage_gallery_currency,
-            homepage_gallery_name,
-            featured_isfree,
-            featured_price,
-            featured_currency,
-            featured_name,
-            link_website_isfree,
-            link_website_price,
-            link_website_currency,
-            link_website_name,
-            urgent_isfree,
-            urgent_price,
-            urgent_currency,
-            urgent_name,
-            spotlight_isfree,
-            spotlight_price,
-            spotlight_currency,
-            spotlight_name,
+           
         } = req.body;
-        let adons_plan = []
-        if (top_name) {
-
-            let data = {
-                isfree: top_isfree,
-                name:  top_name,
-                amount: top_price,
-                currency:top_currency,
-            }
-            adons_plan.push(data)
-        }
-        if (bump_name) {
-
-            let data = {
-                isfree: bump_isfree,
-                name:bump_name, 
-                amount: bump_price,
-                currency: bump_currency,
-            }
-            adons_plan.push(data)
-        }
-        if (highlight_name) {
-
-            let data = {
-                isfree: highlight_isfree,
-                name:  highlight_name,
-                amount: highlight_price,
-                currency:highlight_currency,
-            }
-            adons_plan.push(data)
-        }
-        if (urgent_reduced_name) {
-
-            let data = {
-                isfree: urgent_reduced_isfree,
-                name:  urgent_reduced_name,
-                amount:urgent_reduced_price,
-                currency: urgent_reduced_currency,
-            }
-            adons_plan.push(data)
-        }
-        if (homepage_gallery_name) {
-
-            let data = {
-                isfree: homepage_gallery_isfree,
-                name:homepage_gallery_name,
-                amount: homepage_gallery_price,
-                currency:  homepage_gallery_currency,
-            }
-            adons_plan.push(data)
-        }
-        if (featured_name) {
-            let data = {
-                isfree: featured_isfree,
-                name: featured_name,
-                amount: featured_price,
-                currency:featured_currency, 
-            }
-            adons_plan.push(data)
-        }
-        if (link_website_name) {
-            let data = {
-                isfree: link_website_isfree,
-                name: link_website_name,
-                amount: link_website_price,
-                currency: link_website_currency,
-            }
-            adons_plan.push(data)
-        }
-        if (urgent_name) {
-            let data = {
-                isfree: urgent_isfree,
-                name: urgent_name,
-                amount: urgent_price,
-                currency: urgent_currency,
-            }
-            adons_plan.push(data)
-        }
-        if (spotlight_name) {
-
-            let data = {
-                isfree: spotlight_isfree,
-                name:spotlight_name,
-                amount:  spotlight_price,
-                currency:spotlight_currency, 
-            }
-            adons_plan.push(data)
-        }
-
+     
 
         const addTypePlan = new AdsPlan({
             is_active: is_active,
@@ -208,7 +93,7 @@ exports.posttypeconfigurations = async (req, res, next) => {
             "price.amount": price_amount,
             "price.isfree": price_isfree,
             "price.currency": price_currency,
-            "add_ons": adons_plan,
+          
 
         });
         addTypePlan
@@ -228,19 +113,79 @@ exports.posttypeconfigurations = async (req, res, next) => {
         return failureJSONResponse(res, { message: `something went wrong` });
     }
 };
+
+
+//////////------------------//////////
+
+
+exports.create_adons=async(req, res)=>{
+    try{
+    const {
+        name,
+        plan_id,
+        isfree,
+        duration,
+        amount,
+        currency,
+        price
+    } = req.body;
+    
+    const addOnsPlan = {
+        name: name,
+        plan_id: plan_id,
+        price:price
+    };
+    
+    let addons_result = await addons_plan.create(addOnsPlan)
+    if(addons_result){
+        let pushdata = await AdsPlan.findByIdAndUpdate({"_id":plan_id},{$push:{"add_ons":addons_result._id}})
+        if(pushdata){
+            return successJSONResponse(res, {
+                      message: `success`,
+                      addons: addons_result,
+                   });
+        }
+    }
+  
+} catch (err) {
+    console.log(err,"jdnvdnjdnjd")
+    return failureJSONResponse(res, { message: `something went wrong` });
+}
+}
+
+//////////------------------//////////
+
+
 exports.gettypeconfigurations = async (req, res, next) => {
     try {
-        AdsPlan.find()
-            .then((result) => {
-                if (!result) {
-                    return failureJSONResponse(res, { message: `something went wrong` });
-                }
-                return successJSONResponse(res, { data: result });
-            })
-            .catch((err) => {
-                return failureJSONResponse(res, { message: `something went wrong` });
-            });
+
+        // let plans = await AdsPlan.findOne({"_id":req.body.plan_id})
+        // if(plans){
+            let addons = await AdsPlan.find().populate("add_ons")
+            if(addons){
+                return successJSONResponse(res, {message:"success",addonsplan:addons});
+            }else{
+                return failureJSONResponse(res, { message: `something went wrong1` });
+            }
+        // }
+        // else{
+        //     return failureJSONResponse(res, { message: `something went wrong` });
+        // }
+        // AdsPlan.find()
+        //     .then((result) => {
+        //         if (!result) {
+        //             return failureJSONResponse(res, { message: `something went wrong` });
+        //         }
+        //         return successJSONResponse(res, { data: result });
+        //     })
+        //     .catch((err) => {
+        //         return failureJSONResponse(res, { message: `something went wrong` });
+        //     });
     } catch (err) {
+        console.log(err)
         return failureJSONResponse(res, { message: `something went wrong` });
     }
 };
+
+
+//////////------------------//////////

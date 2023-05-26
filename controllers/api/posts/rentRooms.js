@@ -1,7 +1,7 @@
 const { json } = require("express");
 
 const mongoose = require("mongoose"),
-    RoomRentsAds = mongoose.model("RoomRent"),
+    RoomRentsAds = mongoose.model("rental"),
     Media = mongoose.model("media"),
     tagline_keywords = mongoose.model("keywords"),
     {
@@ -21,15 +21,15 @@ const mongoose = require("mongoose"),
 
 exports.fetchDynamicsData = async (req, res, next) => {
     let adtype = req.query.adsType
-    let records = await tagline_keywords.find({adType:adtype}).select({"keywords":1,"_id":1});
+    let records = await tagline_keywords.find({ adType: adtype }).select({ "keywords": 1, "_id": 1 });
 
     const objtSend = {
-        tagline:records,
+        tagline: records,
         rental_type: ["Rooms for Rent", "Commercial Property for Rent", "Other Rentals"],
         category_Room: ["Apartment", "Condo", "Townhouse", "House", "Basement"],
         category_Commercial_Property: ["Commercial Building", "Office", "Parking Space", "Warehouse", "Venues"],
         category_Other: ["Limousine", "Trucks", "Wedding Appliances", "Wedding Clothes", "Cars", "DJ Equipment", "Event Decorations", "Other"],
-        currency: ["AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USD", "USN"],
+        currency: ["USD", "AED", "AUD", "AWG", "CAD", "EUR", "GBP", "INR", "USN"],
 
         roomType: [
             `Single`,
@@ -56,10 +56,10 @@ exports.fetchDynamicsData = async (req, res, next) => {
             `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`
         ],
         furnished: ["Not Furnished", "Semi Furnished", "Fully Furnished"],
-        
+
 
     }
-   
+
     return successJSONResponse(res, {
         message: `success`,
         data: objtSend
@@ -229,20 +229,20 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
 
 
     } = req.body;
-console.log(tagline,"tagggggggggggg");
+    console.log(tagline, "tagggggggggggg");
     let taglines = tagline
-    if(taglines){
-      for(i=0;i<taglines.length;i++){
-        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
-        if(!tags){
-          let tag = {
-            keywords:taglines[i],
-            ads_type:adsType
+    if (taglines) {
+        for (i = 0; i < taglines.length; i++) {
+            let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
+            if (!tags) {
+                let tag = {
+                    keywords: taglines[i],
+                    ads_type: adsType
+                }
+                await tagline_keywords.create(tag)
+            }
+
         }
-          await tagline_keywords.create(tag)
-        }
-       
-      }
     }
 
     const userId = req.userId;
@@ -258,7 +258,7 @@ console.log(tagline,"tagggggggggggg");
         imageArr.push(productImages._id);
 
     }
-    
+
     let iscontact = false;
     if (is_contact == 'true') {
         iscontact = true;
@@ -320,8 +320,8 @@ console.log(tagline,"tagggggggggggg");
             rent: {
                 amount: amount,
                 negotiable: negotible,
-                is_contact:iscontact,
-                currency:currency,
+                is_contact: iscontact,
+                currency: currency,
             },
             isSmokingAllowed: isSmokin,
             isAlcoholAllowed: isAlcoho,
@@ -335,7 +335,7 @@ console.log(tagline,"tagggggggggggg");
 
         userId: userId
     }
-console.log(dataObj,"jdnjd");
+    console.log(dataObj, "jdnjd");
     const newRoomRentPost = await RoomRentsAds.create(dataObj);
 
 
@@ -425,22 +425,22 @@ exports.editRoomRentAds = async (req, res, next) => {
         hide_my_email,
 
     } = req.body;
-    let taglines =tagline
-    if(taglines){
-      for(i=0;i<taglines.length;i++){
-        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
-        if(!tags){
-          let tag = {
-            keywords:taglines[i],
-            ads_type:adsType
+    let taglines = tagline
+    if (taglines) {
+        for (i = 0; i < taglines.length; i++) {
+            let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
+            if (!tags) {
+                let tag = {
+                    keywords: taglines[i],
+                    ads_type: adsType
+                }
+                await tagline_keywords.create(tag)
+            }
+
         }
-          await tagline_keywords.create(tag)
-        }
-       
-      }
     }
     const imageArr = [];
-let productImages;
+    let productImages;
 
 
     for (var i = 0; i < req.files.length; i++) {
@@ -450,8 +450,8 @@ let productImages;
         imageArr.push(productImages._id);
         console.log(productImages);
     }
-console.log(productImages,"fvhfbbbbbbbbbbbvvbfhvfbhvbfhbvf");
-// console.log(imageArr.map());
+    console.log(productImages, "fvhfbbbbbbbbbbbvvbfhvfbhvbfhbvf");
+    // console.log(imageArr.map());
     const dataObj = {},
         adsInfoObj = {},
         listerBasicInfoObj = {};
@@ -461,14 +461,14 @@ console.log(productImages,"fvhfbbbbbbbbbbbvvbfhvfbhvbfhbvf");
     let my_phone = false;
     let my_email = false;
     let secondary_phone = false
-    
+
     if (hide_my_secondary_phone == "true") {
         secondary_phone = true
     } else if (hide_my_secondary_phone == 'false') {
         secondary_phone = false
     }
 
-    
+
     if (hide_my_phone == "true") {
         my_phone = true
     } else if (hide_my_phone == 'false') {
@@ -560,7 +560,7 @@ console.log(productImages,"fvhfbbbbbbbbbbbvvbfhvfbhvbfhbvf");
             website_link,
             hide_my_phone: my_phone,
             hide_my_email: my_email,
-            hide_my_secondary_phone:secondary_phone,
+            hide_my_secondary_phone: secondary_phone,
             location,
             primary_mobile_number: {
                 country_code: +91,
