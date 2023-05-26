@@ -36,7 +36,7 @@ exports.successJSONResponse = (res = null, data = null, httpStatusCode = 200) =>
 
 exports.failureJSONResponse = (res = null, data = null, httpStatusCode = 400) => {
     if (res) {
-        // let httpStatusCodeToUse = 400;
+        let httpStatusCodeToUse = 400;
         if (httpStatusCode && Number(httpStatusCode))
             httpStatusCodeToUse = Number(httpStatusCode);
 

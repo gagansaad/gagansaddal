@@ -318,7 +318,7 @@ exports.webhooks = async (request, response) => {
     response.send({ status: 200 }).status(200);
   } catch (error) {
     console.log(error);
-    return response.status(400).send({
+    return response.status(422).send({
       error: {
         message: error.message,
       },
