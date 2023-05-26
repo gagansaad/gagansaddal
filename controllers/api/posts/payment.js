@@ -112,10 +112,9 @@ exports.create_payment_intent = async (req, res) => {
     let addonsId = req.body.add_ons;
     let ModelName = await getModelNameByAdsType(adstype);
     let adsModel = await ModelName.findOne({
-      ads: req.body.postId,
-      // status: "draft",
+      '_id': req.body.postId,
     });
-    console.log("adsmodal",adsModel.status);
+    // console.log(adstype,"**",ModelName,"&&&&",req.body.postId,"***",adsModel"adsmodal",adsModel.status);
     if (adsModel.status =='active') {
        return failureJSONResponse(res, {
         message: 'Add is already active',
