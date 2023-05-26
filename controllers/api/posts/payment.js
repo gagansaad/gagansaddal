@@ -115,9 +115,9 @@ exports.create_payment_intent = async (req, res) => {
       // status: "draft",
     });
     if (adsModel.status =='active') {
-       return failureJSONResponse(res, {
+       return failureJSONResponse(res.status(422), {
         message: 'Add is already active',
-      },422);
+      });
     }
     // console.log(addonsId,"arraya ");
     let foundObjects = [];
