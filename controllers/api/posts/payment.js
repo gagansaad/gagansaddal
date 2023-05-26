@@ -96,6 +96,8 @@ const paymentIntentCreate = async (dataobj, totalprice, customerStripeId) => {
   return paymentIntent.client_secret;
 }
 
+exports.create_payment_session = async (req, res) => {
+}
 exports.create_payment_intent = async (req, res) => {
   try {
     let userID = req.userId;

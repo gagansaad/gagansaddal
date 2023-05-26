@@ -17,6 +17,14 @@ const roomRentsSchema = new mongoose.Schema({
         required: true,
         default: "draft"
     },
+    plan_validity:{
+        plan_id:{type: String,trim:true},
+        active_on:{type:String,trim:true},
+        expired_on:{type:String,trim:true},
+    },
+    addons_validity:[{
+        
+    }],
     is_featured: {
         value: {
             type: Boolean,
