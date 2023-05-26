@@ -263,9 +263,10 @@ exports.webhooks = async (request, response) => {
   try {
 
     let event = request.body;
-
+    // if(event.data.object.metadata.payment_id)
     let payment_id = event.data.object.metadata.payment_id;
-
+    if (payment_id == '' || payment_id == null || payment_id == undefined)
+      return successJSONResponse(res, { status: 200, message: `paymentn Id not found`, }, 200)
     // Handle the event
     let paymentStatus = "pending";
     switch (event.type) {
@@ -315,7 +316,8 @@ exports.webhooks = async (request, response) => {
     let PaymentEventInfo = await PaymentEventModel.create(dataobj);
 
     // Return a 200 response to acknowledge receipt of the event
-    response.send({ status: 200 }).status(200);
+    // return response.send({ status: 200 }).status(200);
+    return successJSONResponse(res, { status: 200, message: event.type + " success", }, 200)
   } catch (error) {
     console.log(error);
     return response.status(422).send({
