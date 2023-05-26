@@ -73,7 +73,8 @@ exports.validatepaymentData = async (req, res, next) => {
 };
 
 /////------------payment intent ----///////
-const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeId, deviceType = null) => {
+const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeId, deviceType = null, user) => {
+  console.log(user);
   if (deviceType != null)
     dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
@@ -103,6 +104,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
       ],
       mode: 'payment',
       customer: customerStripeId,
+      customer_email: request.body.useremail,
       metadata: {
         "payment_id": PaymentModelId._id.toString()
       },
@@ -144,6 +146,8 @@ exports.create_payment_intent = async (req, res) => {
     let userID = req.userId;
     let userInfoModel = await UserModel.findOne({ _id: userID });
     userInfoModel = userInfoModel.userInfo;
+    req.body.useremail = userInfoModel.email_address
+
     let planId = req.body.planId;
     //-----find plan -----//
     let find_ads_type = await AdsPlan.find({ _id: planId }).populate("add_ons");
