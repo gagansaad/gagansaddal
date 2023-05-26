@@ -66,7 +66,7 @@ exports.fetchNewSubCategories = async (req, res, next) => {
             .then((newCategory) => {
                 if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
                 else {
-                    return successJSONResponse(res, { message: "Success", newCategory: newCategory });
+                    return successJSONResponse(res, { message: "Success", subCategories: newCategory });
                 }
             }).catch((err) => {
                 return failureJSONResponse(res, { message: `Something went wrong` });

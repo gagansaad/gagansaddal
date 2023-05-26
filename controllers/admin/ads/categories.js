@@ -66,7 +66,7 @@ exports.fetchNewCategories = async (req, res, next) => {
                 if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
                 else {
                     console.log(newCategory,"jvhjrfbv");
-                    return successJSONResponse(res, { message: "Success", newCategory: newCategory });
+                    return successJSONResponse(res, { message: "Success", categories: newCategory });
                 }
             }).catch((err) => {
                 console.log(err,"*******-------------++++++++");
