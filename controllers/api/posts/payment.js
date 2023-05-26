@@ -98,6 +98,7 @@ const paymentIntentCreate = async (dataobj, totalprice, customerStripeId) => {
 
 exports.create_payment_intent = async (req, res) => {
   try {
+    return console.log(req.headers['user-agent']);
     let userID = req.userId;
     let userInfoModel = await UserModel.findOne({ _id: userID });
     userInfoModel = userInfoModel.userInfo;
@@ -108,7 +109,6 @@ exports.create_payment_intent = async (req, res) => {
     let plan_price = find_ads_type[0].price.amount;
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
     let addonsId = req.body.add_ons;
-
     let ModelName = await getModelNameByAdsType(adstype);
     let adsModel = await ModelName.findOne({
       ads: req.body.postId,
@@ -117,7 +117,7 @@ exports.create_payment_intent = async (req, res) => {
     if (adsModel.status =='active') {
        return failureJSONResponse(res, {
         message: 'Add is already active',
-      });
+      },422);
     }
     // console.log(addonsId,"arraya ");
     let foundObjects = [];
@@ -272,7 +272,7 @@ const paymentSuccessModelUpdate = async (payment_id) => {
   if (paymentDetails) {
     plan_id = paymentDetails.plan_id;
     ads_id = paymentDetails.ads;
-    ads_type = paymentDetails.ads_type
+    ads_type = paymentDetails.ads_type;
     // Continue with your logic...
   }
   let AddOnsArr = []
@@ -300,12 +300,15 @@ const paymentSuccessModelUpdate = async (payment_id) => {
     plan_validity: plan_obj,
     addons_validity: AddOnsArr,
   }
+  
   let ModelName = await getModelNameByAdsType(ads_type);
   await ModelName.findByIdAndUpdate({ "_id": ads_id }, { $set: data_Obj });
   return true;
 }
 const getModelNameByAdsType = async (ads_type) => {
-  let findModelName = await category.findById({ "_id": ads_type })
+  
+  let findModelName = await category.findById({ "_id": ads_type.toString() })
+  
   let ModelName;
 
   switch (findModelName.name) {

@@ -20,11 +20,12 @@ exports.successJSONResponseWithPagination = async (res, responseModel, OnPage, p
 }
 
 
-exports.successJSONResponse = (res = null, data = null, httpStatusCode = null) => {
+exports.successJSONResponse = (res = null, data = null, httpStatusCode = 200) => {
 
     if (res) {
-        let httpStatusCodeToUse = 200;
-        if (httpStatusCode && Number(httpStatusCode)) httpStatusCodeToUse = Number(httpStatusCode);
+        // let httpStatusCodeToUse = 200;
+        if (httpStatusCode && Number(httpStatusCode))
+            httpStatusCodeToUse = Number(httpStatusCode);
 
         return res.status(httpStatusCodeToUse).json({
             status: httpStatusCodeToUse,
