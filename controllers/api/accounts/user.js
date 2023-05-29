@@ -862,13 +862,13 @@ module.exports = {
           try {
             const updateDeviceInfo = await User.update(
               { _id: checkUserDetail[0]._id },
-              // {
-              //   $set: {
-              //     "userStatus.userStatus": "Login",
-              //     "userStatus.userActionStatus": "Enable",
-              //     "userDateInfo.lastLoginDate": new Date(),
-              //   },
-              // },
+              {
+                $set: {
+                  "userStatus.userStatus": "Login",
+                  "userStatus.userActionStatus": "Enable",
+                  "userDateInfo.lastLoginDate": new Date(),
+                },
+              },
               
              {
               $addToSet: {
