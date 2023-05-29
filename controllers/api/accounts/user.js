@@ -76,6 +76,7 @@ module.exports = {
   signup_with_email: async function (req, res) {
     try {
       var newUser = req.body;
+      console.log(newUser,"eh haigi aa body");
       newUser.email = newUser.email.trim().toLowerCase();
 
       // Check If email is register with any user via other platforms like facebook,google or email.

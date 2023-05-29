@@ -269,6 +269,7 @@ exports.webhooks = async (request, response) => {
     // Handle the event
     let findUser = await PaymentModel.findById({"_id":payment_id})
     let UserId = findUser.user.toString()
+    let getUserToken = await UserModel.findById({"_id":UserId})
     console.log(findUser.user,"jsncjsn",UserId);
     let paymentStatus = "pending";
     switch (event.type) {
