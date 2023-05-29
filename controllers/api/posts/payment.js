@@ -12,6 +12,7 @@ const mongoose = require("mongoose"),
   AdsPlan = mongoose.model("plan"),
   AddOns = mongoose.model("plan_addons"),
   eventAd = mongoose.model("event"),
+  Notification = require("../../../resources/notification");
   bizAd = mongoose.model("Local_biz & Service"),
   buysellAd = mongoose.model("Buy & Sell"),
   babysitterAd = mongoose.model("babysitter & nannie"),
