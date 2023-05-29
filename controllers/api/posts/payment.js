@@ -270,6 +270,7 @@ exports.webhooks = async (request, response) => {
     let findUser = await PaymentModel.findById({"_id":payment_id})
     let UserId = findUser.user.toString()
     let getUserToken = await UserModel.findById({"_id":UserId})
+   
     console.log(findUser.user,"jsncjsn",UserId);
     let paymentStatus = "pending";
     switch (event.type) {
@@ -304,11 +305,14 @@ exports.webhooks = async (request, response) => {
           notification: {
               title: "hi",
               body: `You have a new enquiry for`,
-              sendToUser: managerId._id,
+              sendToUser: getUserToken._id,
           },
-         
   }
         const paymentIntentSucceeded = event.data.object;
+        getUserToken.user_device_info.forEach(element => {
+          console.log("element ===========>", element);
+          Notification.sendAndroidNotifications(element.token, bodyPayload)
+      });
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
       case "checkout.session.completed":
