@@ -133,8 +133,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
   }
 }
 
-exports.create_payment_session = async (req, res) => {
-}
+
 exports.create_payment_intent = async (req, res) => {
   try {
     let deviceType = null;
@@ -186,7 +185,7 @@ exports.create_payment_intent = async (req, res) => {
         });
       });
 
-      console.log(foundObjects, "hhhhhjjjjjj00000");
+      // console.log(foundObjects, "hhhhhjjjjjj00000");
       const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
       totalprice = plan_price + totalAmount;
     }
@@ -263,11 +262,14 @@ exports.webhooks = async (request, response) => {
   try {
 
     let event = request.body;
-    // if(event.data.object.metadata.payment_id)
+    console.log(event,"this is event");
     let payment_id = event.data.object.metadata.payment_id;
     if (payment_id == '' || payment_id == null || payment_id == undefined)
       return successJSONResponse(response, { status: 200, message: `paymentn Id not found`, }, 200)
     // Handle the event
+    let findUser = await PaymentModel.findById({"_id":payment_id})
+    let UserId = findUser.user.toString()
+    console.log(findUser.user,"jsncjsn",UserId);
     let paymentStatus = "pending";
     switch (event.type) {
       case "payment_intent.amount_capturable_updated":
@@ -297,7 +299,14 @@ exports.webhooks = async (request, response) => {
 
       case "payment_intent.succeeded":
         paymentSuccessModelUpdate(payment_id);
-
+        let bodyPayload = {
+          notification: {
+              title: "hi",
+              body: `You have a new enquiry for`,
+              sendToUser: managerId._id,
+          },
+         
+  }
         const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
         break;

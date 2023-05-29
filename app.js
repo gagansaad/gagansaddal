@@ -41,6 +41,7 @@ require(`./model/posts/payment`);
 require('./model/posts/tagline')
 require(`./model/posts/adsCategories`);
 require('./model/posts/adsSubCategories')
+require('./model/posts/notification')
 // admin configuration
 require(`./model/accounts/admin/configuration`);
 
