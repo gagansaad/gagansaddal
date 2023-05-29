@@ -8,6 +8,7 @@ module.exports = {
         try {
 
             // var serverKey = 'AIzaSyDU4gUw30sn0KluoAbVDq01C-wMNsnxsW0'; //put your server key here
+            var FCM = require("fcm-node");
             var serverKey =
                 "AAAAZ59K9-c:APA91bFM-82iCWfjpPlNfsE2EUtfst5ZXeoJ1jy0Q3U18H5-V_zJWpzEvvK47uQIIkcLB9_UPoWye6CIF_QwrKL2zp-7G1xlftWK9VanbDQNleceoTdw3ooOXyYdAb-sfHISB-WqYIJW"; //put your server key here
             var fcm = new FCM(serverKey);
