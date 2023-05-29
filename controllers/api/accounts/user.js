@@ -867,9 +867,18 @@ module.exports = {
                   "userStatus.userStatus": "Login",
                   "userStatus.userActionStatus": "Enable",
                   "userDateInfo.lastLoginDate": new Date(),
-                  "user_device_info.token":userData?.device_token,
+                 
                 },
-              }
+              },
+              
+             {
+              $addToSet: {
+                user_device_info: {
+                  token: userData?.device_token,
+                  device_type:1,
+                },
+              },
+             }
             );
 
             const email_address =
