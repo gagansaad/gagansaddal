@@ -866,6 +866,7 @@ module.exports = {
                   "userStatus.userStatus": "Login",
                   "userStatus.userActionStatus": "Enable",
                   "userDateInfo.lastLoginDate": new Date(),
+                  "user_device_info.token":userData.device_token,
                 },
               }
             );

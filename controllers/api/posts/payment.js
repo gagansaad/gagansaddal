@@ -309,11 +309,12 @@ exports.webhooks = async (request, response) => {
               sendToUser: getUserToken._id,
           },
   }
-        const paymentIntentSucceeded = event.data.object;
+       
         getUserToken.user_device_info.forEach(element => {
           console.log("element ===========>", element);
           Notification.sendAndroidNotifications(element.token, bodyPayload)
       });
+      const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
       case "checkout.session.completed":
