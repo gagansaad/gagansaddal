@@ -832,6 +832,7 @@ module.exports = {
   login_with_email: async function (req, res) {
     try {
       var userData = req.body;
+      console.log(userData.device_token,"jncejdncjdnjc");
       if (!userData.email) return res.json({ message: "please provide a email address" });
 
       userData.email = (userData?.email).trim().toLowerCase();
@@ -866,7 +867,7 @@ module.exports = {
                   "userStatus.userStatus": "Login",
                   "userStatus.userActionStatus": "Enable",
                   "userDateInfo.lastLoginDate": new Date(),
-                  "user_device_info.token":userData.device_token,
+                  "user_device_info.token":userData?.device_token,
                 },
               }
             );
