@@ -1309,7 +1309,7 @@ module.exports = {
 
           if (invalidOTP === 0) {
             await OTP.deleteMany({ _id: { $in: [foundNewEmailOTP._id, foundEmailOTP._id] } });
-            await User.findByIdAndUpdate({ _id: userId }, { "userInfo.email_address": new_email_address })
+            await User.findByIdAndUpdate({ _id: userId }, { "userInfo.email_address": newEmailAddress })
             return res.json({
               status: 200,
               invalidOTP,

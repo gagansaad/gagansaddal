@@ -47,6 +47,7 @@ require(`./model/accounts/admin/configuration`);
 
 
 app.use(cors())
+app.set(`view engine`, `ejs`);
 // DB Setup
 const signUp = require('./routes/api/accounts/user');
 

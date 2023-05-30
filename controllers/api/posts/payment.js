@@ -151,7 +151,9 @@ exports.create_payment_intent = async (req, res) => {
     let planId = req.body.planId;
     //-----find plan -----//
     let find_ads_type = await AdsPlan.find({ _id: planId }).populate("add_ons");
+    console.log(find_ads_type,"vndvndj");
     let adstype = find_ads_type[0].ads_type;
+    console.log(adstype,"njdnjd");
     let plan_price = find_ads_type[0].price.amount;
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
     let addonsId = req.body.add_ons;

@@ -2,11 +2,14 @@ var FCM = require("fcm-node");
 var serverKey =
     "AAAAZ59K9-c:APA91bFM-82iCWfjpPlNfsE2EUtfst5ZXeoJ1jy0Q3U18H5-V_zJWpzEvvK47uQIIkcLB9_UPoWye6CIF_QwrKL2zp-7G1xlftWK9VanbDQNleceoTdw3ooOXyYdAb-sfHISB-WqYIJW"; //put your server key here
 var fcm = new FCM(serverKey);
+const {
+    
+  } = require(`../resources/sendEmailFunction`);
 const mongoose = require('mongoose'),
     User = mongoose.model("user"),
     Notification = mongoose.model(`notification`);
 module.exports = {
-    sendNotifications: async function (userIds = [], title, body, data = null, saveNotification = false) {
+    sendNotifications: async function (userIds = [], title, body, data = null, saveNotification = false,sendEmail = false) {
         try {
             if (userIds.length == 0)
                 return;
