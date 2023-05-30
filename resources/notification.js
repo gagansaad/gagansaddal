@@ -33,7 +33,7 @@ module.exports = {
             console.log((sendEmailNotification.length > 0));
             console.log(sendEmailNotification);
             if (sendEmailNotification.length > 0) {
-                consol.log('ssss1');
+                console.log('ssss1');
                 convertedIds.map(async userId => {
                     let UserDetails = await User.findById({ "_id": userId })
                     //   let subject = 'Thank you for Use Menehariya!'
