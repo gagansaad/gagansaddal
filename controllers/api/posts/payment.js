@@ -150,6 +150,7 @@ exports.create_payment_intent = async (req, res) => {
 
     let planId = req.body.planId;
     //-----find plan -----//
+    console.log(planId,"plan Id");
     let find_ads_type = await AdsPlan.find({ _id: planId }).populate("add_ons");
     console.log(find_ads_type,"vndvndj");
     let adstype = find_ads_type[0].ads_type;
