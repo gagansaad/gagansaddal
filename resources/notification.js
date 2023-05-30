@@ -9,11 +9,12 @@ const mongoose = require('mongoose'),
     User = mongoose.model("user"),
     Notification = mongoose.model(`notification`);
 module.exports = {
-    sendNotifications: async function (userIds = [], title, body, data = null, saveNotification = false,sendEmail = false) {
+    sendNotifications: async function (userIds = [], title, body, data = null, saveNotification = false,sendEmailNotification = false) {
         try {
             if (userIds.length == 0)
                 return;
             let notificationData
+            let emailData;
             const convertedIds = userIds.map(id => mongoose.Types.ObjectId(id));
             let androidTokens;
             let iosTokens;
@@ -24,10 +25,18 @@ module.exports = {
                 data: JSON.stringify(data),
                 user_id: userId,
               }));
+              
             if (saveNotification == true){
                 await Notification.insertMany(notificationData);
             }
-            
+            if(sendEmailNotification == true){
+                convertedIds.map(async userId => {
+                  let UserDetails = await User.findById({"_id":userId})
+                  let subject = 'Thank you for Use Menehariya!'
+                  sendEmail(UserDetails.userInfo.email_address,subject)
+                  });
+                
+            }
             const userDeviceTypes = await User.aggregate([
                 { $match: { "_id": { $in: convertedIds } } }, // match ids data only
                 { $unwind: "$user_device_info" }, // Unwind the user_device_info array
