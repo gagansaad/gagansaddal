@@ -18,7 +18,7 @@ module.exports = {
             notificationData = convertedIds.map(userId => ({
                 title: title,
                 body: body,
-                data: data,
+                data: JSON.stringify(data),
                 user_id: userId,
               }));
             if (saveNotification == true){
