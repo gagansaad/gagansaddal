@@ -322,7 +322,7 @@ exports.webhooks = async (request, response) => {
     }
     await PaymentEventModel.create(dataobj);
     let getNotification = await getNotificationTitles(event.type);
-    Notification.sendNotifications([userId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true)
+    Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true)
     return successJSONResponse(response, { status: 200, message: event.type + " success", }, 200)
   } catch (error) {
     console.log(error);
