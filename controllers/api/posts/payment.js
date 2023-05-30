@@ -137,6 +137,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
 
 exports.create_payment_intent = async (req, res) => {
   try {
+    console.log(req.body,"body hai je");
     let deviceType = null;
     if (req.headers['m-device-type'] == 'web')
       deviceType = 'web';
