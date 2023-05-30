@@ -18,24 +18,12 @@ const NotificationSchema = new mongoose.Schema({
         ...defaultStringConfig,
         required: true
     },
-    url: {
+    data: {
         ...defaultStringConfig,
         // required: true
     },
-    sendToAdmin: { type: mongoose.Schema.Types.ObjectId, ref: 'admin' },
-    sendToUser: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
-    notificationType: {
-        ...defaultStringConfig,
-        required: true
-    },
-    notificationSeenUser: {
-        type: String,
-        possibleValues: ["admin", "user"],
-        default: "user"
-    },
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
     status: { type: String, possibleValues: ["seen", "unseen"], default: "unseen" }
-
-
 }, { timestamps: true });
 
 

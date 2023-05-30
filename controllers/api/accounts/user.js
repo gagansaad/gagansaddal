@@ -6,7 +6,7 @@ const mongoose = require("mongoose"),
   alertMessage = require(`../../../utils/alertMessage`),
   { generateOTP } = require(`../../../utils/generateOTP`),
   ObjectId = require("mongodb").ObjectID;
-
+Notification = require("../../../resources/notification");
 const { errorMonitor } = require("connect-mongo");
 const {
   EmailOTPVerification,
@@ -76,7 +76,7 @@ module.exports = {
   signup_with_email: async function (req, res) {
     try {
       var newUser = req.body;
-      console.log(newUser,"eh haigi aa body");
+      console.log(newUser, "eh haigi aa body");
       newUser.email = newUser.email.trim().toLowerCase();
 
       // Check If email is register with any user via other platforms like facebook,google or email.
@@ -829,10 +829,13 @@ module.exports = {
   },
 
   // Standard login.
-  login_with_email: async function (req, res) {
+  login_with_email: async function (req, res) {    
+    // Notification.sendNotifications(['642e738ce74d24affcccf8d9','642e9194c77cfa7d49482241','642ea8aa723c7bc5459036b1'], 'welcome', 'menehariya user', {
+    //   model: 'post',
+    //   model_id: '86798767987987687',
+    // });  
     try {
       var userData = req.body;
-      console.log(userData.device_token,"jncejdncjdnjc");
       if (!userData.email) return res.json({ message: "please provide a email address" });
 
       userData.email = (userData?.email).trim().toLowerCase();
@@ -866,7 +869,7 @@ module.exports = {
                 $addToSet: {
                   user_device_info: {
                     token: userData.device_token,
-                    device_type:1,
+                    device_type: Number(deviceType)
                   },
                 },
                 $set: {
@@ -875,7 +878,7 @@ module.exports = {
                   "userDateInfo.lastLoginDate": new Date(),
                 },
               },
-           
+
             );
 
             const email_address =
@@ -1241,10 +1244,12 @@ module.exports = {
         if (!foundMobileOTP) return failureJSONResponse(res, { message: `invalid OTP` })
         else {
           await OTP.deleteMany({ _id: { $in: [foundMobileOTP._id] } });
-          await User.findByIdAndUpdate({ _id: userId }, { "userInfo.mobile_number": {
-            phone_number: phoneNumber,
-            country_code: countryCode
-          } })
+          await User.findByIdAndUpdate({ _id: userId }, {
+            "userInfo.mobile_number": {
+              phone_number: phoneNumber,
+              country_code: countryCode
+            }
+          })
           return successJSONResponse(res, { message: "Phone number chnage successfully" })
         }
 
@@ -1268,7 +1273,7 @@ module.exports = {
 
       if (!oldEmailOTP) return failureJSONResponse(res, { message: `please provide old email otp` });
       if (!newEmailOTP) return failureJSONResponse(res, { message: `please provide new email otp` });
-      
+
       OTP.findOne({
         $and: [{ is_active: true },
         { user: req.userId },
@@ -1287,12 +1292,12 @@ module.exports = {
 
         OTP.findOne({
           $and: [{ is_active: true },
-            { user: req.userId },
-            { email_address: newEmailAddress },
-            { used_for: 3 },
-            { code: newEmailOTP },
-            { for: 2 }
-            ]
+          { user: req.userId },
+          { email_address: newEmailAddress },
+          { used_for: 3 },
+          { code: newEmailOTP },
+          { for: 2 }
+          ]
         }).then(async (foundNewEmailOTP) => {
           if (!foundNewEmailOTP) {
             invalidOTP = 2;

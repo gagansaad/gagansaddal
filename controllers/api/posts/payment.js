@@ -13,7 +13,7 @@ const mongoose = require("mongoose"),
   AddOns = mongoose.model("plan_addons"),
   eventAd = mongoose.model("event"),
   Notification = require("../../../resources/notification");
-  bizAd = mongoose.model("Local_biz & Service"),
+bizAd = mongoose.model("Local_biz & Service"),
   buysellAd = mongoose.model("Buy & Sell"),
   babysitterAd = mongoose.model("babysitter & nannie"),
   rentals = mongoose.model("rental"),
@@ -263,16 +263,17 @@ exports.webhooks = async (request, response) => {
   try {
 
     let event = request.body;
-    console.log(event,"this is event");
+    console.log(event, "this is event");
     let payment_id = event.data.object.metadata.payment_id;
     if (payment_id == '' || payment_id == null || payment_id == undefined)
       return successJSONResponse(response, { status: 200, message: `paymentn Id not found`, }, 200)
     // Handle the event
-    let findUser = await PaymentModel.findById({"_id":payment_id})
+    let findUser = await PaymentModel.findById({ "_id": payment_id })
+    console.log(findUser,"findUser");
     let UserId = findUser.user.toString()
-    let getUserToken = await UserModel.findById({"_id":UserId})
-   
-    console.log(findUser.user,"jsncjsn",UserId);
+    // let getUserToken = await UserModel.findById({"_id":UserId})
+
+    console.log(findUser.user, "jsncjsn", UserId);
     let paymentStatus = "pending";
     switch (event.type) {
       case "payment_intent.amount_capturable_updated":
@@ -302,19 +303,8 @@ exports.webhooks = async (request, response) => {
 
       case "payment_intent.succeeded":
         paymentSuccessModelUpdate(payment_id);
-        let bodyPayload = {
-          notification: {
-              title: "hi",
-              body: `You have a new enquiry for`,
-              sendToUser: getUserToken._id,
-          },
-  }
-       
-        getUserToken.user_device_info.forEach(element => {
-          console.log("element ===========>", element);
-          Notification.sendAndroidNotifications(element.token, bodyPayload)
-      });
-      const paymentIntentSucceeded = event.data.object;
+    
+        const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
       case "checkout.session.completed":
@@ -329,8 +319,9 @@ exports.webhooks = async (request, response) => {
       payment_status: paymentStatus,
       payment_intent: event
     }
-    let PaymentEventInfo = await PaymentEventModel.create(dataobj);
-
+    await PaymentEventModel.create(dataobj);
+    // let getNotification = await getNotificationTitles(event.type);
+    // Notification.sendNotifications(userId, getNotification.title, getNotification.body, { 'model_id': addId, 'model': addname }, true)
     // Return a 200 response to acknowledge receipt of the event
     // return response.send({ status: 200 }).status(200);
     return successJSONResponse(response, { status: 200, message: event.type + " success", }, 200)
@@ -382,6 +373,23 @@ const paymentSuccessModelUpdate = async (payment_id) => {
   let ModelName = await getModelNameByAdsType(ads_type);
   await ModelName.findByIdAndUpdate({ "_id": ads_id }, { $set: data_Obj });
   return true;
+}
+const getNotificationTitles = async (status) => {
+  let title;
+  let body;
+
+  switch (status) {
+    case 'payment_intent.succeeded':
+      title = 'Payment succesfully paid';
+      body = 'Payment succesfully paid on post';
+      break;
+    case 'checkout.session.completed':
+      title = 'Payment succesfully paid';
+      body = 'Payment succesfully paid on post';
+      break;
+
+  }
+  return { 'title': title, 'body': body };
 }
 const getModelNameByAdsType = async (ads_type) => {
 
