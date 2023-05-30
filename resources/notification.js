@@ -2,14 +2,15 @@ var FCM = require("fcm-node");
 var serverKey =
     "AAAAZ59K9-c:APA91bFM-82iCWfjpPlNfsE2EUtfst5ZXeoJ1jy0Q3U18H5-V_zJWpzEvvK47uQIIkcLB9_UPoWye6CIF_QwrKL2zp-7G1xlftWK9VanbDQNleceoTdw3ooOXyYdAb-sfHISB-WqYIJW"; //put your server key here
 var fcm = new FCM(serverKey);
+let fs = require("fs");
 const {
     sendEmail
-  } = require(`../resources/sendEmailFunction`);
+} = require(`../resources/sendEmailFunction`);
 const mongoose = require('mongoose'),
     User = mongoose.model("user"),
     Notification = mongoose.model(`notification`);
 module.exports = {
-    sendNotifications: async function (userIds = [], title, body, data = null, saveNotification = false,sendEmailNotification = false) {
+    sendNotifications: async function (userIds = [], title, body, data = null, saveNotification = false, sendEmailNotification = []) {
         try {
             if (userIds.length == 0)
                 return;
@@ -24,18 +25,20 @@ module.exports = {
                 body: body,
                 data: JSON.stringify(data),
                 user_id: userId,
-              }));
-              
-            if (saveNotification == true){
+            }));
+
+            if (saveNotification == true) {
                 await Notification.insertMany(notificationData);
             }
-            if(sendEmailNotification == true){
+            if (sendEmailNotification.length > 0) {
                 convertedIds.map(async userId => {
-                  let UserDetails = await User.findById({"_id":userId})
-                  let subject = 'Thank you for Use Menehariya!'
-                  sendEmail(UserDetails.userInfo.email_address,subject)
-                  });
-                
+                    let UserDetails = await User.findById({ "_id": userId })
+                    //   let subject = 'Thank you for Use Menehariya!'
+                    let replacements = { 'name': UserDetails.userInfo.name };
+                    replacements.concat(sendEmailNotification.data);
+                    sendEmail(UserDetails.userInfo.email_address, sendEmailNotification.subject, sendEmailNotification.email_template, replacements)
+                });
+
             }
             const userDeviceTypes = await User.aggregate([
                 { $match: { "_id": { $in: convertedIds } } }, // match ids data only

@@ -11,6 +11,7 @@ const express = require(`express`),
     MongoStore = require(`connect-mongo`);
 
 
+const {EmailOTPVerification} = require("./resources/sendEmailFunction")
 // DB Setup
 const connection = require(`./config/dbConnection`);
 connection(mongoose);
@@ -131,7 +132,7 @@ if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))
 }
 app.post("/demo",(req,res)=>{
-    console.log(req.body)
+    EmailOTPVerification()
     res.json({
         data: `working`
     })

@@ -1,6 +1,11 @@
 const nodemailer = require('nodemailer');
+let fs = require("fs")
+let ejs = require("ejs")
+// let file = require("../view/Email-Templetes/")
 
-exports.EmailOTPVerification = (email_address = ``, name = ``, code) => {
+exports.EmailOTPVerification = async (email_address = ``, name = ``, code) => {
+
+
 
     let mailTransporter = nodemailer.createTransport({
         host: "smtp-relay.sendinblue.com",
@@ -10,7 +15,7 @@ exports.EmailOTPVerification = (email_address = ``, name = ``, code) => {
             pass: "xsmtpsib-6b110cbae84bbcc85a6611bf2ad11cb5e1a7b39080c01a1b4eb8241dff7b45fc-Tat3NJ1hVj6CKmsX"
         }
     });
-    
+
     let mailDetails = {
         from: 'support@menehariya.com',
         to: `${email_address}`,
@@ -39,7 +44,7 @@ exports.WelcomeEmail = (email_address = ``, name = ``) => {
             pass: "xsmtpsib-6b110cbae84bbcc85a6611bf2ad11cb5e1a7b39080c01a1b4eb8241dff7b45fc-Tat3NJ1hVj6CKmsX"
         }
     });
-    
+
     let mailDetails = {
         from: 'support@menehariya.com',
         to: `${email_address}`,
@@ -68,7 +73,7 @@ exports.PasswordChange = (email_address = ``, name = ``) => {
             pass: "xsmtpsib-6b110cbae84bbcc85a6611bf2ad11cb5e1a7b39080c01a1b4eb8241dff7b45fc-Tat3NJ1hVj6CKmsX"
         }
     });
-    
+
     let mailDetails = {
         from: 'support@menehariya.com',
         to: `${email_address}`,
@@ -97,7 +102,7 @@ exports.AccountDeleteEmail = (email_address = ``, name = ``) => {
             pass: "xsmtpsib-6b110cbae84bbcc85a6611bf2ad11cb5e1a7b39080c01a1b4eb8241dff7b45fc-Tat3NJ1hVj6CKmsX"
         }
     });
-    
+
     let mailDetails = {
         from: 'support@menehariya.com',
         to: `${email_address}`,
@@ -113,7 +118,7 @@ exports.AccountDeleteEmail = (email_address = ``, name = ``) => {
         }
     });
 };
-exports.sendEmail = async (email_address, subject, text, html) => {
+exports.sendEmail = async (email_address, subject, fileName, replacements = []) => {
     try {
         console.log("html =====================>", html);
         let transporter = nodemailer.createTransport({
@@ -121,19 +126,28 @@ exports.sendEmail = async (email_address, subject, text, html) => {
             port: 587,
             auth: {
                 user: "mohammad.sahil@netscapelabs.com", // generated ethereal user
-                pass:  "xsmtpsib-6b110cbae84bbcc85a6611bf2ad11cb5e1a7b39080c01a1b4eb8241dff7b45fc-Tat3NJ1hVj6CKmsX", // generated ethereal password
+                pass: "xsmtpsib-6b110cbae84bbcc85a6611bf2ad11cb5e1a7b39080c01a1b4eb8241dff7b45fc-Tat3NJ1hVj6CKmsX", // generated ethereal password
             },
         });
-
+        fileName = "./view/Email-Templetes/" + fileName + ".ejs";
+        let templateFile = fs.readFileSync(fileName).toString();
+        var template = ejs.compile(templateFile);
+        var htmlToSend = template(replacements);
+        console.log('replace',replacements);
+        console.log('htmlToSend',htmlToSend);
         var mailOptions = {
             from: 'support@menehariya.com',
             to: email_address,
             subject: subject,
-            html: html,
+            html: htmlToSend,
         };
         console.log("mailOptions", mailOptions);
 
-        let emailSent = await transporter.sendMail(mailOptions);
+        let emailSent = await transporter.sendMail(mailOptions, function (error, response) {
+            if (error) {
+                console.log(error);
+            }
+        });
         console.log("emailSent ===============================>", emailSent);
     } catch (err) {
         console.error('mail send err', err)

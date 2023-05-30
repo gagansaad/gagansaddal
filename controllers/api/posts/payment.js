@@ -137,7 +137,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
 
 exports.create_payment_intent = async (req, res) => {
   try {
-    console.log(req.body,"body hai je");
+    console.log(req.body, "body hai je");
     let deviceType = null;
     if (req.headers['m-device-type'] == 'web')
       deviceType = 'web';
@@ -151,11 +151,11 @@ exports.create_payment_intent = async (req, res) => {
 
     let planId = req.body.planId;
     //-----find plan -----//
-    console.log(planId,"plan Id");
+    console.log(planId, "plan Id");
     let find_ads_type = await AdsPlan.find({ _id: planId }).populate("add_ons");
-    console.log(find_ads_type,"vndvndj");
+    console.log(find_ads_type, "vndvndj");
     let adstype = find_ads_type[0].ads_type;
-    console.log(adstype,"njdnjd");
+    console.log(adstype, "njdnjd");
     let plan_price = find_ads_type[0].price.amount;
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
     let addonsId = req.body.add_ons;
@@ -273,12 +273,12 @@ exports.webhooks = async (request, response) => {
       return successJSONResponse(response, { status: 200, message: `paymentn Id not found`, }, 200)
     // Handle the event
     let findUser = await PaymentModel.findById({ "_id": payment_id })
-    console.log(findUser,"findUser");
+    console.log(findUser, "findUser");
     let UserId = findUser.user.toString()
-    let Adstype_Id  = findUser.ads_type.toString()
-    let getAdDetails = await category.findById({"_id":Adstype_Id})
+    let Adstype_Id = findUser.ads_type.toString()
+    let getAdDetails = await category.findById({ "_id": Adstype_Id })
     let adsName = getAdDetails.name;
-    console.log(findUser.user, "jsncjsn",getAdDetails,"dasshbc",Adstype_Id);
+    console.log(findUser.user, "jsncjsn", getAdDetails, "dasshbc", Adstype_Id);
     let paymentStatus = "pending";
     switch (event.type) {
       case "payment_intent.amount_capturable_updated":
@@ -309,16 +309,16 @@ exports.webhooks = async (request, response) => {
       case "payment_intent.succeeded":
         paymentSuccessModelUpdate(payment_id);
         getNotification = await getNotificationTitles(event.type);
-        Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true)
-     
+        Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Payment succedded of post', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
+
         const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
       case "checkout.session.completed":
         paymentSuccessModelUpdate(payment_id);
         getNotification = await getNotificationTitles(event.type);
-        Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true)
-     
+        Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Payment succedded of post', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
+
         break;
       // ... handle other event types
       default:
