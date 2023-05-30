@@ -10,12 +10,22 @@ module.exports = {
         try {
             if (userIds.length == 0)
                 return;
+            let notificationData
             const convertedIds = userIds.map(id => mongoose.Types.ObjectId(id));
             let androidTokens;
             let iosTokens;
             let webTokens;
-            // if (saveNotification == true)
-            //     await Notification.create();
+            notificationData = convertedIds.map(userId => ({
+                title: title,
+                body: body,
+                data: data,
+                user_id: userId,
+              }));
+            if (saveNotification == true){
+
+                await Notification.insertMany(notificationData);
+            }
+              
             const userDeviceTypes = await User.aggregate([
                 { $match: { "_id": { $in: convertedIds } } }, // match ids data only
                 { $unwind: "$user_device_info" }, // Unwind the user_device_info array

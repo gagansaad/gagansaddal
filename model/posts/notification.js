@@ -12,11 +12,11 @@ const NotificationSchema = new mongoose.Schema({
 
     title: {
         ...defaultStringConfig,
-        required: true
+        // required: true
     },
     body: {
         ...defaultStringConfig,
-        required: true
+        // required: true
     },
     data: {
         ...defaultStringConfig,
