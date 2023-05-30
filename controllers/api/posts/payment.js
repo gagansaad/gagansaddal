@@ -272,7 +272,7 @@ exports.webhooks = async (request, response) => {
     console.log(findUser,"findUser");
     let UserId = findUser.user.toString()
     let Adstype_Id  = findUser.ads_type.toString()
-    let getAdDetails = await findById({"_id":Adstype_Id})
+    let getAdDetails = await category.findById({"_id":Adstype_Id})
 
     console.log(findUser.user, "jsncjsn",getAdDetails,"dasshbc");
     let paymentStatus = "pending";
