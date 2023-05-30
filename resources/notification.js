@@ -30,7 +30,10 @@ module.exports = {
             if (saveNotification == true) {
                 await Notification.insertMany(notificationData);
             }
+            console.log((sendEmailNotification.length > 0));
+            console.log(sendEmailNotification);
             if (sendEmailNotification.length > 0) {
+                consol.log('ssss1');
                 convertedIds.map(async userId => {
                     let UserDetails = await User.findById({ "_id": userId })
                     //   let subject = 'Thank you for Use Menehariya!'
@@ -40,6 +43,7 @@ module.exports = {
                 });
 
             }
+            consol.log('ssss222222222');
             const userDeviceTypes = await User.aggregate([
                 { $match: { "_id": { $in: convertedIds } } }, // match ids data only
                 { $unwind: "$user_device_info" }, // Unwind the user_device_info array
