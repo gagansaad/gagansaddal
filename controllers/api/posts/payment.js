@@ -261,7 +261,7 @@ exports.create_payment_intent = async (req, res) => {
 };
 exports.webhooks = async (request, response) => {
   try {
-
+    let getNotification;
     let event = request.body;
     console.log(event, "this is event");
     let payment_id = event.data.object.metadata.payment_id;
@@ -304,12 +304,17 @@ exports.webhooks = async (request, response) => {
 
       case "payment_intent.succeeded":
         paymentSuccessModelUpdate(payment_id);
-    
+        getNotification = await getNotificationTitles(event.type);
+        Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true)
+     
         const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
       case "checkout.session.completed":
         paymentSuccessModelUpdate(payment_id);
+        getNotification = await getNotificationTitles(event.type);
+        Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true)
+     
         break;
       // ... handle other event types
       default:
@@ -321,8 +326,6 @@ exports.webhooks = async (request, response) => {
       payment_intent: event
     }
     await PaymentEventModel.create(dataobj);
-    let getNotification = await getNotificationTitles(event.type);
-    Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true)
     return successJSONResponse(response, { status: 200, message: event.type + " success", }, 200)
   } catch (error) {
     console.log(error);
