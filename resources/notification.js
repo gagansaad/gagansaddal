@@ -43,7 +43,7 @@ module.exports = {
                 });
 
             }
-            consol.log('ssss222222222');
+            console.log('ssss222222222');
             const userDeviceTypes = await User.aggregate([
                 { $match: { "_id": { $in: convertedIds } } }, // match ids data only
                 { $unwind: "$user_device_info" }, // Unwind the user_device_info array
