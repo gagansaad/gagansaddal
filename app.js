@@ -163,7 +163,12 @@ app.use((req, res, next) => {
 // for (let key in centralErrorHandlers) {
 //     app.use(centralErrorHandlers[key]);
 // }
-
+app.post("demo",(req,res)=>{
+    console.log(req.body)
+    res.json({
+        data: `working`
+    })
+})
 app.use((err, req, res, next) => {
     console.log(err)
     res.status(500).send({ error: 'seriously something went wrong ' });

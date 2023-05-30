@@ -3,7 +3,7 @@ var serverKey =
     "AAAAZ59K9-c:APA91bFM-82iCWfjpPlNfsE2EUtfst5ZXeoJ1jy0Q3U18H5-V_zJWpzEvvK47uQIIkcLB9_UPoWye6CIF_QwrKL2zp-7G1xlftWK9VanbDQNleceoTdw3ooOXyYdAb-sfHISB-WqYIJW"; //put your server key here
 var fcm = new FCM(serverKey);
 const {
-    
+    sendEmail
   } = require(`../resources/sendEmailFunction`);
 const mongoose = require('mongoose'),
     User = mongoose.model("user"),
@@ -25,10 +25,9 @@ module.exports = {
                 user_id: userId,
               }));
             if (saveNotification == true){
-
                 await Notification.insertMany(notificationData);
             }
-              
+            
             const userDeviceTypes = await User.aggregate([
                 { $match: { "_id": { $in: convertedIds } } }, // match ids data only
                 { $unwind: "$user_device_info" }, // Unwind the user_device_info array
