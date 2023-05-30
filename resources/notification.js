@@ -30,9 +30,9 @@ module.exports = {
             if (saveNotification == true) {
                 await Notification.insertMany(notificationData);
             }
-            console.log((sendEmailNotification.length > 0));
+            console.log((Object.keys(sendEmailNotification).length  > 0));
             console.log(sendEmailNotification);
-            if (sendEmailNotification.length > 0) {
+            if (Object.keys(sendEmailNotification).length > 0) {
                 console.log('ssss1');
                 convertedIds.map(async userId => {
                     let UserDetails = await User.findById({ "_id": userId })
