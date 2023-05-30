@@ -273,8 +273,8 @@ exports.webhooks = async (request, response) => {
     let UserId = findUser.user.toString()
     let Adstype_Id  = findUser.ads_type.toString()
     let getAdDetails = await category.findById({"_id":Adstype_Id})
-
-    console.log(findUser.user, "jsncjsn",getAdDetails,"dasshbc");
+    let adsName = getAdDetails.name;
+    console.log(findUser.user, "jsncjsn",getAdDetails,"dasshbc",Adstype_Id);
     let paymentStatus = "pending";
     switch (event.type) {
       case "payment_intent.amount_capturable_updated":
@@ -321,10 +321,8 @@ exports.webhooks = async (request, response) => {
       payment_intent: event
     }
     await PaymentEventModel.create(dataobj);
-    // let getNotification = await getNotificationTitles(event.type);
-    // Notification.sendNotifications(userId, getNotification.title, getNotification.body, { 'model_id': addId, 'model': addname }, true)
-    // Return a 200 response to acknowledge receipt of the event
-    // return response.send({ status: 200 }).status(200);
+    let getNotification = await getNotificationTitles(event.type);
+    Notification.sendNotifications(userId, getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true)
     return successJSONResponse(response, { status: 200, message: event.type + " success", }, 200)
   } catch (error) {
     console.log(error);
