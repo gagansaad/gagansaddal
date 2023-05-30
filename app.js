@@ -130,7 +130,12 @@ app.use('/v1/api/posts/ads', planRoutes)
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))
 }
-
+app.post("/demo",(req,res)=>{
+    console.log(req.body)
+    res.json({
+        data: `working`
+    })
+})
 
 // Routes
 const routes = require(`./routes/_all`);
@@ -163,12 +168,7 @@ app.use((req, res, next) => {
 // for (let key in centralErrorHandlers) {
 //     app.use(centralErrorHandlers[key]);
 // }
-app.post("/demo",(req,res)=>{
-    console.log(req.body)
-    res.json({
-        data: `working`
-    })
-})
+
 app.use((err, req, res, next) => {
     console.log(err)
     res.status(500).send({ error: 'seriously something went wrong ' });
