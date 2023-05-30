@@ -869,7 +869,7 @@ module.exports = {
                 $addToSet: {
                   user_device_info: {
                     token: userData.device_token,
-                    device_type: Number(deviceType)
+                    device_type: Number(device_type)
                   },
                 },
                 $set: {
