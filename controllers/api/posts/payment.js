@@ -271,9 +271,10 @@ exports.webhooks = async (request, response) => {
     let findUser = await PaymentModel.findById({ "_id": payment_id })
     console.log(findUser,"findUser");
     let UserId = findUser.user.toString()
-    // let getUserToken = await UserModel.findById({"_id":UserId})
+    let Adstype_Id  = findUser.ads_type.toString()
+    let getAdDetails = await findById({"_id":Adstype_Id})
 
-    console.log(findUser.user, "jsncjsn", UserId);
+    console.log(findUser.user, "jsncjsn",getAdDetails,"dasshbc");
     let paymentStatus = "pending";
     switch (event.type) {
       case "payment_intent.amount_capturable_updated":
