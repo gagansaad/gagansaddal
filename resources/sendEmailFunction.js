@@ -118,7 +118,7 @@ exports.AccountDeleteEmail = (email_address = ``, name = ``) => {
         }
     });
 };
-exports.sendEmail = async (email_address, subject, fileName, replacements = {}) => {
+exports.sendEmail = async (email_address, subject, fileName, replacements = []) => {
     try {
         // console.log("html =====================>", html);
         let transporter = nodemailer.createTransport({
