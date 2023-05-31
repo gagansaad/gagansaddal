@@ -30,15 +30,28 @@ module.exports = {
             if (saveNotification == true) {
                 await Notification.insertMany(notificationData);
             }
-            console.log((Object.keys(sendEmailNotification).length  > 0));
-            console.log(sendEmailNotification);
+            // console.log((Object.keys(sendEmailNotification).length  > 0));
+            console.log(sendEmailNotification, "this is array");
             if (Object.keys(sendEmailNotification).length > 0) {
                 console.log('ssss1');
                 convertedIds.map(async userId => {
+                    console.log(JSON.stringify(data));
                     let UserDetails = await User.findById({ "_id": userId })
                     //   let subject = 'Thank you for Use Menehariya!'
                     let replacements = { 'name': UserDetails.userInfo.name };
-                    replacements.concat(sendEmailNotification.data);
+                    
+                    replacements=({...sendEmailNotification.data});
+                    
+                    console.log("object of replacement ", replacements);
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     sendEmail(UserDetails.userInfo.email_address, sendEmailNotification.subject, sendEmailNotification.email_template, replacements)
                 });
 
