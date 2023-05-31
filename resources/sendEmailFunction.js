@@ -133,8 +133,6 @@ exports.sendEmail = async (email_address, subject, fileName, replacements = []) 
         let templateFile = fs.readFileSync(fileName).toString();
         var template = ejs.compile(templateFile);
         var htmlToSend = template(replacements);
-        console.log('replace',replacements);
-        console.log('htmlToSend',htmlToSend);
         var mailOptions = {
             from: 'support@menehariya.com',
             to: email_address,
