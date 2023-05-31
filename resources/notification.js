@@ -40,7 +40,7 @@ module.exports = {
                     //   let subject = 'Thank you for Use Menehariya!'
                     let replacements = { 'name': UserDetails.userInfo.name };
                     
-                    replacements=({...sendEmailNotification.data});
+                    replacements=({...replacements,...sendEmailNotification.data});
                     
                     console.log("object of replacement ", replacements);
                     
