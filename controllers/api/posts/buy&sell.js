@@ -547,18 +547,12 @@ exports.editBuySellStatus = async (req, res, next) => {
   }
 };
 
-
-
 /////////////
-
 
 exports.fetchAll = async (req, res, next) => {
   try {
     const isFeatured = req.query.isfeatured;
-    let dbQuery = {
-      status: 1
-    };
-
+    let dbQuery = {};
     if (isFeatured) dbQuery.isfeatured = isFeatured;
     let records = await postBuySellAd.find(dbQuery);
     if (records) {
@@ -569,7 +563,7 @@ exports.fetchAll = async (req, res, next) => {
         status: 200,
       })
     } else {
-      return failureJSONResponse(res, { message: `Room not Available` })
+      return failureJSONResponse(res, { message: `buy sell ad not Available` })
     }
   } catch (err) {
     return failureJSONResponse(res, { message: `something went wrong` })

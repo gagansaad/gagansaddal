@@ -356,32 +356,6 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     })
 
 }
-
-exports.fetchAll = async (req, res, next) => {
-
-    try {
-        const isFeatured = req.query.isfeatured;
-        let dbQuery = {
-            status: 1
-        };
-
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        let records = await RoomRentsAds.find(dbQuery);
-        if (records) {
-            return successJSONResponse(res, {
-                message: `success`,
-                total: Object.keys(records).length,
-                records,
-                status: 200,
-            })
-        } else {
-            return failureJSONResponse(res, { message: `Room not Available` })
-        }
-    } catch (err) {
-        return failureJSONResponse(res, { message: `something went wrong` })
-    }
-}
-
 exports.editRoomRentAds = async (req, res, next) => {
     const roomRentId = req?.params?.roomRentId;
 
@@ -602,6 +576,77 @@ exports.editRoomRentAds = async (req, res, next) => {
 
 
 }
+
+exports.fetchAll = async (req, res, next) => {
+    try {
+        const {
+            isfeatured,
+            status,
+            adsType,
+            rental_type,
+            category,
+            title,
+            roomType,
+            custom_date,
+            listerType,
+            accommodates,
+            furnished,
+            attachedBath,
+            amount,
+            negotiable,
+            is_contact,
+            prefered_age,
+            isSmokingAllowed,
+            isAlcoholAllowed,
+            isPetFriendly,
+            preferedGender,
+            location,
+            tagline,
+        } = req.query;
+              
+
+        let dbQuery = {
+            
+        }; 
+
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured; 
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured; 
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured; 
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        if (isFeatured) dbQuery.isfeatured = isFeatured;
+        let records = await RoomRentsAds.find(dbQuery);
+        if (records) {
+            return successJSONResponse(res, {
+                message: `success`,
+                total: Object.keys(records).length,
+                records,
+                status: 200,
+            })
+        } else {
+            return failureJSONResponse(res, { message: `Room not Available` })
+        }
+    } catch (err) {
+        return failureJSONResponse(res, { message: `something went wrong` })
+    }
+}
+
+
 
 
 

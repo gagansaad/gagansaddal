@@ -32,7 +32,7 @@ const mongoose = require("mongoose"),
 
 
 
-exports.fetchAll = async (req, res, next) => {
+exports.fetchAllMyAds = async (req, res, next) => {
 
   try {
     let adstype = req.query.adsType;
@@ -48,6 +48,61 @@ exports.fetchAll = async (req, res, next) => {
     if (!adstype) return failureJSONResponse(res, { message: `Please provide post type id` });
     else if (adstype && !isValidMongoObjId(mongoose, adstype)) return failureJSONResponse(res, { message: `Please provide valid post type id` });
 
+    let findCategory = await category.findOne({ _id: adstype })
+
+    if (!findCategory) {
+      return failureJSONResponse(res, {
+        message: `Category not found`
+      })
+    }
+    console.log(findCategory.name);
+    switch (findCategory.name) {
+      case 'Babysitters and Nannies':
+        successJSONResponseWithPagination(res, babysitterAd, page, perPage,dbquery)
+        break;
+      case 'Buy & Sell':
+        successJSONResponseWithPagination(res, buysellAd, page, perPage,dbquery)
+        break;
+      case 'Local Biz and services':
+        successJSONResponseWithPagination(res, bizAd, page, perPage,dbquery)
+        break;
+      case 'Events':
+        successJSONResponseWithPagination(res, eventAd, page, perPage,dbquery)
+        break;
+      case 'Job':
+        successJSONResponseWithPagination(res, jobsAd, page, perPage,dbquery)
+        break;
+      case "Rentals":
+        successJSONResponseWithPagination(res, roomrentAd, page, perPage,dbquery)
+        break;
+      default:
+        failureJSONResponse(res, {
+          message: `Record not found`
+        })
+        break;
+    }
+  } catch (err) {
+    console.log(err)
+    return failureJSONResponse(res, { message: `something went wrong` }, { error: err.message })
+  }
+}
+
+exports.fetchAll = async (req, res, next) => {
+
+  try {
+    let adstype = req.query.adsType;
+    console.log(adstype);
+    var perPage = 10 || parseInt(req.query.perpage)
+    var page = parseInt(req.query.page) || 1
+    // let dbquery = ``
+    // if (req.query.userId) {
+    //   dbquery = req.body.userid
+    // } else if (req.body.userId) {
+    //   dbquery = req.body.userid
+    // }
+    if (!adstype) return failureJSONResponse(res, { message: `Please provide post type id` });
+    else if (adstype && !isValidMongoObjId(mongoose, adstype)) return failureJSONResponse(res, { message: `Please provide valid post type id` });
+    
     let findCategory = await category.findOne({ _id: adstype })
 
     if (!findCategory) {
@@ -86,7 +141,5 @@ exports.fetchAll = async (req, res, next) => {
     return failureJSONResponse(res, { message: `something went wrong` }, { error: err.message })
   }
 }
-
-
 
 

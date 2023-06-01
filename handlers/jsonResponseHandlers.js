@@ -1,8 +1,12 @@
 exports.successJSONResponseWithPagination = async (res, responseModel, OnPage, perPage = 10, dbquery, message = `Record found successfully`, data, httpStatusCode = 200) => {
     console.log(responseModel)
     if (res) {
-
-        let responseModelWithLimit = await responseModel.find(dbquery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
+        let responseModelWithLimit;
+        if(dbquery){
+            responseModelWithLimit = await responseModel.find(dbquery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
+        }else{
+            responseModelWithLimit = await responseModel.find().populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
+        }
         console.log(responseModelWithLimit);
         const responseModelCount = await responseModel.count();
         const mainData = {
