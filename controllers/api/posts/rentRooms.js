@@ -588,15 +588,10 @@ exports.fetchAll = async (req, res, next) => {
             category,
             title,
             roomType,
-            custom_date,
             listerType,
             accommodates,
             furnished,
             attachedBath,
-            amount,
-            negotiable,
-            is_contact,
-            prefered_age,
             isSmokingAllowed,
             isAlcoholAllowed,
             isPetFriendly,
@@ -604,7 +599,7 @@ exports.fetchAll = async (req, res, next) => {
             location,
             tagline,
         } = req.query;
-        var perPage = req.query.perpage || 6
+        var perPage =  parseInt(req.query.perpage) || 6
         var page = parseInt(req.query.page) || 1
 
         let dbQuery = {}; 
