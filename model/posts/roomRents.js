@@ -43,6 +43,7 @@ const roomRentsSchema = new mongoose.Schema({
         rental_type: {
             ...defaultStringConfig,
             required: true
+            
         },
 
         category: {
@@ -60,10 +61,12 @@ const roomRentsSchema = new mongoose.Schema({
         roomType: {
             ...defaultStringConfig,
             // required: true
+            default:``
         },
         availability: {
             custom_date: {
                 ...defaultStringConfig,
+                default:``
             },
             immidiate: {
                 type: Boolean,
@@ -73,20 +76,24 @@ const roomRentsSchema = new mongoose.Schema({
         listerType: {
             ...defaultStringConfig,
             // required: true
+            default:``
 
         },
         accommodates: {
             type: Number,
             // required: true
+            default:null
         },
         attachedBath: {
             type: Number,
             // required: true
+            default:null
         },
         rent: {
             amount: {
                 type: Number,
                 // required: true,
+                default:null
             },
             negotiable: {
                 type: Boolean,
@@ -122,11 +129,13 @@ const roomRentsSchema = new mongoose.Schema({
             ...defaultStringConfig,
             // enum: [`Male`,`Female`,`Any Gender`],
             // required: true
+            default:``
         },
         prefered_age:[String],
         furnished: {
             ...defaultStringConfig,
             // required: true
+            default:``
         },
         location: {
             ...defaultStringConfig,
