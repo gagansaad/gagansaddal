@@ -62,6 +62,7 @@ const configurationsRoute = require('./routes/api/configurations');
 const adminconfigurationsRoute1 = require('./routes/admin/configurations');
 
 const postTypeRoutes = require('./routes/api/ads/types');
+const postTypeAdminRoutes = require('./routes/admin/types');
 const roomRentsRoutes = require('./routes/api/ads/roomRents');
 const bizRoutes = require('./routes/api/ads/bizAndServices');
 const jobsRoutes = require('./routes/api/ads/jobs');
@@ -118,6 +119,7 @@ app.use('/admin/v1/api/ads/sub-categories', adsSubCategoriesRoutes);
 
 app.use('/v1/api/posts/', All_Tags);
 app.use('/v1/api/posts/types', postTypeRoutes);
+app.use('/admin/v1/api/posts/types', postTypeAdminRoutes);
 app.use('/v1/api/posts/room-rents', roomRentsRoutes);
 app.use('/v1/api/posts/events', eventRoutes);
 app.use('/v1/api/posts/jobs', jobsRoutes);
