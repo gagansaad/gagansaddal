@@ -1,5 +1,5 @@
 const router = require(`express`).Router(),
-    authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
+    authMiddleware = require(`../../middleware/ensureUserLoggedIn`),
     controllers = require(`../../controllers/api/posts/types`);
 
 router.get(`/`,
