@@ -580,6 +580,7 @@ exports.editRoomRentAds = async (req, res, next) => {
 exports.fetchAll = async (req, res, next) => {
     try {
         const {
+            userId,
             isfeatured,
             status,
             adsType,
@@ -603,38 +604,35 @@ exports.fetchAll = async (req, res, next) => {
             location,
             tagline,
         } = req.query;
-              
+        var perPage = req.query.perpage || 6
+        var page = parseInt(req.query.page) || 1
 
-        let dbQuery = {
-            
-        }; 
-
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured; 
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured; 
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured; 
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        if (isFeatured) dbQuery.isfeatured = isFeatured;
-        let records = await RoomRentsAds.find(dbQuery);
+        let dbQuery = {}; 
+        if (isfeatured) dbQuery.isfeatured = isFeatured;
+        if (status) dbQuery.status = status;
+        if (adsType) dbQuery.adsType = adsType;
+        if (rental_type) dbQuery.rental_type = rental_type;
+        if (category) dbQuery.category = category;
+        if (title) dbQuery.title = title; 
+        if (roomType) dbQuery.roomType = roomType;
+        if (listerType) dbQuery.listerType = listerType;
+        if (accommodates) dbQuery.accommodates = accommodates;
+        if (furnished) dbQuery.furnished = furnished; 
+        if (attachedBath) dbQuery.attachedBath = attachedBath;
+        if (isSmokingAllowed) dbQuery.isSmokingAllowed = isSmokingAllowed;
+        if (isAlcoholAllowed) dbQuery.isAlcoholAllowed = isAlcoholAllowed;
+        if (isPetFriendly) dbQuery.isPetFriendly = isPetFriendly;
+        if (preferedGender) dbQuery.preferedGender = preferedGender;
+        if (userId) dbQuery.userId = userId;
+        
+        let records = await RoomRentsAds.find(dbQuery).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
+        const responseModelCount = await RoomRentsAds.count();
         if (records) {
-            return successJSONResponse(res, {
+            return successJSONResponse(res,{
                 message: `success`,
-                total: Object.keys(records).length,
+                perPage: perPage,
+                totalPages: Math.ceil(responseModelCount / perPage),
+                currentPage: page,
                 records,
                 status: 200,
             })

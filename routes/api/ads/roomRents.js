@@ -62,7 +62,7 @@ router.patch(`/edit/:roomRentId`,
     controllers.validateRoomRentsAdsData,
     controllers.editRoomRentAds
 );
-router.get(`/fetchMyAds`,
+router.get(`/fetchAds`,
     authMiddleware.ensureUserLoggedIn,
     controllers.fetchAll
 );
