@@ -230,7 +230,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
 
     } = req.body;
     console.log(tagline, "tagggggggggggg");
-    let taglines = tagline
+    let taglines = JSON.parse(tagline)
     if (taglines) {
         for (i = 0; i < taglines.length; i++) {
             let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
@@ -297,7 +297,9 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     } else {
         immidiate = false
     }
-
+    if (prefered_age) {
+        prefered_age= JSON.parse(prefered_age)
+    } 
     const dataObj = {
         isfeatured,
         status: status,
@@ -329,7 +331,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
             // occupation,
             preferedGender: preferedGender,
             location,
-            tagline,
+            tagline:taglines,
             image: imageArr
         },
 
