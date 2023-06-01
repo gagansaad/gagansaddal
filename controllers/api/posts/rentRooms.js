@@ -297,8 +297,9 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     } else {
         immidiate = false
     }
+    let prefered_ag;
     if (prefered_age) {
-        prefered_age= JSON.parse(prefered_age)
+        prefered_ag= JSON.parse(prefered_age)
     } 
     const dataObj = {
         isfeatured,
@@ -315,7 +316,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
                 custom_date,
                 immidiate,
             },
-            prefered_age,
+            prefered_age:prefered_ag,
             listerType,
             accommodates,
             attachedBath,
