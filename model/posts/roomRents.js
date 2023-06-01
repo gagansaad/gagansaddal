@@ -19,13 +19,13 @@ const roomRentsSchema = new mongoose.Schema({
         //2 = inactive
         //3 = draft 
     },
-    plan_validity:{
-        plan_id:{type: String,trim:true},
-        active_on:{type:String,trim:true},
-        expired_on:{type:String,trim:true},
+    plan_validity: {
+        plan_id: { type: String, trim: true },
+        active_on: { type: String, trim: true },
+        expired_on: { type: String, trim: true },
     },
-    addons_validity:[{
-        
+    addons_validity: [{
+
     }],
     isfeatured: {
         type: Boolean,
@@ -39,12 +39,12 @@ const roomRentsSchema = new mongoose.Schema({
         required: true
     },
     adsInfo: {
-         
+
         rental_type: {
             ...defaultStringConfig,
             required: true
         },
-         
+
         category: {
             ...defaultStringConfig,
             required: true
@@ -61,14 +61,14 @@ const roomRentsSchema = new mongoose.Schema({
             ...defaultStringConfig,
             // required: true
         },
-        availability:{
-           custom_date:{
-            ...defaultStringConfig,
-           },
-           immidiate:{
-            type: Boolean,
-            default:false
-           }
+        availability: {
+            custom_date: {
+                ...defaultStringConfig,
+            },
+            immidiate: {
+                type: Boolean,
+                default: false
+            }
         },
         listerType: {
             ...defaultStringConfig,
@@ -84,50 +84,46 @@ const roomRentsSchema = new mongoose.Schema({
             // required: true
         },
         rent: {
-           amount:{
-            type: Number,
-            // required: true,
-           },
-            negotiable:{
-                type: Boolean,
-                default:false
+            amount: {
+                type: Number,
+                // required: true,
             },
-            is_contact:{
+            negotiable: {
                 type: Boolean,
-                default:false
+                default: false
             },
-            currency:{type:String,default:"USD"},
+            is_contact: {
+                type: Boolean,
+                default: false
+            },
+            currency: { type: String, default: "USD" },
         },
-        
+
         isSmokingAllowed: {
             type: Boolean,
-            default:false
+            default: false
         },
         // isAlcoholAllowed: {
         //     type: Boolean,
         //     default:false
         // },
-        tagline:{
-            type:Array
+        tagline: {
+            type: Array
         },
         isPetFriendly: {
             type: Boolean,
-            default:false
+            default: false
         },
         // occupation: {
         //     ...defaultStringConfig,
-           
+
         // },
         preferedGender: {
             ...defaultStringConfig,
             // enum: [`Male`,`Female`,`Any Gender`],
             // required: true
         },
-        prefered_age:{
-            type:[{
-                type: String,
-            }]
-        },
+        prefered_age:[String],
         furnished: {
             ...defaultStringConfig,
             // required: true
@@ -148,14 +144,14 @@ const roomRentsSchema = new mongoose.Schema({
         // website_link: defaultStringConfig,
         primary_mobile_number: {
             country_code: defaultStringConfig,
-            primary_phone_number:defaultStringConfig,
-  
-          },
-          secondary_mobile_number: {
+            primary_phone_number: defaultStringConfig,
+
+        },
+        secondary_mobile_number: {
             country_code: defaultStringConfig,
-            secondary_phone_number:defaultStringConfig,
-  
-          },
+            secondary_phone_number: defaultStringConfig,
+
+        },
         hide_my_email: defaultBooleanConfig,
         hide_my_phone: defaultBooleanConfig,
         hide_my_secondary_phone: defaultBooleanConfig,
