@@ -250,7 +250,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     const imageArr = [];
 
 
-
+if(req.files){
     for (var i = 0; i < req.files.length; i++) {
         var thumbnail = req.files[i].path
 
@@ -258,6 +258,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
         imageArr.push(productImages._id);
 
     }
+}
 
     let iscontact = false;
     if (is_contact == 'true') {
