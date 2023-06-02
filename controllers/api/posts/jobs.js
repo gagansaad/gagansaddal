@@ -308,6 +308,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
 exports.createJobAds = async (req, res, next) => {
   try {
+    console.log("hitt hoyi");
     const {
       isfeatured,
       status,
