@@ -591,6 +591,7 @@ exports.editEventAds = async (req, res, next) => {
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (platforms.length) adsInfoObj.live_event = platforms;
     if (location) adsInfoObj.location = location;
+    if (taglines) adsInfoObj.tagline = taglines;
     if (video) adsInfoObj.video = video;
     // if (adsInfoObj && Object.keys(adsInfoObj).length) {
     //   dataObj.adsInfo = adsInfoObj;
