@@ -596,7 +596,6 @@ exports.editEventAds = async (req, res, next) => {
     // if (adsInfoObj && Object.keys(adsInfoObj).length) {
     //   dataObj.adsInfo = adsInfoObj;
     // }
-
     const dataObjq = {
       adsInfo: adsInfoObj,
       listerBasicInfo: {
