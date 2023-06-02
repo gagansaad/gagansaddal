@@ -153,3 +153,7 @@ const roomRentsSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = mongoose.model('job', roomRentsSchema);
+// company_name:defaultStringConfig,
+// exp_title:defaultStringConfig,
+// exp_startdate:defaultStringConfig,
+// exp_enddate:defaultStringConfig,

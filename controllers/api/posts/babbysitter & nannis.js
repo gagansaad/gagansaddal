@@ -522,12 +522,67 @@ secondary_phone = false
 exports.fetchAll = async (req, res, next) => {
   try {
    
-    let dbQuery = {
-     
-    };
+    let dbQuery = {};
+    const {
 
+      status,
+      category_value,
+      category_name,
+      work_type,
+      care_service,
+      age_group,
+      prefered_language,
+      prefered_gender,
+      transport_facilty,
+      location,
+      tagline,
+      
+    } = req.body;
     
-    let records = await postbabyAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' });
+if (status) {
+  dbQuery.status = status;
+}
+
+if (category_value) {
+  dbQuery.category_value = category_value;
+}
+
+if (category_name) {
+  dbQuery.category_name = category_name;
+}
+
+if (work_type) {
+  dbQuery["adsInfo.work_type"] = work_type;
+}
+
+if (care_service) {
+  dbQuery["adsInfo.care_service"] = care_service;
+}
+
+if (age_group) {
+  dbQuery["adsInfo.age_group"] = age_group;
+}
+
+if (prefered_language) {
+  dbQuery["adsInfo.prefered_language"] = prefered_language;
+}
+
+if (prefered_gender) {
+  dbQuery["adsInfo.prefered_gender"] = prefered_gender;
+}
+
+if (transport_facilty) {
+  dbQuery["adsInfo.transport_facilty"] = transport_facilty;
+}
+
+if (location) {
+  dbQuery["adsInfo.location"] = location;
+}
+
+if (tagline) {
+  dbQuery["adsInfo.tagline"] = tagline;
+}
+    let records = await postbabyAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
@@ -553,7 +608,7 @@ exports.fetchonead = async (req, res, next) => {
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
-        records,
+        ad_details:records,
         status: 200,
       })
     } else {

@@ -553,7 +553,63 @@ exports.fetchAll = async (req, res, next) => {
   try {
     
     let dbQuery = {};
-    let records = await postBuySellAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' });
+    const {
+      status,
+      ads_type,
+      category,
+      sub_category,
+      title,
+      product_condition,
+      user_type,
+      payment_mode,
+      fullfilment,
+      location,
+      tagline
+    } = req.body;
+    if (status) {
+      dbQuery.status = status;
+    }
+    
+    if (ads_type) {
+      dbQuery.adsType = ads_type;
+    }
+    
+    if (category) {
+      dbQuery["adsInfo.category"] = category;
+    }
+    
+    if (sub_category) {
+      dbQuery["adsInfo.sub_category"] = sub_category;
+    }
+    
+    if (title) {
+      dbQuery["adsInfo.title"] = title;
+    }
+    
+    if (product_condition) {
+      dbQuery["adsInfo.product_condition"] = product_condition;
+    }
+    
+    if (user_type) {
+      dbQuery["adsInfo.user_type"] = user_type;
+    }
+    
+    if (payment_mode) {
+      dbQuery["adsInfo.payment_mode"] = payment_mode;
+    }
+    
+    if (fullfilment) {
+      dbQuery["adsInfo.fullfilment"] = fullfilment;
+    }
+    
+    if (location) {
+      dbQuery["adsInfo.location"] = location;
+    }
+    
+    if (tagline) {
+      dbQuery["adsInfo.tagline"] = tagline;
+    }
+    let records = await postBuySellAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
@@ -577,7 +633,7 @@ exports.fetchonead = async (req, res, next) => {
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
-        records,
+        ad_details:records,
         status: 200,
       })
     } else {

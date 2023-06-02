@@ -707,8 +707,42 @@ exports.fetchAll = async (req, res, next) => {
      
 
     } = req.body;
+    if (status) {
+      dbQuery.status = status;
+    }
     
-    let records = await eventAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' });
+    if (title) {
+      dbQuery["adsInfo.title"] = title;
+    }
+    
+    if (type) {
+      dbQuery["adsInfo.type"] = type;
+    }
+    
+    if (category) {
+      dbQuery["adsInfo.category"] = category;
+    }
+    
+    if (details) {
+      dbQuery["adsInfo.details"] = details;
+    }
+    
+    if (recurring_type) {
+      dbQuery["adsInfo.recurring_type"] = recurring_type;
+    }
+    
+    if (tagline) {
+      dbQuery["adsInfo.tagline"] = tagline;
+    }
+    
+    if (location) {
+      dbQuery["adsInfo.location"] = location;
+    }
+    
+    if (venue_name) {
+      dbQuery["adsInfo.venue_name"] = venue_name;
+    }
+    let records = await eventAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
@@ -732,7 +766,7 @@ exports.fetchonead = async (req, res, next) => {
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
-        records,
+        ad_details:records,
         status: 200,
       })
     } else {

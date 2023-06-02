@@ -690,9 +690,44 @@ exports.fetchAll = async (req, res, next) => {
     let dbQuery = {
       
     };
-
+    const {
+      status,
+      categories,
+      sub_categories,
+      business_name,
+      tagline,
+      business_location,
+      is_24_seven,
+    } = req.body;
     
-    let records = await postbizAndServicesAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' });
+if (status) {
+  dbQuery.status = status;
+}
+
+if (categories) {
+  dbQuery.categories = categories;
+}
+
+if (sub_categories) {
+  dbQuery.sub_categories = sub_categories;
+}
+
+if (business_name) {
+  dbQuery["adsInfo.business_name"] = business_name;
+}
+
+if (tagline) {
+  dbQuery["adsInfo.tagline"] = tagline;
+}
+
+if (business_location) {
+  dbQuery["adsInfo.business_location"] = business_location;
+}
+
+if (is_24_seven) {
+  dbQuery["adsInfo.is_24_seven"] = is_24_seven;
+}
+    let records = await postbizAndServicesAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
@@ -717,7 +752,7 @@ exports.fetchonead = async (req, res, next) => {
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
-        records,
+        ad_details:records,
         status: 200,
       })
     } else {
