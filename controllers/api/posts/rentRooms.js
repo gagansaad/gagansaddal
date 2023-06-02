@@ -622,7 +622,7 @@ exports.fetchAll = async (req, res, next) => {
         if (preferedGender) dbQuery.preferedGender = preferedGender;
         if (userId) dbQuery.userId = userId;
         
-        let records = await RoomRentsAds.find(dbQuery).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
+        let records = await RoomRentsAds.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
         const responseModelCount = await RoomRentsAds.countDocuments(dbQuery);
         if (records) {
             return successJSONResponse(res,{

@@ -647,9 +647,9 @@ exports.editJobStatus = async (req, res, next) => {
 
 ///////////////////
 
-exports.fetchAll = async (req, res, next) => {
+exports.fetchAllAds = async (req, res, next) => {
   try {
-    console.log("object");
+    console.log("objectuygtututu");
     let dbQuery = {};
     const {
       isfeatured,
@@ -665,6 +665,7 @@ exports.fetchAll = async (req, res, next) => {
       preferred_gender,
       location,
       tagline,
+      userId
     } = req.query;
     var perPage =  parseInt(req.query.perpage) || 6
     var page = parseInt(req.query.page) || 1
@@ -719,7 +720,7 @@ exports.fetchAll = async (req, res, next) => {
       dbQuery["adsInfo.tagline"] = tagline;
     }
     if (userId) dbQuery.userId = userId;
-    let records = await postJobAd.find(dbQuery).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
+    let records = await postJobAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
     const responseModelCount = await postJobAd.countDocuments(dbQuery);
     if (records) {
       return successJSONResponse(res, {
@@ -731,7 +732,7 @@ exports.fetchAll = async (req, res, next) => {
         status: 200,
       });
     } else {
-      return failureJSONResponse(res, { message: `Room not Available` });
+      return failureJSONResponse(res, { message: `ads not Available` });
     }
   } catch (err) {
     console.log(err);

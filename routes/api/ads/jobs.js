@@ -54,7 +54,7 @@ router.post(`/new-job`, upload.array('photos', 10),
 )
 router.get(`/fetchAds`,
     authMiddleware.ensureUserLoggedIn,
-    controllers.fetchAll
+    controllers.fetchAllAds
 );
 
 router.patch(`/edit/:jobId`,
