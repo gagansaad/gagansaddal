@@ -65,7 +65,7 @@ router.patch(`/edit/:bizId`,upload.fields([
 //     authMiddleware.ensureUserLoggedIn,
 //     controllers.editBuySellStatus
 // );
-router.get(`/fetchMyAds`,
+router.get(`/fetchAds`,
     authMiddleware.ensureUserLoggedIn,
     controllers.fetchAll
 );

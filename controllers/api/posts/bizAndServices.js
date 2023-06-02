@@ -687,12 +687,11 @@ if (hide_my_secondary_phone == "true") {
 
 exports.fetchAll = async (req, res, next) => {
   try {
-    const isFeatured = req.query.isfeatured;
     let dbQuery = {
-      status: 1,
+      
     };
 
-    if (isFeatured) dbQuery.isfeatured = isFeatured;
+    
     let records = await postbizAndServicesAd.find(dbQuery);
     if (records) {
       return successJSONResponse(res, {

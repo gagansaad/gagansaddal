@@ -729,6 +729,7 @@ exports.fetchAllAds = async (req, res, next) => {
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
+        total: Object.keys(records).length,
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
