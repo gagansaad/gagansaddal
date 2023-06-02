@@ -69,4 +69,8 @@ router.patch(`/edit-role/:jobId`,
     controllers.validateJobAdsData,
     controllers.editJobStatus
 );
+router.get(`/ad_details`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchonead
+);
 module.exports = router;

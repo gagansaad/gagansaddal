@@ -743,3 +743,24 @@ exports.fetchAllAds = async (req, res, next) => {
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
+
+
+
+exports.fetchonead = async (req, res, next) => {
+  try {
+    const adsId = req.query.adsId;
+  
+    let records = await postJobAd.findById({"_id":adsId});
+    if (records) {
+      return successJSONResponse(res, {
+        message: `success`,
+        records,
+        status: 200,
+      })
+    } else {
+      return failureJSONResponse(res, { message: `ad not Available` })
+    }
+  } catch (err) {
+    return failureJSONResponse(res, { message: `something went wrong` })
+  }
+}

@@ -644,7 +644,24 @@ exports.fetchAll = async (req, res, next) => {
 
 
 
-
+exports.fetchonead = async (req, res, next) => {
+    try {
+      const adsId = req.query.adsId;
+    
+      let records = await RoomRentsAds.findById({"_id":adsId});
+      if (records) {
+        return successJSONResponse(res, {
+          message: `success`,
+          records,
+          status: 200,
+        })
+      } else {
+        return failureJSONResponse(res, { message: `ad not Available` })
+      }
+    } catch (err) {
+      return failureJSONResponse(res, { message: `something went wrong` })
+    }
+  }
 
 
 

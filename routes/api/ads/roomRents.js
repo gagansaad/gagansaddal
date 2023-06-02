@@ -66,5 +66,8 @@ router.get(`/fetchAds`,
     authMiddleware.ensureUserLoggedIn,
     controllers.fetchAll
 );
-
+router.get(`/ad_details`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchonead
+);
 module.exports = router;

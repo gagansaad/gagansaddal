@@ -684,47 +684,6 @@ if (hide_my_secondary_phone == "true") {
   }
 };
 
-/////----------------------Update Job Status -------------------/////
-
-exports.editJobStatus = async (req, res, next) => {
-
-  try {
-    const jobId = req?.params?.jobId;
-
-    if (!jobId)
-      return successJSONResponse(res, {
-        message: `success`,
-        newJobPost,
-        status: 200,
-      });
-    const dataObj = {};
-    const { status } = req.body;
-
-    if (status) dataObj.status = parseInt(status);
-
-    const updateJob = await postJobAd.findByIdAndUpdate(
-      { _id: jobId },
-      { $set: dataObj },
-      { new: true }
-    );
-
-    if (updateJob) {
-      return successJSONResponse(res, {
-        message: `success`,
-        updateJob,
-      });
-    } else {
-      return failureJSONResponse(res, {
-        message: `Something went wrong`,
-        updatejob: null,
-      });
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-////////////////
 
 exports.fetchAll = async (req, res, next) => {
   try {
@@ -734,7 +693,7 @@ exports.fetchAll = async (req, res, next) => {
     };
 
     if (isFeatured) dbQuery.isfeatured = isFeatured;
-    let records = await postJobAd.find(dbQuery);
+    let records = await postbizAndServicesAd.find(dbQuery);
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
@@ -749,3 +708,23 @@ exports.fetchAll = async (req, res, next) => {
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
+
+
+exports.fetchonead = async (req, res, next) => {
+  try {
+    const adsId = req.query.adsId;
+  
+    let records = await postbizAndServicesAd.findById({"_id":adsId});
+    if (records) {
+      return successJSONResponse(res, {
+        message: `success`,
+        records,
+        status: 200,
+      })
+    } else {
+      return failureJSONResponse(res, { message: `ad not Available` })
+    }
+  } catch (err) {
+    return failureJSONResponse(res, { message: `something went wrong` })
+  }
+}
