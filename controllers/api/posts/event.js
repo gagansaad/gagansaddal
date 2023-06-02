@@ -591,7 +591,7 @@ exports.editEventAds = async (req, res, next) => {
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (platforms.length) adsInfoObj.live_event = platforms;
     if (location) adsInfoObj.location = location;
-    if (taglines) adsInfoObj.tagline = taglines;
+    if (tagline) adsInfoObj.tagline = taglines;
     if (video) adsInfoObj.video = video;
     // if (adsInfoObj && Object.keys(adsInfoObj).length) {
     //   dataObj.adsInfo = adsInfoObj;
@@ -720,7 +720,7 @@ exports.fetchAll = async (req, res, next) => {
 
     } = req.body;
     
-    let records = await eventAd.find(dbQuery);
+    let records = await eventAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,

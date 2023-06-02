@@ -553,7 +553,7 @@ exports.fetchAll = async (req, res, next) => {
   try {
     
     let dbQuery = {};
-    let records = await postBuySellAd.find(dbQuery);
+    let records = await postBuySellAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,

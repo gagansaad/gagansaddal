@@ -692,7 +692,7 @@ exports.fetchAll = async (req, res, next) => {
     };
 
     
-    let records = await postbizAndServicesAd.find(dbQuery);
+    let records = await postbizAndServicesAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
