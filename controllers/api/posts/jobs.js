@@ -649,6 +649,7 @@ exports.editJobStatus = async (req, res, next) => {
 
 exports.fetchAll = async (req, res, next) => {
   try {
+    console.log("object");
     let dbQuery = {};
     const {
       isfeatured,
@@ -667,14 +668,9 @@ exports.fetchAll = async (req, res, next) => {
     } = req.query;
     var perPage =  parseInt(req.query.perpage) || 6
     var page = parseInt(req.query.page) || 1
-    if (isFeatured) {
-      dbQuery.isfeatured = isFeatured;
-    }
-
     if (isfeatured) {
       dbQuery.isfeatured = isfeatured;
     }
-
     if (status) {
       dbQuery.status = status;
     }
@@ -724,7 +720,7 @@ exports.fetchAll = async (req, res, next) => {
     }
     if (userId) dbQuery.userId = userId;
     let records = await postJobAd.find(dbQuery).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
-    const responseModelCount = await postJobAd.countDocuments(dbQuery);;
+    const responseModelCount = await postJobAd.countDocuments(dbQuery);
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
@@ -738,6 +734,7 @@ exports.fetchAll = async (req, res, next) => {
       return failureJSONResponse(res, { message: `Room not Available` });
     }
   } catch (err) {
+    console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
