@@ -109,7 +109,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
       metadata: {
         "payment_id": PaymentModelId._id.toString()
       },
-      success_url: 'http://localhost:3005/success',
+      success_url: `http://localhost:3005/success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: 'http://localhost:3005/cancel',
     });
   } else {

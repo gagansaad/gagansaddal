@@ -70,7 +70,7 @@ const roomRentsSchema = new mongoose.Schema({
             type:Array
             // required: true
         },
-        experience:[{ ...defaultStringConfig,}],
+        experience:[{}],
         language: {
             type:Array
             // required: true
