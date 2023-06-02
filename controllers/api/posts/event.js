@@ -377,10 +377,12 @@ exports.createEventAds = async (req, res, next) => {
           start_time,
           end_time,
         },
+        
         live_event: platforms,
         video
 
       },
+      tagline:taglines,
       userId: userId,
     };
 
