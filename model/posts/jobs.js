@@ -65,10 +65,7 @@ const roomRentsSchema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         },
-        role: {
-            ...defaultStringConfig,
-            // required: true
-        },
+        role: [],
         employment_type: {
             type:Array
             // required: true
@@ -98,10 +95,7 @@ const roomRentsSchema = new mongoose.Schema({
         //     // required: true
         // },
 
-        work_authorization: {
-            ...defaultStringConfig,
-            // required: true
-        },
+        work_authorization: [],
 
         location: {
             ...defaultStringConfig,
