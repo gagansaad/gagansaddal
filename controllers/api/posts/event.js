@@ -689,11 +689,41 @@ exports.editEventStatus = async (req, res, next) => {
 ////////////////
 exports.fetchAll = async (req, res, next) => {
   try {
-    const isFeatured = req.query.isfeatured;
-    let dbQuery = {
-      status: 1
-    };
+   
+    let dbQuery = {};
+    const {
+      isfeatured,
+      status,
+      adsType,
+      title,
+      type,
+      category,
+      details,
+      regular_ticket_price,
+      vip_ticket_price,
+      no_of_regular_ticket,
+      no_of_vip_ticket,
+      currency,
+      time_zone,
+      start_date,
+      end_date,
+      start_time,
+      end_time,
+      recurring_type,
+      tagline,
+      image,
+      location,
+      venue_name,
+      video,
+      facebook_platform,
+      instagram_platform,
+      zoom_platform,
+      youtube_platform,
+      tiktok_platform,
+      other_platform,
+      other_platform_name
 
+    } = req.body;
     if (isFeatured) dbQuery.isfeatured = isFeatured;
     let records = await eventAd.find(dbQuery);
     if (records) {

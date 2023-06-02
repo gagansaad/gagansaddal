@@ -62,7 +62,7 @@ router.patch(`/edit-status/:eventId`,
     authMiddleware.ensureUserLoggedIn,
     controllers.editEventStatus
 );
-router.get(`/fetchMyAds`,
+router.get(`/fetchAds`,
     authMiddleware.ensureUserLoggedIn,
     controllers.fetchAll
 );
