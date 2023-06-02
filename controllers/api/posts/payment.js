@@ -110,7 +110,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
         "payment_id": PaymentModelId._id.toString()
       },
       success_url: `http://localhost:3005/success/?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: 'http://localhost:3005/cancel',
+      cancel_url: 'http://localhost:3005/cancel/?cancel=true',
     });
   } else {
     paymentIntent = await stripe.paymentIntents.create({
