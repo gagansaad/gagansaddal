@@ -25,16 +25,16 @@ const mongoose = require("mongoose"),
 
 exports.getDnymicsData = async (req, res, next) => {
   let adtype = req.query.adsType
-    let records = await tagline_keywords.find({adType:adtype}).select({"keywords":1,"_id":1});
+  let records = await tagline_keywords.find({ adType: adtype }).select({ "keywords": 1, "_id": 1 });
 
   const dynamicsData = {
-    tagline:records,
+    tagline: records,
     type: ["Venue Based Event", "Live Event", "Both Venue based and Live Streaming Event"],
     category: ["Sport event", "Festival", "Religious", "Political gatherings", "Community Gatherings", "Music concert", "Night party", "Health care advisor", "Education", "Training", "Food & drink", "Fund Raising", "Candlelight Vigil", "Drama", "Theatre", "Movie", "Wedding", "Funneral", "Anniversary", "Welcome", "Farewell", "Markets & Auction", "Spritual", "Valentines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
-    platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok","Google Meet","Microsoft Teams","other"],
+    platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "Google Meet", "Microsoft Teams", "other"],
     recurring_type: ["Daily", "Weekly", "Monthly"],
     time_zone: ["Hawaii Standard Time", "Hawaii-Aleutian Daylight Time", "Alaska Daylight Time", "Pacific Daylight Time", "Mountain Standard Time", "Mountain Daylight Time", "Central Daylight Time", "Eastern Daylight Time"],
-    currency: ["USD","AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR", "USN"],
+    currency: ["USD", "AED", "AUD", "AWG", "CAD", "EUR", "GBP", "INR", "USN"],
 
   };
   return successJSONResponse(res, {
@@ -140,13 +140,13 @@ exports.validateEventAdsData = async (req, res, next) => {
     //     message: "Please provide valid recurring type",
     //   });
     if (regular_ticket_price && (isNaN(Number(regular_ticket_price))))
-            return failureJSONResponse(res, {
-                message: `please provide valid regular_ticket_price`,
-            });
-            if (vip_ticket_price && (isNaN(Number(vip_ticket_price))))
-            return failureJSONResponse(res, {
-                message: `please provide valid vip_ticket_price`,
-            });
+      return failureJSONResponse(res, {
+        message: `please provide valid regular_ticket_price`,
+      });
+    if (vip_ticket_price && (isNaN(Number(vip_ticket_price))))
+      return failureJSONResponse(res, {
+        message: `please provide valid vip_ticket_price`,
+      });
     // if (isNaN(Number(vip_ticket)))
     //   return failureJSONResponse(res, {
     //     message: `please provide valid no. of vip ticket`,
@@ -282,17 +282,17 @@ exports.createEventAds = async (req, res, next) => {
     } = req.body;
 
     let taglines = tagline
-    if(taglines){
-      for(i=0;i<taglines.length;i++){
-        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
-        if(!tags){
+    if (taglines) {
+      for (i = 0; i < taglines.length; i++) {
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
+        if (!tags) {
           let tag = {
-            keywords:taglines[i],
-            ads_type:adsType
-        }
+            keywords: taglines[i],
+            ads_type: adsType
+          }
           await tagline_keywords.create(tag)
         }
-       
+
       }
     }
 
@@ -342,7 +342,7 @@ exports.createEventAds = async (req, res, next) => {
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path
 
-      productImages = await Media.create({ url: thumbnail});
+      productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
 
     }
@@ -356,15 +356,15 @@ exports.createEventAds = async (req, res, next) => {
         type,
         category,
         details,
-        ticket_price:{
+        ticket_price: {
           regular_ticket_price,
           currency,
           vip_ticket_price,
         },
-        
+
         no_of_ticket: {
-           no_of_regular_ticket,
-           no_of_vip_ticket,
+          no_of_regular_ticket,
+          no_of_vip_ticket,
         },
         recurring_type,
         image: imageArr,
@@ -377,12 +377,12 @@ exports.createEventAds = async (req, res, next) => {
           start_time,
           end_time,
         },
-        
+
         live_event: platforms,
         video
 
       },
-      tagline:taglines,
+      tagline: taglines,
       userId: userId,
     };
 
@@ -477,17 +477,17 @@ exports.editEventAds = async (req, res, next) => {
     } = req.body;
 
     let taglines = tagline
-    if(taglines){
-      for(i=0;i<taglines.length;i++){
-        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
-        if(!tags){
+    if (taglines) {
+      for (i = 0; i < taglines.length; i++) {
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
+        if (!tags) {
           let tag = {
-            keywords:taglines[i],
-            ads_type:adsType
-        }
+            keywords: taglines[i],
+            ads_type: adsType
+          }
           await tagline_keywords.create(tag)
         }
-       
+
       }
     }
 
@@ -541,14 +541,14 @@ exports.editEventAds = async (req, res, next) => {
     }
     const dataObj = {},
       adsInfoObj = {},
-      ticketPrice={},
+      ticketPrice = {},
       listerBasicInfoObj = {};
     let no_of_ticket = {}
     let date_time = {}
     let my_phone = false;
     let my_email = false;
     let secondary_phone = false
-    
+
     if (hide_my_secondary_phone == "true") {
       secondary_phone = true
     } else if (hide_my_secondary_phone == 'false') {
@@ -581,13 +581,13 @@ exports.editEventAds = async (req, res, next) => {
     if (recurring_type) adsInfoObj.recurring_type = recurring_type;
     // if (acuurency) adsInfoObj.acuurency = acuurency;
     if (venue_name) adsInfoObj.venue_name = venue_name;
-    if (regular_ticket_price)ticketPrice.regular_ticket_price = regular_ticket_price;
+    if (regular_ticket_price) ticketPrice.regular_ticket_price = regular_ticket_price;
     if (no_of_vip_ticket) no_of_ticket.no_of_vip_ticket = no_of_vip_ticket;
     if (no_of_regular_ticket) no_of_ticket.no_of_regular_ticket = no_of_regular_ticket;
     if (no_of_ticket) adsInfoObj.no_of_ticket = no_of_ticket;
     if (vip_ticket_price) ticketPrice.vip_ticket_price = vip_ticket_price;
     if (currency) ticketPrice.currency = currency;
-    if (ticketPrice)adsInfoObj.ticket_price = ticketPrice;
+    if (ticketPrice) adsInfoObj.ticket_price = ticketPrice;
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (platforms.length) adsInfoObj.live_event = platforms;
     if (location) adsInfoObj.location = location;
@@ -605,8 +605,8 @@ exports.editEventAds = async (req, res, next) => {
         emailAddress,
         website_link,
         hide_my_phone: my_phone,
-            hide_my_email: my_email,
-            hide_my_secondary_phone:secondary_phone,
+        hide_my_email: my_email,
+        hide_my_secondary_phone: secondary_phone,
         primary_mobile_number: {
           country_code: +91,
           primary_phone_number: primary_phone_number,
@@ -691,10 +691,10 @@ exports.editEventStatus = async (req, res, next) => {
 ////////////////
 exports.fetchAll = async (req, res, next) => {
   try {
-   
+
     let dbQuery = {};
     const {
-      
+
       status,
       title,
       type,
@@ -704,41 +704,44 @@ exports.fetchAll = async (req, res, next) => {
       tagline,
       location,
       venue_name,
-     
 
-    } = req.body;
+
+    } = req.query;
+    var perPage =  parseInt(req.query.perpage) || 6
+    var page = parseInt(req.query.page) || 1
+
     if (status) {
       dbQuery.status = status;
     }
-    
+
     if (title) {
       dbQuery["adsInfo.title"] = title;
     }
-    
+
     if (type) {
       dbQuery["adsInfo.type"] = type;
     }
-    
+
     if (category) {
       dbQuery["adsInfo.category"] = category;
     }
-    
+
     if (details) {
       dbQuery["adsInfo.details"] = details;
     }
-    
+
     if (recurring_type) {
       dbQuery["adsInfo.recurring_type"] = recurring_type;
     }
-    
+
     if (tagline) {
       dbQuery["adsInfo.tagline"] = tagline;
     }
-    
+
     if (location) {
       dbQuery["adsInfo.location"] = location;
     }
-    
+
     if (venue_name) {
       dbQuery["adsInfo.venue_name"] = venue_name;
     }
@@ -747,6 +750,9 @@ exports.fetchAll = async (req, res, next) => {
       return successJSONResponse(res, {
         message: `success`,
         total: Object.keys(records).length,
+        perPage: perPage,
+        totalPages: Math.ceil(responseModelCount / perPage),
+        currentPage: page,
         records,
         status: 200,
       })
@@ -761,12 +767,12 @@ exports.fetchAll = async (req, res, next) => {
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
-  
-    let records = await eventAd.findById({"_id":adsId});
+
+    let records = await eventAd.findById({ "_id": adsId });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
-        ad_details:records,
+        ads_details: records,
         status: 200,
       })
     } else {

@@ -653,7 +653,7 @@ exports.fetchonead = async (req, res, next) => {
       if (records) {
         return successJSONResponse(res, {
           message: `success`,
-          ad_details:records,
+          ads_details:records,
           status: 200,
         })
       } else {

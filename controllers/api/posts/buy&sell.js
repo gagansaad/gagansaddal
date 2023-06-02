@@ -21,11 +21,11 @@ const mongoose = require("mongoose"),
 ////-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   let adtype = req.query.ads_type
-    let records = await tagline_keywords.find({ads_type:adtype}).select({"keywords":1,"_id":1});
+  let records = await tagline_keywords.find({ ads_type: adtype }).select({ "keywords": 1, "_id": 1 });
 
   const dynamicsData = {
-    tagline:records,
-    quantity_unit:["Units", "Pound", "Kg", "Foot", "sqf", "Litre", "Gallon", "Meter", "Yard", "Inches", "Cubic meter", "Centimeter", "Gram", "Quart", "Length"],
+    tagline: records,
+    quantity_unit: ["Units", "Pound", "Kg", "Foot", "sqf", "Litre", "Gallon", "Meter", "Yard", "Inches", "Cubic meter", "Centimeter", "Gram", "Quart", "Length"],
     categories: ["Furniture and Home decore", "Baby & Kids stuff", "Home and Kitchen Appliance", "Real Estate", "Electronics appliance", "Computers & Accsosories", "Books", "Musical instrument", "Phones", "Clothing and Footwear", "Pets", "Fashion & Jewllery", "Home, Lawn & Garden", "Video Games & Consoles", "Bikes & Moterbikes", "Sport & Health product", "Cars", "Arts & Collectabiles", "Free Stuffs", "Other"],
     categories_Furniture: ["Tea table", "Sudy table", "Double bed", "Curtains", "Book shelf", "Center table", "Dining table and chairs", "Coffee tables", "Drawers", "Television stand", "Office furniture", "Bed & Bedroom furniture", "Chairs", "Computer table", "Cabinets", "Doors", "Couch", "Modular kitchen", "Windows", "Other"],
     categories_Baby: ["Baby toilet seat", "Drawing bed", "Swing", "Bags", "Clothes", "Feeding botles & nepples", "Toddler bed", "Bicycles & Tricycles", "Kids bath tube", "Shoe and boots", "Toys", "Breast pump", "Diapers", "Stroller", "Walker", "Kids Party Wear", "Other"],
@@ -51,7 +51,7 @@ exports.getDnymicsData = async (req, res, next) => {
     fullfilment: ["Free shipping", "In person pickup", "Only local delivery", "Please contact"],
     product_condition: ["New", "Used - Like new", "Used - Good", "Used - Fair"],
     user_type: [`Individual`, `Business`],
-    currency:  ["USD", "AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USN"],
+    currency: ["USD", "AED", "AUD", "AWG", "CAD", "EUR", "GBP", "INR", "USN"],
 
   };
   return successJSONResponse(res, {
@@ -119,7 +119,7 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid product_condition`,
       });
-    
+
     // if (!quantity)
     //   return failureJSONResponse(res, {
     //     message: `please provide valid quantity`,
@@ -128,9 +128,9 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `please provide valid quantity`,
       });
-      if (amount && (isNaN(Number(amount))))
+    if (amount && (isNaN(Number(amount))))
       return failureJSONResponse(res, {
-          message: `please provide valid amount`,
+        message: `please provide valid amount`,
       });
     // console.log(object);
     // if (!(negotiable)) return failureJSONResponse(res, { message: `Please provide valid negotiable value` });
@@ -224,21 +224,21 @@ exports.createBuySellAds = async (req, res, next) => {
     } = req.body;
 
     // let data =JSON.stringify(payment_mode)
-     console.log(tagline,"jncdncjdncjdndjcndjn xcmnj bjxjcnk")
+    console.log(tagline, "jncdncjdncjdndjcndjn xcmnj bjxjcnk")
     let taglines = tagline
-    if(taglines){
-      for(i=0;i<taglines.length;i++){
-        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
+    if (taglines) {
+      for (i = 0; i < taglines.length; i++) {
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
         console.log(tags);
-        if(!tags){
+        if (!tags) {
           let tag = {
-            keywords:taglines[i],
-            ads_type:ads_type
+            keywords: taglines[i],
+            ads_type: ads_type
+          }
+          let ja = await tagline_keywords.create(tag)
+          console.log(ja, "jaj");
         }
-         let ja= await tagline_keywords.create(tag)
-         console.log(ja,"jaj");
-        } 
-       
+
       }
     }
     const userId = req.userId;
@@ -274,7 +274,7 @@ exports.createBuySellAds = async (req, res, next) => {
         descriptions,
         product_condition,
         product_model,
-        price:{
+        price: {
           amount,
           currency
         },
@@ -365,17 +365,17 @@ exports.editBuySellAds = async (req, res, next) => {
       // preferableModeContact,
     } = req.body;
     let taglines = tagline
-    if(taglines){
-      for(i=0;i<taglines.length;i++){
-        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
-        if(!tags){
+    if (taglines) {
+      for (i = 0; i < taglines.length; i++) {
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
+        if (!tags) {
           let tag = {
-            keywords:taglines[i],
-            ads_type:ads_type
-        }
+            keywords: taglines[i],
+            ads_type: ads_type
+          }
           await tagline_keywords.create(tag)
         }
-       
+
       }
     }
     const imageArr = [];
@@ -401,28 +401,28 @@ exports.editBuySellAds = async (req, res, next) => {
     } else {
       boolean = false
     }
-let price={}
+    let price = {}
 
-let my_phone = false;
-let my_email = false;
-let secondary_phone = false
+    let my_phone = false;
+    let my_email = false;
+    let secondary_phone = false
 
-if (hide_my_secondary_phone == "true") {
-  secondary_phone = true
-} else if (hide_my_secondary_phone == 'false') {
-  secondary_phone = false
-}
-if (hide_my_phone == "true") {
-  my_phone = true
-} else if (hide_my_phone == 'false') {
-  my_phone = false
-}
+    if (hide_my_secondary_phone == "true") {
+      secondary_phone = true
+    } else if (hide_my_secondary_phone == 'false') {
+      secondary_phone = false
+    }
+    if (hide_my_phone == "true") {
+      my_phone = true
+    } else if (hide_my_phone == 'false') {
+      my_phone = false
+    }
 
-if (hide_my_email == "true") {
-  my_email = true
-} else if (hide_my_email == 'false') {
-  my_email = false
-}
+    if (hide_my_email == "true") {
+      my_email = true
+    } else if (hide_my_email == 'false') {
+      my_email = false
+    }
 
 
     if (status) dataObj.status = status;
@@ -461,7 +461,7 @@ if (hide_my_email == "true") {
         website_link,
         hide_my_phone: my_phone,
         hide_my_email: my_email,
-        hide_my_secondary_phone:secondary_phone,
+        hide_my_secondary_phone: secondary_phone,
         primary_mobile_number: {
           country_code: +91,
           primary_phone_number: primary_phone_number,
@@ -551,7 +551,7 @@ exports.editBuySellStatus = async (req, res, next) => {
 
 exports.fetchAll = async (req, res, next) => {
   try {
-    
+
     let dbQuery = {};
     const {
       status,
@@ -565,47 +565,49 @@ exports.fetchAll = async (req, res, next) => {
       fullfilment,
       location,
       tagline
-    } = req.body;
+    } = req.query;
+    var perPage =  parseInt(req.query.perpage) || 6
+    var page = parseInt(req.query.page) || 1
     if (status) {
       dbQuery.status = status;
     }
-    
+
     if (ads_type) {
       dbQuery.adsType = ads_type;
     }
-    
+
     if (category) {
       dbQuery["adsInfo.category"] = category;
     }
-    
+
     if (sub_category) {
       dbQuery["adsInfo.sub_category"] = sub_category;
     }
-    
+
     if (title) {
       dbQuery["adsInfo.title"] = title;
     }
-    
+
     if (product_condition) {
       dbQuery["adsInfo.product_condition"] = product_condition;
     }
-    
+
     if (user_type) {
       dbQuery["adsInfo.user_type"] = user_type;
     }
-    
+
     if (payment_mode) {
       dbQuery["adsInfo.payment_mode"] = payment_mode;
     }
-    
+
     if (fullfilment) {
       dbQuery["adsInfo.fullfilment"] = fullfilment;
     }
-    
+
     if (location) {
       dbQuery["adsInfo.location"] = location;
     }
-    
+
     if (tagline) {
       dbQuery["adsInfo.tagline"] = tagline;
     }
@@ -614,6 +616,9 @@ exports.fetchAll = async (req, res, next) => {
       return successJSONResponse(res, {
         message: `success`,
         total: Object.keys(records).length,
+        perPage: perPage,
+        totalPages: Math.ceil(responseModelCount / perPage),
+        currentPage: page,
         records,
         status: 200,
       })
@@ -628,12 +633,12 @@ exports.fetchAll = async (req, res, next) => {
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
-  
-    let records = await postBuySellAd.findById({"_id":adsId});
+
+    let records = await postBuySellAd.findById({ "_id": adsId });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
-        ad_details:records,
+        ads_details: records,
         status: 200,
       })
     } else {

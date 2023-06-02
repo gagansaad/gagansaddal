@@ -21,12 +21,12 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   let adtype = req.query.ads_type
-    let records = await tagline_keywords.find({ads_type:adtype}).select({"keywords":1,"_id":1});
+  let records = await tagline_keywords.find({ ads_type: adtype }).select({ "keywords": 1, "_id": 1 });
 
   const dynamicsData = {
-    tagline:records,
+    tagline: records,
     category: ["I want a Babysitter/Nanny", "I am a Babysitter/Nanny"],
-    currency:  ["USD", "AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USN"],
+    currency: ["USD", "AED", "AUD", "AWG", "CAD", "EUR", "GBP", "INR", "USN"],
     work_type: ["Live in", "Live in & out", "Live out"],
     care_service_need: ["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores"],
     care_service_offer: ["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores", "Storytelling"],
@@ -38,7 +38,7 @@ exports.getDnymicsData = async (req, res, next) => {
     preferrd_gender_offer: ["Male", "Female"],
     transport_facilty_need: ["Yes", "No"],
     transport_facilty_offer: ["Yes", "No"],
-    expected_salary_rate_need:  ["/hour", "/day", "/week", "/month", "/biweekly", "fixed amount"],
+    expected_salary_rate_need: ["/hour", "/day", "/week", "/month", "/biweekly", "fixed amount"],
     expected_salary_rate_offer: ["/hour", "/day", "/week", "/month", "/biweekly", "fixed amount"],
   };
   return successJSONResponse(res, {
@@ -84,7 +84,7 @@ exports.validateAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid category_value`,
       });
-    if ( work_type && !isValidString(work_type))
+    if (work_type && !isValidString(work_type))
       return failureJSONResponse(res, {
         message: `Please provide valid work type`,
       });
@@ -104,7 +104,7 @@ exports.validateAdsData = async (req, res, next) => {
     //   return failureJSONResponse(res, {
     //     message: `Please provide valid prefered gender`,
     //   });
-    if ( service_from_date && !isValidString(service_from_date))
+    if (service_from_date && !isValidString(service_from_date))
       return failureJSONResponse(res, {
         message: `Please provide valid service starting date`,
       });
@@ -210,17 +210,17 @@ exports.createAds = async (req, res, next) => {
     const imageArr = [];
 
     let taglines = tagline
-    if(taglines){
-      for(i=0;i<taglines.length;i++){
-        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
-        if(!tags){
+    if (taglines) {
+      for (i = 0; i < taglines.length; i++) {
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
+        if (!tags) {
           let tag = {
-            keywords:taglines[i],
-            ads_type:ads_type
-        }
+            keywords: taglines[i],
+            ads_type: ads_type
+          }
           await tagline_keywords.create(tag)
         }
-       
+
       }
     }
     for (var i = 0; i < req.files.length; i++) {
@@ -332,19 +332,19 @@ exports.editAds = async (req, res, next) => {
       preferable_contact_mode,
       image
     } = req.body;
-console.log(tagline,"vdhvdbhdbvhdbvhdvdbdhvbdh----------------------------------------");
+    console.log(tagline, "vdhvdbhdbvhdbvhdvdbdhvbdh----------------------------------------");
     let taglines = tagline
-    if(taglines){
-      for(i=0;i<taglines.length;i++){
-        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
-        if(!tags){
+    if (taglines) {
+      for (i = 0; i < taglines.length; i++) {
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
+        if (!tags) {
           let tag = {
-            keywords:taglines[i],
-            ads_type:ads_type
-        }
+            keywords: taglines[i],
+            ads_type: ads_type
+          }
           await tagline_keywords.create(tag)
         }
-       
+
       }
     }
     const imageArr = [];
@@ -360,21 +360,21 @@ console.log(tagline,"vdhvdbhdbvhdbvhdvdbdhvbdh----------------------------------
     let my_email = false;
     let secondary_phone = false
 
-if (hide_my_secondary_phone == "true") {
-secondary_phone = true
-} else if (hide_my_secondary_phone == 'false') {
-secondary_phone = false
-}
+    if (hide_my_secondary_phone == "true") {
+      secondary_phone = true
+    } else if (hide_my_secondary_phone == 'false') {
+      secondary_phone = false
+    }
     if (hide_my_phone == "true") {
-        my_phone = true
+      my_phone = true
     } else if (hide_my_phone == 'false') {
-        my_phone = false
+      my_phone = false
     }
 
     if (hide_my_email == "true") {
-        my_email = true
+      my_email = true
     } else if (hide_my_email == 'false') {
-        my_email = false
+      my_email = false
     }
 
     const dataObj = {},
@@ -415,7 +415,7 @@ secondary_phone = false
         website_link,
         hide_my_phone: my_phone,
         hide_my_email: my_email,
-        hide_my_secondary_phone:secondary_phone,
+        hide_my_secondary_phone: secondary_phone,
         location,
         address_info,
         primary_mobile_number: {
@@ -521,7 +521,7 @@ secondary_phone = false
 //////////////
 exports.fetchAll = async (req, res, next) => {
   try {
-   
+
     let dbQuery = {};
     const {
 
@@ -536,57 +536,62 @@ exports.fetchAll = async (req, res, next) => {
       transport_facilty,
       location,
       tagline,
-      
-    } = req.body;
-    
-if (status) {
-  dbQuery.status = status;
-}
 
-if (category_value) {
-  dbQuery.category_value = category_value;
-}
+    } = req.query;
+    var perPage =  parseInt(req.query.perpage) || 6
+    var page = parseInt(req.query.page) || 1
 
-if (category_name) {
-  dbQuery.category_name = category_name;
-}
+    if (status) {
+      dbQuery.status = status;
+    }
 
-if (work_type) {
-  dbQuery["adsInfo.work_type"] = work_type;
-}
+    if (category_value) {
+      dbQuery.category_value = category_value;
+    }
 
-if (care_service) {
-  dbQuery["adsInfo.care_service"] = care_service;
-}
+    if (category_name) {
+      dbQuery.category_name = category_name;
+    }
 
-if (age_group) {
-  dbQuery["adsInfo.age_group"] = age_group;
-}
+    if (work_type) {
+      dbQuery["adsInfo.work_type"] = work_type;
+    }
 
-if (prefered_language) {
-  dbQuery["adsInfo.prefered_language"] = prefered_language;
-}
+    if (care_service) {
+      dbQuery["adsInfo.care_service"] = care_service;
+    }
 
-if (prefered_gender) {
-  dbQuery["adsInfo.prefered_gender"] = prefered_gender;
-}
+    if (age_group) {
+      dbQuery["adsInfo.age_group"] = age_group;
+    }
 
-if (transport_facilty) {
-  dbQuery["adsInfo.transport_facilty"] = transport_facilty;
-}
+    if (prefered_language) {
+      dbQuery["adsInfo.prefered_language"] = prefered_language;
+    }
 
-if (location) {
-  dbQuery["adsInfo.location"] = location;
-}
+    if (prefered_gender) {
+      dbQuery["adsInfo.prefered_gender"] = prefered_gender;
+    }
 
-if (tagline) {
-  dbQuery["adsInfo.tagline"] = tagline;
-}
+    if (transport_facilty) {
+      dbQuery["adsInfo.transport_facilty"] = transport_facilty;
+    }
+
+    if (location) {
+      dbQuery["adsInfo.location"] = location;
+    }
+
+    if (tagline) {
+      dbQuery["adsInfo.tagline"] = tagline;
+    }
     let records = await postbabyAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
         total: Object.keys(records).length,
+        perPage: perPage,
+        totalPages: Math.ceil(responseModelCount / perPage),
+        currentPage: page,
         records,
         status: 200,
       })
@@ -603,12 +608,12 @@ if (tagline) {
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
-  
-    let records = await postbabyAd.findById({"_id":adsId});
+
+    let records = await postbabyAd.findById({ "_id": adsId });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
-        ad_details:records,
+        ads_details: records,
         status: 200,
       })
     } else {
