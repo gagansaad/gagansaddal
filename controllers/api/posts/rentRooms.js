@@ -253,10 +253,8 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
 if(req.files){
     for (var i = 0; i < req.files.length; i++) {
         var thumbnail = req.files[i].path
-
         productImages = await Media.create({ url: thumbnail });
         imageArr.push(productImages._id);
-
     }
 }
 
@@ -625,7 +623,7 @@ exports.fetchAll = async (req, res, next) => {
         if (userId) dbQuery.userId = userId;
         
         let records = await RoomRentsAds.find(dbQuery).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
-        const responseModelCount = await RoomRentsAds.count();
+        const responseModelCount = await RoomRentsAds.countDocuments(dbQuery);
         if (records) {
             return successJSONResponse(res,{
                 message: `success`,

@@ -16,40 +16,97 @@ const mongoose = require("mongoose"),
     isValidDate,
     isValidEmailAddress,
     isValidIndianMobileNumber,
-    isValidNumber
+    isValidNumber,
   } = require(`../../../utils/validators`);
 
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
-  let adtype = req.query.adsType
-    let records = await tagline_keywords.find({adType:adtype}).select({"keywords":1,"_id":1});
+  let adtype = req.query.adsType;
+  let records = await tagline_keywords
+    .find({ adType: adtype })
+    .select({ keywords: 1, _id: 1 });
 
   const dynamicsData = {
-    tagline:records,
-    categories:["Accounting and Finance", "Tax Services", "Bar and Restaurant", "Catering", "Cook", "Cheif", "Sales and Retail sales", "Day care", "Home Care", "Nursing Home", "Agent", "Cleaning and House Keeping", "Construction and trades", "Lawn and Garden", "Plumber", "Electrician", "Customer Service", "Drivers and Security", "Auto Mechanic", "General Labour", "Graphic and Geb design", "Hair Stylist and Salon", "Health Care", "Volunters", "NGO", "Real Estate", "Education", "Training", "Office Manager and Receptionist", "Interns and Students", "Programmers and Computer", "TV, Media ,Fashion", "Movie", "Other"],
+    tagline: records,
+    categories: [
+      "Accounting and Finance",
+      "Tax Services",
+      "Bar and Restaurant",
+      "Catering",
+      "Cook",
+      "Cheif",
+      "Sales and Retail sales",
+      "Day care",
+      "Home Care",
+      "Nursing Home",
+      "Agent",
+      "Cleaning and House Keeping",
+      "Construction and trades",
+      "Lawn and Garden",
+      "Plumber",
+      "Electrician",
+      "Customer Service",
+      "Drivers and Security",
+      "Auto Mechanic",
+      "General Labour",
+      "Graphic and Geb design",
+      "Hair Stylist and Salon",
+      "Health Care",
+      "Volunters",
+      "NGO",
+      "Real Estate",
+      "Education",
+      "Training",
+      "Office Manager and Receptionist",
+      "Interns and Students",
+      "Programmers and Computer",
+      "TV, Media ,Fashion",
+      "Movie",
+      "Other",
+    ],
 
-    type: [`Local Jobs`,
-      `Remote Jobs`],
+    type: [`Local Jobs`, `Remote Jobs`],
 
-    language: [`English`,
+    language: [
+      `English`,
       `Amharic`,
       `Afan Oromo`,
       `Tigrigna`,
       `Arabic`,
       `French`,
-      `Other`],
-      currency: ["USD", "AED",  "AUD", "AWG","CAD", "EUR",  "GBP","INR","USN"],
-    employment_type: [`Full-time`,
+      `Other`,
+    ],
+    currency: ["USD", "AED", "AUD", "AWG", "CAD", "EUR", "GBP", "INR", "USN"],
+    employment_type: [
+      `Full-time`,
       `Part-time`,
       `Contract`,
       `Temporary`,
-      `Please contact`],
-    salary_info: ["/hour", "/day", "/week", "/month", "/biweekly", "/sqft", "fixed amount", "OBO", "Negotiable"],
-    work_authorization: ["Citizen", "Green Card", "Work Permit", "Visa", "Any Type"],
-    preferred_gender: [`Male`,
-      `Female`],
-    list_type: ["Offering - I have a job to offer", "Wanted - I am looking for a job"],
-    
+      `Please contact`,
+    ],
+    salary_info: [
+      "/hour",
+      "/day",
+      "/week",
+      "/month",
+      "/biweekly",
+      "/sqft",
+      "fixed amount",
+      "OBO",
+      "Negotiable",
+    ],
+    work_authorization: [
+      "Citizen",
+      "Green Card",
+      "Work Permit",
+      "Visa",
+      "Any Type",
+    ],
+    preferred_gender: [`Male`, `Female`],
+    list_type: [
+      "Offering - I have a job to offer",
+      "Wanted - I am looking for a job",
+    ],
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -86,14 +143,25 @@ exports.validateJobAdsData = async (req, res, next) => {
       tagline,
     } = req.body;
 
-
-    if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
-    if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
-    else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
+    if (
+      status &&
+      status != `active` &&
+      status != `inactive` &&
+      status != `draft`
+    )
+      return failureJSONResponse(res, {
+        message: `Please enter status active inactive or draft`,
+      });
+    if (!adsType)
+      return failureJSONResponse(res, { message: `Please provide ads type` });
+    else if (adsType && !isValidMongoObjId(mongoose, adsType))
+      return failureJSONResponse(res, {
+        message: `Please provide valid ads type`,
+      });
     if (!isValidString(listing_type))
-    return failureJSONResponse(res, {
-      message: `Please provide valid listing type`,
-    });
+      return failureJSONResponse(res, {
+        message: `Please provide valid listing type`,
+      });
     if (!isValidString(categories))
       return failureJSONResponse(res, {
         message: `Please provide valid job Category`,
@@ -131,22 +199,33 @@ exports.validateJobAdsData = async (req, res, next) => {
     //   return failureJSONResponse(res, {
     //     message: `Please provide us the information about how many languages do you know`,
     //   });
-     if (amount) {
+    if (amount) {
       if (isNaN(Number(amount)))
-      return failureJSONResponse(res, { message: `Please provide us valid salary amount` });
-     };
-   
+        return failureJSONResponse(res, {
+          message: `Please provide us valid salary amount`,
+        });
+    }
+
     // if (!isValidString(salary_info))
     //   return failureJSONResponse(res, {
     //     message: `Please provide valid salary info`,
     //   });
-    if(no_of_opening){
+    if (no_of_opening) {
       if (isNaN(Number(no_of_opening)))
-      return failureJSONResponse(res, { message: "Please provide number of jobs opening" });
-    else if (no_of_opening <= 0 || no_of_opening === "" || no_of_opening === null || no_of_opening.includes(".")) failureJSONResponse(res, { message: `Please provide valid number of job opening` });
-    
+        return failureJSONResponse(res, {
+          message: "Please provide number of jobs opening",
+        });
+      else if (
+        no_of_opening <= 0 ||
+        no_of_opening === "" ||
+        no_of_opening === null ||
+        no_of_opening.includes(".")
+      )
+        failureJSONResponse(res, {
+          message: `Please provide valid number of job opening`,
+        });
     }
-   
+
     // if (!isValidString(preferred_gender))
 
     //   return failureJSONResponse(res, { message: "Please provide valid gender preferences" });
@@ -180,14 +259,12 @@ exports.validateJobAdsData = async (req, res, next) => {
   }
 };
 exports.validateListerBasicinfo = async (req, res, next) => {
-
   try {
     const {
       email_address,
       // phoneNumber,
       // countryCode,
       hideAddress,
-
     } = req.body;
 
     // if (countryCode && isNaN(Number(countryCode)))
@@ -248,7 +325,7 @@ exports.createJobAds = async (req, res, next) => {
       currency,
       salary_info,
       no_of_opening,
-      
+
       work_authorization,
       preferred_gender,
       location,
@@ -256,35 +333,32 @@ exports.createJobAds = async (req, res, next) => {
       image,
       video,
     } = req.body;
-console.log(req.body,"nhvdfhbvu");
-    let taglines = tagline
-    if(taglines){
-      for(i=0;i<taglines.length;i++){
-        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
-        if(!tags){
+    console.log(req.body, "nhvdfhbvu");
+    let taglines = tagline;
+    if (taglines) {
+      for (i = 0; i < taglines.length; i++) {
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] });
+        if (!tags) {
           let tag = {
-            keywords:taglines[i],
-            ads_type:adsType
+            keywords: taglines[i],
+            ads_type: adsType,
+          };
+          await tagline_keywords.create(tag);
         }
-          await tagline_keywords.create(tag)
-        }
-       
       }
     }
 
     const imageArr = [];
-if(req.files){
-    for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = req.files[i].path
+    if (req.files) {
+      for (var i = 0; i < req.files.length; i++) {
+        var thumbnail = req.files[i].path;
 
-      productImages = await Media.create({ url: thumbnail });
-      imageArr.push(productImages._id);
-
+        productImages = await Media.create({ url: thumbnail });
+        imageArr.push(productImages._id);
+      }
     }
-  }
 
     const dataObj = {
-
       status: status,
       isfeatured,
       adsType,
@@ -298,9 +372,9 @@ if(req.files){
         type,
         role,
         employment_type,
-        experience:experience,
+        experience: experience,
         language,
-        salary:{
+        salary: {
           amount,
           currency,
         },
@@ -314,19 +388,17 @@ if(req.files){
         video,
       },
       userId: userId,
-
-
-
     };
 
     const newJobPost = await postJobAd.create(dataObj);
 
     const postJobAdObjToSend = {};
 
-
-
     for (let key in newJobPost.toObject()) {
-      if (!fieldsToExclude.hasOwnProperty(String(key)) && !listerBasicInfo.hasOwnProperty(String(key))) {
+      if (
+        !fieldsToExclude.hasOwnProperty(String(key)) &&
+        !listerBasicInfo.hasOwnProperty(String(key))
+      ) {
         postJobAdObjToSend[key] = newJobPost[key];
       }
     }
@@ -354,11 +426,11 @@ exports.editJobAds = async (req, res, next) => {
   try {
     console.log(req.files);
     const jobId = req?.params?.jobId;
-    const validate_id = await postJobAd.findById(jobId)
+    const validate_id = await postJobAd.findById(jobId);
     if (!validate_id) {
       return failureJSONResponse(res, {
         message: `Failed to find your job id`,
-      })
+      });
     }
 
     if (!jobId)
@@ -384,7 +456,7 @@ exports.editJobAds = async (req, res, next) => {
       currency,
       salary_info,
       no_of_opening,
-      
+
       work_authorization,
       location,
       preferred_gender,
@@ -402,18 +474,17 @@ exports.editJobAds = async (req, res, next) => {
       // preferableModeContact,
     } = req.body;
 
-    let taglines = tagline
-    if(taglines){
-      for(i=0;i<taglines.length;i++){
-        let tags = await tagline_keywords.findOne({keywords:taglines[i]})
-        if(!tags){
+    let taglines = tagline;
+    if (taglines) {
+      for (i = 0; i < taglines.length; i++) {
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] });
+        if (!tags) {
           let tag = {
-            keywords:taglines[i],
-            ads_type:adsType
+            keywords: taglines[i],
+            ads_type: adsType,
+          };
+          await tagline_keywords.create(tag);
         }
-          await tagline_keywords.create(tag)
-        }
-       
       }
     }
 
@@ -421,48 +492,44 @@ exports.editJobAds = async (req, res, next) => {
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = req.files[i].path
+      var thumbnail = req.files[i].path;
 
-      productImages = await Media.create({ url: thumbnail});
+      productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
-
     }
-
 
     console.log(`imageArr`, imageArr);
 
     const dataObj = {},
       adsInfoObj = {},
       listerBasicInfoObj = {};
-let salry={
-  amount: amount,
-  currency:currency
-}
-let my_phone = false;
-let my_email = false;
-let secondary_phone = false
+    let salry = {
+      amount: amount,
+      currency: currency,
+    };
+    let my_phone = false;
+    let my_email = false;
+    let secondary_phone = false;
 
-if (hide_my_secondary_phone == "true") {
-  secondary_phone = true
-} else if (hide_my_secondary_phone == 'false') {
-  secondary_phone = false
-}
-if (hide_my_phone == "true") {
-  my_phone = true
-} else if (hide_my_phone == 'false') {
-  my_phone = false
-}
+    if (hide_my_secondary_phone == "true") {
+      secondary_phone = true;
+    } else if (hide_my_secondary_phone == "false") {
+      secondary_phone = false;
+    }
+    if (hide_my_phone == "true") {
+      my_phone = true;
+    } else if (hide_my_phone == "false") {
+      my_phone = false;
+    }
 
-if (hide_my_email == "true") {
-  my_email = true
-} else if (hide_my_email == 'false') {
-  my_email = false
-
-}
+    if (hide_my_email == "true") {
+      my_email = true;
+    } else if (hide_my_email == "false") {
+      my_email = false;
+    }
 
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
-
 
     if (title) adsInfoObj.title = title;
     if (tagline) adsInfoObj.tagline = tagline;
@@ -486,7 +553,6 @@ if (hide_my_email == "true") {
 
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
-
     }
 
     const dataObjq = {
@@ -496,17 +562,15 @@ if (hide_my_email == "true") {
         email_address,
         website_link,
         hide_my_phone: my_phone,
-            hide_my_email: my_email,
-            hide_my_secondary_phone:secondary_phone,
+        hide_my_email: my_email,
+        hide_my_secondary_phone: secondary_phone,
         primary_mobile_number: {
           country_code: +91,
           primary_phone_number: primary_phone_number,
-
         },
         secondary_mobile_number: {
           country_code: +91,
           secondary_phone_number: secondary_phone_number,
-
         },
       },
     };
@@ -519,7 +583,7 @@ if (hide_my_email == "true") {
       { $set: dataObjq },
       { new: true }
     );
-    let updateJobAdObjToSend = {}
+    let updateJobAdObjToSend = {};
     for (let key in updateJob.toObject()) {
       if (!fieldsToExclude.hasOwnProperty(String(key))) {
         updateJobAdObjToSend[key] = updateJob[key];
@@ -581,31 +645,99 @@ exports.editJobStatus = async (req, res, next) => {
   }
 };
 
-
 ///////////////////
-
 
 exports.fetchAll = async (req, res, next) => {
   try {
-    const isFeatured = req.query.isfeatured;
-    let dbQuery = {
-      status: 1
-    };
+    let dbQuery = {};
+    const {
+      isfeatured,
+      status,
+      adsType,
+      listing_type,
+      title,
+      categories,
+      type,
+      employment_type,
+      language,
+      amount,
+      preferred_gender,
+      location,
+      tagline,
+    } = req.query;
+    var perPage =  parseInt(req.query.perpage) || 6
+    var page = parseInt(req.query.page) || 1
+    if (isFeatured) {
+      dbQuery.isfeatured = isFeatured;
+    }
 
-    if (isFeatured) dbQuery.isfeatured = isFeatured;
-    let records = await postJobAd.find(dbQuery);
+    if (isfeatured) {
+      dbQuery.isfeatured = isfeatured;
+    }
+
+    if (status) {
+      dbQuery.status = status;
+    }
+
+    if (adsType) {
+      dbQuery.adsType = adsType;
+    }
+
+    if (listing_type) {
+      dbQuery.listing_type = listing_type;
+    }
+
+    if (title) {
+      dbQuery["adsInfo.title"] = title;
+    }
+
+    if (categories) {
+      dbQuery["adsInfo.categories"] = categories;
+    }
+
+    if (type) {
+      dbQuery["adsInfo.type"] = type;
+    }
+
+    if (employment_type) {
+      dbQuery["adsInfo.employment_type"] = employment_type;
+    }
+
+    if (language) {
+      dbQuery["adsInfo.language"] = language;
+    }
+
+    if (amount) {
+      dbQuery["adsInfo.rent.amount"] = amount;
+    }
+
+    if (preferred_gender) {
+      dbQuery["adsInfo.preferedGender"] = preferred_gender;
+    }
+
+    if (location) {
+      dbQuery["adsInfo.location"] = location;
+    }
+
+    if (tagline) {
+      dbQuery["adsInfo.tagline"] = tagline;
+    }
+    if (userId) dbQuery.userId = userId;
+    let records = await postJobAd.find(dbQuery).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
+    const responseModelCount = await postJobAd.countDocuments(dbQuery);;
     if (records) {
-
       return successJSONResponse(res, {
         message: `success`,
-        total: Object.keys(records).length,
+        perPage: perPage,
+        totalPages: Math.ceil(responseModelCount / perPage),
+        currentPage: page,
         records,
         status: 200,
-      })
+      });
     } else {
-      return failureJSONResponse(res, { message: `Room not Available` })
+      return failureJSONResponse(res, { message: `Room not Available` });
     }
   } catch (err) {
-    return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, { message: `something went wrong` });
   }
-}
+};
