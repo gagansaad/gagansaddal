@@ -714,17 +714,10 @@ exports.fetchAll = async (req, res, next) => {
       image,
       location,
       venue_name,
-      video,
-      facebook_platform,
-      instagram_platform,
-      zoom_platform,
-      youtube_platform,
-      tiktok_platform,
-      other_platform,
-      other_platform_name
+     
 
     } = req.body;
-    if (isFeatured) dbQuery.isfeatured = isFeatured;
+    
     let records = await eventAd.find(dbQuery);
     if (records) {
       return successJSONResponse(res, {
