@@ -694,26 +694,14 @@ exports.fetchAll = async (req, res, next) => {
    
     let dbQuery = {};
     const {
-      isfeatured,
+      
       status,
-      adsType,
       title,
       type,
       category,
       details,
-      regular_ticket_price,
-      vip_ticket_price,
-      no_of_regular_ticket,
-      no_of_vip_ticket,
-      currency,
-      time_zone,
-      start_date,
-      end_date,
-      start_time,
-      end_time,
       recurring_type,
       tagline,
-      image,
       location,
       venue_name,
      
