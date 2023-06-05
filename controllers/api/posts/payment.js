@@ -75,6 +75,9 @@ exports.validatepaymentData = async (req, res, next) => {
 
 /////------------payment intent ----///////
 const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeId, deviceType = null, user) => {
+  let successUrl;
+  let cancelUrl
+
   console.log(user);
   if (deviceType != null)
     dataobj.device_type = deviceType;
@@ -85,6 +88,17 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
   }
   let paymentIntent = null;
   if (deviceType == 'web') {
+    if(request.body.redirect_uri_success){
+      successUrl = request.body.redirect_uri_success
+    }else{
+      successUrl =`http://localhost:3005/success`
+    }
+    if(request.body.redirect_uri_cancel){
+      cancelUrl = request.body.redirect_uri_cancel
+    }else{
+      cancelUrl = 'http://localhost:3005/cancel'
+    }
+    
     let findModelName = await category.findById({ "_id": dataobj.ads_type.toString() })
     let sessionName = findModelName.name;
     if (request.body.add_ons.length > 0)
@@ -109,8 +123,9 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
       metadata: {
         "payment_id": PaymentModelId._id.toString()
       },
-      success_url: `http://localhost:3005/success`,
-      cancel_url: 'http://localhost:3005/cancel',
+    
+      success_url: successUrl,
+      cancel_url: cancelUrl,
     });
   } else {
     paymentIntent = await stripe.paymentIntents.create({
@@ -309,7 +324,7 @@ exports.webhooks = async (request, response) => {
       case "payment_intent.succeeded":
         paymentSuccessModelUpdate(payment_id);
         getNotification = await getNotificationTitles(event.type);
-        Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Payment succedded of post', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
+        Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Payment succeedded of post', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
 
         const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
