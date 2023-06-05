@@ -1250,7 +1250,7 @@ module.exports = {
               country_code: countryCode
             }
           })
-          return successJSONResponse(res, { message: "Phone number chnage successfully" })
+          return successJSONResponse(res, { message: "Phone number change successfully" })
         }
 
       })
@@ -1346,6 +1346,7 @@ module.exports = {
     const newEmailAddress = String(req?.query?.email_address).toLowerCase()
           user_id = req?.query?.userId
           secret = req?.query?.secret
+          
     const foundUser = await User.findByIdAndUpdate({ "_id": userId },{$set:{"userInfo.email_address":newEmailAddress}});
     if (!foundUser) return failureJSONResponse(res, { message: `User not verified` });
     else{

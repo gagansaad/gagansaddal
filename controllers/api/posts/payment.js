@@ -88,6 +88,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
   }
   let paymentIntent = null;
   if (deviceType == 'web') {
+    console.log("object" , request.body.redirect_uri_success , "hnehe",request.body.redirect_uri_cancel);
     if(request.body.redirect_uri_success){
       successUrl = request.body.redirect_uri_success
     }else{
