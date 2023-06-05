@@ -1869,14 +1869,14 @@ module.exports = {
             });
 
           console.log(`OTPForOldEmail`, newOTPForNewEmail)
-          let verifiy_url=`https://menehariya.netscapelabs.com/?user_id=6450f04e20c1198ce3423f18&new_email=${newEmailAddress}&secret=${code}`
+          let verifiy_url=`https://menehariya.netscapelabs.com/?user_id=6450f04e20c1198ce3423f18&new_email=${newEmailAddress}&secret=${newOTPForNewEmail?.code}`
           if (!newOTPForNewEmail) {
             OTPCreatedForBoth = false;
             return failureJSONResponse(res, { message: `something went wrong` });
           }
           else {
             OTPCreatedForBoth = true;
-            EmailOTPVerification(newEmailAddress, `Hi`, newOTPForNewEmail?.verifiy_url,);
+            EmailOTPVerification(newEmailAddress, `Hi`, verifiy_url,);
             // return successJSONResponse(res, { message: `OTP send successfully on ${newOTPForNewEmail}` });
           }
 
