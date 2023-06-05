@@ -1340,6 +1340,21 @@ module.exports = {
 
     }
   },
+
+  verifiy_otp_for_email_change: async function (req, res, next) {
+
+    const newEmailAddress = String(req?.query?.email_address).toLowerCase()
+          user_id = req?.query?.userId
+          secret = req?.query?.secret
+    const foundUser = await User.findByIdAndUpdate({ "_id": userId },{$set:{"userInfo.email_address":newEmailAddress}});
+    if (!foundUser) return failureJSONResponse(res, { message: `User not verified` });
+    else{
+      return successJSONResponse(res, {
+        message: `User verified successfully`,
+        status: 200,
+      })
+    }
+  },
   /////////////
   ////////////
   forget_password: async function (req, res, next) {
@@ -1854,14 +1869,14 @@ module.exports = {
             });
 
           console.log(`OTPForOldEmail`, newOTPForNewEmail)
-
+          let verifiy_url=`https://menehariya.netscapelabs.com/?user_id=6450f04e20c1198ce3423f18&new_email=${newEmailAddress}&secret=${code}`
           if (!newOTPForNewEmail) {
             OTPCreatedForBoth = false;
             return failureJSONResponse(res, { message: `something went wrong` });
           }
           else {
             OTPCreatedForBoth = true;
-            EmailOTPVerification(newEmailAddress, `Hi`, newOTPForNewEmail?.code);
+            EmailOTPVerification(newEmailAddress, `Hi`, newOTPForNewEmail?.verifiy_url,);
             // return successJSONResponse(res, { message: `OTP send successfully on ${newOTPForNewEmail}` });
           }
 
