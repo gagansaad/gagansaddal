@@ -1498,8 +1498,7 @@ module.exports = {
               let verifiy_url = `https://menehariya.netscapelabs.com/change-emailaddress?secret=${foundOTP?._id}`;
               Notification.sendNotifications([userId], title, body, { 'model_id': userId, 'model': 'user' }, false, { 'subject': 'Email Address changed successfully', 'email_template': 'emailverification', 'data': { 'verify_url': verifiy_url,'newEmailAddress':newEmailAddress} });
               return successJSONResponse(res, {
-                message: `Please click on the link that has just been sent to your email account to verify your email
-                and continue the email change process.The link expires in next 4 hours.`,
+                message: `success`,
               });
             }
           })
@@ -1892,6 +1891,7 @@ module.exports = {
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
+////////
 
   // change email address
 
@@ -2155,17 +2155,26 @@ module.exports = {
     try {
       const userId = req.userId,
         newEmailAddress = String(req?.body?.new_email_address).toLowerCase();
-
+        if (!newEmailAddress)
+        return failureJSONResponse(res, {
+          message: `please provide new email address`,
+        });
+        if (newEmailAddress && !isValidEmailAddress(newEmailAddress)) {
+          return failureJSONResponse(res, {
+            message: `please provide valid email`,
+          });
+        }
+      let Checkmail = User.findOne({"userInfo.email_address":newEmailAddress})
+      if(checkmail) return failureJSONResponse(res, {
+        message: `Account with that ${newEmailAddress} already exists`,
+      });
       const foundUser = await User.findById({ _id: userId });
       if (!foundUser)
         return failureJSONResponse(res, { message: `User not found` });
       else if (foundUser && !foundUser?.userInfo?.email_address)
         return failureJSONResponse(res, { message: `Old  email not found` });
 
-      if (!newEmailAddress)
-        return failureJSONResponse(res, {
-          message: `please provide new email address`,
-        });
+    
       let oldEmailAddress = foundUser?.userInfo?.email_address
       OTP.create({
         is_active: true,
