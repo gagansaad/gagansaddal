@@ -2165,7 +2165,7 @@ module.exports = {
           });
         }
       let Checkmail = User.findOne({"userInfo.email_address":newEmailAddress})
-      if(checkmail) return failureJSONResponse(res, {
+      if(Checkmail) return failureJSONResponse(res, {
         message: `Account with that ${newEmailAddress} already exists`,
       });
       const foundUser = await User.findById({ _id: userId });
