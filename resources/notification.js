@@ -35,24 +35,15 @@ module.exports = {
             if (Object.keys(sendEmailNotification).length > 0) {
                 console.log('ssss1');
                 convertedIds.map(async userId => {
-                    console.log(JSON.stringify(data));
+                    // console.log(JSON.stringify(data));
                     let UserDetails = await User.findById({ "_id": userId })
                     //   let subject = 'Thank you for Use Menehariya!'
                     let replacements = { 'name': UserDetails.userInfo.name };
-                    
-                    replacements=({...replacements,...sendEmailNotification.data});
-                    
+                    if (Object.keys(sendEmailNotification.data).length > 0)
+                        replacements = ({ ...replacements, ...sendEmailNotification.data });
+
                     console.log("object of replacement ", replacements);
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    sendEmail(UserDetails.userInfo.email_address, sendEmailNotification.subject, sendEmailNotification.email_template, replacements)
+                    sendEmail(UserDetails?.userInfo?.email_address, sendEmailNotification.subject, sendEmailNotification.email_template, replacements)
                 });
 
             }

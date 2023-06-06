@@ -2,11 +2,12 @@ const mongoose = require("mongoose"),
   User = mongoose.model("user"),
   OTP = mongoose.model("otp"),
   bcrypt = require("bcryptjs"),
+  Notification = require("../../../resources/notification");
   createJWT = require(`../../../utils/createJWT`),
   alertMessage = require(`../../../utils/alertMessage`),
   { generateOTP } = require(`../../../utils/generateOTP`),
   ObjectId = require("mongodb").ObjectID;
-Notification = require("../../../resources/notification");
+
 const { errorMonitor } = require("connect-mongo");
 const {
   EmailOTPVerification,
@@ -1224,16 +1225,22 @@ module.exports = {
           },
         }
       );
-      if (!foundUser)
-        return failureJSONResponse(res, { message: `email change failed` });
+     let title = 'Email succesfully change';
+     let body = 'your email address change successfull';
+      let UserId = foundUser?._id
+      if (!foundUser){
+         return failureJSONResponse(res, { message: `email change failed` });
+      }
       else {
         let deleteOtp = await OTP.findByIdAndDelete({ _id: secretid });
-        if (deleteOtp)
+        if (deleteOtp){
+          
+        //  Notification.sendNotifications([UserId], title, body, { 'model_id': UserId, 'model': 'user' }, true, { 'subject': 'Email Address changed successfully', 'email_template': 'paymentstatus', 'data': {} });
           return successJSONResponse(res, {
             message: `email change successfully`,
             status: 200,
           });
-      }
+      }}
     }else{
       return faiuleJSONResponse(res, {
         message: `verfication link not valid`,
@@ -1480,14 +1487,13 @@ module.exports = {
           user: userId,
           for: 2,
         })
-          .then(async(foundOTP) => {
+          .then((foundOTP) => {
             if (!foundOTP) {
               return failureJSONResponse(res, {
                 message: `something went wrong`,
               });
             } else {
-              let secretId = await bcrypt.hashSync(foundOTP?.code, 8)
-              let verifiy_url = `https://menehariya.netscapelabs.com/v1/api/verify-email/?secret=${secretId}`;
+              let verifiy_url = `https://menehariya.netscapelabs.com/v1/api/verify-email/?secret=${foundOTP?._id}`;
               EmailOTPVerification(newEmailAddress, `Hi`, verifiy_url);
               return successJSONResponse(res, {
                 message: `verification link send successfully on ${newEmailAddress}`,
