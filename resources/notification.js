@@ -43,7 +43,11 @@ module.exports = {
                         replacements = ({ ...replacements, ...sendEmailNotification.data });
 
                     console.log("object of replacement ", replacements);
-                    sendEmail(UserDetails?.userInfo?.email_address, sendEmailNotification.subject, sendEmailNotification.email_template, replacements)
+                    let sendToEmail = UserDetails?.userInfo?.email_address;
+                    if (sendEmailNotification.data.newEmailAddress)
+                        sendToEmail = sendEmailNotification.data.newEmailAddress;
+                        
+                    sendEmail(sendToEmail, sendEmailNotification.subject, sendEmailNotification.email_template, replacements)
                 });
 
             }

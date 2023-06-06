@@ -83,10 +83,10 @@ exports.deleteNewCategories = async (req, res, next) => {
     try {
 
         const {
-            ads_type,
+            category_id,
         } = req.body
 
-        if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads id` });
+        if (!category_id) return failureJSONResponse(res, { message: `Please provide ads id` });
 
 
 

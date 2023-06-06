@@ -1235,7 +1235,7 @@ module.exports = {
         let deleteOtp = await OTP.findByIdAndDelete({ _id: secretid });
         if (deleteOtp){
           
-        //  Notification.sendNotifications([UserId], title, body, { 'model_id': UserId, 'model': 'user' }, true, { 'subject': 'Email Address changed successfully', 'email_template': 'paymentstatus', 'data': {} });
+          // Notification.sendNotifications([UserId], title, body, { 'model_id': UserId, 'model': 'user' }, true, { 'subject': 'Email Address changed successfully', 'email_template': 'paymentstatus', 'data': {} });
           return successJSONResponse(res, {
             message: `email change successfully`,
             status: 200,
@@ -1493,12 +1493,13 @@ module.exports = {
                 message: `something went wrong`,
               });
             } else {
-              let title = 'Email succesfully change';
-              let body = 'your email address change successfull';
+              let title = 'Email verification';
+              let body = 'Please check your new email and click to verify';
               let verifiy_url = `https://menehariya.netscapelabs.com/change-emailaddress?secret=${foundOTP?._id}`;
-              Notification.sendNotifications([UserId], title, body, { 'model_id': UserId, 'model': 'user' }, false, { 'subject': 'Email Address changed successfully', 'email_template': 'emailverification', 'data': { 'verify_url': verifiy_url} });
+              Notification.sendNotifications([userId], title, body, { 'model_id': userId, 'model': 'user' }, false, { 'subject': 'Email Address changed successfully', 'email_template': 'emailverification', 'data': { 'verify_url': verifiy_url,'newEmailAddress':newEmailAddress} });
               return successJSONResponse(res, {
-                message: `verification link send successfully on ${newEmailAddress}`,
+                message: `Please click on the link that has just been sent to your email account to verify your email
+                and continue the email change process.The link expires in next 4 hours.`,
               });
             }
           })
