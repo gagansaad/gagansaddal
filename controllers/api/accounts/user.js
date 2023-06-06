@@ -2161,7 +2161,7 @@ module.exports = {
             message: `please provide valid email`,
           });
         }
-      let Checkmail = User.findOne({"userInfo.email_address":newEmailAddress})
+      let Checkmail = await User.findOne({"userInfo.email_address":newEmailAddress})
       if(Checkmail) {
         return failureJSONResponse(res, {
         message: `email already exists`,
