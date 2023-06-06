@@ -1205,6 +1205,8 @@ module.exports = {
     }
   },
   ///////
+
+  ////new api by gagan
   verifiy_otp_for_email_change: async function (req, res, next) {
     const secretid = req?.query?.secret;
 
@@ -1469,7 +1471,7 @@ module.exports = {
         console.log(foundEmailOTP,"bchdbc nj");
       if (foundEmailOTP) {
         await OTP.deleteOne({ _id: foundEmailOTP._id });
-
+        
         OTP.create({
           is_active: true,
           code: generateOTP(4),
@@ -1478,13 +1480,14 @@ module.exports = {
           user: userId,
           for: 2,
         })
-          .then((foundOTP) => {
+          .then(async(foundOTP) => {
             if (!foundOTP) {
               return failureJSONResponse(res, {
                 message: `something went wrong`,
               });
             } else {
-              let verifiy_url = `https://menehariya.netscapelabs.com/verifiy_email?secret=${foundOTP?._id}`;
+              let secretId = await bcrypt.hashSync(foundOTP?.code, 8)
+              let verifiy_url = `https://menehariya.netscapelabs.com/v1/api/verify-email/?secret=${secretId}`;
               EmailOTPVerification(newEmailAddress, `Hi`, verifiy_url);
               return successJSONResponse(res, {
                 message: `verification link send successfully on ${newEmailAddress}`,
