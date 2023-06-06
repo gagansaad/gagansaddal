@@ -80,7 +80,6 @@ router.post(`/verify-otp-for-email-change`,
 
 
 router.post(`/verify-email`,
-    authMiddleware.ensureUserLoggedIn,
     controllers.verifiy_otp_for_email_change
 );
 router.post(`/forget-password`, controllers.forget_password);
