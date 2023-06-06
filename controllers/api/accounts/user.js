@@ -1493,8 +1493,10 @@ module.exports = {
                 message: `something went wrong`,
               });
             } else {
-              let verifiy_url = `https://menehariya.netscapelabs.com/v1/api/verify-email/?secret=${foundOTP?._id}`;
-              EmailOTPVerification(newEmailAddress, `Hi`, verifiy_url);
+              let title = 'Email succesfully change';
+              let body = 'your email address change successfull';
+              let verifiy_url = `https://menehariya.netscapelabs.com/change-emailaddress?secret=${foundOTP?._id}`;
+              Notification.sendNotifications([UserId], title, body, { 'model_id': UserId, 'model': 'user' }, false, { 'subject': 'Email Address changed successfully', 'email_template': 'emailverification', 'data': { 'verify_url': verifiy_url} });
               return successJSONResponse(res, {
                 message: `verification link send successfully on ${newEmailAddress}`,
               });
