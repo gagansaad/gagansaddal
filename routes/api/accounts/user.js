@@ -102,7 +102,7 @@ router.post(`/generate-otp-for-mobile-email-change`,
 );
 router.post(`/generate-otp-for-email-change`,
     authMiddleware.ensureUserLoggedIn,
-    controllers.check_email_already_exists,
+    // controllers.check_email_already_exists,
     controllers.generate_otp_for_change_email
 );
 
