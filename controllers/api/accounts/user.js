@@ -1502,7 +1502,7 @@ module.exports = {
           })
           .catch((err) => {
             console.log(err);
-            return (res, {
+            return failureJSONResponse(res, {
               message: `something went wrong`,
             });
           });
