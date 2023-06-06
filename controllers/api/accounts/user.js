@@ -2162,9 +2162,10 @@ module.exports = {
           });
         }
       let Checkmail = User.findOne({"userInfo.email_address":newEmailAddress})
-      if(Checkmail) return failureJSONResponse(res, {
+      if(Checkmail) {
+        return failureJSONResponse(res, {
         message: `Account with that ${newEmailAddress} already exists`,
-      });
+      });}
       const foundUser = await User.findById({ _id: userId });
       if (!foundUser)
         return failureJSONResponse(res, { message: `User not found` });
