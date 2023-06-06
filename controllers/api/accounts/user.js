@@ -1461,9 +1461,7 @@ module.exports = {
         message: `please provide valid old email address`,
       });
 
-      console.log(req.userId );
-      console.log(oldEmailAddress );
-      console.log(oldEmailOTP);
+    
 
       OTP.findOne({
         $and: [
@@ -1510,8 +1508,7 @@ module.exports = {
           });
      
       } else {
-        return res.json({
-          status: 200,
+        return failureJSONResponse(res, {
           message: `please provide valid old email otp`,
         });
       }
@@ -2150,7 +2147,7 @@ module.exports = {
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
-
+// new by gagan
   generate_otp_for_change_email: async function (req, res) {
     try {
       const userId = req.userId,
@@ -2210,7 +2207,7 @@ module.exports = {
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
-
+//
   update_email_or_phone_number: async function (req, res) {
     try {
       const userId = req.userId;
