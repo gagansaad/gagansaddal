@@ -3,10 +3,10 @@ const mongoose = require("mongoose"),
   OTP = mongoose.model("otp"),
   bcrypt = require("bcryptjs"),
   Notification = require("../../../resources/notification");
-  createJWT = require(`../../../utils/createJWT`),
-  alertMessage = require(`../../../utils/alertMessage`),
-  { generateOTP } = require(`../../../utils/generateOTP`),
-  ObjectId = require("mongodb").ObjectID;
+(createJWT = require(`../../../utils/createJWT`)),
+  (alertMessage = require(`../../../utils/alertMessage`)),
+  ({ generateOTP } = require(`../../../utils/generateOTP`)),
+  (ObjectId = require("mongodb").ObjectID);
 
 const { errorMonitor } = require("connect-mongo");
 const {
@@ -1143,6 +1143,7 @@ module.exports = {
       })
         .then(async (foundOTP) => {
           if (foundOTP) {
+            console.log("object",foundOTP);
             await OTP.findByIdAndDelete({ _id: foundOTP._id });
 
             User.update(
@@ -1225,23 +1226,33 @@ module.exports = {
           },
         }
       );
-     let title = 'Email succesfully change';
-     let body = 'your email address change successfull';
-      let UserId = foundUser?._id
-      if (!foundUser){
-         return failureJSONResponse(res, { message: `email change failed` });
-      }
-      else {
+      let title = "Email succesfully change";
+      let body = "your email address change successfull";
+      let UserId = foundUser?._id;
+      if (!foundUser) {
+        return failureJSONResponse(res, { message: `email change failed` });
+      } else {
         let deleteOtp = await OTP.findByIdAndDelete({ _id: secretid });
-        if (deleteOtp){
-          
-          Notification.sendNotifications([UserId], title, body, { 'model_id': UserId, 'model': 'user' }, false, { 'subject': 'Email Address changed successfully', 'email_template': 'emailVerifiedSuccess', 'data': {} });
+        if (deleteOtp) {
+          Notification.sendNotifications(
+            [UserId],
+            title,
+            body,
+            { model_id: UserId, model: "user" },
+            false,
+            {
+              subject: "Email Address changed successfully",
+              email_template: "emailVerifiedSuccess",
+              data: {},
+            }
+          );
           return successJSONResponse(res, {
             message: `email change successfully`,
             status: 200,
           });
-      }}
-    }else{
+        }
+      }
+    } else {
       return faiuleJSONResponse(res, {
         message: `verfication link not valid`,
         status: 400,
@@ -1434,10 +1445,6 @@ module.exports = {
   },
   /////
 
-
-
-
-
   ///// new api for verify old email /////
   verifiy_otp_for_old_email: async function (req, res, next) {
     const userId = req.userId,
@@ -1451,7 +1458,7 @@ module.exports = {
       return failureJSONResponse(res, { message: `Old  email not found` });
 
     const oldEmailAddress = foundUser?.userInfo?.email_address?.toLowerCase();
-   
+
     if (!oldEmailAddress)
       return failureJSONResponse(res, {
         message: `please provide old email address`,
@@ -1461,22 +1468,20 @@ module.exports = {
         message: `please provide valid old email address`,
       });
 
-    
-
-      OTP.findOne({
-        $and: [
-          { is_active: true },
-          { user: req.userId },
-          { email_address: oldEmailAddress },
-          { used_for: 3 },
-          { code: oldEmailOTP },
-          { for: 2 },
-        ],
-      }).then(async (foundEmailOTP) => {
-        console.log(foundEmailOTP,"bchdbc nj");
+    OTP.findOne({
+      $and: [
+        { is_active: true },
+        { user: req.userId },
+        { email_address: oldEmailAddress },
+        { used_for: 3 },
+        { code: oldEmailOTP },
+        { for: 2 },
+      ],
+    }).then(async (foundEmailOTP) => {
+      console.log(foundEmailOTP, "bchdbc nj");
       if (foundEmailOTP) {
         await OTP.deleteOne({ _id: foundEmailOTP._id });
-        
+
         OTP.create({
           is_active: true,
           code: generateOTP(4),
@@ -1491,10 +1496,24 @@ module.exports = {
                 message: `something went wrong`,
               });
             } else {
-              let title = 'Email verification';
-              let body = 'Please check your new email and click to verify';
+              let title = "Email verification";
+              let body = "Please check your new email and click to verify";
               let verifiy_url = `https://menehariya.netscapelabs.com/change-emailaddress?secret=${foundOTP?._id}`;
-              Notification.sendNotifications([userId], title, body, { 'model_id': userId, 'model': 'user' }, false, { 'subject': 'Email Verification', 'email_template': 'emailverification', 'data': { 'verify_url': verifiy_url,'newEmailAddress':newEmailAddress} });
+              Notification.sendNotifications(
+                [userId],
+                title,
+                body,
+                { model_id: userId, model: "user" },
+                false,
+                {
+                  subject: "Email Verification",
+                  email_template: "emailverification",
+                  data: {
+                    verify_url: verifiy_url,
+                    newEmailAddress: newEmailAddress,
+                  },
+                }
+              );
               return successJSONResponse(res, {
                 message: `success`,
               });
@@ -1506,7 +1525,6 @@ module.exports = {
               message: `something went wrong`,
             });
           });
-     
       } else {
         return failureJSONResponse(res, {
           message: `please provide valid old email otp`,
@@ -1514,8 +1532,8 @@ module.exports = {
       }
     });
   },
-/////
- 
+  /////
+
   ////////////
   forget_password: async function (req, res, next) {
     console.log(req.body);
@@ -1824,7 +1842,7 @@ module.exports = {
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
-  // check_email_already_exists: async function (req, res, next) {
+  
   //   const dbQuery = { _id: { $ne: req.userId } };
 
   //   if (email_address)
@@ -1888,7 +1906,7 @@ module.exports = {
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
-////////
+ 
 
   // change email address
 
@@ -2147,33 +2165,35 @@ module.exports = {
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
-// new by gagan
+  // new by gagan
   generate_otp_for_change_email: async function (req, res) {
     try {
       const userId = req.userId,
         newEmailAddress = String(req?.body?.new_email_address).toLowerCase();
-        if (!newEmailAddress)
+      if (!newEmailAddress)
         return failureJSONResponse(res, {
           message: `please provide new email address`,
         });
-        if (newEmailAddress && !isValidEmailAddress(newEmailAddress)) {
-          return failureJSONResponse(res, {
-            message: `please provide valid email`,
-          });
-        }
-      let Checkmail = await User.findOne({"userInfo.email_address":newEmailAddress})
-      if(Checkmail) {
+      if (newEmailAddress && !isValidEmailAddress(newEmailAddress)) {
         return failureJSONResponse(res, {
-        message: `email already exists`,
-      });}
+          message: `please provide valid email`,
+        });
+      }
+      let Checkmail = await User.findOne({
+        "userInfo.email_address": newEmailAddress,
+      });
+      if (Checkmail) {
+        return failureJSONResponse(res, {
+          message: `email already exists`,
+        });
+      }
       const foundUser = await User.findById({ _id: userId });
       if (!foundUser)
         return failureJSONResponse(res, { message: `User not found` });
       else if (foundUser && !foundUser?.userInfo?.email_address)
         return failureJSONResponse(res, { message: `Old  email not found` });
 
-    
-      let oldEmailAddress = foundUser?.userInfo?.email_address
+      let oldEmailAddress = foundUser?.userInfo?.email_address;
       OTP.create({
         is_active: true,
         code: generateOTP(4),
@@ -2208,7 +2228,7 @@ module.exports = {
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
-//
+  //
   update_email_or_phone_number: async function (req, res) {
     try {
       const userId = req.userId;
