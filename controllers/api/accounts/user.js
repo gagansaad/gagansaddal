@@ -1049,6 +1049,9 @@ module.exports = {
           code: otp_for_mobile_number,
           for: 1,
         }).then(async (foundMobileOTP) => {
+          if(foundMobileOTP){
+            invalidOTP = 0;
+          }
           if (!foundMobileOTP) {
             invalidOTP = 2;
           }
@@ -1058,10 +1061,12 @@ module.exports = {
           }
 
           if (invalidOTP === 0) {
-            await OTP.deleteMany({
+          let success = await OTP.deleteMany({
               _id: { $in: [foundMobileOTP._id, foundEmailOTP._id] },
             });
-
+if(success){
+  console.log(success,"done");
+}
             User.updateOne(
               { _id: req.userId },
               {
