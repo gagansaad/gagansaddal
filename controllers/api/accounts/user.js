@@ -1146,10 +1146,10 @@ module.exports = {
         // code: otp_for_email,
         // source: 2
       })
-        .then( (foundOTP) => {
+        .then(async (foundOTP) => {
           if (foundOTP) {
             console.log("object",foundOTP);
-           OTP.findByIdAndDelete({ _id: foundOTP._id });
+            await OTP.findByIdAndDelete({ _id: foundOTP._id });
 
             User.updateOne(
               { _id: req.userId },
