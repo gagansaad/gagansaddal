@@ -1022,7 +1022,7 @@ module.exports = {
     const { otp_for_email, otp_for_new_email, otp_for_mobile_number } =
       req.body;
 
-    if (otp_for_mobile_number) {
+    if (otp_for_mobile_number || otp_for_email) {
       OTP.findOne({
         $and: [
           { is_active: true },
