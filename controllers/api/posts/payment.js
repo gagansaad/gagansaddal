@@ -357,7 +357,7 @@ exports.webhooks = async (request, response) => {
 };
 
 const paymentSuccessModelUpdate = async (payment_id) => {
-
+  let userID = req.userId;
   let paymentDetails = await PaymentModel.findById({ "_id": payment_id })
   if (paymentDetails) {
     plan_id = paymentDetails.plan_id;
@@ -394,8 +394,7 @@ const paymentSuccessModelUpdate = async (payment_id) => {
   let ModelName = await getModelNameByAdsType(ads_type);
  let statusUpdate = await ModelName.findByIdAndUpdate({ "_id": ads_id }, { $set: data_Obj });
  if(statusUpdate)
- await Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Post Successfully Created!', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
-
+ await Notification.sendNotifications([userID], getNotification.title, getNotification.body, { 'model_id': UserId, 'model': 'user'}, false, { 'subject': 'Post Successfully Created!', 'email_template': 'postSuccess', 'data': {} });
   return true;
 }
 const getNotificationTitles = async (status) => {

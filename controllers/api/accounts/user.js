@@ -2430,36 +2430,40 @@ module.exports = {
   },
 
   logout: async function (req, res) {
-    const deviceType = req?.body?.device_type,
-      deviceToken = req?.body?.device_token;
-
-    if (!isValidString(deviceToken.trim()))
-      return failureJSONResponse(res, { message: `device token missing` });
-    if (!deviceType)
-      return failureJSONResponse(res, { message: `device type missing` });
-    else if (isNaN(deviceType))
-      return failureJSONResponse(res, { message: `device type invalid;` });
-
-    User.update(
-      {
-        _id: req.userId,
-      },
-      {
-        $pull: {
-          user_device_info: {
-            token: deviceToken,
-            device_type: Number(deviceType),
+    const deviceType = req?.body?.device_type;
+    const deviceToken = req?.body?.device_token;
+  
+    if (!isValidString(deviceToken?.trim())) {
+      return failureJSONResponse(res, { message: 'Device token missing.' });
+    }
+  
+    if (!deviceType) {
+      return failureJSONResponse(res, { message: 'Device type missing.' });
+    } else if (isNaN(deviceType)) {
+      return failureJSONResponse(res, { message: 'Invalid device type.' });
+    }
+  
+    try {
+      const user = await User.updateOne(
+        { _id: req.userId },
+        {
+          $pull: {
+            user_device_info: {
+              token: deviceToken,
+              device_type: Number(deviceType),
+            },
           },
-        },
-      },
-      function (err, user) {
-        if (err) {
-          return failureJSONResponse(res, { message: `something went wrong` });
-        } else {
-          return successJSONResponse(res, { message: `logout successfully` });
         }
+      );
+  
+      if (user.modifiedCount === 1) {
+        return successJSONResponse(res, { message: 'Logout successful.' });
+      } else {
+        return failureJSONResponse(res, { message: 'Device token not found.' });
       }
-    );
+    } catch (error) {
+      return failureJSONResponse(res, { message: 'Something went wrong.' });
+    }
   },
 
   ///////////////////////////////////////////////////
@@ -2697,24 +2701,6 @@ console.log(source,"------------------------------------------------------------
             return successJSONResponse(res, {
               message: `A new OTP has successfully sent out to your phone number`,
             });
-            // OTP.create({
-            //     code: generateOTP(4),
-            //     phone_number: phone_number,
-            //     user: userId,
-            //     for: 1
-
-            // }).then((foundOTP) => {
-
-            //     if (!foundOTP) {
-            //         return failureJSONResponse(res, { message: `something went wrong` });
-            //     } else {
-            //         MobileNumberVerificationOTP(phone_number, `hi`, foundOTP?.code)
-            //         return successJSONResponse(res, { message: `success` });
-            //     }
-
-            // }).catch((err) => {
-            //     return failureJSONResponse(res, { message: `something went wrong` });
-            // })
           } 
            if (source === 2) {
             if (!email_address) {
