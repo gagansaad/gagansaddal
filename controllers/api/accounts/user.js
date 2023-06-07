@@ -2686,7 +2686,7 @@ console.log(source,"------------------------------------------------------------
           if (!user)
             return failureJSONResponse(res, { message: `User not exits` });
 
-          if (Number(source) === Number(1)) {
+          if (source === 1) {
             console.log(`working`);
             if (!phone_number)
               return failureJSONResponse(res, {
@@ -2716,7 +2716,7 @@ console.log(source,"------------------------------------------------------------
             //     return failureJSONResponse(res, { message: `something went wrong` });
             // })
           } 
-           if (Number(source) === Number(2)) {
+           if (source === 2) {
             if (!email_address) {
               // console.log("yes i am error !");
               return failureJSONResponse(res, {
