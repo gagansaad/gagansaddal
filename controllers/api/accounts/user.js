@@ -2667,9 +2667,9 @@ module.exports = {
       find_old_email = await User.findById({ _id: userId });
       //  return console.log(find_old_email.userInfo.email_address,"dnxdjdnj");
       const source = Math.abs(req?.body?.source),
-        email_address = req?.body?.email_address?.toLowerCase(),
-        phone_number = req?.body?.phone_number;
-
+            email_address = req?.body?.email_address?.toLowerCase(),
+            phone_number = req?.body?.phone_number;
+console.log(source,"------------------------------------------------------------------------------------------------------------------------------------------");
       if (!source)
         return failureJSONResponse(res, { message: `please provide soruce` });
       else if (source && isNaN(source))
