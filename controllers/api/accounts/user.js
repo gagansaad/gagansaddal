@@ -2736,7 +2736,7 @@ console.log(source,"------------------------------------------------------------
             //     ],
             //   })
             
-              await OTP.findByIdAndDelete({ user: req.userId });
+              // await OTP.findByIdAndDelete({ user: req.userId });
             OTP.create({
               is_active: true,
               code: generateOTP(4),
