@@ -88,7 +88,6 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
   }
   let paymentIntent = null;
   if (deviceType == 'web') {
-    console.log("object" , request.body.redirect_uri_success , "hnehe",request.body.redirect_uri_cancel);
     if(request.body.redirect_uri_success){
       successUrl = request.body.redirect_uri_success
     }else{
@@ -325,15 +324,15 @@ exports.webhooks = async (request, response) => {
       case "payment_intent.succeeded":
         paymentSuccessModelUpdate(payment_id);
         getNotification = await getNotificationTitles(event.type);
-        Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Payment succeedded of post', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
-
+        await Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Payment succeedded of post', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
+        
         const paymentIntentSucceeded = event.data.object;
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
       case "checkout.session.completed":
         paymentSuccessModelUpdate(payment_id);
         getNotification = await getNotificationTitles(event.type);
-        Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Payment succedded of post', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
+        await Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Payment succedded of post', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
 
         break;
       // ... handle other event types
@@ -393,7 +392,10 @@ const paymentSuccessModelUpdate = async (payment_id) => {
   }
 
   let ModelName = await getModelNameByAdsType(ads_type);
-  await ModelName.findByIdAndUpdate({ "_id": ads_id }, { $set: data_Obj });
+ let statusUpdate = await ModelName.findByIdAndUpdate({ "_id": ads_id }, { $set: data_Obj });
+ if(statusUpdate)
+ await Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Post Successfully Created!', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
+
   return true;
 }
 const getNotificationTitles = async (status) => {

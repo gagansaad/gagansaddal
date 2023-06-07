@@ -2715,7 +2715,8 @@ console.log(source,"------------------------------------------------------------
             // }).catch((err) => {
             //     return failureJSONResponse(res, { message: `something went wrong` });
             // })
-          } else if (Number(source) === Number(2)) {
+          } 
+           if (Number(source) === Number(2)) {
             if (!email_address) {
               // console.log("yes i am error !");
               return failureJSONResponse(res, {
