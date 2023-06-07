@@ -2682,7 +2682,7 @@ console.log(source,"------------------------------------------------------------
         });
 
       User.findById({ _id: userId })
-        .then((user) => {
+        .then( async (user) => {
           if (!user)
             return failureJSONResponse(res, { message: `User not exits` });
 
@@ -2725,7 +2725,18 @@ console.log(source,"------------------------------------------------------------
               return failureJSONResponse(res, {
                 message: `please provide valid  email address`,
               });
-
+            let oldOtp = await OTP.findOne({
+                $and: [
+                  { is_active: true },
+                  { user: req.userId },
+                  { used_for: 2 },
+                  { code: otp_for_email },
+                  { for: 2 },
+                ],
+              })
+            if(oldOtp){
+              await OTP.findByIdAndDelete({ _id: oldOtp._id});
+            }
             OTP.create({
               is_active: true,
               code: generateOTP(4),
