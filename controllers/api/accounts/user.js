@@ -1235,7 +1235,7 @@ module.exports = {
         let deleteOtp = await OTP.findByIdAndDelete({ _id: secretid });
         if (deleteOtp){
           
-          // Notification.sendNotifications([UserId], title, body, { 'model_id': UserId, 'model': 'user' }, true, { 'subject': 'Email Address changed successfully', 'email_template': 'paymentstatus', 'data': {} });
+          Notification.sendNotifications([UserId], title, body, { 'model_id': UserId, 'model': 'user' }, false, { 'subject': 'Email Address changed successfully', 'email_template': 'emailVerifiedSuccess', 'data': {} });
           return successJSONResponse(res, {
             message: `email change successfully`,
             status: 200,
@@ -1494,7 +1494,7 @@ module.exports = {
               let title = 'Email verification';
               let body = 'Please check your new email and click to verify';
               let verifiy_url = `https://menehariya.netscapelabs.com/change-emailaddress?secret=${foundOTP?._id}`;
-              Notification.sendNotifications([userId], title, body, { 'model_id': userId, 'model': 'user' }, false, { 'subject': 'Email Address changed successfully', 'email_template': 'emailverification', 'data': { 'verify_url': verifiy_url,'newEmailAddress':newEmailAddress} });
+              Notification.sendNotifications([userId], title, body, { 'model_id': userId, 'model': 'user' }, false, { 'subject': 'Email Verification', 'email_template': 'emailverification', 'data': { 'verify_url': verifiy_url,'newEmailAddress':newEmailAddress} });
               return successJSONResponse(res, {
                 message: `success`,
               });
