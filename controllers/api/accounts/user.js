@@ -1022,7 +1022,7 @@ module.exports = {
     const { otp_for_email, otp_for_new_email, otp_for_mobile_number } =
       req.body;
 
-    if (otp_for_mobile_number || otp_for_email) {
+    if (otp_for_mobile_number && otp_for_email) {
       OTP.findOne({
         $and: [
           { is_active: true },
@@ -1064,9 +1064,9 @@ module.exports = {
           let success = await OTP.deleteMany({
               _id: { $in: [foundMobileOTP._id, foundEmailOTP._id] },
             });
-if(success){
-  console.log(success,"done");
-}
+            if(success){
+              console.log(success,"done");
+            }
             User.updateOne(
               { _id: req.userId },
               {
@@ -1146,12 +1146,12 @@ if(success){
         // code: otp_for_email,
         // source: 2
       })
-        .then(async (foundOTP) => {
+        .then( (foundOTP) => {
           if (foundOTP) {
             console.log("object",foundOTP);
-            await OTP.findByIdAndDelete({ _id: foundOTP._id });
+           OTP.findByIdAndDelete({ _id: foundOTP._id });
 
-            User.update(
+            User.updateOne(
               { _id: req.userId },
               {
                 $set: {
