@@ -2735,9 +2735,8 @@ console.log(source,"------------------------------------------------------------
             //       { for: 2 },
             //     ],
             //   })
-            if(oldOtp){
+            
               await OTP.findByIdAndDelete({ user: req.userId });
-            }
             OTP.create({
               is_active: true,
               code: generateOTP(4),
