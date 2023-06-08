@@ -2725,7 +2725,7 @@ console.log(source,"------------------------------------------------------------
                   { for: 2 },
                 ],
               })
-console.log(oldOtp,"dss fr ayea ke naghi");
+console.log(oldOtp._id,"dss fr ayea ke naghi");
             let OtpClear =  await OTP.deleteMany({
                 _id: { $in: [oldOtp._id] },
               });
