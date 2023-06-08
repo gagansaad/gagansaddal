@@ -855,6 +855,7 @@ module.exports = {
       );
 
       if (checkUserDetail?.length) {
+        console.log(checkUserDetail`sjdfhkjdshfkjs sdkjbfdshbfsd `);
         if (!checkUserDetail[0]?.userInfo?.password) {
           return res.json({
             status: 400,
@@ -910,7 +911,7 @@ module.exports = {
 
             if (!is_active) {
               if (phone_number && email_address) {
-                console.log(checkUserDetail`sjdfhkjdshfkjs sdkjbfdshbfsd `);
+                
                 let OtpClear =  await OTP.deleteMany({
                   user: { $in: [checkUserDetail[0]._id] },
                   });
