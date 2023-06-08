@@ -2720,7 +2720,7 @@ console.log(source,"------------------------------------------------------------
             let oldOtp = await OTP.findOne({
                 $and: [
                   { is_active: true },
-                  { user: req.userId },
+                  { email_address: email_address },
                   { used_for: 2 }
                 ],
               })
