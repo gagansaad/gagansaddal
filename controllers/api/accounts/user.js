@@ -851,7 +851,7 @@ module.exports = {
 
       const checkUserDetail = await User.find(
         { "userInfo.email_address": userData.email.trim() },
-        {_id:1, userInfo: 1, userBasicInfo: 1, userStatus: 1 }
+        {_id: 1, userInfo: 1, userBasicInfo: 1, userStatus: 1 }
       );
 
       if (checkUserDetail?.length) {
