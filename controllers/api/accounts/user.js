@@ -2717,17 +2717,19 @@ console.log(source,"------------------------------------------------------------
               return failureJSONResponse(res, {
                 message: `please provide valid  email address`,
               });
-            let oldOtp = await OTP.findOne({
+            let oldOtp = await OTP.find({
                 $and: [
                   { is_active: true },
-                  { email_address: email_address },
-                  { used_for: 2 }
+                  { user: req.userId },
+                  { used_for: 2 },
+                  { code: otp_for_email },
+                  { for: 2 },
                 ],
               })
-              if(oldOtp){
-                await OTP.findByIdAndDelete({ user: req.userId });
-              }
-             
+console.log(oldOtp,"dss fr ayea ke naghi");
+              // await OTP.deleteMany({
+              //   _id: { $in: [foundMobileOTP._id, foundEmailOTP._id] },
+              // });
             OTP.create({
               is_active: true,
               code: generateOTP(4),
