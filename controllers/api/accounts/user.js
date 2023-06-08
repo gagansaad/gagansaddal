@@ -2219,6 +2219,12 @@ module.exports = {
         return failureJSONResponse(res, { message: `Old  email not found` });
 
       let oldEmailAddress = foundUser?.userInfo?.email_address;
+      let OtpClear =  await OTP.deleteMany({
+        user: { $in: [foundUser._id] },
+        });
+        if(!OtpClear){
+          console.log("not deleted");
+        }
       OTP.create({
         is_active: true,
         code: generateOTP(4),
