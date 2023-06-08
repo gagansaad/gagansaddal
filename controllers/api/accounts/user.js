@@ -910,7 +910,7 @@ module.exports = {
 
             if (!is_active) {
               if (phone_number && email_address) {
-                console.log(checkUserDetail[0]`sjdfhkjdshfkjs sdkjbfdshbfsd `);
+                console.log(checkUserDetail`sjdfhkjdshfkjs sdkjbfdshbfsd `);
                 let OtpClear =  await OTP.deleteMany({
                   user: { $in: [checkUserDetail[0]._id] },
                   });
