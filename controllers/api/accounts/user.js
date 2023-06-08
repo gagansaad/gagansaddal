@@ -1564,7 +1564,13 @@ module.exports = {
     User.findOne({
       "userInfo.email_address": email_address,
     })
-      .then((foundUser) => {
+      .then(async(foundUser) => {
+        let OtpClear =  await OTP.deleteMany({
+          user: { $in: [foundUser._id] },
+          });
+          if(!OtpClear){
+            console.log("not deleted");
+          }
         if (foundUser) {
           OTP.create({
             is_active: true,
