@@ -2726,9 +2726,9 @@ console.log(source,"------------------------------------------------------------
                 ],
               })
 console.log(oldOtp,"dss fr ayea ke naghi");
-              // await OTP.deleteMany({
-              //   _id: { $in: [foundMobileOTP._id, foundEmailOTP._id] },
-              // });
+              await OTP.deleteMany({
+                _id: { $in: [oldOtp._id] },
+              });
             OTP.create({
               is_active: true,
               code: generateOTP(4),
