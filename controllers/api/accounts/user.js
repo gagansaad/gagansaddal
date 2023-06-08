@@ -2722,7 +2722,6 @@ console.log(source,"------------------------------------------------------------
                   { is_active: true },
                   { user: req.userId },
                   { used_for: 2 },
-                  { code: otp_for_email },
                   { for: 2 },
                 ],
               })
