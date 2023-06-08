@@ -855,7 +855,7 @@ module.exports = {
       );
 
       if (checkUserDetail?.length) {
-        console.log(checkUserDetail`sjdfhkjdshfkjs sdkjbfdshbfsd `);
+        console.log(checkUserDetail,`sjdfhkjdshfkjs sdkjbfdshbfsd `);
         if (!checkUserDetail[0]?.userInfo?.password) {
           return res.json({
             status: 400,
