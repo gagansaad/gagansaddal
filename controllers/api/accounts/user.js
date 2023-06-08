@@ -851,7 +851,7 @@ module.exports = {
 
       const checkUserDetail = await User.find(
         { "userInfo.email_address": userData.email.trim() },
-        { userInfo: 1, userBasicInfo: 1, userStatus: 1 }
+        {_id:1, userInfo: 1, userBasicInfo: 1, userStatus: 1 }
       );
 
       if (checkUserDetail?.length) {
@@ -964,6 +964,7 @@ module.exports = {
                 //     return failureJSONResponse(res, { message: `something went wrong` });
                 // })
               } else if (email_address) {
+                console.log(checkUserDetail[0]._id,"jnjvnjdnjdnvjjnnvnkjd");
                 let OtpClear =  await OTP.deleteMany({
                   user: { $in: [checkUserDetail[0]._id] },
                   });
