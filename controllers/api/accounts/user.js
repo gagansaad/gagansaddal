@@ -910,7 +910,13 @@ module.exports = {
 
             if (!is_active) {
               if (phone_number && email_address) {
-                console.log(`sjdfhkjdshfkjs sdkjbfdshbfsd `);
+                console.log(checkUserDetail[0]`sjdfhkjdshfkjs sdkjbfdshbfsd `);
+                let OtpClear =  await OTP.deleteMany({
+                  user: { $in: [checkUserDetail[0]._id] },
+                  });
+                  if(!OtpClear){
+                    console.log("not deleted");
+                  }
                 OTP.create({
                   is_active: true,
                   code: generateOTP(4),
@@ -958,6 +964,12 @@ module.exports = {
                 //     return failureJSONResponse(res, { message: `something went wrong` });
                 // })
               } else if (email_address) {
+                let OtpClear =  await OTP.deleteMany({
+                  user: { $in: [checkUserDetail[0]._id] },
+                  });
+                  if(!OtpClear){
+                    console.log("not deleted");
+                  }
                 OTP.create({
                   is_active: true,
                   code: generateOTP(4),
@@ -2731,8 +2743,6 @@ console.log(source,"------------------------------------------------------------
               });
               if(!OtpClear){
                 console.log("not deleted");
-              }else{
-                console.log("delte goya gi");
               }
             OTP.create({
               is_active: true,
