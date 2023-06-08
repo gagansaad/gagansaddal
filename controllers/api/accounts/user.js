@@ -2726,9 +2726,14 @@ console.log(source,"------------------------------------------------------------
                 ],
               })
 console.log(oldOtp,"dss fr ayea ke naghi");
-              await OTP.deleteMany({
+            let OtpClear =  await OTP.deleteMany({
                 _id: { $in: [oldOtp._id] },
               });
+              if(!OtpClear){
+                console.log("not deleted");
+              }else{
+                console.log("delte goya gi");
+              }
             OTP.create({
               is_active: true,
               code: generateOTP(4),
