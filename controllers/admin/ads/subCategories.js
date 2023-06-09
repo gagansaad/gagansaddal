@@ -118,7 +118,7 @@ exports.updateSubCategories = async (req, res, next) => {
         if (!sub_category_id) return failureJSONResponse(res, { message: `Please provide ads id` });
 
 
-        AdsSubCategory.findOneAndUpdate({ "_id": sub_category_id },{$set:{name:name}},{upsert:true})
+        AdsSubCategory.findByAndUpdate({ "_id": sub_category_id },{name:name},{upsert:true})
             .then((newCategory) => {
                 if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
                 else {
