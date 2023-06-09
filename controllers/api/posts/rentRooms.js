@@ -653,7 +653,7 @@ exports.fetchAll = async (req, res, next) => {
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
         records,
-        status: 200,
+        status: 200, 
       });
     } else {
       return failureJSONResponse(res, { message: `Room not Available` });
