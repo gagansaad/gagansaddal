@@ -54,7 +54,6 @@ exports.fetchNewSubCategories = async (req, res, next) => {
     try {
 
         const {
-
             category_id,
         } = req.query
 
@@ -85,12 +84,11 @@ exports.deleteNewSubCategories = async (req, res, next) => {
     try {
 
         const {
-
-            category_id,
+            sub_category_id
         } = req.body
 
 
-        if (!category_id) return failureJSONResponse(res, { message: `Please provide ads id` });
+        if (!sub_category_id) return failureJSONResponse(res, { message: `Please provide ads id` });
 
 
         AdsSubCategory.findOneAndDelete({ "_id": sub_category_id })
