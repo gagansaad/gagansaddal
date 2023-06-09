@@ -20,26 +20,87 @@ const mongoose = require("mongoose"),
 
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
-  let adtype = req.query.ads_type
-  let records = await tagline_keywords.find({ ads_type: adtype }).select({ "keywords": 1, "_id": 1 });
+  let adtype = req.query.ads_type;
+  let records = await tagline_keywords
+    .find({ ads_type: adtype })
+    .select({ keywords: 1, _id: 1 });
 
   const dynamicsData = {
     tagline: records,
     category: ["I want a Babysitter/Nanny", "I am a Babysitter/Nanny"],
     currency: ["USD", "AED", "AUD", "AWG", "CAD", "EUR", "GBP", "INR", "USN"],
     work_type: ["Live in", "Live in & out", "Live out"],
-    care_service_need: ["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores"],
-    care_service_offer: ["Childcare Duties", "Educational Activities", "Homework Assistance", "Light Cooking only for Babies", "Light Household Chores", "Storytelling"],
-    age_group_need: ["0-6 month", "6 month - 3 years", "3-5 years", "5-10 years", "10-13 years", "above 13", "any age"],
-    age_group_offer: ["0-6 month", "6 month - 3 years", "3-5 years", "5-10 years", "10-13 years", "above 13", "any age"],
-    preferrd_languge_need: ["English", "Amharic", "Afan Oromo", "Tigrigna", "Arabic", "French", "Other"],
-    preferrd_languge_offer: ["English", "Amharic", "Afan Oromo", "Tigrigna", "Arabic", "French", "Other"],
+    care_service_need: [
+      "Childcare Duties",
+      "Educational Activities",
+      "Homework Assistance",
+      "Light Cooking only for Babies",
+      "Light Household Chores",
+    ],
+    care_service_offer: [
+      "Childcare Duties",
+      "Educational Activities",
+      "Homework Assistance",
+      "Light Cooking only for Babies",
+      "Light Household Chores",
+      "Storytelling",
+    ],
+    age_group_need: [
+      "0-6 month",
+      "6 month - 3 years",
+      "3-5 years",
+      "5-10 years",
+      "10-13 years",
+      "above 13",
+      "any age",
+    ],
+    age_group_offer: [
+      "0-6 month",
+      "6 month - 3 years",
+      "3-5 years",
+      "5-10 years",
+      "10-13 years",
+      "above 13",
+      "any age",
+    ],
+    preferrd_languge_need: [
+      "English",
+      "Amharic",
+      "Afan Oromo",
+      "Tigrigna",
+      "Arabic",
+      "French",
+      "Other",
+    ],
+    preferrd_languge_offer: [
+      "English",
+      "Amharic",
+      "Afan Oromo",
+      "Tigrigna",
+      "Arabic",
+      "French",
+      "Other",
+    ],
     preferrd_gender_need: ["Male", "Female", "Any Gender"],
     preferrd_gender_offer: ["Male", "Female"],
     transport_facilty_need: ["Yes", "No"],
     transport_facilty_offer: ["Yes", "No"],
-    expected_salary_rate_need: ["/hour", "/day", "/week", "/month", "/biweekly", "fixed amount"],
-    expected_salary_rate_offer: ["/hour", "/day", "/week", "/month", "/biweekly", "fixed amount"],
+    expected_salary_rate_need: [
+      "/hour",
+      "/day",
+      "/week",
+      "/month",
+      "/biweekly",
+      "fixed amount",
+    ],
+    expected_salary_rate_offer: [
+      "/hour",
+      "/day",
+      "/week",
+      "/month",
+      "/biweekly",
+      "fixed amount",
+    ],
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -50,7 +111,6 @@ exports.getDnymicsData = async (req, res, next) => {
 ///-----------------------Validate Data---------------------------//
 
 exports.validateAdsData = async (req, res, next) => {
-
   try {
     const {
       status,
@@ -67,13 +127,23 @@ exports.validateAdsData = async (req, res, next) => {
       description,
       location,
       tagline,
-
     } = req.body;
     // console.log(req.body, "ye boDY HAI");
-    if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
-    if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads type` });
-    else if (ads_type && !isValidMongoObjId(mongoose, ads_type)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
-
+    if (
+      status &&
+      status != `active` &&
+      status != `inactive` &&
+      status != `draft`
+    )
+      return failureJSONResponse(res, {
+        message: `Please enter status active inactive or draft`,
+      });
+    if (!ads_type)
+      return failureJSONResponse(res, { message: `Please provide ads type` });
+    else if (ads_type && !isValidMongoObjId(mongoose, ads_type))
+      return failureJSONResponse(res, {
+        message: `Please provide valid ads type`,
+      });
 
     // if(category_name)
     if (!isValidString(category_name))
@@ -126,7 +196,6 @@ exports.validateAdsData = async (req, res, next) => {
         message: `Please provide valid tagline`,
       });
 
-
     return next();
   } catch (err) {
     console.log(err);
@@ -134,7 +203,6 @@ exports.validateAdsData = async (req, res, next) => {
 };
 //////////////
 exports.validateListerBasicinfo = async (req, res, next) => {
-
   try {
     const {
       email_address,
@@ -182,7 +250,6 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 ////-----------------------Create babbysitter & nannis------------------------------//
 
 exports.createAds = async (req, res, next) => {
-
   try {
     const {
       isfeatured,
@@ -203,34 +270,31 @@ exports.createAds = async (req, res, next) => {
       description,
       location,
       tagline,
-      image
+      image,
     } = req.body;
     console.log(req.body);
     const userId = req.userId;
     const imageArr = [];
 
-    let taglines = tagline
+    let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
-        let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] });
         if (!tags) {
           let tag = {
             keywords: taglines[i],
-            ads_type: ads_type
-          }
-          await tagline_keywords.create(tag)
+            ads_type: ads_type,
+          };
+          await tagline_keywords.create(tag);
         }
-
       }
     }
     for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = req.files[i].path
+      var thumbnail = req.files[i].path;
 
       productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
-
     }
-
 
     const dataObj = {
       isfeatured,
@@ -250,7 +314,7 @@ exports.createAds = async (req, res, next) => {
         transport_facilty,
         expected_salary_amount: {
           amount,
-          currency
+          currency,
         },
         expected_salary_rate,
         description,
@@ -267,7 +331,10 @@ exports.createAds = async (req, res, next) => {
     const Babysitter_Nannies = {};
 
     for (let key in newPost.toObject()) {
-      if (!fieldsToExclude.hasOwnProperty(String(key)) && !listerBasicInfo.hasOwnProperty(String(key))) {
+      if (
+        !fieldsToExclude.hasOwnProperty(String(key)) &&
+        !listerBasicInfo.hasOwnProperty(String(key))
+      ) {
         Babysitter_Nannies[key] = newPost[key];
       }
     }
@@ -296,11 +363,11 @@ exports.editAds = async (req, res, next) => {
     console.log(req.params);
     const productId = req?.params?.productId;
     // console.log(productId, "id dsso hai gi ja nhi ");
-    const validate_id = await postbabyAd.findById(productId)
+    const validate_id = await postbabyAd.findById(productId);
     if (!validate_id) {
       return failureJSONResponse(res, {
         message: `Failed to find your babysitter and nannies id`,
-      })
+      });
     }
     const {
       status,
@@ -330,63 +397,64 @@ exports.editAds = async (req, res, next) => {
       // hide_address,
       address_info,
       preferable_contact_mode,
-      image
+      image,
     } = req.body;
-    console.log(tagline, "vdhvdbhdbvhdbvhdvdbdhvbdh----------------------------------------");
-    let taglines = tagline
+    console.log(
+      tagline,
+      "vdhvdbhdbvhdbvhdvdbdhvbdh----------------------------------------"
+    );
+    let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
-        let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] });
         if (!tags) {
           let tag = {
             keywords: taglines[i],
-            ads_type: ads_type
-          }
-          await tagline_keywords.create(tag)
+            ads_type: ads_type,
+          };
+          await tagline_keywords.create(tag);
         }
-
       }
     }
     const imageArr = [];
     for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = req.files[i].path
+      var thumbnail = req.files[i].path;
 
       productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
-
     }
 
     let my_phone = false;
     let my_email = false;
-    let secondary_phone = false
+    let secondary_phone = false;
 
     if (hide_my_secondary_phone == "true") {
-      secondary_phone = true
-    } else if (hide_my_secondary_phone == 'false') {
-      secondary_phone = false
+      secondary_phone = true;
+    } else if (hide_my_secondary_phone == "false") {
+      secondary_phone = false;
     }
     if (hide_my_phone == "true") {
-      my_phone = true
-    } else if (hide_my_phone == 'false') {
-      my_phone = false
+      my_phone = true;
+    } else if (hide_my_phone == "false") {
+      my_phone = false;
     }
 
     if (hide_my_email == "true") {
-      my_email = true
-    } else if (hide_my_email == 'false') {
-      my_email = false
+      my_email = true;
+    } else if (hide_my_email == "false") {
+      my_email = false;
     }
 
     const dataObj = {},
       adsInfoObj = {},
       listerBasicInfoObj = {};
-    let category = {}
-    let expected_salary_amount = {}
+    let category = {};
+    let expected_salary_amount = {};
     if (status) dataObj.status = status;
     if (ads_type) dataObj.ads_type = ads_type;
     if (category_name) category.category_name = category_name;
     if (category_value) category.category_value = category_value;
-    if (category_name) adsInfoObj.category = category
+    if (category_name) adsInfoObj.category = category;
     if (care_service) adsInfoObj.care_service = care_service;
     if (work_type) adsInfoObj.work_type = work_type;
     if (age_group) adsInfoObj.age_group = age_group;
@@ -397,7 +465,8 @@ exports.editAds = async (req, res, next) => {
     if (amount) expected_salary_amount.amount = amount;
     if (tagline) adsInfoObj.tagline = tagline;
     if (amount) adsInfoObj.expected_salary_amount = expected_salary_amount;
-    if (expected_salary_rate) adsInfoObj.expected_salary_rate = expected_salary_rate
+    if (expected_salary_rate)
+      adsInfoObj.expected_salary_rate = expected_salary_rate;
     if (description) adsInfoObj.description = description;
     if (location) adsInfoObj.location = location;
 
@@ -421,25 +490,19 @@ exports.editAds = async (req, res, next) => {
         primary_mobile_number: {
           country_code: +91,
           primary_phone_number: primary_phone_number,
-
         },
         secondary_mobile_number: {
           country_code: +91,
           secondary_phone_number: secondary_phone_number,
-
         },
         preferable_contact_mode: preferable_contact_mode,
       },
     };
 
-
-
     const updateproduct = await postbabyAd.findByIdAndUpdate(
       { _id: productId },
       { $set: dataObjq },
       { new: true }
-
-
     );
 
     // if(updateproduct && Object.keys(updateproduct).length){
@@ -452,7 +515,7 @@ exports.editAds = async (req, res, next) => {
     // })
     // }
 
-    let BabysitterNannies = {}
+    let BabysitterNannies = {};
 
     for (let key in updateproduct.toObject()) {
       if (!fieldsToExclude.hasOwnProperty(String(key))) {
@@ -516,15 +579,12 @@ exports.editAds = async (req, res, next) => {
 //   }
 // };
 
-
-
 //////////////
 exports.fetchAll = async (req, res, next) => {
   try {
-
+    let searchTerm = req.body.searchTerm;
     let dbQuery = {};
     const {
-
       status,
       category_value,
       category_name,
@@ -536,10 +596,9 @@ exports.fetchAll = async (req, res, next) => {
       transport_facilty,
       location,
       tagline,
-
     } = req.query;
-    var perPage =  parseInt(req.query.perpage) || 6
-    var page = parseInt(req.query.page) || 1
+    var perPage = parseInt(req.query.perpage) || 6;
+    var page = parseInt(req.query.page) || 1;
 
     if (status) {
       dbQuery.status = status;
@@ -584,24 +643,40 @@ exports.fetchAll = async (req, res, next) => {
     if (tagline) {
       dbQuery["adsInfo.tagline"] = tagline;
     }
-    let records = await postbabyAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
+    let queryFinal = dbQuery;
+    if (searchTerm) {
+      queryFinal = {
+        ...dbQuery,
+        ...{ title: { $regex: searchTerm, $options: "i" } },
+        ...{ "adsInfo.tagline": { $regex: searchTerm, $options: "i" } },
+      };
+    }
+    let records = await postbabyAd
+      .find({ $or: [queryFinal] })
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .sort({ createdAt: -1 })
+      .skip(perPage * page - perPage)
+      .limit(perPage);
+    const responseModelCount = await postbabyAd.countDocuments({
+      $or: [queryFinal],
+    });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
-        total: Object.keys(records).length,
+        total: responseModelCount,
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
         records,
         status: 200,
-      })
+      });
     } else {
-      return failureJSONResponse(res, { message: `Room not Available` })
+      return failureJSONResponse(res, { message: `Room not Available` });
     }
   } catch (err) {
-    return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, { message: `something went wrong` });
   }
-}
+};
 
 ////
 
@@ -609,17 +684,17 @@ exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
 
-    let records = await postbabyAd.findById({ "_id": adsId });
+    let records = await postbabyAd.findById({ _id: adsId });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
         ads_details: records,
         status: 200,
-      })
+      });
     } else {
-      return failureJSONResponse(res, { message: `ad not Available` })
+      return failureJSONResponse(res, { message: `ad not Available` });
     }
   } catch (err) {
-    return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, { message: `something went wrong` });
   }
-}
+};

@@ -18,24 +18,77 @@ const mongoose = require("mongoose"),
     isValidIndianMobileNumber,
     isValidUrl,
     isValidlink,
-    isValidPlink
+    isValidPlink,
   } = require(`../../../utils/validators`);
 
 ///-----------------------Dynamic Data---------------------------////
 
 exports.getDnymicsData = async (req, res, next) => {
-  let adtype = req.query.adsType
-  let records = await tagline_keywords.find({ adType: adtype }).select({ "keywords": 1, "_id": 1 });
+  let adtype = req.query.adsType;
+  let records = await tagline_keywords
+    .find({ adType: adtype })
+    .select({ keywords: 1, _id: 1 });
 
   const dynamicsData = {
     tagline: records,
-    type: ["Venue Based Event", "Live Event", "Both Venue based and Live Streaming Event"],
-    category: ["Sport event", "Festival", "Religious", "Political gatherings", "Community Gatherings", "Music concert", "Night party", "Health care advisor", "Education", "Training", "Food & drink", "Fund Raising", "Candlelight Vigil", "Drama", "Theatre", "Movie", "Wedding", "Funneral", "Anniversary", "Welcome", "Farewell", "Markets & Auction", "Spritual", "Valentines day", "Exhibition", "Seminar", "Aerobics", "Webinar", "Other"],
-    platform: ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "Google Meet", "Microsoft Teams", "other"],
+    type: [
+      "Venue Based Event",
+      "Live Event",
+      "Both Venue based and Live Streaming Event",
+    ],
+    category: [
+      "Sport event",
+      "Festival",
+      "Religious",
+      "Political gatherings",
+      "Community Gatherings",
+      "Music concert",
+      "Night party",
+      "Health care advisor",
+      "Education",
+      "Training",
+      "Food & drink",
+      "Fund Raising",
+      "Candlelight Vigil",
+      "Drama",
+      "Theatre",
+      "Movie",
+      "Wedding",
+      "Funneral",
+      "Anniversary",
+      "Welcome",
+      "Farewell",
+      "Markets & Auction",
+      "Spritual",
+      "Valentines day",
+      "Exhibition",
+      "Seminar",
+      "Aerobics",
+      "Webinar",
+      "Other",
+    ],
+    platform: [
+      "Facebook",
+      "Instagram",
+      "Zoom",
+      "Youtube",
+      "Tiktok",
+      "Google Meet",
+      "Microsoft Teams",
+      "other",
+    ],
     recurring_type: ["Daily", "Weekly", "Monthly"],
-    time_zone: ["Hawaii Standard Time", "Hawaii-Aleutian Daylight Time", "Alaska Daylight Time", "Pacific Daylight Time", "Mountain Standard Time", "Mountain Daylight Time", "Central Daylight Time", "Eastern Daylight Time"],
+    time_zone: [
+      "Hawaii Standard Time",
+      "Hawaii-Aleutian Daylight Time",
+      "Alaska Daylight Time",
+      "Pacific Daylight Time",
+      "Mountain Standard Time",
+      "Mountain Daylight Time",
+      "Central Daylight Time",
+      "Eastern Daylight Time",
+    ],
     currency: ["USD", "AED", "AUD", "AWG", "CAD", "EUR", "GBP", "INR", "USN"],
-
   };
   return successJSONResponse(res, {
     message: `success`,
@@ -75,12 +128,20 @@ exports.validateEventAdsData = async (req, res, next) => {
       youtube_platform,
       tiktok_platform,
       other_platform,
-      tagline
-
+      tagline,
     } = req.body;
     // console.log(req.body, "is validate ki body");
-    if (status && (status != `active` && status != `inactive` && status != `draft`)) return failureJSONResponse(res, { message: `Please enter status active inactive or draft` });
-    if (!adsType) return failureJSONResponse(res, { message: `Please provide ads type` });
+    if (
+      status &&
+      status != `active` &&
+      status != `inactive` &&
+      status != `draft`
+    )
+      return failureJSONResponse(res, {
+        message: `Please enter status active inactive or draft`,
+      });
+    if (!adsType)
+      return failureJSONResponse(res, { message: `Please provide ads type` });
     // else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
 
     if (!isValidString(title))
@@ -101,11 +162,11 @@ exports.validateEventAdsData = async (req, res, next) => {
         message: "Please provide valid details",
       });
 
-    if (venue_name && (!isValidString(venue_name)))
+    if (venue_name && !isValidString(venue_name))
       return failureJSONResponse(res, {
         message: `Please provide valid  venue name`,
       });
-    if (live_platform && (!isValidString(live_platform)))
+    if (live_platform && !isValidString(live_platform))
       return failureJSONResponse(res, {
         message: `Please provide valid live platform`,
       });
@@ -121,7 +182,10 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: "Please provide valid end date",
       });
-    if ((new Date(start_date) > new Date(end_date)) || (new Date(end_date) < new Date(start_date))) {
+    if (
+      new Date(start_date) > new Date(end_date) ||
+      new Date(end_date) < new Date(start_date)
+    ) {
       return failureJSONResponse(res, {
         message: "End date should be greater than Start date",
       });
@@ -139,11 +203,11 @@ exports.validateEventAdsData = async (req, res, next) => {
     //   return failureJSONResponse(res, {
     //     message: "Please provide valid recurring type",
     //   });
-    if (regular_ticket_price && (isNaN(Number(regular_ticket_price))))
+    if (regular_ticket_price && isNaN(Number(regular_ticket_price)))
       return failureJSONResponse(res, {
         message: `please provide valid regular_ticket_price`,
       });
-    if (vip_ticket_price && (isNaN(Number(vip_ticket_price))))
+    if (vip_ticket_price && isNaN(Number(vip_ticket_price)))
       return failureJSONResponse(res, {
         message: `please provide valid vip_ticket_price`,
       });
@@ -159,17 +223,37 @@ exports.validateEventAdsData = async (req, res, next) => {
     //   return failureJSONResponse(res, {
     //     message: `please provide valid valid vip ticket price`,
     //   });
-    if (facebook_platform && (!isValidPlink(facebook_platform))) return failureJSONResponse(res, { message: `please provide valid facebook link` });
-    if (youtube_platform && (!isValidPlink(youtube_platform))) return failureJSONResponse(res, { message: `please provide valid youtube link` });
-    if (instagram_platform && (!isValidPlink(instagram_platform))) return failureJSONResponse(res, { message: `please provide valid instagram link` });
-    if (zoom_platform && (!isValidPlink(zoom_platform))) return failureJSONResponse(res, { message: `please provide valid zoom link` });
-    if (tiktok_platform && (!isValidPlink(tiktok_platform))) return failureJSONResponse(res, { message: `please provide valid tiktok link` });
-    if (other_platform && (!isValidPlink(other_platform))) return failureJSONResponse(res, { message: `please provide valid other link` });
+    if (facebook_platform && !isValidPlink(facebook_platform))
+      return failureJSONResponse(res, {
+        message: `please provide valid facebook link`,
+      });
+    if (youtube_platform && !isValidPlink(youtube_platform))
+      return failureJSONResponse(res, {
+        message: `please provide valid youtube link`,
+      });
+    if (instagram_platform && !isValidPlink(instagram_platform))
+      return failureJSONResponse(res, {
+        message: `please provide valid instagram link`,
+      });
+    if (zoom_platform && !isValidPlink(zoom_platform))
+      return failureJSONResponse(res, {
+        message: `please provide valid zoom link`,
+      });
+    if (tiktok_platform && !isValidPlink(tiktok_platform))
+      return failureJSONResponse(res, {
+        message: `please provide valid tiktok link`,
+      });
+    if (other_platform && !isValidPlink(other_platform))
+      return failureJSONResponse(res, {
+        message: `please provide valid other link`,
+      });
 
     // if (link&&(!isValidlink(link)))
     //   return failureJSONResponse(res, { message: `please provide valid link` });
     if (!isValidString(location))
-      return failureJSONResponse(res, { message: `please provide valid location` });
+      return failureJSONResponse(res, {
+        message: `please provide valid location`,
+      });
     // if (!isValidString(tagline))
     //   return failureJSONResponse(res, {
     //     message: `Please provide us tagline`,
@@ -185,20 +269,18 @@ exports.validateEventAdsData = async (req, res, next) => {
 };
 
 exports.validateListerBasicinfo = async (req, res, next) => {
-
   try {
     const {
       organization_name,
       hosted_by,
 
       emailAddress,
-
     } = req.body;
-    if (organization_name && (!isValidString(organization_name)))
+    if (organization_name && !isValidString(organization_name))
       return failureJSONResponse(res, {
         message: `Please provide valid organization name`,
       });
-    if (hosted_by && (!isValidString(hosted_by)))
+    if (hosted_by && !isValidString(hosted_by))
       return failureJSONResponse(res, {
         message: `Please provide valid hosted by`,
       });
@@ -215,7 +297,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
     //   return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
     // }
 
-    if (emailAddress && (!isValidEmailAddress(emailAddress))) {
+    if (emailAddress && !isValidEmailAddress(emailAddress)) {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
@@ -239,8 +321,6 @@ exports.validateListerBasicinfo = async (req, res, next) => {
     console.log(err);
   }
 };
-
-
 
 ////-----------------------Create Event------------------------------//
 
@@ -277,62 +357,67 @@ exports.createEventAds = async (req, res, next) => {
       youtube_platform,
       tiktok_platform,
       other_platform,
-      other_platform_name
-
+      other_platform_name,
     } = req.body;
 
-    let taglines = tagline
+    let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
-        let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] });
         if (!tags) {
           let tag = {
             keywords: taglines[i],
-            ads_type: adsType
-          }
-          await tagline_keywords.create(tag)
+            ads_type: adsType,
+          };
+          await tagline_keywords.create(tag);
         }
-
       }
     }
 
-    const livePlatform = ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"];
+    const livePlatform = [
+      "Facebook",
+      "Instagram",
+      "Zoom",
+      "Youtube",
+      "Tiktok",
+      "other",
+    ];
     let platforms = [];
     if (facebook_platform) {
       platforms.push({
         live_platform: livePlatform[0],
-        platform_link: facebook_platform
-      })
+        platform_link: facebook_platform,
+      });
     }
     if (instagram_platform) {
       platforms.push({
         live_platform: livePlatform[1],
-        platform_link: instagram_platform
-      })
+        platform_link: instagram_platform,
+      });
     }
     if (zoom_platform) {
       platforms.push({
         live_platform: livePlatform[2],
-        platform_link: zoom_platform
-      })
+        platform_link: zoom_platform,
+      });
     }
     if (youtube_platform) {
       platforms.push({
         live_platform: livePlatform[3],
-        platform_link: youtube_platform
-      })
+        platform_link: youtube_platform,
+      });
     }
     if (tiktok_platform) {
       platforms.push({
         live_platform: livePlatform[4],
-        platform_link: tiktok_platform
-      })
+        platform_link: tiktok_platform,
+      });
     }
     if (other_platform) {
       platforms.push({
         live_platform: other_platform_name,
-        platform_link: other_platform
-      })
+        platform_link: other_platform,
+      });
     }
 
     const userId = req.userId;
@@ -340,11 +425,10 @@ exports.createEventAds = async (req, res, next) => {
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = req.files[i].path
+      var thumbnail = req.files[i].path;
 
       productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
-
     }
 
     const dataObj = {
@@ -379,8 +463,7 @@ exports.createEventAds = async (req, res, next) => {
         },
 
         live_event: platforms,
-        video
-
+        video,
       },
       tagline: taglines,
       userId: userId,
@@ -391,7 +474,10 @@ exports.createEventAds = async (req, res, next) => {
     const postEventAdObjToSend = {};
 
     for (let key in newEventPost.toObject()) {
-      if (!fieldsToExclude.hasOwnProperty(String(key)) && (!listerBasicInfo.hasOwnProperty(String(key)))) {
+      if (
+        !fieldsToExclude.hasOwnProperty(String(key)) &&
+        !listerBasicInfo.hasOwnProperty(String(key))
+      ) {
         postEventAdObjToSend[key] = newEventPost[key];
       }
     }
@@ -416,14 +502,13 @@ exports.createEventAds = async (req, res, next) => {
 exports.editEventAds = async (req, res, next) => {
   console.log(req.body, "body hai je body");
   try {
-
     const eventId = req?.params?.eventId;
 
-    const validate_id = await eventAd.findById(eventId)
+    const validate_id = await eventAd.findById(eventId);
     if (!validate_id) {
       return failureJSONResponse(res, {
         message: `Failed to find your event id`,
-      })
+      });
     }
 
     if (!eventId)
@@ -434,7 +519,6 @@ exports.editEventAds = async (req, res, next) => {
       });
 
     const {
-
       status,
       adsType,
 
@@ -476,94 +560,98 @@ exports.editEventAds = async (req, res, next) => {
       secondary_phone_number,
     } = req.body;
 
-    let taglines = tagline
+    let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
-        let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] });
         if (!tags) {
           let tag = {
             keywords: taglines[i],
-            ads_type: adsType
-          }
-          await tagline_keywords.create(tag)
+            ads_type: adsType,
+          };
+          await tagline_keywords.create(tag);
         }
-
       }
     }
 
-    const livePlatform = ["Facebook", "Instagram", "Zoom", "Youtube", "Tiktok", "other"];
+    const livePlatform = [
+      "Facebook",
+      "Instagram",
+      "Zoom",
+      "Youtube",
+      "Tiktok",
+      "other",
+    ];
     let platforms = [];
     if (facebook_platform) {
       platforms.push({
         live_platform: livePlatform[0],
-        platform_link: facebook_platform
-      })
+        platform_link: facebook_platform,
+      });
     }
     if (instagram_platform) {
       platforms.push({
         live_platform: livePlatform[1],
-        platform_link: instagram_platform
-      })
+        platform_link: instagram_platform,
+      });
     }
     if (zoom_platform) {
       platforms.push({
         live_platform: livePlatform[2],
-        platform_link: zoom_platform
-      })
+        platform_link: zoom_platform,
+      });
     }
     if (youtube_platform) {
       platforms.push({
         live_platform: livePlatform[3],
-        platform_link: youtube_platform
-      })
+        platform_link: youtube_platform,
+      });
     }
     if (tiktok_platform) {
       platforms.push({
         live_platform: livePlatform[4],
-        platform_link: tiktok_platform
-      })
+        platform_link: tiktok_platform,
+      });
     }
     if (other_platform) {
       platforms.push({
         live_platform: other_platform_name,
-        platform_link: other_platform
-      })
+        platform_link: other_platform,
+      });
     }
 
-
-    let imageArr = []
+    let imageArr = [];
     for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = req.files[i].path
+      var thumbnail = req.files[i].path;
 
       productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
-
     }
     const dataObj = {},
       adsInfoObj = {},
       ticketPrice = {},
       listerBasicInfoObj = {};
-    let no_of_ticket = {}
-    let date_time = {}
+    let no_of_ticket = {};
+    let date_time = {};
     let my_phone = false;
     let my_email = false;
-    let secondary_phone = false
+    let secondary_phone = false;
 
     if (hide_my_secondary_phone == "true") {
-      secondary_phone = true
-    } else if (hide_my_secondary_phone == 'false') {
-      secondary_phone = false
+      secondary_phone = true;
+    } else if (hide_my_secondary_phone == "false") {
+      secondary_phone = false;
     }
     if (hide_my_phone == "true") {
-      my_phone = true
-    } else if (hide_my_phone == 'false') {
-      my_phone = false
+      my_phone = true;
+    } else if (hide_my_phone == "false") {
+      my_phone = false;
     }
 
     if (hide_my_email == "true") {
-      my_email = true
-    } else if (hide_my_email == 'false') {
-      my_email = false
+      my_email = true;
+    } else if (hide_my_email == "false") {
+      my_email = false;
     }
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
@@ -581,9 +669,11 @@ exports.editEventAds = async (req, res, next) => {
     if (recurring_type) adsInfoObj.recurring_type = recurring_type;
     // if (acuurency) adsInfoObj.acuurency = acuurency;
     if (venue_name) adsInfoObj.venue_name = venue_name;
-    if (regular_ticket_price) ticketPrice.regular_ticket_price = regular_ticket_price;
+    if (regular_ticket_price)
+      ticketPrice.regular_ticket_price = regular_ticket_price;
     if (no_of_vip_ticket) no_of_ticket.no_of_vip_ticket = no_of_vip_ticket;
-    if (no_of_regular_ticket) no_of_ticket.no_of_regular_ticket = no_of_regular_ticket;
+    if (no_of_regular_ticket)
+      no_of_ticket.no_of_regular_ticket = no_of_regular_ticket;
     if (no_of_ticket) adsInfoObj.no_of_ticket = no_of_ticket;
     if (vip_ticket_price) ticketPrice.vip_ticket_price = vip_ticket_price;
     if (currency) ticketPrice.currency = currency;
@@ -599,7 +689,6 @@ exports.editEventAds = async (req, res, next) => {
     const dataObjq = {
       adsInfo: adsInfoObj,
       listerBasicInfo: {
-
         organization_name,
         hosted_by,
         emailAddress,
@@ -610,12 +699,10 @@ exports.editEventAds = async (req, res, next) => {
         primary_mobile_number: {
           country_code: +91,
           primary_phone_number: primary_phone_number,
-
         },
         secondary_mobile_number: {
           country_code: +91,
           secondary_phone_number: secondary_phone_number,
-
         },
       },
     };
@@ -624,7 +711,7 @@ exports.editEventAds = async (req, res, next) => {
       { $set: dataObjq },
       { new: true }
     );
-    let updateEventAdObjToSend = {}
+    let updateEventAdObjToSend = {};
     for (let key in updateEvent.toObject()) {
       if (!fieldsToExclude.hasOwnProperty(String(key))) {
         updateEventAdObjToSend[key] = updateEvent[key];
@@ -686,15 +773,12 @@ exports.editEventStatus = async (req, res, next) => {
   }
 };
 
-
-
 ////////////////
 exports.fetchAll = async (req, res, next) => {
   try {
-
+    let searchTerm = req.body.searchTerm;
     let dbQuery = {};
     const {
-
       status,
       title,
       type,
@@ -704,11 +788,9 @@ exports.fetchAll = async (req, res, next) => {
       tagline,
       location,
       venue_name,
-
-
     } = req.query;
-    var perPage =  parseInt(req.query.perpage) || 6
-    var page = parseInt(req.query.page) || 1
+    var perPage = parseInt(req.query.perpage) || 6;
+    var page = parseInt(req.query.page) || 1;
 
     if (status) {
       dbQuery.status = status;
@@ -745,40 +827,56 @@ exports.fetchAll = async (req, res, next) => {
     if (venue_name) {
       dbQuery["adsInfo.venue_name"] = venue_name;
     }
-    let records = await eventAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
+    let queryFinal = dbQuery;
+    if (searchTerm) {
+      queryFinal = {
+        ...dbQuery,
+        ...{ title: { $regex: searchTerm, $options: "i" } },
+        ...{ "adsInfo.tagline": { $regex: searchTerm, $options: "i" } },
+      };
+    }
+    let records = await eventAd
+      .find({ $or: [queryFinal] })
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .sort({ createdAt: -1 })
+      .skip(perPage * page - perPage)
+      .limit(perPage);
+    const responseModelCount = await eventAd.countDocuments({
+      $or: [queryFinal],
+    });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
-        total: Object.keys(records).length,
+        total: responseModelCount,
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
         records,
         status: 200,
-      })
+      });
     } else {
-      return failureJSONResponse(res, { message: `Room not Available` })
+      return failureJSONResponse(res, { message: `Room not Available` });
     }
   } catch (err) {
-    return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, { message: `something went wrong` });
   }
-}
+};
 
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
 
-    let records = await eventAd.findById({ "_id": adsId });
+    let records = await eventAd.findById({ _id: adsId });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
         ads_details: records,
         status: 200,
-      })
+      });
     } else {
-      return failureJSONResponse(res, { message: `ad not Available` })
+      return failureJSONResponse(res, { message: `ad not Available` });
     }
   } catch (err) {
-    return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, { message: `something went wrong` });
   }
-}
+};

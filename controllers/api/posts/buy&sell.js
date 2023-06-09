@@ -552,7 +552,7 @@ exports.editBuySellStatus = async (req, res, next) => {
 
 exports.fetchAll = async (req, res, next) => {
   try {
-
+    let searchTerm = req.body.searchTerm;
     let dbQuery = {};
     const {
       status,
@@ -612,11 +612,18 @@ exports.fetchAll = async (req, res, next) => {
     if (tagline) {
       dbQuery["adsInfo.tagline"] = tagline;
     }
-    let records = await postBuySellAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
+    let queryFinal = dbQuery;
+    if (searchTerm){
+        queryFinal = ({ ...dbQuery, ...{ title: { $regex: searchTerm, $options: "i" } },... { "adsInfo.tagline": { $regex: searchTerm, $options: "i" } } });
+    }
+    let records = await postBuySellAd.find({  $or: [queryFinal]}).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
+    const responseModelCount = await eventAd.countDocuments({
+      $or: [queryFinal]
+  });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
-        total: Object.keys(records).length,
+        total: responseModelCount,
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,

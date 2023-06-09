@@ -21,28 +21,221 @@ const mongoose = require("mongoose"),
 
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
-  let adtype = req.query.adsType
-  let records = await tagline_keywords.find({ adType: adtype }).select({ "keywords": 1, "_id": 1 });
+  let adtype = req.query.adsType;
+  let records = await tagline_keywords
+    .find({ adType: adtype })
+    .select({ keywords: 1, _id: 1 });
 
   const dynamicsData = {
     tagline: records,
-    categories: ["Business & Office", "Childcare", "Clothing", "Computers & Telecoms", "Entertainment", "Finance & Legal", "Food & Drink", "Goods Suppliers & Retailers", "Health & Beauty", "Automotive Services", "Property Maintenance and Construction", "Transport", "Travel & Tourism", "Tuition & Classes", "Weddings", "Funneral Services", "Photography & Video", "Pets", "Other"],
-    business_Office: ["Accounting", "Advertising Agencies", "Courier services", "Funeral directors", "Tax Service", "Insurance Agencies", "Translation Service", "Realestate", "Realtor", "Marketing", "Printing", "Recuriment", "Shipping", "Shredding service", "Sign makers", "Storage", "Writing and litterature", "Other bussines and office service"],
-    childcare: ["Daycare", "Kindergarton", "Childeren's activity", "Child care agencies", "Nursery school", "Parent support", "Other childeren service"],
-    clothing: ["Dry cleaning and loundery", "Fashion designers", "Printing", "Seamstress/tailors", "Stylists", "Other Clothing Services"],
-    computers_Telecoms: ["Computer network", "Computer repair", "Computer services", "Computer support", "Online content providers", "Phone and tablet repair", "Software application development", "Telecom and internet service provider", "Web development", "Web service", "Website design", "Other computer service"],
-    entertainment: ["Bands and  musicians", "Cake makers", "Catering", "DJ and disco hire", "Cultural music", "Entertainers", "Venues and nightclubs", "Other entertainments"],
-    finance_Legal: ["Loan Service", "Financial Advice", "Insolvency Practitioners", "Insurance", "Legal Service", "Money transfer", "Mortgage brokers", "Solicitors and conveyancing", "Visa and immigration", "Other finance and legal Service"],
-    food_Drink: ["Bakery", "Bars and Restaurants", "Cafes", "Takeaways", "Other foods and drinks"],
-    suppliers_Retailers: ["Grocery Store", "Wholesale Distributors", "Accessories", "Bike shops", "Clotheing Stores", "Electrical", "Florists", "Footwear", "Health products", "Jewellers", "Mobile phone", "Office furnitures", "Home Furnitures", "Other Goods Suppliers & Retailers"],
+    categories: [
+      "Business & Office",
+      "Childcare",
+      "Clothing",
+      "Computers & Telecoms",
+      "Entertainment",
+      "Finance & Legal",
+      "Food & Drink",
+      "Goods Suppliers & Retailers",
+      "Health & Beauty",
+      "Automotive Services",
+      "Property Maintenance and Construction",
+      "Transport",
+      "Travel & Tourism",
+      "Tuition & Classes",
+      "Weddings",
+      "Funneral Services",
+      "Photography & Video",
+      "Pets",
+      "Other",
+    ],
+    business_Office: [
+      "Accounting",
+      "Advertising Agencies",
+      "Courier services",
+      "Funeral directors",
+      "Tax Service",
+      "Insurance Agencies",
+      "Translation Service",
+      "Realestate",
+      "Realtor",
+      "Marketing",
+      "Printing",
+      "Recuriment",
+      "Shipping",
+      "Shredding service",
+      "Sign makers",
+      "Storage",
+      "Writing and litterature",
+      "Other bussines and office service",
+    ],
+    childcare: [
+      "Daycare",
+      "Kindergarton",
+      "Childeren's activity",
+      "Child care agencies",
+      "Nursery school",
+      "Parent support",
+      "Other childeren service",
+    ],
+    clothing: [
+      "Dry cleaning and loundery",
+      "Fashion designers",
+      "Printing",
+      "Seamstress/tailors",
+      "Stylists",
+      "Other Clothing Services",
+    ],
+    computers_Telecoms: [
+      "Computer network",
+      "Computer repair",
+      "Computer services",
+      "Computer support",
+      "Online content providers",
+      "Phone and tablet repair",
+      "Software application development",
+      "Telecom and internet service provider",
+      "Web development",
+      "Web service",
+      "Website design",
+      "Other computer service",
+    ],
+    entertainment: [
+      "Bands and  musicians",
+      "Cake makers",
+      "Catering",
+      "DJ and disco hire",
+      "Cultural music",
+      "Entertainers",
+      "Venues and nightclubs",
+      "Other entertainments",
+    ],
+    finance_Legal: [
+      "Loan Service",
+      "Financial Advice",
+      "Insolvency Practitioners",
+      "Insurance",
+      "Legal Service",
+      "Money transfer",
+      "Mortgage brokers",
+      "Solicitors and conveyancing",
+      "Visa and immigration",
+      "Other finance and legal Service",
+    ],
+    food_Drink: [
+      "Bakery",
+      "Bars and Restaurants",
+      "Cafes",
+      "Takeaways",
+      "Other foods and drinks",
+    ],
+    suppliers_Retailers: [
+      "Grocery Store",
+      "Wholesale Distributors",
+      "Accessories",
+      "Bike shops",
+      "Clotheing Stores",
+      "Electrical",
+      "Florists",
+      "Footwear",
+      "Health products",
+      "Jewellers",
+      "Mobile phone",
+      "Office furnitures",
+      "Home Furnitures",
+      "Other Goods Suppliers & Retailers",
+    ],
     currency: ["USD", "AED", "AUD", "AWG", "CAD", "EUR", "GBP", "INR", "USN"],
-    health_Beauty: ["Alternative therapies", "Beauty treatments", "Chiropodists and podiatrists", "Dentists", "Doctors and Clinics", "Hair Salon", "Life coaching", "Makeup artist", "Massages", "Model and actors", "Nursing and care", "Opticians", "Personal trainers", "Pregnancy and child care", "Tatooing and piercing", "Other health and beauty services"],
-    automotive_Services: ["Body repair", "Car breakers", "Car servicing and repair", "Car valeting", "Car wash", "Garage and mechanic service", "MOT testing", "Tyer fitting", "Vehicle recovery service", "Windshield repair", "Other Automotive Services"],
-    maintenance_and_Construction: ["Cleaners", "Commercial proprerty agents", "Drain and pipe cleaning", "Lawn and Garden", "Housekeapers", "Interior design", "Heating and Air conditioning", "Plumbers", "Remodeling", "Electricians", "Satellite, cable and TV", "Security service", "architect", "Bathroom fitter", "Bedroom fitters", "Other Property Maintenance and Construction Services"],
-    transport: ["Trucking Serices", "Chauffeur & Limousine Hire", "Bus & Coach", "Other transport Services"],
-    travel_Tourism: ["Travel Agents", "Group Travel Coordinators", "Other travel and tourism"],
-    tuition_Classes: ["Academic", "Arts & Crafts", "Business", "Construction", "Cookery Classes", "Dance Classes", "Driving Lessons & Instructors", "Health & Fitness", "IT & Computing", "Language", "Music", "Other Classes"],
-    weddings: ["Cars & Transportation", "Catering & Services", "Dress & Suit Hire", "Entertainment", "Florists", "Hairdressers", "Hen & Stag Planners", "Honeymoons", "Marquee Hire", "Organisers & Planners", "Photography & Film", "Wedding & Reception Venues", "Weddings Abroad", "Other Wedding Services"],
+    health_Beauty: [
+      "Alternative therapies",
+      "Beauty treatments",
+      "Chiropodists and podiatrists",
+      "Dentists",
+      "Doctors and Clinics",
+      "Hair Salon",
+      "Life coaching",
+      "Makeup artist",
+      "Massages",
+      "Model and actors",
+      "Nursing and care",
+      "Opticians",
+      "Personal trainers",
+      "Pregnancy and child care",
+      "Tatooing and piercing",
+      "Other health and beauty services",
+    ],
+    automotive_Services: [
+      "Body repair",
+      "Car breakers",
+      "Car servicing and repair",
+      "Car valeting",
+      "Car wash",
+      "Garage and mechanic service",
+      "MOT testing",
+      "Tyer fitting",
+      "Vehicle recovery service",
+      "Windshield repair",
+      "Other Automotive Services",
+    ],
+    maintenance_and_Construction: [
+      "Cleaners",
+      "Commercial proprerty agents",
+      "Drain and pipe cleaning",
+      "Lawn and Garden",
+      "Housekeapers",
+      "Interior design",
+      "Heating and Air conditioning",
+      "Plumbers",
+      "Remodeling",
+      "Electricians",
+      "Satellite, cable and TV",
+      "Security service",
+      "architect",
+      "Bathroom fitter",
+      "Bedroom fitters",
+      "Other Property Maintenance and Construction Services",
+    ],
+    transport: [
+      "Trucking Serices",
+      "Chauffeur & Limousine Hire",
+      "Bus & Coach",
+      "Other transport Services",
+    ],
+    travel_Tourism: [
+      "Travel Agents",
+      "Group Travel Coordinators",
+      "Other travel and tourism",
+    ],
+    tuition_Classes: [
+      "Academic",
+      "Arts & Crafts",
+      "Business",
+      "Construction",
+      "Cookery Classes",
+      "Dance Classes",
+      "Driving Lessons & Instructors",
+      "Health & Fitness",
+      "IT & Computing",
+      "Language",
+      "Music",
+      "Other Classes",
+    ],
+    weddings: [
+      "Cars & Transportation",
+      "Catering & Services",
+      "Dress & Suit Hire",
+      "Entertainment",
+      "Florists",
+      "Hairdressers",
+      "Hen & Stag Planners",
+      "Honeymoons",
+      "Marquee Hire",
+      "Organisers & Planners",
+      "Photography & Film",
+      "Wedding & Reception Venues",
+      "Weddings Abroad",
+      "Other Wedding Services",
+    ],
     funneral_Services: [],
     photography_Video: [],
     pets: [],
@@ -82,7 +275,7 @@ exports.validatebizAdsData = async (req, res, next) => {
       accreditation_files,
       accreditation_name,
       image,
-      video_link
+      video_link,
     } = req.body;
 
     if (
@@ -136,7 +329,7 @@ exports.validatebizAdsData = async (req, res, next) => {
     //   return failureJSONResponse(res, {
     //     message: `Please provide us experience`,
     //   });
-    // if (!isValidUrl(video_link)) 
+    // if (!isValidUrl(video_link))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid video link`,
     // });
@@ -233,13 +426,11 @@ exports.createbizAds = async (req, res, next) => {
       is_available: false,
       open_at: "",
       close_at: "",
-
     };
     let weekend = {
       is_available: false,
       open_at: "",
       close_at: "",
-
     };
     if (week_day == "true") {
       weekday = {
@@ -249,8 +440,8 @@ exports.createbizAds = async (req, res, next) => {
         is_24_hour: JSON.parse(weekday_24_hour),
       };
       working_hour = {
-        week_days: weekday
-      }
+        week_days: weekday,
+      };
     }
     if (week_end == "true") {
       weekend = {
@@ -260,24 +451,24 @@ exports.createbizAds = async (req, res, next) => {
         is_24_hour: JSON.parse(weekend_24_hour),
       };
       working_hour = {
-        week_ends: weekend
-      }
+        week_ends: weekend,
+      };
     }
     if (week_end == "true" && week_day == "true") {
       working_hour = {
         week_days: weekday,
-        week_ends: weekend
-      }
+        week_ends: weekend,
+      };
     }
     if (is_24_seven == "true") {
       working_hour = {
-        is_24_seven: true
-      }
+        is_24_seven: true,
+      };
     }
     if (is_appointment == "true") {
       working_hour = {
-        appointment: appointment
-      }
+        appointment: appointment,
+      };
     }
     const imageArr = [];
     let accreditationArr = [];
@@ -288,7 +479,12 @@ exports.createbizAds = async (req, res, next) => {
 
         if (req.files.photos[i].fieldname === `photos`) {
           let type_of_file = req.files.photos[i].mimetype;
-          if (type_of_file === 'image/png' || type_of_file === 'application/octet-stream' || type_of_file === 'image/jpg' || type_of_file === 'image/jpg') {
+          if (
+            type_of_file === "image/png" ||
+            type_of_file === "application/octet-stream" ||
+            type_of_file === "image/jpg" ||
+            type_of_file === "image/jpg"
+          ) {
             var thumbnail = req.files.photos[i].path;
             productImages = await Media.create({ url: thumbnail });
             imageArr.push(productImages._id);
@@ -307,16 +503,22 @@ exports.createbizAds = async (req, res, next) => {
         });
       }
       for (var i = 0; i < req.files.accreditation_document.length; i++) {
-        if (req.files.accreditation_document[i].fieldname === `accreditation_document`) {
+        if (
+          req.files.accreditation_document[i].fieldname ===
+          `accreditation_document`
+        ) {
           let type_of_files = req.files.accreditation_document[i].mimetype;
           // if (type_of_files === 'application/pdf' || type_of_files === 'image/jpg' ||  type_of_file === 'application/octet-stream' || type_of_files === 'image/jpeg') {
           var doc = req.files.accreditation_document[i].path;
-          productDoc = await Media.create({ url: doc, url_type: type_of_files });
+          productDoc = await Media.create({
+            url: doc,
+            url_type: type_of_files,
+          });
           console.log(productDoc, "hdhcbdhh");
           let acrredationn = {
             accreditation_name: accreditation_name,
-            accreditation_files: productDoc._id
-          }
+            accreditation_files: productDoc._id,
+          };
           accreditationArr.push(acrredationn);
           // } else {
           //   return failureJSONResponse(res, {
@@ -325,21 +527,19 @@ exports.createbizAds = async (req, res, next) => {
           // }
         }
       }
-
     }
-    console.log(tagline, "this is tagline array")
-    let taglines = tagline
+    console.log(tagline, "this is tagline array");
+    let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
-        let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] });
         if (!tags) {
           let tag = {
             keywords: taglines[i],
-            ads_type: adsType
-          }
-          await tagline_keywords.create(tag)
+            ads_type: adsType,
+          };
+          await tagline_keywords.create(tag);
         }
-
       }
     }
 
@@ -397,9 +597,7 @@ exports.createbizAds = async (req, res, next) => {
 ///--------------------------Edit event-----------------------------///
 
 exports.editbizAds = async (req, res, next) => {
-
   try {
-
     const bizId = req?.params?.bizId;
 
     const validate_id = await postbizAndServicesAd.findById(bizId);
@@ -454,18 +652,17 @@ exports.editbizAds = async (req, res, next) => {
       hide_my_email,
     } = req.body;
 
-    let taglines = tagline
+    let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
-        let tags = await tagline_keywords.findOne({ keywords: taglines[i] })
+        let tags = await tagline_keywords.findOne({ keywords: taglines[i] });
         if (!tags) {
           let tag = {
             keywords: taglines[i],
-            ads_type: adsType
-          }
-          await tagline_keywords.create(tag)
+            ads_type: adsType,
+          };
+          await tagline_keywords.create(tag);
         }
-
       }
     }
 
@@ -474,13 +671,14 @@ exports.editbizAds = async (req, res, next) => {
 
     if (req.files.photos) {
       for (var i = 0; i < req.files.photos.length; i++) {
-
-
         if (req.files.photos[i].fieldname === `photos`) {
           let type_of_file = req.files.photos[i].mimetype;
           // if (type_of_file === 'image/png' || type_of_file === 'image/jpeg') {
           var thumbnail = req.files.photos[i].path;
-          productImages = await Media.create({ url: thumbnail, url_type: type_of_file });
+          productImages = await Media.create({
+            url: thumbnail,
+            url_type: type_of_file,
+          });
           imageArr.push(productImages._id);
           // } else {
           //   return failureJSONResponse(res, {
@@ -539,13 +737,11 @@ exports.editbizAds = async (req, res, next) => {
       is_available: false,
       open_at: "",
       close_at: "",
-
     };
     let weekend = {
       is_available: false,
       open_at: "",
       close_at: "",
-
     };
     if (week_day == "true") {
       weekday = {
@@ -555,8 +751,8 @@ exports.editbizAds = async (req, res, next) => {
         is_24_hour: JSON.parse(weekday_24_hour),
       };
       working_hour = {
-        week_days: weekday
-      }
+        week_days: weekday,
+      };
     }
     if (week_end == "true") {
       weekend = {
@@ -566,51 +762,48 @@ exports.editbizAds = async (req, res, next) => {
         is_24_hour: JSON.parse(weekend_24_hour),
       };
       working_hour = {
-        week_ends: weekend
-      }
+        week_ends: weekend,
+      };
     }
     if (week_end == "true" && week_day == "true") {
       working_hour = {
         week_days: weekday,
-        week_ends: weekend
-      }
+        week_ends: weekend,
+      };
     }
     if (is_24_seven == "true") {
       working_hour = {
-        is_24_seven: true
-      }
+        is_24_seven: true,
+      };
     }
     if (is_appointment == "true") {
       working_hour = {
-        appointment: appointment
-      }
+        appointment: appointment,
+      };
     }
-
-
-
 
     const dataObj = {},
       adsInfoObj = {},
       accreditation_data = {};
     let my_phone = false;
     let my_email = false;
-    let secondary_phone = false
+    let secondary_phone = false;
 
     if (hide_my_secondary_phone == "true") {
-      secondary_phone = true
-    } else if (hide_my_secondary_phone == 'false') {
-      secondary_phone = false
+      secondary_phone = true;
+    } else if (hide_my_secondary_phone == "false") {
+      secondary_phone = false;
     }
     if (hide_my_phone == "true") {
-      my_phone = true
-    } else if (hide_my_phone == 'false') {
-      my_phone = false
+      my_phone = true;
+    } else if (hide_my_phone == "false") {
+      my_phone = false;
     }
 
     if (hide_my_email == "true") {
-      my_email = true
-    } else if (hide_my_email == 'false') {
-      my_email = false
+      my_email = true;
+    } else if (hide_my_email == "false") {
+      my_email = false;
     }
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
@@ -627,7 +820,8 @@ exports.editbizAds = async (req, res, next) => {
     if (video_link) adsInfoObj.video_link = video_link;
     // if (accreditationArr.length) accreditation_data.accreditation_files = accreditationArr;
     // if (accreditation_name) accreditation_data.accreditation_name = accreditation_name;
-    if (accreditationArr.length) adsInfoObj.accreditation_file = accreditationArr;
+    if (accreditationArr.length)
+      adsInfoObj.accreditation_file = accreditationArr;
     if (working_hour) adsInfoObj.working_hours = working_hour;
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
@@ -646,14 +840,11 @@ exports.editbizAds = async (req, res, next) => {
         primary_mobile_number: {
           country_code: +91,
           primary_phone_number: primary_phone_number,
-
         },
         secondary_mobile_number: {
           country_code: +91,
           secondary_phone_number: secondary_phone_number,
-
         },
-
       },
     };
     const updatebiz = await postbizAndServicesAd.findByIdAndUpdate(
@@ -684,12 +875,10 @@ exports.editbizAds = async (req, res, next) => {
   }
 };
 
-
 exports.fetchAll = async (req, res, next) => {
   try {
-    let dbQuery = {
-
-    };
+    let searchTerm = req.body.searchTerm;
+    let dbQuery = {};
     const {
       status,
       categories,
@@ -699,8 +888,8 @@ exports.fetchAll = async (req, res, next) => {
       business_location,
       is_24_seven,
     } = req.query;
-    var perPage =  parseInt(req.query.perpage) || 6
-    var page = parseInt(req.query.page) || 1
+    var perPage = parseInt(req.query.perpage) || 6;
+    var page = parseInt(req.query.page) || 1;
 
     if (status) {
       dbQuery.status = status;
@@ -729,11 +918,27 @@ exports.fetchAll = async (req, res, next) => {
     if (is_24_seven) {
       dbQuery["adsInfo.is_24_seven"] = is_24_seven;
     }
-    let records = await postbizAndServicesAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
+    let queryFinal = dbQuery;
+    if (searchTerm) {
+      queryFinal = {
+        ...dbQuery,
+        ...{ title: { $regex: searchTerm, $options: "i" } },
+        ...{ "adsInfo.tagline": { $regex: searchTerm, $options: "i" } },
+      };
+    }
+    let records = await postbizAndServicesAd
+      .find({ $or: [queryFinal] })
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .sort({ createdAt: -1 })
+      .skip(perPage * page - perPage)
+      .limit(perPage);
+    const responseModelCount = await eventAd.countDocuments({
+      $or: [queryFinal],
+    });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
-        total: Object.keys(records).length,
+        total: responseModelCount,
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
@@ -748,22 +953,21 @@ exports.fetchAll = async (req, res, next) => {
   }
 };
 
-
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
 
-    let records = await postbizAndServicesAd.findById({ "_id": adsId });
+    let records = await postbizAndServicesAd.findById({ _id: adsId });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
         ads_details: records,
         status: 200,
-      })
+      });
     } else {
-      return failureJSONResponse(res, { message: `ad not Available` })
+      return failureJSONResponse(res, { message: `ad not Available` });
     }
   } catch (err) {
-    return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, { message: `something went wrong` });
   }
-}
+};

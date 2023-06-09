@@ -104,3 +104,30 @@ exports.deleteNewCategories = async (req, res, next) => {
         return failureJSONResponse(res, { message: `something went wrong` })
     }
 }
+
+exports.UpdateCategories = async (req, res, next) => {
+    try {
+
+        const {
+            category_id,
+            name,
+        } = req.body
+
+        if (!category_id) return failureJSONResponse(res, { message: `Please provide ads id` });
+
+
+
+        AdsCategories.findById({ "_id": category_id },{$set:{name:name}},{upsert:true})
+            .then((newCategory) => {
+                if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
+                else {
+                    return successJSONResponse(res, { message: "Success" });
+                }
+            }).catch((err) => {
+                return failureJSONResponse(res, { message: `Something went wrong` });
+            })
+
+    } catch (err) {
+        return failureJSONResponse(res, { message: `something went wrong` })
+    }
+}

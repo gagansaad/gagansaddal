@@ -653,6 +653,7 @@ exports.editJobStatus = async (req, res, next) => {
 
 exports.fetchAllAds = async (req, res, next) => {
   try {
+    let searchTerm = req.body.searchTerm;
     console.log("objectuygtututu");
     let dbQuery = {};
     const {
@@ -669,10 +670,10 @@ exports.fetchAllAds = async (req, res, next) => {
       preferred_gender,
       location,
       tagline,
-      userId
+      userId,
     } = req.query;
-    var perPage =  parseInt(req.query.perpage) || 6
-    var page = parseInt(req.query.page) || 1
+    var perPage = parseInt(req.query.perpage) || 6;
+    var page = parseInt(req.query.page) || 1;
     if (isfeatured) {
       dbQuery.isfeatured = isfeatured;
     }
@@ -724,12 +725,27 @@ exports.fetchAllAds = async (req, res, next) => {
       dbQuery["adsInfo.tagline"] = tagline;
     }
     if (userId) dbQuery.userId = userId;
-    let records = await postJobAd.find(dbQuery).populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * page) - perPage).limit(perPage);
-    const responseModelCount = await postJobAd.countDocuments(dbQuery);
+    let queryFinal = dbQuery;
+    if (searchTerm) {
+      queryFinal = {
+        ...dbQuery,
+        ...{ title: { $regex: searchTerm, $options: "i" } },
+        ...{ "adsInfo.tagline": { $regex: searchTerm, $options: "i" } },
+      };
+    }
+    let records = await postJobAd
+      .find({ $or: [queryFinal] })
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .sort({ createdAt: -1 })
+      .skip(perPage * page - perPage)
+      .limit(perPage);
+    const responseModelCount = await postJobAd.countDocuments({
+      $or: [queryFinal],
+    });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
-        total: Object.keys(records).length,
+        total: responseModelCount,
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
@@ -745,23 +761,21 @@ exports.fetchAllAds = async (req, res, next) => {
   }
 };
 
-
-
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
-  
-    let records = await postJobAd.findById({"_id":adsId});
+
+    let records = await postJobAd.findById({ _id: adsId });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,
-        ads_details:records,
+        ads_details: records,
         status: 200,
-      })
+      });
     } else {
-      return failureJSONResponse(res, { message: `ad not Available` })
+      return failureJSONResponse(res, { message: `ad not Available` });
     }
   } catch (err) {
-    return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, { message: `something went wrong` });
   }
-}
+};
