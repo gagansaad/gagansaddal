@@ -610,31 +610,33 @@ exports.fetchAll = async (req, res, next) => {
     var perPage = parseInt(req.query.perpage) || 6;
     var page = parseInt(req.query.page) || 1;
 
-    if (isfeatured) dbQuery.isfeatured = isFeatured;
-    if (status) dbQuery.status = status;
-    if (adsType) dbQuery.adsType = adsType;
-    if (rental_type) dbQuery.rental_type = rental_type;
-    if (category) dbQuery.category = category;
-    if (title) dbQuery.title = title;
-    if (roomType) dbQuery.roomType = roomType;
-    if (listerType) dbQuery.listerType = listerType;
-    if (accommodates) dbQuery.accommodates = accommodates;
-    if (furnished) dbQuery.furnished = furnished;
-    if (attachedBath) dbQuery.attachedBath = attachedBath;
-    if (isSmokingAllowed) dbQuery.isSmokingAllowed = isSmokingAllowed;
-    if (isAlcoholAllowed) dbQuery.isAlcoholAllowed = isAlcoholAllowed;
-    if (isPetFriendly) dbQuery.isPetFriendly = isPetFriendly;
-    if (preferedGender) dbQuery.preferedGender = preferedGender;
+if (isfeatured) dbQuery.isfeatured = isfeatured;
+if (status) dbQuery.status = status;
+if (adsType) dbQuery.adsType = adsType;
+if (rental_type) dbQuery["adsInfo.rental_type"] = rental_type;
+if (category) dbQuery["adsInfo.category"] = category;
+if (title) dbQuery["adsInfo.title"] = title;
+if (roomType) dbQuery["adsInfo.roomType"] = roomType;
+if (listerType) dbQuery["adsInfo.listerType"] = listerType;
+if (accommodates) dbQuery["adsInfo.accommodates"] = accommodates;
+if (furnished) dbQuery["adsInfo.furnished"] = furnished;
+if (attachedBath) dbQuery["adsInfo.attachedBath"] = attachedBath;
+if (isSmokingAllowed) dbQuery["adsInfo.isSmokingAllowed"] = isSmokingAllowed;
+if (isAlcoholAllowed) dbQuery["adsInfo.isAlcoholAllowed"] = isAlcoholAllowed;
+if (isPetFriendly) dbQuery["adsInfo.isPetFriendly"] = isPetFriendly;
+if (preferedGender) dbQuery["adsInfo.preferedGender"] = preferedGender;
     if (userId) dbQuery.userId = userId;
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
         ...dbQuery,
-        ...{ "adsInfo.title": { $regex: searchTerm, $options: "i" } },
-        ...{ "adsInfo.tagline": { $regex: searchTerm, $options: "i" } },
+        $or: [
+          { "adsInfo.title": { $regex: searchTerm, $options: "i" } },
+          { "adsInfo.tagline": { $regex: searchTerm, $options: "i" } }
+        ]
       };
     }
-
+console.log(queryFinal);
     let records = await RoomRentsAds.find({
       $or: [queryFinal],
     })

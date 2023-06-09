@@ -922,8 +922,10 @@ exports.fetchAll = async (req, res, next) => {
     if (searchTerm) {
       queryFinal = {
         ...dbQuery,
-        ...{ "adsInfo.title": { $regex: searchTerm, $options: "i" } },
-        ...{ "adsInfo.tagline": { $regex: searchTerm, $options: "i" } },
+        $or: [
+          { "adsInfo.title": { $regex: searchTerm, $options: "i" } },
+          { "adsInfo.tagline": { $regex: searchTerm, $options: "i" } }
+        ]
       };
     }
     let records = await postbizAndServicesAd
