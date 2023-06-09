@@ -107,7 +107,7 @@ exports.deleteNewSubCategories = async (req, res, next) => {
         return failureJSONResponse(res, { message: `something went wrong` })
     }
 }
-exports.updateSubCategories = async (req, res, next) => {
+exports.updateSubCategories = async (req, res) => {
     try {
         const {
             name,
@@ -118,7 +118,7 @@ exports.updateSubCategories = async (req, res, next) => {
         if (!sub_category_id) return failureJSONResponse(res, { message: `Please provide ads id` });
 
 
-        AdsSubCategory.findByAndUpdate({ "_id": sub_category_id },{name:name},{upsert:true})
+        AdsSubCategory.findByAndUpdate({ "_id": sub_category_id },{$set:{name:name}})
             .then((newCategory) => {
                 if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
                 else {
