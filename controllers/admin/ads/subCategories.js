@@ -120,7 +120,7 @@ if(status)dbQuery.status = status
         if (!sub_category_id) return failureJSONResponse(res, { message: `Please provide ads id` });
 
 
-        AdsSubCategory.findOneAndUpdate({ "_id": sub_category_id },{$set:dbQuery},{upsert:true})
+        AdsSubCategory.findOneAndUpdate({ "_id": sub_category_id },{$set:{dbQuery}},{upsert:true})
             .then((newCategory) => {
                 if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
                 else {
