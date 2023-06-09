@@ -125,10 +125,12 @@ exports.updateSubCategories = async (req, res) => {
                     return successJSONResponse(res, { message: "Success", newCategory: newCategory });
                 }
             }).catch((err) => {
+                console.log(err);
                 return failureJSONResponse(res, { message: `Something went wrong` });
             })
 
     } catch (err) {
+        console.log(err);
         return failureJSONResponse(res, { message: `something went wrong` })
     }
 }
