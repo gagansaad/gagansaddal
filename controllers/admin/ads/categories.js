@@ -58,10 +58,7 @@ exports.fetchNewCategories = async (req, res, next) => {
         } = req.query
 
         if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads id` });
-
-
-
-        AdsCategories.find({ "ads_type": ads_type })
+            AdsCategories.find({ "ads_type": ads_type })
             .then((newCategory) => {
                 if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
                 else {
@@ -117,7 +114,7 @@ exports.UpdateCategories = async (req, res, next) => {
 
 
 
-        AdsCategories.findById({ "_id": category_id },{$set:{name:name}},{upsert:true})
+        AdsCategories.findByIdAndUpdate({ "_id": category_id },{$set:{name:name}})
             .then((newCategory) => {
                 if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
                 else {
