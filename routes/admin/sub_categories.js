@@ -46,4 +46,5 @@ const router = require(`express`).Router(),
 router.post(`/create-sub-category-data`,controllers.createNewSubCategories)
 router.get(`/fetch-sub-category-data`,controllers.fetchNewSubCategories)
 router.post(`/delete-sub-category`,controllers.deleteNewSubCategories)
+router.post(`/update-sub-category`,controllers.updateNewSubCategories)
 module.exports = router;
