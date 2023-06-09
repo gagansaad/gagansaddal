@@ -86,7 +86,7 @@ exports.deleteNewSubCategories = async (req, res, next) => {
         const {
             sub_category_id
         } = req.query
-        console.log(req.body);
+        console.log(req.query,"djnvjdnvjnvj");
 
         if (!sub_category_id) return failureJSONResponse(res, { message: `Please provide ads id` });
 
