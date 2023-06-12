@@ -27,7 +27,7 @@ exports.createFavoriteAd = async (req, res, next) => {
     let  userId = req.userId
     let ModelName= await getModelNameByAdsType(ads_type)
     console.log(userId,"bol bai bandya bol",ModelName.toString());
-    let adType = JSON.stringify(ModelName)
+    let adType = ModelName
     try {
       
       const favoriteAd = await FavoriteAd.create({ user: userId, ad: adId ,adType:adType});
