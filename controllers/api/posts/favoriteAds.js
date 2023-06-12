@@ -1,4 +1,5 @@
 const { json } = require("express");
+const user = require("../accounts/user");
 
 const mongoose = require("mongoose"),
   FavoriteAd = mongoose.model("FavoriteAd"),
@@ -20,7 +21,9 @@ const mongoose = require("mongoose"),
 
 ////-----------------------Dynamic Data---------------------------////
 exports.createFavoriteAd = async (req, res, next) => {
-    const { userId, adId } = req.body;
+    const {adId } = req.body;
+    let  userId = req.userId
+    console.log(userId,"bol bai bandya bol");
     try {
       const favoriteAd = await FavoriteAd.create({ user: userId, ad: adId });
       res.status(201).json(favoriteAd);

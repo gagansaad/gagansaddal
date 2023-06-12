@@ -59,9 +59,7 @@ const adminconfigurationsRoute2 = require('./routes/api/accounts/admin/configura
 const dashboardRoute = require('./routes/admin/dashboard');
 const usercontrol = require('./routes/accounts/admin/users_control');
 const configurationsRoute = require('./routes/api/configurations');
-
 const adminconfigurationsRoute1 = require('./routes/admin/configurations');
-
 const postTypeRoutes = require('./routes/api/ads/types');
 const postTypeAdminRoutes = require('./routes/admin/types');
 const roomRentsRoutes = require('./routes/api/ads/roomRents');
