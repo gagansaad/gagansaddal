@@ -23,30 +23,25 @@ const mongoose = require("mongoose"),
 ////-----------------------Dynamic Data---------------------------////
 
 exports.createFavoriteAd = async (req, res, next) => {
-    const {adId ,ads_type,isfavorite} = req.body;
+    const {adId ,ads_type} = req.body;
     let dbQuery={}
     let  userId = req.userId
     if (!adId)
       return failureJSONResponse(res, { message: `Please provide ad id` });
       if (!ads_type)
       return failureJSONResponse(res, { message: `Please provide ads type` });
-      if (!isfavorite)
-      return failureJSONResponse(res, { message: `Please provide isfavorite` });
     let ModelName= await ModelNameByAdsType(ads_type)
     if(userId)dbQuery.user = userId
     if(adId)dbQuery.ad = adId
-    if(isfavorite)dbQuery.isfavorite = isfavorite
     if(ads_type)dbQuery.ads_type = ads_type
     if(ModelName)dbQuery.adType = ModelName
     try {
       let favoriteAd;
       let checkAlreadyexist = await FavoriteAd.findOne({ user: userId, ad: adId }).exec();
       if (checkAlreadyexist) {
-        favoriteAd = await FavoriteAd.findOneAndUpdate(
+        favoriteAd = await FavoriteAd.findOneAndDelete(
           { user: userId, ad: adId },
-          { $set: dbQuery },
-          { new: true } // Return the updated document
-        );
+          );
       } else {
         favoriteAd = await FavoriteAd.create(dbQuery);
       }

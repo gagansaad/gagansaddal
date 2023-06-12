@@ -14,13 +14,6 @@ const favoriteAdSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  isfavorite:{
-    type: String,
-    enum: ["active","inactive"],
-    required:true,
-    default:"inactive"
-  },
-
   ad: {
     type:  mongoose.Schema.Types.ObjectId,
     ref: "adType",
