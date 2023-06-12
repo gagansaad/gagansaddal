@@ -12,17 +12,12 @@ const roomRentsSchema = new mongoose.Schema({
         required: true,
         immutable: true
     },
-
     status: {
         type: String,
-        enum: [1, 2],
+        enum: [`active`, `inactive`],
         required: true,
-        default: 1
-
-        // 1 = active
-         // 2 = inactive
+        default: "active"
     },
-
     name:{
         ...defaultStringConfig,
         required: true,

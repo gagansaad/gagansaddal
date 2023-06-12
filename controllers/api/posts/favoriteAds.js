@@ -21,7 +21,6 @@ const mongoose = require("mongoose"),
 ////-----------------------Dynamic Data---------------------------////
 exports.createFavoriteAd = async (req, res, next) => {
     const { userId, adId } = req.body;
-
     try {
       const favoriteAd = await FavoriteAd.create({ user: userId, ad: adId });
       res.status(201).json(favoriteAd);
