@@ -3,6 +3,7 @@ const user = require("../accounts/user");
 
 const mongoose = require("mongoose"),
   FavoriteAd = mongoose.model("FavoriteAd"),
+  category = mongoose.model("PostType"),
   Media = mongoose.model("media"),
   tagline_keywords = mongoose.model("keywords"),
   {
