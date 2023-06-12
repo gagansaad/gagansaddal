@@ -39,22 +39,28 @@ exports.createFavoriteAd = async (req, res, next) => {
     if(ads_type)dbQuery.ads_type = ads_type
     if(ModelName)dbQuery.adType = ModelName
     try {
-      let favoriteAd
-      let checkAlreadyexist = await FavoriteAd.findOne({ user: userId, ad: adId}).exec();
-      if(checkAlreadyexist){
-         favoriteAd = await FavoriteAd.findOneAndUpdate({user: userId,ad:adId},{$set:dbQuery});
-      }else{
+      let favoriteAd;
+      let checkAlreadyexist = await FavoriteAd.findOne({ user: userId, ad: adId }).exec();
+      if (checkAlreadyexist) {
+        favoriteAd = await FavoriteAd.findOneAndUpdate(
+          { user: userId, ad: adId },
+          { $set: dbQuery },
+          { new: true } // Return the updated document
+        );
+      } else {
         favoriteAd = await FavoriteAd.create(dbQuery);
-      } 
-      if(favoriteAd){
-        return successJSONResponse(res, { message: `success`,favoriteAd:favoriteAd });
-      }else{
-        return failureJSONResponse(res, { message: `failure`});
+      }
+      
+      if (favoriteAd) {
+        return successJSONResponse(res, { message: `success`, favoriteAd: favoriteAd });
+      } else {
+        return failureJSONResponse(res, { message: `failure` });
       }
     } catch (error) {
       console.log(error);
       return failureJSONResponse(res, { message: `Something went wrong` });
     }
+    
 }
 
 const ModelNameByAdsType = async (ads_type) => {
