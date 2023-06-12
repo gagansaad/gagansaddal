@@ -42,7 +42,7 @@ exports.createFavoriteAd = async (req, res, next) => {
       let favoriteAd
       let checkAlreadyexist = await FavoriteAd.findOne({adId:adId})
       if(checkAlreadyexist){
-         favoriteAd = await FavoriteAd.findOneAndUpdate({adId:adId},{$set:dbQuery});
+         favoriteAd = await FavoriteAd.findOneAndUpdate({ad:adId},{$set:dbQuery});
       }else{
         favoriteAd = await FavoriteAd.create(dbQuery);
       } 
