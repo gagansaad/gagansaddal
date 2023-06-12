@@ -1,4 +1,12 @@
 const mongoose = require("mongoose");
+const {
+  defaultStringConfig,
+  nonEmptyArrayValidator,
+  defaultPriceProperty,
+  defaultCurrencyProperty,
+  getAlphaNumID,
+  defaultBooleanConfig
+} = require(`../../utils/mongoose`);
 
 const favoriteAdSchema = new mongoose.Schema({
   user: {
@@ -7,10 +15,7 @@ const favoriteAdSchema = new mongoose.Schema({
     required: true,
   },
   isfavorite:{
-    type: String,
-    required: true,
-    enum:["true","false"],
-    default:"false"
+    ...defaultBooleanConfig,
   },
 
   ad: {
