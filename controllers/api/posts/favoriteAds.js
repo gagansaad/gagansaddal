@@ -20,12 +20,14 @@ const mongoose = require("mongoose"),
   } = require(`../../../utils/validators`);
 
 ////-----------------------Dynamic Data---------------------------////
+
 exports.createFavoriteAd = async (req, res, next) => {
-    const {adId } = req.body;
+    const {adId ,ads_type} = req.body;
     let  userId = req.userId
-    let adType= "babysitter & nannie"
+    let adType= await getModelNameByAdsType(ads_type)
     console.log(userId,"bol bai bandya bol");
     try {
+      
       const favoriteAd = await FavoriteAd.create({ user: userId, ad: adId ,adType:adType});
       res.status(201).json(favoriteAd);
     } catch (error) {
@@ -34,3 +36,33 @@ exports.createFavoriteAd = async (req, res, next) => {
     }
 }
 
+const getModelNameByAdsType = async (ads_type) => {
+
+  let findModelName = await category.findById({ "_id": ads_type})
+
+  let ModelName;
+
+  switch (findModelName.name) {
+    case "Rentals":
+      ModelName = rentals
+      break;
+    case "Jobs":
+      ModelName = jobsAd
+      break;
+    case "Local Biz & Services":
+      ModelName = bizAd
+      break;
+    case "Events":
+      ModelName = eventAd
+      break;
+    case "Buy & Sell":
+      ModelName = buysellAd
+      break;
+    case "Babysitters & Nannies":
+      ModelName = babysitterAd
+      break;
+    default:
+      console.log(`Please provide valid ads id`);
+  }
+  return ModelName;
+}
