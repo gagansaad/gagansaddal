@@ -104,17 +104,19 @@ exports.deleteNewCategories = async (req, res, next) => {
 
 exports.UpdateCategories = async (req, res, next) => {
     try {
-
+        let dbQuery ={}
         const {
             category_id,
             name,
+            status
         } = req.body
 
         if (!category_id) return failureJSONResponse(res, { message: `Please provide ads id` });
+        if(name)dbQuery.name =name
+        if(status)dbQuery.status=status
 
 
-
-        AdsCategories.findByIdAndUpdate({ "_id": category_id },{$set:{name:name}})
+        AdsCategories.findByIdAndUpdate({ "_id": category_id },{$set:dbQuery})
             .then((newCategory) => {
                 if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
                 else {
