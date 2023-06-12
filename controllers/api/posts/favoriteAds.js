@@ -32,10 +32,12 @@ exports.createFavoriteAd = async (req, res, next) => {
       if (!isfavorite)
       return failureJSONResponse(res, { message: `Please provide isfavorite` });
     let ModelName= await ModelNameByAdsType(ads_type)
-    
+    if(userId)dbQuery.user = userId
+    if(adId)dbQuery.ad = adId
+    if(isfavorite)dbQuery.isfavorite = isfavorite
+    if(ads_type)dbQuery.ads_type = ads_type
     try {
-      
-      const favoriteAd = await FavoriteAd.create({ user: userId, ad: adId ,adType:ModelName});
+      const favoriteAd = await FavoriteAd.create(dbQuery);
       res.status(201).json(favoriteAd);
     } catch (error) {
       console.log(error);
