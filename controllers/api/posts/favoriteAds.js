@@ -39,9 +39,13 @@ exports.createFavoriteAd = async (req, res, next) => {
     if(ads_type)dbQuery.ads_type = ads_type
     if(ModelName)dbQuery.adType = ModelName
     try {
-      let checkAlreadyexist = await FavoriteAd.findOne({user:userId})
-      console.log(checkAlreadyexist,"jenfvjdnvjn");
-      const favoriteAd = await FavoriteAd.create(dbQuery);
+      let favoriteAd
+      let checkAlreadyexist = await FavoriteAd.findOne({adId:adId})
+      if(checkAlreadyexist){
+         favoriteAd = await FavoriteAd.findOneAndUpdate({adId:adId},{$set:dbQuery});
+      }else{
+        favoriteAd = await FavoriteAd.create(dbQuery);
+      } 
       res.status(201).json(favoriteAd);
     } catch (error) {
       console.log(error);
