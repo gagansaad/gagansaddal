@@ -23,14 +23,19 @@ const mongoose = require("mongoose"),
 ////-----------------------Dynamic Data---------------------------////
 
 exports.createFavoriteAd = async (req, res, next) => {
-    const {adId ,ads_type} = req.body;
+    const {adId ,ads_type,isfavorite} = req.body;
     let  userId = req.userId
+    if (!adId)
+      return failureJSONResponse(res, { message: `Please provide ad id` });
+      if (!ads_type)
+      return failureJSONResponse(res, { message: `Please provide ads type` });
+      if (!isfavorite)
+      return failureJSONResponse(res, { message: `Please provide isfavorite` });
     let ModelName= await ModelNameByAdsType(ads_type)
-    console.log(userId,"bol bai bandya bol",ModelName);
-    let adType = ModelName
+    
     try {
       
-      const favoriteAd = await FavoriteAd.create({ user: userId, ad: adId ,adType:adType});
+      const favoriteAd = await FavoriteAd.create({ user: userId, ad: adId ,adType:ModelName});
       res.status(201).json(favoriteAd);
     } catch (error) {
       console.log(error);
