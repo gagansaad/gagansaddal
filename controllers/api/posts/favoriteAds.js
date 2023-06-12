@@ -23,9 +23,10 @@ const mongoose = require("mongoose"),
 exports.createFavoriteAd = async (req, res, next) => {
     const {adId } = req.body;
     let  userId = req.userId
+          adType: "babysitter & nannie",
     console.log(userId,"bol bai bandya bol");
     try {
-      const favoriteAd = await FavoriteAd.create({ user: userId, ad: adId });
+      const favoriteAd = await FavoriteAd.create({ user: userId, ad: adId ,adType:adType});
       res.status(201).json(favoriteAd);
     } catch (error) {
       console.log(error);
