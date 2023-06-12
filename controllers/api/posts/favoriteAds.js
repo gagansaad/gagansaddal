@@ -28,7 +28,7 @@ exports.createFavoriteAd = async (req, res, next) => {
     console.log(userId,"bol bai bandya bol",adType);
     try {
       
-      const favoriteAd = await FavoriteAd.create({ user: userId, ad: adId ,adType:adType});
+      const favoriteAd = await FavoriteAd.create({ user: userId, ad: adId ,adType:JSON.stringify(adType)});
       res.status(201).json(favoriteAd);
     } catch (error) {
       console.log(error);
