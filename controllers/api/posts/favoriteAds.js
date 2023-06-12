@@ -24,6 +24,7 @@ const mongoose = require("mongoose"),
 
 exports.createFavoriteAd = async (req, res, next) => {
     const {adId ,ads_type,isfavorite} = req.body;
+    let dbQuery={}
     let  userId = req.userId
     if (!adId)
       return failureJSONResponse(res, { message: `Please provide ad id` });
@@ -36,6 +37,7 @@ exports.createFavoriteAd = async (req, res, next) => {
     if(adId)dbQuery.ad = adId
     if(isfavorite)dbQuery.isfavorite = isfavorite
     if(ads_type)dbQuery.ads_type = ads_type
+    if(ModelName)dbQuery.adType = ModelName
     try {
       const favoriteAd = await FavoriteAd.create(dbQuery);
       res.status(201).json(favoriteAd);
