@@ -13,7 +13,7 @@ const adsSubCategoriesSchema = new mongoose.Schema({
     },
 
     status: {
-        type: defaultBooleanConfig,
+        ...defaultBooleanConfig,
         
     },
 
