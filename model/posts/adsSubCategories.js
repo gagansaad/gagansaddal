@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const {
-    defaultStringConfig, defaultBooleanConfig,
+    defaultStringConfig,
 } = require(`../../utils/mongoose`);
 
 const adsSubCategoriesSchema = new mongoose.Schema({
@@ -13,8 +13,10 @@ const adsSubCategoriesSchema = new mongoose.Schema({
     },
 
     status: {
-        type: defaultBooleanConfig,
-        
+        type: String,
+        enum: [`active`, `inactive`],
+        required: true,
+        default: "active"
     },
 
     name:{

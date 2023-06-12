@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const {
     defaultStringConfig,
-    defaultBooleanConfig,
 } = require(`../../utils/mongoose`);
 
 const roomRentsSchema = new mongoose.Schema({
@@ -14,8 +13,10 @@ const roomRentsSchema = new mongoose.Schema({
         immutable: true
     },
     status: {
-        type: defaultBooleanConfig,
-        
+        type: String,
+        enum: [`active`, `inactive`],
+        required: true,
+        default: "active"
     },
     name:{
         ...defaultStringConfig,
