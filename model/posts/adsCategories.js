@@ -13,7 +13,8 @@ const roomRentsSchema = new mongoose.Schema({
         immutable: true
     },
     status: {
-        ...defaultBooleanConfig,
+        type: defaultBooleanConfig,
+        
     },
     name:{
         ...defaultStringConfig,
