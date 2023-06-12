@@ -116,9 +116,10 @@ exports.updateSubCategories = async (req, res) => {
             status,
             sub_category_id,
         } = req.body
+        
         if(name)dbQuery.name =name
         if(status)dbQuery.status=status
-
+console.log(dbQuery,"nhedchbcs");
         if (!sub_category_id) return failureJSONResponse(res, { message: `Please provide ads id` });
 
 
