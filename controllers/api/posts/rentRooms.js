@@ -2,7 +2,6 @@ const { json, query } = require("express");
 
 const mongoose = require("mongoose"),
   RoomRentsAds = mongoose.model("rental"),
-  FavoriteAd = mongoose.model("FavoriteAd"),
   Media = mongoose.model("media"),
   tagline_keywords = mongoose.model("keywords"),
   {
@@ -628,13 +627,6 @@ if (isPetFriendly) dbQuery["adsInfo.isPetFriendly"] = isPetFriendly;
 if (preferedGender) dbQuery["adsInfo.preferedGender"] = preferedGender;
     if (userId) dbQuery.userId = userId;
     let queryFinal = dbQuery;
-        // Find the favorite ads for the specific user
-        const favoriteAds = await FavoriteAd.find({ user: userId }).select('ad');
-        // Extract the ad IDs from the favorite ads
-        const adIds = favoriteAds.map(favoriteAd => favoriteAd.ad);
-        // Add the favorite ad IDs to the query
-        queryFinal._id = { $in: adIds };
-    
     if (searchTerm) {
       queryFinal = {
         ...dbQuery,
