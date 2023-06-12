@@ -46,10 +46,10 @@ exports.createFavoriteAd = async (req, res, next) => {
       }else{
         favoriteAd = await FavoriteAd.create(dbQuery);
       } 
-      res.status(201).json(favoriteAd);
+      return successJSONResponse(res, { message: `success`,favoriteAd:favoriteAd });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "Failed to add favorite ad" });
+      return failureJSONResponse(res, { message: `Something went wrong` });
     }
 }
 
