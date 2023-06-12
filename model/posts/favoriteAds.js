@@ -15,7 +15,10 @@ const favoriteAdSchema = new mongoose.Schema({
     required: true,
   },
   isfavorite:{
-    ...defaultBooleanConfig,
+    type: String,
+    enum: ["active","inactive"],
+    required:true,
+    default:"inactive"
   },
 
   ad: {
