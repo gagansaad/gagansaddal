@@ -25,8 +25,8 @@ const mongoose = require("mongoose"),
 exports.createFavoriteAd = async (req, res, next) => {
     const {adId ,ads_type} = req.body;
     let  userId = req.userId
-    let ModelName= await getModelNameByAdsType(ads_type)
-    console.log(userId,"bol bai bandya bol",ModelName.toString());
+    let ModelName= await ModelNameByAdsType(ads_type)
+    console.log(userId,"bol bai bandya bol",ModelName);
     let adType = ModelName
     try {
       
@@ -38,7 +38,7 @@ exports.createFavoriteAd = async (req, res, next) => {
     }
 }
 
-const getModelNameByAdsType = async (ads_type) => {
+const ModelNameByAdsType = async (ads_type) => {
 
   let findModelName = await category.findById({ "_id": ads_type})
 
@@ -46,22 +46,22 @@ const getModelNameByAdsType = async (ads_type) => {
 
   switch (findModelName.name) {
     case "Rentals":
-      ModelName = rentals
+      ModelName = "rental"
       break;
     case "Jobs":
-      ModelName = jobsAd
+      ModelName = "Job"
       break;
-    case "Local Biz & Services":
-      ModelName = bizAd
+    case "Local Biz & Service":
+      ModelName = "Local_biz & Service"
       break;
     case "Events":
-      ModelName = eventAd
+      ModelName = "event"
       break;
     case "Buy & Sell":
-      ModelName = buysellAd
+      ModelName = "Buy & Sell"
       break;
     case "Babysitters & Nannies":
-      ModelName = babysitterAd
+      ModelName = "babysitter & nannie"
       break;
     default:
       console.log(`Please provide valid ads id`);
