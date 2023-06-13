@@ -38,6 +38,10 @@ const roomRentsSchema = new mongoose.Schema({
         ref: `PostType`,
         required: true
     },
+    favorite:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `PostType`,
+    }],
     adsInfo: {
 
         rental_type: {
