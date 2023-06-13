@@ -107,5 +107,5 @@ let Typename;
     default:
       console.log(`Please provide valid ads id`);
   }
-  return ModelName,Typename;
+  return {ModelName,Typename};
 }
