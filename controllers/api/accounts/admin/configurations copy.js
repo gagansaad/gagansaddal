@@ -6,6 +6,7 @@ const mongoose = require("mongoose"),
     } = require(`../../../../handlers/jsonResponseHandlers`);
 const PostType = mongoose.model("PostType");
 const AdsPlan = mongoose.model("plan");
+  let  Media = mongoose.model("media");
 const addons_plan = mongoose.model("plan_addons");
 
 
@@ -145,6 +146,39 @@ exports.create_adons=async(req, res)=>{
                       addons: addons_result,
                    });
         }
+    }
+  
+} catch (err) {
+    console.log(err,"jdnvdnjdnjd")
+    return failureJSONResponse(res, { message: `something went wrong` });
+}
+}
+
+exports.edit_adons=async(req, res)=>{
+    try{
+    const {
+        addons_id,
+        example_title,
+        example_desc,
+    } = req.body;
+   let dbQuery = {};
+   let Images;
+//    console.log(req.file);
+  if (req.file) {
+      var thumbnail = req.file.path;
+    //   console.log(thumbnail);
+      Images = await Media.create({ url:thumbnail });
+  } 
+    if(example_title)dbQuery.example_title=example_title
+    if(example_desc)dbQuery.example_description=example_desc
+    if(Images)dbQuery.example_image=Images.url
+    // console.log(Images.url,"dnvhjjdfhjvdfjhb");
+    let result = await addons_plan.findByIdAndUpdate({"_id":addons_id},{$set:dbQuery},{new:true})
+    if(result){
+            return successJSONResponse(res, {
+                      message: `success`,
+                      addons: result,
+                   });
     }
   
 } catch (err) {

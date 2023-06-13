@@ -7,5 +7,4 @@ router.get(`/fetch_plan`,
     controllers.fetchPlanForAds
 );
 
-
 module.exports = router;

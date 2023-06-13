@@ -46,19 +46,13 @@ exports.createFavoriteAd = async (req, res, next) => {
       let favoriteAd;
       let checkAlreadyexist = await FavoriteAd.findOne({ user: userId, ad: adId }).exec();
       if (checkAlreadyexist) {
-        await ModelName.findByIdAndUpdate({_id:adId},
-          { $pull: { favorite: userId } },
-          { new: true },)
+    
         favoriteAd = await FavoriteAd.findOneAndDelete(
           {_id:checkAlreadyexist._id},
           );
       } else {
         favoriteAd = await FavoriteAd.create(dbQuery);
-        if(favoriteAd){
-          await ModelName.findByIdAndUpdate({_id:adId},
-          { $push: { favorite:userId} },
-          { new: true },)
-        }
+       
       }
       
       if (favoriteAd) {
@@ -109,3 +103,18 @@ let Typename;
   }
   return {ModelName,Typename};
 }
+
+
+
+
+// if(favoriteAd){
+//   await ModelName.findByIdAndUpdate({_id:adId},
+//   { $push: { favorite:userId} },
+//   { new: true },)
+// }
+
+
+
+// await ModelName.findByIdAndUpdate({_id:adId},
+//   { $pull: { favorite: userId } },
+//   { new: true },)
