@@ -42,18 +42,19 @@ exports.createFavoriteAd = async (req, res, next) => {
     if(adId)dbQuery.ad = adId
     if(ads_type)dbQuery.ads_type = ads_type
     if(Typename)dbQuery.adType = Typename
+    console.log(dbQuery);
     try {
       let favoriteAd;
-      let checkAlreadyexist = await FavoriteAd.findOne({ user: userId, ad: adId }).exec();
-      if (checkAlreadyexist) {
+      // let checkAlreadyexist = await FavoriteAd.findOne({ user: userId, ad: adId }).exec();
+      // if (checkAlreadyexist) {
     
-        favoriteAd = await FavoriteAd.findOneAndDelete(
-          {_id:checkAlreadyexist._id},
-          );
-      } else {
+        // favoriteAd = await FavoriteAd.findOneAndDelete(
+        //   {_id:checkAlreadyexist._id},
+        //   );
+      // } else {
         favoriteAd = await FavoriteAd.create(dbQuery);
        
-      }
+      // }
       
       if (favoriteAd) {
         return successJSONResponse(res, { message: `success`, favoriteAd: favoriteAd });
