@@ -80,7 +80,7 @@ let Typename;
       ModelName = roomrentAd
       break;
     case "Jobs":
-      Typename = "Job"
+      Typename = "job"
       ModelName = jobsAd
       break;
     case "Local Biz & Service":
