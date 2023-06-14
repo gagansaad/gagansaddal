@@ -72,7 +72,7 @@ const paymentRoutes = require(`./routes/api/ads/payment`)
 const planRoutes = require(`./routes/api/ads/plans copy`)
 const AllAdsRoutes = require(`./routes/api/ads/fetchAllAds`)
 const All_Tags = require(`./routes/api/ads/tagline`)
-const favorite = require(`./routes/api/ads/favoriteAd`)
+// const favorite = require(`./routes/api/ads/favoriteAd`)
 //admin
 const adsCategoriesRoutes = require('./routes/admin/categories');
 const adsSubCategoriesRoutes = require('./routes/admin/sub_categories');
@@ -129,7 +129,7 @@ app.use('/v1/api/posts/biz', bizRoutes);
 app.use('/v1/api/posts/payment', paymentRoutes)
 app.use('/v1/api/posts/ads', AllAdsRoutes)
 app.use('/v1/api/posts/ads', planRoutes)
-app.use('/v1/api/posts/ads', favorite)
+// app.use('/v1/api/posts/ads', favorite)
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))
