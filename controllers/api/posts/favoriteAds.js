@@ -27,14 +27,6 @@ const mongoose = require("mongoose"),
   } = require(`../../../utils/validators`);
 
 ////-----------------------Dynamic Data---------------------------////
-exports.fetchFavoriteSchema = async(req,res,next)=>{
-  let favorite = await FavoriteAd.find()
-  if (favorite) {
-    return successJSONResponse(res, { message: `success`, favorite: favorite });
-  } else {
-    return failureJSONResponse(res, { message: `failure` });
-  }
-}
 
 exports.createFavoriteAd = async (req, res, next) => {
     const {adId ,ads_type} = req.body;

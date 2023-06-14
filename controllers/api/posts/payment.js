@@ -322,7 +322,7 @@ exports.webhooks = async (request, response) => {
         break;
 
       case "payment_intent.succeeded":
-        paymentSuccessModelUpdate(payment_id);
+        paymentSuccessModelUpdate(payment_id,UserId);
         getNotification = await getNotificationTitles(event.type);
         await Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Payment succeedded of post', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
         
@@ -330,7 +330,7 @@ exports.webhooks = async (request, response) => {
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
       case "checkout.session.completed":
-        paymentSuccessModelUpdate(payment_id);
+        paymentSuccessModelUpdate(payment_id,UserId);
         getNotification = await getNotificationTitles(event.type);
         await Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Payment succedded of post', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
 
@@ -356,8 +356,8 @@ exports.webhooks = async (request, response) => {
   }
 };
 
-const paymentSuccessModelUpdate = async (payment_id) => {
-  let userID = req.userId;
+const paymentSuccessModelUpdate = async (payment_id,UserId) => {
+  // let userID = req.userId;
   let paymentDetails = await PaymentModel.findById({ "_id": payment_id })
   if (paymentDetails) {
     plan_id = paymentDetails.plan_id;
@@ -394,7 +394,7 @@ const paymentSuccessModelUpdate = async (payment_id) => {
   let ModelName = await getModelNameByAdsType(ads_type);
  let statusUpdate = await ModelName.findByIdAndUpdate({ "_id": ads_id }, { $set: data_Obj });
  if(statusUpdate)
- await Notification.sendNotifications([userID], getNotification.title, getNotification.body, { 'model_id': UserId, 'model': 'user'}, false, { 'subject': 'Post Successfully Created!', 'email_template': 'postSuccess', 'data': {} });
+ await Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': UserId, 'model': 'user'}, false, { 'subject': 'Post Successfully Created!', 'email_template': 'postSuccess', 'data': {} });
   return true;
 }
 const getNotificationTitles = async (status) => {
