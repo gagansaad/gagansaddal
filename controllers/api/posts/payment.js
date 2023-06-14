@@ -77,7 +77,7 @@ exports.validatepaymentData = async (req, res, next) => {
 const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeId, deviceType = null, user) => {
   let successUrl;
   let cancelUrl
-let UserId = dataobj.user
+let UserId = dataobj.userx
   console.log(UserId,"bol ve channa bol");
   if (deviceType != null)
     dataobj.device_type = deviceType;
