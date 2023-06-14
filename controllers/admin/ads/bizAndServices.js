@@ -16,8 +16,6 @@ const mongoose = require("mongoose"),
     isValidIndianMobileNumber,
   } = require(`../../../utils/validators`);
 
-
-
   exports.fetchAll = async (req, res, next) => {
     try {
   //     const isFeatured = req.query.isfeatured;
@@ -41,7 +39,6 @@ const mongoose = require("mongoose"),
         return failureJSONResponse(res, { message: `something went wrong` })
     }
   }
-
 
   exports.fetchOne = async (req, res, next) => {
     try {

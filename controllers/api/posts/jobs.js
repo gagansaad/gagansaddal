@@ -1,7 +1,9 @@
 const { json } = require("express");
+const bluebird = require("bluebird");
 const mongoose = require("mongoose"),
   postJobAd = mongoose.model("job"),
   Media = mongoose.model("media"),
+  FavoriteAd = mongoose.model("FavoriteAd"),
   tagline_keywords = mongoose.model("keywords"),
   {
     successJSONResponse,
@@ -654,7 +656,7 @@ exports.editJobStatus = async (req, res, next) => {
 exports.fetchAllAds = async (req, res, next) => {
   try {
     let searchTerm = req.body.searchTerm;
-    console.log("objectuygtututu");
+    // console.log("objectuygtututu");
     let dbQuery = {};
     const {
       isfeatured,
@@ -735,12 +737,18 @@ exports.fetchAllAds = async (req, res, next) => {
         ]
       };
     }
-    let records = await postJobAd
+    postJobAd
       .find({ $or: [queryFinal] })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
-      .limit(perPage);
+      .limit(perPage).then(function (records) {
+        return bluebird.map(records, function (postJobA) {
+          return FavoriteAd.find({ ad: postJobA._id }).exec().countDocuments();
+        });
+      });
+    console.log(records);
+    return 's';
     const responseModelCount = await postJobAd.countDocuments({
       $or: [queryFinal],
     });

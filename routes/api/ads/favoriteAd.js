@@ -8,10 +8,12 @@ const router = require(`express`).Router(),
     
 router.post(`/create-favorite`,authMiddleware.ensureUserLoggedIn,controllers.createFavoriteAd)
 
-// router.get(`/my-all-ads`,
-// authMiddleware.ensureUserLoggedIn,
-//     controllers.fetchAllMyAds
-// );
+
+
+router.get(`/allfavorite`,
+authMiddleware.ensureUserLoggedIn,
+    controllers.fetchFavoriteSchema
+);
 // router.get(`/all-ads`,
 // // authMiddleware.ensureUserLoggedIn,
 //     controllers.fetchAll
