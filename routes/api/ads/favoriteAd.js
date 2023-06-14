@@ -10,7 +10,7 @@ router.post(`/create-favorite`,authMiddleware.ensureUserLoggedIn,controllers.cre
 
 
 
-router.get(`/allfavorite`,
+router.get(`/all-favorite`,
 authMiddleware.ensureUserLoggedIn,
     controllers.fetchFavoriteSchema
 );
