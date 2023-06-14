@@ -357,7 +357,7 @@ exports.webhooks = async (request, response) => {
 };
 
 const paymentSuccessModelUpdate = async (payment_id) => {
-  let userID = req.userId;
+  let userID = userId;
   let paymentDetails = await PaymentModel.findById({ "_id": payment_id })
   if (paymentDetails) {
     plan_id = paymentDetails.plan_id;
