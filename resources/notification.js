@@ -35,8 +35,10 @@ module.exports = {
             if (Object.keys(sendEmailNotification).length > 0) {
                 console.log('ssss1');
                 convertedIds.map(async userId => {
-                    // console.log(JSON.stringify(data));
+                    console.log(userId);
                     let UserDetails = await User.findById({ "_id": userId })
+                    
+                    console.log(UserDetails);
                     //   let subject = 'Thank you for Use Menehariya!'
                     let replacements = { 'name': UserDetails.userInfo.name };
                     if (Object.keys(sendEmailNotification.data).length > 0)
