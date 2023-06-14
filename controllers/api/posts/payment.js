@@ -78,7 +78,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
   let successUrl;
   let cancelUrl
 let UserId = request.UserId
-  console.log(user);
+  console.log(UserId,"jdjvndsjvn ds ve sohnya yaara tera ki dena ");
   if (deviceType != null)
     dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
