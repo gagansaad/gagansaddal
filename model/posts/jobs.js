@@ -152,19 +152,16 @@ const roomRentsSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('job', roomRentsSchema);
-const FavoriteAd = new Schema({
-    name: String
-});
-FavoriteAd.virtual('job', {
-    ref: 'FavoriteAd',
-    localField: '_id',
-    foreignField: 'ad',
-    count: true // And only get the number of docs
-    // match: { archived: false } // match option with basic query selector
-});
+roomRentsSchema.virtual("favorites", {
+    ref: "FavoriteAd",
+    localField: "_id",
+    foreignField: "ad",
+  });
 
-module.exports = mongoose.model('job', FavoriteAd);
+module.exports = mongoose.model('job', roomRentsSchema);
+
+
+// module.exports = mongoose.model('job', FavoriteAd);
 // company_name:defaultStringConfig,
 // exp_title:defaultStringConfig,
 // exp_startdate:defaultStringConfig,
