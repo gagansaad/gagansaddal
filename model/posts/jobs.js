@@ -17,13 +17,13 @@ const roomRentsSchema = new mongoose.Schema({
         required: true,
         default: "draft"
     },
-    plan_validity:{
-        plan_id:{type: String,trim:true},
-        active_on:{type:String,trim:true},
-        expired_on:{type:String,trim:true},
+    plan_validity: {
+        plan_id: { type: String, trim: true },
+        active_on: { type: String, trim: true },
+        expired_on: { type: String, trim: true },
     },
-    addons_validity:[{
-        
+    addons_validity: [{
+
     }],
     is_featured: {
         value: {
@@ -39,7 +39,7 @@ const roomRentsSchema = new mongoose.Schema({
         }
 
     },
-    listing_type:{
+    listing_type: {
         ...defaultStringConfig,
         required: true
     },
@@ -67,20 +67,20 @@ const roomRentsSchema = new mongoose.Schema({
         },
         role: [],
         employment_type: {
-            type:Array
+            type: Array
             // required: true
         },
-        experience:[],
+        experience: [],
         language: {
-            type:Array
+            type: Array
             // required: true
 
         },
         salary: {
-            amount:{type:Number},
-            currency:{type:String,default:"USD"},
+            amount: { type: Number },
+            currency: { type: String, default: "USD" },
         },
-        salary_info:{
+        salary_info: {
             ...defaultStringConfig,
             // required: true
         },
@@ -99,8 +99,8 @@ const roomRentsSchema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true,
         },
-        tagline:{
-            type:Array,
+        tagline: {
+            type: Array,
             // required: true,
         },
         preferred_gender: {
@@ -125,14 +125,14 @@ const roomRentsSchema = new mongoose.Schema({
         // website_link: defaultStringConfig,
         primary_mobile_number: {
             country_code: defaultStringConfig,
-            primary_phone_number:defaultStringConfig,
-  
-          },
-          secondary_mobile_number: {
+            primary_phone_number: defaultStringConfig,
+
+        },
+        secondary_mobile_number: {
             country_code: defaultStringConfig,
-            secondary_phone_number:defaultStringConfig,
-  
-          },
+            secondary_phone_number: defaultStringConfig,
+
+        },
         hide_my_email: defaultBooleanConfig,
         hide_my_phone: defaultBooleanConfig,
         hide_my_secondary_phone: defaultBooleanConfig,
@@ -153,6 +153,18 @@ const roomRentsSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = mongoose.model('job', roomRentsSchema);
+const FavoriteAd = new Schema({
+    name: String
+});
+FavoriteAd.virtual('job', {
+    ref: 'FavoriteAd',
+    localField: '_id',
+    foreignField: 'ad',
+    count: true // And only get the number of docs
+    // match: { archived: false } // match option with basic query selector
+});
+
+module.exports = mongoose.model('job', FavoriteAd);
 // company_name:defaultStringConfig,
 // exp_title:defaultStringConfig,
 // exp_startdate:defaultStringConfig,
