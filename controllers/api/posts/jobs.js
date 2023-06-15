@@ -746,7 +746,7 @@ exports.fetchAllAds = async (req, res, next) => {
       $or: [queryFinal],
     });
     if (records) {
-      const jobData = records.map((job) => {
+      const jobData = await records.map((job) => {
         return {
           ...job._doc,
           favoriteCount: job.favoriteCount.length,
