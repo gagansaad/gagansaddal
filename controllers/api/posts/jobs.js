@@ -746,6 +746,13 @@ exports.fetchAllAds = async (req, res, next) => {
       $or: [queryFinal],
     });
     if (records) {
+      const jobData = records.map((job) => {
+        return {
+          _id: job._id,
+          // Add other job fields as needed
+          favoriteCount: job.favoriteCount,
+        };
+      });
       return successJSONResponse(res, {
         message: `success`,
         total: responseModelCount,
@@ -753,6 +760,7 @@ exports.fetchAllAds = async (req, res, next) => {
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
         records,
+        jobData,
         status: 200,
       });
     } else {
