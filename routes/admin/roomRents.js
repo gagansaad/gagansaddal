@@ -47,10 +47,10 @@ router.get(`/fetchroomads`,
     controllers.fetchAll
 );
 
-router.get(`/view-roomrent-ad/:adsId`,
+router.get(`/view-roomrent-ad`,
     controllers.fetchOne
 );
-router.delete(`/delete-roomrent-ad/:adsId`,
+router.delete(`/delete-roomrent-ad`,
     controllers.fetchOneDelete
 );
 
