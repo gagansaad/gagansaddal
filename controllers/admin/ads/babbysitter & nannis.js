@@ -70,7 +70,7 @@ exports.fetchOneDelete = async (req, res, next) => {
   try {
     
     let dbQuery ={
-      _id:req.query._id
+      _id:req.query.adsId
     };
 
       let records = await  postbabyAd.findOneAndDelete(dbQuery);

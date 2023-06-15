@@ -740,7 +740,7 @@ exports.fetchAllAds = async (req, res, next) => {
     let records = await postJobAd
       .find({ $or: [queryFinal] })
       .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "isFavorite", select: "_id" , match: { user: mongoose.Types.ObjectId(userId) }, })
+      .populate({ path: "isFavorite", match: { user: userId }, })
       .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
       .limit(perPage);
