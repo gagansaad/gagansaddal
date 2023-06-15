@@ -181,5 +181,20 @@ const events_Schema = new mongoose.Schema({
 
 }, { timestamps: true });
 
+events_Schema.virtual("favoriteCount", {
+    ref: "FavoriteAd",
+    localField: "_id",
+    foreignField: "ad",
+    count: true,
+  });
+  events_Schema.virtual("isFavorite", {
+    ref: "FavoriteAd",
+    localField: "_id",
+    foreignField: "ad",
+    justOne: true,  
+    match: function () {
+        return { user: this.userId };
+      },
+  });
 module.exports = mongoose.model('event', events_Schema);
 

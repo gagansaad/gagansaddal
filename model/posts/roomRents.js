@@ -184,4 +184,19 @@ const roomRentsSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
+roomRentsSchema.virtual("favoriteCount", {
+    ref: "FavoriteAd",
+    localField: "_id",
+    foreignField: "ad",
+    count: true,
+  });
+  roomRentsSchema.virtual("isFavorite", {
+    ref: "FavoriteAd",
+    localField: "_id",
+    foreignField: "ad",
+    justOne: true,  
+    match: function () {
+        return { user: this.userId };
+      },
+  });
 module.exports = mongoose.model('rental', roomRentsSchema);

@@ -140,5 +140,19 @@ const BuySellSchema = new mongoose.Schema({
         ref: "user"
     }
 }, { timestamps: true });
-
+BuySellSchema.virtual("favoriteCount", {
+    ref: "FavoriteAd",
+    localField: "_id",
+    foreignField: "ad",
+    count: true,
+  });
+  BuySellSchema.virtual("isFavorite", {
+    ref: "FavoriteAd",
+    localField: "_id",
+    foreignField: "ad",
+    justOne: true,  
+    match: function () {
+        return { user: this.userId };
+      },
+  });
 module.exports = mongoose.model('Buy & Sell', BuySellSchema);

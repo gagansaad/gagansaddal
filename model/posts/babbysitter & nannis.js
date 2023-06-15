@@ -135,5 +135,19 @@ const babysitter_Schema = new mongoose.Schema({
     }
 
 }, { timestamps: true });
-
+babysitter_Schema.virtual("favoriteCount", {
+    ref: "FavoriteAd",
+    localField: "_id",
+    foreignField: "ad",
+    count: true,
+  });
+  babysitter_Schema.virtual("isFavorite", {
+    ref: "FavoriteAd",
+    localField: "_id",
+    foreignField: "ad",
+    justOne: true,  
+    match: function () {
+        return { user: this.userId };
+      },
+  });
 module.exports = mongoose.model('babysitter & nannie', babysitter_Schema);

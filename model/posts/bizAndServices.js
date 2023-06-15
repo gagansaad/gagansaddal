@@ -151,5 +151,19 @@ const bizAndServices = new mongoose.Schema({
     }
 
 }, { timestamps: true });
-
+bizAndServices.virtual("favoriteCount", {
+    ref: "FavoriteAd",
+    localField: "_id",
+    foreignField: "ad",
+    count: true,
+  });
+  bizAndServices.virtual("isFavorite", {
+    ref: "FavoriteAd",
+    localField: "_id",
+    foreignField: "ad",
+    justOne: true,  
+    match: function () {
+        return { user: this.userId };
+      },
+  });
 module.exports = mongoose.model('Local_biz & Service', bizAndServices);

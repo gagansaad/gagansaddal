@@ -637,10 +637,13 @@ if (preferedGender) dbQuery["adsInfo.preferedGender"] = preferedGender;
       };
     }
 console.log(queryFinal);
+    let myid = req.userId;
     let records = await RoomRentsAds.find({
       $or: [queryFinal],
     })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
       .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
       .limit(perPage);
