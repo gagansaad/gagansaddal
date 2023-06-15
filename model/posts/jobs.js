@@ -160,11 +160,11 @@ roomRentsSchema.virtual("favoriteCount", {
   });
   roomRentsSchema.virtual("isFavorite", {
     ref: "FavoriteAd",
-    localField: "userId",
-    foreignField: "user",
+    localField: "_id",
+    foreignField: "ad",
     justOne: true,
-    match: { userId: { $exists: true } },
-  }); 
+    match: { user: userId }, // Make sure `userId` is defined with the correct value
+  });
 module.exports = mongoose.model('job', roomRentsSchema);
 
 
