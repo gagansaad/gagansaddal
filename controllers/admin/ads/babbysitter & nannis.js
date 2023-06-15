@@ -83,6 +83,6 @@ exports.fetchOneDelete = async (req, res, next) => {
           return failureJSONResponse(res, { message: `Ad not available` })
       }
   } catch (err) {
-      return failureJSONResponse(res, { message: `something went wrong` })
+      return failureJSONResponse(res, {err, message: `something went wrong` })
   }
 }
