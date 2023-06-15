@@ -740,6 +740,7 @@ exports.fetchAllAds = async (req, res, next) => {
     let records = await postJobAd
       .find({ $or: [queryFinal] })
       .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "isFavorite", select: "user" , match: { userId: userId }, })
       .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
       .limit(perPage);
@@ -749,19 +750,13 @@ exports.fetchAllAds = async (req, res, next) => {
    
     if (records) {
       const jobData = records.map((job) => {
-        const isFavorite = job.favoriteCount.some(
-          (favorite) => favorite.userId.toString() === userId
-        );
-        const { _id, favoriteCount, ...rest } = job._doc;
         return {
-          ...rest,
+          ...job._doc,
           // Add other job fields as needed
           favoriteCount: job.favoriteCount,
-          favoriteCoun: job.favoriteCount.length,
-          isFavorite,
+          isFavorite:job.isFavorite
         };
       });
-      
       return successJSONResponse(res, {
         message: `success`,
         total: responseModelCount,
