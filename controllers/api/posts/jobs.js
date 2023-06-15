@@ -736,7 +736,6 @@ exports.fetchAllAds = async (req, res, next) => {
       };
     }
     // .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-
     let records = await postJobAd
       .find({ $or: [queryFinal] })
       .populate({ path: "favoriteCount", select: "_id" })
