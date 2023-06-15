@@ -745,13 +745,13 @@ exports.fetchAllAds = async (req, res, next) => {
     const responseModelCount = await postJobAd.countDocuments({
       $or: [queryFinal],
     });
-    if (records) {
-      const jobData = await records.map((job) => {
-        return {
-          ...job._doc,
-          favoriteCount: job.favoriteCount.length,
-        };
-      });
+    const jobData = await records.map((job) => {
+      return {
+        ...job._doc,
+        favoriteCount: job.favoriteCount.length,
+      };
+    });
+    if (jobData) {
       return successJSONResponse(res, {
         message: `success`,
         total: responseModelCount,

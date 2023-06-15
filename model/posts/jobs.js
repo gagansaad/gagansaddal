@@ -151,6 +151,7 @@ const roomRentsSchema = new mongoose.Schema({
     }
 
 }, { timestamps: true });
+
 roomRentsSchema.virtual("favoriteCount", {
     ref: "FavoriteAd",
     localField: "_id",
