@@ -724,7 +724,7 @@ exports.fetchAllAds = async (req, res, next) => {
     if (tagline) {
       dbQuery["adsInfo.tagline"] = tagline;
     }
-    if (req.userId) dbQuery.userId = userId;
+    if (userId) dbQuery.userId = userId;
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
@@ -736,7 +736,7 @@ exports.fetchAllAds = async (req, res, next) => {
       };
     }
       // .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-console.log(userId,"mjvnjvjdjnvjdnvjdnvj");
+console.log(req.userId,"mjvnjvjdjnvjdnvjdnvj");
     let records = await postJobAd
       .find({ $or: [queryFinal] })
       .populate({ path: "favoriteCount", select: "_id" })
