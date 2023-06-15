@@ -42,10 +42,10 @@ router.get(`/fetch-all-babysitter-ads`,
     controllers.fetchAll
 );
 
-router.get(`/view-babysitter-ad/:adsId`,
+router.get(`/view-babysitter-ad`,
     controllers.fetchOne
 );
-router.delete(`/delete-babysitter-ad/:adsId`,
+router.delete(`/delete-babysitter-ad`,
     controllers.fetchOneDelete
 );
 module.exports = router;

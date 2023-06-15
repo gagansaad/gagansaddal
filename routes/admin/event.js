@@ -42,10 +42,10 @@ router.get(`/fetcheventads`,
 
     controllers.fetchAll
 );
-router.get(`/view-event-ad/:adsId`,
+router.get(`/view-event-ad`,
     controllers.fetchOne
 );
-router.delete(`/delete-event-ad/:adsId`,
+router.delete(`/delete-event-ad`,
     controllers.fetchOneDelete
 );
 module.exports = router;

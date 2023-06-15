@@ -47,10 +47,10 @@ router.get(`/fetchjobads`,
     controllers.fetchAll
 );
 
-router.get(`/view-job-ad/:adsId`,
+router.get(`/view-job-ad`,
     controllers.fetchOne
 );
-router.delete(`/delete-job-ad/:adsId`,
+router.delete(`/delete-job-ad`,
     controllers.fetchOneDelete
 );
 module.exports = router;

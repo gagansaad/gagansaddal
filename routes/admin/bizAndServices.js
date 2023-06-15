@@ -44,10 +44,10 @@ router.get(`/fetchbizads`,
     
     controllers.fetchAll
 );
-router.get(`/view-biz-ad/:adsId`,
+router.get(`/view-biz-ad`,
     controllers.fetchOne
 );
-router.delete(`/delete-biz-ad/:adsId`,
+router.delete(`/delete-biz-ad`,
     controllers.fetchOneDelete
 );
 module.exports = router;
