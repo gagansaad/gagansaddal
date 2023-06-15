@@ -737,7 +737,7 @@ exports.fetchAllAds = async (req, res, next) => {
     }
     let records = await postJobAd
       .find({ $or: [queryFinal] })
-     .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      // .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
