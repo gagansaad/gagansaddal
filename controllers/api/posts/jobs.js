@@ -752,11 +752,12 @@ exports.fetchAllAds = async (req, res, next) => {
         const isFavorite = job.favoriteCount.some(
           (favorite) => favorite.userId.toString() === userId
         );
+        const { _id, favoriteCount, ...rest } = job._doc;
         return {
-          ...job._doc,
+          ...rest,
           // Add other job fields as needed
           favoriteCount: job.favoriteCount,
-          ...job.toObject(),
+          favoriteCoun: job.favoriteCount.length,
           isFavorite,
         };
       });
