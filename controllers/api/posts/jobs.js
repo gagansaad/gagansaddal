@@ -735,9 +735,9 @@ exports.fetchAllAds = async (req, res, next) => {
         ]
       };
     }
-    // .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
     let records = await postJobAd
       .find({ $or: [queryFinal] })
+     .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
@@ -747,10 +747,13 @@ exports.fetchAllAds = async (req, res, next) => {
     });
     if (records) {
       const jobData = records.map((job) => {
+        const isFavorite = job.favoriteCount.some((favorite) =>
+        favorite.user.equals(userId)
+      );
         return {
-          _id: job._id,
-          
-          favoriteCount: job.favoriteCount,
+          ...job._doc,
+          favoriteCount: job.favoriteCount.length,
+          isFavorite,
         };
       });
       return successJSONResponse(res, {
@@ -759,8 +762,7 @@ exports.fetchAllAds = async (req, res, next) => {
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
-        records,
-        jobData,
+        records:jobData,
         status: 200,
       });
     } else {
