@@ -46,7 +46,7 @@ exports.fetchOne = async (req, res, next) => {
   try {
     
     let dbQuery ={
-      _id:req.query._id
+      _id:req.query.adsId
     };
 
       let records = await  postbabyAd.findOne(dbQuery);

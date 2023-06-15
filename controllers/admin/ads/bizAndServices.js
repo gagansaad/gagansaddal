@@ -44,7 +44,7 @@ const mongoose = require("mongoose"),
     try {
       
       let dbQuery ={
-        _id:req.query._id
+        _id:req.query.adsId
       };
 
         let records = await  postbizAndServicesAd.findOne(dbQuery);
@@ -67,7 +67,7 @@ const mongoose = require("mongoose"),
     try {
       
       let dbQuery ={
-        _id:req.query._id
+        _id:req.query.adsId
       };
 
         let records = await  postbizAndServicesAd.findOneAndDelete(dbQuery);

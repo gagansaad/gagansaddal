@@ -749,7 +749,7 @@ exports.fetchAllAds = async (req, res, next) => {
       const jobData = records.map((job) => {
         return {
           _id: job._id,
-          // Add other job fields as needed
+          
           favoriteCount: job.favoriteCount,
         };
       });

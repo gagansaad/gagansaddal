@@ -43,4 +43,10 @@ router.get(`/fetchbuysellads`,
     
     controllers.fetchAll
 );
+router.get(`/view-buysell-ad/:adsId`,
+    controllers.fetchOne
+);
+router.delete(`/delete-buysell-ad/:adsId`,
+    controllers.fetchOneDelete
+);
 module.exports = router;

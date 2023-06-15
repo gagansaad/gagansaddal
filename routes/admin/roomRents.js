@@ -47,4 +47,11 @@ router.get(`/fetchroomads`,
     controllers.fetchAll
 );
 
+router.get(`/view-roomrent-ad/:adsId`,
+    controllers.fetchOne
+);
+router.delete(`/delete-roomrent-ad/:adsId`,
+    controllers.fetchOneDelete
+);
+
 module.exports = router;
