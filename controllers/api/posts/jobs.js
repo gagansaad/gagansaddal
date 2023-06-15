@@ -747,10 +747,11 @@ exports.fetchAllAds = async (req, res, next) => {
     });
     if (records) {
       const jobData = records.map((job) => {
+        console.log( ...job._doc,"vnbdjvnjdnvjd")
         return {
           ...job._doc,
+          
           favoriteCount: job.favoriteCount.length,
-          isFavorite: job.favoriteCount.some(favorite => favorite.user.toString() === userId),
         };
       });
       return successJSONResponse(res, {
