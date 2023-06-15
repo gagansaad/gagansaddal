@@ -749,18 +749,18 @@ exports.fetchAllAds = async (req, res, next) => {
    
     if (records) {
       const jobData = records.map((job) => {
-        
+        const isFavorite = job.favoriteCount.some(
+          (favorite) => favorite.userId.toString() === userId
+        );
         return {
           ...job._doc,
           // Add other job fields as needed
           favoriteCount: job.favoriteCount,
-        
+          ...job.toObject(),
           isFavorite,
         };
       });
-      const isFavorite = job.favoriteCount.some(
-        (favorite) => favorite.userId.toString() === userId
-      );
+      
       return successJSONResponse(res, {
         message: `success`,
         total: responseModelCount,
