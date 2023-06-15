@@ -160,7 +160,7 @@ roomRentsSchema.virtual("favoriteCount", {
   });
   roomRentsSchema.virtual("isFavorite", {
     ref: "FavoriteAd",
-    localField: "_id",
+    localField: "userId",
     foreignField: "user",
     justOne: true,
     match: { userId: { $exists: true } },
