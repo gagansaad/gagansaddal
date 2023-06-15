@@ -80,7 +80,6 @@ exports.fetchOneDelete = async (req, res, next) => {
       if (records) {
           return successJSONResponse(res, {
               message: `success`,
-              records,
               status: 200,
           })
       } else {

@@ -74,7 +74,6 @@ const mongoose = require("mongoose"),
         if (records) {
             return successJSONResponse(res, {
                 message: `success`,
-                records,
                 status: 200,
             })
         } else {
