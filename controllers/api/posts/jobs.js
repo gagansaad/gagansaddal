@@ -754,7 +754,7 @@ exports.fetchAllAds = async (req, res, next) => {
           ...job._doc,
           // Add other job fields as needed
           favoriteCount: job.favoriteCount,
-          isFavorite:job.isFavorite? true : false,
+          isFavorite:job.isFavorite,
         };
       });
       return successJSONResponse(res, {
