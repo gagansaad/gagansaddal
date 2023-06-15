@@ -740,7 +740,7 @@ exports.fetchAllAds = async (req, res, next) => {
     let records = await postJobAd
       .find({ $or: [queryFinal] })
       .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "isFavorite", match: { user: userId }})
+      .populate({ path: 'isFavorite', select: 'user', match: { user: userId } })
       .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
       .limit(perPage);
@@ -754,7 +754,7 @@ exports.fetchAllAds = async (req, res, next) => {
           ...job._doc,
           // Add other job fields as needed
           favoriteCount: job.favoriteCount,
-          isFavorite:job.isFavorite? true : false,
+          isFavorite: !!job.isFavorite, 
         };
       });
       return successJSONResponse(res, {
