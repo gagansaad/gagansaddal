@@ -748,7 +748,7 @@ exports.fetchAllAds = async (req, res, next) => {
     });
    
     if (records) {
-      const jobData = jobs.map((job) => {
+      const jobData = records.map((job) => {
         return {
           _id: job._id,
           // Add other job fields as needed
