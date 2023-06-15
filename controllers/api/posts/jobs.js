@@ -724,7 +724,7 @@ exports.fetchAllAds = async (req, res, next) => {
     if (tagline) {
       dbQuery["adsInfo.tagline"] = tagline;
     }
-    if (userId) dbQuery.userId = userId;
+    if (req.userId) dbQuery.userId = userId;
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
