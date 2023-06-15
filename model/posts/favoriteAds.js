@@ -26,12 +26,7 @@ const favoriteAdSchema = new mongoose.Schema({
   },
 });
 
-favoriteAdSchema.virtual("favoritesCount", {
-  ref: "FavoriteAd",
-  localField: "ad",
-  foreignField: "ad",
-  count: true,
-});
+
 const FavoriteAd = mongoose.model("FavoriteAd", favoriteAdSchema);
 
 module.exports = FavoriteAd;
