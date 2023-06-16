@@ -681,7 +681,7 @@ console.log(queryFinal);
         status: 200, 
       });
     } else {
-      return failureJSONResponse(res, { message: `Room not Available` });
+      return failureJSONResponse(res, { message: `ads not Available` });
     }
   } catch (err) {
     console.log(err);
