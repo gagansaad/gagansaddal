@@ -704,7 +704,7 @@ exports.fetchonead = async (req, res, next) => {
       data_Obj = {
           _id:adsId,
           status :"active" ,
-          "plan_validity.expired_on" :{ $gte: currentDateOnly }
+          "plan_validity.expired_on" :{ $lte: currentDateOnly }
       }
     }
     let myid = req.userId
