@@ -22,6 +22,7 @@ const addPlanSchema = new mongoose.Schema({
     example_title:defaultStringConfig,
     example_description:defaultStringConfig,
     example_image:defaultStringConfig,
+    color_code:defaultStringConfig,
 }, { timestamps: true });
 
 module.exports = mongoose.model('plan_addons', addPlanSchema);

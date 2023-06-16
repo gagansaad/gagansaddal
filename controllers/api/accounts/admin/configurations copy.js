@@ -157,9 +157,10 @@ exports.create_adons=async(req, res)=>{
 exports.edit_adons=async(req, res)=>{
     try{
     const {
-        addons_id,
-        example_title,
-        example_desc,
+        // addons_id,
+        // example_title,
+        // example_desc,
+        color
     } = req.body;
    let dbQuery = {};
    let Images;
@@ -169,9 +170,10 @@ exports.edit_adons=async(req, res)=>{
     //   console.log(thumbnail);
       Images = await Media.create({ url:thumbnail });
   } 
-    if(example_title)dbQuery.example_title=example_title
-    if(example_desc)dbQuery.example_description=example_desc
-    if(Images)dbQuery.example_image=Images.url
+    // if(example_title)dbQuery.example_title=example_title
+    // if(example_desc)dbQuery.example_description=example_desc
+    // if(Images)dbQuery.example_image=Images.url
+    if(color)dbQuery.color_code=color
     // console.log(Images.url,"dnvhjjdfhjvdfjhb");
     let result = await addons_plan.findByIdAndUpdate({"_id":addons_id},{$set:dbQuery},{new:true})
     if(result){
