@@ -652,14 +652,24 @@ console.log(queryFinal);
     const responseModelCount = await RoomRentsAds.countDocuments({
       $or: [queryFinal],
     });
+   
+      
     if (records) {
+      const jobData = records.map((job) => {
+        return {
+          ...job._doc,
+          // Add other job fields as needed
+          favoriteCount: job.favoriteCount,
+          isFavorite: !!job.isFavorite, 
+        };
+      });
       return successJSONResponse(res, {
         message: `success`,
         total: responseModelCount,
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
-        records,
+        records:jobData,
         status: 200, 
       });
     } else {
@@ -675,7 +685,10 @@ exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
     
-    let records = await RoomRentsAds.findById({"_id": adsId });
+    let records = await RoomRentsAds.findById({"_id": adsId })
+    .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+    .populate({ path: "favoriteCount", select: "_id" })
+    .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
     const ads_type =records.adsType.toString();
     
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
@@ -693,9 +706,17 @@ exports.fetchonead = async (req, res, next) => {
       let data=  await PostViews.create(dbQuery)
       console.log(data,"billo ni tere kale kalle naina ");
       }
+      const jobData = records.map((job) => {
+        return {
+          ...job._doc,
+          // Add other job fields as needed
+          favoriteCount: job.favoriteCount,
+          isFavorite: !!job.isFavorite, 
+        };
+      });
       return successJSONResponse(res, {
         message: `success`,
-        ads_details: records,
+        ads_details: jobData,
         status: 200,
       });
     } else {
