@@ -627,8 +627,11 @@ if (isSmokingAllowed) dbQuery["adsInfo.isSmokingAllowed"] = isSmokingAllowed;
 if (isAlcoholAllowed) dbQuery["adsInfo.isAlcoholAllowed"] = isAlcoholAllowed;
 if (isPetFriendly) dbQuery["adsInfo.isPetFriendly"] = isPetFriendly;
 if (preferedGender) dbQuery["adsInfo.preferedGender"] = preferedGender;
+const currentDate = new Date();
+// Extract only the date part
+const currentDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
     dbQuery.status = "active";
-    dbQuery["plan_validity.expired_on"] = { $gt: new Date() };
+    dbQuery["plan_validity.expired_on"] = { $gte: currentDay };
     if (userId) dbQuery.userId = userId;
     let queryFinal = dbQuery;
     if (searchTerm) {
