@@ -166,4 +166,10 @@ bizAndServices.virtual("favoriteCount", {
         return { user: this.userId };
       },
   });
+  bizAndServices.virtual("viewCount", {
+    ref: "Post_view",
+    localField: "_id",
+    foreignField: "ad",
+    count: true,
+  });
 module.exports = mongoose.model('Local_biz & Service', bizAndServices);

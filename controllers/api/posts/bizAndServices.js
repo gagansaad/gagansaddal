@@ -934,6 +934,7 @@ exports.fetchAll = async (req, res, next) => {
       .find({ $or: [queryFinal] })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
       .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
@@ -946,6 +947,7 @@ exports.fetchAll = async (req, res, next) => {
         return {
           ...job._doc,
           // Add other job fields as needed
+          viewCount: records.viewCount,
           favoriteCount: job.favoriteCount,
           isFavorite: !!job.isFavorite, 
         };
@@ -967,21 +969,50 @@ exports.fetchAll = async (req, res, next) => {
   }
 };
 
+
+
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
-
-    let records = await postbizAndServicesAd.findById({ _id: adsId });
+    let myid = req.userId
+    let records = await postbizAndServicesAd.findById({"_id": adsId })
+    .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+    .populate({ path: "favoriteCount", select: "_id" })
+    .populate({ path: "viewCount" })
+    .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
+    const ads_type =records.adsType.toString();
+    
+    let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
+    console.log(Typename,"nfjdnfcjed");
+    let dbQuery ={
+      userId:myid,
+      ad:records._id,
+      adType:Typename
+    } 
+    
+     let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
+     console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
     if (records) {
+      if(!checkview){
+      let data=  await PostViews.create(dbQuery)
+      console.log(data,"billo ni tere kale kalle naina ");
+      }
+      const jobData = {
+        ...records._doc,
+        viewCount: records.viewCount,
+        favoriteCount: records.favoriteCount,
+        isFavorite: !!records.isFavorite
+      };
       return successJSONResponse(res, {
         message: `success`,
-        ads_details: records,
+        ads_details: jobData,
         status: 200,
       });
     } else {
       return failureJSONResponse(res, { message: `ad not Available` });
     }
   } catch (err) {
+    console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };

@@ -196,5 +196,11 @@ events_Schema.virtual("favoriteCount", {
         return { user: this.userId };
       },
   });
+  events_Schema.virtual("viewCount", {
+    ref: "Post_view",
+    localField: "_id",
+    foreignField: "ad",
+    count: true,
+  });
 module.exports = mongoose.model('event', events_Schema);
 

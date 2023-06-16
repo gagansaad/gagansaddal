@@ -369,7 +369,8 @@ const paymentSuccessModelUpdate = async (payment_id,userId) => {
   let AddOnsArr = []
   let currentDate = new Date()
   let activedate = currentDate.toISOString().split('T')[0]
-  let planDuration = await AdsPlan.findById({ "_id": plan_id }).select("duration")
+  let planDuration = await AdsPlan.findById({ "_id": plan_id })
+  console.log(planDuration,"kaali boli raat utto paiondi barsaat aake mainu mil sohniye  ");
   let plan_obj = {
     plan_id: planDuration._id.toString(),
     active_on: activedate,

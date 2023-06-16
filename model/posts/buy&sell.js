@@ -155,4 +155,10 @@ BuySellSchema.virtual("favoriteCount", {
         return { user: this.userId };
       },
   });
+  BuySellSchema.virtual("viewCount", {
+    ref: "Post_view",
+    localField: "_id",
+    foreignField: "ad",
+    count: true,
+  });
 module.exports = mongoose.model('Buy & Sell', BuySellSchema);

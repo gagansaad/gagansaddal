@@ -150,4 +150,10 @@ babysitter_Schema.virtual("favoriteCount", {
         return { user: this.userId };
       },
   });
+  babysitter_Schema.virtual("viewCount", {
+    ref: "Post_view",
+    localField: "_id",
+    foreignField: "ad",
+    count: true,
+  });
 module.exports = mongoose.model('babysitter & nannie', babysitter_Schema);
