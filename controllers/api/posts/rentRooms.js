@@ -710,7 +710,7 @@ exports.fetchonead = async (req, res, next) => {
       }
     }
     let myid = req.userId
-    let records = await RoomRentsAds.findById({$and: [data_Obj]})
+    let records = await RoomRentsAds.findById(data_Obj)
     .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
     .populate({ path: "favoriteCount", select: "_id" })
     .populate({ path: "viewCount" })
