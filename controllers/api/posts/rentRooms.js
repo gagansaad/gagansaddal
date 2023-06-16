@@ -687,9 +687,11 @@ exports.fetchonead = async (req, res, next) => {
     } 
     
      let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
+     console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
     if (records) {
       if(!checkview){
-        await PostViews.create(dbQuery)
+      let data=  await PostViews.create(dbQuery)
+      console.log(data,"billo ni tere kale kalle naina ");
       }
       return successJSONResponse(res, {
         message: `success`,
