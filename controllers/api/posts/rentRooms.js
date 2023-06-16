@@ -706,14 +706,19 @@ exports.fetchonead = async (req, res, next) => {
       let data=  await PostViews.create(dbQuery)
       console.log(data,"billo ni tere kale kalle naina ");
       }
-      const jobData = records.map((job) => {
-        return {
-          ...job._doc,
-          // Add other job fields as needed
-          favoriteCount: job.favoriteCount,
-          isFavorite: !!job.isFavorite, 
-        };
-      });
+      const jobData = {
+        ...records._doc,
+        favoriteCount: records.favoriteCount,
+        isFavorite: !!records.isFavorite
+      };
+      // const jobData = records.map((job) => {
+      //   return {
+      //     ...job._doc,
+      //     // Add other job fields as needed
+      //     favoriteCount: job.favoriteCount,
+      //     isFavorite: !!job.isFavorite, 
+      //   };
+      // });
       return successJSONResponse(res, {
         message: `success`,
         ads_details: jobData,
