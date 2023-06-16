@@ -713,7 +713,9 @@ exports.fetchonead = async (req, res, next) => {
     .populate({ path: "favoriteCount", select: "_id" })
     .populate({ path: "viewCount" })
     .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-    const ads_type =records.adsType.toString();
+    
+    if (records) {
+      const ads_type =records.adsType.toString();
     
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
     console.log(Typename,"nfjdnfcjed");
@@ -725,7 +727,6 @@ exports.fetchonead = async (req, res, next) => {
     
      let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
      console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
-    if (records) {
       if(!checkview){
       let data=  await PostViews.create(dbQuery)
       console.log(data,"billo ni tere kale kalle naina ");
