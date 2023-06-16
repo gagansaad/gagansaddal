@@ -702,11 +702,9 @@ exports.fetchonead = async (req, res, next) => {
      const currentDateOnly = currentISODate.substring(0, 10);
      if(adsId){
       data_Obj = {
-        $and:[
-          {_id:adsId},
-          {status :"active" },
-          {"plan_validity.expired_on" :{ $gte: currentDateOnly }}
-        ]
+          _id:adsId,
+          status :"active" ,
+          "plan_validity.expired_on" :{ $gte: currentDateOnly }
       }
     }
     let myid = req.userId
