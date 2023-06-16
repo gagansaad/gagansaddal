@@ -157,7 +157,7 @@ exports.create_adons=async(req, res)=>{
 exports.edit_adons=async(req, res)=>{
     try{
     const {
-        // addons_id,
+        addons_id,
         // example_title,
         // example_desc,
         color
