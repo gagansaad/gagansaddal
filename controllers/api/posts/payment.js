@@ -382,7 +382,7 @@ const paymentSuccessModelUpdate = async (payment_id,userId) => {
     let result = await AddOns.find({ "price._id": { $in: _id.toString() } }).select("name").exec();
     let name = result[0].name;
     return AddOnsArr.push({
-      add_ons_id: _id.toString(), name: name, amount: amount, duration: duration, currentDate:
+      add_ons_id: _id.toString(), name: name, amount: amount, expired_on: duration, active_on:
         currentDate.toISOString().split('T')[0]
     });
   }));
