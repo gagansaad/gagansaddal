@@ -2,6 +2,7 @@ const { json } = require("express");
 
 const mongoose = require("mongoose"),
   postBuySellAd = mongoose.model("Buy & Sell"),
+  PostViews = mongoose.model("Post_view"),
   Media = mongoose.model("media"),
   tagline_keywords = mongoose.model("keywords"),
   {

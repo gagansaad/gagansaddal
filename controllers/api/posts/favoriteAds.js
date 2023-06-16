@@ -15,6 +15,7 @@ const mongoose = require("mongoose"),
   {
     successJSONResponse,
     failureJSONResponse,
+    ModelNameByAdsType
   } = require(`../../../handlers/jsonResponseHandlers`),
   { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
@@ -45,16 +46,16 @@ exports.createFavoriteAd = async (req, res, next) => {
     console.log(dbQuery);
     try {
       let favoriteAd;
-      // let checkAlreadyexist = await FavoriteAd.findOne({ user: userId, ad: adId }).exec();
-      // if (checkAlreadyexist) {
+      let checkAlreadyexist = await FavoriteAd.findOne({ $and: [{ user: userId }, { ad: adId }] }).exec();
+      if (checkAlreadyexist) {
     
-        // favoriteAd = await FavoriteAd.findOneAndDelete(
-        //   {_id:checkAlreadyexist._id},
-        //   );
-      // } else {
+        favoriteAd = await FavoriteAd.findOneAndDelete(
+          {_id:checkAlreadyexist._id},
+          );
+      } else {
         favoriteAd = await FavoriteAd.create(dbQuery);
        
-      // }
+      }
       
       if (favoriteAd) {
         return successJSONResponse(res, { message: `success`, favoriteAd: favoriteAd });
@@ -68,42 +69,7 @@ exports.createFavoriteAd = async (req, res, next) => {
     
 }
 
-const ModelNameByAdsType = async (ads_type) => {
 
-  let findModelName = await category.findById({ "_id": ads_type})
-
-  let ModelName;
-let Typename;
-  switch (findModelName.name) {
-    case "Rentals":
-      Typename = "rental"
-      ModelName = roomrentAd
-      break;
-    case "Jobs":
-      Typename = "job"
-      ModelName = jobsAd
-      break;
-    case "Local Biz & Service":
-      Typename = "Local_biz & Service"
-      ModelName = bizAd
-      break;
-    case "Events":
-      Typename = "event"
-      ModelName = eventAd
-      break;
-    case "Buy & Sell":
-      Typename = "Buy & Sell"
-      ModelName = buysellAd
-      break;
-    case "Babysitters & Nannies":
-      Typename = "babysitter & nannie"
-      ModelName = babysitterAd
-      break;
-    default:
-      console.log(`Please provide valid ads id`);
-  }
-  return {ModelName,Typename};
-}
 
 
 

@@ -37,7 +37,41 @@ exports.successJSONResponse = (res = null, data = null, httpStatusCode = 200) =>
         });
     }
 }
+exports.ModelNameByAdsType = async (ads_type) => {
 
+    let findModelName = await category.findById({ "_id": ads_type})
+    let ModelName;
+  let Typename;
+    switch (findModelName.name) {
+      case "Rentals":
+        Typename = "rental"
+        ModelName = roomrentAd
+        break;
+      case "Jobs":
+        Typename = "job"
+        ModelName = jobsAd
+        break;
+      case "Local Biz & Service":
+        Typename = "Local_biz & Service"
+        ModelName = bizAd
+        break;
+      case "Events":
+        Typename = "event"
+        ModelName = eventAd
+        break;
+      case "Buy & Sell":
+        Typename = "Buy & Sell"
+        ModelName = buysellAd
+        break;
+      case "Babysitters & Nannies":
+        Typename = "babysitter & nannie"
+        ModelName = babysitterAd
+        break;
+      default:
+        console.log(`Please provide valid ads id`);
+    }
+    return {ModelName,Typename};
+  }
 exports.failureJSONResponse = (res = null, data = null, httpStatusCode = 400) => {
     if (res) {
         let httpStatusCodeToUse = 400;

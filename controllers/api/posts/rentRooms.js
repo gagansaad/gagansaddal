@@ -1,12 +1,14 @@
 const { json, query } = require("express");
 
-const mongoose = require("mongoose"),
+const {mongoose,ObjectId} = require("mongoose"),
   RoomRentsAds = mongoose.model("rental"),
+  PostViews = mongoose.model("Post_view"),
   Media = mongoose.model("media"),
   tagline_keywords = mongoose.model("keywords"),
   {
     successJSONResponse,
     failureJSONResponse,
+    ModelNameByAdsType
   } = require(`../../../handlers/jsonResponseHandlers`),
   { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
@@ -672,9 +674,22 @@ console.log(queryFinal);
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
-
-    let records = await RoomRentsAds.findById({ _id: adsId });
+    
+    let records = await RoomRentsAds.findById({"_id": adsId });
+    const ads_type =records.adsType.toString();
+    
+    let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
+    let dbQuery ={
+      userId:req.userId,
+      ad:records._id,
+      adType:Typename
+    } 
+    
+     let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
     if (records) {
+      if(!checkview){
+        await PostViews.create(dbQuery)
+      }
       return successJSONResponse(res, {
         message: `success`,
         ads_details: records,
@@ -684,6 +699,7 @@ exports.fetchonead = async (req, res, next) => {
       return failureJSONResponse(res, { message: `ad not Available` });
     }
   } catch (err) {
+    console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };

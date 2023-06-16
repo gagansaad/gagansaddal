@@ -1,6 +1,7 @@
 const { json } = require("express");
 const mongoose = require("mongoose"),
   postJobAd = mongoose.model("job"),
+  PostViews = mongoose.model("Post_view"),
   Media = mongoose.model("media"),
   tagline_keywords = mongoose.model("keywords"),
   {

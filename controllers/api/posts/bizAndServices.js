@@ -3,6 +3,7 @@ const { json } = require("express");
 const mongoose = require("mongoose"),
   Media = mongoose.model("media"),
   postbizAndServicesAd = mongoose.model("Local_biz & Service"),
+  PostViews = mongoose.model("Post_view"),
   tagline_keywords = mongoose.model("keywords"),
   {
     successJSONResponse,
