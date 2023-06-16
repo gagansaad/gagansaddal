@@ -919,6 +919,14 @@ exports.fetchAll = async (req, res, next) => {
     if (is_24_seven) {
       dbQuery["adsInfo.is_24_seven"] = is_24_seven;
     }
+     // Get the current date
+     const currentDate = new Date();
+     // Convert the date to ISO 8601 format
+     const currentISODate = currentDate.toISOString();
+     // Extract only the date portion
+     const currentDateOnly = currentISODate.substring(0, 10);
+     dbQuery.status = "active";
+     dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
@@ -974,25 +982,34 @@ exports.fetchAll = async (req, res, next) => {
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
+    
+     // Get the current date
+     const currentDate = new Date();
+     // Convert the date to ISO 8601 format
+     const currentISODate = currentDate.toISOString();
+     // Extract only the date portion
+     const currentDateOnly = currentISODate.substring(0, 10);
+     
     let myid = req.userId
     let records = await postbizAndServicesAd.findById({"_id": adsId })
     .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
     .populate({ path: "favoriteCount", select: "_id" })
     .populate({ path: "viewCount" })
     .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-    const ads_type =records.adsType.toString();
+   
+     if (records.status === "active" && records.plan_validity.expired_on >= currentDateOnly) {
+      const ads_type =records.adsType.toString();
     
-    let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(Typename,"nfjdnfcjed");
-    let dbQuery ={
-      userId:myid,
-      ad:records._id,
-      adType:Typename
-    } 
-    
-     let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
-     console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
-    if (records) {
+      let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
+      console.log(Typename,"nfjdnfcjed");
+      let dbQuery ={
+        userId:myid,
+        ad:records._id,
+        adType:Typename
+      } 
+      
+       let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
+       console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
       if(!checkview){
       let data=  await PostViews.create(dbQuery)
       console.log(data,"billo ni tere kale kalle naina ");

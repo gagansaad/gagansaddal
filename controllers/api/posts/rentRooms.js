@@ -692,8 +692,18 @@ console.log(queryFinal);
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
+    let data_Obj = {}
+    if(adsId)data_Obj._id = adsId;
+     // Get the current date
+     const currentDate = new Date();
+     // Convert the date to ISO 8601 format
+     const currentISODate = currentDate.toISOString();
+     // Extract only the date portion
+     const currentDateOnly = currentISODate.substring(0, 10);
+     data_Obj.status = "active";
+     data_Obj["plan_validity.expired_on"] = { $gte: currentDateOnly };
     let myid = req.userId
-    let records = await RoomRentsAds.findById({"_id": adsId })
+    let records = await RoomRentsAds.findById(data_Obj)
     .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
     .populate({ path: "favoriteCount", select: "_id" })
     .populate({ path: "viewCount" })
