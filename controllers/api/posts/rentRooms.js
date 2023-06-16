@@ -684,7 +684,7 @@ console.log(queryFinal);
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
-    
+    let myid = req.userId
     let records = await RoomRentsAds.findById({"_id": adsId })
     .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
     .populate({ path: "favoriteCount", select: "_id" })
@@ -694,7 +694,7 @@ exports.fetchonead = async (req, res, next) => {
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
     console.log(Typename,"nfjdnfcjed");
     let dbQuery ={
-      userId:req.userId,
+      userId:myid,
       ad:records._id,
       adType:Typename
     } 
