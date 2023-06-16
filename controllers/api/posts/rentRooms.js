@@ -628,7 +628,7 @@ if (isAlcoholAllowed) dbQuery["adsInfo.isAlcoholAllowed"] = isAlcoholAllowed;
 if (isPetFriendly) dbQuery["adsInfo.isPetFriendly"] = isPetFriendly;
 if (preferedGender) dbQuery["adsInfo.preferedGender"] = preferedGender;
     dbQuery.status = "active";
-    dbQuery["plan_validity.expire_on"] = { $gt: new Date() };
+    dbQuery["plan_validity.expired_on"] = { $gt: new Date() };
     if (userId) dbQuery.userId = userId;
     let queryFinal = dbQuery;
     if (searchTerm) {
