@@ -1,3 +1,15 @@
+const mongoose = require("mongoose"),
+  FavoriteAd = mongoose.model("FavoriteAd"),
+  eventAd = mongoose.model("event"),
+  bizAd = mongoose.model("Local_biz & Service"),
+  buysellAd = mongoose.model("Buy & Sell"),
+  babysitterAd = mongoose.model("babysitter & nannie"),
+  roomrentAd = mongoose.model("rental"),
+  jobsAd = mongoose.model("job"),
+  category = mongoose.model("PostType"),
+  Media = mongoose.model("media"),
+  tagline_keywords = mongoose.model("keywords")
+
 exports.successJSONResponseWithPagination = async (res, responseModel, OnPage, perPage = 10, dbquery, message = `Record found successfully`, data, httpStatusCode = 200) => {
     console.log(responseModel)
     if (res) {
