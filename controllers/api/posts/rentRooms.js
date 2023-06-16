@@ -688,6 +688,7 @@ exports.fetchonead = async (req, res, next) => {
     let records = await RoomRentsAds.findById({"_id": adsId })
     .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
     .populate({ path: "favoriteCount", select: "_id" })
+    .populate({ path: "Post_view" })
     .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
     const ads_type =records.adsType.toString();
     
@@ -711,14 +712,6 @@ exports.fetchonead = async (req, res, next) => {
         favoriteCount: records.favoriteCount,
         isFavorite: !!records.isFavorite
       };
-      // const jobData = records.map((job) => {
-      //   return {
-      //     ...job._doc,
-      //     // Add other job fields as needed
-      //     favoriteCount: job.favoriteCount,
-      //     isFavorite: !!job.isFavorite, 
-      //   };
-      // });
       return successJSONResponse(res, {
         message: `success`,
         ads_details: jobData,

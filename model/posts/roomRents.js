@@ -190,6 +190,12 @@ roomRentsSchema.virtual("favoriteCount", {
     foreignField: "ad",
     count: true,
   });
+  roomRentsSchema.virtual("viewCount", {
+    ref: "Post_view",
+    localField: "_id",
+    foreignField: "ad",
+    count: true,
+  });
   roomRentsSchema.virtual("isFavorite", {
     ref: "FavoriteAd",
     localField: "_id",

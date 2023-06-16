@@ -851,13 +851,21 @@ exports.fetchAll = async (req, res, next) => {
       $or: [queryFinal],
     });
     if (records) {
+        const jobData = records.map((job) => {
+          return {
+            ...job._doc,
+            // Add other job fields as needed
+            favoriteCount: job.favoriteCount,
+            isFavorite: !!job.isFavorite, 
+          };
+        });
       return successJSONResponse(res, {
         message: `success`,
         total: responseModelCount,
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
-        records,
+        records:jobData,
         status: 200,
       });
     } else {
