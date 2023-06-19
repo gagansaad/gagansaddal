@@ -654,6 +654,7 @@ console.log(queryFinal);
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
+      .populate({ path: "viewCount" })
       .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
       .limit(perPage);
@@ -667,6 +668,7 @@ console.log(queryFinal);
         return {
           ...job._doc,
           // Add other job fields as needed
+          viewCount: records.viewCount,
           favoriteCount: job.favoriteCount,
           isFavorite: !!job.isFavorite, 
         };
