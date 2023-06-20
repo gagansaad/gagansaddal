@@ -77,7 +77,7 @@ exports.validatepaymentData = async (req, res, next) => {
 const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeId, deviceType = null, user) => {
   let successUrl;
   let cancelUrl
-let UserId = dataobj.userx
+let UserId = dataobj.userId
   console.log(UserId,"bol ve channa bol");
   if (deviceType != null)
     dataobj.device_type = deviceType;
@@ -263,16 +263,6 @@ exports.create_payment_intent = async (req, res) => {
       paymentIntentClientSecret = await paymentIntentCreate(req, dataObj, totalprice, customerStripeId, deviceType);
       statusCode = 201;
     }
-    let link =req.body.website_url
-    console.log(link,"jasspreet di link aayi",req.body.postId);
-    let linkupdate
-    if(link){
-    linkupdate = await ModelName.findByIdAndUpdate({
-        '_id': req.body.postId,
-      },{$set:{website_url:link}},{upsert:true});
-      console.log(linkupdate,"kejdnjnjndjndjncjdncjdj");
-    }
-    
     return successJSONResponse(res, {
       status: statusCode,
       message: `success`,
@@ -380,7 +370,7 @@ const paymentSuccessModelUpdate = async (payment_id,userId) => {
   let currentDate = new Date()
   let activedate = currentDate.toISOString().split('T')[0]
   let planDuration = await AdsPlan.findById({ "_id": plan_id })
-  // console.log(planDuration,"kaali boli raat utto paiondi barsaat aake mainu mil sohniye  ");
+  console.log(planDuration,"kaali boli raat utto paiondi barsaat aake mainu mil sohniye  ");
   let plan_obj = {
     plan_id: planDuration._id.toString(),
     active_on: activedate,
