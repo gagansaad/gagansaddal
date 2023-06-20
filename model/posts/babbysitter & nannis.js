@@ -28,6 +28,9 @@ const babysitter_Schema = new mongoose.Schema({
     addons_validity:[{
         
     }],
+    website_url:{
+        ...defaultStringConfig,
+    },
     isfeatured: {
         type: Boolean,
         required: true,

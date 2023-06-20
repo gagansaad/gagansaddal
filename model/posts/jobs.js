@@ -25,6 +25,9 @@ const roomRentsSchema = new mongoose.Schema({
     addons_validity: [{
 
     }],
+    website_url:{
+        ...defaultStringConfig,
+    },
     is_featured: {
         value: {
             type: Boolean,

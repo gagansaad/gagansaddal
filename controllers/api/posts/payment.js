@@ -263,6 +263,12 @@ exports.create_payment_intent = async (req, res) => {
       paymentIntentClientSecret = await paymentIntentCreate(req, dataObj, totalprice, customerStripeId, deviceType);
       statusCode = 201;
     }
+    let link =req.body.website_url
+    if(req.body.website_url){
+      await ModelName.findByIdAndUpdate({
+        '_id': req.body.postId,
+      },{$set:{website_url:link}},{upsert:true},{new:true});
+    }
     return successJSONResponse(res, {
       status: statusCode,
       message: `success`,
@@ -370,7 +376,7 @@ const paymentSuccessModelUpdate = async (payment_id,userId) => {
   let currentDate = new Date()
   let activedate = currentDate.toISOString().split('T')[0]
   let planDuration = await AdsPlan.findById({ "_id": plan_id })
-  console.log(planDuration,"kaali boli raat utto paiondi barsaat aake mainu mil sohniye  ");
+  // console.log(planDuration,"kaali boli raat utto paiondi barsaat aake mainu mil sohniye  ");
   let plan_obj = {
     plan_id: planDuration._id.toString(),
     active_on: activedate,
