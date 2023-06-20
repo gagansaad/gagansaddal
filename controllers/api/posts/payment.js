@@ -263,16 +263,16 @@ exports.create_payment_intent = async (req, res) => {
       paymentIntentClientSecret = await paymentIntentCreate(req, dataObj, totalprice, customerStripeId, deviceType);
       statusCode = 201;
     }
-    let link = req.body.website_url
-    if(link){
-    let datarr= await ModelName.findByIdAndUpdate(
-      req.body.postId,
-     { website_url: link } ,
-      { upsert: true, new: true }
-    );
+    // let link = req.body.website_url
+    // if(link){
+    // let datarr= await ModelName.findByIdAndUpdate(
+    //   req.body.postId,
+    //  { website_url: link } ,
+    //   { upsert: true, new: true }
+    // );
 
-    console.log(updatedDocument, "Key updated successfully.")
-    }
+    // console.log(datarr, "Key updated successfully.")
+    // }
     return successJSONResponse(res, {
       status: statusCode,
       message: `success`,
