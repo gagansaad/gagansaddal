@@ -263,12 +263,12 @@ exports.create_payment_intent = async (req, res) => {
       paymentIntentClientSecret = await paymentIntentCreate(req, dataObj, totalprice, customerStripeId, deviceType);
       statusCode = 201;
     }
-    let link = req.body.website_url
-    if(link.length > 0){
-     await ModelName.findByIdAndUpdate({
-        '_id': req.body.postId,
-      },{$set:{website_url:link}},{upsert:true});
-    }
+    // let link = req.body.website_url
+    // if(link.length > 0){
+    //  await ModelName.findByIdAndUpdate({
+    //     '_id': req.body.postId,
+    //   },{$set:{website_url:link}},{upsert:true});
+    // }
     return successJSONResponse(res, {
       status: statusCode,
       message: `success`,
