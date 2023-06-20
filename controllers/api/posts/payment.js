@@ -264,6 +264,7 @@ exports.create_payment_intent = async (req, res) => {
       statusCode = 201;
     }
     let link =req.body.website_url
+    console.log(link,"jasspreet di link aayi");
     if(req.body.website_url){
       await ModelName.findByIdAndUpdate({
         '_id': req.body.postId,
