@@ -265,11 +265,13 @@ exports.create_payment_intent = async (req, res) => {
     }
     let link =req.body.website_url
     console.log(link,"jasspreet di link aayi",req.body.postId);
-    if(req.body.website_url){
-      await ModelName.findByIdAndUpdate({
+    let linkupdate
+    if(link){
+    linkupdate = await ModelName.findByIdAndUpdate({
         '_id': req.body.postId,
       },{$set:{website_url:link}},{upsert:true});
     }
+    console.log(linkupdate,"kejdnjnjndjndjncjdncjdj");
     return successJSONResponse(res, {
       status: statusCode,
       message: `success`,
