@@ -265,10 +265,13 @@ exports.create_payment_intent = async (req, res) => {
     }
     let link = req.body.website_url
     if(link){
-    let datarr= await ModelName.findByIdAndUpdate({
-        '_id': req.body.postId,
-      },{$set:{website_url:link}},{upsert:true});
-      console.log(datarr,"wenga lelo wanga");
+    let datarr= await ModelName.findByIdAndUpdate(
+      req.body.postId,
+      { $set: { website_url: link } },
+      { upsert: true, new: true }
+    );
+
+    console.log(datarr, "Key updated successfully.")
     }
     return successJSONResponse(res, {
       status: statusCode,
