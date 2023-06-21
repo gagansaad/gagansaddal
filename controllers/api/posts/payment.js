@@ -270,7 +270,6 @@ exports.create_payment_intent = async (req, res) => {
      { website_url: link } ,
       { upsert: true, new: true }
     );
-
     console.log(datarr, "Key updated successfully.")
     }
     return successJSONResponse(res, {
@@ -281,7 +280,7 @@ exports.create_payment_intent = async (req, res) => {
     }, statusCode)
 
   } catch (error) {
-    console.log(error, "bbooklakituramu");
+    console.log("vdvdvdvvvvdvvvdvdvdvdvdvdvdvdvd",error, "bbooklakituramu");
     return failureJSONResponse(res, {
       message: `Something went wrong`,
       error: error.message
