@@ -192,6 +192,7 @@ exports.create_payment_intent = async (req, res) => {
 
     //-----find add ons -----//
     let totalprice = plan_price
+     console.log(totalprice,"arraya ", addonsId, "aala kala bala tala mala ola yala uala pala nala mala vala cala xala zala");
     if (addonsId.length) {
       if (!Array.isArray(req.body.add_ons)) {
         addonsId = JSON.parse(req.body.add_ons);
