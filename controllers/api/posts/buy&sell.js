@@ -548,10 +548,10 @@ exports.validateBuySellAdsData = async (req, res, next) => {
     //  else if (!isValidBoolean(negotiable)) return failureJSONResponse(res, { message: `Please provide boolean value for negotiable` });
     // if (!isValidString(payment_mode))
     //   return failureJSONResponse(res, { message: `please provide valid payment mode` });
-    if (!isValidString(fullfilment))
-      return failureJSONResponse(res, {
-        message: `please provide valid fullfilment`,
-      });
+    // if (!isValidString(fullfilment))
+    //   return failureJSONResponse(res, {
+    //     message: `please provide valid fullfilment`,
+    //   });
 
     if (!isValidString(location))
       return failureJSONResponse(res, {
