@@ -947,7 +947,7 @@ exports.fetchAll = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
       .limit(perPage);
-    const responseModelCount = await eventAd.countDocuments({
+    const responseModelCount = await postbizAndServicesAd.countDocuments({
       $or: [queryFinal],
     });
     if (records) {

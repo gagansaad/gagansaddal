@@ -1050,7 +1050,7 @@ exports.fetchAll = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
       .limit(perPage);
-    const responseModelCount = await eventAd.countDocuments({
+    const responseModelCount = await postBuySellAd.countDocuments({
       $or: [queryFinal],
     });
     if (records) {
@@ -1076,6 +1076,7 @@ exports.fetchAll = async (req, res, next) => {
       return failureJSONResponse(res, { message: `ads not Available` });
     }
   } catch (err) {
+    console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
