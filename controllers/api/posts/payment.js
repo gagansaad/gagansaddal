@@ -201,6 +201,7 @@ exports.create_payment_intent = async (req, res) => {
       addonsId.forEach((targetId) => {
         result.forEach((item) => {
           const priceArray = item.price;
+          console.log(priceArray,"mai kmli yaar di kamli ");
           const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
           if (foundObj) {
             foundObjects.push(foundObj);
@@ -208,7 +209,7 @@ exports.create_payment_intent = async (req, res) => {
         });
       });
 
-      // console.log(foundObjects, "hhhhhjjjjjj00000");
+      console.log(foundObjects, "hhhhhjjjjjj00000");
       const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
       totalprice = plan_price + totalAmount;
     }
