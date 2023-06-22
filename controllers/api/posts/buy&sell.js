@@ -638,7 +638,7 @@ exports.createBuySellAds = async (req, res, next) => {
     } = req.body;
 
     // let data =JSON.stringify(payment_mode)
-    console.log(tagline, "jncdncjdncjdndjcndjn xcmnj bjxjcnk");
+    console.log(fullfilment, "jncdncjdncjdndjcndjn xcmnj bjxjcnk");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -1029,7 +1029,7 @@ exports.fetchAll = async (req, res, next) => {
      const currentDateOnly = currentISODate.substring(0, 10);
      dbQuery.status = "active";
      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-console.log(dbQuery);
+
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
