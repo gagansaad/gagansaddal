@@ -127,6 +127,7 @@ let UserId = dataobj.user
       success_url: successUrl,
       cancel_url: cancelUrl,
     });
+    console.log("eh chaalu hoya");
   } else {
     paymentIntent = await stripe.paymentIntents.create({
       amount: (totalprice.toFixed(2) * 100).toFixed(0),
@@ -139,6 +140,7 @@ let UserId = dataobj.user
         'card',
       ]
     });
+    console.log("po po po po po ki ku ka ll oii cc bd yf jg nv");
   }
 
   await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
@@ -236,7 +238,7 @@ exports.create_payment_intent = async (req, res) => {
       payment_status: "pending",
       device_type: deviceType,
     });
-    // console.log();
+    console.log(paymentModelInfo ,"baabu laal ki shadi hai");
 
     let paymentIntentClientSecret = null;
     let statusCode = 200
@@ -245,11 +247,13 @@ exports.create_payment_intent = async (req, res) => {
       //payment intene
       let dataObj = { plan_id: planId, plan_addons: foundObjects, plan_price: plan_price, total_amount: JSON.parse(totalprice.toFixed(2)), ads: req.body.postId, ads_type: adstype, user: userID, payment_status: "pending" };
       paymentIntentClientSecret = await paymentIntentCreate(req, dataObj, totalprice, customerStripeId, deviceType);
+      console.log(paymentIntentClientSecret,"gaare vich panmi paa meh aaya hai tuudi ,lai lao miti bna lao");
       statusCode = 201;
     } else if (paymentModelInfo.total_amount != totalprice) {
       let dataObj = { plan_id: planId, plan_addons: foundObjects, plan_price: plan_price, total_amount: JSON.parse(totalprice.toFixed(2)), ads: req.body.postId, ads_type: adstype, user: userID, payment_status: "pending" };
       statusCode = 201;
       paymentIntentClientSecret = await paymentIntentCreate(req, dataObj, totalprice, customerStripeId, deviceType);
+      console.log(paymentIntentClientSecret,"gaare vich panmilao miti bna lao");
     } else {
       if (deviceType == 'web') {
         paymentIntentClientSecret = paymentModelInfo.payment_intent.url;
