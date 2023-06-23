@@ -358,6 +358,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
   console.log(dataObj, "jdnjd");
   const newRoomRentPost = await RoomRentsAds.create(dataObj);
   const stringToHash = newRoomRentPost._id.toString();
+  console.log(stringToHash,"hbvhjd xb hdbhd vhdb hnd  ddb nhd nhdb nd  b cn dn n",newRoomRentPost._id);
   const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
   const truncatedHash = hash.slice(0, 10);
   const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
