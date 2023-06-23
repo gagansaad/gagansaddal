@@ -358,7 +358,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
   console.log(dataObj, "jdnjd");
   const newRoomRentPost = await RoomRentsAds.create(dataObj);
   const inputString = newRoomRentPost._id;
-const numbersOnly = inputString.replace(/\D/g, "");
+const numbersOnly = await inputString.replace(/\D/g, "");
 console.log(numbersOnly);
 
   // let hahyekalu = await ModelName.findByIdAndUpdate({_id:newRoomRentPost._id},{$set:{}})
