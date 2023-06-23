@@ -340,7 +340,7 @@ exports.createJobAds = async (req, res, next) => {
       image,
       video,
     } = req.body;
-    let ModelName = await (await ModelNameByAdsType(adsType)).ModelName
+    let ModelName = await ModelNameByAdsType(adsType).ModelName
     console.log(req.body, "nhvdfhbvu");
     let taglines = tagline;
     if (taglines) {

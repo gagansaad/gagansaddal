@@ -637,7 +637,7 @@ exports.createBuySellAds = async (req, res, next) => {
       video_link,
       image,
     } = req.body;
-    let ModelName = await (await ModelNameByAdsType(ads_type)).ModelName
+    let ModelName = await ModelNameByAdsType(ads_type).ModelName
     // let data =JSON.stringify(payment_mode)
     console.log(fullfilment, "jncdncjdncjdndjcndjn xcmnj bjxjcnk");
     let taglines = tagline;

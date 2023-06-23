@@ -421,7 +421,8 @@ exports.createbizAds = async (req, res, next) => {
       image,
       video_link,
     } = req.body;
-    let ModelName = await (await ModelNameByAdsType(adsType)).ModelName
+
+    let ModelName = await ModelNameByAdsType(adsType).ModelName
     const userId = req.userId;
 
     let working_hour;

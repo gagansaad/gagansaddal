@@ -274,7 +274,7 @@ exports.createAds = async (req, res, next) => {
       tagline,
       image,
     } = req.body;
-    let ModelName = await (await ModelNameByAdsType(ads_type)).ModelName
+    let ModelName = await ModelNameByAdsType(ads_type).ModelName
     console.log(req.body);
     const userId = req.userId;
     const imageArr = [];

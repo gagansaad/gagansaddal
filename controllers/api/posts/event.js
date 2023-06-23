@@ -361,7 +361,7 @@ exports.createEventAds = async (req, res, next) => {
       other_platform,
       other_platform_name,
     } = req.body;
-    let ModelName = await (await ModelNameByAdsType(adsType)).ModelName
+    let ModelName = await ModelNameByAdsType(adsType).ModelName
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
