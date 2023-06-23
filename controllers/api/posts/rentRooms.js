@@ -363,7 +363,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
   const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
   let ad_Id = numericHash.toString().padStart(10, '0') 
 
- await ModelName.findByIdAndUpdate({_id:newRoomRentPost._id},{$set:{advertisementId:ad_Id}})
+ await ModelName.findByIdAndUpdate({_id:newRoomRentPost._id},{$set:{advertisement_id:ad_Id}})
   // console.log(hahyekalu,"dkvjdvdvjds jdfnmv jdfm nmdsvj mfj m  mj fdj mn vfm ");
   const roomtRentObjToSend = {};
 
