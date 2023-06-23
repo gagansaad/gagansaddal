@@ -142,7 +142,7 @@ exports.create_adons = async (req, res) => {
 
 exports.edit_adons = async (req, res) => {
   try {
-    const { addons_id, example_title, example_desc, color } = req.body;
+    const { addons_id, example_title, example_desc, color,description } = req.body;
     let dbQuery = {};
     let Images;
     //    console.log(req.file);
@@ -155,6 +155,7 @@ exports.edit_adons = async (req, res) => {
     if (example_desc) dbQuery.example_description = example_desc;
     if (Images) dbQuery.example_image = Images.url;
     if (color) dbQuery.color_code = color;
+    if(description)dbQuery.description = description;
     // console.log(Images.url,"dnvhjjdfhjvdfjhb");
     let result = await addons_plan.findByIdAndUpdate(
       { _id: addons_id },

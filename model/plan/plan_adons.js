@@ -19,6 +19,7 @@ const addPlanSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: `plan`,
     },
+    description:defaultStringConfig,
     example_title:defaultStringConfig,
     example_description:defaultStringConfig,
     example_image:defaultStringConfig,
