@@ -576,7 +576,7 @@ exports.createbizAds = async (req, res, next) => {
     const truncatedHash = hash.slice(0, 10);
     const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
     let ad_Id = numericHash.toString().padStart(10, '0') 
-  
+  console.log(newbizPost);
    await ModelName.findByIdAndUpdate({_id:newbizPost._id},{$set:{advertisement_id:ad_Id}})
     
     const bizAndServices = {};
