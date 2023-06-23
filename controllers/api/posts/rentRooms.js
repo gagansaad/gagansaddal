@@ -358,7 +358,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
   console.log(dataObj, "jdnjd");
   const newRoomRentPost = await RoomRentsAds.create(dataObj);
   console.log(newRoomRentPost._id,"vtvtfrvvrv");
-  const inputString = newRoomRentPost._id;
+  const inputString = newRoomRentPost._id.toString();;
 const numbersOnly = await inputString.replace(/\D/g, "");
 console.log(numbersOnly);
 
