@@ -377,7 +377,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
       roomtRentObjToSend[key] = newRoomRentPost[key];
     }
   }
-
+console.log(roomtRentObjToSend);
   return successJSONResponse(res, {
     message: `success`,
     roomtRentObjToSend,
