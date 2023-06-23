@@ -1,5 +1,5 @@
 const { json } = require("express");
-
+const crypto = require('crypto');
 const mongoose = require("mongoose"),
   postBuySellAd = mongoose.model("Buy & Sell"),
   PostViews = mongoose.model("Post_view"),
@@ -637,7 +637,7 @@ exports.createBuySellAds = async (req, res, next) => {
       video_link,
       image,
     } = req.body;
-
+    let ModelName = await (await ModelNameByAdsType(ads_type)).ModelName
     // let data =JSON.stringify(payment_mode)
     console.log(fullfilment, "jncdncjdncjdndjcndjn xcmnj bjxjcnk");
     let taglines = tagline;
@@ -707,7 +707,13 @@ exports.createBuySellAds = async (req, res, next) => {
     };
 
     const newBuySellPost = await postBuySellAd.create(dataObj);
-
+    const stringToHash = newBuySellPost._id.toString();
+    const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
+    const truncatedHash = hash.slice(0, 10);
+    const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
+    let ad_Id = numericHash.toString().padStart(10, '0') 
+  
+   await ModelName.findByIdAndUpdate({_id:newBuySellPost._id},{$set:{advertisement_id:ad_Id}})
     const postBuySellAdObjToSend = {};
 
     for (let key in newBuySellPost.toObject()) {

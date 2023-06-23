@@ -1,5 +1,5 @@
 const { json } = require("express");
-
+const crypto = require('crypto');
 const mongoose = require("mongoose"),
   postbabyAd = mongoose.model("babysitter & nannie"),
   PostViews = mongoose.model("Post_view"),
@@ -274,6 +274,7 @@ exports.createAds = async (req, res, next) => {
       tagline,
       image,
     } = req.body;
+    let ModelName = await (await ModelNameByAdsType(ads_type)).ModelName
     console.log(req.body);
     const userId = req.userId;
     const imageArr = [];
@@ -329,7 +330,13 @@ exports.createAds = async (req, res, next) => {
     };
     console.log(dataObj, "vhebjvbdsgjvhbesdvgbedhcvwsehjcbsdbvjhyudsbvghr");
     const newPost = await postbabyAd.create(dataObj);
-
+    const stringToHash = newPost._id.toString();
+    const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
+    const truncatedHash = hash.slice(0, 10);
+    const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
+    let ad_Id = numericHash.toString().padStart(10, '0') 
+  
+   await ModelName.findByIdAndUpdate({_id:newPost._id},{$set:{advertisement_id:ad_Id}})
     const Babysitter_Nannies = {};
 
     for (let key in newPost.toObject()) {

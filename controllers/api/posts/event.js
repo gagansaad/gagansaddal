@@ -1,5 +1,5 @@
 const { json } = require("express");
-
+const crypto = require('crypto');
 const mongoose = require("mongoose"),
   eventAd = mongoose.model("event"),
   Media = mongoose.model("media"),
@@ -361,7 +361,7 @@ exports.createEventAds = async (req, res, next) => {
       other_platform,
       other_platform_name,
     } = req.body;
-
+    let ModelName = await (await ModelNameByAdsType(adsType)).ModelName
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -472,7 +472,13 @@ exports.createEventAds = async (req, res, next) => {
     };
 
     const newEventPost = await eventAd.create(dataObj);
-
+    const stringToHash = newEventPost._id.toString();
+    const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
+    const truncatedHash = hash.slice(0, 10);
+    const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
+    let ad_Id = numericHash.toString().padStart(10, '0') 
+  
+   await ModelName.findByIdAndUpdate({_id:newEventPost._id},{$set:{advertisement_id:ad_Id}})
     const postEventAdObjToSend = {};
 
     for (let key in newEventPost.toObject()) {

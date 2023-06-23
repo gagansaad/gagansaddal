@@ -17,6 +17,7 @@ const roomRentsSchema = new mongoose.Schema({
         required: true,
         default: "draft"
     },
+    advertisement_id:defaultStringConfig,
     plan_validity: {
         plan_id: { type: String, trim: true },
         active_on: { type: String, trim: true },

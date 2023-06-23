@@ -1,4 +1,5 @@
 const { json } = require("express");
+const crypto = require('crypto');
 const mongoose = require("mongoose"),
   postJobAd = mongoose.model("job"),
   PostViews = mongoose.model("Post_view"),
@@ -339,6 +340,7 @@ exports.createJobAds = async (req, res, next) => {
       image,
       video,
     } = req.body;
+    let ModelName = await (await ModelNameByAdsType(adsType)).ModelName
     console.log(req.body, "nhvdfhbvu");
     let taglines = tagline;
     if (taglines) {
@@ -397,7 +399,13 @@ exports.createJobAds = async (req, res, next) => {
     };
 
     const newJobPost = await postJobAd.create(dataObj);
-
+    const stringToHash = newJobPost._id.toString();
+    const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
+    const truncatedHash = hash.slice(0, 10);
+    const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
+    let ad_Id = numericHash.toString().padStart(10, '0') 
+  
+   await ModelName.findByIdAndUpdate({_id:newJobPost._id},{$set:{advertisement_id:ad_Id}})
     const postJobAdObjToSend = {};
 
     for (let key in newJobPost.toObject()) {

@@ -1,5 +1,5 @@
 const { json } = require("express");
-
+const crypto = require('crypto');
 const mongoose = require("mongoose"),
   Media = mongoose.model("media"),
   postbizAndServicesAd = mongoose.model("Local_biz & Service"),
@@ -421,6 +421,7 @@ exports.createbizAds = async (req, res, next) => {
       image,
       video_link,
     } = req.body;
+    let ModelName = await (await ModelNameByAdsType(adsType)).ModelName
     const userId = req.userId;
 
     let working_hour;
@@ -570,7 +571,14 @@ exports.createbizAds = async (req, res, next) => {
     };
 
     const newbizPost = await postbizAndServicesAd.create(dataObj);
-    console.log(newbizPost);
+    const stringToHash = newbizPost._id.toString();
+    const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
+    const truncatedHash = hash.slice(0, 10);
+    const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
+    let ad_Id = numericHash.toString().padStart(10, '0') 
+  
+   await ModelName.findByIdAndUpdate({_id:newbizPost._id},{$set:{advertisement_id:ad_Id}})
+    
     const bizAndServices = {};
 
     for (let key in newbizPost.toObject()) {

@@ -21,6 +21,7 @@ const bizAndServices = new mongoose.Schema({
         //2 = inactive
         //3 = draft 
     },
+    advertisement_id:defaultStringConfig,
     plan_validity:{
         plan_id:{type: String,trim:true},
         active_on:{type:String,trim:true},
