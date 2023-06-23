@@ -249,7 +249,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     location,
     tagline,
   } = req.body;
-  let ModelName = await ModelNameByAdsType(adsType)
+  let ModelName = await (await ModelNameByAdsType(adsType)).ModelName
   console.log(ModelName,"vbdfhndnv jdnvjdncjndjcdjcmdjn dj jdn jd j jdn jd cjndcj dnnjc dxjcj dxnn jc cnjc bjn cn");
   let taglines = tagline;
   if (taglines) {
