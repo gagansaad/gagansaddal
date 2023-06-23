@@ -8,6 +8,7 @@ const mongoose = require("mongoose"),
   {
     successJSONResponse,
     failureJSONResponse,
+    ModelNameByAdsType,
   } = require(`../../../handlers/jsonResponseHandlers`),
   { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {

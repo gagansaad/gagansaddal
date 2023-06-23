@@ -192,17 +192,15 @@ exports.create_payment_intent = async (req, res) => {
 
     //-----find add ons -----//
     let totalprice = plan_price
-     console.log(totalprice,"arraya ", addonsId, "aala kala bala tala mala ola yala uala pala nala mala vala cala xala zala");
+    //  console.log(totalprice,"arraya ", addonsId, "aala kala bala tala mala ola yala uala pala nala mala vala cala xala zala");
     if (addonsId.length) {
       if (!Array.isArray(req.body.add_ons)) {
         addonsId = JSON.parse(req.body.add_ons);
       }
       let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
-      console.log(result,"vdkvmdvjdvjnv");
       addonsId.forEach((targetId) => {
         result.forEach((item) => {
           const priceArray = item.price;
-          console.log(item.price,"mai kmli yaar di kamli ");
           const foundObj = priceArray.find((priceObj) => priceObj._id == targetId);
           if (foundObj) {
             foundObjects.push(foundObj);
@@ -241,7 +239,6 @@ exports.create_payment_intent = async (req, res) => {
       payment_status: "pending",
       device_type: deviceType,
     });
-    console.log(paymentModelInfo ,"baabu laal ki shadi hai");
 
     let paymentIntentClientSecret = null;
     let statusCode = 200
@@ -250,13 +247,11 @@ exports.create_payment_intent = async (req, res) => {
       //payment intene
       let dataObj = { plan_id: planId, plan_addons: foundObjects, plan_price: plan_price, total_amount: JSON.parse(totalprice.toFixed(2)), ads: req.body.postId, ads_type: adstype, user: userID, payment_status: "pending" };
       paymentIntentClientSecret = await paymentIntentCreate(req, dataObj, totalprice, customerStripeId, deviceType);
-      console.log(paymentIntentClientSecret,"gaare vich panmi paa meh aaya hai tuudi ,lai lao miti bna lao");
       statusCode = 201;
     } else if (paymentModelInfo.total_amount != totalprice) {
       let dataObj = { plan_id: planId, plan_addons: foundObjects, plan_price: plan_price, total_amount: JSON.parse(totalprice.toFixed(2)), ads: req.body.postId, ads_type: adstype, user: userID, payment_status: "pending" };
       statusCode = 201;
       paymentIntentClientSecret = await paymentIntentCreate(req, dataObj, totalprice, customerStripeId, deviceType);
-      console.log(paymentIntentClientSecret,"gaare vich panmilao miti bna lao");
     } else {
       if (deviceType == 'web') {
         paymentIntentClientSecret = paymentModelInfo.payment_intent.url;

@@ -1,6 +1,6 @@
 const { json, query } = require("express");
 
-const {mongoose,ObjectId} = require("mongoose"),
+const {mongoose,ObjectId, modelNames} = require("mongoose"),
   RoomRentsAds = mongoose.model("rental"),
   PostViews = mongoose.model("Post_view"),
   Media = mongoose.model("media"),
@@ -249,7 +249,8 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     location,
     tagline,
   } = req.body;
-  console.log(tagline, "tagggggggggggg");
+  let ModelName = await ModelNameByAdsType(adsType)
+  console.log(ModelName,"vbdfhndnv jdnvjdncjndjcdjcmdjn dj jdn jd j jdn jd cjndcj dnnjc dxjcj dxnn jc cnjc bjn cn");
   let taglines = tagline;
   if (taglines) {
     for (i = 0; i < taglines.length; i++) {
