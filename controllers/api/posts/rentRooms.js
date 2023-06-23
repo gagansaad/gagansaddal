@@ -360,7 +360,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
   console.log(newRoomRentPost._id,"vtvtfrvvrv");
   // const inputString = 
   const stringToHash = newRoomRentPost._id.toString();
-  const hash = crypto.createHash('sha256').update(stringToHash).digest('hex');
+  const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
   const truncatedHash = hash.slice(0, 10);
   const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
   let ad_Id = numericHash.toString().padStart(10, '0') 

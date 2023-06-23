@@ -19,6 +19,7 @@ const roomRentsSchema = new mongoose.Schema({
         //2 = inactive
         //3 = draft 
     },
+    ad_id:defaultStringConfig,
     plan_validity: {
         plan_id: { type: String, trim: true },
         active_on: { type: String, trim: true },
