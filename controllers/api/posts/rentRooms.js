@@ -357,15 +357,13 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
   };
   console.log(dataObj, "jdnjd");
   const newRoomRentPost = await RoomRentsAds.create(dataObj);
-  console.log(newRoomRentPost._id,"vtvtfrvvrv");
-  // const inputString = 
   const stringToHash = newRoomRentPost._id.toString();
   const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
   const truncatedHash = hash.slice(0, 10);
   const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
   let ad_Id = numericHash.toString().padStart(10, '0') 
 
- await ModelName.findByIdAndUpdate({_id:newRoomRentPost._id},{$set:{ad_id:ad_Id}})
+ await ModelName.findByIdAndUpdate({_id:newRoomRentPost._id},{$set:{advertisementId:ad_Id}})
   // console.log(hahyekalu,"dkvjdvdvjds jdfnmv jdfm nmdsvj mfj m  mj fdj mn vfm ");
   const roomtRentObjToSend = {};
 
