@@ -249,8 +249,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     location,
     tagline,
   } = req.body;
-  let ModelName = await ModelNameByAdsType(adsType).ModelName
-  console.log(ModelName,"vbdfhndnv jdnvjdncjndjcdjcmdjn dj jdn jd j jdn jd cjndcj dnnjc dxjcj dxnn jc cnjc bjn cn");
+  
   let taglines = tagline;
   if (taglines) {
     for (i = 0; i < taglines.length; i++) {
@@ -364,7 +363,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
   const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
   let ad_Id = numericHash.toString().padStart(10, '0') 
 
- await ModelName.findByIdAndUpdate({_id:newRoomRentPost._id},{$set:{advertisement_id:ad_Id}})
+ await RoomRentsAds.findByIdAndUpdate({_id:newRoomRentPost._id},{$set:{advertisement_id:ad_Id}})
   // console.log(hahyekalu,"dkvjdvdvjds jdfnmv jdfm nmdsvj mfj m  mj fdj mn vfm ");
   const roomtRentObjToSend = {};
 

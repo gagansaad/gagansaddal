@@ -361,7 +361,6 @@ exports.createEventAds = async (req, res, next) => {
       other_platform,
       other_platform_name,
     } = req.body;
-    let ModelName = await ModelNameByAdsType(adsType).ModelName
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -478,7 +477,7 @@ exports.createEventAds = async (req, res, next) => {
     const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
     let ad_Id = numericHash.toString().padStart(10, '0') 
   
-   await ModelName.findByIdAndUpdate({_id:newEventPost._id},{$set:{advertisement_id:ad_Id}})
+   await eventAd.findByIdAndUpdate({_id:newEventPost._id},{$set:{advertisement_id:ad_Id}})
     const postEventAdObjToSend = {};
 
     for (let key in newEventPost.toObject()) {

@@ -274,7 +274,6 @@ exports.createAds = async (req, res, next) => {
       tagline,
       image,
     } = req.body;
-    let ModelName = await ModelNameByAdsType(ads_type).ModelName
     console.log(req.body);
     const userId = req.userId;
     const imageArr = [];
@@ -336,7 +335,7 @@ exports.createAds = async (req, res, next) => {
     const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
     let ad_Id = numericHash.toString().padStart(10, '0') 
   
-   await ModelName.findByIdAndUpdate({_id:newPost._id},{$set:{advertisement_id:ad_Id}})
+   await postbabyAd.findByIdAndUpdate({_id:newPost._id},{$set:{advertisement_id:ad_Id}})
     const Babysitter_Nannies = {};
 
     for (let key in newPost.toObject()) {

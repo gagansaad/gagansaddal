@@ -340,8 +340,7 @@ exports.createJobAds = async (req, res, next) => {
       image,
       video,
     } = req.body;
-    let ModelName = await ModelNameByAdsType(adsType).ModelName
-    console.log(req.body, "nhvdfhbvu");
+  
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -405,7 +404,7 @@ exports.createJobAds = async (req, res, next) => {
     const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
     let ad_Id = numericHash.toString().padStart(10, '0') 
   
-   await ModelName.findByIdAndUpdate({_id:newJobPost._id},{$set:{advertisement_id:ad_Id}})
+   await postJobAd.findByIdAndUpdate({_id:newJobPost._id},{$set:{advertisement_id:ad_Id}})
     const postJobAdObjToSend = {};
 
     for (let key in newJobPost.toObject()) {
