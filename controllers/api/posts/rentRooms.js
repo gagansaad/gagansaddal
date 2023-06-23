@@ -357,8 +357,12 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
   };
   console.log(dataObj, "jdnjd");
   const newRoomRentPost = await RoomRentsAds.create(dataObj);
-  let hahyekalu = await ModelName.findById({_id:newRoomRentPost._id})
-  console.log(hahyekalu,"dkvjdvdvjds jdfnmv jdfm nmdsvj mfj m  mj fdj mn vfm ");
+  const inputString = "64660ac0356a2b0932d172bb";
+const numbersOnly = inputString.replace(/\D/g, "");
+console.log(numbersOnly);
+
+  // let hahyekalu = await ModelName.findByIdAndUpdate({_id:newRoomRentPost._id},{$set:{}})
+  // console.log(hahyekalu,"dkvjdvdvjds jdfnmv jdfm nmdsvj mfj m  mj fdj mn vfm ");
   const roomtRentObjToSend = {};
 
   for (let key in newRoomRentPost.toObject()) {
