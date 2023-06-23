@@ -358,9 +358,13 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
   console.log(dataObj, "jdnjd");
   const newRoomRentPost = await RoomRentsAds.create(dataObj);
   console.log(newRoomRentPost._id,"vtvtfrvvrv");
-  const inputString = newRoomRentPost._id.toString();;
-const numbersOnly = await inputString.replace(/\D/g, "");
-console.log(numbersOnly);
+  // const inputString = 
+  const stringToHash = newRoomRentPost._id.toString();
+  const hash = crypto.createHash('sha256').update(stringToHash).digest('hex');
+  const truncatedHash = hash.slice(0, 10);
+  const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
+  
+  console.log(numericHash.toString().padStart(10, '0')); 
 
   // let hahyekalu = await ModelName.findByIdAndUpdate({_id:newRoomRentPost._id},{$set:{}})
   // console.log(hahyekalu,"dkvjdvdvjds jdfnmv jdfm nmdsvj mfj m  mj fdj mn vfm ");
