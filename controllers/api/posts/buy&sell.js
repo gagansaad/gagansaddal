@@ -671,10 +671,14 @@ exports.createBuySellAds = async (req, res, next) => {
     } else {
       boolean = false;
     }
+    let mode_payment
     console.log(payment_mode, "jai ho");
-    let mode_payment = payment_mode
+    if(payment_mode){
+       mode_payment = payment_mode
       .substring(1, payment_mode.length - 1)
       .split(",");
+    }
+    
     console.log(mode_payment, "jai ho jai jai jai gagan ki jai");
     const dataObj = {
       isfeatured,
