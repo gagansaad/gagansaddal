@@ -119,7 +119,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
       ],
       mode: 'payment',
       customer: customerStripeId,
-      customer_email: request.body.useremail,
+      // customer_email: request.body.useremail,
       metadata: {
         "payment_id": PaymentModelId._id.toString()
       },
