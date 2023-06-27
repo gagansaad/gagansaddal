@@ -61,8 +61,6 @@ const mongoose = require("mongoose"),
         return failureJSONResponse(res, { message: `something went wrong` })
     }
   }
-
-
   exports.fetchOneDelete = async (req, res, next) => {
     try {
       

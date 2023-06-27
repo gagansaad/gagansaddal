@@ -223,6 +223,7 @@ exports.create_payment_intent = async (req, res) => {
         { $set: { "userInfo.stripe_id": customer.id } }
       );
       customerStripeId = customer.id;
+      console.log(customerStripeId,"vhndsjvnsdjnsnvskjdrvkrsd --------------->>>>>>>>>>>>>>>>");
     } else {
       customerStripeId = userInfoModel.stripe_id;
     }
