@@ -132,6 +132,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
     paymentIntent = await stripe.paymentIntents.create({
       amount: (totalprice.toFixed(2) * 100).toFixed(0),
       currency: "usd",
+      setup_future_usage: 'off_session',
       customer: customerStripeId,
       metadata: {
         "payment_id": PaymentModelId._id.toString()
