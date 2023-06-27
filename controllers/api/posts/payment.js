@@ -224,7 +224,7 @@ exports.create_payment_intent = async (req, res) => {
       // return;
       await UserModel.findOneAndUpdate(
         { _id: userID },
-        { $set: { "userInfo.stripe_id": customer.id } }
+        { "userInfo.stripe_id": customer.id } 
       );
       console.log("object",UserModel,"vxdvdmfcmv m vm m m m dm dmmdmd","--------------------->>>>>>>>>>>>");
       customerStripeId = customer.id;
