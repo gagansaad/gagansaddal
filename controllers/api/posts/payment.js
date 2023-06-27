@@ -265,18 +265,20 @@ exports.create_payment_intent = async (req, res) => {
       paymentIntentClientSecret = await paymentIntentCreate(req, dataObj, totalprice, customerStripeId, deviceType);
       statusCode = 201;
     }
-    let link = req.body.website_url
-    let price = req.body.price_drop
-    let dbQuery = {}
-    if(link)dbQuery.website_url = link;
-    if(price >= 0)dbQuery.price_drop= price
-    if(dbQuery.length){
-      console.log(dbQuery,"dvdvvdcdcccc");
-    let datarr= await ModelName.findByIdAndUpdate(
-     {_id:req.body.postId} ,
-     {$set:dbQuery} 
-    );
-    console.log(datarr, "Key updated successfully.")
+    if (Object.keys(dbQuery).length > 0) {
+      console.log(dbQuery, "dvdvvdcdcccc");
+    
+      try {
+        let datarr = await ModelName.findByIdAndUpdate(
+          req.body.postId,
+          dbQuery,
+          { new: true }
+        );
+    
+        console.log(datarr, "Key updated successfully.");
+      } catch (error) {
+        console.error("Error updating document:", error);
+      }
     }
     return successJSONResponse(res, {
       status: statusCode,
