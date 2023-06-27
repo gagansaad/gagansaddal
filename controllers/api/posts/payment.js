@@ -271,6 +271,7 @@ exports.create_payment_intent = async (req, res) => {
     if(link)dbQuery.website_url = link;
     if(price >= 0)dbQuery.price_drop= price
     if(dbQuery.length){
+      console.log(dbQuery,"dvdvvdcdcccc");
     let datarr= await ModelName.findByIdAndUpdate(
      {_id:req.body.postId} ,
      {$set:dbQuery} 
