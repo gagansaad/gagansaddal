@@ -675,7 +675,6 @@ exports.createBuySellAds = async (req, res, next) => {
     console.log(payment_mode, "jai ho");
     if(payment_mode){
        mode_payment = payment_mode
-      .substring(1, payment_mode.length - 1)
       .split(",");
     }
     

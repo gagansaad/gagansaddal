@@ -25,7 +25,7 @@ const mongoose = require("mongoose"),
 ////////////////
 exports.fetchAll = async (req, res, next) => {
   try {
-//     const isFeatured = req.query.isfeatured;
+//     const isFeatured = req.query.  ;
 //     let dbQuery ={
 //         status: 1
 //     };
