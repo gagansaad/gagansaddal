@@ -671,12 +671,12 @@ exports.createBuySellAds = async (req, res, next) => {
     } else {
       boolean = false;
     }
-    let mode_payment
-    console.log(payment_mode, "jai ho");
-    if(payment_mode){
-       mode_payment = payment_mode
-      .split(",");
-    }
+    let mode_payment= payment_mode
+    // console.log(payment_mode, "jai ho");
+    // if(payment_mode){
+    //    mode_payment = 
+    //   .split(",");
+    // }
     
     console.log(mode_payment, "jai ho jai jai jai gagan ki jai");
     const dataObj = {
