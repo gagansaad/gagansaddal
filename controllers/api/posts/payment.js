@@ -189,11 +189,11 @@ exports.create_payment_intent = async (req, res) => {
     // console.log(addonsId,"arraya ");
     let foundObjects = [];
 
-    if (userID != adsModel.userId) {
-      return failureJSONResponse(res, {
-        message: "This Add doesn't belongs to your profile.",
-      }, 422);
-    }
+    // if (userID != adsModel.userId) {
+    //   return failureJSONResponse(res, {
+    //     message: "This Add doesn't belongs to your profile.",
+    //   }, 422);
+    // }
     //-----find add ons -----//
     let totalprice = plan_price
     //  console.log(totalprice,"arraya ", addonsId, "aala kala bala tala mala ola yala uala pala nala mala vala cala xala zala");
