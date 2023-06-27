@@ -34,7 +34,6 @@ const BuySellSchema = new mongoose.Schema({
     },
     price_drop:{
             type: Number,
-            required: true
     },
     isfeatured: {
         type: Boolean,
