@@ -221,16 +221,18 @@ exports.create_payment_intent = async (req, res) => {
         email: userInfoModel.email_address,
       });
       console.log("object",customer,"--------------------->>>>>>>>>>>>");
+      return;
       await UserModel.findOneAndUpdate(
         { _id: userID },
         { $set: { "userInfo.stripe_id": customer.id } }
       );
+      console.log("object",UserModel,"vxdvdmfcmv m vm m m m dm dmmdmd","--------------------->>>>>>>>>>>>");
       customerStripeId = customer.id;
     } else {
       customerStripeId = userInfoModel.stripe_id;
     }
-
-
+console.log(customerStripeId);
+return customerStripeId;
 
     // const ephemeralKey = await stripe.ephemeralKeys.create(
     //   { customer: customerStripeId },
