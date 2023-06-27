@@ -220,8 +220,8 @@ exports.create_payment_intent = async (req, res) => {
         name: userInfoModel.name,
         email: userInfoModel.email_address,
       });
-      console.log("object",customer,"--------------------->>>>>>>>>>>>");
-      return;
+      // console.log("object",customer,"--------------------->>>>>>>>>>>>");
+      // return;
       await UserModel.findOneAndUpdate(
         { _id: userID },
         { $set: { "userInfo.stripe_id": customer.id } }
