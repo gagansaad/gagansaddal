@@ -212,7 +212,7 @@ exports.create_payment_intent = async (req, res) => {
       const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
       totalprice = plan_price + totalAmount;
     }
-    console.log(userInfoModel.stripe_id,"vhndsjvnsdjnsnvskjdrvkrsd --------------->>>>>>>>>>>>>>>>");
+    console.log(userInfoModel,"vhndsjvnsdjnsnvskjdrvkrsd --------------->>>>>>>>>>>>>>>>");
 
     let customerStripeId = null;
     if (userInfoModel.stripe_id == "" && userInfoModel.stripe_id == null) {
