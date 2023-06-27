@@ -215,7 +215,7 @@ exports.create_payment_intent = async (req, res) => {
     console.log(userInfoModel,"vhndsjvnsdjnsnvskjdrvkrsd --------------->>>>>>>>>>>>>>>>");
 
     let customerStripeId = null;
-    if (userInfoModel.stripe_id == "" && userInfoModel.stripe_id == null) {
+    if (userInfoModel?.stripe_id == "" || userInfoModel?.stripe_id == null) {
       const customer = await stripe.customers.create({
         name: userInfoModel.name,
         email: userInfoModel.email_address,
