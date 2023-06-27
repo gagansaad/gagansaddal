@@ -77,13 +77,13 @@ exports.validatepaymentData = async (req, res, next) => {
 const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeId, deviceType = null, user) => {
   let successUrl;
   let cancelUrl
-let UserId = dataobj.user
-  console.log(UserId,"bol ve channa bol");
+  let UserId = dataobj.user
+  console.log(UserId, "bol ve channa bol");
   if (deviceType != null)
     dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
   if (dataobj.total_amount == 0) {
-    await paymentSuccessModelUpdate(PaymentModelId._id,UserId);
+    await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
     return null;
   }
   let paymentIntent = null;
@@ -189,7 +189,11 @@ exports.create_payment_intent = async (req, res) => {
     // console.log(addonsId,"arraya ");
     let foundObjects = [];
 
-
+    if (userID != adsModel.userId) {
+      return failureJSONResponse(res, {
+        message: "This Add doesn't belongs to your profile.",
+      }, 422);
+    }
     //-----find add ons -----//
     let totalprice = plan_price
     //  console.log(totalprice,"arraya ", addonsId, "aala kala bala tala mala ola yala uala pala nala mala vala cala xala zala");
@@ -212,7 +216,7 @@ exports.create_payment_intent = async (req, res) => {
       const totalAmount = foundObjects.reduce((acc, obj) => acc + obj.amount, 0);
       totalprice = plan_price + totalAmount;
     }
-    console.log(userInfoModel,"vhndsjvnsdjnsnvskjdrvkrsd --------------->>>>>>>>>>>>>>>>");
+    console.log(userInfoModel, "vhndsjvnsdjnsnvskjdrvkrsd --------------->>>>>>>>>>>>>>>>");
 
     let customerStripeId = null;
     if (userInfoModel?.stripe_id == "" || userInfoModel?.stripe_id == null) {
@@ -224,15 +228,15 @@ exports.create_payment_intent = async (req, res) => {
       // return;
       await UserModel.findOneAndUpdate(
         { _id: userID },
-        { "userInfo.stripe_id": customer.id } 
+        { "userInfo.stripe_id": customer.id }
       );
-      console.log("object",UserModel,"vxdvdmfcmv m vm m m m dm dmmdmd","--------------------->>>>>>>>>>>>");
+      // console.log("object",UserModel,"vxdvdmfcmv m vm m m m dm dmmdmd","--------------------->>>>>>>>>>>>");
       customerStripeId = customer.id;
     } else {
       customerStripeId = userInfoModel.stripe_id;
     }
-console.log(customerStripeId);
-return customerStripeId;
+    console.log(customerStripeId);
+    // return customerStripeId;
 
     // const ephemeralKey = await stripe.ephemeralKeys.create(
     //   { customer: customerStripeId },
@@ -272,26 +276,26 @@ return customerStripeId;
     }
 
     let link = req.body.website_url;
-let price = req.body.price_drop;
-let dbQu = {};
+    let price = req.body.price_drop;
+    let dbQu = {};
 
-if (link) {
-  dbQu.website_url = link;
-}
+    if (link) {
+      dbQu.website_url = link;
+    }
 
-if (price >= 0) {
-  dbQu.price_drop = price;
-}
+    if (price >= 0) {
+      dbQu.price_drop = price;
+    }
     if (Object.keys(dbQu).length > 0) {
       console.log(dbQu, "dvdvvdcdcccc");
-    
+
       try {
         let datarr = await ModelName.findByIdAndUpdate(
           req.body.postId,
           dbQu,
           { new: true }
         );
-    
+
         console.log(datarr, "Key updated successfully.");
       } catch (error) {
         console.error("Error updating document:", error);
@@ -305,7 +309,7 @@ if (price >= 0) {
     }, statusCode)
 
   } catch (error) {
-    console.log("vdvdvdvvvvdvvvdvdvdvdvdvdvdvdvd",error, "bbooklakituramu");
+    console.log("vdvdvdvvvvdvvvdvdvdvdvdvdvdvdvd", error, "bbooklakituramu");
     return failureJSONResponse(res, {
       message: `Something went wrong`,
       error: error.message
@@ -356,7 +360,7 @@ exports.webhooks = async (request, response) => {
         break;
 
       case "payment_intent.succeeded":
-        paymentSuccessModelUpdate(payment_id,UserId);
+        paymentSuccessModelUpdate(payment_id, UserId);
         getNotification = await getNotificationTitles(event.type);
         await Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Payment succeedded of post', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
 
@@ -364,7 +368,7 @@ exports.webhooks = async (request, response) => {
         // Then define and call a function to handle the event payment_intent.succeeded
         break;
       case "checkout.session.completed":
-        paymentSuccessModelUpdate(payment_id,UserId);
+        paymentSuccessModelUpdate(payment_id, UserId);
         getNotification = await getNotificationTitles(event.type);
         await Notification.sendNotifications([UserId], getNotification.title, getNotification.body, { 'model_id': Adstype_Id, 'model': adsName }, true, { 'subject': 'Payment succedded of post', 'email_template': 'paymentstatus', 'data': { 'payment_status': 'succeeded' } });
 
@@ -390,7 +394,7 @@ exports.webhooks = async (request, response) => {
   }
 };
 
-const paymentSuccessModelUpdate = async (payment_id,userId) => {
+const paymentSuccessModelUpdate = async (payment_id, userId) => {
   // let userID = req.userId;
   let userID = userId;
   let paymentDetails = await PaymentModel.findById({ "_id": payment_id })
@@ -404,7 +408,7 @@ const paymentSuccessModelUpdate = async (payment_id,userId) => {
   let currentDate = new Date()
   let activedate = currentDate.toISOString().split('T')[0]
   let planDuration = await AdsPlan.findById({ "_id": plan_id })
-  console.log(planDuration,"kaali boli raat utto paiondi barsaat aake mainu mil sohniye  ");
+  console.log(planDuration, "kaali boli raat utto paiondi barsaat aake mainu mil sohniye  ");
   let plan_obj = {
     plan_id: planDuration._id.toString(),
     active_on: activedate,
