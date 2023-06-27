@@ -266,10 +266,15 @@ exports.create_payment_intent = async (req, res) => {
       statusCode = 201;
     }
     let link = req.body.website_url
+    let price = req.body.price_drop
+    let dbQuery = {}
+    if(link)dbQuery.website_url = link;
+    if(price >= 0)dbQuery.price_drop= price
+    if(price)
     if(link){
     let datarr= await ModelName.findByIdAndUpdate(
      {_id:req.body.postId} ,
-     { website_url: link } 
+     {$set:dbQuery} 
     );
     console.log(datarr, "Key updated successfully.")
     }

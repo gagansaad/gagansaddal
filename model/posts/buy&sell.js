@@ -32,6 +32,10 @@ const BuySellSchema = new mongoose.Schema({
     website_url:{
         ...defaultStringConfig,
     },
+    price_drop:{
+            type: Number,
+            required: true
+    },
     isfeatured: {
         type: Boolean,
         required: true,
