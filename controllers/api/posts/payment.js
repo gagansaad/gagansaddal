@@ -342,6 +342,7 @@ exports.create_payment_intent = async (req, res) => {
       message: `success`,
       paymentIntent: paymentIntentClientSecret,
       ephemeralKey: ephemeralKey.secret,
+      stripe_customer_id: customerStripeId,
     }, statusCode)
 
   } catch (error) {
