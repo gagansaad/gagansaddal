@@ -98,7 +98,7 @@ const getStripeCustomer = async (userID) => {
     if (customer?.id) {
       customerStripeId = userInfoModel.stripe_id;
     } else {
-      getStripeCustomer(userInfoModel, userID);
+      getStripeCustomer(userID);
     }
   }
   return customerStripeId;
