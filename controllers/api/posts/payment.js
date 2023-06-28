@@ -191,7 +191,7 @@ exports.create_payment_intent = async (req, res) => {
       '_id': req.body.postId,
     });
     // console.log(adstype,"**",ModelName,"&&&&",req.body.postId,"***",adsModel"adsmodal",adsModel.status);
-    if (adsModel.status == 'active') {
+    if (adsModel?.status == 'active') {
       return failureJSONResponse(res, {
         message: 'Add is already active',
       }, 422);
