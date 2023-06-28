@@ -130,10 +130,10 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
     console.log("eh chaalu hoya");
   } else {
     // List the customer's payment methods to find one to charge
-    const paymentMethods = await stripe.paymentMethods.list({
-      customer: customerStripeId,
-      type: "card"
-    });
+    // const paymentMethods = await stripe.paymentMethods.list({
+    //   customer: customerStripeId,
+    //   type: "card"
+    // });
 console.log(paymentMethods,"payment methods");
     paymentIntent = await stripe.paymentIntents.create({
       amount: (totalprice.toFixed(2) * 100).toFixed(0),
@@ -146,9 +146,8 @@ console.log(paymentMethods,"payment methods");
       payment_method_types: [
         'card',
       ],
-      off_session: true,
-      confirm: true,
-      payment_method: paymentMethods.data[0].id,
+      // off_session: true,
+      // payment_method: paymentMethods.data[0].id,
     });
     console.log(paymentIntent,"po po po po po ki ku ka ll oii cc bd yf jg nv");
   }
