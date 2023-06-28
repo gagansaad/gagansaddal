@@ -273,11 +273,12 @@ exports.create_payment_intent = async (req, res) => {
     console.log(customerStripeId,"25-25 =50 mainu kithe eh line chldi dikha ");
     // return customerStripeId;
 
-    // const ephemeralKey = await stripe.ephemeralKeys.create(
-    //   { customer: customerStripeId.id },
-    //   { apiVersion: "2022-11-15" }
-    // );
+    const ephemeralKey = await stripe.ephemeralKeys.create(
+      { customer: customerStripeId.id },
+      { apiVersion: "2022-11-15" }
+    );
 
+    console.log(ephemeralKey,"25-25=70 je tu na aayi terer pain ge chitter");
     let paymentModelInfo = await PaymentModel.findOne({
       ads: req.body.postId,
       payment_status: "pending",
