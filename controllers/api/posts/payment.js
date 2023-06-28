@@ -78,16 +78,8 @@ const getStripeCustomer = async (userID) => {
   let userInfoModel = await UserModel.findOne({ _id: userID });
   userInfoModel = userInfoModel.userInfo;
   let customerStripeId;
-  console.log("VDDVDVDDVDddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", userInfoModel.stripe_id);
-  // const customer = await stripe.customers.retrieve(
-  //   userInfoModel.stripe_id
-  // );
-  // if(customer){
-  //   console.log("VDDVDVDDVDddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", customer);
-  // }else{
-  //   console.log("vdvdvdevdevdev");
-  // }
-  if (userInfoModel?.stripe_id == "" || userInfoModel?.stripe_id == null ) {
+
+  if (userInfoModel?.stripe_id == "" || userInfoModel?.stripe_id == null) {
     const customer = await stripe.customers.create({
       name: userInfoModel.name,
       email: userInfoModel.email_address,
@@ -97,9 +89,6 @@ const getStripeCustomer = async (userID) => {
       { _id: userID },
       { "userInfo.stripe_id": customer.id }
     );
-
-    // ]customer.id;
-    // console.log("object",UserModel,"vxdvdmfcmv m vm m m m dm dmmdmd","--------------------->>>>>>>>>>>>");
     customerStripeId = customer.id;
   } else {
     try {
@@ -281,7 +270,7 @@ exports.create_payment_intent = async (req, res) => {
     console.log(userInfoModel, "vhndsjvnsdjnsnvskjdrvkrsd --------------->>>>>>>>>>>>>>>>");
 
     let customerStripeId = await getStripeCustomer(userID);
-    console.log(customerStripeId);
+    console.log(customerStripeId,"25-25 =50 mainu kithe eh line chldi dikha ");
     // return customerStripeId;
 
     // const ephemeralKey = await stripe.ephemeralKeys.create(
