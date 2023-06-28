@@ -341,7 +341,7 @@ exports.create_payment_intent = async (req, res) => {
       status: statusCode,
       message: `success`,
       paymentIntent: paymentIntentClientSecret,
-      // ephemeralKey: ephemeralKey.secret,
+      ephemeralKey: ephemeralKey.secret,
     }, statusCode)
 
   } catch (error) {
