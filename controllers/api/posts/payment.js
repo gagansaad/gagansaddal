@@ -74,6 +74,34 @@ exports.validatepaymentData = async (req, res, next) => {
 };
 
 /////------------payment intent ----///////
+const getStripeCustomer = async (userID) => {
+  let userInfoModel = await UserModel.findOne({ _id: userID });
+  let customerStripeId;
+  if (userInfoModel?.stripe_id == "" || userInfoModel?.stripe_id == null) {
+    const customer = await stripe.customers.create({
+      name: userInfoModel.name,
+      email: userInfoModel.email_address,
+    });
+    // console.log("object",customer,"--------------------->>>>>>>>>>>>");
+    // return;
+    await UserModel.findOneAndUpdate(
+      { _id: userID },
+      { "userInfo.stripe_id": customer.id }
+    );
+    // console.log("object",UserModel,"vxdvdmfcmv m vm m m m dm dmmdmd","--------------------->>>>>>>>>>>>");
+    customerStripeId = customer.id;
+  } else {
+    const customer = await stripe.customers.retrieve(
+      userInfoModel.stripe_id
+    );
+    if (customer?.id) {
+      customerStripeId = userInfoModel.stripe_id;
+    } else {
+      getStripeCustomer(userInfoModel, userID);
+    }
+  }
+  return customerStripeId;
+}
 const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeId, deviceType = null, user) => {
   let successUrl;
   let cancelUrl
@@ -134,7 +162,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
     //   customer: customerStripeId,
     //   type: "card"
     // });
-// console.log(paymentMethods,"payment methods");
+    // console.log(paymentMethods,"payment methods");
     paymentIntent = await stripe.paymentIntents.create({
       amount: (totalprice.toFixed(2) * 100).toFixed(0),
       currency: "usd",
@@ -149,7 +177,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
       // off_session: true,
       // payment_method: paymentMethods.data[0].id,
     });
-    console.log(paymentIntent,"po po po po po ki ku ka ll oii cc bd yf jg nv");
+    console.log(paymentIntent, "po po po po po ki ku ka ll oii cc bd yf jg nv");
   }
 
   await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
@@ -227,23 +255,7 @@ exports.create_payment_intent = async (req, res) => {
     }
     console.log(userInfoModel, "vhndsjvnsdjnsnvskjdrvkrsd --------------->>>>>>>>>>>>>>>>");
 
-    let customerStripeId = null;
-    if (userInfoModel?.stripe_id == "" || userInfoModel?.stripe_id == null) {
-      const customer = await stripe.customers.create({
-        name: userInfoModel.name,
-        email: userInfoModel.email_address,
-      });
-      // console.log("object",customer,"--------------------->>>>>>>>>>>>");
-      // return;
-      await UserModel.findOneAndUpdate(
-        { _id: userID },
-        { "userInfo.stripe_id": customer.id }
-      );
-      // console.log("object",UserModel,"vxdvdmfcmv m vm m m m dm dmmdmd","--------------------->>>>>>>>>>>>");
-      customerStripeId = customer.id;
-    } else {
-      customerStripeId = userInfoModel.stripe_id;
-    }
+    let customerStripeId = await getStripeCustomer(userID);
     console.log(customerStripeId);
     // return customerStripeId;
 
