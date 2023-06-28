@@ -82,8 +82,8 @@ const getStripeCustomer = async (userID) => {
   const customer = await stripe.customers.retrieve(
     userInfoModel.stripe_id
   );
-  console.log("VDDVDVDDVDddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",customer);
-  if (userInfoModel?.stripe_id == "" || userInfoModel?.stripe_id == null) {
+  console.log("VDDVDVDDVDddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", customer);
+  if (userInfoModel?.stripe_id == "" || userInfoModel?.stripe_id == null || (!customer)) {
     const customer = await stripe.customers.create({
       name: userInfoModel.name,
       email: userInfoModel.email_address,
@@ -97,16 +97,7 @@ const getStripeCustomer = async (userID) => {
     // console.log("object",UserModel,"vxdvdmfcmv m vm m m m dm dmmdmd","--------------------->>>>>>>>>>>>");
     customerStripeId = customer.id;
   } else {
-    console.log("effnukkiaataamala")
-    const customer = await stripe.customers.retrieve(
-      userInfoModel.stripe_id
-    );
-    console.log("effnukkiaataamala",customer);
-    if (customer?.id) {
-      customerStripeId = userInfoModel.stripe_id;
-    } else {
-      getStripeCustomer(userID);
-    }
+    customerStripeId = userInfoModel.stripe_id;
   }
   return customerStripeId;
 }
