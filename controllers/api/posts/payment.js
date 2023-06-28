@@ -76,6 +76,7 @@ exports.validatepaymentData = async (req, res, next) => {
 /////------------payment intent ----///////
 const getStripeCustomer = async (userID) => {
   let userInfoModel = await UserModel.findOne({ _id: userID });
+  userInfoModel = userInfoModel.userInfo;
   let customerStripeId;
   if (userInfoModel?.stripe_id == "" || userInfoModel?.stripe_id == null) {
     const customer = await stripe.customers.create({
