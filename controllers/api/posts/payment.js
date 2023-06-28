@@ -79,30 +79,52 @@ const getStripeCustomer = async (userID) => {
   userInfoModel = userInfoModel.userInfo;
   let customerStripeId;
   console.log("VDDVDVDDVDddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", userInfoModel.stripe_id);
-  const customer = await stripe.customers.retrieve(
-    userInfoModel.stripe_id
-  );
-  if(customer){
-    console.log("VDDVDVDDVDddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", customer);
-  }else{
-    console.log("vdvdvdevdevdev");
-  }
+  // const customer = await stripe.customers.retrieve(
+  //   userInfoModel.stripe_id
+  // );
+  // if(customer){
+  //   console.log("VDDVDVDDVDddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", customer);
+  // }else{
+  //   console.log("vdvdvdevdevdev");
+  // }
   if (userInfoModel?.stripe_id == "" || userInfoModel?.stripe_id == null || (!customer)) {
     const customer = await stripe.customers.create({
       name: userInfoModel.name,
       email: userInfoModel.email_address,
     });
-    // console.log("object",customer,"--------------------->>>>>>>>>>>>");
-    // return;
+
     await UserModel.findOneAndUpdate(
       { _id: userID },
       { "userInfo.stripe_id": customer.id }
     );
+
+    // ]customer.id;
     // console.log("object",UserModel,"vxdvdmfcmv m vm m m m dm dmmdmd","--------------------->>>>>>>>>>>>");
     customerStripeId = customer.id;
   } else {
-    customerStripeId = userInfoModel.stripe_id;
+    try {
+      customer = await stripe.customers.retrieve(userInfoModel.stripe_id);
+    } catch (error) {
+      if (error.type === 'StripeInvalidRequestError' && error.raw.code === 'resource_missing') {
+        // Customer not found, create a new one
+        customer = await stripe.customers.create({
+          name: userInfoModel.name,
+          email: userInfoModel.email_address,
+        });
+
+        await UserModel.findOneAndUpdate(
+          { _id: userID },
+          { "userInfo.stripe_id": customer.id }
+        );
+      } else {
+        console.error('Error retrieving customer from Stripe:', error);
+        throw error;
+      }
+    }
+
+    customerStripeId = customer.id;
   }
+    // customerStripeId = userInfoModel.stripe_id;
   return customerStripeId;
 }
 const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeId, deviceType = null, user) => {
