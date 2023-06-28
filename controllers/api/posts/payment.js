@@ -133,7 +133,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
     });
     console.log("eh chaalu hoya");
   } else {
-    try{
+    // try{
       paymentIntent = await stripe.paymentIntents.create({
         amount: (totalprice.toFixed(2) * 100).toFixed(0),
         currency: "usd",
@@ -151,12 +151,12 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
        
        
       });
-    }catch (err) {
-      console.log('Error code is: ', err);
-      let paymentItent = await stripe.paymentIntents.retrieve(err.raw.payment_intent.id);
-       console.log(paymentItent,
-        "dvkvkdvkdevkem ");
-    }
+    // }catch (err) {
+    //   console.log('Error code is: ', err);
+    //   let paymentItent = await stripe.paymentIntents.retrieve(err.raw.payment_intent.id);
+    //    console.log(paymentItent,
+    //     "dvkvkdvkdevkem ");
+    // }
   }
 
   await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
