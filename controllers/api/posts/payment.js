@@ -92,6 +92,7 @@ const getStripeCustomer = async (userID) => {
     // console.log("object",UserModel,"vxdvdmfcmv m vm m m m dm dmmdmd","--------------------->>>>>>>>>>>>");
     customerStripeId = customer.id;
   } else {
+    console.log("effnukkiaataamala")
     const customer = await stripe.customers.retrieve(
       userInfoModel.stripe_id
     );
