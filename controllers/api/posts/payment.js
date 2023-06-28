@@ -86,6 +86,10 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
     await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
     return null;
   }
+  const paymentMethods = await stripe.paymentMethods.list({
+    customer: customerStripeId,
+    type: 'card',
+  });
   let paymentIntent = null;
   if (deviceType == 'web') {
     if (request.body.redirect_uri_success) {
@@ -129,20 +133,28 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
     });
     console.log("eh chaalu hoya");
   } else {
-    paymentIntent = await stripe.paymentIntents.create({
-      amount: (totalprice.toFixed(2) * 100).toFixed(0),
-      currency: "usd",
-      setup_future_usage: 'on_session',
-      customer: customerStripeId,
-      metadata: {
-        "payment_id": PaymentModelId._id.toString()
-      },
-      automatic_payment_methods: {
-        enabled: true,
-      },
-     
-    });
-    console.log("po po po po po ki ku ka ll oii cc bd yf jg nv");
+    try{
+      paymentIntent = await stripe.paymentIntents.create({
+        amount: (totalprice.toFixed(2) * 100).toFixed(0),
+        currency: "usd",
+        setup_future_usage: 'on_session',
+        customer: customerStripeId,
+        metadata: {
+          "payment_id": PaymentModelId._id.toString()
+        },
+        automatic_payment_methods: {
+          enabled: true,
+        },
+        payment_method: paymentMethods.ID,
+        off_session: true,
+        confirm: true,
+       
+       
+      });
+    }catch (err) {
+      console.log('Error code is: ', err.code);
+       paymentIntent = await stripe.paymentIntents.retrieve(err.raw.payment_intent.id);
+    }
   }
 
   await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
