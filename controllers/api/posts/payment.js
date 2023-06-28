@@ -87,7 +87,7 @@ const getStripeCustomer = async (userID) => {
   // }else{
   //   console.log("vdvdvdevdevdev");
   // }
-  if (userInfoModel?.stripe_id == "" || userInfoModel?.stripe_id == null || (!customer)) {
+  if (userInfoModel?.stripe_id == "" || userInfoModel?.stripe_id == null ) {
     const customer = await stripe.customers.create({
       name: userInfoModel.name,
       email: userInfoModel.email_address,
