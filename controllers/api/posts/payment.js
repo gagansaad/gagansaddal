@@ -129,6 +129,12 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
     });
     console.log("eh chaalu hoya");
   } else {
+    // List the customer's payment methods to find one to charge
+    const paymentMethods = await stripe.paymentMethods.list({
+      customer: customerStripeId,
+      type: "card"
+    });
+
     paymentIntent = await stripe.paymentIntents.create({
       amount: (totalprice.toFixed(2) * 100).toFixed(0),
       currency: "usd",
@@ -139,9 +145,12 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
       },
       payment_method_types: [
         'card',
-      ]
+      ],
+      off_session: true,
+      confirm: true,
+      payment_method: paymentMethods.data[0].id,
     });
-    console.log("po po po po po ki ku ka ll oii cc bd yf jg nv");
+    console.log(paymentIntent,"po po po po po ki ku ka ll oii cc bd yf jg nv");
   }
 
   await PaymentModel.findOneAndUpdate({ "_id": PaymentModelId._id }, { "payment_intent": paymentIntent }, { upsert: true });
