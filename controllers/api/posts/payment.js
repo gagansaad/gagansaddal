@@ -140,9 +140,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
       automatic_payment_methods: {
         enabled: true,
       },
-      payment_method_types: [
-        'card',
-      ]
+     
     });
     console.log("po po po po po ki ku ka ll oii cc bd yf jg nv");
   }
