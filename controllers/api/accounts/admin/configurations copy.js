@@ -112,7 +112,7 @@ exports.posttypeconfigurations = async (req, res, next) => {
 
 exports.create_adons = async (req, res) => {
   try {
-    const { name, plan_id, isfree, duration, amount, currency, price } =
+    const { name, plan_id, isfree, duration, amount, currency, price,example_description,example_image,example_title,color_code,description } =
       req.body;
 
     const addOnsPlan = {
@@ -120,7 +120,11 @@ exports.create_adons = async (req, res) => {
       plan_id: plan_id,
       price: price,
     };
-
+    if(description) addOnsPlan.description=description;
+    if(example_description) addOnsPlan.example_description=example_description;
+    if(example_image) addOnsPlan.example_image=example_image;
+    if(example_title) addOnsPlan.example_title=example_title;
+    if(color_code) addOnsPlan.color_code=color_code;
     let addons_result = await addons_plan.create(addOnsPlan);
     if (addons_result) {
       let pushdata = await AdsPlan.findByIdAndUpdate(
