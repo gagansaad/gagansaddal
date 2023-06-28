@@ -137,6 +137,9 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
       metadata: {
         "payment_id": PaymentModelId._id.toString()
       },
+      automatic_payment_methods: {
+        enabled: true,
+      },
       payment_method_types: [
         'card',
       ]
