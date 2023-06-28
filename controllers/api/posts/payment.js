@@ -78,11 +78,11 @@ const getStripeCustomer = async (userID) => {
   let userInfoModel = await UserModel.findOne({ _id: userID });
   userInfoModel = userInfoModel.userInfo;
   let customerStripeId;
+  console.log("VDDVDVDDVDddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", userInfoModel.stripe_id);
   const customer = await stripe.customers.retrieve(
     userInfoModel.stripe_id
   );
   console.log("VDDVDVDDVDddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",customer);
-  return
   if (userInfoModel?.stripe_id == "" || userInfoModel?.stripe_id == null) {
     const customer = await stripe.customers.create({
       name: userInfoModel.name,
@@ -265,7 +265,7 @@ exports.create_payment_intent = async (req, res) => {
 
     let customerStripeId = await getStripeCustomer(userID);
     console.log(customerStripeId);
-    return customerStripeId;
+    // return customerStripeId;
 
     // const ephemeralKey = await stripe.ephemeralKeys.create(
     //   { customer: customerStripeId.id },
