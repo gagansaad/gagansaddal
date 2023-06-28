@@ -95,7 +95,7 @@ const getStripeCustomer = async (userID) => {
     const customer = await stripe.customers.retrieve(
       userInfoModel.stripe_id
     );
-    if (customer?.id) {
+    if (!customer.id) {
       customerStripeId = userInfoModel.stripe_id;
     } else {
       getStripeCustomer(userID);
