@@ -152,7 +152,7 @@ const paymentIntentCreate = async (request, dataobj, totalprice, customerStripeI
        
       });
     }catch (err) {
-      console.log('Error code is: ', err.code);
+      console.log('Error code is: ', err);
        paymentIntent = await stripe.paymentIntents.retrieve(err.raw.payment_intent.id);
     }
   }
