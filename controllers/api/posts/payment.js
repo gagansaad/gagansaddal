@@ -530,11 +530,7 @@ exports.billingInfo = async(req,res)=>{
   try{
     let userId = req.userId
     console.log("userk nij jv vj jn d ossk  djf  okjn  n nhfn jnfvjfdn ",userId);
-    return
-    const paymentMethods = await stripe.customers.listPaymentMethods(
-      'cus_OAHyJqAcwmur6u',
-      {type: 'card'}
-    );
+    
   }catch(err){
     return console.log(err);
   }
