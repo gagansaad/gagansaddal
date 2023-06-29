@@ -8,6 +8,7 @@ const UserModel = require("../../../model/accounts/users");
 const PaymentModel = require("../../../model/posts/payment");
 const PaymentEventModel = require("../../../model/posts/paymentEvent");
 const plan_adons = require("../../../model/plan/plan_adons");
+const { failure } = require("../../../utils/alertMessage");
 const mongoose = require("mongoose"),
   AdsPlan = mongoose.model("plan"),
   AddOns = mongoose.model("plan_addons"),
@@ -522,4 +523,19 @@ const getModelNameByAdsType = async (ads_type) => {
       console.log(`Please provide valid ads id`);
   }
   return ModelName;
+}
+
+
+exports.billingInfo = async(req,res)=>{
+  try{
+    let userId = req.userId
+    console.log("userk nij jv vj jn d ossk  djf  okjn  n nhfn jnfvjfdn ",userId);
+    return
+    const paymentMethods = await stripe.customers.listPaymentMethods(
+      'cus_OAHyJqAcwmur6u',
+      {type: 'card'}
+    );
+  }catch(err){
+    return console.log(err);
+  }
 }

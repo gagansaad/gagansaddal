@@ -637,7 +637,7 @@ exports.createBuySellAds = async (req, res, next) => {
       video_link,
       image,
     } = req.body;
-   
+
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {

@@ -11,7 +11,11 @@ authMiddleware.ensureUserLoggedIn,
     // controllers.validatepaymentData,
     controllers.create_payment_intent
 );
-
+router.get(`/billing-information`,
+authMiddleware.ensureUserLoggedIn,
+    // controllers.validatepaymentData,
+    controllers.billingInfo
+);
 router.post(`/paymentstatus`,
 // authMiddleware.ensureUserLoggedIn,
 //     controllers.validatepaymentData,
