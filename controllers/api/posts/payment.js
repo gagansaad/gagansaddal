@@ -528,8 +528,13 @@ const getModelNameByAdsType = async (ads_type) => {
 
 exports.billingInfo = async(req,res)=>{
   try{
-    let userId = req.userId
-    console.log("saun di jhadi ni lagi saun di jhadi mai khda kothe tu v satt te chadi saun di jhadi de vich nachne nu ji krda aaaaaqaaaa paake baaha vich baaha nachne nu ji krda ",userId);
+    let userId = req.userId;
+    let cusId;
+if(userId){
+  cusId = await UserModel.findById({_id:userId});
+  
+}
+    console.log("saun di jhadi ni lagi saun di jhadi mai khda kothe tu v satt te chadi saun di jhadi de vich nachne nu ji krda aaaaaqaaaa paake baaha vich baaha nachne nu ji krda ",cusId);
     // return res.json({message :"saun di jhadi ni lagi saun di jhadi mai khda kothe tu v satt te chadi saun di jhadi de vich nachne nu ji krda aaaaaqaaaa paake baaha vich baaha nachne nu ji krda"})
   }catch(err){
     console.log(err,"nvdjnjdsnjdvjnzsd");
