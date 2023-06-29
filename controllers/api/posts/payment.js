@@ -530,11 +530,19 @@ exports.billingInfo = async(req,res)=>{
   try{
     let userId = req.userId;
     let cusId;
+    let paymentMethods;
 if(userId){
   cusId = await UserModel.findById({_id:userId})
   cusId = cusId.userInfo.stripe_id
+  
 }
-    console.log("saun di jhadi ni lagi saun di jhadi mai khda kothe tu v satt te chadi saun di jhadi de vich nachne nu ji krda aaaaaqaaaa paake baaha vich baaha nachne nu ji krda ",cusId);
+if(cusId){
+ paymentMethods = await stripe.customers.listPaymentMethods(
+    cusId,
+    {type: 'card'}
+  );
+}
+    console.log("saun di jhadi ni lagi saun di jhadi mai khda kothe tu v satt te chadi saun di jhadi de vich nachne nu ji krda aaaaaqaaaa paake baaha vich baaha nachne nu ji krda ",cusId,paymentMethods);
     // return res.json({message :"saun di jhadi ni lagi saun di jhadi mai khda kothe tu v satt te chadi saun di jhadi de vich nachne nu ji krda aaaaaqaaaa paake baaha vich baaha nachne nu ji krda"})
   }catch(err){
     console.log(err,"nvdjnjdsnjdvjnzsd");
