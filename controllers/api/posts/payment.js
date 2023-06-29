@@ -671,7 +671,7 @@ exports.billingInfo = async (req, res) => {
         type: "card",
       });
     }
-    if (paymentMethods.length) {
+    if (paymentMethods) {
       return successJSONResponse(
         response,
         { status: 200, message: " success", paymentMethods },
