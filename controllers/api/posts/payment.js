@@ -532,6 +532,6 @@ exports.billingInfo = async(req,res)=>{
     console.log("saun di jhadi ni lagi saun di jhadi mai khda kothe tu v satt te chadi saun di jhadi de vich nachne nu ji krda aaaaaqaaaa paake baaha vich baaha nachne nu ji krda ");
     // return res.json({message :"saun di jhadi ni lagi saun di jhadi mai khda kothe tu v satt te chadi saun di jhadi de vich nachne nu ji krda aaaaaqaaaa paake baaha vich baaha nachne nu ji krda"})
   }catch(err){
-    return console.log(err);
+    return console.log(err,"nvdjnjdsnjdvjnzsd");
   }
 }
