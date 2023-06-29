@@ -673,7 +673,7 @@ exports.billingInfo = async (req, res) => {
     }
     if (paymentMethods) {
       return successJSONResponse(
-        response,
+        res,
         { status: 200, message: " success", paymentMethods },
         200
       );
