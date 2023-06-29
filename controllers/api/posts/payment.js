@@ -671,6 +671,7 @@ exports.billingInfo = async (req, res) => {
         type: "card",
       });
     }
+    console.log(paymentMethods.data.length > 0);
     if (paymentMethods) {
       return successJSONResponse(
         res,
