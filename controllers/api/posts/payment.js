@@ -671,8 +671,8 @@ exports.billingInfo = async (req, res) => {
         type: "card",
       });
     }
-    console.log(paymentMethods.data.length > 0);
-    if (paymentMethods) {
+   
+    if (paymentMethods.data.length > 0) {
       return successJSONResponse(
         res,
         { status: 200, message: " success", paymentMethods },
@@ -680,7 +680,7 @@ exports.billingInfo = async (req, res) => {
       );
     } else {
       return failureJSONResponse(res, {
-        message: `Something went wrong`,
+        message: `Does not have any card `,
       });
     }
   } catch (error) {
