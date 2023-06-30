@@ -684,9 +684,12 @@ exports.billingInfo = async (req, res) => {
         200
       );
     } else {
-      return failureJSONResponse(res, {
-        message: `Does not have any card `,
-      });
+      return successJSONResponse(
+        res,
+        { status: 200, message: " Does not have any card", paymentMethods },
+        200
+      );
+      
     }
   } catch (error) {
     return failureJSONResponse(res, {
@@ -723,3 +726,39 @@ exports.detachcard = async (req, res) => {
     });
   }
 };
+exports.defaultcard = async (req, res) => {
+  try {
+    let userId = req.userId;
+    let cusId;
+    let paymentMethods;
+    let card_id = req.body.card_id
+    if (userId) {
+      cusId = await UserModel.findById({ _id: userId });
+      cusId = cusId.userInfo.stripe_id;
+    }
+    if (cusId) {
+      paymentMethods = await stripe.paymentMethods.attach(
+        card_id,
+        {customer: cusId}
+      );
+    }
+   
+    if (paymentMethods.data.length > 0) {
+      return successJSONResponse(
+        res,
+        { status: 200, message: " success", },
+        200
+      );
+    } else {
+      return failureJSONResponse(res, {
+        message: `failure `,
+      });
+    }
+  } catch (error) {
+    return failureJSONResponse(res, {
+      message: `Something went wrong`,
+      error: error.message,
+    });
+  }
+};
+
