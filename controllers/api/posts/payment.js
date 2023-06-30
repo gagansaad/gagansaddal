@@ -158,11 +158,6 @@ const paymentIntentCreate = async (
     if (request.body.add_ons.length > 0)
       sessionName +=
         " and " + request.body.add_ons.length.toString() + " addons";
-
-        const setupIntent = await stripe.setupIntents.create({
-          customer: customerStripeId,
-          payment_method_types: ['card'],
-        });
     paymentIntent = await stripe.checkout.sessions.create({
       line_items: [
         {
@@ -177,18 +172,13 @@ const paymentIntentCreate = async (
           quantity: 1,
         },
       ],
-      payment_method_types: ['card'],
-      mode: 'payment',
+      mode: "payment",
       customer: customerStripeId,
       // customer_email: request.body.useremail,
       metadata: {
         payment_id: PaymentModelId._id.toString(),
       },
-      payment_intent_data: {
-        setup_future_usage: 'off_session', // Save payment method for future use
-        setup_intent: setupIntent.id, // Pass the SetupIntent ID
-      },
-      
+
       success_url: successUrl,
       cancel_url: cancelUrl,
     });
