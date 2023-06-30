@@ -172,14 +172,18 @@ const paymentIntentCreate = async (
           quantity: 1,
         },
       ],
-      mode: "payment",
+      payment_method_types: ['card'],
+      mode: 'payment',
       customer: customerStripeId,
       // customer_email: request.body.useremail,
       metadata: {
         payment_id: PaymentModelId._id.toString(),
       },
-      payment_method_types: ["card"], // Specify the supported payment method types
-      setup_future_usage: "off_session",
+      payment_intent_data: {
+        setup_future_usage: 'off_session', // Save payment method for future use
+        setup_intent: setupIntent.id, // Pass the SetupIntent ID
+      },
+      
       success_url: successUrl,
       cancel_url: cancelUrl,
     });
