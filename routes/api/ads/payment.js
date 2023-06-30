@@ -16,7 +16,7 @@ authMiddleware.ensureUserLoggedIn,
     // controllers.validatepaymentData,
     controllers.billingInfo
 );
-router.get(`/detach-card`,
+router.post(`/detach-card`,
 authMiddleware.ensureUserLoggedIn,
     // controllers.validatepaymentData,
     controllers.detachcard
