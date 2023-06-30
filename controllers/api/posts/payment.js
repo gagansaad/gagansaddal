@@ -695,3 +695,31 @@ exports.billingInfo = async (req, res) => {
     });
   }
 };
+
+exports.detachcard = async (req, res) => {
+  try {
+    let payment_id = req.body.card_id;
+   let paymentMethods;
+    if (payment_id) {
+      paymentMethods = await stripe.paymentMethods.detach(payment_id);
+    }
+    
+   
+    if (paymentMethods.data.length > 0) {
+      return successJSONResponse(
+        res,
+        { status: 200, message: " success", paymentMethods },
+        200
+      );
+    } else {
+      return failureJSONResponse(res, {
+        message: `failure `,
+      });
+    }
+  } catch (error) {
+    return failureJSONResponse(res, {
+      message: `Something went wrong`,
+      error: error.message,
+    });
+  }
+};
