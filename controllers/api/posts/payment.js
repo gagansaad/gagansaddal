@@ -743,16 +743,18 @@ exports.defaultcard = async (req, res) => {
       );
     }
    
-    if (paymentMethods.data.length > 0) {
+    if (paymentMethods) {
       return successJSONResponse(
         res,
         { status: 200, message: " success", },
         200
       );
     } else {
-      return failureJSONResponse(res, {
-        message: `failure `,
-      });
+      return successJSONResponse(
+        res,
+        { status: 200, message: "failure", },
+        200
+      );
     }
   } catch (error) {
     return failureJSONResponse(res, {
