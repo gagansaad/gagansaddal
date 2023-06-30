@@ -700,7 +700,7 @@ exports.detachcard = async (req, res) => {
   try {
     let payment_id = req.body.card_id;
    let paymentMethods;
-    if (payment_id) {
+    if (payment_id.length) {
       paymentMethods = await stripe.paymentMethods.detach(payment_id);
     }
     
