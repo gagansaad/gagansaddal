@@ -686,7 +686,7 @@ exports.billingInfo = async (req, res) => {
     } else {
       return successJSONResponse(
         res,
-        { status: 200, message: " Does not have any card", paymentMethods },
+        { status: 200, message: " Does not have any card", paymentMethods:paymentMethods.data },
         200
       );
       
