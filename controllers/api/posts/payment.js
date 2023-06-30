@@ -174,7 +174,7 @@ const paymentIntentCreate = async (
         },
       ],
       payment_intent_data: {
-        setup_future_usage: "off_session"
+        setup_future_usage: "on_session"
       },
       mode: "payment",
       customer: customerStripeId,
