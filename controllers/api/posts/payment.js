@@ -178,7 +178,8 @@ const paymentIntentCreate = async (
       metadata: {
         payment_id: PaymentModelId._id.toString(),
       },
-
+      payment_method_types: ["card"], // Specify the supported payment method types
+      setup_future_usage: "off_session",
       success_url: successUrl,
       cancel_url: cancelUrl,
     });
