@@ -158,6 +158,11 @@ const paymentIntentCreate = async (
     if (request.body.add_ons.length > 0)
       sessionName +=
         " and " + request.body.add_ons.length.toString() + " addons";
+
+        const setupIntent = await stripe.setupIntents.create({
+          customer: customerStripeId,
+          payment_method_types: ['card'],
+        });
     paymentIntent = await stripe.checkout.sessions.create({
       line_items: [
         {
