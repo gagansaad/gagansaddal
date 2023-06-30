@@ -705,7 +705,7 @@ exports.detachcard = async (req, res) => {
     }
     
    
-    if (paymentMethods.data.length > 0) {
+    if (paymentMethods) {
       return successJSONResponse(
         res,
         { status: 200, message: " success", paymentMethods },
