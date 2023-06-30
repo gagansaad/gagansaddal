@@ -159,6 +159,7 @@ const paymentIntentCreate = async (
       sessionName +=
         " and " + request.body.add_ons.length.toString() + " addons";
     paymentIntent = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
       line_items: [
         {
           price_data: {
@@ -178,6 +179,7 @@ const paymentIntentCreate = async (
       metadata: {
         payment_id: PaymentModelId._id.toString(),
       },
+      
 
       success_url: successUrl,
       cancel_url: cancelUrl,
