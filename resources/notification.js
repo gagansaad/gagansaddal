@@ -128,6 +128,7 @@ let sendAppleNotification = (deviceTokens, title, body, data = null) => {
                 body: body,
             }
         };
+        console.log(message,"Amika ka issuue hai");
         fcm.send(message, function (err, response) {
             if (err) {
                 console.log(err)
