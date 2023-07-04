@@ -599,7 +599,7 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
     { _id: ads_id },
     { $set: data_Obj }
   );
-  let title = "CrePost ated!";
+  let title = "Post Created!";
   let body = "Your Post is Successfully Created!";
   if (statusUpdate)
     await Notification.sendNotifications(
