@@ -158,10 +158,11 @@ const paymentIntentCreate = async (
     // if (request.body.add_ons.length > 0)
     //   sessionName +=" and " + request.body.add_ons.length.toString() + " addons";
 console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsrequest.body.add_onsrequest.body.add_ons");
-    if (request.body.add_ons.length) {
+    if (request.body.add_ons.length > 0) {
       let addonsId;
       if (!Array.isArray(request.body.add_ons)) {
         addonsId = JSON.parse(request.body.add_ons);
+        console.log(addonsId,"addonsIddddddddddddddddddddddddd");
       }
       console.log(addonsId,"addonsIdaddonsIdaddonsId");
       let addonsName;
