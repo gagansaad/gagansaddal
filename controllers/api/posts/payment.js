@@ -158,8 +158,8 @@ const paymentIntentCreate = async (
     // if (request.body.add_ons.length > 0)
     //   sessionName +=" and " + request.body.add_ons.length.toString() + " addons";
     if (request.body.add_ons.length) {
-      if (!Array.isArray(req.body.add_ons)) {
-        addonsId = JSON.parse(req.body.add_ons);
+      if (!Array.isArray(request.body.add_ons)) {
+        addonsId = JSON.parse(request.body.add_ons);
       }
       let addonsName;
       let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
