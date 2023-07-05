@@ -167,6 +167,7 @@ console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsreques
     
       
         result.forEach((item) => {
+          console.log(item,"items of result")
           addonsName += item.name + ', ';
         });
      
