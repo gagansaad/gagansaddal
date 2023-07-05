@@ -157,7 +157,9 @@ const paymentIntentCreate = async (
     let sessionName = findModelName.name;
     // if (request.body.add_ons.length > 0)
     //   sessionName +=" and " + request.body.add_ons.length.toString() + " addons";
+
     if (request.body.add_ons.length) {
+      let addonsId;
       if (!Array.isArray(request.body.add_ons)) {
         addonsId = JSON.parse(request.body.add_ons);
       }
