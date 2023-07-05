@@ -170,8 +170,10 @@ console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsreques
           addonsName += item.name + ', ';
         })
       }
-     
-      sessionName += "(" + addonsName + ")";
+      if (sessionName.endsWith(",")) {
+        sessionName = sessionName.slice(0, -1);
+      }
+      sessionName += " (" + addonsName + ")";
     }
     paymentIntent = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
