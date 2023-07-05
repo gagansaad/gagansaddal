@@ -76,7 +76,7 @@ module.exports = {
             if (iosTokens.length) {
 
                 iosTokens = iosTokens.map(user => user.token);
-                console.log(iosTokens);
+                console.log(iosTokens,"------------------------------------------------------------------>>>>>>>>>>>>>>>>>>>>>>.");
                 sendAppleNotification(iosTokens, title, body, data);
             }
             // if (deviceType3Array.length) {
