@@ -161,7 +161,7 @@ console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsreques
     if (request.body.add_ons.length > 0) {
       let addonsId =request.body.add_ons;
       
-      let addonsName = null;
+      let addonsName ='';
       let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
     console.log(result,'sessionresultresultresultresultresultName');
     
@@ -170,7 +170,7 @@ console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsreques
           console.log(item,"items of result")
           console.log(item.name,"items of result")
 
-          return
+          // return
           addonsName += item.name + ', ';
         })
       }
