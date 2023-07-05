@@ -155,9 +155,25 @@ const paymentIntentCreate = async (
       _id: dataobj.ads_type.toString(),
     });
     let sessionName = findModelName.name;
-    if (request.body.add_ons.length > 0)
-      sessionName +=
-        " and " + request.body.add_ons.length.toString() + " addons";
+    // if (request.body.add_ons.length > 0)
+    //   sessionName +=" and " + request.body.add_ons.length.toString() + " addons";
+    if (request.body.add_ons.length) {
+      if (!Array.isArray(req.body.add_ons)) {
+        addonsId = JSON.parse(req.body.add_ons);
+      }
+      let addonsName;
+      let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
+    console.log(result,'sessionresultresultresultresultresultName');
+
+      addonsId.forEach((targetId) => {
+        result.forEach((item) => {
+          addonsName += item.name + ', ';
+        });
+      });
+      sessionName += "(" + addonsName + ")";
+    }
+    console.log(sessionName,'sessionName');
+    return ;
     paymentIntent = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -182,7 +198,7 @@ const paymentIntentCreate = async (
       metadata: {
         payment_id: PaymentModelId._id.toString(),
       },
-      
+
 
       success_url: successUrl,
       cancel_url: cancelUrl,
@@ -486,7 +502,7 @@ exports.webhooks = async (request, response) => {
           getNotification.title,
           getNotification.body,
           { model_id: Adstype_Id, model: adsName },
-          true, 
+          true,
           {
             subject: "Payment succeedded of post",
             email_template: "paymentstatus",
@@ -676,7 +692,7 @@ exports.billingInfo = async (req, res) => {
         type: "card",
       });
     }
-   
+
     if (paymentMethods.data.length > 0) {
       return successJSONResponse(
         res,
@@ -686,10 +702,10 @@ exports.billingInfo = async (req, res) => {
     } else {
       return successJSONResponse(
         res,
-        { status: 200, message: " Does not have any card", paymentMethods:{paymentMethods:paymentMethods.data} },
+        { status: 200, message: " Does not have any card", paymentMethods: { paymentMethods: paymentMethods.data } },
         200
       );
-      
+
     }
   } catch (error) {
     return failureJSONResponse(res, {
@@ -702,12 +718,12 @@ exports.billingInfo = async (req, res) => {
 exports.detachcard = async (req, res) => {
   try {
     let payment_id = req.body.card_id;
-   let paymentMethods;
+    let paymentMethods;
     if (payment_id.length) {
       paymentMethods = await stripe.paymentMethods.detach(payment_id);
     }
-    
-   
+
+
     if (paymentMethods) {
       return successJSONResponse(
         res,
@@ -739,10 +755,10 @@ exports.defaultcard = async (req, res) => {
     if (cusId) {
       paymentMethods = await stripe.paymentMethods.attach(
         card_id,
-        {customer: cusId}
+        { customer: cusId }
       );
     }
-   
+
     if (paymentMethods) {
       return successJSONResponse(
         res,
