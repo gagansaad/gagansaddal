@@ -486,7 +486,7 @@ exports.webhooks = async (request, response) => {
           getNotification.title,
           getNotification.body,
           { model_id: Adstype_Id, model: adsName },
-          true,
+          true, 
           {
             subject: "Payment succeedded of post",
             email_template: "paymentstatus",

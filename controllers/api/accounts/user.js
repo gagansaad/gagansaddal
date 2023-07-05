@@ -1266,7 +1266,7 @@ module.exports = {
             }
           );
           return successJSONResponse(res, {
-            message: `email change successfully`,
+            message: `Your email has been changed successfully`,
             status: 200,
           });
         }
