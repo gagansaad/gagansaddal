@@ -172,7 +172,7 @@ console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsreques
       }
       console.log(addonsName,"dkdkd");
       if (addonsName.endsWith(", ")) {
-        addonsName = addonsName.slice(0, -1);
+        addonsName = addonsName.slice(0, -2);
       }
       sessionName += " (" + addonsName + ")";
       
