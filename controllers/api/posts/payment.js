@@ -165,11 +165,12 @@ console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsreques
       let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
     console.log(result,'sessionresultresultresultresultresultName');
     
-      
+      if(result.length){
         result.forEach((item) => {
           console.log(item,"items of result")
           addonsName += item.name + ', ';
-        });
+        })
+      }
      
       sessionName += "(" + addonsName + ")";
     }
