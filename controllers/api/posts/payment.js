@@ -166,7 +166,7 @@ console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsreques
       }
       console.log(addonsId,"addonsIdaddonsIdaddonsId");
       let addonsName;
-      let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
+      let result = await AddOns.find({ "price._id": { $in: request.body.add_ons } }).exec();
     console.log(result,'sessionresultresultresultresultresultName');
     
       addonsId.forEach((targetId) => {
