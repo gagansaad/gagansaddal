@@ -159,14 +159,10 @@ const paymentIntentCreate = async (
     //   sessionName +=" and " + request.body.add_ons.length.toString() + " addons";
 console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsrequest.body.add_onsrequest.body.add_ons");
     if (request.body.add_ons.length > 0) {
-      let addonsId;
-      if (!Array.isArray(request.body.add_ons)) {
-        addonsId = JSON.parse(request.body.add_ons);
-        console.log(addonsId,"addonsIddddddddddddddddddddddddd");
-      }
-      console.log(addonsId,"addonsIdaddonsIdaddonsId");
+      let addonsId =request.body.add_ons;
+      
       let addonsName;
-      let result = await AddOns.find({ "price._id": { $in: request.body.add_ons } }).exec();
+      let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
     console.log(result,'sessionresultresultresultresultresultName');
     
       addonsId.forEach((targetId) => {
