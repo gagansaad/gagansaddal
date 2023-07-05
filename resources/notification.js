@@ -132,7 +132,7 @@ let sendAppleNotification = (deviceTokens, title, body, data = null) => {
                 body: body,
             }
         };
-        console.log(message
+        console.log(registration_ids
 ,"dsjbdhbvhdvbdxgbdgxbgdb");
         fcm.send(message, function (err, response) {
             if (err) {
