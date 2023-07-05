@@ -69,10 +69,14 @@ module.exports = {
             webTokens = userDeviceTypes.find(type => type._id === 3)?.devices || [];
             if (androidTokens.length) {
                 androidTokens = androidTokens.map(user => user.token);
+                console.log(androidTokens);
+
                 sendAndroidNotifications(androidTokens, title, body, data);
             }
             if (iosTokens.length) {
+
                 iosTokens = iosTokens.map(user => user.token);
+                console.log(iosTokens);
                 sendAppleNotification(iosTokens, title, body, data);
             }
             // if (deviceType3Array.length) {
