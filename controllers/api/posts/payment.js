@@ -170,11 +170,11 @@ console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsreques
           addonsName += item.name + ', ';
         })
       }
-      console.log(addonsName,"dkdkd");
+      
       if (addonsName.endsWith(", ")) {
         addonsName = addonsName.slice(0, -2);
       }
-      sessionName += " (" + addonsName + ")";
+      sessionName += " and Add-ons (" + addonsName + ")";
       
     }
     paymentIntent = await stripe.checkout.sessions.create({
