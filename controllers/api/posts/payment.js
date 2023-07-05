@@ -167,18 +167,12 @@ console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsreques
     
       if(result.length){
         result.forEach((item) => {
-          console.log(item,"items of result")
-          console.log(item.name,"items of result")
-
-          // return
           addonsName += item.name + ', ';
         })
       }
      
       sessionName += "(" + addonsName + ")";
     }
-    console.log(sessionName,'sessionName');
-    return ;
     paymentIntent = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
