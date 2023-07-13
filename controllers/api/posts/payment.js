@@ -452,111 +452,111 @@ exports.create_payment_intent = async (req, res) => {
     });
   }
 };
-exports.webhooks = async (request, response) => {
-  try {
-    let getNotification;
-    let event = request.body;
-    console.log(event, "this is event");
-    let payment_id = event.data.object.metadata.payment_id;
-    if (payment_id == "" || payment_id == null || payment_id == undefined)
+  exports.webhooks = async (request, response) => {
+    try {
+      let getNotification;
+      let event = request.body;
+      console.log(event, "this is event");
+      let payment_id = event.data.object.metadata.payment_id;
+      if (payment_id == "" || payment_id == null || payment_id == undefined)
+        return successJSONResponse(
+          response,
+          { status: 200, message: `paymentn Id not found` },
+          200
+        );
+      // Handle the event
+      let findUser = await PaymentModel.findById({ _id: payment_id });
+      console.log(findUser, "findUser");
+      let UserId = findUser.user.toString();
+      let Adstype_Id = findUser.ads_type.toString();
+      let getAdDetails = await category.findById({ _id: Adstype_Id });
+      let adsName = getAdDetails.name;
+      // console.log(findUser.user, "jsncjsn", getAdDetails, "dasshbc", Adstype_Id);
+      let paymentStatus = "pending";
+      switch (event.type) {
+        case "payment_intent.amount_capturable_updated":
+          const paymentIntentAmountCapturableUpdated = event.data.object;
+          // Then define and call a function to handle the event payment_intent.amount_capturable_updated
+          break;
+        case "payment_intent.canceled":
+          const paymentIntentCanceled = event.data.object;
+          // Then define and call a function to handle the event payment_intent.canceled
+          break;
+        case "payment_intent.created":
+          paymentStatus = "confirmed";
+          const paymentIntentCreated = event.data.object;
+          // Then define and call a function to handle the event payment_intent.created
+          break;
+        case "payment_intent.payment_failed":
+          paymentStatus = "failed";
+          const paymentIntentPaymentFailed = event.data.object;
+          // Then define and call a function to handle the event payment_intent.payment_failed
+          break;
+        case "payment_intent.processing":
+          const paymentIntentProcessing = event.data.object;
+          // Then define and call a function to handle the event payment_intent.processing
+          break;
+
+        case "payment_intent.succeeded":
+          paymentSuccessModelUpdate(payment_id, UserId);
+          getNotification = await getNotificationTitles(event.type);
+          await Notification.sendNotifications(
+            [UserId],
+            getNotification.title,
+            getNotification.body,
+            { model_id: Adstype_Id, model: adsName },
+            true,
+            {
+              subject: "Payment succeedded of post",
+              email_template: "paymentstatus",
+              data: { payment_status: "succeeded" },
+            }
+          );
+
+          const paymentIntentSucceeded = event.data.object;
+          // Then define and call a function to handle the event payment_intent.succeeded
+          break;
+        case "checkout.session.completed":
+          paymentSuccessModelUpdate(payment_id, UserId);
+          getNotification = await getNotificationTitles(event.type);
+          await Notification.sendNotifications(
+            [UserId],
+            getNotification.title,
+            getNotification.body,
+            { model_id: Adstype_Id, model: adsName },
+            true,
+            {
+              subject: "Payment succedded of post",
+              email_template: "paymentstatus",
+              data: { payment_status: "succeeded" },
+            }
+          );
+
+          break;
+        // ... handle other event types
+        default:
+          console.log(`Unhandled event type ${event.type}`);
+      }
+      let dataobj = {
+        payment_id: payment_id,
+        payment_status: paymentStatus,
+        payment_intent: event,
+      };
+      await PaymentEventModel.create(dataobj);
       return successJSONResponse(
         response,
-        { status: 200, message: `paymentn Id not found` },
+        { status: 200, message: event.type + " success" },
         200
       );
-    // Handle the event
-    let findUser = await PaymentModel.findById({ _id: payment_id });
-    console.log(findUser, "findUser");
-    let UserId = findUser.user.toString();
-    let Adstype_Id = findUser.ads_type.toString();
-    let getAdDetails = await category.findById({ _id: Adstype_Id });
-    let adsName = getAdDetails.name;
-    // console.log(findUser.user, "jsncjsn", getAdDetails, "dasshbc", Adstype_Id);
-    let paymentStatus = "pending";
-    switch (event.type) {
-      case "payment_intent.amount_capturable_updated":
-        const paymentIntentAmountCapturableUpdated = event.data.object;
-        // Then define and call a function to handle the event payment_intent.amount_capturable_updated
-        break;
-      case "payment_intent.canceled":
-        const paymentIntentCanceled = event.data.object;
-        // Then define and call a function to handle the event payment_intent.canceled
-        break;
-      case "payment_intent.created":
-        paymentStatus = "confirmed";
-        const paymentIntentCreated = event.data.object;
-        // Then define and call a function to handle the event payment_intent.created
-        break;
-      case "payment_intent.payment_failed":
-        paymentStatus = "failed";
-        const paymentIntentPaymentFailed = event.data.object;
-        // Then define and call a function to handle the event payment_intent.payment_failed
-        break;
-      case "payment_intent.processing":
-        const paymentIntentProcessing = event.data.object;
-        // Then define and call a function to handle the event payment_intent.processing
-        break;
-
-      case "payment_intent.succeeded":
-        paymentSuccessModelUpdate(payment_id, UserId);
-        getNotification = await getNotificationTitles(event.type);
-        await Notification.sendNotifications(
-          [UserId],
-          getNotification.title,
-          getNotification.body,
-          { model_id: Adstype_Id, model: adsName },
-          true,
-          {
-            subject: "Payment succeedded of post",
-            email_template: "paymentstatus",
-            data: { payment_status: "succeeded" },
-          }
-        );
-
-        const paymentIntentSucceeded = event.data.object;
-        // Then define and call a function to handle the event payment_intent.succeeded
-        break;
-      case "checkout.session.completed":
-        paymentSuccessModelUpdate(payment_id, UserId);
-        getNotification = await getNotificationTitles(event.type);
-        await Notification.sendNotifications(
-          [UserId],
-          getNotification.title,
-          getNotification.body,
-          { model_id: Adstype_Id, model: adsName },
-          true,
-          {
-            subject: "Payment succedded of post",
-            email_template: "paymentstatus",
-            data: { payment_status: "succeeded" },
-          }
-        );
-
-        break;
-      // ... handle other event types
-      default:
-        console.log(`Unhandled event type ${event.type}`);
+    } catch (error) {
+      console.log(error);
+      return response.status(422).send({
+        error: {
+          message: error.message,
+        },
+      });
     }
-    let dataobj = {
-      payment_id: payment_id,
-      payment_status: paymentStatus,
-      payment_intent: event,
-    };
-    await PaymentEventModel.create(dataobj);
-    return successJSONResponse(
-      response,
-      { status: 200, message: event.type + " success" },
-      200
-    );
-  } catch (error) {
-    console.log(error);
-    return response.status(422).send({
-      error: {
-        message: error.message,
-      },
-    });
-  }
-};
+  };
 
 const paymentSuccessModelUpdate = async (payment_id, userId) => {
   // let userID = req.userId;
@@ -782,4 +782,47 @@ exports.defaultcard = async (req, res) => {
     });
   }
 };
-
+exports.createcard = async (req, res) => {
+  try {
+    const {number,
+    exp_month,
+    exp_year,
+    cvc,} = req.body
+    let userID=req.userId
+let customerStripeId = await getStripeCustomer(userID);
+let paymentMethod;
+    if(customerStripeId){
+      paymentMethod = await stripe.paymentMethods.create({
+        type: 'card',
+        card: {
+          number: number,
+          exp_month: exp_month,
+          exp_year: exp_year,
+          cvc: cvc,
+        },
+      });
+     
+      
+      paymentMethod = await stripe.paymentMethods.attach(
+        paymentMethod.id,
+        {customer: customerStripeId}
+      );
+    }
+    if (paymentMethod) {
+      return successJSONResponse(
+        res,
+        { status: 200, message: " success" },
+        200
+      );
+    } else {
+      return failureJSONResponse(res, {
+        message: `failure `,
+      });
+    }
+  } catch (error) {
+    return failureJSONResponse(res, {
+      message: `Something went wrong`,
+      error: error.message,
+    });
+  }
+};

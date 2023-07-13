@@ -21,6 +21,11 @@ authMiddleware.ensureUserLoggedIn,
     // controllers.validatepaymentData,
     controllers.detachcard
 );
+router.post(`/create-card`,
+authMiddleware.ensureUserLoggedIn,
+    // controllers.validatepaymentData,
+    controllers.createcard
+);
 router.post(`/attach-card`,
 authMiddleware.ensureUserLoggedIn,
     // controllers.validatepaymentData,
