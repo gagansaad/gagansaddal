@@ -1337,9 +1337,7 @@ module.exports = {
         phone_number: phoneNumber,
         used_for: 3,
         code: phoneNumberOTP,
-        for: 1,
-      })
-        .then(async (foundMobileOTP) => {
+        for: 1}).then(async (foundMobileOTP) => {
           if (!foundMobileOTP)
             return failureJSONResponse(res, { message: `invalid OTP` });
           else {
