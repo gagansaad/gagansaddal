@@ -1337,20 +1337,25 @@ module.exports = {
         phone_number: phoneNumber,
         used_for: 3,
         code: phoneNumberOTP,
-        for: 1,
-      }).then(async (foundMobileOTP) => {
-
-        if (!foundMobileOTP) return failureJSONResponse(res, { message: `invalid OTP` })
-        else {
-          await OTP.deleteMany({ _id: { $in: [foundMobileOTP._id] } });
-          await User.findByIdAndUpdate({ _id: userId }, { "userInfo.mobile_number": {
-            phone_number: phoneNumber,
-            country_code: countryCode
-          } })
-          return successJSONResponse(res, { message: "Phone number chnage successfully" })
-        }
-
-      })
+        for: 1}).then(async (foundMobileOTP) => {
+          if (!foundMobileOTP)
+            return failureJSONResponse(res, { message: `invalid OTP` });
+          else {
+            await OTP.deleteMany({ _id: { $in: [foundMobileOTP._id] } });
+            await User.findByIdAndUpdate(
+              { _id: userId },
+              {
+                "userInfo.mobile_number": {
+                  phone_number: phoneNumber,
+                  country_code: countryCode,
+                },
+              }
+            );
+            return successJSONResponse(res, {
+              message: "Phone number change successfully",
+            });
+          }
+        })
         .catch((err) => {
           console.log(err);
           return failureJSONResponse(res, { message: `Something went wrong` });
@@ -1420,8 +1425,13 @@ module.exports = {
           }
 
           if (invalidOTP === 0) {
-            await OTP.deleteMany({ _id: { $in: [foundNewEmailOTP._id, foundEmailOTP._id] } });
-            await User.findByIdAndUpdate({ _id: userId }, { "userInfo.email_address": new_email_address })
+            await OTP.deleteMany({
+              _id: { $in: [foundNewEmailOTP._id, foundEmailOTP._id] },
+            });
+            await User.findByIdAndUpdate(
+              { _id: userId },
+              { "userInfo.email_address": newEmailAddress }
+            );
             return res.json({
               status: 200,
               invalidOTP,
@@ -1452,10 +1462,95 @@ module.exports = {
   },
   /////
 
+  ///// new api for verify old email /////
+  verifiy_otp_for_old_email: async function (req, res, next) {
+    const userId = req.userId,
+      oldEmailOTP = req?.body?.old_email_otp,
+      newEmailAddress = String(req?.body?.new_email_address).toLowerCase();
 
-    }
+    const foundUser = await User.findById({ _id: userId });
+    if (!foundUser)
+      return failureJSONResponse(res, { message: `User not found` });
+    else if (foundUser && !foundUser?.userInfo?.email_address)
+      return failureJSONResponse(res, { message: `Old  email not found` });
+
+    const oldEmailAddress = foundUser?.userInfo?.email_address?.toLowerCase();
+
+    if (!oldEmailAddress)
+      return failureJSONResponse(res, {
+        message: `please provide old email address`,
+      });
+    else if (!isValidEmailAddress(oldEmailAddress))
+      return failureJSONResponse(res, {
+        message: `please provide valid old email address`,
+      });
+
+    OTP.findOne({
+      $and: [
+        { is_active: true },
+        { user: req.userId },
+        { email_address: oldEmailAddress },
+        { used_for: 3 },
+        { code: oldEmailOTP },
+        { for: 2 },
+      ],
+    }).then(async (foundEmailOTP) => {
+      console.log(foundEmailOTP, "bchdbc nj");
+      if (foundEmailOTP) {
+        await OTP.deleteOne({ _id: foundEmailOTP._id });
+
+        OTP.create({
+          is_active: true,
+          code: generateOTP(4),
+          email_address: newEmailAddress.toLowerCase(),
+          used_for: 3,
+          user: userId,
+          for: 2,
+        })
+          .then((foundOTP) => {
+            if (!foundOTP) {
+              return failureJSONResponse(res, {
+                message: `something went wrong`,
+              });
+            } else {
+              let title = "Email verification";
+              let body = "Please check your new email and click to verify";
+              let verifiy_url = `https://menehariya.netscapelabs.com/change-emailaddress?secret=${foundOTP?._id}`;
+              Notification.sendNotifications(
+                [userId],
+                title,
+                body,
+                { model_id: userId, model: "user" },
+                false,
+                {
+                  subject: "Email Verification",
+                  email_template: "emailverification",
+                  data: {
+                    verify_url: verifiy_url,
+                    newEmailAddress: newEmailAddress,
+                  },
+                }
+              );
+              return successJSONResponse(res, {
+                message: `success`,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            return failureJSONResponse(res, {
+              message: `something went wrong`,
+            });
+          });
+      } else {
+        return failureJSONResponse(res, {
+          message: `please provide valid old email otp`,
+        });
+      }
+    });
   },
-  /////////////
+  /////
+
   ////////////
   forget_password: async function (req, res, next) {
     console.log(req.body);
@@ -1894,14 +1989,14 @@ module.exports = {
             message: `please provide valid old email address`,
           });
 
-        const oldEmailAddress = foundUser?.userInfo?.email_address?.toLowerCase();
-
-        if (!oldEmailAddress) return failureJSONResponse(res, { message: `please provide old email address` });
-        else if (!isValidEmailAddress(oldEmailAddress)) return failureJSONResponse(res, { message: `please provide valid old email address` });
-
-        if (!newEmailAddress) return failureJSONResponse(res, { message: `please provide new email address` });
-        else if (!isValidEmailAddress(newEmailAddress)) return failureJSONResponse(res, { message: `please provide valid new email address` });
-
+        if (!newEmailAddress)
+          return failureJSONResponse(res, {
+            message: `please provide new email address`,
+          });
+        else if (!isValidEmailAddress(newEmailAddress))
+          return failureJSONResponse(res, {
+            message: `please provide valid new email address`,
+          });
         /*
         emailType :-
         1: Old Email
@@ -1949,7 +2044,6 @@ module.exports = {
               });
             });
         } else if (emailType === 2) {
-
           OTP.create({
             is_active: true,
             code: generateOTP(4),
@@ -1967,17 +2061,18 @@ module.exports = {
                 });
               else {
                 EmailOTPVerification(newEmailAddress, `Hi`, foundOTP?.code);
-                return successJSONResponse(res, { message: `OTP send successfully on ${oldEmailAddress}` });
+                return successJSONResponse(res, {
+                  message: `OTP send successfully on ${oldEmailAddress}`,
+                });
               }
             })
             .catch((err) => {
-              console.log(err)
-              return failureJSONResponse(res, { message: `something went wrong` });
+              console.log(err);
+              return failureJSONResponse(res, {
+                message: `something went wrong`,
+              });
             });
-        }
-
-        else if (emailType === 3) {
-
+        } else if (emailType === 3) {
           let OTPCreatedForBoth = false;
 
           const newOTPForNewEmail = await OTP.create({
