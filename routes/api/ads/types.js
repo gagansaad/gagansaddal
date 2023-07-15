@@ -3,12 +3,12 @@ const router = require(`express`).Router(),
     controllers = require(`../../../controllers/api/posts/types`);
 
 router.get(`/`,
-    authMiddleware.ensureUserLoggedIn,
+    // authMiddleware.ensureUserLoggedIn,
     controllers.fetchPostsTypes
 );
 
 router.post(`/`,
-    authMiddleware.ensureUserLoggedIn,
+    // authMiddleware.ensureUserLoggedIn,
     controllers.createPostsTypes
 );
 
