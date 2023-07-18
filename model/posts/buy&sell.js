@@ -77,7 +77,7 @@ const BuySellSchema = new mongoose.Schema({
         price:{
             amount: {
                 type: Number,
-                required: true
+                // required: true
             },
             currency:{type:String,default:"USD"},
         },

@@ -174,7 +174,7 @@ console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsreques
       if (addonsName.endsWith(", ")) {
         addonsName = addonsName.slice(0, -2);
       }
-      sessionName += " and Add-ons (" + addonsName + ")";
+      sessionName += " and Ad-  ons (" + addonsName + ")";
       
     }
     paymentIntent = await stripe.checkout.sessions.create({
