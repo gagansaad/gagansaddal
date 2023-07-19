@@ -1048,7 +1048,6 @@ exports.fetchAll = async (req, res, next) => {
         ]
       };
     }
-    console.log(object);
     let myid = req.userId;
     let records = await postBuySellAd
       .find({ $or: [queryFinal] })
