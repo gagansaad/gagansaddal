@@ -362,6 +362,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
 
     userId: userId,
   };
+  
   console.log(dataObj, "jdnjd");
   const newRoomRentPost = await RoomRentsAds.create(dataObj);
   const stringToHash = newRoomRentPost._id.toString();
