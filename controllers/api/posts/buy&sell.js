@@ -1121,7 +1121,7 @@ exports.fetchonead = async (req, res, next) => {
     .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
     
     if (records) {
-      const ads_type =records.adsType.toString();
+      const ads_type =records.ads_type.toString();
     
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
     console.log(Typename,"nfjdnfcjed");
