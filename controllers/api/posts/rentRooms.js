@@ -250,6 +250,8 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     preferedGender,
     location,
     tagline,
+    latitude,
+    longitude
   } = req.body;
   
   let taglines = tagline;
@@ -349,7 +351,11 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
       isPetFriendly: isPetFr,
       // occupation,
       preferedGender: preferedGender,
-      location,
+      location:{
+        locationName:location,
+        latitude:latitude,
+        longitude:longitude
+      },
       tagline: taglines,
       image: imageArr,
     },
