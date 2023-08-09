@@ -28,6 +28,7 @@ exports.fetchDynamicsData = async (req, res, next) => {
     .find({ adType: adtype })
     .select({ keywords: 1, _id: 1 });
   }
+  console.log(records,"tere tag tag tere");
   const objtSend = {
     tagline: records,
     rental_type: [
