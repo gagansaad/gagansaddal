@@ -434,6 +434,7 @@ exports.editRoomRentAds = async (req, res, next) => {
     latitude,
     longitude
   } = req.body;
+  console.log(req.body,"-----------09999999999999999900000000000000000999999999999090");
   let taglines = tagline;
   if (taglines) {
     for (i = 0; i < taglines.length; i++) {
@@ -546,8 +547,11 @@ exports.editRoomRentAds = async (req, res, next) => {
 
   // if (occupation) adsInfoObj.occupation = occupation;
   if (prefered_age) adsInfoObj.prefered_age = prefered_age;
-
-  if (location) adsInfoObj.location = location;
+let locationobj={}
+  if (location) locationobj.location = location;
+  if (longitude) locationobj.longitude = longitude;
+  if (latitude) locationobj.latitude = latitude;
+  if (locationobj) adsInfoObj.location = locationobj;
   if (imageArr.length) adsInfoObj.image = imageArr;
   if (name) listerBasicInfoObj.name = name;
 
