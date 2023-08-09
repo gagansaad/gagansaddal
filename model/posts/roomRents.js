@@ -148,16 +148,13 @@ const roomRentsSchema = new mongoose.Schema({
         location: {
             locationName:{
                 ...defaultStringConfig,
-                required: true,
             },
             latitude: {
                 type: Number,
-                required: true,
                 default:0
               },
             longitude: {
                 type: Number,
-                required: true,
                 default:0
               },
         },
