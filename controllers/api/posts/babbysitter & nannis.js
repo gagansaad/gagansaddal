@@ -26,7 +26,7 @@ exports.getDnymicsData = async (req, res, next) => {
   let records = await tagline_keywords
     .find({ ads_type: adtype })
     .select({ keywords: 1, _id: 1 });
-
+console.log(adtype,"=========================");
   const dynamicsData = {
     tagline: records,
     category: ["I want a Babysitter/Nanny", "I am a Babysitter/Nanny"],

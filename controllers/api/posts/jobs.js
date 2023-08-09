@@ -25,7 +25,7 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   let adtype = req.query.adsType;
-
+console.log(adtype,"-------------000000000000000000000000000000000000000000000000000");
   let records = await tagline_keywords
     .find({ adType: adtype })
     .select({ keywords: 1, _id: 1 });
