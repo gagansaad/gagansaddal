@@ -568,11 +568,6 @@ let locationobj={}
       hide_my_phone: my_phone,
       hide_my_email: my_email,
       hide_my_secondary_phone: secondary_phone,
-      location:{
-        locationName:location,
-        latitude:latitude,
-        longitude:longitude
-      },
       primary_mobile_number: {
         country_code: +91,
         primary_phone_number: primary_phone_number,
