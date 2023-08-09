@@ -991,7 +991,10 @@ exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
     let data_Obj
- 
+    let checkId = await postbizAndServicesAd.findOne({_id:adsId})
+    if(!checkId){
+        return failureJSONResponse(res, { message: `Please provide valid ad id` });
+    }
      // Get the current date
      const currentDate = new Date();
      // Convert the date to ISO 8601 format

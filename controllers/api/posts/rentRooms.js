@@ -22,10 +22,12 @@ const {mongoose,ObjectId, modelNames} = require("mongoose"),
 
 exports.fetchDynamicsData = async (req, res, next) => {
   let adtype = req.query.adsType;
-  let records = await tagline_keywords
+  let records;
+  if(adtype){
+   records = await tagline_keywords
     .find({ adType: adtype })
     .select({ keywords: 1, _id: 1 });
-
+  }
   const objtSend = {
     tagline: records,
     rental_type: [
@@ -703,7 +705,10 @@ exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
     let data_Obj
- 
+    let checkId = await RoomRentsAds.findOne({_id:adsId})
+    if(!checkId){
+        return failureJSONResponse(res, { message: `Please provide valid ad id` });
+    }
      // Get the current date
      const currentDate = new Date();
      // Convert the date to ISO 8601 format
@@ -753,7 +758,7 @@ exports.fetchonead = async (req, res, next) => {
         status: 200,
       });
     } else {
-      return failureJSONResponse(res, { message: `ad not Available` });
+      return failureJSONResponse(res, { message: `Ads plan expired` });
     }
   } catch (err) {
     console.log(err);

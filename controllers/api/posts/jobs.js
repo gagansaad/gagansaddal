@@ -25,6 +25,7 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   let adtype = req.query.adsType;
+
   let records = await tagline_keywords
     .find({ adType: adtype })
     .select({ keywords: 1, _id: 1 });
@@ -799,8 +800,12 @@ exports.fetchAllAds = async (req, res, next) => {
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
+    console.log("object",adsId);
     let data_Obj
- 
+    let checkId = await postJobAd.findOne({_id:adsId})
+    if(!checkId){
+        return failureJSONResponse(res, { message: `Please provide valid ad id` });
+    }
      // Get the current date
      const currentDate = new Date();
      // Convert the date to ISO 8601 format
@@ -813,6 +818,8 @@ exports.fetchonead = async (req, res, next) => {
           status :"active" ,
           "plan_validity.expired_on" :{ $gte: currentDateOnly }
       }
+    }else{
+      return failureJSONResponse(res, { message: `ad id not Available` });
     }
     let myid = req.userId
     let records = await postJobAd.findOne(data_Obj)
@@ -820,7 +827,7 @@ exports.fetchonead = async (req, res, next) => {
     .populate({ path: "favoriteCount", select: "_id" })
     .populate({ path: "viewCount" })
     .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-    
+    console.log(records,"saun mahona chad da hai");
     if (records) {
       const ads_type =records.adsType.toString();
     
@@ -842,7 +849,7 @@ exports.fetchonead = async (req, res, next) => {
         ...records._doc,
         viewCount: records.viewCount,
         favoriteCount: records.favoriteCount,
-        isFavorite: !!records.isFavorite
+        isFavorite: records.isFavorite
       };
       return successJSONResponse(res, {
         message: `success`,
@@ -850,7 +857,7 @@ exports.fetchonead = async (req, res, next) => {
         status: 200,
       });
     } else {
-      return failureJSONResponse(res, { message: `ad not Available` });
+      return failureJSONResponse(res, { message: `ad not available` });
     }
   } catch (err) {
     console.log(err);

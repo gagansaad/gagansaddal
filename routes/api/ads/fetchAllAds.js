@@ -12,6 +12,7 @@ router.get(`/my-all-ads`,
 authMiddleware.ensureUserLoggedIn,
     controllers.fetchAllMyAds
 );
+
 router.get(`/all-ads`,
 // authMiddleware.ensureUserLoggedIn,
     controllers.fetchAll

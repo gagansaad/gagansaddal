@@ -9,6 +9,7 @@ const mongoose = require("mongoose"),
   roomrentAd = mongoose.model("rental"),
   jobsAd = mongoose.model("job"),
   category = mongoose.model("PostType"),
+  
   {
     successJSONResponse,
     failureJSONResponse,
@@ -25,12 +26,14 @@ const mongoose = require("mongoose"),
     isValidUrl,
     isValidlink,
   } = require(`../../../utils/validators`);
+let dynamicRoom = require("./rentRooms")
+let dynamicJob = require("./jobs")
+let dynamicBiz = require("./bizAndServices")
+let dynamicBaby = require("./babbysitter & nannis")
+let dynamicBuysell = require("./buy&sell")
+let dynamicEvent = require("./event")
 
 ////////////////
-
-
-
-
 
 exports.fetchAllMyAds = async (req, res, next) => {
 
