@@ -431,8 +431,13 @@ exports.editRoomRentAds = async (req, res, next) => {
     hide_my_secondary_phone,
     hide_my_email,
     latitude,
+    is_contact,
     longitude
   } = req.body;
+  let iscontact = false;
+  if (is_contact == "true") {
+    iscontact = true;
+  }
   console.log(req.body,"-----------09999999999999999900000000000000000999999999999090");
   let taglines = tagline;
   if (taglines) {
@@ -539,6 +544,7 @@ exports.editRoomRentAds = async (req, res, next) => {
   if (attachedBath) adsInfoObj.attachedBath = attachedBath;
   if (amount) rent.amount = amount;
   if (negotiable) rent.negotiable = negotible;
+  if (is_contact) rent.is_contact = iscontact;
   if (amount) adsInfoObj.rent = rent;
   if (isSmokingAllowed) adsInfoObj.isSmokingAllowed = isSmokin;
   if (isAlcoholAllowed) adsInfoObj.isAlcoholAllowed = isAlcoho;
