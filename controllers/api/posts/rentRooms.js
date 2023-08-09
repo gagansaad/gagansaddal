@@ -362,7 +362,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
 
     userId: userId,
   };
-  
+
   console.log(dataObj, "jdnjd");
   const newRoomRentPost = await RoomRentsAds.create(dataObj);
   const stringToHash = newRoomRentPost._id.toString();
@@ -432,6 +432,8 @@ exports.editRoomRentAds = async (req, res, next) => {
     hide_my_phone,
     hide_my_secondary_phone,
     hide_my_email,
+    latitude,
+    longitude
   } = req.body;
   let taglines = tagline;
   if (taglines) {
@@ -563,7 +565,11 @@ exports.editRoomRentAds = async (req, res, next) => {
       hide_my_phone: my_phone,
       hide_my_email: my_email,
       hide_my_secondary_phone: secondary_phone,
-      location,
+      location:{
+        locationName:location,
+        latitude:latitude,
+        longitude:longitude
+      },
       primary_mobile_number: {
         country_code: +91,
         primary_phone_number: primary_phone_number,
