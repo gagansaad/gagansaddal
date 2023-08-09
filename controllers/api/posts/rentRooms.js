@@ -255,6 +255,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     latitude,
     longitude
   } = req.body;
+  console.log(negotiable,is_contact);
   
   let taglines = tagline;
   if (taglines) {
@@ -285,15 +286,11 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
   let iscontact = false;
   if (is_contact == "true") {
     iscontact = true;
-  } else if (is_contact == "false") {
-    iscontact = false;
   }
   let negotible = false;
   if (negotiable == "true") {
     negotible = true;
-  } else if (negotiable == "false") {
-    negotible = false;
-  }
+  } 
   let isSmokin = false;
   let isAlcoho = false;
   let isPetFr = false;
