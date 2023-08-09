@@ -255,8 +255,8 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     latitude,
     longitude
   } = req.body;
-  console.log(negotiable,is_contact);
-  
+  console.log(negotiable,is_contact,"----------------------------------------------------------------------------------------------------------");
+  console.log(req.body,"+++++++++++++++++++++++++++++++++++++++++++{++++++++++++++++++++");
   let taglines = tagline;
   if (taglines) {
     for (i = 0; i < taglines.length; i++) {
