@@ -21,14 +21,13 @@ const {mongoose,ObjectId, modelNames} = require("mongoose"),
   } = require(`../../../utils/validators`);
 
 exports.fetchDynamicsData = async (req, res, next) => {
-  let adtype = req.query.adsType;
-  console.log(adtype,"------------------------------");
+ 
   let records;
-  if(adtype){
+  
    records = await tagline_keywords
     .find({ adType: adtype })
     .select({ keywords: 1, _id: 1 });
-  }
+  
   console.log(records,"tere tag tag tere");
   const objtSend = {
     tagline: records,
