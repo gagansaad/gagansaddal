@@ -22,6 +22,7 @@ const {mongoose,ObjectId, modelNames} = require("mongoose"),
 
 exports.fetchDynamicsData = async (req, res, next) => {
   let adtype = req.query.adsType;
+  console.log(adtype,"------------------------------");
   let records;
   if(adtype){
    records = await tagline_keywords
@@ -364,7 +365,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     userId: userId,
   };
 
-  console.log(dataObj, "jdnjd");
+  console.log(dataObj, "jdnjd---------------------------------");
   const newRoomRentPost = await RoomRentsAds.create(dataObj);
   const stringToHash = newRoomRentPost._id.toString();
   console.log(stringToHash,"hbvhjd xb hdbhd vhdb hnd  ddb nhd nhdb nd  b cn dn n",newRoomRentPost._id);
@@ -581,7 +582,7 @@ exports.editRoomRentAds = async (req, res, next) => {
       },
     },
   };
-
+  console.log(dataObjq,"----------------------------------------");
   const updateRoomRents = await RoomRentsAds.findByIdAndUpdate(
     { _id: roomRentId },
     { $set: dataObjq },
