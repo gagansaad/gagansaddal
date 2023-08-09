@@ -25,7 +25,7 @@ exports.fetchDynamicsData = async (req, res, next) => {
   let records;
   
    records = await tagline_keywords
-    .find({ adType: adtype })
+    .find()
     .select({ keywords: 1, _id: 1 });
   
   console.log(records,"tere tag tag tere");
