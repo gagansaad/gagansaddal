@@ -43,7 +43,10 @@ router.get(`/dynamics-data`,
     authMiddleware.ensureUserLoggedIn,
     controllers.getDnymicsData
 );
-
+router.get(`/menu`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchBizData
+);
 router.post(`/create-service`, upload.fields([
     { name: 'photos', maxCount: 10 },
     { name: 'accreditation_document', maxCount: 5 }]),

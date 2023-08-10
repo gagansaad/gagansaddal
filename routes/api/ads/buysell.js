@@ -43,7 +43,10 @@ router.get(`/dynamics-data`,
     authMiddleware.ensureUserLoggedIn,
     controllers.getDnymicsData
 );
-
+router.get(`/menu`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchBuysellData
+);
 router.post(`/create`, upload.array('photos', 10),
     authMiddleware.ensureUserLoggedIn,
     controllers.validateBuySellAdsData,

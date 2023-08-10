@@ -774,3 +774,49 @@ exports.fetchonead = async (req, res, next) => {
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
+
+exports.fetchBabyData = async (req, res, next) => {
+  try {
+    const sub_categories = {
+      "Babysitter & nannies": [
+        "I want a Babysitter/Nanny", 
+        "I am a Babysitter/Nanny"
+      ],
+    };
+    
+    const responseArray = [];
+
+    for (const category in sub_categories) {
+      const subCategoryArray = sub_categories[category];
+      const subcategoryData = [];
+
+      for (const subCategory of subCategoryArray) {
+        const query = {"adsInfo.care_service": subCategory };
+        
+        const count = await postbabyAd.countDocuments(query);
+        subcategoryData.push({ sub_category_name: subCategory, count });
+      }
+
+      const totalCount = subcategoryData.reduce((total, item) => total + item.count, 0);
+
+      responseArray.push({
+        name: category,
+        count: totalCount,
+        sub_categories: subcategoryData,
+      });
+    }
+
+    console.log(responseArray);
+
+    return successJSONResponse(res, {
+      message: `success`,
+      data: responseArray,
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    return errorJSONResponse(res, {
+      message: 'An error occurred',
+      error: error.message,
+    });
+  }
+};

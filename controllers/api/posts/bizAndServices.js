@@ -1051,3 +1051,250 @@ exports.fetchonead = async (req, res, next) => {
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
+
+exports.fetchBizData = async (req, res, next) => {
+  try {
+    const sub_categories = {
+      "Business & Office": [
+        "Accounting",
+      "Advertising Agencies",
+      "Courier services",
+      "Funeral directors",
+      "Tax Service",
+      "Insurance Agencies",
+      "Translation Service",
+      "Realestate",
+      "Realtor",
+      "Marketing",
+      "Printing",
+      "Recuriment",
+      "Shipping",
+      "Shredding service",
+      "Sign makers",
+      "Storage",
+      "Writing and litterature",
+      "Other bussines and office service",
+      ],
+      "Childcare": [
+        "Daycare",
+        "Kindergarton",
+        "Childeren's activity",
+        "Child care agencies",
+        "Nursery school",
+        "Parent support",
+        "Other childeren service",
+      ],
+      "Clothing": [
+        "Dry cleaning and loundery",
+        "Fashion designers",
+        "Printing",
+        "Seamstress/tailors",
+        "Stylists",
+        "Other Clothing Services",
+      ],
+      "Computers & Telecoms": [
+        "Computer network",
+      "Computer repair",
+      "Computer services",
+      "Computer support",
+      "Online content providers",
+      "Phone and tablet repair",
+      "Software application development",
+      "Telecom and internet service provider",
+      "Web development",
+      "Web service",
+      "Website design",
+      "Other computer service",
+      ],
+      "Entertainment": [
+        "Bands and  musicians",
+        "Cake makers",
+        "Catering",
+        "DJ and disco hire",
+        "Cultural music",
+        "Entertainers",
+        "Venues and nightclubs",
+        "Other entertainments",
+      ],
+      "Finance & Legal": [
+        "Loan Service",
+        "Financial Advice",
+        "Insolvency Practitioners",
+        "Insurance",
+        "Legal Service",
+        "Money transfer",
+        "Mortgage brokers",
+        "Solicitors and conveyancing",
+        "Visa and immigration",
+        "Other finance and legal Service",
+      ],
+      "Food & Drink": [
+        "Bakery",
+        "Bars and Restaurants",
+        "Cafes",
+        "Takeaways",
+        "Other foods and drinks",
+      ],
+      "Goods Suppliers & Retailers": [
+        "Grocery Store",
+      "Wholesale Distributors",
+      "Accessories",
+      "Bike shops",
+      "Clotheing Stores",
+      "Electrical",
+      "Florists",
+      "Footwear",
+      "Health products",
+      "Jewellers",
+      "Mobile phone",
+      "Office furnitures",
+      "Home Furnitures",
+      "Other Goods Suppliers & Retailers",
+      ],
+      "Health & Beauty": [
+        "Alternative therapies",
+        "Beauty treatments",
+        "Chiropodists and podiatrists",
+        "Dentists",
+        "Doctors and Clinics",
+        "Hair Salon",
+        "Life coaching",
+        "Makeup artist",
+        "Massages",
+        "Model and actors",
+        "Nursing and care",
+        "Opticians",
+        "Personal trainers",
+        "Pregnancy and child care",
+        "Tatooing and piercing",
+        "Other health and beauty services",
+      ],
+      "Automotive Services": [
+        "Body repair",
+      "Car breakers",
+      "Car servicing and repair",
+      "Car valeting",
+      "Car wash",
+      "Garage and mechanic service",
+      "MOT testing",
+      "Tyer fitting",
+      "Vehicle recovery service",
+      "Windshield repair",
+      "Other Automotive Services",
+      ],
+      "Property Maintenance and Construction": [
+        "Cleaners",
+        "Commercial proprerty agents",
+        "Drain and pipe cleaning",
+        "Lawn and Garden",
+        "Housekeapers",
+        "Interior design",
+        "Heating and Air conditioning",
+        "Plumbers",
+        "Remodeling",
+        "Electricians",
+        "Satellite, cable and TV",
+        "Security service",
+        "architect",
+        "Bathroom fitter",
+        "Bedroom fitters",
+        "Other Property Maintenance and Construction Services",
+      ],
+      "Transport": [
+        "Trucking Serices",
+      "Chauffeur & Limousine Hire",
+      "Bus & Coach",
+      "Other transport Services",
+      ],
+      "Travel & Tourism": [
+        "Travel Agents",
+        "Group Travel Coordinators",
+        "Other travel and tourism",
+      ],
+      "Tuition & Classes": [
+        "Academic",
+        "Arts & Crafts",
+        "Business",
+        "Construction",
+        "Cookery Classes",
+        "Dance Classes",
+        "Driving Lessons & Instructors",
+        "Health & Fitness",
+        "IT & Computing",
+        "Language",
+        "Music",
+        "Other Classes",
+      ],
+      "Weddings": [
+        "Limousine",
+        "Trucks",
+        "Wedding Appliances",
+        "Wedding Clothes",
+        "Cars",
+        "DJ Equipment",
+        "Event Decorations",
+        "Other",
+      ],
+      "Funneral Services": [
+        "Cars & Transportation",
+      "Catering & Services",
+      "Dress & Suit Hire",
+      "Entertainment",
+      "Florists",
+      "Hairdressers",
+      "Hen & Stag Planners",
+      "Honeymoons",
+      "Marquee Hire",
+      "Organisers & Planners",
+      "Photography & Film",
+      "Wedding & Reception Venues",
+      "Weddings Abroad",
+      "Other Wedding Services",
+      ],
+      "Photography & Video": [
+       
+      ],
+      "Pets": [
+       
+      ],
+      "Other": [
+        
+      ],
+    };
+    
+    const responseArray = [];
+
+    for (const category in sub_categories) {
+      const subCategoryArray = sub_categories[category];
+      const subcategoryData = [];
+
+      for (const subCategory of subCategoryArray) {
+        const query = { "adsInfo.categories": category, "adsInfo.sub_categories": subCategory };
+        
+        const count = await postbizAndServicesAd.countDocuments(query);
+        subcategoryData.push({ sub_category_name: subCategory, count });
+      }
+
+      const totalCount = subcategoryData.reduce((total, item) => total + item.count, 0);
+
+      responseArray.push({
+        name: category,
+        count: totalCount,
+        sub_categories: subcategoryData,
+      });
+    }
+
+    console.log(responseArray);
+
+    return successJSONResponse(res, {
+      message: `success`,
+      data: responseArray,
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    return errorJSONResponse(res, {
+      message: 'An error occurred',
+      error: error.message,
+    });
+  }
+};

@@ -21,12 +21,10 @@ const storage = new CloudinaryStorage({
     params: {
         folder: "DEV",
     },
-
 });
 
 
 const upload = multer({ storage: storage, });
-
 function validateImage(req, res, next) {
 
 
@@ -57,6 +55,10 @@ router.patch(`/edit/:eventId`,
     controllers.validateEventAdsData,
     controllers.validateListerBasicinfo,
     controllers.editEventAds
+);
+router.get(`/menu`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchEventData
 );
 router.patch(`/edit-status/:eventId`,
     authMiddleware.ensureUserLoggedIn,
