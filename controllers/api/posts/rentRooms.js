@@ -759,9 +759,9 @@ console.log(queryFinal);
       .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
       .limit(perPage);
-    const responseModelCount = await RoomRentsAds.countDocuments({
-      $or: [queryFinal],
-    });
+      const responseModelCount = await RoomRentsAds.countDocuments({
+        $or: [queryFinal],
+      })
    
       
     if (records) {
