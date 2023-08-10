@@ -791,7 +791,7 @@ exports.fetchBabyData = async (req, res, next) => {
       const subcategoryData = [];
 
       for (const subCategory of subCategoryArray) {
-        const query = {"adsInfo.care_service": subCategory };
+        const query = {"ads_info.category.category_name": subCategory };
         
         const count = await postbabyAd.countDocuments(query);
         subcategoryData.push({ sub_category_name: subCategory, count });
