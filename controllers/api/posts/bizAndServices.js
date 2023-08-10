@@ -1263,13 +1263,17 @@ exports.fetchBizData = async (req, res, next) => {
     };
     
     const responseArray = [];
-
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    const currentDateOnly = currentISODate.substring(0, 10);
     for (const category in sub_categories) {
       const subCategoryArray = sub_categories[category];
       const subcategoryData = [];
 
       for (const subCategory of subCategoryArray) {
-        const query = { "adsInfo.categories": category, "adsInfo.sub_categories": subCategory };
+        const query = { "adsInfo.categories": category, "adsInfo.sub_categories": subCategory ,"status" :"active",["plan_validity.expired_on"]:{ $gte: currentDateOnly }};
         
         const count = await postbizAndServicesAd.countDocuments(query);
         subcategoryData.push({ sub_category_name: subCategory, count });

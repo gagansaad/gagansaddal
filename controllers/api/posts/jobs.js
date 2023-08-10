@@ -911,9 +911,13 @@ exports.fetchJobData = async (req, res, next) => {
     for (const category in sub_categories) {
       const subCategoryArray = sub_categories[category];
       const subcategoryData = [];
-
+      const currentDate = new Date();
+      // Convert the date to ISO 8601 format
+      const currentISODate = currentDate.toISOString();
+      // Extract only the date portion
+      const currentDateOnly = currentISODate.substring(0, 10);
       for (const subCategory of subCategoryArray) {
-        const query = {"adsInfo.categories": subCategory };
+        const query = {"adsInfo.categories": subCategory ,"status" :"active",["plan_validity.expired_on"]:{ $gte: currentDateOnly }};
         
         const count = await postJobAd.countDocuments(query);
         subcategoryData.push({ sub_category_name: subCategory, count });

@@ -109,7 +109,13 @@ exports.fetchRoomData = async (req, res, next) => {
       const subcategoryData = [];
 
       for (const subCategory of subCategoryArray) {
-        const query = { "adsInfo.rental_type": category, "adsInfo.category": subCategory };
+        const currentDate = new Date();
+        // Convert the date to ISO 8601 format
+        const currentISODate = currentDate.toISOString();
+        // Extract only the date portion
+        const currentDateOnly = currentISODate.substring(0, 10);
+       
+        const query = { "adsInfo.rental_type": category, "adsInfo.category": subCategory ,"status" :"active",["plan_validity.expired_on"]:{ $gte: currentDateOnly }};
         
         const count = await RoomRentsAds.countDocuments(query);
         subcategoryData.push({ sub_category_name: subCategory, count });
