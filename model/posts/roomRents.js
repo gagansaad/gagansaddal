@@ -50,10 +50,8 @@ const roomRentsSchema = new mongoose.Schema({
 
         rental_type: {
             ...defaultStringConfig,
-            required: true
-            
+            required: true   
         },
-
         category: {
             ...defaultStringConfig,
             required: true

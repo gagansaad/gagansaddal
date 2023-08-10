@@ -863,3 +863,82 @@ exports.fetchonead = async (req, res, next) => {
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
+
+
+exports.fetchJobData = async (req, res, next) => {
+  try {
+    const sub_categories = {
+      "Jobs": [
+        "Accounting and Finance",
+        "Tax Services",
+        "Bar and Restaurant",
+        "Catering",
+        "Cook",
+        "Cheif",
+        "Sales and Retail sales",
+        "Day care",
+        "Home Care",
+        "Nursing Home",
+        "Agent",
+        "Cleaning and House Keeping",
+        "Construction and trades",
+        "Lawn and Garden",
+        "Plumber",
+        "Electrician",
+        "Customer Service",
+        "Drivers and Security",
+        "Auto Mechanic",
+        "General Labour",
+        "Graphic and Geb design",
+        "Hair Stylist and Salon",
+        "Health Care",
+        "Volunters",
+        "NGO",
+        "Real Estate",
+        "Education",
+        "Training",
+        "Office Manager and Receptionist",
+        "Interns and Students",
+        "Programmers and Computer",
+        "TV, Media ,Fashion",
+        "Movie",
+        "Other",
+      ],
+    };
+    
+    const responseArray = [];
+
+    for (const category in sub_categories) {
+      const subCategoryArray = sub_categories[category];
+      const subcategoryData = [];
+
+      for (const subCategory of subCategoryArray) {
+        const query = {"adsInfo.categories": subCategory };
+        
+        const count = await postJobAd.countDocuments(query);
+        subcategoryData.push({ sub_category_name: subCategory, count });
+      }
+
+      const totalCount = subcategoryData.reduce((total, item) => total + item.count, 0);
+
+      responseArray.push({
+        name: category,
+        count: totalCount,
+        sub_categories: subcategoryData,
+      });
+    }
+
+    console.log(responseArray);
+
+    return successJSONResponse(res, {
+      message: `success`,
+      data: responseArray,
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    return errorJSONResponse(res, {
+      message: 'An error occurred',
+      error: error.message,
+    });
+  }
+};

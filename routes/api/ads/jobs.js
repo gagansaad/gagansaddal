@@ -56,7 +56,10 @@ router.get(`/fetchAds`,
     authMiddleware.ensureUserLoggedIn,
     controllers.fetchAllAds
 );
-
+router.get(`/menu`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchJobData
+);
 router.patch(`/edit/:jobId`,
     upload.array('photos', 10),
     authMiddleware.ensureUserLoggedIn,
