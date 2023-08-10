@@ -46,6 +46,10 @@ router.get(`/dynamics-data`,
     authMiddleware.ensureUserLoggedIn,
     controllers.fetchDynamicsData
 );
+router.get(`/menu`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.fetchRoomData
+);
 
 router.post(`/`, upload.array('photos', 10),
     authMiddleware.ensureUserLoggedIn,

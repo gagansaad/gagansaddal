@@ -1,5 +1,6 @@
 const { json, query } = require("express");
 const crypto = require('crypto');
+const { listeners } = require("../../../model/posts/roomRents");
 const {mongoose,ObjectId, modelNames} = require("mongoose"),
   RoomRentsAds = mongoose.model("rental"),
   PostViews = mongoose.model("Post_view"),
@@ -71,6 +72,80 @@ exports.fetchDynamicsData = async (req, res, next) => {
     data: objtSend,
   });
 };
+
+exports.fetchRoomData = async (req, res, next) => {
+  try {
+    const sub_categories = {
+      "Rooms for Rent": [
+        "Apartment", 
+        "Condo",
+        "Townhouse",
+        "House",
+        "Basement",
+      ],
+      "Commercial Property for Rent": [
+        "Commercial Building",
+        "Office",
+        "Parking Space",
+        "Warehouse",
+        "Venues",
+      ],
+      "Other Rentals": [
+        "Limousine",
+        "Trucks",
+        "Wedding Appliances",
+        "Wedding Clothes",
+        "Cars",
+        "DJ Equipment",
+        "Event Decorations",
+        "Other",
+      ],
+    };
+    
+    const responseArray = [];
+
+    for (const category in sub_categories) {
+      const subCategoryArray = sub_categories[category];
+      const subcategoryData = [];
+
+      for (const subCategory of subCategoryArray) {
+        const query = { "adsInfo.rental_type": category, "adsInfo.category": subCategory };
+        
+        const count = await RoomRentsAds.countDocuments(query);
+        subcategoryData.push({ sub_category_name: subCategory, count });
+      }
+
+      const totalCount = subcategoryData.reduce((total, item) => total + item.count, 0);
+
+      responseArray.push({
+        name: category,
+        count: totalCount,
+        sub_categories: subcategoryData,
+      });
+    }
+
+    console.log(responseArray);
+
+    return successJSONResponse(res, {
+      message: `success`,
+      data: responseArray,
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    return errorJSONResponse(res, {
+      message: 'An error occurred',
+      error: error.message,
+    });
+  }
+};
+
+
+
+
+
+
+
+
 
 exports.validateRoomRentsAdsData = async (req, res, next) => {
   try {
