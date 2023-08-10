@@ -59,7 +59,7 @@ router.patch(`/edit/:eventId`,
 router.get(`/menu`,
     authMiddleware.ensureUserLoggedIn,
     controllers.fetchEventData
-);
+);   
 router.patch(`/edit-status/:eventId`,
     authMiddleware.ensureUserLoggedIn,
     controllers.editEventStatus
