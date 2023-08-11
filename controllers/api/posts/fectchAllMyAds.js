@@ -91,58 +91,35 @@ exports.fetchAllMyAds = async (req, res, next) => {
 }
 
 exports.fetchAll = async (req, res, next) => {
-
   try {
-    let adstype = req.query.adsType;
-    console.log(adstype);
-    var perPage = 10 || parseInt(req.query.perpage)
-    var page = parseInt(req.query.page) || 1
-    // let dbquery = ``
-    // if (req.query.userId) {
-    //   dbquery = req.body.userid
-    // } else if (req.body.userId) {
-    //   dbquery = req.body.userid
-    // }
-    if (!adstype) return failureJSONResponse(res, { message: `Please provide post type id` });
-    else if (adstype && !isValidMongoObjId(mongoose, adstype)) return failureJSONResponse(res, { message: `Please provide valid post type id` });
+    console.log("object-------------------------------",);
+    const adons_name = ["Featured", "Homepage Gallery", "Urgent", "Link to your website", "Bump up", "Upcoming Event", "Price Drop"];
     
-    let findCategory = await category.findOne({ _id: adstype })
 
-    if (!findCategory) {
-      return failureJSONResponse(res, {
-        message: `Category not found`
-      })
+    const mergedData = {};
+
+    for (const adons of adons_name) {
+      const adonsData = {
+        babysitterAd: await babysitterAd.find({ "addons_validity.name": adons }),
+        buysellAd: await buysellAd.find({ "addons_validity.name": adons }),
+        bizAd: await bizAd.find({ "addons_validity.name": adons }),
+        eventAd: await eventAd.find({ "addons_validity.name": adons }),
+        jobsAd: await jobsAd.find({ "addons_validity.name": adons }),
+        roomrentAd: await roomrentAd.find({ "addons_validity.name": adons }),
+      };
+
+      mergedData[adons] = adonsData;
     }
-    console.log(findCategory.name);
-    switch (findCategory.name) {
-      case 'Babysitters and Nannies':
-        successJSONResponseWithPagination(res, babysitterAd, page, perPage)
-        break;
-      case 'Buy & Sell':
-        successJSONResponseWithPagination(res, buysellAd, page, perPage)
-        break;
-      case 'Local Biz and services':
-        successJSONResponseWithPagination(res, bizAd, page, perPage)
-        break;
-      case 'Events':
-        successJSONResponseWithPagination(res, eventAd, page, perPage)
-        break;
-      case 'Job':
-        successJSONResponseWithPagination(res, jobsAd, page, perPage)
-        break;
-      case "Rentals":
-        successJSONResponseWithPagination(res, roomrentAd, page, perPage)
-        break;
-      default:
-        failureJSONResponse(res, {
-          message: `Record not found`
-        })
-        break;
-    }
+
+    return successJSONResponse(res, {
+      message: "success",
+      data: mergedData
+    });
   } catch (err) {
-    console.log(err)
-    return failureJSONResponse(res, { message: `something went wrong` }, { error: err.message })
+    console.log(err);
+    return failureJSONResponse(res, { message: `something went wrong` }, { error: err.message });
   }
-}
+};
+
 
 
