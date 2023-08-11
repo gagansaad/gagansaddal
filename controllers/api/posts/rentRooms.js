@@ -175,7 +175,7 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
       isPetFriendly,
       // occupation,
       preferedGender,
-      location,
+      location_name,
       tagline,
     } = req.body;
     console.log(req.body);
@@ -227,7 +227,7 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
     // if (!accommodates) return failureJSONResponse(res, { message: `Please provide valid accommodates` });
     // if (isNaN(Number(accommodates))) return failureJSONResponse(res, { message: `Please provide valid no. of accommodates` });
     // if (!isValidString(furnished)) return failureJSONResponse(res, { message: `Please provide valid furnished` });
-    if (!isValidString(location))
+    if (!isValidString(location_name))
       return failureJSONResponse(res, {
         message: `Please provide valid location`,
       });
