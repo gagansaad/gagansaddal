@@ -605,7 +605,7 @@ exports.fetchAll = async (req, res, next) => {
     const {
       status,
       category_value,
-      category_name,
+      category,
       work_type,
       care_service,
       age_group,
@@ -623,43 +623,43 @@ exports.fetchAll = async (req, res, next) => {
     }
 
     if (category_value) {
-      dbQuery["adsInfo.category.category_value"] = category_value;
+      dbQuery["ads_info.category.category_value"] = category_value;
     }
 
-    if (category_name) {
-      dbQuery["adsInfo.category.categoryName"] = category_name;
+    if (category) {
+      dbQuery["ads_info.category.category_name"] = category;
     }
 
     if (work_type) {
-      dbQuery["adsInfo.work_type"] = work_type;
+      dbQuery["ads_info.work_type"] = work_type;
     }
 
     if (care_service) {
-      dbQuery["adsInfo.care_service"] = care_service;
+      dbQuery["ads_info.care_service"] = care_service;
     }
 
     if (age_group) {
-      dbQuery["adsInfo.age_group"] = age_group;
+      dbQuery["ads_info.age_group"] = age_group;
     }
 
     if (prefered_language) {
-      dbQuery["adsInfo.prefered_language"] = prefered_language;
+      dbQuery["ads_info.prefered_language"] = prefered_language;
     }
 
     if (prefered_gender) {
-      dbQuery["adsInfo.prefered_gender"] = prefered_gender;
+      dbQuery["ads_info.prefered_gender"] = prefered_gender;
     }
 
     if (transport_facilty) {
-      dbQuery["adsInfo.transport_facilty"] = transport_facilty;
+      dbQuery["ads_info.transport_facilty"] = transport_facilty;
     }
 
     if (location) {
-      dbQuery["adsInfo.location"] = location;
+      dbQuery["ads_info.location"] = location;
     }
 
     if (tagline) {
-      dbQuery["adsInfo.tagline"] = tagline;
+      dbQuery["ads_info.tagline"] = tagline;
     }
      // Get the current date
      const currentDate = new Date();
@@ -674,15 +674,15 @@ exports.fetchAll = async (req, res, next) => {
       queryFinal = {
         ...dbQuery,
         $or: [
-          { "adsInfo.title": { $regex: searchTerm, $options: "i" } },
-          { "adsInfo.tagline": { $regex: searchTerm, $options: "i" } }
+          { "ads_info.title": { $regex: searchTerm, $options: "i" } },
+          { "ads_info.tagline": { $regex: searchTerm, $options: "i" } }
         ]
       };
     }
     let myid = req.userId;
     let records = await postbabyAd
       .find({ $or: [queryFinal] })
-      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "ads_info.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
