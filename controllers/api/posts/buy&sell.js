@@ -1007,11 +1007,11 @@ exports.fetchAll = async (req, res, next) => {
     }
 
     if (category) {
-      dbQuery.category = category;
+      dbQuery["adsInfo.category"] = category;
     }
 
     if (sub_category) {
-      dbQuery.sub_category = sub_category;
+      dbQuery["adsInfo.sub_category"] = sub_category;
     }
 
     if (title) {
