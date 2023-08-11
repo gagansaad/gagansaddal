@@ -1049,7 +1049,7 @@ exports.fetchAll = async (req, res, next) => {
      const currentDateOnly = currentISODate.substring(0, 10);
      dbQuery.status = "active";
      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-
+console.log(dbQuery,"77777777777777777777777777777777777777777777777");
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
