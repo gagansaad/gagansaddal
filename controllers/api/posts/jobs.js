@@ -139,7 +139,7 @@ exports.validateJobAdsData = async (req, res, next) => {
       no_of_opening,
       job_website_link,
       work_authorization,
-      location,
+      location_name,
       preferred_gender,
       image,
       video,
@@ -248,7 +248,7 @@ exports.validateJobAdsData = async (req, res, next) => {
     //   return failureJSONResponse(res, {
     //     message: `Please provide us work authorization`,
     //   });
-    if (!isValidString(location))
+    if (!isValidString(location_name))
       return failureJSONResponse(res, {
         message: `Please provide us location`,
       });
@@ -335,7 +335,9 @@ exports.createJobAds = async (req, res, next) => {
       exp_enddate,
       work_authorization,
       preferred_gender,
-      location,
+      location_name,
+      longitude,
+      latitude,
       tagline,
       image,
       video,
@@ -388,7 +390,11 @@ exports.createJobAds = async (req, res, next) => {
         salary_info,
         no_of_opening,
         work_authorization,
-        location,
+        location:{
+          locationName:location_name,
+          latitude:latitude,
+          longitude:longitude
+        },
         tagline,
         preferred_gender: preferred_gender,
         image: imageArr,
@@ -471,7 +477,9 @@ exports.editJobAds = async (req, res, next) => {
       no_of_opening,
 
       work_authorization,
-      location,
+      location_name,
+      longitude,
+      latitude,
       preferred_gender,
       image,
       video,
@@ -558,7 +566,11 @@ exports.editJobAds = async (req, res, next) => {
     if (no_of_opening) adsInfoObj.no_of_opening = no_of_opening;
     if (experience) adsInfoObj.experience = experience;
     if (work_authorization) adsInfoObj.work_authorization = work_authorization;
-    if (location) adsInfoObj.location = location;
+    let locationobj={}
+    if (location_name) locationobj.locationName = location_name;
+    if (longitude) locationobj.longitude = longitude;
+    if (latitude) locationobj.latitude = latitude;
+    if (locationobj) adsInfoObj.location = locationobj;
     if (preferred_gender) adsInfoObj.preferred_gender = preferred_gender;
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (video) adsInfoObj.video = video;

@@ -480,7 +480,7 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       quantity,
       payment_mode,
       fullfilment,
-      location,
+      location_name,
       tagline,
 
       image,
@@ -554,7 +554,7 @@ exports.validateBuySellAdsData = async (req, res, next) => {
     //     message: `please provide valid fullfilment`,
     //   });
 
-    if (!isValidString(location))
+    if (!isValidString(location_name))
       return failureJSONResponse(res, {
         message: `please provide valid location`,
       });
@@ -632,7 +632,9 @@ exports.createBuySellAds = async (req, res, next) => {
       quantity,
       payment_mode,
       fullfilment,
-      location,
+      location_name,
+      longitude,
+      latitude,
       tagline,
       video_link,
       image,
@@ -699,7 +701,11 @@ exports.createBuySellAds = async (req, res, next) => {
         quantity,
         payment_mode: mode_payment,
         fullfilment,
-        location,
+        location:{
+          locationName:location_name,
+          latitude:latitude,
+          longitude:longitude
+        },
         tagline,
         video_link,
         image: imageArr,
@@ -772,7 +778,9 @@ exports.editBuySellAds = async (req, res, next) => {
       quantity,
       payment_mode,
       fullfilment,
-      location,
+      location_name,
+      longitude,
+      latitude,
       tagline,
       video_link,
       image,
@@ -862,7 +870,11 @@ exports.editBuySellAds = async (req, res, next) => {
     if (quantity) adsInfoObj.quantity = quantity;
     if (payment_mode) adsInfoObj.payment_mode = payment_mode;
     if (fullfilment) adsInfoObj.fullfilment = fullfilment;
-    if (location) adsInfoObj.location = location;
+    let locationobj={}
+  if (location_name) locationobj.locationName = location_name;
+  if (longitude) locationobj.longitude = longitude;
+  if (latitude) locationobj.latitude = latitude;
+  if (locationobj) adsInfoObj.location = locationobj;
     if (tagline) adsInfoObj.tagline = tagline;
     if (video_link) adsInfoObj.video_link = video_link;
     if (imageArr.length) adsInfoObj.image = imageArr;

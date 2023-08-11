@@ -81,9 +81,18 @@ const bizAndServices = new mongoose.Schema({
                 default:false
             }
         },
-        business_location: {
-            ...defaultStringConfig,
-            // required: true
+        location: {
+                locationName:{
+                    ...defaultStringConfig,
+                },
+                latitude: {
+                    type: Number,
+                    default:0
+                  },
+                longitude: {
+                    type: Number,
+                    default:0
+                  },
         },
         // business_service:{
         //     ...defaultStringConfig,

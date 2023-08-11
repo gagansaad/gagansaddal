@@ -126,7 +126,7 @@ exports.validateAdsData = async (req, res, next) => {
       service_from_date,
       amount,
       description,
-      location,
+      location_name,
       tagline,
     } = req.body;
     // console.log(req.body, "ye boDY HAI");
@@ -188,7 +188,7 @@ exports.validateAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid description`,
       });
-    if (!isValidString(location))
+    if (!isValidString(location_name))
       return failureJSONResponse(res, {
         message: `Please provide valid location`,
       });
@@ -269,7 +269,9 @@ exports.createAds = async (req, res, next) => {
       currency,
       expected_salary_rate,
       description,
-      location,
+      location_name,
+      longitude,
+      latitude,
       tagline,
       image,
     } = req.body;
@@ -319,7 +321,11 @@ exports.createAds = async (req, res, next) => {
         },
         expected_salary_rate,
         description,
-        location,
+        location:{
+          locationName:location_name,
+          latitude:latitude,
+          longitude:longitude
+        },
         tagline,
         image: imageArr,
       },
@@ -391,7 +397,9 @@ exports.editAds = async (req, res, next) => {
       amount,
       expected_salary_rate,
       description,
-      location,
+      location_name,
+      longitude,
+      latitude,
       tagline,
       name,
       email_address,
@@ -475,7 +483,11 @@ exports.editAds = async (req, res, next) => {
     if (expected_salary_rate)
       adsInfoObj.expected_salary_rate = expected_salary_rate;
     if (description) adsInfoObj.description = description;
-    if (location) adsInfoObj.location = location;
+    let locationobj={}
+    if (location_name) locationobj.locationName = location_name;
+    if (longitude) locationobj.longitude = longitude;
+    if (latitude) locationobj.latitude = latitude;
+    if (locationobj) adsInfoObj.location = locationobj;
 
     if (name) listerBasicInfoObj.name = name;
     if (imageArr.length) adsInfoObj.image = imageArr;

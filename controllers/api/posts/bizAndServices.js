@@ -271,7 +271,8 @@ exports.validatebizAdsData = async (req, res, next) => {
       tagline,
       experience,
       // working_hours,
-      business_location,
+      location_name,
+      
       // price,
       descriptions,
       accreditation_files,
@@ -315,7 +316,7 @@ exports.validatebizAdsData = async (req, res, next) => {
     //   return failureJSONResponse(res, {
     //     message: `Please provide valid tagline`,
     //   });
-    if (!isValidString(business_location))
+    if (!isValidString(location_name))
       return failureJSONResponse(res, {
         message: "Pleae provide us your buisness location",
       });
@@ -402,7 +403,9 @@ exports.createbizAds = async (req, res, next) => {
       business_name,
       experience,
       tagline,
-      business_location,
+      location_name,
+      longitude,
+      latitude,
       accreditation_name,
       accreditation_files,
       week_day,
@@ -559,7 +562,11 @@ exports.createbizAds = async (req, res, next) => {
         experience,
         working_hours: working_hour,
         tagline,
-        business_location,
+        location:{
+          locationName:location_name,
+          latitude:latitude,
+          longitude:longitude
+        },
         // price,
         descriptions,
         image: imageArr,
@@ -633,7 +640,6 @@ exports.editbizAds = async (req, res, next) => {
       business_name,
       experience,
       tagline,
-      business_location,
       accreditation_name,
       accreditation_files,
       // price,
@@ -651,7 +657,9 @@ exports.editbizAds = async (req, res, next) => {
       descriptions,
       image,
       video_link,
-      location,
+      location_name,
+      longitude,
+      latitude,
       name,
       email_address,
       primary_phone_number,
@@ -822,7 +830,12 @@ exports.editbizAds = async (req, res, next) => {
     if (categories) adsInfoObj.categories = categories;
     if (business_name) adsInfoObj.business_name = business_name;
     if (tagline) adsInfoObj.tagline = tagline;
-    if (business_location) adsInfoObj.business_location = business_location;
+    // if (business_location) adsInfoObj.business_location = business_location;
+    let locationobj={}
+  if (location_name) locationobj.locationName = location_name;
+  if (longitude) locationobj.longitude = longitude;
+  if (latitude) locationobj.latitude = latitude;
+  if (locationobj) adsInfoObj.location = locationobj;
     if (experience) adsInfoObj.experience = experience;
     if (descriptions) adsInfoObj.descriptions = descriptions;
 

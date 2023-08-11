@@ -63,8 +63,17 @@ const events_Schema = new mongoose.Schema({
             ...defaultStringConfig,
         },
         location: {
-            ...defaultStringConfig,
-            // required: true
+            locationName:{
+                ...defaultStringConfig,
+            },
+            latitude: {
+                type: Number,
+                default:0
+              },
+            longitude: {
+                type: Number,
+                default:0
+              },
         },
         live_event: [{
             live_platform: {

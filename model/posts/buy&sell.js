@@ -98,9 +98,18 @@ const BuySellSchema = new mongoose.Schema({
             ...defaultStringConfig,
             required: true
         }],
-        location:{
-            ...defaultStringConfig,
-            required: true
+        location: {
+            locationName:{
+                ...defaultStringConfig,
+            },
+            latitude: {
+                type: Number,
+                default:0
+              },
+            longitude: {
+                type: Number,
+                default:0
+              },
         },
         tagline:{
             type:Array,

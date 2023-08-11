@@ -113,7 +113,7 @@ exports.validateEventAdsData = async (req, res, next) => {
       vip_ticket_price,
       no_of_regular_ticket,
       no_of_vip_ticket,
-      location,
+      location_name,
       time_zone,
       start_date,
       end_date,
@@ -252,7 +252,7 @@ exports.validateEventAdsData = async (req, res, next) => {
 
     // if (link&&(!isValidlink(link)))
     //   return failureJSONResponse(res, { message: `please provide valid link` });
-    if (!isValidString(location))
+    if (!isValidString(location_name))
       return failureJSONResponse(res, {
         message: `please provide valid location`,
       });
@@ -350,7 +350,9 @@ exports.createEventAds = async (req, res, next) => {
       recurring_type,
       tagline,
       image,
-      location,
+      location_name,
+      longitude,
+      latitude,
       venue_name,
       video,
       facebook_platform,
@@ -453,7 +455,11 @@ exports.createEventAds = async (req, res, next) => {
         },
         recurring_type,
         image: imageArr,
-        location,
+        location:{
+          locationName:location_name,
+          latitude:latitude,
+          longitude:longitude
+        },
         venue_name,
         date_time: {
           time_zone,
@@ -546,7 +552,9 @@ exports.editEventAds = async (req, res, next) => {
       recurring_type,
       tagline,
       image,
-      location,
+      location_name,
+      longitude,
+      latitude,
       venue_name,
       facebook_platform,
       instagram_platform,
@@ -687,7 +695,11 @@ exports.editEventAds = async (req, res, next) => {
     if (ticketPrice) adsInfoObj.ticket_price = ticketPrice;
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (platforms.length) adsInfoObj.live_event = platforms;
-    if (location) adsInfoObj.location = location;
+    let locationobj={}
+    if (location_name) locationobj.locationName = location_name;
+    if (longitude) locationobj.longitude = longitude;
+    if (latitude) locationobj.latitude = latitude;
+    if (locationobj) adsInfoObj.location = locationobj;
     if (tagline) adsInfoObj.tagline = taglines;
     if (video) adsInfoObj.video = video;
     // if (adsInfoObj && Object.keys(adsInfoObj).length) {
