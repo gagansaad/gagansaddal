@@ -92,21 +92,22 @@ exports.fetchAllMyAds = async (req, res, next) => {
 
 exports.fetchAll = async (req, res, next) => {
   try {
-    console.log("object-------------------------------",);
+    console.log("object-------------------------------");
     const adons_name = ["Featured", "Homepage Gallery", "Urgent", "Link to your website", "Bump up", "Upcoming Event", "Price Drop"];
-    
 
     const mergedData = {};
 
     for (const adons of adons_name) {
-      const adonsData = {
-        babysitterAd: await babysitterAd.find({ "addons_validity.name": adons }),
-        buysellAd: await buysellAd.find({ "addons_validity.name": adons }),
-        bizAd: await bizAd.find({ "addons_validity.name": adons }),
-        eventAd: await eventAd.find({ "addons_validity.name": adons }),
-        jobsAd: await jobsAd.find({ "addons_validity.name": adons }),
-        roomrentAd: await roomrentAd.find({ "addons_validity.name": adons }),
-      };
+      const adonsData = [];
+
+      const data1 = await babysitterAd.find({ "addons_validity.name": adons });
+      const data2 = await buysellAd.find({ "addons_validity.name": adons });
+      const data3 = await bizAd.find({ "addons_validity.name": adons });
+      const data4 = await eventAd.find({ "addons_validity.name": adons });
+      const data5 = await jobsAd.find({ "addons_validity.name": adons });
+      const data6 = await roomrentAd.find({ "addons_validity.name": adons });
+
+      adonsData.push(...data1, ...data2, ...data3, ...data4, ...data5, ...data6);
 
       mergedData[adons] = adonsData;
     }
@@ -120,6 +121,7 @@ exports.fetchAll = async (req, res, next) => {
     return failureJSONResponse(res, { message: `something went wrong` }, { error: err.message });
   }
 };
+
 
 
 
