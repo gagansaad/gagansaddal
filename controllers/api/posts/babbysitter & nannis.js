@@ -504,7 +504,6 @@ exports.editAds = async (req, res, next) => {
         hide_my_phone: my_phone,
         hide_my_email: my_email,
         hide_my_secondary_phone: secondary_phone,
-        location,
         address_info,
         primary_mobile_number: {
           country_code: +91,
