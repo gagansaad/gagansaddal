@@ -624,11 +624,11 @@ exports.fetchAll = async (req, res, next) => {
     }
 
     if (category_value) {
-      dbQuery.category_value = category_value;
+      dbQuery["adsInfo.category.category_value"] = category_value;
     }
 
     if (category_name) {
-      dbQuery.category_name = category_name;
+      dbQuery["adsInfo.category.categoryName"] = category_name;
     }
 
     if (work_type) {
