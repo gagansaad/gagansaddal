@@ -701,8 +701,8 @@ exports.fetchAll = async (req, res, next) => {
       isfeatured,
       status,
       adsType,
-      rental_type,
       category,
+      sub_category,
       title,
       roomType,
       listerType,
@@ -722,8 +722,8 @@ exports.fetchAll = async (req, res, next) => {
 if (isfeatured) dbQuery.isfeatured = isfeatured;
 if (status) dbQuery.status = status;
 if (adsType) dbQuery.adsType = adsType;
-if (rental_type) dbQuery["adsInfo.rental_type"] = rental_type;
-if (category) dbQuery["adsInfo.category"] = category;
+if (category) dbQuery["adsInfo.rental_type"] = category;
+if (sub_category) dbQuery["adsInfo.category"] = sub_category;
 if (title) dbQuery["adsInfo.title"] = title;
 if (roomType) dbQuery["adsInfo.roomType"] = roomType;
 if (listerType) dbQuery["adsInfo.listerType"] = listerType;
@@ -762,7 +762,7 @@ console.log(queryFinal);
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
       .populate({ path: "viewCount" })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: -1 },)
       .skip(perPage * page - perPage)
       .limit(perPage);
       const responseModelCount = await RoomRentsAds.countDocuments({
