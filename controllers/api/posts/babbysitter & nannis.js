@@ -692,6 +692,7 @@ exports.fetchAll = async (req, res, next) => {
     const responseModelCount = await postbabyAd.countDocuments({
       $or: [queryFinal],
     });
+    
     if (records) {
       const jobData = records.map((job) => {
         return {

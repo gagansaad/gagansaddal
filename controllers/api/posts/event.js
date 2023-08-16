@@ -252,10 +252,10 @@ exports.validateEventAdsData = async (req, res, next) => {
 
     // if (link&&(!isValidlink(link)))
     //   return failureJSONResponse(res, { message: `please provide valid link` });
-    if (!isValidString(location_name))
-      return failureJSONResponse(res, {
-        message: `please provide valid location`,
-      });
+    // if (!isValidString(location_name))
+    //   return failureJSONResponse(res, {
+    //     message: `please provide valid location`,
+    //   });
     // if (!isValidString(tagline))
     //   return failureJSONResponse(res, {
     //     message: `Please provide us tagline`,
@@ -263,7 +263,6 @@ exports.validateEventAdsData = async (req, res, next) => {
     // if (!video && (!isValidUrl(video)))return failureJSONResponse(res, {
     //   message: `Please provide valid video link`,
     // });
-
     return next();
   } catch (err) {
     console.log(err);
