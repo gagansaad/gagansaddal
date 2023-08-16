@@ -87,11 +87,11 @@ const bizAndServices = new mongoose.Schema({
                 },
                 latitude: {
                     type: Number,
-                    default:0
+                    default:0.0
                   },
                 longitude: {
                     type: Number,
-                    default:0
+                    default:0.0
                   },
         },
         // business_service:{
