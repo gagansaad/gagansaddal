@@ -724,6 +724,7 @@ exports.editEventAds = async (req, res, next) => {
         },
       },
     };
+    console.log(dataObjq,"66666666666666666666666666666666666666s");
     const updateEvent = await eventAd.findByIdAndUpdate(
       { _id: eventId },
       { $set: dataObjq },
