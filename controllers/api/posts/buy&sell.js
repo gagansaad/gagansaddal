@@ -700,7 +700,7 @@ exports.createBuySellAds = async (req, res, next) => {
         price: {
           amount,
           currency,
-          negotiable: boolean_val,
+          negotiable: negov,
           is_contact:iscontact
         },
         quantity,
