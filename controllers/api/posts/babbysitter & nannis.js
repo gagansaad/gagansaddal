@@ -1,6 +1,5 @@
 const { json } = require("express");
 const crypto = require('crypto');
-const { CLIENT_RENEG_LIMIT } = require("tls");
 const mongoose = require("mongoose"),
   postbabyAd = mongoose.model("babysitter & nannie"),
   PostViews = mongoose.model("Post_view"),
@@ -687,30 +686,12 @@ exports.fetchAll = async (req, res, next) => {
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
-      .sort({ createdAt: -1 , "addons_validity.name": -1})
+      .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
       .limit(perPage);
     const responseModelCount = await postbabyAd.countDocuments({
       $or: [queryFinal],
     });
-    records.sort((a, b) => {
-      console.log(a.addons_validity,"dfghj");
-      const aFeaturedAddon = a.addons_validity.find(addon => addon.name === "Featured");
-      const bFeaturedAddon = b.addons_validity.find(addon => addon.name === "Featured");
-
-      // If one of the records has a "Featured" addon and the other doesn't
-      if (aFeaturedAddon && !bFeaturedAddon) return -1;
-      if (!aFeaturedAddon && bFeaturedAddon) return 1;
-
-      // Both records have "Featured" addons or neither have it
-      if (aFeaturedAddon && bFeaturedAddon) {
-        // Sort by expired_on if both have "Featured" addons
-        return aFeaturedAddon.expired_on.localeCompare(bFeaturedAddon.expired_on);
-      }
-    
-      return b.createdAt.localeCompare(a.createdAt);
-    });
-
     if (records) {
       const jobData = records.map((job) => {
         return {
@@ -757,7 +738,7 @@ exports.fetchonead = async (req, res, next) => {
      if(adsId){
       data_Obj = {
           _id:adsId,
-          status :"active",
+          status :"active" ,
           "plan_validity.expired_on" :{ $gte: currentDateOnly }
       }
     }
