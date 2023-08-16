@@ -74,7 +74,8 @@ const bizAndServices = new mongoose.Schema({
                 is_available: Boolean, is_24_hour: Boolean, open_at: String, close_at: String 
             },
             appointment:{
-                ...defaultStringConfig
+                type:Boolean,
+                default:false
             },
             is_24_seven:{
                 type:Boolean,

@@ -417,7 +417,7 @@ exports.createbizAds = async (req, res, next) => {
       weekend_close_at,
       weekend_24_hour,
       is_24_seven,
-      appointment,
+      
       is_appointment,
       // price,
       descriptions,
@@ -473,7 +473,7 @@ exports.createbizAds = async (req, res, next) => {
     }
     if (is_appointment == "true") {
       working_hour = {
-        appointment: appointment,
+        appointment: true,
       };
     }
     const imageArr = [];
@@ -652,7 +652,6 @@ exports.editbizAds = async (req, res, next) => {
       weekend_close_at,
       weekend_24_hour,
       is_24_seven,
-      appointment,
       is_appointment,
       descriptions,
       image,
@@ -796,7 +795,7 @@ exports.editbizAds = async (req, res, next) => {
     }
     if (is_appointment == "true") {
       working_hour = {
-        appointment: appointment,
+        appointment: true,
       };
     }
 
