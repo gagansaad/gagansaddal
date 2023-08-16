@@ -80,12 +80,17 @@ const BuySellSchema = new mongoose.Schema({
                 // required: true
             },
             currency:{type:String,default:"USD"},
+            negotiable:{
+                type:Boolean,
+                default:false
+            },
+            is_contact:{
+                type:Boolean,
+                default:false
+            },
         },
        
-        negotiable:{
-            type:Boolean,
-            default:false
-        },
+       
         quantity:{
             type: Number,
             // required: true

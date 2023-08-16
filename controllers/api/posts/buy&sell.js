@@ -554,10 +554,10 @@ exports.validateBuySellAdsData = async (req, res, next) => {
     //     message: `please provide valid fullfilment`,
     //   });
 
-    if (!isValidString(location_name))
-      return failureJSONResponse(res, {
-        message: `please provide valid location`,
-      });
+    // if (!isValidString(location_name))
+    //   return failureJSONResponse(res, {
+    //     message: `please provide valid location`,
+    //   });
     // if (!isValidString(tagline))
     //   return failureJSONResponse(res, { message: `please provide valid tagline` });
     return next();
@@ -629,6 +629,7 @@ exports.createBuySellAds = async (req, res, next) => {
       currency,
       user_type,
       negotiable,
+      is_contact,
       quantity,
       payment_mode,
       fullfilment,
@@ -666,12 +667,15 @@ exports.createBuySellAds = async (req, res, next) => {
       imageArr.push(productImages._id);
     }
 
-    let boolean = false;
+    let negov = false;
 
     if (negotiable == "true") {
-      boolean = true;
-    } else {
-      boolean = false;
+      negov = true;
+    }
+    let iscontact = false;
+
+    if (is_contact == "true") {
+      iscontact = true;
     }
     let mode_payment= payment_mode
     // console.log(payment_mode, "jai ho");
@@ -696,8 +700,9 @@ exports.createBuySellAds = async (req, res, next) => {
         price: {
           amount,
           currency,
+          negotiable: boolean_val,
+          is_contact:iscontact
         },
-        negotiable: boolean,
         quantity,
         payment_mode: mode_payment,
         fullfilment,
@@ -775,6 +780,7 @@ exports.editBuySellAds = async (req, res, next) => {
       currency,
       user_type,
       negotiable,
+      is_contact,
       quantity,
       payment_mode,
       fullfilment,
@@ -796,6 +802,10 @@ exports.editBuySellAds = async (req, res, next) => {
       // address_info,
       // preferableModeContact,
     } = req.body;
+    let iscontact = false
+    if (is_contact == "true") {
+      iscontact = true;
+    }
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -823,13 +833,11 @@ exports.editBuySellAds = async (req, res, next) => {
     const dataObj = {},
       adsInfoObj = {},
       listerBasicInfoObj = {};
-    let boolean = false;
+    let negoval = false;
 
     if (negotiable == "true") {
-      boolean = true;
-    } else {
-      boolean = false;
-    }
+      negoval = true;
+    } 
     let price = {};
 
     let my_phone = false;
@@ -865,8 +873,11 @@ exports.editBuySellAds = async (req, res, next) => {
     if (product_model) adsInfoObj.product_model = product_model;
     if (amount) price.amount = amount;
     if (currency) price.currency = currency;
+    if (negotiable) price.negotiable = negoval;
+    if (is_contact) price.is_contact = iscontact;
     if (price) adsInfoObj.price = price;
-    if (negotiable) adsInfoObj.negotiable = boolean;
+    
+    
     if (quantity) adsInfoObj.quantity = quantity;
     if (payment_mode) adsInfoObj.payment_mode = payment_mode;
     if (fullfilment) adsInfoObj.fullfilment = fullfilment;
