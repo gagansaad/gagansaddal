@@ -626,7 +626,7 @@ exports.editRoomRentAds = async (req, res, next) => {
   if (amount) rent.amount = amount;
   if (negotiable) rent.negotiable = negotible;
   if (is_contact) rent.is_contact = iscontact;
-  if (amount) adsInfoObj.rent = rent;
+  if (rent) adsInfoObj.rent = rent;
   if (isSmokingAllowed) adsInfoObj.isSmokingAllowed = isSmokin;
   if (isAlcoholAllowed) adsInfoObj.isAlcoholAllowed = isAlcoho;
   if (isPetFriendly) adsInfoObj.isPetFriendly = isPetFr;
