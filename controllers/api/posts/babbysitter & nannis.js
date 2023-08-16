@@ -686,7 +686,7 @@ exports.fetchAll = async (req, res, next) => {
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: -1 , "addons_validity.name": -1})
       .skip(perPage * page - perPage)
       .limit(perPage);
     const responseModelCount = await postbabyAd.countDocuments({
@@ -738,7 +738,7 @@ exports.fetchonead = async (req, res, next) => {
      if(adsId){
       data_Obj = {
           _id:adsId,
-          status :"active" ,
+          status :"active",
           "plan_validity.expired_on" :{ $gte: currentDateOnly }
       }
     }
