@@ -9,7 +9,7 @@ const mongoose = require("mongoose"),
   roomrentAd = mongoose.model("rental"),
   jobsAd = mongoose.model("job"),
   category = mongoose.model("PostType"),
-  
+
   {
     successJSONResponse,
     failureJSONResponse,
@@ -61,22 +61,22 @@ exports.fetchAllMyAds = async (req, res, next) => {
     console.log(findCategory.name);
     switch (findCategory.name) {
       case 'Babysitters and Nannies':
-        successJSONResponseWithPagination(res, babysitterAd, page, perPage,dbquery)
+        successJSONResponseWithPagination(res, babysitterAd, page, perPage, dbquery)
         break;
       case 'Buy & Sell':
-        successJSONResponseWithPagination(res, buysellAd, page, perPage,dbquery)
+        successJSONResponseWithPagination(res, buysellAd, page, perPage, dbquery)
         break;
       case 'Local Biz and services':
-        successJSONResponseWithPagination(res, bizAd, page, perPage,dbquery)
+        successJSONResponseWithPagination(res, bizAd, page, perPage, dbquery)
         break;
       case 'Events':
-        successJSONResponseWithPagination(res, eventAd, page, perPage,dbquery)
+        successJSONResponseWithPagination(res, eventAd, page, perPage, dbquery)
         break;
       case 'Job':
-        successJSONResponseWithPagination(res, jobsAd, page, perPage,dbquery)
+        successJSONResponseWithPagination(res, jobsAd, page, perPage, dbquery)
         break;
       case "Rentals":
-        successJSONResponseWithPagination(res, roomrentAd, page, perPage,dbquery)
+        successJSONResponseWithPagination(res, roomrentAd, page, perPage, dbquery)
         break;
       default:
         failureJSONResponse(res, {
@@ -108,11 +108,14 @@ exports.fetchAll = async (req, res, next) => {
       const data6 = await roomrentAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 });
 
 
-        if (data1.length || data2.length || data3.length || data4.length || data5.length || data6.length) {
+      if (data1.length || data2.length || data3.length || data4.length || data5.length || data6.length) {
         adonsData.push(...data1, ...data2, ...data3, ...data4, ...data5, ...data6);
         // mergedData[adons] = adonsData; 
-        mergedData['name'] = adons;
-        mergedData['data'] = adonsData;
+        const mergedData2 = {};
+
+        mergedData2['name'] = adons;
+        mergedData2['data'] = adonsData;
+        mergedData[] = mergedData2;
       }
     }
 
