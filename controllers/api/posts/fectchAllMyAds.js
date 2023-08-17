@@ -109,14 +109,17 @@ exports.fetchAll = async (req, res, next) => {
 
 
       if (data1.length || data2.length || data3.length || data4.length || data5.length || data6.length) {
-        adonsData.push(...data1, ...data2, ...data3, ...data4, ...data5, ...data6);
-        // mergedData[adons] = adonsData; 
-        let mergedData2 = {};
+        const combinedData = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
 
-        mergedData2['name'] = adons;
-        mergedData2['data'] = adonsData;
-        mergedData=mergedData2;
+      // Only add to mergedData if there is data
+      if (combinedData.length > 0) {
+        adonsData.push({
+          name: adons,
+          data: combinedData
+        });
+        mergedData.push(...adonsData);
       }
+    }
     }
 
     return successJSONResponse(res, {
