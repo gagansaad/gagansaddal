@@ -100,16 +100,20 @@ exports.fetchAll = async (req, res, next) => {
     for (const adons of adons_name) {
       const adonsData = [];
 
-      const data1 = await babysitterAd.find({ "addons_validity.name": adons });
-      const data2 = await buysellAd.find({ "addons_validity.name": adons });
-      const data3 = await bizAd.find({ "addons_validity.name": adons });
-      const data4 = await eventAd.find({ "addons_validity.name": adons });
-      const data5 = await jobsAd.find({ "addons_validity.name": adons });
-      const data6 = await roomrentAd.find({ "addons_validity.name": adons });
+      const data1 = await babysitterAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 });
+      const data2 = await buysellAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 });
+      const data3 = await bizAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 });
+      const data4 = await eventAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 });
+      const data5 = await jobsAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 });
+      const data6 = await roomrentAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 });
 
-      adonsData.push(...data1, ...data2, ...data3, ...data4, ...data5, ...data6);
 
-      mergedData[adons] = adonsData;
+        if (data1.length || data2.length || data3.length || data4.length || data5.length || data6.length) {
+        adonsData.push(...data1, ...data2, ...data3, ...data4, ...data5, ...data6);
+        // mergedData[adons] = adonsData;
+        mergedData['name'] = adons;
+        mergedData['data'] = adonsData;
+      }
     }
 
     return successJSONResponse(res, {
