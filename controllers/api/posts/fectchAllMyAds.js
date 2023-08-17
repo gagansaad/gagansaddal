@@ -111,14 +111,17 @@ exports.fetchAll = async (req, res, next) => {
       if (data1.length || data2.length || data3.length || data4.length || data5.length || data6.length) {
         const combinedData = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
 
-      // Only add to mergedData if there is data
-      if (combinedData.length > 0) {
-        adonsData.push({
-          name: adons,
-          data: combinedData
-        });
-        mergedData.push(...adonsData);
-      }
+        if (combinedData.length > 0) {
+          adonsData.push({
+            name: adons,
+            data: combinedData
+          });
+        }
+        
+        // Add adonsData to mergedData if there's data for this addon
+        if (adonsData.length > 0) {
+          mergedData.push(...adonsData);
+        }
     }
     }
 
