@@ -95,7 +95,7 @@ exports.fetchAll = async (req, res, next) => {
     console.log("object-------------------------------");
     const adons_name = ["Featured", "Homepage Gallery", "Urgent", "Link to your website", "Bump up", "Upcoming Event", "Price Drop"];
 
-    const mergedData = {};
+    let mergedData = {};
 
     for (const adons of adons_name) {
       const adonsData = [];
@@ -111,7 +111,7 @@ exports.fetchAll = async (req, res, next) => {
       if (data1.length || data2.length || data3.length || data4.length || data5.length || data6.length) {
         adonsData.push(...data1, ...data2, ...data3, ...data4, ...data5, ...data6);
         // mergedData[adons] = adonsData; 
-        const mergedData2 = {};
+        let mergedData2 = {};
 
         mergedData2['name'] = adons;
         mergedData2['data'] = adonsData;
