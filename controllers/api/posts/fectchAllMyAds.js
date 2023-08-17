@@ -110,7 +110,7 @@ exports.fetchAll = async (req, res, next) => {
 
         if (data1.length || data2.length || data3.length || data4.length || data5.length || data6.length) {
         adonsData.push(...data1, ...data2, ...data3, ...data4, ...data5, ...data6);
-        // mergedData[adons] = adonsData;
+        // mergedData[adons] = adonsData; 
         mergedData['name'] = adons;
         mergedData['data'] = adonsData;
       }
