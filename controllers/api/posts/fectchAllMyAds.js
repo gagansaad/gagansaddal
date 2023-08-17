@@ -115,7 +115,7 @@ exports.fetchAll = async (req, res, next) => {
 
         mergedData2['name'] = adons;
         mergedData2['data'] = adonsData;
-        mergedData.push(mergedData2)
+        mergedData=[mergedData2];
       }
     }
 
