@@ -31,7 +31,8 @@ let dynamicJob = require("./jobs")
 let dynamicBiz = require("./bizAndServices")
 let dynamicBaby = require("./babbysitter & nannis")
 let dynamicBuysell = require("./buy&sell")
-let dynamicEvent = require("./event")
+let dynamicEvent = require("./event");
+const { CallPage } = require("twilio/lib/rest/api/v2010/account/call");
 
 ////////////////
 
@@ -116,7 +117,7 @@ exports.fetchAll = async (req, res, next) => {
           data: combinedData
         });
       }
-
+console.log(adonsData,"999999999999999999999")
       // Only add to mergedData if there is adonsData
       if (adonsData.length > 0) {
         mergedData.push(...adonsData);
