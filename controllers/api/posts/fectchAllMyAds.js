@@ -95,7 +95,7 @@ exports.fetchAll = async (req, res, next) => {
     console.log("object-------------------------------");
     const adons_name = ["Featured", "Homepage Gallery", "Urgent", "Link to your website", "Bump up", "Upcoming Event", "Price Drop"];
 
-    let mergedData = {};
+    const mergedData = [];
 
     for (const adons of adons_name) {
       const adonsData = [];
@@ -115,11 +115,13 @@ exports.fetchAll = async (req, res, next) => {
           name: adons,
           data: combinedData
         });
+      }
 
+      // Only add to mergedData if there is adonsData
+      if (adonsData.length > 0) {
         mergedData.push(...adonsData);
       }
     }
-
 
     return successJSONResponse(res, {
       message: "success",
