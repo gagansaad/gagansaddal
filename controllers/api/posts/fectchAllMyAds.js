@@ -101,6 +101,7 @@ exports.fetchAll = async (req, res, next) => {
     const adons_name = ["Featured", "Homepage Gallery", "Urgent", "Link to your website", "Bump up", "Upcoming Event", "Price Drop"];
     const mergedData = [];
     let commonPopulateOptions = [
+      { path: "adsType", strictPopulate: false, select: "name" },
       { path: "adsInfo.image", strictPopulate: false, select: "url" },
       { path: "viewCount" },
       { path: 'isFavorite', select: 'user', match: { user: myid } }
