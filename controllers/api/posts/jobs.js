@@ -391,7 +391,7 @@ exports.createJobAds = async (req, res, next) => {
         no_of_opening,
         work_authorization,
         location:{
-          locationName:location_name,
+          location_name:location_name,
           latitude:latitude,
           longitude:longitude
         },
@@ -567,7 +567,7 @@ exports.editJobAds = async (req, res, next) => {
     if (experience) adsInfoObj.experience = experience;
     if (work_authorization) adsInfoObj.work_authorization = work_authorization;
     let locationobj={}
-    if (location_name) locationobj.locationName = location_name;
+    if (location_name) locationobj.location_name = location_name;
     if (longitude) locationobj.longitude = longitude;
     if (latitude) locationobj.latitude = latitude;
     if (locationobj) adsInfoObj.location = locationobj;

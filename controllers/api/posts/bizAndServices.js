@@ -563,7 +563,7 @@ exports.createbizAds = async (req, res, next) => {
         working_hours: working_hour,
         tagline,
         location:{
-          locationName:location_name,
+          location_name:location_name,
           latitude:latitude,
           longitude:longitude
         },
@@ -831,7 +831,7 @@ exports.editbizAds = async (req, res, next) => {
     if (tagline) adsInfoObj.tagline = tagline;
     // if (business_location) adsInfoObj.business_location = business_location;
     let locationobj={}
-  if (location_name) locationobj.locationName = location_name;
+  if (location_name) locationobj.location_name = location_name;
   if (longitude) locationobj.longitude = longitude;
   if (latitude) locationobj.latitude = latitude;
   if (locationobj) adsInfoObj.location = locationobj;

@@ -104,7 +104,7 @@ const BuySellSchema = new mongoose.Schema({
             required: true
         }],
         location: {
-            locationName:{
+            location_name:{
                 ...defaultStringConfig,
             },
             latitude: {

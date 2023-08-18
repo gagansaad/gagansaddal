@@ -707,7 +707,7 @@ exports.createBuySellAds = async (req, res, next) => {
         payment_mode: mode_payment,
         fullfilment,
         location:{
-          locationName:location_name,
+          location_name:location_name,
           latitude:latitude,
           longitude:longitude
         },
@@ -882,7 +882,7 @@ exports.editBuySellAds = async (req, res, next) => {
     if (payment_mode) adsInfoObj.payment_mode = payment_mode;
     if (fullfilment) adsInfoObj.fullfilment = fullfilment;
     let locationobj={}
-  if (location_name) locationobj.locationName = location_name;
+  if (location_name) locationobj.location_name = location_name;
   if (longitude) locationobj.longitude = longitude;
   if (latitude) locationobj.latitude = latitude;
   if (locationobj) adsInfoObj.location = locationobj;

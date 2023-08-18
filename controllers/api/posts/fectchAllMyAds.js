@@ -109,7 +109,7 @@ exports.fetchAll = async (req, res, next) => {
   
   let commonSelectFields = {
       "adsInfo.title": 1,
-      "adsInfo.location": 1,
+      "adsInfo.location.location_name": 1,
       "_id": 1,
   };
     for (const adons of adons_name) {

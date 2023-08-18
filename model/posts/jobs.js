@@ -100,7 +100,7 @@ const roomRentsSchema = new mongoose.Schema({
         work_authorization: [],
 
         location: {
-            locationName:{
+            location_name:{
                 ...defaultStringConfig,
             },
             latitude: {

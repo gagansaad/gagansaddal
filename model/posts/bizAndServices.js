@@ -83,7 +83,7 @@ const bizAndServices = new mongoose.Schema({
             }
         },
         location: {
-                locationName:{
+            location_name:{
                     ...defaultStringConfig,
                 },
                 latitude: {

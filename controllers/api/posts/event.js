@@ -455,7 +455,7 @@ exports.createEventAds = async (req, res, next) => {
         recurring_type,
         image: imageArr,
         location:{
-          locationName:location_name,
+          location_name:location_name,
           latitude:latitude,
           longitude:longitude
         },
@@ -695,7 +695,7 @@ exports.editEventAds = async (req, res, next) => {
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (platforms.length) adsInfoObj.live_event = platforms;
     let locationobj={}
-    if (location_name) locationobj.locationName = location_name;
+    if (location_name) locationobj.location_name = location_name;
     if (longitude) locationobj.longitude = longitude;
     if (latitude) locationobj.latitude = latitude;
     if (locationobj) adsInfoObj.location = locationobj;

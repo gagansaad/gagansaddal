@@ -63,7 +63,7 @@ const events_Schema = new mongoose.Schema({
             ...defaultStringConfig,
         },
         location: {
-            locationName:{
+            location_name:{
                 ...defaultStringConfig,
             },
             latitude: {
