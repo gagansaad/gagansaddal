@@ -217,3 +217,6 @@ roomRentsSchema.virtual("favoriteCount", {
       },
   });
 module.exports = mongoose.model('rental', roomRentsSchema);
+
+
+// check code by Sr. soft dev
