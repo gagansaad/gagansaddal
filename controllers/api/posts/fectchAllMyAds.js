@@ -105,7 +105,11 @@ exports.fetchAll = async (req, res, next) => {
       const data2 = await buysellAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2);
       const data3 = await bizAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2);
       const data4 = await eventAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2);
-      const data5 = await jobsAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2);
+      const data5 = await jobsAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2)   .select({
+        "adsInfo.title": 1,
+        "adsInfo.location.locationName": 1,
+        "_id": 1,
+    });
       const data6 = await roomrentAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2);
 
       const combinedData = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
