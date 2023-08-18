@@ -7,12 +7,16 @@ const router = require(`express`).Router(),
     const multer = require("multer");
     
     
-    
-    cloudinary.config({
-        cloud_name: "djqwsb0hr",
-        api_key: "413855651964414",
-        api_secret: "n3km-PA9egUoHXLnoCsmazdZ7Gc",
-    });
+    const CLOUD_NAME = process.env.CLOUD_NAME;
+const CLOUD_API_KEY = process.env.CLOUD_API_KEY;
+const CLOUD_SECRET = process.env.CLOUD_SECRET;
+
+
+cloudinary.config({
+    cloud_name: CLOUD_NAME,
+    api_key: CLOUD_API_KEY,
+    api_secret: CLOUD_SECRET,
+});
     
     
     
