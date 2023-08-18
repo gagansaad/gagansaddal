@@ -146,12 +146,23 @@ exports.fetchAll = async (req, res, next) => {
       .select(commonSelectFields);
 
       const combinedData = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
-
+      let filterData
+      if (combinedData) {
+         filterData = combinedData.map((job) => {
+          return {
+            ...job._doc,
+            // Add other job fields as needed
+            viewCount: job.viewCount,
+            favoriteCount: job.favoriteCount,
+            isFavorite: !!job.isFavorite, 
+          };
+        });
+      
       // Only add to adonsData if there is data
-      if (combinedData.length > 0) {
+      if (filterData.length > 0) {
         adonsData.push({
           name: adons,
-          data: combinedData
+          data: filterData
         });
       }
 console.log(adonsData,"999999999999999999999")
@@ -165,6 +176,7 @@ console.log(adonsData,"999999999999999999999")
       message: "success",
       data: mergedData
     });
+  }
   } catch (err) {
     console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` }, { error: err.message });
