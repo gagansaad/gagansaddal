@@ -1089,9 +1089,9 @@ console.log(dbQuery,"77777777777777777777777777777777777777777777777");
         return {
           ...job._doc,
           // Add other job fields as needed
-          viewCount: records.viewCount,
-          favoriteCount: job.favoriteCount,
-          isFavorite: !!job.isFavorite, 
+          view_count: job.viewCount,
+          favorite_count: job.favoriteCount,
+          is_favorite: !!job.isFavorite, 
         };
       });
       return successJSONResponse(res, {
@@ -1162,9 +1162,9 @@ exports.fetchonead = async (req, res, next) => {
       }
       const jobData = {
         ...records._doc,
-        viewCount: records.viewCount,
-        favoriteCount: records.favoriteCount,
-        isFavorite: !!records.isFavorite
+        view_count: records.viewCount,
+        favorite_count: records.favoriteCount,
+        is_favorite: !!records.isFavorite
       };
       return successJSONResponse(res, {
         message: `success`,
