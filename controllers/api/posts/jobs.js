@@ -771,7 +771,7 @@ exports.fetchAllAds = async (req, res, next) => {
       .find({ $or: [queryFinal] })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "viewCount" ,select: "_id" })
+      .populate({ path: "viewCount" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
       .sort({ createdAt: -1 })
       .skip(perPage * page - perPage)
@@ -785,7 +785,7 @@ exports.fetchAllAds = async (req, res, next) => {
         return {
           ...job._doc,
           // Add other job fields as needed
-          viewCount: records.viewCount,
+          viewCount: !!records.viewCount,
           favoriteCount: job.favoriteCount,
           isFavorite: !!job.isFavorite, 
         };
