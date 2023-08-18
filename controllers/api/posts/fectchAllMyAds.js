@@ -152,9 +152,9 @@ exports.fetchAll = async (req, res, next) => {
           return {
             ...job._doc,
             // Add other job fields as needed
-            viewCount: job.viewCount,
-            favoriteCount: job.favoriteCount,
-            isFavorite: !!job.isFavorite, 
+            view_count: job.viewCount,
+            favorite_count: job.favoriteCount,
+            is_favorite: !!job.isFavorite, 
           };
         });
       
