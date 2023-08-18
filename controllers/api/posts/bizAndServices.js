@@ -558,7 +558,7 @@ exports.createbizAds = async (req, res, next) => {
       adsInfo: {
         categories,
         sub_categories,
-        business_name,
+        title:business_name,
         experience,
         working_hours: working_hour,
         tagline,
@@ -827,7 +827,7 @@ exports.editbizAds = async (req, res, next) => {
 
     if (sub_categories) adsInfoObj.sub_categories = sub_categories;
     if (categories) adsInfoObj.categories = categories;
-    if (business_name) adsInfoObj.business_name = business_name;
+    if (business_name) adsInfoObj.title = business_name;
     if (tagline) adsInfoObj.tagline = tagline;
     // if (business_location) adsInfoObj.business_location = business_location;
     let locationobj={}
@@ -925,7 +925,7 @@ exports.fetchAll = async (req, res, next) => {
     }
 
     if (business_name) {
-      dbQuery["adsInfo.business_name"] = business_name;
+      dbQuery["adsInfo.title"] = business_name;
     }
 
     if (tagline) {

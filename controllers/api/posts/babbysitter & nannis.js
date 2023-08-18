@@ -303,7 +303,7 @@ exports.createAds = async (req, res, next) => {
       isfeatured,
       status: status,
       ads_type,
-      ads_info: {
+      adsInfo: {
         category: {
           category_value,
           category_name,
@@ -492,11 +492,11 @@ exports.editAds = async (req, res, next) => {
     if (name) listerBasicInfoObj.name = name;
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
-      dataObj.ads_info = adsInfoObj;
+      dataObj.adsInfo = adsInfoObj;
     }
 
     const dataObjq = {
-      ads_info: adsInfoObj,
+      adsInfo: adsInfoObj,
       lister_basic_info: {
         name,
         email_address,
@@ -623,43 +623,43 @@ exports.fetchAll = async (req, res, next) => {
     }
 
     if (category_value) {
-      dbQuery["ads_info.category.category_value"] = category_value;
+      dbQuery["adsInfo.category.category_value"] = category_value;
     }
 
     if (category) {
-      dbQuery["ads_info.category.category_name"] = category;
+      dbQuery["adsInfo.category.category_name"] = category;
     }
 
     if (work_type) {
-      dbQuery["ads_info.work_type"] = work_type;
+      dbQuery["adsInfo.work_type"] = work_type;
     }
 
     if (care_service) {
-      dbQuery["ads_info.care_service"] = care_service;
+      dbQuery["adsInfo.care_service"] = care_service;
     }
 
     if (age_group) {
-      dbQuery["ads_info.age_group"] = age_group;
+      dbQuery["adsInfo.age_group"] = age_group;
     }
 
     if (prefered_language) {
-      dbQuery["ads_info.prefered_language"] = prefered_language;
+      dbQuery["adsInfo.prefered_language"] = prefered_language;
     }
 
     if (prefered_gender) {
-      dbQuery["ads_info.prefered_gender"] = prefered_gender;
+      dbQuery["adsInfo.prefered_gender"] = prefered_gender;
     }
 
     if (transport_facilty) {
-      dbQuery["ads_info.transport_facilty"] = transport_facilty;
+      dbQuery["adsInfo.transport_facilty"] = transport_facilty;
     }
 
     if (location) {
-      dbQuery["ads_info.location"] = location;
+      dbQuery["adsInfo.location"] = location;
     }
 
     if (tagline) {
-      dbQuery["ads_info.tagline"] = tagline;
+      dbQuery["adsInfo.tagline"] = tagline;
     }
      // Get the current date
      const currentDate = new Date();
@@ -674,15 +674,15 @@ exports.fetchAll = async (req, res, next) => {
       queryFinal = {
         ...dbQuery,
         $or: [
-          { "ads_info.title": { $regex: searchTerm, $options: "i" } },
-          { "ads_info.tagline": { $regex: searchTerm, $options: "i" } }
+          { "adsInfo.title": { $regex: searchTerm, $options: "i" } },
+          { "adsInfo.tagline": { $regex: searchTerm, $options: "i" } }
         ]
       };
     }
     let myid = req.userId;
     let records = await postbabyAd
       .find({ $or: [queryFinal] })
-      .populate({ path: "ads_info.image", strictPopulate: false, select: "url" })
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
@@ -807,7 +807,7 @@ exports.fetchBabyData = async (req, res, next) => {
       const subcategoryData = [];
 
       for (const subCategory of subCategoryArray) {
-        const query = {"ads_info.category.category_name": subCategory ,"status" :"active",["plan_validity.expired_on"]:{ $gte: currentDateOnly }};
+        const query = {"adsInfo.category.category_name": subCategory ,"status" :"active",["plan_validity.expired_on"]:{ $gte: currentDateOnly }};
         
         const count = await postbabyAd.countDocuments(query);
         subcategoryData.push({ sub_category_name: subCategory, count });

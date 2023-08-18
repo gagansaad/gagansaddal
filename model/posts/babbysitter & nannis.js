@@ -43,7 +43,7 @@ const babysitter_Schema = new mongoose.Schema({
         ref: `PostType`,
         required: true
     },
-    ads_info: {
+    adsInfo: {
         category: {
             category_value:{
                 type:Number,

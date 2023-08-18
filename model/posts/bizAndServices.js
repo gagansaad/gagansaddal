@@ -53,7 +53,7 @@ const bizAndServices = new mongoose.Schema({
             ...defaultStringConfig,
             // required: true
         },
-        business_name: {
+        title: {
             ...defaultStringConfig,
             // required: true
         },

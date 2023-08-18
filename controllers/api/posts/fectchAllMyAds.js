@@ -97,20 +97,50 @@ exports.fetchAll = async (req, res, next) => {
     const adons_name = ["Featured", "Homepage Gallery", "Urgent", "Link to your website", "Bump up", "Upcoming Event", "Price Drop"];
 
     const mergedData = [];
-
+    let commonPopulateOptions = [
+      { path: "adsInfo.image", strictPopulate: false, select: "url" },
+      { path: "viewCount" },
+      { path: 'isFavorite', select: 'user', match: { user: myid } }
+  ];
+  
+  let commonSelectFields = {
+      "adsInfo.title": 1,
+      "adsInfo.location": 1,
+      "_id": 1,
+  };
     for (const adons of adons_name) {
       const adonsData = [];
 
-      const data1 = await babysitterAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2);
-      const data2 = await buysellAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2);
-      const data3 = await bizAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2);
-      const data4 = await eventAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2);
-      const data5 = await jobsAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2)   .select({
-        "adsInfo.title": 1,
-        "adsInfo.location.locationName": 1,
-        "_id": 1,
-    });
-      const data6 = await roomrentAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2);
+      const data1 = await babysitterAd.find({ "addons_validity.name": adons })
+      .sort({ createdAt: -1 })
+      .limit(2)
+      .populate(...commonPopulateOptions);
+      // .select(commonSelectFields);
+      const data2 = await buysellAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2)
+      .sort({ createdAt: -1 })
+      .limit(2)
+      .populate(...commonPopulateOptions)
+      .select(commonSelectFields);
+      const data3 = await bizAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2)
+      .sort({ createdAt: -1 })
+      .limit(2)
+      .populate(...commonPopulateOptions)
+      .select(commonSelectFields);
+      const data4 = await eventAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2)
+      .sort({ createdAt: -1 })
+      .limit(2)
+      .populate(...commonPopulateOptions)
+      .select(commonSelectFields);
+      const data5 = await jobsAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2)
+      .sort({ createdAt: -1 })
+      .limit(2)
+      .populate(...commonPopulateOptions)
+      .select(commonSelectFields);
+      const data6 = await roomrentAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2)
+      .sort({ createdAt: -1 })
+      .limit(2)
+      .populate(...commonPopulateOptions)
+      .select(commonSelectFields);
 
       const combinedData = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
 
