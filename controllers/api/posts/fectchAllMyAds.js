@@ -118,7 +118,7 @@ exports.fetchAll = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .limit(2)
       .populate(...commonPopulateOptions);
-      // .select(commonSelectFields);
+      
       const data2 = await buysellAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2)
       .sort({ createdAt: -1 })
       .limit(2)
