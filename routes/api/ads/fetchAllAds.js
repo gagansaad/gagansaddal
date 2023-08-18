@@ -13,7 +13,7 @@ authMiddleware.ensureUserLoggedIn,
     controllers.fetchAllMyAds
 );
 
-router.get(`/all-ads`,
+router.get(`/adons-ads`,
 // authMiddleware.ensureUserLoggedIn,
     controllers.fetchAll
 );
