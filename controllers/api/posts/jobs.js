@@ -785,7 +785,7 @@ exports.fetchAllAds = async (req, res, next) => {
         return {
           ...job._doc,
           // Add other job fields as needed
-          viewCount: !!records.viewCount,
+          viewCount: !!job.viewCount,
           favoriteCount: job.favoriteCount,
           isFavorite: !!job.isFavorite, 
         };
