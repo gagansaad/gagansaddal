@@ -94,8 +94,11 @@ exports.fetchAllMyAds = async (req, res, next) => {
 exports.fetchAll = async (req, res, next) => {
   try {
     console.log("object-------------------------------");
+    let myid 
+    if(req.userId){
+      myid=req.userId || "0"
+    }
     const adons_name = ["Featured", "Homepage Gallery", "Urgent", "Link to your website", "Bump up", "Upcoming Event", "Price Drop"];
-
     const mergedData = [];
     let commonPopulateOptions = [
       { path: "adsInfo.image", strictPopulate: false, select: "url" },
