@@ -302,7 +302,7 @@ exports.createAds = async (req, res, next) => {
     const dataObj = {
       isfeatured,
       status: status,
-      ads_type,
+      adsType:ads_type,
       adsInfo: {
         category: {
           category_value,
@@ -466,7 +466,7 @@ exports.editAds = async (req, res, next) => {
     let category = {};
     let expected_salary_amount = {};
     if (status) dataObj.status = status;
-    if (ads_type) dataObj.ads_type = ads_type;
+    if (ads_type) dataObj.adsType = ads_type;
     if (category_name) category.category_name = category_name;
     if (category_value) category.category_value = category_value;
     if (category_name) adsInfoObj.category = category;
@@ -751,7 +751,7 @@ exports.fetchonead = async (req, res, next) => {
     .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
     
     if (records) {
-      const ads_type =records.ads_type.toString();
+      const ads_type =records.adsType.toString();
     
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
     console.log(Typename,"nfjdnfcjed");

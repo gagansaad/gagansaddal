@@ -688,7 +688,7 @@ exports.createBuySellAds = async (req, res, next) => {
     const dataObj = {
       isfeatured,
       status: status,
-      ads_type,
+      adsType:ads_type,
       adsInfo: {
         category,
         sub_category,
@@ -862,7 +862,7 @@ exports.editBuySellAds = async (req, res, next) => {
     }
 
     if (status) dataObj.status = status;
-    if (ads_type) dataObj.ads_type = ads_type;
+    if (ads_type) dataObj.adsType = ads_type;
     if (category) adsInfoObj.category = category;
     if (sub_category) adsInfoObj.sub_category = sub_category;
     if (title) adsInfoObj.title = title;
@@ -1144,7 +1144,7 @@ exports.fetchonead = async (req, res, next) => {
     .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
     
     if (records) {
-      const ads_type =records.ads_type.toString();
+      const ads_type =records.adsType.toString();
     
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
     console.log(Typename,"nfjdnfcjed");

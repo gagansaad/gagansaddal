@@ -107,6 +107,7 @@ exports.fetchAll = async (req, res, next) => {
   ];
   
   let commonSelectFields = {
+      "adsType":1,
       "adsInfo.title": 1,
       "adsInfo.location": 1,
       "_id": 1,
@@ -154,7 +155,7 @@ exports.fetchAll = async (req, res, next) => {
             // Add other job fields as needed
             view_count: job.viewCount,
             favorite_count: job.favoriteCount,
-            is_favorite: !!job.isFavorite, 
+            is_favorite: !!job.isFavorite,
           };
         });
       
