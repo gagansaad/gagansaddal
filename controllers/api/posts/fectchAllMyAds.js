@@ -175,12 +175,12 @@ console.log(adonsData,"999999999999999999999")
         mergedData.push(...adonsData);
       }
     }
-
+  }
     return successJSONResponse(res, {
       message: "success",
       data: mergedData
     });
-  }
+  
   } catch (err) {
     console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` }, { error: err.message });
