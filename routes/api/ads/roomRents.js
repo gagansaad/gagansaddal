@@ -51,7 +51,6 @@ router.get(`/dynamics-data`,
     controllers.fetchDynamicsData
 );
 router.get(`/menu`,
-    authMiddleware.ensureUserLoggedIn,
     controllers.fetchRoomData
 );
 
@@ -75,7 +74,6 @@ router.get(`/fetchAds`,
     controllers.fetchAll
 );
 router.get(`/ad_details`,
-    authMiddleware.ensureUserLoggedIn,
     controllers.fetchonead
 );
 module.exports = router;

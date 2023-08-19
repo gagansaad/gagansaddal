@@ -47,7 +47,6 @@ router.get(`/dynamics-data`,
     controllers.getDnymicsData
 );
 router.get(`/menu`,
-    authMiddleware.ensureUserLoggedIn,
     controllers.fetchBabyData
 );
 router.post(`/add`, upload.array('photos', 10),
@@ -68,11 +67,9 @@ router.patch(`/edit/:productId`, upload.array('photos', 10),
 //     controllers.editBuySellStatus
 // );
 router.get(`/fetchAds`,
-    // authMiddleware.ensureUserLoggedIn,
     controllers.fetchAll
 );
 router.get(`/ad_details`,
-    authMiddleware.ensureUserLoggedIn,
     controllers.fetchonead
 );
 module.exports = router;

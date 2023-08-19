@@ -46,7 +46,6 @@ router.get(`/dynamics-data`,
     controllers.getDnymicsData
 );
 router.get(`/menu`,
-    authMiddleware.ensureUserLoggedIn,
     controllers.fetchBizData
 );
 router.post(`/create-service`, upload.fields([
@@ -71,11 +70,9 @@ router.patch(`/edit/:bizId`,upload.fields([
 //     controllers.editBuySellStatus
 // );
 router.get(`/fetchAds`,
-    authMiddleware.ensureUserLoggedIn,
     controllers.fetchAll
 );
 router.get(`/ad_details`,
-    authMiddleware.ensureUserLoggedIn,
     controllers.fetchonead
 );
 module.exports = router;

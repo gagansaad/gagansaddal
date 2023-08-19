@@ -62,7 +62,6 @@ router.get(`/fetchAds`,
     controllers.fetchAllAds
 );
 router.get(`/menu`,
-    authMiddleware.ensureUserLoggedIn,
     controllers.fetchJobData
 );
 router.patch(`/edit/:jobId`,

@@ -60,7 +60,6 @@ router.patch(`/edit/:eventId`,
     controllers.editEventAds
 );
 router.get(`/menu`,
-    authMiddleware.ensureUserLoggedIn,
     controllers.fetchEventData
 );   
 router.patch(`/edit-status/:eventId`,
@@ -68,11 +67,9 @@ router.patch(`/edit-status/:eventId`,
     controllers.editEventStatus
 );
 router.get(`/fetchAds`,
-    authMiddleware.ensureUserLoggedIn,
     controllers.fetchAll
 );
 router.get(`/ad_details`,
-    authMiddleware.ensureUserLoggedIn,
     controllers.fetchonead
 );
 module.exports = router;
