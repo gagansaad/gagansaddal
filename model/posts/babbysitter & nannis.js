@@ -38,7 +38,7 @@ const babysitter_Schema = new mongoose.Schema({
         default: false
     },
 
-    ads_type: {
+    adsType: {
         type: mongoose.Schema.Types.ObjectId,
         ref: `PostType`,
         required: true

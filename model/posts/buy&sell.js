@@ -40,7 +40,7 @@ const BuySellSchema = new mongoose.Schema({
         required: true,
         default: false
     },
-    ads_type: {
+    adsType: {
         type: mongoose.Schema.Types.ObjectId,
         ref: `PostType`,
         required: true
