@@ -151,7 +151,12 @@ exports.fetchAll = async (req, res, next) => {
       if (combinedData) {
          filterData = combinedData.map((job) => {
           const isFeaturedAddonValid = job.addons_validity && Array.isArray(job.addons_validity) &&
-                job.addons_validity.some((addon) => addon.name === "Featured" && new Date(addon.expired_on) >= new Date());
+          job.addons_validity.some((addon) => {
+              const addonExpired = new Date(addon.expired_on) >= new Date();
+              console.log(`Addon: ${addon.name}, Expired: ${addonExpired}`);
+              return addon.name === "Featured" && addonExpired;
+          });
+      
           return {
             ...job._doc,
             // Add other job fields as needed
