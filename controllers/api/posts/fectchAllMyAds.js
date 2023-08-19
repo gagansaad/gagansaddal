@@ -33,6 +33,7 @@ let dynamicBaby = require("./babbysitter & nannis")
 let dynamicBuysell = require("./buy&sell")
 let dynamicEvent = require("./event");
 const { CallPage } = require("twilio/lib/rest/api/v2010/account/call");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 ////////////////
 
@@ -156,7 +157,7 @@ exports.fetchAll = async (req, res, next) => {
               console.log(`Addon: ${addon.name}, Expired: ${addonExpired}`);
               return addon.name === "Featured" && addonExpired;
           });
-      
+console.log(isFeaturedAddonValid);
           return {
             ...job._doc,
             // Add other job fields as needed
