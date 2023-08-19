@@ -163,7 +163,7 @@ exports.fetchAll = async (req, res, next) => {
         });
       
       // Only add to adonsData if there is data
-      if (filterData.length > 0) {
+      if (filterData.length >= 0) {
         adonsData.push({
           name: adons,
           data: filterData
