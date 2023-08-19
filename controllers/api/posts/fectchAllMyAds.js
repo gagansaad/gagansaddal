@@ -109,6 +109,7 @@ exports.fetchAll = async (req, res, next) => {
   ];
   
   let commonSelectFields = {
+      "addons_validity":1,
       "adsInfo.title": 1,
       "adsInfo.location.location_name": 1,
       "_id": 1,
