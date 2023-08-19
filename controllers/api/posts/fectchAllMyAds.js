@@ -150,12 +150,14 @@ exports.fetchAll = async (req, res, next) => {
       let filterData
       if (combinedData) {
          filterData = combinedData.map((job) => {
+          const isFeaturedAddonValid = job.addons_validity.some((addon) => addon.name === "Featured" && new Date(addon.expired_on) >= new Date());
           return {
             ...job._doc,
             // Add other job fields as needed
             view_count: job.viewCount,
             favorite_count: job.favoriteCount,
             is_favorite: !!job.isFavorite,
+            is_featured: isFeaturedAddonValid,
           };
         });
       
