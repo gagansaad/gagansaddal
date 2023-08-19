@@ -157,7 +157,7 @@ exports.fetchAll = async (req, res, next) => {
             view_count: job.viewCount,
             favorite_count: job.favoriteCount,
             is_favorite: !!job.isFavorite,
-            is_featured: isFeaturedAddonValid,
+            is_featured:  isFeaturedAddonValid || false,
           };
         });
       
