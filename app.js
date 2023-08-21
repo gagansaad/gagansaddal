@@ -15,7 +15,8 @@ const {EmailOTPVerification} = require("./resources/sendEmailFunction")
 // DB Setup
 const connection = require(`./config/dbConnection`);
 connection(mongoose);
-
+//chat 
+require("./model/posts/message")
 require(`./model/accounts/users`);
 require(`./model/accounts/admin`);
 require(`./model/otp`);

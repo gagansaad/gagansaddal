@@ -916,11 +916,11 @@ exports.fetchAll = async (req, res, next) => {
       dbQuery.status = status;
     }
 
-    if (categories) {
+    if (category) {
       dbQuery.categories = category;
     }
 
-    if (sub_categories) {
+    if (sub_category) {
       dbQuery.sub_categories = sub_category;
     }
 

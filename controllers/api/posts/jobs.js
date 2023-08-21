@@ -714,7 +714,7 @@ exports.fetchAllAds = async (req, res, next) => {
       dbQuery["adsInfo.title"] = title;
     }
 
-    if (categories) {
+    if (category) {
       dbQuery["adsInfo.categories"] = category;
     }
 
