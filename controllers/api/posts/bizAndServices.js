@@ -902,8 +902,8 @@ exports.fetchAll = async (req, res, next) => {
     let dbQuery = {};
     const {
       status,
-      categories,
-      sub_categories,
+      category,
+      sub_category,
       business_name,
       tagline,
       business_location,
@@ -917,11 +917,11 @@ exports.fetchAll = async (req, res, next) => {
     }
 
     if (categories) {
-      dbQuery.categories = categories;
+      dbQuery.categories = category;
     }
 
     if (sub_categories) {
-      dbQuery.sub_categories = sub_categories;
+      dbQuery.sub_categories = sub_category;
     }
 
     if (business_name) {

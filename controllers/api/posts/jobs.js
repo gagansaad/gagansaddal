@@ -683,7 +683,7 @@ exports.fetchAllAds = async (req, res, next) => {
       adsType,
       listing_type,
       title,
-      categories,
+      category,
       type,
       employment_type,
       language,
@@ -715,7 +715,7 @@ exports.fetchAllAds = async (req, res, next) => {
     }
 
     if (categories) {
-      dbQuery["adsInfo.categories"] = categories;
+      dbQuery["adsInfo.categories"] = category;
     }
 
     if (type) {
