@@ -35,4 +35,4 @@ const msgSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
-exports.module = mongoose.model(`notification`, msgSchema);
+exports.module = mongoose.model(`message`, msgSchema);
