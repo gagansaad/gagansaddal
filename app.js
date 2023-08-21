@@ -19,7 +19,7 @@ connection(mongoose);
 require(`./model/accounts/users`);
 require(`./model/accounts/admin`);
 require(`./model/otp`);
-
+require("./model/posts/banner")
 // post
 require(`./model/posts/Types`);
 require(`./model/posts/roomRents`);

@@ -99,7 +99,7 @@ exports.fetchAll = async (req, res, next) => {
     if(req.userId){
       myid=req.userId || "0"
     }
-    const adons_name = ["Homepage Gallery", "Urgent", "Price Drop"];
+    const adons_name = ["Homepage Gallery", "Urgent", "Upcoming Event", "Price Drop"];
     const mergedData = [];
     let commonPopulateOptions = [
       { path: "adsType", strictPopulate: false, select: "name" },
