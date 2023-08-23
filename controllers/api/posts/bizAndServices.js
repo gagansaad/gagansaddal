@@ -1028,7 +1028,7 @@ exports.fetchonead = async (req, res, next) => {
     
     if (records) {
       const ads_type =records.adsType.toString();
-    
+    console.log(ads_type,"------------");
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
     console.log(Typename,"nfjdnfcjed");
     let dbQuery ={
