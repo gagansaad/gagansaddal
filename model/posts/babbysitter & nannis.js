@@ -44,6 +44,10 @@ const babysitter_Schema = new mongoose.Schema({
         required: true
     },
     adsInfo: {
+        title: {
+            ...defaultStringConfig,
+            // required: true
+        },
         category: {
             category_value:{
                 type:Number,

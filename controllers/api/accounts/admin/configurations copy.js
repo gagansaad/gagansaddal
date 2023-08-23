@@ -125,6 +125,7 @@ exports.create_adons = async (req, res) => {
     if(example_image) addOnsPlan.example_image=example_image;
     if(example_title) addOnsPlan.example_title=example_title;
     if(color_code) addOnsPlan.color_code=color_code;
+    console.log(addOnsPlan,"tt-------");
     let addons_result = await addons_plan.create(addOnsPlan);
     if (addons_result) {
       let pushdata = await AdsPlan.findByIdAndUpdate(

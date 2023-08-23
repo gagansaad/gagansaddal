@@ -253,6 +253,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 exports.createAds = async (req, res, next) => {
   try {
     const {
+      title,
       isfeatured,
       status,
       ads_type,
@@ -304,6 +305,7 @@ exports.createAds = async (req, res, next) => {
       status: status,
       adsType:ads_type,
       adsInfo: {
+        title,
         category: {
           category_value,
           category_name,
@@ -383,6 +385,7 @@ exports.editAds = async (req, res, next) => {
       });
     }
     const {
+      title,
       status,
       ads_type,
       category_value,
@@ -470,6 +473,7 @@ exports.editAds = async (req, res, next) => {
     if (category_name) category.category_name = category_name;
     if (category_value) category.category_value = category_value;
     if (category_name) adsInfoObj.category = category;
+    if (title) adsInfoObj.title = title;
     if (care_service) adsInfoObj.care_service = care_service;
     if (work_type) adsInfoObj.work_type = work_type;
     if (age_group) adsInfoObj.age_group = age_group;
