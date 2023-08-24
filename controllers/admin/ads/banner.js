@@ -42,16 +42,12 @@ exports.createBanner = async (req, res, next) => {
 console.log(dataObj,"----------------------");
     
        
-            BannerSchema.create(dataObj)
-                .then((newCategory) => {
-                    if (!BannerSchema) return failureJSONResponse(res, { message: `Something went wrong` });
+            let bannerdata = await BannerSchema.create(dataObj)
+                
+                    if (!bannerdata) return failureJSONResponse(res, { message: `Something went wrong` });
                     else {
                         return successJSONResponse(res, { message: "Success" });
                     }
-                }).catch((err) => {
-                    return failureJSONResponse(res, { message: `Something went wrong` });
-                })
-        
     } catch (err) {
         return failureJSONResponse(res, { message: `something went wrong` })
     }
