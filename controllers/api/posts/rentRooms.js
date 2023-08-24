@@ -764,7 +764,7 @@ console.log(sortval);
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
       .populate({ path: "viewCount" })
-      .sort(sortval)
+      .sort({createdAt:1})
       .skip(perPage * page - perPage)
       .limit(perPage);
       const responseModelCount = await RoomRentsAds.countDocuments({
