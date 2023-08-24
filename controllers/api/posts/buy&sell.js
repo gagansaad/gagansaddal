@@ -1006,7 +1006,10 @@ exports.fetchAll = async (req, res, next) => {
       fullfilment,
       location,
       tagline,
+      sortBy
     } = req.query;
+    const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
+
     var perPage = parseInt(req.query.perpage) || 6;
     var page = parseInt(req.query.page) || 1;
     if (status) {
@@ -1078,7 +1081,7 @@ console.log(dbQuery,"77777777777777777777777777777777777777777777777");
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
-      .sort({ createdAt: -1 })
+      .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
     const responseModelCount = await postBuySellAd.countDocuments({
