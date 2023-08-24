@@ -100,7 +100,7 @@ exports.fetchAll = async (req, res, next) => {
       myid=req.userId || "0"
     }
     let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false,select:"url"})
-    console.log(banner);
+   
     
     const adons_name = ["Homepage Gallery", "Urgent", "Upcoming Event", "Price Drop"];
     const mergedData = [];

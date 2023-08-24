@@ -719,7 +719,12 @@ exports.fetchAll = async (req, res, next) => {
     } = req.query;
     var perPage = parseInt(req.query.perpage) || 6;
     var page = parseInt(req.query.page) || 1;
-
+   let sortval
+if(sortBy == "Oldest"){
+sortval = {createdAt:1}
+}else{
+  sortval = {createdAt:-1}
+}
 if (isfeatured) dbQuery.isfeatured = isfeatured;
 if (status) dbQuery.status = status;
 if (adsType) dbQuery.adsType = adsType;
@@ -763,7 +768,7 @@ console.log(queryFinal);
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
       .populate({ path: "viewCount" })
-      .sort({ createdAt: -1 },)
+      .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
       const responseModelCount = await RoomRentsAds.countDocuments({
