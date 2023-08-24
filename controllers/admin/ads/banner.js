@@ -25,8 +25,8 @@ exports.createBanner = async (req, res, next) => {
         console.log(req.file);
         // if (!caption) return failureJSONResponse(res, { message: `Please provide caption` });
         // if (!target_url) return failureJSONResponse(res, { message: `Please provide target_url` });
-        if (req.files.length) {
-            var thumbnail = req.files.path;
+        if (req.file.length) {
+            var thumbnail = req.file.path;
 
             productImages = await Media.create({ url: thumbnail });
         } else {
