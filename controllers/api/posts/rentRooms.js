@@ -728,15 +728,21 @@ exports.fetchAll = async (req, res, next) => {
     var page = parseInt(req.query.page) || 1;
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     if (longitude && latitude && maxDistance) {
-      dbQuery["adsInfo.location"] = {
-        $geoWithin: {
-          $centerSphere: [[parseFloat(longitude), parseFloat(latitude)], parseFloat(maxDistance) / 6378100]
-        }
+      const targetPoint = {
+        type: 'Point',
+        coordinates: [longitude, latitude]
       };
+      dbQuery["adsInfo.location.coordinates"] = {
+        
+          $near: {
+            $geometry: targetPoint,
+            $maxDistance: maxDistance
+          }
     }
+  }
     let recordss = await RoomRentsAds.find(dbQuery)
     console.log(recordss,"---------------------------");
-    return
+  
 if (isfeatured) dbQuery.isfeatured = isfeatured;
 if (status) dbQuery.status = status;
 if (adsType) dbQuery.adsType = adsType;
@@ -771,7 +777,7 @@ if (preferedGender) dbQuery["adsInfo.preferedGender"] = preferedGender;
         ]
       };
     }
-console.log(sortval);
+    console.log(sortval);
     let myid = req.userId;
     let records = await RoomRentsAds.find({
       $or: [queryFinal],
