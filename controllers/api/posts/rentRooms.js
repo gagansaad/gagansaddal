@@ -740,8 +740,7 @@ exports.fetchAll = async (req, res, next) => {
           }
     }
   }
-    let recordss = await RoomRentsAds.find(dbQuery)
-    console.log(recordss,"---------------------------");
+  
   
 if (isfeatured) dbQuery.isfeatured = isfeatured;
 if (status) dbQuery.status = status;
