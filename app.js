@@ -56,6 +56,7 @@ require(`./model/accounts/admin/configuration`);
 app.use(cors())
 app.set(`view engine`, `ejs`);
 // DB Setup
+app.use(express.json());
 const signUp = require('./routes/api/accounts/user');
 
 const adminSignIp = require('./routes/accounts/admin/admin_login');
