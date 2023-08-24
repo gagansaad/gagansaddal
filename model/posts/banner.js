@@ -14,13 +14,16 @@ const BannerSchema = new mongoose.Schema({
         default:false,
     },
     image: {
-        type:String
+        type:String,
+        required: true,
     },
     caption: {
-        type:String
+        type:String,
+        required: true,
     },
     target_url:{
-        type:String
+        type:String,
+        required: true,
     },
     img_type:{
         type: String,

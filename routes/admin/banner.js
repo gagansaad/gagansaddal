@@ -1,6 +1,6 @@
 const router = require(`express`).Router(),
     
-    controllers = require(`../../controllers/admin/ads/buy&sell`);
+    controllers = require(`../../controllers/admin/ads/banner`);
 
     const cloudinary = require("cloudinary").v2;
     const { CloudinaryStorage } = require("multer-storage-cloudinary");
@@ -41,9 +41,8 @@ cloudinary.config({
     }
 
 
-router.get(`/fetchbuysellads`,
-    
-    controllers.fetchAll
+router.post(`/createbanner`,
+    controllers.createBanner
 );
 router.get(`/view-buysell-ad`,
     controllers.fetchOne
