@@ -17,14 +17,12 @@ exports.createBanner = async (req, res, next) => {
     try {
 
         const {
-            name,
             image,
             caption,
             target_url,
             img_type,
         } = req.body
         console.log(req.body);
-        if (!isValidString(name)) return failureJSONResponse(res, { message: `Please provide name` });
         if (!isValidString(caption)) return failureJSONResponse(res, { message: `Please provide caption` });
         if (!target_url) return failureJSONResponse(res, { message: `Please provide target_url` });
         if (req.files.length) {
@@ -37,7 +35,6 @@ exports.createBanner = async (req, res, next) => {
         }
 
         let dataObj = {
-            name,
             image: imageArr,
             caption,
             target_url,
