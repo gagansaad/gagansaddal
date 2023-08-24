@@ -755,7 +755,7 @@ if (preferedGender) dbQuery["adsInfo.preferedGender"] = preferedGender;
         ]
       };
     }
-console.log(queryFinal);
+console.log(sortval);
     let myid = req.userId;
     let records = await RoomRentsAds.find({
       $or: [queryFinal],
