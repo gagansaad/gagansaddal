@@ -9,10 +9,12 @@ const express = require(`express`),
     centralErrorHandlers = require(`./utils/centralErrorHandlers`),
     expressSession = require(`express-session`),
     MongoStore = require(`connect-mongo`);
+    
 
 
 const {EmailOTPVerification} = require("./resources/sendEmailFunction")
 // DB Setup
+app.use(express.bodyParser());
 const connection = require(`./config/dbConnection`);
 connection(mongoose);
 //chat 
