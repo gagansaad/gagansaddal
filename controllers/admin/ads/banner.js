@@ -15,7 +15,7 @@ const mongoose = require("mongoose"),
 
 exports.createBanner = async (req, res, next) => {
     try {
-
+        console.log(req.body);
         const {
             image,
             caption,
@@ -29,18 +29,17 @@ exports.createBanner = async (req, res, next) => {
             var thumbnail = req.files.path;
 
             productImages = await Media.create({ url: thumbnail });
-            imageArr.push(productImages._id);
         } else {
             return failureJSONResponse(res, { message: `Please provide Banner image` });
         }
 
         let dataObj = {
-            image: imageArr,
+            image: productImages._id,
             caption,
             target_url,
             img_type,
         }
-
+console.log(dataObj,"----------------------");
     
        
             BannerSchema.create(dataObj)
