@@ -213,6 +213,9 @@ roomRentsSchema.virtual("favoriteCount", {
         return { user: this.userId };
       },
   });
+  // Create a 2dsphere index on the coordinates field
+  roomRentsSchema.index({ "adsInfo.location.coordinates": "2dsphere" });
+
 module.exports = mongoose.model('rental', roomRentsSchema);
 
 
