@@ -723,7 +723,7 @@ exports.fetchAll = async (req, res, next) => {
     var perPage = parseInt(req.query.perpage) || 6;
     var page = parseInt(req.query.page) || 1;
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
-    if (longitude && latitude) {
+    if (longitude && latitude && maxDistance) {
       const point = {
         type: "Point",
         coordinates: [parseFloat(longitude), parseFloat(latitude)]
@@ -735,6 +735,9 @@ exports.fetchAll = async (req, res, next) => {
         }
       };
     }
+    let recordss = await RoomRentsAds.find(dbQuery)
+    console.log(recordss,"---------------------------");
+    return
 if (isfeatured) dbQuery.isfeatured = isfeatured;
 if (status) dbQuery.status = status;
 if (adsType) dbQuery.adsType = adsType;
