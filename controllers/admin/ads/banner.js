@@ -1,55 +1,69 @@
+const { json } = require("express");
 
 const mongoose = require("mongoose"),
-    BannerSchema = mongoose.model("Banner"),
-    Media = mongoose.model("media"),
-    {
-        successJSONResponse,
-        failureJSONResponse,
-    } = require(`../../../handlers/jsonResponseHandlers`),
-    { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
-    {
-        isValidString,
-        isValidMongoObjId,
-    } = require(`../../../utils/validators`);
+  Media = mongoose.model("media"),
+  BannerSchema=mongoose.model("Banner"),
+  {
+    successJSONResponse,
+    failureJSONResponse,
+  } = require(`../../../handlers/jsonResponseHandlers`),
+  { fieldsToExclude,listerBasicInfo } = require(`../../../utils/mongoose`),
+  {
+    isValidString,
+    isValidMongoObjId,
+    isValidBoolean,
+    isValidDate,
+    isValidEmailAddress,
+    isValidIndianMobileNumber,
+  } = require(`../../../utils/validators`);
 
-
-exports.createBanner = async (req, res, next) => {
+  exports.createBanner = async (req, res, next) => {
     try {
-        console.log(req.body,"-----------------------------------");
-        const {
-            image,
-            caption,
-            target_url,
-            img_type,
-        } = req.body
-        console.log(req.files);
-        if (!caption) return failureJSONResponse(res, { message: `Please provide caption` });
-        if (!target_url) return failureJSONResponse(res, { message: `Please provide target_url` });
-        if (req.files.length) {
-            var thumbnail = req.files.path;
-
-            productImages = await Media.create({ url: thumbnail });
-        } else {
-            return failureJSONResponse(res, { message: `Please provide Banner image` });
-        }
-
-        let dataObj = {
-            image: productImages._id,
-            caption,
-            target_url,
-            img_type,
-        }
-        console.log(dataObj, "----------------------");
-
-
-        let bannerdata = await BannerSchema.create(dataObj)
-
-        if (!bannerdata) return failureJSONResponse(res, { message: `Something went wrong` });
-        else {
-            return successJSONResponse(res, { message: "Success" });
-        }
-
+     console.log(BannerSchema);
+      const {
+        image,
+        caption,
+        target_url,
+        img_type,
+      } = req.body;
+ if(!isValidString(caption)) return failureJSONResponse(res, {message: `Please provide caption`,})
+ if(!isValidString(target_url)) return failureJSONResponse(res, {message: `Please provide target url`,})
+ if(!req.files.length) return failureJSONResponse(res, {message: `Please provide Banner img`,})
+      let productImages
+    //   console.log(req.file,"----------------------");
+      if (req.files.length) {
+        var thumbnail = req.files[0].path;
+ 
+        productImages = await Media.create({ url: thumbnail });
+       
+      }
+  
+      
+      const dataObj = {
+                image: productImages.id,
+                caption,
+                target_url,
+                img_type,
+      };
+  
+      const newBuySellPost = await BannerSchema.create(dataObj);
+     
+  
+      if (newBuySellPost) {
+        return successJSONResponse(res, {
+          message: `success`,
+        
+        });
+      } else {
+        return failureJSONResponse(res, {
+          message: `Something went wrong`,
+          postBuySellAdObjToSend: null,
+        });
+      }
     } catch (err) {
-        return failureJSONResponse(res, { message: `something went wrong` })
+      console.log(err);
+      return failureJSONResponse(res, {
+        message: `Something went wrong`,
+      })
     }
-}
+  };

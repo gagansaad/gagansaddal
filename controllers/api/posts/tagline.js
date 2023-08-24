@@ -2,6 +2,8 @@ const { json } = require("express");
 
 const mongoose = require("mongoose"),
   tagline_keywords = mongoose.model("keywords"),
+  Media = mongoose.model("media"),
+  BannerSchema = mongoose.model("Banner"),
   {
     successJSONResponse,
     failureJSONResponse,

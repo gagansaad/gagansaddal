@@ -713,6 +713,7 @@ exports.fetchAll = async (req, res, next) => {
       isAlcoholAllowed,
       isPetFriendly,
       preferedGender,
+      sortBy,
       location,
       tagline,
     } = req.query;

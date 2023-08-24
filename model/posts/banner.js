@@ -14,8 +14,9 @@ const BannerSchema = new mongoose.Schema({
         default:false,
     },
     image: {
-        type:String,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `media`,
+        required:true
     },
     caption: {
         type:String,
@@ -32,4 +33,5 @@ const BannerSchema = new mongoose.Schema({
         default: "topbanner"
     }
 })
+
 module.exports = mongoose.model('Banner', BannerSchema);
