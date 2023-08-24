@@ -189,7 +189,7 @@ exports.gettypeconfigurations = async (req, res, next) => {
     if (plans) {
       return successJSONResponse(res, {
         message: "success",
-        addonsplan: addons,
+        addonsplan: plans,
       });
     } else {
       return failureJSONResponse(res, { message: `something went wrong1` });
