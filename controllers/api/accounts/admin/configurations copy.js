@@ -183,7 +183,7 @@ exports.edit_adons = async (req, res) => {
 
 exports.gettypeconfigurations = async (req, res, next) => {
   try {
-    let plans = await AdsPlan.findOne({"_id":req.body.plan_id}).populate("add_ons");
+    let plans = await AdsPlan.findOne({"_id":req.query.plan_id}).populate("add_ons");
     // if(plans){
     // let addons = await AdsPlan.find().populate("add_ons");
     if (plans) {
