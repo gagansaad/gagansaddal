@@ -716,11 +716,25 @@ exports.fetchAll = async (req, res, next) => {
       sortBy,
       location,
       tagline,
+      longitude,
+      latitude,
+      maxDistance,
     } = req.query;
     var perPage = parseInt(req.query.perpage) || 6;
     var page = parseInt(req.query.page) || 1;
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
+    if (longitude && latitude && maxDistance) {
+      const point = {
+        type: "Point",
+        coordinates: [parseFloat(longitude), parseFloat(latitude)]
+      };
 
+      dbQuery["adsInfo.location"] = {
+        $geoWithin: {
+          $centerSphere: [point.coordinates, parseFloat(maxDistance) / 6378100]
+        }
+      };
+    }
 if (isfeatured) dbQuery.isfeatured = isfeatured;
 if (status) dbQuery.status = status;
 if (adsType) dbQuery.adsType = adsType;
