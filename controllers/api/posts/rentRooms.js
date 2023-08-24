@@ -726,12 +726,12 @@ exports.fetchAll = async (req, res, next) => {
     if (longitude && latitude && maxDistance) {
       const point = {
         type: "Point",
-        coordinates: [parseFloat(longitude), parseFloat(latitude)]
+        coordinates: [longitude,latitude]
       };
 
       dbQuery["adsInfo.location"] = {
         $geoWithin: {
-          $centerSphere: [point.coordinates, parseFloat(maxDistance) / 6378100]
+          $centerSphere: [point.coordinates, maxDistance / 6378100]
         }
       };
     }
