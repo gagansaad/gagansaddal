@@ -14,7 +14,7 @@ const express = require(`express`),
 
 const {EmailOTPVerification} = require("./resources/sendEmailFunction")
 // DB Setup
-app.use(express.bodyParser());
+
 const connection = require(`./config/dbConnection`);
 connection(mongoose);
 //chat 
