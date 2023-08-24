@@ -23,7 +23,7 @@ exports.createBanner = async (req, res, next) => {
             img_type,
         } = req.body
         console.log(req.body);
-        if (!isValidString(caption)) return failureJSONResponse(res, { message: `Please provide caption` });
+        if (!caption) return failureJSONResponse(res, { message: `Please provide caption` });
         if (!target_url) return failureJSONResponse(res, { message: `Please provide target_url` });
         if (req.files.length) {
             var thumbnail = req.files.path;
