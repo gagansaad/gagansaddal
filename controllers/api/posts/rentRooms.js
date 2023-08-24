@@ -432,8 +432,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
       preferedGender: preferedGender,
       location:{
         location_name:location_name,
-        latitude:latitude,
-        longitude:longitude
+        coordinates:[longitude,latitude]
       },
       tagline: taglines,
       image: imageArr,
@@ -634,9 +633,14 @@ exports.editRoomRentAds = async (req, res, next) => {
   // if (occupation) adsInfoObj.occupation = occupation;
   if (prefered_age) adsInfoObj.prefered_age = prefered_age;
 let locationobj={}
+if(longitude && latitude){
+  locationobj={
+    coordinates:[longitude,latitude]
+  }
+}
   if (location_name) locationobj.location_name = location_name;
-  if (longitude) locationobj.longitude = longitude;
-  if (latitude) locationobj.latitude = latitude;
+  // if (longitude) locationobj.longitude = longitude;
+  // if (latitude) locationobj.latitude = latitude;
   if (locationobj) adsInfoObj.location = locationobj;
   if (imageArr.length) adsInfoObj.image = imageArr;
   if (name) listerBasicInfoObj.name = name;
