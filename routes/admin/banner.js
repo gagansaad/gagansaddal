@@ -44,10 +44,10 @@ cloudinary.config({
 router.post(`/createbanner`,
     controllers.createBanner
 );
-router.get(`/view-buysell-ad`,
-    controllers.fetchOne
-);
-router.delete(`/delete-buysell-ad`,
-    controllers.fetchOneDelete
-);
+// router.get(`/view-buysell-ad`,
+//     controllers.fetchOne
+// );
+// router.delete(`/delete-buysell-ad`,
+//     controllers.fetchOneDelete
+// );
 module.exports = router;
