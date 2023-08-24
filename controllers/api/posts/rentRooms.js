@@ -726,14 +726,20 @@ exports.fetchAll = async (req, res, next) => {
     if (longitude && latitude && maxDistance) {
       const point = {
         type: "Point",
-        coordinates: [longitude,latitude]
+        coordinates: [parseFloat(longitude), parseFloat(latitude)]
       };
 
-      dbQuery["adsInfo.location"] = {
+      dbQuery["adsInfo.location.longitude"] = {
         $geoWithin: {
-          $centerSphere: [point.coordinates, maxDistance / 6378100]
+          $centerSphere: [point.coordinates, parseFloat(maxDistance) / 6378100]
         }
       };
+      dbQuery["adsInfo.location.latitude"] = {
+        $geoWithin: {
+          $centerSphere: [point.coordinates, parseFloat(maxDistance) / 6378100]
+        }
+      };
+    
     }
 if (isfeatured) dbQuery.isfeatured = isfeatured;
 if (status) dbQuery.status = status;
