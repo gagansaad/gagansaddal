@@ -738,7 +738,7 @@ exports.fetchAll = async (req, res, next) => {
     let Distance
     
     if(maxDistance === "0" || !maxDistance){
-      console.log("bol");
+    
       Distance =  200000
     }else{
       Distance =maxDistance*1000
