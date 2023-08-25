@@ -144,6 +144,8 @@ exports.validateJobAdsData = async (req, res, next) => {
       image,
       video,
       tagline,
+      latitude,
+      longitude,
     } = req.body;
 
     if (
@@ -161,6 +163,11 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid ads type`,
       });
+      if (!latitude && !longitude) {
+        return failureJSONResponse(res, {
+          message: `Please provide both latitude and longitude`,
+        });
+      }
     if (!isValidString(listing_type))
       return failureJSONResponse(res, {
         message: `Please provide valid listing type`,

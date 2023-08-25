@@ -173,6 +173,8 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
       isSmokingAllowed,
       isAlcoholAllowed,
       isPetFriendly,
+      latitude,
+      longitude,
       // occupation,
       preferedGender,
       location_name,
@@ -208,6 +210,11 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid rental type`,
       });
+      if (!latitude && !longitude) {
+        return failureJSONResponse(res, {
+          message: `Please provide both latitude and longitude`,
+        });
+      }
     if (!isValidString(category))
       return failureJSONResponse(res, {
         message: `Please provide valid category`,

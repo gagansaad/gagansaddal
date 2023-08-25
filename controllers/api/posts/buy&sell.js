@@ -482,7 +482,8 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       fullfilment,
       location_name,
       tagline,
-
+      latitude,
+      longitude,
       image,
     } = req.body;
     if (
@@ -531,6 +532,11 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid product_condition`,
       });
+      if (!latitude && !longitude) {
+        return failureJSONResponse(res, {
+          message: `Please provide both latitude and longitude`,
+        });
+      }
 
     // if (!quantity)
     //   return failureJSONResponse(res, {

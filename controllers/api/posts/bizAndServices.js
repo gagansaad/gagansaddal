@@ -279,6 +279,8 @@ exports.validatebizAdsData = async (req, res, next) => {
       accreditation_name,
       image,
       video_link,
+      latitude,
+      longitude,
     } = req.body;
 
     if (
@@ -290,6 +292,11 @@ exports.validatebizAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please enter status active inactive or draft`,
       });
+      if (!latitude && !longitude) {
+        return failureJSONResponse(res, {
+          message: `Please provide both latitude and longitude`,
+        });
+      }
     if (!adsType)
       return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (adsType && !isValidMongoObjId(mongoose, adsType))

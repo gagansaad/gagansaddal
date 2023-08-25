@@ -131,6 +131,8 @@ exports.validateEventAdsData = async (req, res, next) => {
       tiktok_platform,
       other_platform,
       tagline,
+      latitude,
+      longitude,
     } = req.body;
     // console.log(req.body, "is validate ki body");
     if (
@@ -142,6 +144,11 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please enter status active inactive or draft`,
       });
+      if (!latitude && !longitude) {
+        return failureJSONResponse(res, {
+          message: `Please provide both latitude and longitude`,
+        });
+      }
     if (!adsType)
       return failureJSONResponse(res, { message: `Please provide ads type` });
     // else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });

@@ -128,6 +128,8 @@ exports.validateAdsData = async (req, res, next) => {
       description,
       location_name,
       tagline,
+      latitude,
+      longitude,
     } = req.body;
     // console.log(req.body, "ye boDY HAI");
     if (
@@ -139,6 +141,11 @@ exports.validateAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please enter status active inactive or draft`,
       });
+      if (!latitude && !longitude) {
+        return failureJSONResponse(res, {
+          message: `Please provide both latitude and longitude`,
+        });
+      }
     if (!ads_type)
       return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (ads_type && !isValidMongoObjId(mongoose, ads_type))
