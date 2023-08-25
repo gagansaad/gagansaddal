@@ -620,7 +620,10 @@ exports.fetchAll = async (req, res, next) => {
       transport_facilty,
       location,
       tagline,
-      sortBy
+      sortBy,
+      longitude,
+      latitude,
+      maxDistance,
     } = req.query;
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
