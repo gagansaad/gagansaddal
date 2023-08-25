@@ -633,8 +633,16 @@ exports.fetchAll = async (req, res, next) => {
       maxDistance,
     } = req.query;
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
+    let Distance
+    
+    if(maxDistance === "0" || !maxDistance){
+      console.log("bol");
+      Distance =  200000
+    }else{
+      Distance =maxDistance*1000
+    }
     // console.log(longitude, latitude,'longitude, latitude');
-  if (longitude && latitude && maxDistance) {
+  if (longitude && latitude && Distance) {
       const targetPoint = {
         type: 'Point',
         coordinates: [longitude, latitude]
@@ -643,7 +651,7 @@ exports.fetchAll = async (req, res, next) => {
        
           $near: {
             $geometry: targetPoint,
-            $maxDistance: maxDistance
+            $maxDistance: Distance
           }
         
     }

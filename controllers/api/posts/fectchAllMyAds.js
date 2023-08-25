@@ -99,6 +99,20 @@ exports.fetchAll = async (req, res, next) => {
     if(req.userId){
       myid=req.userId || "0"
     }
+    const {
+      longitude,
+      latitude,
+      maxDistance,
+    } = req.query;
+    let Distance
+    
+    if(maxDistance === "0" || !maxDistance){
+      console.log("bol");
+      Distance =  200000
+    }else{
+      Distance =maxDistance*1000
+    }
+  console.log(Distance,"aayayayayayayayyayayayayayyayayayayayyayayayayayayyayayayayya");
     let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false,select:"url"})
    
     
@@ -114,43 +128,51 @@ exports.fetchAll = async (req, res, next) => {
   let commonSelectFields = {
       "addons_validity":1,
       "adsInfo.title": 1,
-      "adsInfo.location.location_name": 1,
+      "adsInfo.location": 1,
       "_id": 1,
   };
+
+
     for (const adons of adons_name) {
       const adonsData = [];
-
-      const data1 = await babysitterAd.find({ "addons_validity.name": adons })
+      let dbQuery={"addons_validity.name": adons }
+      
+      if (longitude && latitude && Distance) {
+        const targetPoint = {
+          type: 'Point',
+          coordinates: [longitude, latitude]
+        };
+        dbQuery["adsInfo.location.coordinates"] = {
+         
+            $near: {
+              $geometry: targetPoint,
+              $maxDistance: Distance
+            }
+          
+      }
+    }
+      console.log(dbQuery,"------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+      const data1 = await babysitterAd.find(dbQuery)
       .sort({ createdAt: -1 })
       .limit(2)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
-      const data2 = await buysellAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2)
-      .sort({ createdAt: -1 })
-      .limit(2)
+      const data2 = await buysellAd.find(dbQuery).sort({ createdAt: -1 }).limit(2)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
-      const data3 = await bizAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2)
-      .sort({ createdAt: -1 })
-      .limit(2)
+      const data3 = await bizAd.find(dbQuery).sort({ createdAt: -1 }).limit(2)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
-      const data4 = await eventAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2)
-      .sort({ createdAt: -1 })
-      .limit(2)
+      const data4 = await eventAd.find(dbQuery).sort({ createdAt: -1 }).limit(2)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
-      const data5 = await jobsAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2)
-      .sort({ createdAt: -1 })
-      .limit(2)
+      const data5 = await jobsAd.find(dbQuery).sort({ createdAt: -1 }).limit(2)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
-      const data6 = await roomrentAd.find({ "addons_validity.name": adons }).sort({ createdAt: -1 }).limit(2)
-      .sort({ createdAt: -1 })
-      .limit(2)
+      const data6 = await roomrentAd.find(dbQuery).sort({ createdAt: -1 }).limit(2)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
-
+console.log(data6);
       const combinedData = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
       let filterData
       if (combinedData) {
