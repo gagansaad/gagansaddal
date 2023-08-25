@@ -66,14 +66,11 @@ const events_Schema = new mongoose.Schema({
             location_name:{
                 ...defaultStringConfig,
             },
-            latitude: {
-                type: Number,
-                default:0.0
-              },
-            longitude: {
-                type: Number,
-                default:0.0
-              },
+            coordinates: {
+                type: [Number], // [longitude, latitude]
+                index: '2dsphere',
+                default: [0, 0] // Specify a 2dsphere index for geospatial querying
+              }
         },
         live_event: [{
             live_platform: {

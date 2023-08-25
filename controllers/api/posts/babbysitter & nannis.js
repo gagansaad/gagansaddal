@@ -325,8 +325,7 @@ exports.createAds = async (req, res, next) => {
         description,
         location:{
           location_name:location_name,
-          latitude:latitude,
-          longitude:longitude
+          coordinates:[longitude,latitude]
         },
         tagline,
         image: imageArr,
@@ -488,9 +487,12 @@ exports.editAds = async (req, res, next) => {
       adsInfoObj.expected_salary_rate = expected_salary_rate;
     if (description) adsInfoObj.description = description;
     let locationobj={}
+    if(longitude && latitude){
+      locationobj={
+        coordinates:[longitude,latitude]
+      }
+    }
     if (location_name) locationobj.location_name = location_name;
-    if (longitude) locationobj.longitude = longitude;
-    if (latitude) locationobj.latitude = latitude;
     if (locationobj) adsInfoObj.location = locationobj;
 
     if (name) listerBasicInfoObj.name = name;
@@ -621,7 +623,21 @@ exports.fetchAll = async (req, res, next) => {
       sortBy
     } = req.query;
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
-
+    // console.log(longitude, latitude,'longitude, latitude');
+  if (longitude && latitude && maxDistance) {
+      const targetPoint = {
+        type: 'Point',
+        coordinates: [longitude, latitude]
+      };
+      dbQuery["adsInfo.location.coordinates"] = {
+       
+          $near: {
+            $geometry: targetPoint,
+            $maxDistance: maxDistance
+          }
+        
+    }
+  }
     var perPage = parseInt(req.query.perpage) || 6;
     var page = parseInt(req.query.page) || 1;
 
@@ -696,9 +712,10 @@ exports.fetchAll = async (req, res, next) => {
       .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
-    const responseModelCount = await postbabyAd.countDocuments({
-      $or: [queryFinal],
-    });
+      const filteredRecords = records.filter(record =>
+        records.some(textRecord => textRecord._id.equals(record._id))
+      );
+      const responseModelCount = filteredRecords.length;
     
     if (records) {
       const jobData = records.map((job) => {
