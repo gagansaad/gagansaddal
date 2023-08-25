@@ -727,21 +727,29 @@ exports.fetchAll = async (req, res, next) => {
     var perPage = parseInt(req.query.perpage) || 6;
     var page = parseInt(req.query.page) || 1;
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
-    if (longitude && latitude && maxDistance) {
+    // console.log(longitude, latitude,'longitude, latitude');
+  if (longitude && latitude && maxDistance) {
       const targetPoint = {
         type: 'Point',
         coordinates: [longitude, latitude]
       };
       dbQuery["adsInfo.location.coordinates"] = {
-        
+       
           $near: {
             $geometry: targetPoint,
             $maxDistance: maxDistance
           }
+        
     }
   }
   
-  
+  // console.log(dbQuery);
+  // let recordss = await RoomRentsAds.find(dbQuery)
+  // console.log(recordss);
+  // return successJSONResponse(res, {
+  //   message: `success`,
+  //   total: recordss,})
+
 if (isfeatured) dbQuery.isfeatured = isfeatured;
 if (status) dbQuery.status = status;
 if (adsType) dbQuery.adsType = adsType;
@@ -788,11 +796,12 @@ if (preferedGender) dbQuery["adsInfo.preferedGender"] = preferedGender;
       .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
-      const responseModelCount = await RoomRentsAds.countDocuments({
-        $or: [queryFinal],
-      })
-   
-      
+      console.log(records);
+      const filteredRecords = records.filter(record =>
+        records.some(textRecord => textRecord._id.equals(record._id))
+      );
+      const responseModelCount = filteredRecords.length;
+     
     if (records) {
       const jobData = records.map((job) => {
         return {
