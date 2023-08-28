@@ -6,13 +6,14 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 router.post('/',(req,res,next)=>{
-
+console.log(req.body.email_address,"sdfghjkl;");
     Admin.find({email_address:req.body.email_address})
     .exec()
     .then(admin => {
+        console.log(admin);
         if(admin.length < 1){
             return res.status(401).json({
-                msg:'Admin Not Exit'
+                msg:'Admin Not Exist'
             })
         }
        
