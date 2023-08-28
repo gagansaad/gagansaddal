@@ -731,7 +731,7 @@ exports.fetchAllAds = async (req, res, next) => {
         
     }
   }
-    var perPage = parseInt(req.query.perpage) || 6;
+    var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
     if (isfeatured) {
       dbQuery.isfeatured = isfeatured;
