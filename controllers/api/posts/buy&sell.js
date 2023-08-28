@@ -1118,10 +1118,11 @@ console.log(dbQuery,"77777777777777777777777777777777777777777777777");
       .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
-      const filteredRecords = records.filter(record =>
-        records.some(textRecord => textRecord._id.equals(record._id))
-      );
-      const responseModelCount = filteredRecords.length;
+      const totalCount = await postBuySellAd.find({
+        $or: [queryFinal],
+      });
+      let responseModelCount = totalCount.length;
+   
     if (records) {
       const jobData = records.map((job) => {
         return {

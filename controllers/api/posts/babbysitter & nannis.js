@@ -730,11 +730,11 @@ exports.fetchAll = async (req, res, next) => {
       .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
-      const filteredRecords = records.filter(record =>
-        records.some(textRecord => textRecord._id.equals(record._id))
-      );
-      const responseModelCount = filteredRecords.length;
-    
+      const totalCount = await postbabyAd.find({
+        $or: [queryFinal],
+      });
+      let responseModelCount = totalCount.length;
+   
     if (records) {
       const jobData = records.map((job) => {
         return {

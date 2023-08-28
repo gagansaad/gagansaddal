@@ -731,7 +731,7 @@ exports.fetchAll = async (req, res, next) => {
       latitude,
       maxDistance,
     } = req.query;
-    var perPage = parseInt(req.query.perpage) || 40;
+    var perPage = parseInt(req.query.perpage) || 6;
     var page = parseInt(req.query.page) || 1;
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
@@ -812,11 +812,12 @@ if (preferedGender) dbQuery["adsInfo.preferedGender"] = preferedGender;
       .skip(perPage * page - perPage)
       .limit(perPage);
       console.log(records);
-      const filteredRecords = records.filter(record =>
-        records.some(textRecord => textRecord._id.equals(record._id))
-      );
-      const responseModelCount = filteredRecords.length;
      
+      const totalCount = await RoomRentsAds.find({
+        $or: [queryFinal],
+      });
+      let responseModelCount = totalCount.length;
+      console.log(responseModelCount);
     if (records) {
       const jobData = records.map((job) => {
         return {
