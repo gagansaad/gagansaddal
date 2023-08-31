@@ -730,7 +730,8 @@ exports.fetchAll = async (req, res, next) => {
       longitude,
       latitude,
       maxDistance,
-    } = req.body;
+      prefered_age,
+    } = req.query;
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
@@ -780,6 +781,17 @@ if (isSmokingAllowed) dbQuery["adsInfo.isSmokingAllowed"] = isSmokingAllowed;
 if (isAlcoholAllowed) dbQuery["adsInfo.isAlcoholAllowed"] = isAlcoholAllowed;
 if (isPetFriendly) dbQuery["adsInfo.isPetFriendly"] = isPetFriendly;
 if (preferedGender) dbQuery["adsInfo.preferedGender"] = preferedGender;
+
+
+if (prefered_age) {
+  // Convert prefered_age to an array if it's not already
+  const preferedAgeArray = Array.isArray(prefered_age) ? prefered_age : [prefered_age];
+
+  // Add $in query to filter based on prefered_age
+  dbQuery["adsInfo.prefered_age"] = {
+    $in: preferedAgeArray,
+  };
+}
     // Get the current date
     const currentDate = new Date();
     // Convert the date to ISO 8601 format
