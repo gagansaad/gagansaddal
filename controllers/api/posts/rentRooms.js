@@ -732,6 +732,7 @@ exports.fetchAll = async (req, res, next) => {
       maxDistance,
       prefered_age,
     } = req.query;
+    console.log(req.query,"aayi");
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
