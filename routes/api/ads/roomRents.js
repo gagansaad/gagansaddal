@@ -69,7 +69,7 @@ router.patch(`/edit/:roomRentId`,
     controllers.validateRoomRentsAdsData,
     controllers.editRoomRentAds
 );
-router.get(`/fetchAds`,
+router.post(`/fetchAds`,
     // authMiddleware.ensureUserLoggedIn,
     controllers.fetchAll
 );
