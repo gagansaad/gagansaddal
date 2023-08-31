@@ -707,6 +707,7 @@ exports.fetchAllAds = async (req, res, next) => {
       latitude,
       maxDistance,
     } = req.query;
+    console.log(req.query,"-------------------------------------------------------------------------------------------------------------------------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
     let Distance
