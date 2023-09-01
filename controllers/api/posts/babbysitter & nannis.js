@@ -670,11 +670,7 @@ exports.fetchAll = async (req, res, next) => {
 
     if (category) {
       dbQuery["adsInfo.category.category_name"] = category;
-    }if(category === "I%2520want%2520a%2520Babysitter%252FNanny"){
-      dbQuery["adsInfo.category.category_name"] = "I want a Babysitter/Nanny";
-    } if(category === "I%2520am%2520a%2520Babysitter%252FNanny"){
-      dbQuery["adsInfo.category.category_name"] = "Im a Babysitter/Nanny";
-    }
+    }s
 
     if (work_type) {
       dbQuery["adsInfo.work_type"] = work_type;
