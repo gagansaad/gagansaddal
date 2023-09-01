@@ -118,7 +118,7 @@ app.use('/admin/v1/api/ads/dashboard', dashboardRoute);
 app.use('/admin/v1/api/ads/room-rents', adminroomRentsRoutes);
 app.use('/admin/v1/api/ads/biz', adminbizRoutes);
 app.use('/admin/v1/api/ads/banner', adminbannerRoutes);
-app.use('/admin/v1/api/ads/jobs', adminjobsRoutes);
+app.use('/v1/api/ads/jobs', adminjobsRoutes);
 app.use('/admin/v1/api/ads/buysell', adminbuySellRoutes);
 app.use('/admin/v1/api/ads/babysitter', adminbabysitterRoutes);
 app.use('/admin/v1/api/ads/events', admineventRoutes);
