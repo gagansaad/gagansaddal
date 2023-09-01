@@ -130,7 +130,7 @@ app.use('/v1/api/posts/types', postTypeRoutes);
 app.use('/admin/v1/api/posts/types', postTypeAdminRoutes);
 app.use('/v1/api/posts/room-rents', roomRentsRoutes);
 app.use('/v1/api/posts/events', eventRoutes);
-app.use('/v1/api/posts/jobs', jobsRoutes);
+app.use('/v1/api/posts/job', jobsRoutes);
 app.use('/v1/api/posts/buysell', buySellRoutes);
 app.use('/v1/api/posts/babysitter', babysitterRoutes);
 app.use('/v1/api/posts/biz', bizRoutes);
