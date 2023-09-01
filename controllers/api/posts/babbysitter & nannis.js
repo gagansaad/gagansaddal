@@ -667,13 +667,13 @@ exports.fetchAll = async (req, res, next) => {
     if (category_value) {
       dbQuery["adsInfo.category.category_value"] = category_value;
     }
-    if(category == "Im a Babysitter/Nanny"){
+
+    if (category) {
       dbQuery["adsInfo.category.category_name"] = category;
-    }
-    else if(category == "I%2520want%2520a%2520Babysitter%252FNanny"){
+    }else if(category === "I%2520want%2520a%2520Babysitter%252FNanny"){
       dbQuery["adsInfo.category.category_name"] = "I want a Babysitter/Nanny";
-    }else if (category) {
-      dbQuery["adsInfo.category.category_name"] = category;
+    }else if(category === "I%2520am%2520a%2520Babysitter%252FNanny"){
+      dbQuery["adsInfo.category.category_name"] = "Im a Babysitter/Nanny";
     }
 
     if (work_type) {
