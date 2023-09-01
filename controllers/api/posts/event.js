@@ -813,6 +813,9 @@ exports.fetchAll = async (req, res, next) => {
       category,
       details,
       recurring_type,
+      start_date,
+      end_date,
+      regular_ticket_price,
       tagline,
       location,
       venue_name,
@@ -825,7 +828,35 @@ exports.fetchAll = async (req, res, next) => {
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
     let Distance
+    if (regular_ticket_price) {
+      dbQuery["adsInfo.ticket_price.regular_ticket_price"] = {
+        $lte: parseFloat(regular_ticket_price) // Parse the input as a float if it's not already
+      };
+    }
     
+    if (recurring_type) {
+      dbQuery["adsInfo.recurring_type"] = recurring_type;
+    }
+    
+
+if (start_date && end_date) {
+  dbQuery["adsInfo.date_time.start_date"] = {
+    $gte: start_date
+  };
+  dbQuery["adsInfo.date_time.end_date"] = {
+    $lte: end_date
+  };
+} else if (start_date) {
+  dbQuery["adsInfo.date_time.start_date"] = {
+    $gte: start_date
+  };
+} else if (end_date) {
+  dbQuery["adsInfo.date_time.end_date"] = {
+    $lte: end_date
+  };
+}
+
+
     if(maxDistance === "0" || !maxDistance){
       console.log("bol");
       Distance =  200000
