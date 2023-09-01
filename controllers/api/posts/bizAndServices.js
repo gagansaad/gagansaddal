@@ -924,6 +924,29 @@ exports.fetchAll = async (req, res, next) => {
       maxDistance,
       availability,
     } = req.query;
+    if (availability) {
+      switch (availability) {
+        case "Weekdays":
+          dbQuery["adsInfo.working_hours.week_days.is_available"] = true;
+          break;
+        case "Weekends":
+          dbQuery["adsInfo.working_hours.week_ends.is_available"] = true;
+          break;
+        case "Weekdays & Weekends":
+          dbQuery["adsInfo.working_hours.week_days.is_available"] = true;
+          dbQuery["adsInfo.working_hours.week_ends.is_available"] = true;
+          break;
+        case "24/7":
+          dbQuery["adsInfo.working_hours.is_24_seven"] = true;
+          break;
+        case "By appointment":
+          dbQuery["adsInfo.working_hours.appointment"] = true;
+          break;
+        default:
+          break;
+      }
+    }
+
     console.log(req.query,"--------------------------------------------------------------------------------------------------------------------------------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
