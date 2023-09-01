@@ -632,6 +632,7 @@ exports.fetchAll = async (req, res, next) => {
       latitude,
       maxDistance,
     } = req.query;
+    console.log(req.query,"---------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     let Distance
     
