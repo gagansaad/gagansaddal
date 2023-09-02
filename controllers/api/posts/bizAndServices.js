@@ -905,7 +905,7 @@ exports.editbizAds = async (req, res, next) => {
     console.log(err);
   }
 };
-
+///
 exports.fetchAll = async (req, res, next) => {
   try {
     let searchTerm = req.body.searchTerm;

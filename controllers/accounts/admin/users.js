@@ -12,14 +12,14 @@ exports.userList = async(req,res, next) => {
             if (!result){
                 return failureJSONResponse(res, {message: `something went wrong` })
             }
-            return  successJSONResponse(res, { data: result })
+            return successJSONResponse(res, { data: result })
         })
         .catch(err=>{
             res.status(500).json({
                 error:err
             })
         })
-        
+        /// clients
     } catch (error) {
          res.status(error?.status || 400 ).send(error?.message || 'something went wrong!');
     }

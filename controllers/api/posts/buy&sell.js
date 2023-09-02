@@ -997,7 +997,7 @@ exports.editBuySellStatus = async (req, res, next) => {
   }
 };
 
-/////////////
+///////
 
 exports.fetchAll = async (req, res, next) => {
   try {
