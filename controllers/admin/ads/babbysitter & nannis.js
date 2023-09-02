@@ -146,7 +146,7 @@ const mongoose = require("mongoose"),
         const jobData = records.map((job) => {
           return {
             ...job._doc,
-            // Add other job fields as needed
+            // Add other job fields 
             view_count: job.viewCount,
             favorite_count: job.favoriteCount,
             is_favorite: !!job.isFavorite, 
