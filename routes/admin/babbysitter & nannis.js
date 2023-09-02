@@ -41,7 +41,7 @@ const router = require(`express`).Router(),
         next();
     }
 
-router.get(`/fetch-all-babysitter-ads`,
+router.get(`/fetchbabysitterads`,
     controllers.fetchAll
 );
 
