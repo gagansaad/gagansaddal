@@ -1074,14 +1074,31 @@ exports.fetchAll = async (req, res, next) => {
       dbQuery["adsInfo.user_type"] = user_type;
     }
 
-    if (payment_mode) {
-      dbQuery["adsInfo.payment_mode"] = payment_mode;
-    }
+    // if (payment_mode) {
+    //   dbQuery["adsInfo.payment_mode"] = payment_mode;
+    // }
 
+    // if (fullfilment) {
+    //   dbQuery["adsInfo.fullfilment"] = fullfilment;
+    // }
     if (fullfilment) {
-      dbQuery["adsInfo.fullfilment"] = fullfilment;
+      // Convert prefered_age to an array if it's not already
+      const fullfilmentArray = Array.isArray(fullfilment) ? fullfilment : [fullfilment];
+    
+      // Add $in query to filter based on prefered_age
+      dbQuery["adsInfo.fullfilment"] = {
+        $in: fullfilmentArray,
+      };
+    } 
+    if (payment_mode) {
+      // Convert prefered_age to an array if it's not already
+      const payment_modeArray = Array.isArray(payment_mode) ? payment_mode : [payment_mode];
+    
+      // Add $in query to filter based on prefered_age
+      dbQuery["adsInfo.payment_mode"] = {
+        $in: payment_modeArray,
+      };
     }
-
     if (location) {
       dbQuery["adsInfo.location"] = location;
     }

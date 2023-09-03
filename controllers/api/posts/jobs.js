@@ -696,6 +696,7 @@ exports.fetchAllAds = async (req, res, next) => {
       category,
       type,
       employment_type,
+      work_authorization,
       language,
       amount,
       preferred_gender,
@@ -762,12 +763,33 @@ exports.fetchAllAds = async (req, res, next) => {
     }
 
     if (employment_type) {
-      dbQuery["adsInfo.employment_type"] = employment_type;
+      // Convert prefered_age to an array if it's not already
+      const employment_typeArray = Array.isArray(employment_type) ? employment_type : [employment_type];
+    
+      // Add $in query to filter based on prefered_age
+      dbQuery["adsInfo.employment_type"] = {
+        $in: employment_typeArray,
+      };
+    }
+    if (language) {
+      // Convert prefered_age to an array if it's not already
+      const languageArray = Array.isArray(language) ? language : [language];
+    
+      // Add $in query to filter based on prefered_age
+      dbQuery["adsInfo.language"] = {
+        $in: languageArray,
+      };
+    }  
+      if (work_authorization) {
+      // Convert prefered_age to an array if it's not already
+      const work_authorizationArray = Array.isArray(work_authorization) ? work_authorization : [work_authorization];
+    
+      // Add $in query to filter based on prefered_age
+      dbQuery["adsInfo.work_authorization"] = {
+        $in: work_authorizationArray,
+      };
     }
 
-    if (language) {
-      dbQuery["adsInfo.language"] = language;
-    }
 
     if (amount) {
       dbQuery["adsInfo.rent.amount"] = amount;

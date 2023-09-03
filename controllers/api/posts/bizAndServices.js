@@ -917,6 +917,7 @@ exports.fetchAll = async (req, res, next) => {
       business_name,
       tagline,
       business_location,
+      experience,
       is_24_seven,
       sortBy,
       longitude,
@@ -946,7 +947,9 @@ exports.fetchAll = async (req, res, next) => {
           break;
       }
     }
-
+    if (experience) {
+      dbQuery["adsInfo.experience"] = experience
+    }
     console.log(req.query,"--------------------------------------------------------------------------------------------------------------------------------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
