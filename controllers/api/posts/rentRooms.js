@@ -117,19 +117,24 @@ exports.fetchRoomData = async (req, res, next) => {
         // Extract only the date portion
         const currentDateOnly = currentISODate.substring(0, 10);
        
-        // const query = { "adsInfo.rental_type": category, "adsInfo.category": subCategory ,"status" :"active",["plan_validity.expired_on"]:{ $gte: currentDateOnly }};
+       
         const query = {
           "adsInfo.rental_type": category,
           "adsInfo.category": subCategory,
           "status": "active",
           "plan_validity.expired_on": { $gte: currentDateOnly },
-          // Assuming you have longitude and latitude fields in your data
-          "adsInfo.location.coordinates": {
-            $geoWithin: {
-              $centerSphere: [[parseFloat(longitude), parseFloat(latitude)], maxDistance / 6371] // 6371 is the Earth's radius in kilometers
-            }
-          }
         };
+        if (req.query.longitude && req.query.latitude) {
+          // Assuming you have longitude and latitude fields in your data
+          query["adsInfo.location.coordinates"] = {
+            $geoWithin: {
+              $centerSphere: [
+                [parseFloat(req.query.longitude), parseFloat(req.query.latitude)],
+                maxDistance / 6371 // 6371 is the Earth's radius in kilometers
+              ]
+            }
+          };
+        }
         const count = await RoomRentsAds.countDocuments(query);
         subcategoryData.push({ sub_category_name: subCategory, count });
       }

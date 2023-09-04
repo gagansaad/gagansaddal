@@ -1133,6 +1133,7 @@ exports.fetchonead = async (req, res, next) => {
 
 exports.fetchBizData = async (req, res, next) => {
   try {
+    let maxDistance = req.query.maxDistance || 200;
     const sub_categories = {
       "Business & Office": [
         "Accounting",
@@ -1353,7 +1354,17 @@ exports.fetchBizData = async (req, res, next) => {
 
       for (const subCategory of subCategoryArray) {
         const query = { "adsInfo.categories": category, "adsInfo.sub_categories": subCategory ,"status" :"active",["plan_validity.expired_on"]:{ $gte: currentDateOnly }};
-        
+        if (req.query.longitude && req.query.latitude) {
+          // Assuming you have longitude and latitude fields in your data
+          query["adsInfo.location.coordinates"] = {
+            $geoWithin: {
+              $centerSphere: [
+                [parseFloat(req.query.longitude), parseFloat(req.query.latitude)],
+                maxDistance / 6371 // 6371 is the Earth's radius in kilometers
+              ]
+            }
+          };
+        }
         const count = await postbizAndServicesAd.countDocuments(query);
         subcategoryData.push({ sub_category_name: subCategory, count });
       }
