@@ -950,7 +950,7 @@ exports.fetchAll = async (req, res, next) => {
     if (experience) {
       dbQuery["adsInfo.experience"] = experience
     }
-    console.log(req.query,"--------------------------------------------------------------------------------------------------------------------------------------");
+    // console.log(req.query,"--------------------------------------------------------------------------------------------------------------------------------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
     let Distance
