@@ -97,7 +97,7 @@ exports.failureJSONResponse = (res = null, data = null, httpStatusCode = 400) =>
     }
 }
 
-exports.errorJSONResponse = (res = null, message = `Error occured on server`, errorCode = null, data = null, httpStatusCode = 500) => {
+exports.failureJSONResponse = (res = null, message = `Error occured on server`, errorCode = null, data = null, httpStatusCode = 500) => {
 
     const objToSend = {
         status: `error`,

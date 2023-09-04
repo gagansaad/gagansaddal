@@ -1125,7 +1125,7 @@ exports.fetchEventData = async (req, res, next) => {
     });
   } catch (error) {
     console.error('Error:', error);
-    return errorJSONResponse(res, {
+    return failureJSONResponse(res, {
       message: 'An error occurred',
       error: error.message,
     });
