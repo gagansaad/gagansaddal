@@ -1080,7 +1080,7 @@ exports.fetchEventData = async (req, res, next) => {
       "Other",
       ],
     };
-    
+    clg
     const responseArray = [];
 
     for (const category in sub_categories) {

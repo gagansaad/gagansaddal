@@ -983,11 +983,11 @@ exports.fetchAll = async (req, res, next) => {
     }
 
     if (category) {
-      dbQuery.categories = category;
+      dbQuery["adsInfo.categories"] = category;
     }
 
     if (sub_category) {
-      dbQuery.sub_categories = sub_category;
+      dbQuery["adsInfo.sub_categories"] = sub_category;
     }
 
     if (business_name) {
