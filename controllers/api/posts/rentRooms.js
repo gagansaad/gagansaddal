@@ -76,7 +76,7 @@ exports.fetchDynamicsData = async (req, res, next) => {
 exports.fetchRoomData = async (req, res, next) => {
   try {
     const { longitude, latitude } = req.query; // Get longitude and latitude from the request query parameters
-    let maxDistance = req.query.maxDistance || 10;
+    let maxDistance = req.query.maxDistance || 200;
     const sub_categories = {
       "Rooms for Rent": [
         "Apartment", 
