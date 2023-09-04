@@ -40,11 +40,12 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 exports.fetchAllMyAds = async (req, res, next) => {
 
   try {
+    let maxDistance = req.query.maxDistance || 200;
     let adstype = req.query.adsType;
     console.log(adstype);
     var perPage = 10 || parseInt(req.query.perpage)
     var page = parseInt(req.query.page) || 1
-    let dbquery = ``
+    let dbquery = {};
     if (req.query.userId) {
       dbquery = req.body.userid
     } else if (req.body.userId) {
@@ -59,6 +60,17 @@ exports.fetchAllMyAds = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Category not found`
       })
+    }
+    if (req.query.longitude && req.query.latitude) {
+      // Assuming you have longitude and latitude fields in your data
+      dbquery["adsInfo.location.coordinates"] = {
+        $geoWithin: {
+          $centerSphere: [
+            [parseFloat(req.query.longitude), parseFloat(req.query.latitude)],
+            maxDistance / 6371 // 6371 is the Earth's radius in kilometers
+          ]
+        }
+      };
     }
     console.log(findCategory.name);
     switch (findCategory.name) {
