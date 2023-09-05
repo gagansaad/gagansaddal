@@ -878,6 +878,7 @@ exports.editbizAds = async (req, res, next) => {
         },
       },
     };
+    console.log(dataObjq,"/////////////////////////////////////////////////////////////////////////////");
     const updatebiz = await postbizAndServicesAd.findByIdAndUpdate(
       { _id: bizId },
       { $set: dataObjq },
