@@ -807,6 +807,7 @@ exports.editBuySellAds = async (req, res, next) => {
       // address_info,
       // preferableModeContact,
     } = req.body;
+    console.log(req.body,"----------------------------------------");
     let iscontact = false
     if (is_contact == "true") {
       iscontact = true;
