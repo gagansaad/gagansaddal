@@ -2,6 +2,8 @@ const { json } = require("express");
 
 const mongoose = require("mongoose"),
   eventAd = mongoose.model("event"),
+  PostViews = mongoose.model("Post_view"),
+  tagline_keywords = mongoose.model("keywords"),
   {
     successJSONResponse,
     failureJSONResponse,
