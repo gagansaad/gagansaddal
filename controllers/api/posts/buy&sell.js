@@ -908,10 +908,9 @@ exports.editBuySellAds = async (req, res, next) => {
 
     const dataObjq = {
       adsInfo: adsInfoObj,
-      lister_basic_info: {
+      listerBasicInfo: {
         name,
         email_address,
-        website_link,
         hide_my_phone: my_phone,
         hide_my_email: my_email,
         hide_my_secondary_phone: secondary_phone,
