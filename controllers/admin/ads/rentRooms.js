@@ -4,7 +4,8 @@ const mongoose = require("mongoose"),
     RoomRentsAds = mongoose.model("rental"),
     {
         successJSONResponse,
-        failureJSONResponse
+        failureJSONResponse,
+        ModelNameByAdsType
     } = require(`../../../handlers/jsonResponseHandlers`),
     { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
     {

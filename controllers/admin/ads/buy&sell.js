@@ -5,6 +5,7 @@ postBuySellAd = mongoose.model("Buy & Sell"),
   {
     successJSONResponse,
     failureJSONResponse,
+    ModelNameByAdsType
   } = require(`../../../handlers/jsonResponseHandlers`),
   { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
