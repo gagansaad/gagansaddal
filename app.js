@@ -83,6 +83,8 @@ const postTypeAdminRoutes = require('./routes/admin/types');
 const roomRentsRoutes = require('./routes/api/ads/roomRents');
 const bizRoutes = require('./routes/api/ads/bizAndServices');
 const jobsRoutes = require('./routes/api/ads/jobs');
+const messageRoutes = require('./routes/api/ads/message');
+
 const buySellRoutes = require('./routes/api/ads/buysell');
 const babysitterRoutes = require('./routes/api/ads/babbysitter & nannis');
 const eventRoutes = require(`./routes/api/ads/event`)
@@ -138,6 +140,7 @@ app.use('/admin/v1/api/ads/categories', adsCategoriesRoutes);
 app.use('/admin/v1/api/ads/sub-categories', adsSubCategoriesRoutes);
 
 app.use('/v1/api/posts/', All_Tags);
+app.use('/v1/api/chat/', messageRoutes);
 app.use('/v1/api/posts/types', postTypeRoutes);
 app.use('/admin/v1/api/posts/types', postTypeAdminRoutes);
 app.use('/v1/api/posts/room-rents', roomRentsRoutes);
@@ -197,7 +200,8 @@ app.use((err, req, res, next) => {
     console.log(err)
     res.status(500).send({ error: 'seriously something went wrong ' });
 });
-
+const{socketio} = require('./socketio/socket');
+socketio(io);
 
 // Server setup
 app.listen(process.env.PORT, () => console.log(`[ MENEHARIYA API ] on ${process.env.PORT}`));
