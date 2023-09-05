@@ -176,23 +176,66 @@ const mongoose = require("mongoose"),
 
   exports.fetchOne = async (req, res, next) => {
     try {
-      
-      let dbQuery ={
-        _id:req.query.adsId
-      };
-
-        let records = await  postbizAndServicesAd.findOne(dbQuery);
-        if (records) {
-            return successJSONResponse(res, {
-                message: `success`,
-                records,
-                status: 200,
-            })
-        } else {
-            return failureJSONResponse(res, { message: `Ad not available` })
+      const adsId = req.query.adsId;
+      let data_Obj
+      let checkId = await postbizAndServicesAd.findOne({_id:adsId})
+      if(!checkId){
+          return failureJSONResponse(res, { message: `Please provide valid ad id` });
+      }
+       // Get the current date
+       const currentDate = new Date();
+       // Convert the date to ISO 8601 format
+       const currentISODate = currentDate.toISOString();
+       // Extract only the date portion
+       const currentDateOnly = currentISODate.substring(0, 10);
+       if(adsId){
+        data_Obj = {
+            _id:adsId,
+            status :"active" ,
+            "plan_validity.expired_on" :{ $gte: currentDateOnly }
         }
+      }
+      let myid = req.userId
+      let records = await postbizAndServicesAd.findOne(data_Obj)
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
+      
+      if (records) {
+        const ads_type =records.adsType.toString();
+      console.log(ads_type,"------------");
+      let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
+      console.log(Typename,"nfjdnfcjed");
+      let dbQuery ={
+        userId:myid,
+        ad:records._id,
+        adType:Typename
+      } 
+      
+       let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
+       console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
+        if(!checkview){
+        let data=  await PostViews.create(dbQuery)
+        console.log(data,"billo ni tere kale kalle naina ");
+        }
+        const jobData = {
+          ...records._doc,
+          view_count: records.viewCount,
+          favorite_count: records.favoriteCount,
+          is_favorite: !!records.isFavorite
+        };
+        return successJSONResponse(res, {
+          message: `success`,
+          ads_details: jobData,
+          status: 200,
+        });
+      } else {
+        return failureJSONResponse(res, { message: `ad not Available` });
+      }
     } catch (err) {
-        return failureJSONResponse(res, { message: `something went wrong` })
+      console.log(err);
+      return failureJSONResponse(res, { message: `something went wrong` });
     }
   }
   exports.fetchOneDelete = async (req, res, next) => {
