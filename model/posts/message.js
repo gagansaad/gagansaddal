@@ -9,30 +9,35 @@ const {
 } = require(`../../utils/mongoose`);
 
 const msgSchema = new mongoose.Schema({
-    message: {
-        type: defaultStringConfig
+    senderId:{
+        type:String,
+        index:true,
+        required:true
     },
-    sender_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `users`,
-        required: true
+    senderName:{
+        type:String,
+        required:true
     },
-    receiver_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `users`,
-        required: true
+    recieverId:{
+        type:String,
+        index:true,
+        required:true
     },
-    file: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `media`,
-    }],
-    unread: {
-        type: String,
-        enum: [`read`, `unread`],
-        required: true,
-        default: "unread"
+    message : {
+        text : {
+            type : String,
+            default : ''
+        },
+        image : {
+            type : String,
+            default : ''
+        }
+    },
+    status : {
+        type : String,
+        default : 'unseen'
     }
-}, { timestamps: true });
+},{timestamps : true});
 
 
 exports.module = mongoose.model(`message`, msgSchema);

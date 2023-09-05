@@ -300,6 +300,7 @@ exports.createAds = async (req, res, next) => {
         }
       }
     }
+    console.log(req.files,"qwertyuikol;nhbvfcdxsdfghjkjhgfds");
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path;
 

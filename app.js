@@ -54,6 +54,18 @@ require(`./model/accounts/admin/configuration`);
 
 
 app.use(cors())
+
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = require("socket.io")(server,{
+    transports:['polling'],
+  cors:{
+    cors: {
+      origin: "*"
+    }
+}
+});
 app.set(`view engine`, `ejs`);
 // DB Setup
 
