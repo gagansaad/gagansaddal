@@ -12,7 +12,7 @@ const {
     removeUser,
     allUsersIds,
     userCount,
-    allUsersSocketIds
+    allUsersSocketIds,
 } = require('./controllers/user.controller');
 
 // const{
@@ -25,7 +25,7 @@ const socketio = (io)=>{
 io.on('connection', async (socket)=>{
     // console.log("connected user num:",++user);
     // sockets.add(socket.id);
-  
+  console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
     //send geeting to new user and request his id
      io.to(socket.id).emit("greeting");
 
