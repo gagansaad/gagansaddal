@@ -282,11 +282,15 @@ exports.createAds = async (req, res, next) => {
       latitude,
       tagline,
       image,
+      is_contact
     } = req.body;
     console.log(req.body);
     const userId = req.userId;
     const imageArr = [];
-
+    let iscontact = false;
+    if (is_contact == "true") {
+      iscontact = true;
+    }
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -328,6 +332,7 @@ exports.createAds = async (req, res, next) => {
         expected_salary_amount: {
           amount,
           currency,
+          is_contact: iscontact,
         },
         expected_salary_rate,
         description,
@@ -423,7 +428,12 @@ exports.editAds = async (req, res, next) => {
       address_info,
       preferable_contact_mode,
       image,
+      is_contact
     } = req.body;
+    let iscontact = false;
+    if (is_contact == "true") {
+      iscontact = true;
+    }
     console.log(
       tagline,
       "vdhvdbhdbvhdbvhdvdbdhvbdh----------------------------------------"
@@ -489,6 +499,7 @@ exports.editAds = async (req, res, next) => {
     if (service_from_date) adsInfoObj.service_from_date = service_from_date;
     if (transport_facilty) adsInfoObj.transport_facilty = transport_facilty;
     if (amount) expected_salary_amount.amount = amount;
+    if (is_contact) expected_salary_amount.is_contact = iscontact;
     if (tagline) adsInfoObj.tagline = tagline;
     if (amount) adsInfoObj.expected_salary_amount = expected_salary_amount;
     if (expected_salary_rate)
