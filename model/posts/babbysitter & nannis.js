@@ -84,7 +84,7 @@ const babysitter_Schema = new mongoose.Schema({
             default: false
         },
         expected_salary_amount:{
-            amount:{type:Number},
+            amount:{type:Number,default:0},
             currency:{type:String,default:"USD"},
             is_contact: {
                 type: Boolean,
