@@ -288,7 +288,7 @@ exports.createAds = async (req, res, next) => {
     const userId = req.userId;
     const imageArr = [];
     let iscontact;
-    console.log(is_contact,"===============");
+    console.log(typeof(is_contact),"===============");
     if (is_contact == "true") {
       iscontact = true;
     }else{
