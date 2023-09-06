@@ -508,7 +508,7 @@ exports.editAds = async (req, res, next) => {
     if (amount) expected_salary_amount.amount = amount;
     if (is_contact) expected_salary_amount.is_contact = iscontact;
     if (tagline) adsInfoObj.tagline = tagline;
-    if (amount) adsInfoObj.expected_salary_amount = expected_salary_amount;
+    if (amount || is_contact == "true") adsInfoObj.expected_salary_amount = expected_salary_amount;
     if (expected_salary_rate)
       adsInfoObj.expected_salary_rate = expected_salary_rate;
     if (description) adsInfoObj.description = description;
