@@ -287,9 +287,12 @@ exports.createAds = async (req, res, next) => {
     console.log(req.body);
     const userId = req.userId;
     const imageArr = [];
-    let iscontact = false;
+    let iscontact;
+    console.log(is_contact,"===============");
     if (is_contact == "true") {
       iscontact = true;
+    }else{
+      iscontact = false;
     }
     let taglines = tagline;
     if (taglines) {
@@ -430,9 +433,13 @@ exports.editAds = async (req, res, next) => {
       image,
       is_contact
     } = req.body;
-    let iscontact = false;
+    let iscontact;
+    console.log(is_contact,"===============");
     if (is_contact == "true") {
+      console.log(is_contact,"===============");
       iscontact = true;
+    }else{
+      iscontact = false;
     }
     console.log(
       tagline,
