@@ -434,7 +434,7 @@ exports.editAds = async (req, res, next) => {
       is_contact
     } = req.body;
     let iscontact;
-    console.log(is_contact,"===============");
+    console.log(typeof(is_contact),"===============");
     if (is_contact == "true") {
       console.log(is_contact,"===============");
       iscontact = true;
