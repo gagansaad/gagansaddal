@@ -93,7 +93,7 @@ const babysitter_Schema = new mongoose.Schema({
         },
       expected_salary_rate:{
         ...defaultStringConfig,
-        required: true
+        
       },
 
         description:{
