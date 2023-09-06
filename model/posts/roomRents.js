@@ -111,7 +111,10 @@ const roomRentsSchema = new mongoose.Schema({
             },
             currency: { type: String, default: "USD" },
         },
-
+        rent_info: {
+            ...defaultStringConfig,
+            // required: true
+        },
         isSmokingAllowed: {
             type: Boolean,
             default: false

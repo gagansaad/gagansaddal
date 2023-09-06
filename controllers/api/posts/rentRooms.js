@@ -56,7 +56,17 @@ exports.fetchDynamicsData = async (req, res, next) => {
       "Other",
     ],
     currency: ["USD", "AED", "AUD", "AWG", "CAD", "EUR", "GBP", "INR", "USN"],
-
+    rent_info: [
+      "/hour",
+      "/day",
+      "/week",
+      "/month",
+      "/biweekly",
+      "/sqft",
+      "fixed amount",
+      "OBO",
+      "Negotiable",
+    ],
     roomType: [`Single`, `Double`, `Triple`, `Quad`],
     occupation: [`employed`, `self employed`, `engineer`],
     gender: ["Male", "Female", "Any Gender"],
@@ -346,6 +356,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     furnished,
     attachedBath,
     amount,
+    rent_info,
     currency,
     negotiable,
     is_contact,
@@ -450,6 +461,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
         is_contact: iscontact,
         currency: currency,
       },
+      rent_info,
       isSmokingAllowed: isSmokin,
       isAlcoholAllowed: isAlcoho,
       isPetFriendly: isPetFr,
@@ -518,6 +530,7 @@ exports.editRoomRentAds = async (req, res, next) => {
     furnished,
     attachedBath,
     amount,
+    rent_info,
     negotiable,
     prefered_age,
     isSmokingAllowed,
@@ -636,6 +649,7 @@ exports.editRoomRentAds = async (req, res, next) => {
   if (rental_type) adsInfoObj.rental_type = rental_type;
   if (category) adsInfoObj.category = category;
   if (title) adsInfoObj.title = title;
+  if (rent_info) adsInfoObj.rent_info = rent_info;
   if (tagline) adsInfoObj.tagline = tagline;
   if (custom_date) availability.custom_date = custom_date;
   if (!custom_date) availability.immidiate = immidiate;
