@@ -134,6 +134,7 @@ exports.fetchAll = async (req, res, next) => {
       { path: "adsType", strictPopulate: false, select: "name" },
       { path: "adsInfo.image", strictPopulate: false, select: "url" },
       { path: "viewCount" },
+      { path: "createdAt" },
       { path: 'isFavorite', select: 'user', match: { user: myid } }
   ];
   
