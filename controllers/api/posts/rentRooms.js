@@ -752,12 +752,16 @@ exports.fetchAll = async (req, res, next) => {
       isPetFriendly,
       preferedGender,
       sortBy,
-      location,
       tagline,
       longitude,
       latitude,
       maxDistance,
       prefered_age,
+      amount,
+      negotiable,
+      is_contact,
+      immidiate,
+      custom_date,
     } = req.query;
     console.log(req.query,"aayi");
     var perPage = parseInt(req.query.perpage) || 40;
@@ -797,7 +801,10 @@ exports.fetchAll = async (req, res, next) => {
     // Add filter for rent amount
     dbQuery["adsInfo.rent.amount"] = amount;
   }
-  
+  if (custom_date) {
+    // Add filter for availability custom_date
+    dbQuery["adsInfo.availability.custom_date"] = custom_date;
+  }
   if (negotiable !== undefined) {
     // Add filter for negotiable
     dbQuery["adsInfo.rent.negotiable"] = negotiable === true || negotiable === "true";
@@ -806,6 +813,10 @@ exports.fetchAll = async (req, res, next) => {
   if (is_contact !== undefined) {
     // Add filter for is_contact
     dbQuery["adsInfo.rent.is_contact"] = is_contact === true || is_contact === "true";
+  }
+  if (immidiate !== undefined) {
+    // Add filter for availability immidiate
+    dbQuery["adsInfo.availability.immidiate"] = immidiate === "true" || immidiate === true;
   }
 if (isfeatured) dbQuery.isfeatured = isfeatured;
 if (status) dbQuery.status = status;

@@ -70,35 +70,62 @@ exports.fetchAllFeaturedAds = async (req, res, next) => {
 
 exports.fetchAlldashboard = async (req, res, next) => {
   try {
-    let dbQuery = {
-      status: 1,
+
+    const eventCount = await eventAd.countDocuments();
+    const bizCount = await bizAd.countDocuments();
+    const babysitterCount = await babysitterAd.countDocuments();
+    const roomrentCount = await roomrentAd.countDocuments();
+    const jobsCount = await jobsAd.countDocuments();
+    const buysellCount = await buysellAd.countDocuments();
+
+    // Calculate the total sum
+    const totalSum = eventCount + bizCount + babysitterCount + roomrentCount + jobsCount + buysellCount;
+
+    // Create an object with model counts
+    const counts = {
+      event: eventCount,
+      biz: bizCount,
+      babysitter: babysitterCount,
+      roomrent: roomrentCount,
+      jobs: jobsCount,
+      buysell: buysellCount,
     };
 
-    let event = await eventAd.find(dbQuery);
-    let biz = await bizAd.find(dbQuery);
-    let babysitter = await babysitterAd.find(dbQuery);
-    let roomrent = await roomrentAd.find(dbQuery);
-    let jobs = await jobsAd.find(dbQuery);
-    let buysell = await buysellAd.find(dbQuery);
-    let records = [
-      ...event,
-      ...biz,
-      ...babysitter,
-      ...roomrent,
-      ...jobs,
-      ...buysell,
-    ];
-    
- 
-    if (records) {
+    if (totalSum > 0) {
       return successJSONResponse(res, {
-        message: `success`,
-        totalads: Object.keys(records).length,
+        message: 'Success',
+        counts,
+        totalads: totalSum,
         status: 200,
       });
     } else {
-      return failureJSONResponse(res, { message: `Ads not available` });
+      return failureJSONResponse(res, { message: 'Ads not available' });
     }
+    // let event = await eventAd.find();
+    // let biz = await bizAd.find();
+    // let babysitter = await babysitterAd.find();
+    // let roomrent = await roomrentAd.find();
+    // let jobs = await jobsAd.find();
+    // let buysell = await buysellAd.find();
+    // let records = [
+    //   ...event,
+    //   ...biz,
+    //   ...babysitter,
+    //   ...roomrent,
+    //   ...jobs,
+    //   ...buysell,
+    // ];
+    
+ 
+    // if (records) {
+    //   return successJSONResponse(res, {
+    //     message: `success`,
+    //     totalads: Object.keys(records).length,
+    //     status: 200,
+    //   });
+    // } else {
+    //   return failureJSONResponse(res, { message: `Ads not available` });
+    // }
   } catch (err) {
     return failureJSONResponse(res, {
       message: `something went wrong`,
