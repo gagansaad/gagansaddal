@@ -793,7 +793,20 @@ exports.fetchAll = async (req, res, next) => {
   // return successJSONResponse(res, {
   //   message: `success`,
   //   total: recordss,})
-
+  if (amount) {
+    // Add filter for rent amount
+    dbQuery["adsInfo.rent.amount"] = amount;
+  }
+  
+  if (negotiable !== undefined) {
+    // Add filter for negotiable
+    dbQuery["adsInfo.rent.negotiable"] = negotiable === true || negotiable === "true";
+  }
+  
+  if (is_contact !== undefined) {
+    // Add filter for is_contact
+    dbQuery["adsInfo.rent.is_contact"] = is_contact === true || is_contact === "true";
+  }
 if (isfeatured) dbQuery.isfeatured = isfeatured;
 if (status) dbQuery.status = status;
 if (adsType) dbQuery.adsType = adsType;
