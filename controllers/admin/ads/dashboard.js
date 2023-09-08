@@ -130,7 +130,8 @@ exports.fetchAlldashboard = async (req, res, next) => {
 
     // Calculate the total sum
     const totalSum = eventCount + bizCount + babysitterCount + roomrentCount + jobsCount + buysellCount;
-    let featuredCount
+    let featuredTotalCount
+    let featuredcounts
 if(totalSum>0){
   let dbquery ={"addons_validity.name": "Featured"}
   const eventCount = await eventAd.countDocuments(dbquery);
@@ -139,7 +140,15 @@ if(totalSum>0){
   const roomrentCount = await roomrentAd.countDocuments(dbquery);
   const jobsCount = await jobsAd.countDocuments(dbquery);
   const buysellCount = await buysellAd.countDocuments(dbquery);
-  featuredCount= eventCount + bizCount + babysitterCount + roomrentCount + jobsCount + buysellCount;
+  featuredTotalCount= eventCount + bizCount + babysitterCount + roomrentCount + jobsCount + buysellCount;
+   featuredcounts = {
+    event: eventCount,
+    biz: bizCount,
+    babysitter: babysitterCount,
+    roomrent: roomrentCount,
+    jobs: jobsCount,
+    buysell: buysellCount,
+  };
 }
 const thisDay = moment().startOf('day');
 let todayAdsCount
@@ -207,7 +216,8 @@ if (todayTotalAmountAggregation.length > 0) {
         message: 'Success',
         counts,
         totalads: totalSum,
-        featuredCount,
+        featuredTotalCount,
+        featuredcounts,
         todayAdsCount,
         totalAmount, 
         todayTotalAmount,
