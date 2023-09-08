@@ -19,7 +19,7 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
 
         console.log(`token`, token)
 
-        if (!token) {return failureJSONResponse(res,
+        if (!token) {return failureJSONResponse(401,
             {message: `InvalidToken` },
             
         ) }
@@ -57,7 +57,7 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
         return next();
     } catch (err) {
         console.log(err,"vdvdvdvdvd")
-        return failureJSONResponse(res,
+        return failureJSONResponse(401,
             {message: `InvalidToken` },
             
         ) 
