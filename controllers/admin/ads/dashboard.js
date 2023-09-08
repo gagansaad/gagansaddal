@@ -202,20 +202,33 @@ if (totalAmountAggregation.length > 0) {
 if (todayTotalAmountAggregation.length > 0) {
   todayTotalAmount = todayTotalAmountAggregation[0].todayTotalAmount;
 }
-    const counts = {
-      event: eventCount,
-      featuredevent:featuredcounts.featuredevent,
-      biz: bizCount,
-      featuredbiz: featuredcounts.featuredbiz,
-      babysitter: babysitterCount,
-      featuredbabysitter:featuredcounts.featuredbabysitter,
-      roomrent: roomrentCount,
-      featuredroomrent:featuredcounts.featuredroomrent,
-      jobs: jobsCount,
-      featuredjobs: featuredcounts.featuredjobs,
-      buysell: buysellCount,
-      featuredbuysell:  featuredcounts.featuredbuysell
-    };
+const counts = {
+  event: {
+    total: eventCount,
+    featured: featuredcounts.featuredevent,
+  },
+  biz: {
+    total: bizCount,
+    featured: featuredcounts.featuredbiz,
+  },
+  babysitter: {
+    total: babysitterCount,
+    featured: featuredcounts.featuredbabysitter,
+  },
+  roomrent: {
+    total: roomrentCount,
+    featured: featuredcounts.featuredroomrent,
+  },
+  jobs: {
+    total: jobsCount,
+    featured: featuredcounts.featuredjobs,
+  },
+  buysell: {
+    total: buysellCount,
+    featured: featuredcounts.featuredbuysell,
+  },
+};
+
 
     if (totalSum > 0) {
       return successJSONResponse(res, {
