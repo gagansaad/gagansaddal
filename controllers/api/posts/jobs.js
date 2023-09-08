@@ -735,8 +735,8 @@ exports.fetchAllAds = async (req, res, next) => {
             $geometry: targetPoint,
             $maxDistance: Distance
           }
-        
     }
+   
   }
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
