@@ -713,7 +713,7 @@ exports.fetchAllAds = async (req, res, next) => {
     // console.log(longitude, latitude,'longitude, latitude');
     let Distance
     
-    if(maxDistance === "0" || !maxDistance){
+    if(maxDistance == "0" || !maxDistance){
       console.log("bol");
       Distance =  200000
     }else{
