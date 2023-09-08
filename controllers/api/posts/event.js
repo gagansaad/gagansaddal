@@ -823,6 +823,7 @@ exports.fetchAll = async (req, res, next) => {
       longitude,
       latitude,
       maxDistance,
+      add_on
     } = req.query;
     if (add_on){
       // Add filter for rent amount
@@ -976,6 +977,7 @@ if (start_date && end_date) {
       return failureJSONResponse(res, { message: `Room not Available` });
     }
   } catch (err) {
+    console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };

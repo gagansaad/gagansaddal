@@ -674,10 +674,7 @@ exports.editbizAds = async (req, res, next) => {
       hide_my_secondary_phone,
       hide_my_email,
     } = req.body;
-    if (add_on){
-      // Add filter for rent amount
-      dbQuery["addons_validity.name"] = add_on;
-    }
+   
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -928,7 +925,12 @@ exports.fetchAll = async (req, res, next) => {
       latitude,
       maxDistance,
       availability,
+      add_on,
     } = req.query;
+    if (add_on){
+      // Add filter for rent amount
+      dbQuery["addons_validity.name"] = add_on;
+    }
     if (availability) {
       switch (availability) {
         case "Weekdays":

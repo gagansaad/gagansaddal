@@ -807,10 +807,7 @@ exports.editBuySellAds = async (req, res, next) => {
       // address_info,
       // preferableModeContact,
     } = req.body;
-    if (add_on){
-      // Add filter for rent amount
-      dbQuery["addons_validity.name"] = add_on;
-    }
+    
     console.log(req.body,"----------------------------------------");
     let iscontact = false
     if (is_contact == "true") {
@@ -1023,7 +1020,12 @@ exports.fetchAll = async (req, res, next) => {
       longitude,
       latitude,
       maxDistance,
+      add_on
     } = req.query;
+    if (add_on){
+      // Add filter for rent amount
+      dbQuery["addons_validity.name"] = add_on;
+    }
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
     let Distance

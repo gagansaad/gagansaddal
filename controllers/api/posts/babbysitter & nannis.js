@@ -650,6 +650,7 @@ exports.fetchAll = async (req, res, next) => {
       longitude,
       latitude,
       maxDistance,
+      add_on
     } = req.query;
     if (add_on){
       // Add filter for rent amount
