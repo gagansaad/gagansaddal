@@ -142,12 +142,12 @@ if(totalSum>0){
   const buysellCount = await buysellAd.countDocuments(dbquery);
   featuredTotalCount= eventCount + bizCount + babysitterCount + roomrentCount + jobsCount + buysellCount;
    featuredcounts = {
-    event: eventCount,
-    biz: bizCount,
-    babysitter: babysitterCount,
-    roomrent: roomrentCount,
-    jobs: jobsCount,
-    buysell: buysellCount,
+    featuredevent:      eventCount,
+    featuredbiz:        bizCount,
+    featuredbabysitter: babysitterCount,
+    featuredroomrent:   roomrentCount,
+    featuredjobs:       jobsCount,
+    featuredbuysell:    buysellCount,
   };
 }
 const thisDay = moment().startOf('day');
@@ -204,11 +204,17 @@ if (todayTotalAmountAggregation.length > 0) {
 }
     const counts = {
       event: eventCount,
+      featuredevent:featuredcounts.featuredevent,
       biz: bizCount,
+      featuredbiz: featuredcounts.featuredbiz,
       babysitter: babysitterCount,
+      featuredbabysitter:featuredcounts.featuredbabysitter,
       roomrent: roomrentCount,
+      featuredroomrent:featuredcounts.featuredroomrent,
       jobs: jobsCount,
+      featuredjobs: featuredcounts.featuredjobs,
       buysell: buysellCount,
+      featuredbuysell:  featuredcounts.featuredbuysell
     };
 
     if (totalSum > 0) {
@@ -217,7 +223,6 @@ if (todayTotalAmountAggregation.length > 0) {
         counts,
         totalads: totalSum,
         featuredTotalCount,
-        featuredcounts,
         todayAdsCount,
         totalAmount, 
         todayTotalAmount,
