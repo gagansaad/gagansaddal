@@ -20,7 +20,7 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
         console.log(`token`, token)
 
         if (!token) {return failureJSONResponse(401,
-            {message: `InvalidToken` },
+             "InvalidToken"
             
         ) }
         else {
@@ -58,7 +58,7 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
     } catch (err) {
         console.log(err,"vdvdvdvdvd")
         return failureJSONResponse(401,
-            {message: `InvalidToken` },
+           "InvalidToken"
             
         ) 
     }
