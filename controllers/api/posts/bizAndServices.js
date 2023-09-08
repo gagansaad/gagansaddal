@@ -1019,6 +1019,7 @@ exports.fetchAll = async (req, res, next) => {
      const currentDateOnly = currentISODate.substring(0, 10);
      dbQuery.status = "active";
      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+     console.log(dbQuery);
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
@@ -1029,6 +1030,7 @@ exports.fetchAll = async (req, res, next) => {
         ]
       };
     }
+
     let myid = req.userId;
     let records = await postbizAndServicesAd
       .find({ $or: [queryFinal] })
