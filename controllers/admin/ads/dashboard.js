@@ -216,31 +216,6 @@ if (todayTotalAmountAggregation.length > 0) {
     } else {
       return failureJSONResponse(res, { message: 'Ads not available' });
     }
-    // let event = await eventAd.find();
-    // let biz = await bizAd.find();
-    // let babysitter = await babysitterAd.find();
-    // let roomrent = await roomrentAd.find();
-    // let jobs = await jobsAd.find();
-    // let buysell = await buysellAd.find();
-    // let records = [
-    //   ...event,
-    //   ...biz,
-    //   ...babysitter,
-    //   ...roomrent,
-    //   ...jobs,
-    //   ...buysell,
-    // ];
-    
- 
-    // if (records) {
-    //   return successJSONResponse(res, {
-    //     message: `success`,
-    //     totalads: Object.keys(records).length,
-    //     status: 200,
-    //   });
-    // } else {
-    //   return failureJSONResponse(res, { message: `Ads not available` });
-    // }
   } catch (err) {
     return failureJSONResponse(res, {
       message: `something went wrong`,

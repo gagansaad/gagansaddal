@@ -151,7 +151,7 @@ const events_Schema = new mongoose.Schema({
             ...defaultStringConfig,
            
         },
-        hosted_by: {
+        name: {
             ...defaultStringConfig,
            
         },

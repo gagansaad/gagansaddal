@@ -717,7 +717,7 @@ exports.editEventAds = async (req, res, next) => {
       adsInfo: adsInfoObj,
       listerBasicInfo: {
         organization_name,
-        hosted_by,
+        name:hosted_by,
         emailAddress,
         website_link,
         hide_my_phone: my_phone,
