@@ -900,7 +900,7 @@ exports.editBuySellAds = async (req, res, next) => {
     if (video_link) adsInfoObj.video_link = video_link;
     if (imageArr.length) adsInfoObj.image = imageArr;
 
-    if (name) listerBasicInfo.name = name;
+    // if (name) listerBasicInfo.name = name;
 
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
@@ -908,7 +908,7 @@ exports.editBuySellAds = async (req, res, next) => {
 
     const dataObjq = {
       adsInfo: adsInfoObj,
-      listerBasicInfo: {
+      lister_basic_info: {
         name,
         email_address,
         hide_my_phone: my_phone,

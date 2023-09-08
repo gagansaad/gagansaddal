@@ -715,7 +715,7 @@ exports.editEventAds = async (req, res, next) => {
     // }
     const dataObjq = {
       adsInfo: adsInfoObj,
-      listerBasicInfo: {
+      lister_basic_info: {
         organization_name,
         name:hosted_by,
         emailAddress,

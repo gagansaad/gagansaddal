@@ -127,7 +127,7 @@ const BuySellSchema = new mongoose.Schema({
         }],
 
     },
-    listerBasicInfo: {
+    lister_basic_info: {
         name: defaultStringConfig,
         email_address: defaultStringConfig,
         primary_mobile_number: {

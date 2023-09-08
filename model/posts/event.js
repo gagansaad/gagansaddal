@@ -146,7 +146,7 @@ const events_Schema = new mongoose.Schema({
         }
 
     },
-    listerBasicInfo: {
+    lister_basic_info: {
         organization_name: {
             ...defaultStringConfig,
            
