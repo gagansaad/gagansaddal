@@ -166,12 +166,12 @@ exports.fetchAll = async (req, res, next) => {
           
       }
     }
-    const eventCount = await eventAd.countDocuments(dbQuery);
-    const bizCount = await bizAd.countDocuments(dbQuery);
-    const babysitterCount = await babysitterAd.countDocuments(dbQuery);
-    const roomrentCount = await roomrentAd.countDocuments(dbQuery);
-    const jobsCount = await jobsAd.countDocuments(dbQuery);
-    const buysellCount = await buysellAd.countDocuments(dbQuery);
+    const eventCount = await eventAd.find(dbQuery);
+    const bizCount = await bizAd.find(dbQuery);
+    const babysitterCount = await babysitterAd.find(dbQuery);
+    const roomrentCount = await roomrentAd.find(dbQuery);
+    const jobsCount = await jobsAd.find(dbQuery);
+    const buysellCount = await buysellAd.find(dbQuery);
     let eventlimt   = 2;
     let bizlimit  = 2;
     let babylimit = 2;
@@ -179,22 +179,22 @@ exports.fetchAll = async (req, res, next) => {
     let joblimit  = 2;
     let buylimit  = 2;
 
-    if(eventCount < 2){
+    if(eventCount.length < 2){
       eventlimt = 0
     }
-    if(bizCount < 2){
+    if(bizCount.length < 2){
       bizlimit = 0
     }
-    if(babysitterCount < 2){
+    if(babysitterCount.length < 2){
       babylimit = 0
     }
-    if(roomrentCount < 2){
+    if(roomrentCount.length < 2){
       roomlimit = 0
     }
-    if(jobsCount < 2){
+    if(jobsCount.length < 2){
       joblimit = 0
     }
-    if(buysellCount < 2){
+    if(buysellCount.length < 2){
       buylimit = 0
     }
       const data1 = await babysitterAd.find(dbQuery)
