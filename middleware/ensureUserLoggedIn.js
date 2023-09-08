@@ -56,10 +56,7 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
 
         return next();
     } catch (err) {
-        console.log(failureJSONResponse(res,
-            {message: `InvalidToken` },
-            
-        ) )
+        console.log(err)
         return failureJSONResponse(res,
             {message: `InvalidToken` },
             
