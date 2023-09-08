@@ -17,7 +17,7 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
         console.log(`token`, token)
 
         if (!token) return res.json({
-            status: 403,
+            status: 401,
             message: `InvalidToken` ,
             
         }) 
