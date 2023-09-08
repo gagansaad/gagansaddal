@@ -19,10 +19,10 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
 
         console.log(`token`, token)
 
-        if (!token) return failureJSONResponse(res,
+        if (!token) {return failureJSONResponse(res,
             {message: `InvalidToken` },
             
-        ) 
+        ) }
         else {
 
             const decodedPayload = verifyAndDecodeToken(token);
@@ -56,7 +56,10 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
 
         return next();
     } catch (err) {
-        console.log(err)
+        console.log(failureJSONResponse(res,
+            {message: `InvalidToken` },
+            
+        ) )
         return failureJSONResponse(res,
             {message: `InvalidToken` },
             
