@@ -124,6 +124,8 @@ exports.fetchAll = async (req, res, next) => {
     }else{
       Distance =maxDistance*1000
     }
+
+   
   console.log(Distance,"aayayayayayayayyayayayayayyayayayayayyayayayayayayyayayayayya");
     let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false,select:"url"})
    
@@ -164,24 +166,55 @@ exports.fetchAll = async (req, res, next) => {
           
       }
     }
+    const eventCount = await eventAd.countDocuments(dbQuery);
+    const bizCount = await bizAd.countDocuments(dbQuery);
+    const babysitterCount = await babysitterAd.countDocuments(dbQuery);
+    const roomrentCount = await roomrentAd.countDocuments(dbQuery);
+    const jobsCount = await jobsAd.countDocuments(dbQuery);
+    const buysellCount = await buysellAd.countDocuments(dbQuery);
+    let eventlimt   = 2;
+    let bizlimit  = 2;
+    let babylimit = 2;
+    let roomlimit = 2;
+    let joblimit  = 2;
+    let buylimit  = 2;
+
+    if(eventCount < 2){
+      eventlimt = 0
+    }
+    if(bizCount < 2){
+      bizlimit = 0
+    }
+    if(babysitterCount < 2){
+      babylimit = 0
+    }
+    if(roomrentCount < 2){
+      roomlimit = 0
+    }
+    if(jobsCount < 2){
+      joblimit = 0
+    }
+    if(buysellCount < 2){
+      buylimit = 0
+    }
       const data1 = await babysitterAd.find(dbQuery)
       .sort({ createdAt: -1 })
-      .limit(2)
+      .limit(babylimit)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
-      const data2 = await buysellAd.find(dbQuery).sort({ createdAt: -1 }).limit(2)
+      const data2 = await buysellAd.find(dbQuery).sort({ createdAt: -1 }).limit(buylimit)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
-      const data3 = await bizAd.find(dbQuery).sort({ createdAt: -1 }).limit(2)
+      const data3 = await bizAd.find(dbQuery).sort({ createdAt: -1 }).limit(bizlimit)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
-      const data4 = await eventAd.find(dbQuery).sort({ createdAt: -1 }).limit(2)
+      const data4 = await eventAd.find(dbQuery).sort({ createdAt: -1 }).limit(eventlimt)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
-      const data5 = await jobsAd.find(dbQuery).sort({ createdAt: -1 }).limit(2)
+      const data5 = await jobsAd.find(dbQuery).sort({ createdAt: -1 }).limit(joblimit)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
-      const data6 = await roomrentAd.find(dbQuery).sort({ createdAt: -1 }).limit(2)
+      const data6 = await roomrentAd.find(dbQuery).sort({ createdAt: -1 }).limit(roomlimit)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
 console.log(data6);
