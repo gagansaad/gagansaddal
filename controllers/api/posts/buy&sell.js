@@ -807,6 +807,10 @@ exports.editBuySellAds = async (req, res, next) => {
       // address_info,
       // preferableModeContact,
     } = req.body;
+    if (add_on){
+      // Add filter for rent amount
+      dbQuery["addons_validity.name"] = add_on;
+    }
     console.log(req.body,"----------------------------------------");
     let iscontact = false
     if (is_contact == "true") {

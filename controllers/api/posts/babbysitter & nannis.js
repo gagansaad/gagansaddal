@@ -651,6 +651,10 @@ exports.fetchAll = async (req, res, next) => {
       latitude,
       maxDistance,
     } = req.query;
+    if (add_on){
+      // Add filter for rent amount
+      dbQuery["addons_validity.name"] = add_on;
+    }
     console.log(req.query,"---------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     let Distance

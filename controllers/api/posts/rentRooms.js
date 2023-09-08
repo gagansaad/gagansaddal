@@ -804,7 +804,7 @@ exports.fetchAll = async (req, res, next) => {
   }
   if (add_on){
     // Add filter for rent amount
-    dbQuery["adsInfo.rent.amount"] = amount;
+    dbQuery["addons_validity.name"] = add_on;
   }
   if (custom_date) {
     // Add filter for availability custom_date

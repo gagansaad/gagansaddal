@@ -707,13 +707,18 @@ exports.fetchAllAds = async (req, res, next) => {
       longitude,
       latitude,
       maxDistance,
+      add_on
     } = req.query;
+    if (add_on){
+      // Add filter for rent amount
+      dbQuery["addons_validity.name"] = add_on;
+    }
     console.log(req.query,"-------------------------------------------------------------------------------------------------------------------------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
     let Distance
     
-    if(maxDistance == "0"){
+    if(maxDistance === "0" || !maxDistance){
       console.log("bol");
       Distance =  200000
     }else{
