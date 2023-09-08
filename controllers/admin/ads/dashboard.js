@@ -7,6 +7,7 @@ const mongoose = require("mongoose"),
   babysitterAd = mongoose.model("babysitter & nannie"),
   roomrentAd = mongoose.model("rental"),
   jobsAd = mongoose.model("job"),
+  paymentModel = mongoose.model("payment"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -67,6 +68,55 @@ exports.fetchAllFeaturedAds = async (req, res, next) => {
   }
 };
 
+exports.fetchAll = async (req, res, next) => {
+  try {
+    
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    const currentDateOnly = currentISODate.substring(0, 10);
+ 
+  
+    let event = await eventAd.find();
+    let biz = await bizAd.find();
+    let babysitter = await babysitterAd.find();
+    let roomrent = await roomrentAd.find();
+    let jobs = await jobsAd.find();
+    let buysell = await buysellAd.find().populate({ path: "viewCount" })
+      
+      console.log(records);
+     
+     
+     
+    if (records) {
+      const jobData = records.map((job) => {
+        return {
+          ...job._doc,
+          // Add other job fields as needed
+          view_count: job.viewCount,
+            favorite_count: job.favoriteCount,
+            is_favorite: !!job.isFavorite, 
+        };
+      });
+      return successJSONResponse(res, {
+        message: `success`,
+        total: responseModelCount,
+        perPage: perPage,
+        totalPages: Math.ceil(responseModelCount / perPage),
+        currentPage: page,
+        records:jobData,
+        status: 200, 
+      });
+    } else {
+      return failureJSONResponse(res, { message: `ads not Available` });
+    }
+  } catch (err) {
+    console.log(err);
+    return failureJSONResponse(res, { message: `something went wrong` });
+  }
+};
 
 exports.fetchAlldashboard = async (req, res, next) => {
   try {
@@ -80,8 +130,69 @@ exports.fetchAlldashboard = async (req, res, next) => {
 
     // Calculate the total sum
     const totalSum = eventCount + bizCount + babysitterCount + roomrentCount + jobsCount + buysellCount;
+    let featuredCount
+if(totalSum>0){
+  let dbquery ={"addons_validity.name": "Featured"}
+  const eventCount = await eventAd.countDocuments(dbquery);
+  const bizCount = await bizAd.countDocuments(dbquery);
+  const babysitterCount = await babysitterAd.countDocuments(dbquery);
+  const roomrentCount = await roomrentAd.countDocuments(dbquery);
+  const jobsCount = await jobsAd.countDocuments(dbquery);
+  const buysellCount = await buysellAd.countDocuments(dbquery);
+  featuredCount= eventCount + bizCount + babysitterCount + roomrentCount + jobsCount + buysellCount;
+}
+const thisDay = moment().startOf('day');
+let todayAdsCount
+if(thisDay){
+  let dbquery = { createdAt: { $gte: thisDay.toDate() }}
+  const eventCount = await eventAd.countDocuments(dbquery);
+  const bizCount = await bizAd.countDocuments(dbquery);
+  const babysitterCount = await babysitterAd.countDocuments(dbquery);
+  const roomrentCount = await roomrentAd.countDocuments(dbquery);
+  const jobsCount = await jobsAd.countDocuments(dbquery);
+  const buysellCount = await buysellAd.countDocuments(dbquery);
+  todayAdsCount= eventCount + bizCount + babysitterCount + roomrentCount + jobsCount + buysellCount;
+}
+const totalAmountAggregation = await paymentModel.aggregate([
+  {
+    $group: {
+      _id: null,
+      totalAmount: { $sum: "$total_amount" }
+    }
+  }
+]);
 
-    // Create an object with model counts
+// Calculate today's date range
+const today = moment().startOf('day');
+const tomorrow = moment(today).add(1, 'days');
+
+const todayTotalAmountAggregation = await paymentModel.aggregate([
+  {
+    $match: {
+      createdAt: {
+        $gte: today.toDate(),
+        $lt: tomorrow.toDate()
+      }
+    }
+  },
+  {
+    $group: {
+      _id: null,
+      todayTotalAmount: { $sum: "$total_amount" }
+    }
+  }
+]);
+
+let totalAmount = 0;
+let todayTotalAmount = 0;
+
+if (totalAmountAggregation.length > 0) {
+  totalAmount = totalAmountAggregation[0].totalAmount;
+}
+
+if (todayTotalAmountAggregation.length > 0) {
+  todayTotalAmount = todayTotalAmountAggregation[0].todayTotalAmount;
+}
     const counts = {
       event: eventCount,
       biz: bizCount,
@@ -96,6 +207,10 @@ exports.fetchAlldashboard = async (req, res, next) => {
         message: 'Success',
         counts,
         totalads: totalSum,
+        featuredCount,
+        todayAdsCount,
+        totalAmount, 
+        todayTotalAmount,
         status: 200,
       });
     } else {
