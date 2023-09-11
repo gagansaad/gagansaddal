@@ -47,7 +47,7 @@ exports.create_configuration = async (req, res, next) => {
       } else {
         await AboutUS.create({ htmlText: about_text });
       }
-  
+      return successJSONResponse(res, { message: "Success" });
     
 } catch (err) {
     console.log(err,"------------------------------");
