@@ -55,10 +55,21 @@ exports.create_configuration = async (req, res, next) => {
 }
 
 }
-
-exports.createPrivacypolicy = async (req, res, next) => {
-    res.json({
-        data: `jhgdajhgda`
-    })
-
+exports.get_configuation = async(req,res,next)=>{
+    try {
+        const existingTermCondition = await TermAndCondition.findOne();
+        const existingPrivacyPolicy = await Privacy.findOne();
+        const existingAboutUs = await AboutUS.findOne();
+    
+        // Pass the data to an HTML form or template
+        return successJSONResponse(res, {
+          message: "Success",
+          existingTermCondition,
+          existingPrivacyPolicy,
+          existingAboutUs,
+        });
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Something went wrong' });
+      }
 }
