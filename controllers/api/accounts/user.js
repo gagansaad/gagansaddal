@@ -231,7 +231,7 @@ module.exports = {
       googleId = req?.body?.google_id,
       googleToken = req?.body?.google_token,
       deviceToken = req?.body?.device_token;
-
+console.log(name,"-----------------");
     if (!isValidString(name.trim()))
       return failureJSONResponse(res, { message: `Please enter valid name` });
     if (!isValidString(googleId.trim()))
