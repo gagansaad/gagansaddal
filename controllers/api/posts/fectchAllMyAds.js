@@ -208,7 +208,8 @@ exports.fetchAll = async (req, res, next) => {
       const data3 = await bizAd.find(dbQuery).sort({ createdAt: -1 }).limit(bizlimit)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
-      const data4 = await eventAd.find(dbQuery).sort({ createdAt: -1 }).limit(eventlimt)
+      let data4Limit = adons === "Upcoming Event" ? (eventCount.length < 12 ? eventCount.length : 12) : eventlimt;
+      const data4 = await eventAd.find(dbQuery).sort({ createdAt: -1 }).limit(data4Limit)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
       const data5 = await jobsAd.find(dbQuery).sort({ createdAt: -1 }).limit(joblimit)
@@ -229,7 +230,7 @@ console.log(data6);
               job.addons_validity.some((addon) => {
                   const addonExpired = new Date(addon.expired_on) >= new Date();
                   console.log(`Addon: ${addon.name}, Expired: ${addonExpired}`);
-                  return addon.name === "Featured" && addonExpired;
+                  return addon.name === "Featured"  && addonExpired;
               });
       
           console.log("Is Featured Addon Valid:", isFeaturedAddonValid);
