@@ -5,7 +5,7 @@ router.post(`/create-configurations`,
     controllers.create_configuration
 );
 
-router.post(`/get_configuation`,
+router.post(`/get-configuation`,
     controllers.get_configuation
 );
 
