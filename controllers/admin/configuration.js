@@ -50,6 +50,7 @@ exports.create_configuration = async (req, res, next) => {
   
     
 } catch (err) {
+    console.log(err,"------------------------------");
     return failureJSONResponse(res, { message: `something went wrong` })
 }
 
