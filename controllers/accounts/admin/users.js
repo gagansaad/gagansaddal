@@ -15,7 +15,7 @@ exports.userList = async(req,res, next) => {
           var perPage = parseInt(req.query.perpage) || 10;
           var page = parseInt(req.query.page) || 1;
           
-          let records = await users.find()
+          let records = await users.find({}, { "userInfo.password": 0 })
             .sort(sortval)
             .skip(perPage * page - perPage)
             .limit(perPage);
