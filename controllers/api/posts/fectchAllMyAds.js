@@ -209,6 +209,7 @@ exports.fetchAll = async (req, res, next) => {
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
       let data4Limit = adons === "Upcoming Event" ? (eventCount.length < 12 ? eventCount.length : 12) : eventlimt;
+      console.log(data4Limit);
       const data4 = await eventAd.find(dbQuery).sort({ createdAt: -1 }).limit(data4Limit)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);

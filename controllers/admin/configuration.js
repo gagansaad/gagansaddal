@@ -18,24 +18,36 @@ exports.create_configuration = async (req, res, next) => {
         privacy_text,
         about_text,
     } = req.body
-
+    const existingTermCondition = await TermAndCondition.find();
+    const existingPrivacyPolicy = await Privacy.find();
+    const existingAboutUs = await AboutUS.find();
    
     if (!term_text) return failureJSONResponse(res, { message: `Please provide Term And Conditions` });
     if (!privacy_text) return failureJSONResponse(res, { message: `Please provide Privacy Policy` });
     if (!about_text) return failureJSONResponse(res, { message: `Please provide About Us` });
-
-        const termCondition = await TermAndCondition.create({ htmlText: term_text });
-        const privacyPolicy = await Privacy.create({ htmlText: privacy_text });
-        const aboutUs = await AboutUS.create({ htmlText: about_text });
-
-        if (termCondition && privacyPolicy && aboutUs) {
-           
-                return successJSONResponse(res, { message: "Success" });
-            
-        } else {
-            // Handle a case where records creation failed
-            return failureJSONResponse(res, { message: "Failed to create records" });
-        }
+    if (existingTermCondition) {
+        // If data exists, update it
+        existingTermCondition.htmlText = term_text;
+        await existingTermCondition.save();
+      } else {
+        // If data doesn't exist, create it
+        await TermAndCondition.create({ htmlText: term_text });
+      }
+  
+      if (existingPrivacyPolicy) {
+        existingPrivacyPolicy.htmlText = privacy_text;
+        await existingPrivacyPolicy.save();
+      } else {
+        await Privacy.create({ htmlText: privacy_text });
+      }
+  
+      if (existingAboutUs) {
+        existingAboutUs.htmlText = about_text;
+        await existingAboutUs.save();
+      } else {
+        await AboutUS.create({ htmlText: about_text });
+      }
+  
     
 } catch (err) {
     return failureJSONResponse(res, { message: `something went wrong` })
