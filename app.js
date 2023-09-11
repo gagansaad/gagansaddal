@@ -32,6 +32,7 @@ require(`./model/posts/event`)
 // configuration
 require(`./model/configurations/privacy`);
 require(`./model/configurations/termAndCondition`);
+require(`./model/configurations/aboutUs`);
 require(`./model/plan/plan`);
 require(`./model/plan/plan copy`);
 require(`./model/plan/plan_adons`);
