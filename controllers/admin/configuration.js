@@ -18,9 +18,9 @@ exports.create_configuration = async (req, res, next) => {
         privacy_text,
         about_text,
     } = req.body
-    const existingTermCondition = await TermAndCondition.find();
-    const existingPrivacyPolicy = await Privacy.find();
-    const existingAboutUs = await AboutUS.find();
+    const existingTermCondition = await TermAndCondition.findOne();
+    const existingPrivacyPolicy = await Privacy.findOne();
+    const existingAboutUs = await AboutUS.findOne();
    
     if (!term_text) return failureJSONResponse(res, { message: `Please provide Term And Conditions` });
     if (!privacy_text) return failureJSONResponse(res, { message: `Please provide Privacy Policy` });
