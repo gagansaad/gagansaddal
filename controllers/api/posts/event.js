@@ -439,7 +439,7 @@ exports.createEventAds = async (req, res, next) => {
       productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
     }
-
+console.log(platforms,"---------------------------------");
     const dataObj = {
       isfeatured,
       status: status,
@@ -480,7 +480,7 @@ exports.createEventAds = async (req, res, next) => {
       tagline: taglines,
       userId: userId,
     };
-
+console.log(dataObj,"dvbfbfbfbfrb");
     const newEventPost = await eventAd.create(dataObj);
     const stringToHash = newEventPost._id.toString();
     const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
