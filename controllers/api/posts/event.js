@@ -369,6 +369,13 @@ exports.createEventAds = async (req, res, next) => {
       other_platform,
       other_platform_name,
     } = req.body;
+    console.log(facebook_platform,
+      instagram_platform,
+      zoom_platform,
+      youtube_platform,
+      tiktok_platform,
+      other_platform,
+      other_platform_name,"????????????????????????????");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
