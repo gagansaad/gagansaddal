@@ -199,10 +199,10 @@ exports.validateAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid location`,
       });
-    if (tagline && !isValidString(tagline))
-      return failureJSONResponse(res, {
-        message: `Please provide valid tagline`,
-      });
+    // if (tagline && !isValidString(tagline))
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide valid tagline`,
+    //   });
 
     return next();
   } catch (err) {
