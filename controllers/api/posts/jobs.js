@@ -349,7 +349,7 @@ exports.createJobAds = async (req, res, next) => {
       image,
       video,
     } = req.body;
-  
+  console.log("gori gori body",req.body,"gori gori body");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
