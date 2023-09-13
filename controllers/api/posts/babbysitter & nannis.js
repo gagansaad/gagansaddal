@@ -413,6 +413,7 @@ exports.editAds = async (req, res, next) => {
       service_from_date,
       transport_facilty,
       amount,
+      currency,
       expected_salary_rate,
       description,
       location_name,
@@ -506,6 +507,7 @@ exports.editAds = async (req, res, next) => {
     if (service_from_date) adsInfoObj.service_from_date = service_from_date;
     if (transport_facilty) adsInfoObj.transport_facilty = transport_facilty;
     if (amount) expected_salary_amount.amount = amount;
+    if (currency) expected_salary_amount.currency = currency;
     if (is_contact) expected_salary_amount.is_contact = iscontact;
     if (tagline) adsInfoObj.tagline = tagline;
     if (amount || is_contact == "true") adsInfoObj.expected_salary_amount = expected_salary_amount;

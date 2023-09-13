@@ -1070,7 +1070,6 @@ exports.fetchAll = async (req, res, next) => {
       return failureJSONResponse(res, { message: `ads not Available` });
     }
   } catch (err) {
-    console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
