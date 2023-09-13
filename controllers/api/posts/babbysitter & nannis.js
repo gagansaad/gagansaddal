@@ -652,11 +652,19 @@ exports.fetchAll = async (req, res, next) => {
       maxDistance,
       add_on,
       amount,
-      is_contact
+      is_contact,
+      min_price,
+      max_price
     } = req.query;
     if (is_contact !== undefined) {
       // Add filter for is_contact
       dbQuery["adsInfo.expected_salary_amount.is_contact"] = is_contact === true || is_contact === "true";
+    }
+    if (min_price && max_price) {
+      dbQuery["adsInfo.expected_salary_amount.amount"] = {
+        $gte: parseFloat(min_price),
+        $lte: parseFloat(max_price)
+      };
     }
     if (amount) {
       // Add filter for rent amount

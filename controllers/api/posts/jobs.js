@@ -707,7 +707,9 @@ exports.fetchAllAds = async (req, res, next) => {
       longitude,
       latitude,
       maxDistance,
-      add_on
+      add_on,
+      min_price,
+      max_price
     } = req.query;
     if (add_on){
       // Add filter for rent amount
@@ -797,9 +799,15 @@ exports.fetchAllAds = async (req, res, next) => {
 
 
     if (amount) {
-      dbQuery["adsInfo.rent.amount"] = amount;
+      dbQuery["adsInfo.salary.amount"] = amount;
     }
-
+    if (min_price && max_price) {
+      dbQuery["adsInfo.salary.amount"] = {
+        $gte: parseFloat(min_price),
+        $lte: parseFloat(max_price)
+      };
+    }
+    
     if (preferred_gender) {
       dbQuery["adsInfo.preferedGender"] = preferred_gender;
     }

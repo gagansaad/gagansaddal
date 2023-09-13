@@ -762,7 +762,9 @@ exports.fetchAll = async (req, res, next) => {
       is_contact,
       immidiate,
       custom_date,
-      add_on
+      add_on,
+      min_price,
+      max_price
     } = req.query;
     console.log(req.query,"aayi");
     var perPage = parseInt(req.query.perpage) || 40;
@@ -802,6 +804,13 @@ exports.fetchAll = async (req, res, next) => {
     // Add filter for rent amount
     dbQuery["adsInfo.rent.amount"] = { $lte: amount };
   }
+  if (min_price && max_price) {
+    dbQuery["adsInfo.rent.amount"] = {
+      $gte: parseFloat(min_price),
+      $lte: parseFloat(max_price)
+    };
+  }
+  
   if (add_on){
     // Add filter for rent amount
     dbQuery["addons_validity.name"] = add_on;

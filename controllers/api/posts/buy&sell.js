@@ -1023,8 +1023,16 @@ exports.fetchAll = async (req, res, next) => {
       add_on,
       negotiable,
       amount,
-      is_contact
+      is_contact,
+      min_price,
+      max_price
     } = req.query;
+    if (min_price && max_price) {
+      dbQuery["adsInfo.price.amount"] = {
+        $gte: parseFloat(min_price),
+        $lte: parseFloat(max_price)
+      };
+    }
     if (negotiable !== undefined) {
       // Add filter for negotiable
       dbQuery["adsInfo.price.negotiable"] = negotiable === true || negotiable === "true";
