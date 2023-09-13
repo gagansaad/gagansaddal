@@ -650,8 +650,18 @@ exports.fetchAll = async (req, res, next) => {
       longitude,
       latitude,
       maxDistance,
-      add_on
+      add_on,
+      amount,
+      is_contact
     } = req.query;
+    if (is_contact !== undefined) {
+      // Add filter for is_contact
+      dbQuery["adsInfo.expected_salary_amount.is_contact"] = is_contact === true || is_contact === "true";
+    }
+    if (amount) {
+      // Add filter for rent amount
+      dbQuery["adsInfo.expected_salary_amount.amount"] = { $lte: amount };
+    }
     if (add_on){
       // Add filter for rent amount
       dbQuery["addons_validity.name"] = add_on;

@@ -800,7 +800,7 @@ exports.fetchAll = async (req, res, next) => {
   //   total: recordss,})
   if (amount) {
     // Add filter for rent amount
-    dbQuery["adsInfo.rent.amount"] = amount;
+    dbQuery["adsInfo.rent.amount"] = { $lte: amount };
   }
   if (add_on){
     // Add filter for rent amount
