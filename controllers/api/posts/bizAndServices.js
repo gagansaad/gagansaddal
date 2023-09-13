@@ -510,36 +510,36 @@ exports.createbizAds = async (req, res, next) => {
       }
     }
     if (req.files.accreditation_document) {
-      if (!accreditation_name) {
+      if (accreditation_name.length != req.files.accreditation_document.length) {
         return failureJSONResponse(res, {
           message: `Please provide accreditation_name`,
         });
       }
-      for (var i = 0; i < req.files.accreditation_document.length; i++) {
-        if (
-          req.files.accreditation_document[i].fieldname ===
-          `accreditation_document`
-        ) {
-          let type_of_files = req.files.accreditation_document[i].mimetype;
-          // if (type_of_files === 'application/pdf' || type_of_files === 'image/jpg' ||  type_of_file === 'application/octet-stream' || type_of_files === 'image/jpeg') {
+      for (var i = 0, j = 0; i < req.files.accreditation_document.length && j < accreditation_name.length; i++, j++) {
+        if (req.files.accreditation_document[i].fieldname === 'accreditation_document') {
+          let type_of_file = req.files.accreditation_document[i].mimetype;
+          
+          // Check if the file type is allowed (uncomment the code block if needed)
+          // if (type_of_file !== 'application/pdf' && type_of_file !== 'image/jpg' && type_of_file !== 'application/octet-stream' && type_of_file !== 'image/jpeg') {
+          //   return failureJSONResponse(res, { message: 'Please provide only pdf, png' });
+          // }
+      
           var doc = req.files.accreditation_document[i].path;
           productDoc = await Media.create({
             url: doc,
-            url_type: type_of_files,
+            url_type: type_of_file,
           });
+          
           console.log(productDoc, "hdhcbdhh");
-          let acrredationn = {
-            accreditation_name: accreditation_name,
-            accreditation_files: productDoc._id,
+      
+          let accreditation = {
+            name: accreditation_name[j], // Use the 'j' index to match the accreditation name with the file
+            url: productDoc._id,
           };
-          accreditationArr.push(acrredationn);
-          // } else {
-          //   return failureJSONResponse(res, {
-          //     message: `Please provide only pdf,png`,
-          //   });
-          // }
+          accreditationArr.push(accreditation);
         }
       }
+      
     }
     console.log(tagline, "this is tagline array");
     let taglines = tagline;
