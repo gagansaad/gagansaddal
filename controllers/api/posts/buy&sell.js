@@ -1020,8 +1020,23 @@ exports.fetchAll = async (req, res, next) => {
       longitude,
       latitude,
       maxDistance,
-      add_on
+      add_on,
+      negotiable,
+      amount,
+      is_contact
     } = req.query;
+    if (negotiable !== undefined) {
+      // Add filter for negotiable
+      dbQuery["adsInfo.price.negotiable"] = negotiable === true || negotiable === "true";
+    }
+    if (amount) {
+      // Add filter for rent amount
+      dbQuery["adsInfo.price.amount"] = { $lte: amount };
+    }
+    if (is_contact !== undefined) {
+      // Add filter for is_contact
+      dbQuery["adsInfo.price.is_contact"] = is_contact === true || is_contact === "true";
+    }
     if (add_on){
       // Add filter for rent amount
       dbQuery["addons_validity.name"] = add_on;
