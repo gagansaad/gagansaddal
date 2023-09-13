@@ -509,6 +509,7 @@ exports.createbizAds = async (req, res, next) => {
         }
       }
     }
+    console.log(req.files.accreditation_document);
     if (req.files.accreditation_document) {
       if (accreditation_name.length != req.files.accreditation_document.length) {
         return failureJSONResponse(res, {
