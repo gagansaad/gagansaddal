@@ -586,7 +586,13 @@ exports.editEventAds = async (req, res, next) => {
       primary_phone_number,
       secondary_phone_number,
     } = req.body;
-
+console.log(facebook_platform,
+  instagram_platform,
+  zoom_platform,
+  youtube_platform,
+  tiktok_platform,
+  other_platform,
+  other_platform_name,"==========================");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
