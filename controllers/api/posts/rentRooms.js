@@ -525,6 +525,7 @@ exports.editRoomRentAds = async (req, res, next) => {
     furnished,
     attachedBath,
     amount,
+    currency,
     rent_info,
     negotiable,
     prefered_age,
@@ -657,6 +658,7 @@ exports.editRoomRentAds = async (req, res, next) => {
   if (accommodates) adsInfoObj.accommodates = accommodates;
   if (attachedBath) adsInfoObj.attachedBath = attachedBath;
   if (amount) rent.amount = amount;
+  if (currency) rent.currency = currency;
   if (negotiable) rent.negotiable = negotible;
   if (is_contact) rent.is_contact = iscontact;
   if (rent) adsInfoObj.rent = rent;
