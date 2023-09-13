@@ -823,6 +823,8 @@ exports.fetchAll = async (req, res, next) => {
       start_date,
       end_date,
       regular_ticket_price,
+      min_price,
+      max_price,
       tagline,
       location,
       venue_name,
@@ -843,6 +845,12 @@ exports.fetchAll = async (req, res, next) => {
     if (regular_ticket_price) {
       dbQuery["adsInfo.ticket_price.regular_ticket_price"] = {
         $lte: parseFloat(regular_ticket_price) // Parse the input as a float if it's not already
+      };
+    }
+    if (min_price && max_price) {
+      dbQuery["adsInfo.ticket_price.regular_ticket_price"] = {
+        $gte: parseFloat(min_price),
+        $lte: parseFloat(max_price)
       };
     }
     
