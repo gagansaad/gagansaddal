@@ -573,6 +573,7 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
   // let userID = req.userId;
   let userID = userId;
   let paymentDetails = await PaymentModel.findById({ _id: payment_id });
+  let ads_type;
   if (paymentDetails) {
     plan_id = paymentDetails.plan_id;
     ads_id = paymentDetails.ads;
@@ -580,6 +581,7 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
     // Continue with your logic...
   }
   let getAdDetails = await category.findById({ _id: ads_type });
+  console.log(getAdDetails,"/////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\********************@@@@@@@@@@@@!!!!!");
       let adsName = getAdDetails.name;
       let userIds
       if(adsName){
