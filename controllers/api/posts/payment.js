@@ -502,7 +502,9 @@ exports.create_payment_intent = async (req, res) => {
         case "payment_intent.succeeded":
           paymentSuccessModelUpdate(payment_id, UserId);
           let alertdata = await Alert.find({Typename:adsName})
-          const userIds = alertdata.map(alert => alert.userId);
+          const userIds = alertdata.map(alert => String(alert.userId));
+
+          console.log(userIds);
 console.log(userIds,alertdata,":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
           
           getNotification = await getNotificationTitles(event.type);
