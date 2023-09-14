@@ -46,7 +46,7 @@ exports.createAlert = async (req, res, next) => {
     console.log(dbQuery);
     try {
       let AlertAd;
-      let checkAlreadyexist = await Alert.findOne({ $and: [{ user: userId }, { Typename:Typename}] }).exec();
+      let checkAlreadyexist = await Alert.findOne({ $and: [{ user: userId }, { Typename:adsName}] }).exec();
       if (checkAlreadyexist) {
     
         AlertAd = await Alert.findOneAndDelete(
