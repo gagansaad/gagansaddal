@@ -519,7 +519,7 @@ exports.create_payment_intent = async (req, res) => {
         case "checkout.session.completed":
           paymentSuccessModelUpdate(payment_id, UserId);
           let ModelName = await getModelNameByAdsType(Adstype_Id);
-          console.log(ModelName);
+          console.log(ModelName,"----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
           getNotification = await getNotificationTitles(event.type);
 
           await Notification.sendNotifications(
