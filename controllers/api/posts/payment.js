@@ -22,7 +22,6 @@ const mongoose = require("mongoose"),
   category = mongoose.model("PostType"),
   Alert = mongoose.model("Alert")
   payment_logs = require("../../../model/posts/paymentEvent"),
-  Notification = require("../../../resources/notification");
   ({
     successJSONResponse,
     failureJSONResponse,
@@ -38,6 +37,7 @@ const mongoose = require("mongoose"),
     isValidUrl,
     isValidlink,
   } = require(`../../../utils/validators`));
+  let Notification = require("../../../resources/notification");
 
 const env = require("dotenv").config({ path: "../../" });
 
@@ -504,6 +504,7 @@ exports.create_payment_intent = async (req, res) => {
           let alertdata = await Alert.find({Typename:adsName})
           const userIds = alertdata.map(alert => alert.userId);
 console.log(userIds,alertdata,":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+          
           getNotification = await getNotificationTitles(event.type);
           await Notification.sendNotifications(
             [UserId],

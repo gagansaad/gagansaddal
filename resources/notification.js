@@ -16,6 +16,7 @@ module.exports = {
                 return;
             let notificationData
             let emailData;
+            console.log(userIds,"000000000000000000000000000000::::::::::::::::################&&&&&&&&&&&&&****************************");
             const convertedIds = userIds.map(id => mongoose.Types.ObjectId(id));
             let androidTokens;
             let iosTokens;
