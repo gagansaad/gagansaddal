@@ -500,7 +500,7 @@ exports.editJobAds = async (req, res, next) => {
       hide_my_email,
       // preferableModeContact,
     } = req.body;
-
+console.log(req.body,"lpalpa lpai lpa lpa lpai");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
