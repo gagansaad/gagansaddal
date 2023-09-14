@@ -579,14 +579,21 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
     ads_type = paymentDetails.ads_type;
     // Continue with your logic...
   }
+  let getAdDetails = await category.findById({ _id: ads_type });
+      let adsName = getAdDetails.name;
+      let userIds
+      if(adsName){
+        let alertdata = await Alert.find({Typename:adsName})
+        userIds = alertdata.map(alert => String(alert.userId));
+      }
+  
+
+      
   let AddOnsArr = [];
   let currentDate = new Date();
   let activedate = currentDate.toISOString().split("T")[0];
   let planDuration = await AdsPlan.findById({ _id: plan_id });
-  console.log(
-    planDuration,
-    "kaali boli raat utto paiondi barsaat aake mainu mil sohniye  "
-  );
+ 
   let plan_obj = {
     plan_id: planDuration._id.toString(),
     active_on: activedate,
@@ -631,19 +638,23 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
   );
   let title = "Post Created!";
   let body = "Your Post is Successfully Created!";
-  if (statusUpdate)
-    await Notification.sendNotifications(
-      [userID],
-      title,
-      body,
-      { model_id: userID, model: "user" },
-      false,
-      {
-        subject: "Post Successfully Created!",
-        email_template: "postSuccess",
-        data: {},
-      }
-    );
+  if (statusUpdate){
+    if (!userIds.includes(userID)) {
+      userIds.push(userID);
+      await Notification.sendNotifications(
+        userIds,
+        title,
+        body,
+        { model_id: userIds, model: "user" },
+        false,
+        {
+          subject: "Post Successfully Created!",
+          email_template: "postSuccess",
+          data: {},
+        }
+      );
+    }
+  }
   return true;
 };
 const getNotificationTitles = async (status) => {
