@@ -20,6 +20,7 @@ const mongoose = require("mongoose"),
   jobsAd = mongoose.model("job"),
   USER = mongoose.model("user"),
   category = mongoose.model("PostType"),
+  Alert = mongoose.model("Alert")
   payment_logs = require("../../../model/posts/paymentEvent"),
   Notification = require("../../../resources/notification");
   ({
@@ -500,8 +501,10 @@ exports.create_payment_intent = async (req, res) => {
 
         case "payment_intent.succeeded":
           paymentSuccessModelUpdate(payment_id, UserId);
-          ModelName = await getModelNameByAdsType(Adstype_Id);
-          console.log(ModelName,"--------",adsName,"--------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+          let alertdata = await Alert.find({Typename:adsName})
+          const userIds = alertdata.map(alert => alert.userId);
+
+console.log(userIds,":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
           getNotification = await getNotificationTitles(event.type);
           await Notification.sendNotifications(
             [UserId],
