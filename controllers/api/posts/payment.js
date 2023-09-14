@@ -454,6 +454,7 @@ exports.create_payment_intent = async (req, res) => {
 };
   exports.webhooks = async (request, response) => {
     try {
+      let ModelName
       let getNotification;
       let event = request.body;
       console.log(event, "this is event");
@@ -499,6 +500,8 @@ exports.create_payment_intent = async (req, res) => {
 
         case "payment_intent.succeeded":
           paymentSuccessModelUpdate(payment_id, UserId);
+          ModelName = await getModelNameByAdsType(Adstype_Id);
+          console.log(ModelName,"--------",adsName,"--------------------------------------------------------------------------------------------------------------------------------------------------------------------");
           getNotification = await getNotificationTitles(event.type);
           await Notification.sendNotifications(
             [UserId],
@@ -518,7 +521,7 @@ exports.create_payment_intent = async (req, res) => {
           break;
         case "checkout.session.completed":
           paymentSuccessModelUpdate(payment_id, UserId);
-          let ModelName = await getModelNameByAdsType(Adstype_Id);
+           ModelName = await getModelNameByAdsType(Adstype_Id);
           console.log(ModelName,"--------",adsName,"--------------------------------------------------------------------------------------------------------------------------------------------------------------------");
           getNotification = await getNotificationTitles(event.type);
 
