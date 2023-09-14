@@ -36,11 +36,11 @@ exports.createAlert = async (req, res, next) => {
     
       if (!ads_type)
       return failureJSONResponse(res, { message: `Please provide ads type` });
-    let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(ModelName ,"jcnhdjbcjdcjd",Typename);
+      let getAdDetails = await category.findById({ _id: ads_type });
+      let adsName = getAdDetails.name;
     if(userId)dbQuery.user = userId
     if(ads_type)dbQuery.ads_type = ads_type
-    if(Typename)dbQuery.Typename = Typename
+    if(Typename)dbQuery.Typename = adsName
     if(userId)dbQuery.userId = userId
 
     console.log(dbQuery);
