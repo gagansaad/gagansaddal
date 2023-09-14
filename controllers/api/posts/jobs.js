@@ -570,7 +570,7 @@ console.log(req.body,"lpalpa lpai lpa lpa lpai");
     if (amount) adsInfoObj.salary = salry;
     if (salary_info) adsInfoObj.salary_info = salary_info;
     if (no_of_opening) adsInfoObj.no_of_opening = no_of_opening;
-    if (experience) adsInfoObj.experience = experience;
+    if (experience) adsInfoObj.experience = JSON.parse(experience);
     if (work_authorization) adsInfoObj.work_authorization = work_authorization;
     let locationobj={}
     if(longitude && latitude){
