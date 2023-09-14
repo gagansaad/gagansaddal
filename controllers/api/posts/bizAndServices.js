@@ -1068,6 +1068,7 @@ exports.fetchAll = async (req, res, next) => {
     let records = await postbizAndServicesAd
       .find({ $or: [queryFinal] })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "adsInfo.accreditation_file.url", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
