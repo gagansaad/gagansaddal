@@ -135,6 +135,7 @@ const mongoose = require("mongoose"),
         .find({ $or: [queryFinal] })
         .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
         .populate({ path: "favoriteCount", select: "_id" })
+        .populate({ path: "ReportCount"})
         .populate({ path: "viewCount" })
         .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
         .sort(sortval)
@@ -151,6 +152,7 @@ const mongoose = require("mongoose"),
             ...job._doc,
             // Add other job fields 
             view_count: job.viewCount,
+            reportCount: job.ReportCount,
             favorite_count: job.favoriteCount,
             is_favorite: !!job.isFavorite, 
           };

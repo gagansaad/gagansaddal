@@ -43,7 +43,9 @@ require(`./model/posts/babbysitter & nannis`);
 require(`./model/image/image`);
 require(`./model/posts/paymentEvent`);
 require(`./model/posts/payment`);
-require('./model/posts/tagline')
+require('./model/posts/tagline');
+require('./model/posts/report');
+require('./model/posts/notificationAlert');
 require(`./model/posts/adsCategories`);
 require('./model/posts/adsSubCategories')
 require('./model/posts/notification')
@@ -85,6 +87,8 @@ const planRoutes = require(`./routes/api/ads/plans copy`)
 const AllAdsRoutes = require(`./routes/api/ads/fetchAllAds`)
 const All_Tags = require(`./routes/api/ads/tagline`)
 const favorite = require(`./routes/api/ads/favoriteAd`)
+const Report = require(`./routes/api/ads/notifucationAlert`)
+
 //admin
 const adsCategoriesRoutes = require('./routes/admin/categories');
 const adsSubCategoriesRoutes = require('./routes/admin/sub_categories');
@@ -145,6 +149,8 @@ app.use('/v1/api/posts/payment', paymentRoutes)
 app.use('/v1/api/posts/ads', AllAdsRoutes)
 app.use('/v1/api/posts/ads', planRoutes)
 app.use('/v1/api/posts/ads', favorite)
+app.use('/v1/api/posts/ads', Report)
+
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {
     app.use(morgan("tiny",))

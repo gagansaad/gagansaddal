@@ -770,6 +770,7 @@ exports.fetchAll = async (req, res, next) => {
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
+      .populate({ path: "ReportCount" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
       .sort(sortval)
       .skip(perPage * page - perPage)
@@ -785,6 +786,7 @@ exports.fetchAll = async (req, res, next) => {
           ...job._doc,
           // Add other job fields as needed
           view_count: job.viewCount,
+          ReportCount: job.ReportCount,
           favorite_count: job.favoriteCount,
           is_favorite: !!job.isFavorite, 
         };
@@ -802,6 +804,7 @@ exports.fetchAll = async (req, res, next) => {
       return failureJSONResponse(res, { message: `ads not Available` });
     }
   } catch (err) {
+    console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
