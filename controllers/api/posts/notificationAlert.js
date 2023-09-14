@@ -40,7 +40,7 @@ exports.createAlert = async (req, res, next) => {
       let adsName = getAdDetails.name;
     if(userId)dbQuery.user = userId
     if(ads_type)dbQuery.ads_type = ads_type
-    if(Typename)dbQuery.Typename = adsName
+    if(adsName)dbQuery.Typename = adsName
     if(userId)dbQuery.userId = userId
 
     console.log(dbQuery);
