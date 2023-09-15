@@ -621,6 +621,7 @@ console.log(updateQuery);
   let currentDate = new Date();
   let activedate = currentDate.toISOString().split("T")[0];
   let planDuration = await AdsPlan.findById({ _id: plan_id });
+  
  let expired_data =new Date(
   currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
 )
@@ -644,20 +645,34 @@ console.log(updateQuery);
         .toISOString()
         .split("T")[0];
       let result = await AddOns.find({ "price._id": { $in: _id.toString() } })
-        .select("name")
+        .select("name duration")
         .exec();
-      let name = result[0].name;
-      let expired = duration
-      if (name === "Bump up") {
-        expired = expired_data // Replace with the actual value
-      }
-      return AddOnsArr.push({
-        add_ons_id: _id.toString(),
-        name: name,
-        amount: amount,
-        expired_on: expired,
-        active_on: currentDate.toISOString().split("T")[0],
-      });
+        let name = result[0].name;
+        let days = result[0].duration;
+        let expired = duration;
+        
+        if (name === "Bump up") {
+          expired = expired_data;
+          days = days // Replace with the actual value
+        }
+        console.log(days,"-------------------------");
+        // Create the object
+        const addOn = {
+          add_ons_id: _id.toString(),
+          name: name,
+          amount: amount,
+          expired_on: expired,
+          active_on: currentDate.toISOString().split("T")[0],
+        };
+        
+        // Add the "days" property when the name is "Bump up"
+        if (name === "Bump up") {
+          addOn.days = 7; // Replace with the desired number of days
+        }
+        
+        // Push the object into AddOnsArr
+       return AddOnsArr.push(addOn);
+        
     })
   );
 

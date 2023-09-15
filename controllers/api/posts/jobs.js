@@ -868,17 +868,63 @@ exports.fetchAllAds = async (req, res, next) => {
           is_favorite: !!job.isFavorite, 
         };
       });
-      let adonsData = await postJobAd.find({"addons_validity.name":"Bump up"})
+      30 % 3
+      let adonsData = await postJobAd.find({ "addons_validity.name": "Bump up" })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
-      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
-      .sort(sortval)
-      .skip(perPage * page - perPage)
-      .limit(perPage);
+      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
+    
+    let bumpUpDates = adonsData.map((data) => {
+      // Filter addons_validity to get only the "Bump up" addon
+      let bumpUpAddon = data.addons_validity.find((addon) => addon.name === "Bump up");
+      if (bumpUpAddon) {
+        return {
+          active_on: bumpUpAddon.active_on,
+          expired_on: bumpUpAddon.expired_on,
+        };
+      }
+      return null; // If "Bump up" addon is not found, return null
+    }).filter((dates) => dates !== null);
+    
+    const interval = 3; // The interval you want (3 days in this case)
+    const resultDates = [];
+    
+    for (const dateRange of bumpUpDates) {
+      const { active_on, expired_on } = dateRange;
+      const startDate = new Date(active_on);
+      const endDate = new Date(expired_on);
+      const recordDates = []; // Create a separate array for each record
+    
+      while (startDate <= endDate) {
+        recordDates.push(startDate.toISOString().split("T")[0]);
+        startDate.setDate(startDate.getDate() + interval);
+      }
+    
+      resultDates.push(recordDates); // Push the record's dates array into the result array
+    }
+    
+    console.log(resultDates);
+    const today = new Date().toISOString().split("T")[0]; // Get today's date in the format "YYYY-MM-DD"
 
+// Filter adonsData to find records where resultDates array contains today's date
+const recordsWithTodayDate = adonsData.filter((data, index) => {
+  const recordDates = resultDates[index]; // Get the resultDates array for the current record
+  return recordDates.includes(today);
+});
+const numberOfRecordsToPick = 3;
+const pickedRecords = [];
 
-      const AdOnsData = adonsData.map((job) => {
+while (pickedRecords.length < numberOfRecordsToPick && recordsWithTodayDate.length > 0) {
+  const randomIndex = Math.floor(Math.random() * recordsWithTodayDate.length);
+  const randomRecord = recordsWithTodayDate.splice(randomIndex, 1)[0]; // Remove and pick the record
+  pickedRecords.push(randomRecord);
+}
+
+console.log(pickedRecords);
+console.log(recordsWithTodayDate);
+     
+      const AdOnsData = pickedRecords.map((job) => {
         return {
           ...job._doc,
           // Add other job fields as needed
