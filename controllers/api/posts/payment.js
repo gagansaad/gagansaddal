@@ -648,12 +648,12 @@ console.log(updateQuery);
         .select("name duration")
         .exec();
         let name = result[0].name;
-        let days = result[0].duration;
+        let days = result[0];
         let expired = duration;
         
         if (name === "Bump up") {
           expired = expired_data;
-          days = days // Replace with the actual value
+          // days = days // Replace with the actual value
         }
         console.log(days,"-------------------------");
         // Create the object
