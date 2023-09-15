@@ -28,16 +28,7 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage,limits: { fileSize: 1024 * 1024 * 5 } });
 
-function validateImage(req, res, next) {
 
-
-    const fileType = req.file.mimetype.split('/')[1];
-    if (fileType !== 'jpg' && fileType !== 'jpeg' && fileType !== 'png') {
-        return res.status(200).json({ status: 400, error: 'Only JPEG or PNG images are allowed.' });
-    }
-
-    next();
-}
 
 
 router.get(`/dynamics-data`,

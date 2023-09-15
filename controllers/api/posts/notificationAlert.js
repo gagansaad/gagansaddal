@@ -11,6 +11,7 @@ const mongoose = require("mongoose"),
   jobsAd = mongoose.model("job"),
   category = mongoose.model("PostType"),
   Media = mongoose.model("media"),
+  User = mongoose.model("user")
   tagline_keywords = mongoose.model("keywords"),
   {
     successJSONResponse,
@@ -29,44 +30,68 @@ const mongoose = require("mongoose"),
 
 ////-----------------------Dynamic Data---------------------------////
 
-exports.createAlert = async (req, res, next) => {
-    const {ads_type} = req.body;
-    let dbQuery={}
-    let  userId = req.userId
-    
-      if (!ads_type)
-      return failureJSONResponse(res, { message: `Please provide ads type` });
-      let getAdDetails = await category.findById({ _id: ads_type });
-      let adsName = getAdDetails.name;
-    if(userId)dbQuery.user = userId
-    if(ads_type)dbQuery.ads_type = ads_type
-    if(adsName)dbQuery.Typename = adsName
-    if(userId)dbQuery.userId = userId
 
-    console.log(dbQuery);
-    try {
-      let AlertAd;
-      let checkAlreadyexist = await Alert.findOne({ $and: [{ user: userId }, { Typename:adsName}] }).exec();
-      if (checkAlreadyexist) {
-    
-        AlertAd = await Alert.findOneAndDelete(
-          {_id:checkAlreadyexist._id},
-          );
-      } else {
-        AlertAd = await Alert.create(dbQuery);
-       
-      }
-      if (AlertAd) {
-        return successJSONResponse(res, { message: `success`});
-      } else {
-        return failureJSONResponse(res, { message: `failure` });
-      }
-    } catch (error) {
-      console.log(error);
-      return failureJSONResponse(res, { message: `Something went wrong` });
+const Category = mongoose.model("PostType");
+
+exports.createAlert = async (req, res, next) => {
+  try {
+    const { ads_type, notification_status } = req.body;
+    const userId = req.userId;
+    console.log(req.body);
+    if (!ads_type && !notification_status) {
+      return failureJSONResponse(res, {
+        message: "Please provide ads type and notification status",
+      });
     }
-    
-}
+
+    const category = await Category.findById(ads_type);
+
+    if (!category) {
+      return failureJSONResponse(res, {
+        message: "Invalid ads_type Category not found.",
+      });
+    }
+
+    const adsName = category.name;
+    const updateQuery = {};
+
+    switch (adsName) {
+      case "Events":
+        updateQuery["userNotification.event"] = notification_status;
+        break;
+      case "Jobs":
+        updateQuery["userNotification.job"] = notification_status;
+        break;
+      case "Rentals":
+        updateQuery["userNotification.rental"] = notification_status;
+        break;
+      case "Local Biz & Services":
+        updateQuery["userNotification.localBiz"] = notification_status;
+        break;
+      case "Buy & Sell":
+        updateQuery["userNotification.buysell"] = notification_status;
+        break;
+      case "Babysitters & Nannies":
+        updateQuery["userNotification.careService"] = notification_status;
+        break;
+      default:
+        return failureJSONResponse(res, {
+          message: "Invalid adsName. Cannot update notification status.",
+        });
+    }
+
+    let alert = await User.findOneAndUpdate(
+      { _id: userId },
+      { $set: updateQuery },
+      { new: true, upsert: true }
+    );
+
+    return successJSONResponse(res, { message: "Success", alert });
+  } catch (error) {
+    console.error(error);
+    return failureJSONResponse(res, { message: "Something went wrong" });
+  }
+};
 
 
 

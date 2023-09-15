@@ -121,6 +121,14 @@ const userSchema = new mongoose.Schema({
         appleEmail: { type: String },
         loginOn: { type: Date, default: Date.now() },
     },
+    userNotification: {
+        rental:{type:Boolean,default:false,},
+        job:{type:Boolean,default:false,},
+        localBiz:{type:Boolean,default:false,},
+        buysell:{type:Boolean,default:false,},
+        careService:{type:Boolean,default:false,},
+        event:{type:Boolean,default:false,},
+    },
 
 
 }, { timestamps: true });

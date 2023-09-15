@@ -573,7 +573,6 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
   // let userID = req.userId;
   let userID = userId;
   let paymentDetails = await PaymentModel.findById({ _id: payment_id });
-  let ads_type;
   if (paymentDetails) {
     plan_id = paymentDetails.plan_id;
     ads_id = paymentDetails.ads;
@@ -581,14 +580,41 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
     // Continue with your logic...
   }
   let getAdDetails = await category.findById({ _id: ads_type });
-  console.log(getAdDetails,"/////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\********************@@@@@@@@@@@@!!!!!");
       let adsName = getAdDetails.name;
       let userIds
+      const updateQuery = {};
+
+    switch (adsName) {
+      case "Events":
+        updateQuery["userNotification.event"] = true;
+        break;
+      case "Jobs":
+        updateQuery["userNotification.job"] = true;
+        break;
+      case "Rentals":
+        updateQuery["userNotification.rental"] = true;
+        break;
+      case "Local Biz & Services":
+        updateQuery["userNotification.localBiz"] = true;
+        break;
+      case "Buy & Sell":
+        updateQuery["userNotification.buysell"] = true;
+        break;
+      case "Babysitters & Nannies":
+        updateQuery["userNotification.careService"] = true;
+        break;
+      default:
+        return failureJSONResponse(res, {
+          message: "Invalid adsName. Cannot update notification status.",
+        });
+    }
+console.log(updateQuery);
       if(adsName){
-        let alertdata = await Alert.find({Typename:adsName})
-        userIds = alertdata.map(alert => String(alert.userId));
+        let alertdata = await USER.find(updateQuery)
+        userIds = alertdata.map(alert => String(alert._id));
       }
-  
+     let  title1 = `${adsName}`;
+     let  body1 = `${adsName} New Post Added Click to See`;
 
       
   let AddOnsArr = [];
@@ -641,22 +667,35 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
   let title = "Post Created!";
   let body = "Your Post is Successfully Created!";
   if (statusUpdate){
-    if (!userIds.includes(userID)) {
-      userIds.push(userID);
-      await Notification.sendNotifications(
-        userIds,
-        title,
-        body,
-        { model_id: userIds, model: "user" },
-        false,
-        {
-          subject: "Post Successfully Created!",
-          email_template: "postSuccess",
-          data: {},
-        }
-      );
+
+  
+    await Notification.sendNotifications(
+      [userID],
+      title,
+      body,
+      { model_id: userID, model: "user" },
+      false,
+      {
+        subject: "Post Successfully Created!",
+        email_template: "postSuccess",
+        data: {},
+      }
+    );
+    await Notification.sendNotifications(
+      userIds,
+      title1,
+      body1,
+      { model_id: ads_id, model: `${ModelName}`},
+      false,
+      {
+        subject: `${adsName} New Post Added`,
+        email_template: "postSuccess",
+        data: {},
+      }
+    );
     }
-  }
+   
+    
   return true;
 };
 const getNotificationTitles = async (status) => {
