@@ -648,7 +648,7 @@ console.log(updateQuery);
         .select("name duration")
         .exec();
         let name = result[0].name;
-        let days = result[0];
+        let days = result;
         let expired = duration;
         
         if (name === "Bump up") {
