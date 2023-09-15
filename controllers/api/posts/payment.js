@@ -645,7 +645,7 @@ console.log(updateQuery);
         .toISOString()
         .split("T")[0];
       let result = await AddOns.find({ "price._id": { $in: _id.toString() } })
-        .select("name duration")
+        .select("name price.duration")
         .exec();
         let name = result[0].name;
         let days = result;
