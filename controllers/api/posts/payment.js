@@ -639,16 +639,16 @@ console.log(updateQuery);
   await Promise.all(
     paymentDetails?.plan_addons?.map(async (obj) => {
       let { amount, duration, _id } = obj;
+      let days = duration;
       duration = new Date(
         currentDate.getTime() + duration * 24 * 60 * 60 * 1000
       )
         .toISOString()
         .split("T")[0];
       let result = await AddOns.find({ "price._id": { $in: _id.toString() } })
-        .select("name price.duration")
+        .select("name")
         .exec();
         let name = result[0].name;
-        let days = result;
         let expired = duration;
         
         if (name === "Bump up") {
