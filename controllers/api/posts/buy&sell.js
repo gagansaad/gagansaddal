@@ -22,7 +22,7 @@ const mongoose = require("mongoose"),
 
 ////-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
- 
+
   let records = await tagline_keywords
     .find()
     .select({ keywords: 1, _id: 1 });
@@ -532,11 +532,11 @@ exports.validateBuySellAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid product_condition`,
       });
-      if (!latitude && !longitude) {
-        return failureJSONResponse(res, {
-          message: `Please provide both latitude and longitude`,
-        });
-      }
+    if (!latitude && !longitude) {
+      return failureJSONResponse(res, {
+        message: `Please provide both latitude and longitude`,
+      });
+    }
 
     // if (!quantity)
     //   return failureJSONResponse(res, {
@@ -683,18 +683,18 @@ exports.createBuySellAds = async (req, res, next) => {
     if (is_contact == "true") {
       iscontact = true;
     }
-    let mode_payment= payment_mode
+    let mode_payment = payment_mode
     // console.log(payment_mode, "jai ho");
     // if(payment_mode){
     //    mode_payment = 
     //   .split(",");
     // }
-    
+
     console.log(mode_payment, "jai ho jai jai jai gagan ki jai");
     const dataObj = {
       isfeatured,
       status: status,
-      adsType:ads_type,
+      adsType: ads_type,
       adsInfo: {
         category,
         sub_category,
@@ -707,14 +707,14 @@ exports.createBuySellAds = async (req, res, next) => {
           amount,
           currency,
           negotiable: negov,
-          is_contact:iscontact
+          is_contact: iscontact
         },
         quantity,
         payment_mode: mode_payment,
         fullfilment,
-        location:{
-          location_name:location_name,
-          coordinates:[longitude,latitude]
+        location: {
+          location_name: location_name,
+          coordinates: [longitude, latitude]
         },
         tagline,
         video_link,
@@ -728,9 +728,9 @@ exports.createBuySellAds = async (req, res, next) => {
     const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
     const truncatedHash = hash.slice(0, 10);
     const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
-    let ad_Id = numericHash.toString().padStart(10, '0') 
-  
-   await postBuySellAd.findByIdAndUpdate({_id:newBuySellPost._id},{$set:{advertisement_id:ad_Id}})
+    let ad_Id = numericHash.toString().padStart(10, '0')
+
+    await postBuySellAd.findByIdAndUpdate({ _id: newBuySellPost._id }, { $set: { advertisement_id: ad_Id } })
     const postBuySellAdObjToSend = {};
 
     for (let key in newBuySellPost.toObject()) {
@@ -807,8 +807,8 @@ exports.editBuySellAds = async (req, res, next) => {
       // address_info,
       // preferableModeContact,
     } = req.body;
-    
-    console.log(req.body,"----------------------------------------");
+
+    console.log(req.body, "----------------------------------------");
     let iscontact = false
     if (is_contact == "true") {
       iscontact = true;
@@ -844,7 +844,7 @@ exports.editBuySellAds = async (req, res, next) => {
 
     if (negotiable == "true") {
       negoval = true;
-    } 
+    }
     let price = {};
 
     let my_phone = false;
@@ -883,20 +883,20 @@ exports.editBuySellAds = async (req, res, next) => {
     if (negotiable) price.negotiable = negoval;
     if (is_contact) price.is_contact = iscontact;
     if (price) adsInfoObj.price = price;
-    
-    
+
+
     if (quantity) adsInfoObj.quantity = quantity;
     if (payment_mode) adsInfoObj.payment_mode = payment_mode;
     if (fullfilment) adsInfoObj.fullfilment = fullfilment;
-    let locationobj={}
-    if(longitude && latitude){
-      locationobj={
-        coordinates:[longitude,latitude]
+    let locationobj = {}
+    if (longitude && latitude) {
+      locationobj = {
+        coordinates: [longitude, latitude]
       }
     }
-  if (location_name) locationobj.location_name = location_name;
- 
-  if (locationobj) adsInfoObj.location = locationobj;
+    if (location_name) locationobj.location_name = location_name;
+
+    if (locationobj) adsInfoObj.location = locationobj;
     if (tagline) adsInfoObj.tagline = tagline;
     if (video_link) adsInfoObj.video_link = video_link;
     if (imageArr.length) adsInfoObj.image = imageArr;
@@ -1045,34 +1045,34 @@ exports.fetchAll = async (req, res, next) => {
       // Add filter for is_contact
       dbQuery["adsInfo.price.is_contact"] = is_contact === true || is_contact === "true";
     }
-    if (add_on){
+    if (add_on) {
       // Add filter for rent amount
       dbQuery["addons_validity.name"] = add_on;
     }
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
     let Distance
-    
-    if(maxDistance === "0" || !maxDistance){
+
+    if (maxDistance === "0" || !maxDistance) {
       console.log("bol");
-      Distance =  200000
-    }else{
-      Distance =maxDistance*1000
+      Distance = 200000
+    } else {
+      Distance = maxDistance * 1000
     }
-  if (longitude && latitude && Distance) {
+    if (longitude && latitude && Distance) {
       const targetPoint = {
         type: 'Point',
         coordinates: [longitude, latitude]
       };
       dbQuery["adsInfo.location.coordinates"] = {
-       
-          $near: {
-            $geometry: targetPoint,
-            $maxDistance: Distance
-          }
-        
+
+        $near: {
+          $geometry: targetPoint,
+          $maxDistance: Distance
+        }
+
+      }
     }
-  }
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
     if (status) {
@@ -1113,16 +1113,16 @@ exports.fetchAll = async (req, res, next) => {
     if (fullfilment) {
       // Convert prefered_age to an array if it's not already
       const fullfilmentArray = Array.isArray(fullfilment) ? fullfilment : [fullfilment];
-    
+
       // Add $in query to filter based on prefered_age
       dbQuery["adsInfo.fullfilment"] = {
         $in: fullfilmentArray,
       };
-    } 
+    }
     if (payment_mode) {
       // Convert prefered_age to an array if it's not already
       const payment_modeArray = Array.isArray(payment_mode) ? payment_mode : [payment_mode];
-    
+
       // Add $in query to filter based on prefered_age
       dbQuery["adsInfo.payment_mode"] = {
         $in: payment_modeArray,
@@ -1135,15 +1135,16 @@ exports.fetchAll = async (req, res, next) => {
     if (tagline) {
       dbQuery["adsInfo.tagline"] = tagline;
     }
-     // Get the current date
-     const currentDate = new Date();
-     // Convert the date to ISO 8601 format
-     const currentISODate = currentDate.toISOString();
-     // Extract only the date portion
-     const currentDateOnly = currentISODate.substring(0, 10);
-     dbQuery.status = "active";
-     dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-console.log(dbQuery,"77777777777777777777777777777777777777777777777");
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    
+    const currentDateOnly = currentISODate.substring(0, 10);
+    dbQuery.status = "active";
+    dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+    console.log(dbQuery, "77777777777777777777777777777777777777777777777");
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
@@ -1154,7 +1155,9 @@ console.log(dbQuery,"77777777777777777777777777777777777777777777777");
         ]
       };
     }
+
     let myid = req.userId;
+
     let records = await postBuySellAd
       .find({ $or: [queryFinal] })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
@@ -1164,11 +1167,11 @@ console.log(dbQuery,"77777777777777777777777777777777777777777777777");
       .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
-      const totalCount = await postBuySellAd.find({
-        $or: [queryFinal],
-      });
-      let responseModelCount = totalCount.length;
-   
+    const totalCount = await postBuySellAd.find({
+      $or: [queryFinal],
+    });
+    let responseModelCount = totalCount.length;
+
     if (records) {
       const jobData = records.map((job) => {
         return {
@@ -1176,16 +1179,20 @@ console.log(dbQuery,"77777777777777777777777777777777777777777777777");
           // Add other job fields as needed
           view_count: job.viewCount,
           favorite_count: job.favoriteCount,
-          is_favorite: !!job.isFavorite, 
+          is_favorite: !!job.isFavorite,
         };
       });
+      /////
+      
+
+      //////
       return successJSONResponse(res, {
         message: `success`,
         total: responseModelCount,
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
-        records:jobData,
+        records: jobData,
         status: 200,
       });
     } else {
@@ -1204,46 +1211,46 @@ exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
     let data_Obj
-    let checkId = await postBuySellAd.findOne({_id:adsId})
-    if(!checkId){
-        return failureJSONResponse(res, { message: `Please provide valid ad id` });
+    let checkId = await postBuySellAd.findOne({ _id: adsId })
+    if (!checkId) {
+      return failureJSONResponse(res, { message: `Please provide valid ad id` });
     }
-     // Get the current date
-     const currentDate = new Date();
-     // Convert the date to ISO 8601 format
-     const currentISODate = currentDate.toISOString();
-     // Extract only the date portion
-     const currentDateOnly = currentISODate.substring(0, 10);
-     if(adsId){
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    const currentDateOnly = currentISODate.substring(0, 10);
+    if (adsId) {
       data_Obj = {
-          _id:adsId,
-          status :"active" ,
-          "plan_validity.expired_on" :{ $gte: currentDateOnly }
+        _id: adsId,
+        status: "active",
+        "plan_validity.expired_on": { $gte: currentDateOnly }
       }
     }
     let myid = req.userId
     let records = await postBuySellAd.findOne(data_Obj)
-    .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-    .populate({ path: "favoriteCount", select: "_id" })
-    .populate({ path: "viewCount" })
-    .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-    
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
+
     if (records) {
-      const ads_type =records.adsType.toString();
-    
-    let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(Typename,"nfjdnfcjed");
-    let dbQuery ={
-      userId:myid,
-      ad:records._id,
-      adType:Typename
-    } 
-    
-     let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
-     console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
-      if(!checkview){
-      let data=  await PostViews.create(dbQuery)
-      console.log(data,"billo ni tere kale kalle naina ");
+      const ads_type = records.adsType.toString();
+
+      let { ModelName, Typename } = await ModelNameByAdsType(ads_type)
+      console.log(Typename, "nfjdnfcjed");
+      let dbQuery = {
+        userId: myid,
+        ad: records._id,
+        adType: Typename
+      }
+
+      let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
+      console.log(checkview, "tere nakhre maare mainu ni mai ni jan da  tainu ni");
+      if (!checkview) {
+        let data = await PostViews.create(dbQuery)
+        console.log(data, "billo ni tere kale kalle naina ");
       }
       const jobData = {
         ...records._doc,
@@ -1310,7 +1317,7 @@ exports.fetchBuysellData = async (req, res, next) => {
         "Kids Party Wear",
         "Other",
       ],
-      "Home and Kitchen Appliance":[
+      "Home and Kitchen Appliance": [
         "Esprresso machine",
         "Freezer",
         "Kitchen Utensils & Accessories",
@@ -1335,7 +1342,7 @@ exports.fetchBuysellData = async (req, res, next) => {
         "Vacuums",
         "Washers & Dryers",
       ],
-      "Real Estate":  [
+      "Real Estate": [
         "Single House",
         "Condo",
         "Apartment",
@@ -1515,7 +1522,7 @@ exports.fetchBuysellData = async (req, res, next) => {
         "XBOX Series X&S",
         "Other",
       ],
-      "Bikes & Moterbikes":[
+      "Bikes & Moterbikes": [
         "Bmx",
         "Clothing, shoes and accessories",
         "Cruiser, commuter and hybrid",
@@ -1643,13 +1650,13 @@ exports.fetchBuysellData = async (req, res, next) => {
         "Wristwatches and Chronometers",
       ],
       "Free Stuffs": [
-       
+
       ],
       "Other": [
-       
+
       ],
     };
-    
+
     const responseArray = [];
     const currentDate = new Date();
     // Convert the date to ISO 8601 format
@@ -1661,7 +1668,7 @@ exports.fetchBuysellData = async (req, res, next) => {
       const subcategoryData = [];
 
       for (const subCategory of subCategoryArray) {
-        const query = { "adsInfo.category": category, "adsInfo.sub_category": subCategory ,"status" :"active",["plan_validity.expired_on"]:{ $gte: currentDateOnly }};
+        const query = { "adsInfo.category": category, "adsInfo.sub_category": subCategory, "status": "active", ["plan_validity.expired_on"]: { $gte: currentDateOnly } };
         if (req.query.longitude && req.query.latitude) {
           // Assuming you have longitude and latitude fields in your data
           query["adsInfo.location.coordinates"] = {

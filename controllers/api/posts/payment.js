@@ -621,7 +621,11 @@ console.log(updateQuery);
   let currentDate = new Date();
   let activedate = currentDate.toISOString().split("T")[0];
   let planDuration = await AdsPlan.findById({ _id: plan_id });
- 
+ let expired_data =new Date(
+  currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
+)
+  .toISOString()
+  .split("T")[0];
   let plan_obj = {
     plan_id: planDuration._id.toString(),
     active_on: activedate,
@@ -643,11 +647,15 @@ console.log(updateQuery);
         .select("name")
         .exec();
       let name = result[0].name;
+      let expired = duration
+      if (name === "Bump up") {
+        expired = expired_data // Replace with the actual value
+      }
       return AddOnsArr.push({
         add_ons_id: _id.toString(),
         name: name,
         amount: amount,
-        expired_on: duration,
+        expired_on: expired,
         active_on: currentDate.toISOString().split("T")[0],
       });
     })

@@ -828,6 +828,9 @@ exports.fetchAllAds = async (req, res, next) => {
      const currentDateOnly = currentISODate.substring(0, 10);
      dbQuery.status = "active";
      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+     let adOnsQuery = {};
+    adOnsQuery.status = "active";
+    adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
 
     let queryFinal = dbQuery;
     if (searchTerm) {
@@ -865,6 +868,25 @@ exports.fetchAllAds = async (req, res, next) => {
           is_favorite: !!job.isFavorite, 
         };
       });
+      let adonsData = await postJobAd.find({"addons_validity.name":"Bump up"})
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
+      .sort(sortval)
+      .skip(perPage * page - perPage)
+      .limit(perPage);
+
+
+      const AdOnsData = adonsData.map((job) => {
+        return {
+          ...job._doc,
+          // Add other job fields as needed
+          view_count: job.viewCount,
+          favorite_count: job.favoriteCount,
+          is_favorite: !!job.isFavorite,
+        };
+      })
       return successJSONResponse(res, {
         message: `success`,
         total: responseModelCount,
@@ -872,6 +894,7 @@ exports.fetchAllAds = async (req, res, next) => {
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
         records:jobData,
+        AdOnsData,
         status: 200,
       });
     } else {
