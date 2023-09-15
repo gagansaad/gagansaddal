@@ -75,7 +75,7 @@ module.exports = {
   signup_with_email: async function (req, res) {
     try {
       var newUser = req.body;
-      console.log(newUser, "eh haigi aa body");
+      // console.log(newUser, "eh haigi aa body");
       newUser.email = newUser.email.trim().toLowerCase();
 
       // Check If email is register with any user via other platforms like facebook,google or email.
@@ -180,7 +180,7 @@ module.exports = {
 
               if (result?.userInfo?.mobile_number?.phone_number) {
                 MobileNumberVerificationOTPByUserId(result._id, null);
-                console.log(`kjasjhkasdgasjgd`);
+                // console.log(`kjasjhkasdgasjgd`);
                 // OTP.create({
                 //     code: generateOTP(4),
                 //     user: result._id,
@@ -202,7 +202,7 @@ module.exports = {
                     (result?.userInfo?.email_address).toLowerCase(),
                   for: 2,
                 }).then((data) => {
-                  console.log(data);
+                  // console.log(data);
                   EmailOTPVerification(
                     result?.userInfo?.email_address,
                     result?.userInfo?.name,
@@ -223,7 +223,7 @@ module.exports = {
 
   // Standard signup with Google.
   login_signup_with_google: async function (req, res) {
-    console.log(req.body);
+    // console.log(req.body);
 
     const emailAddress = req?.body?.email_address,
       name = req?.body?.name,
@@ -231,7 +231,7 @@ module.exports = {
       googleId = req?.body?.google_id,
       googleToken = req?.body?.google_token,
       deviceToken = req?.body?.device_token;
-console.log(name,"-----------------");
+// console.log(name,"-----------------");
     if (!isValidString(name.trim()))
       return failureJSONResponse(res, { message: `Please enter valid name` });
     if (!isValidString(googleId.trim()))
@@ -269,7 +269,7 @@ console.log(name,"-----------------");
     );
 
     if (foundUser && Object.keys(foundUser).length) {
-      console.log(`case 1`);
+      // console.log(`case 1`);
 
       const updateDeviceInfo = await User.update(
         { _id: foundUser._id },
@@ -321,7 +321,7 @@ console.log(name,"-----------------");
         foundUserWithEmailAddress &&
         Object.keys(foundUserWithEmailAddress).length
       ) {
-        console.log(`case2 `);
+        // console.log(`case2 `);
 
         const updateDeviceInfo = await dbSchema.User.update(
           { _id: foundUserWithEmailAddress._id },
@@ -359,7 +359,7 @@ console.log(name,"-----------------");
           token: createJWT(foundUserWithEmailAddress._id),
         });
       } else {
-        console.log(`case3`);
+        // console.log(`case3`);
 
         // Create a new user.
         var newUserDetail = {};
@@ -472,7 +472,7 @@ console.log(name,"-----------------");
     );
 
     if (foundUser && Object.keys(foundUser).length) {
-      console.log(`case 1`);
+      // console.log(`case 1`);
 
       const updateDeviceInfo = await User.update(
         { _id: foundUser._id },
@@ -505,7 +505,7 @@ console.log(name,"-----------------");
         token: createJWT(foundUser._id),
       });
     } else {
-      console.log(`dvnavsndvsah`);
+      // console.log(`dvnavsndvsah`);
 
       const foundUserWithEmailAddress = await User.findOne(
         {
@@ -526,7 +526,7 @@ console.log(name,"-----------------");
         foundUserWithEmailAddress &&
         Object.keys(foundUserWithEmailAddress).length
       ) {
-        console.log(`case2 `);
+        // console.log(`case2 `);
 
         const updateDeviceInfo = User.update(
           { _id: foundUserWithEmailAddress._id },
@@ -564,7 +564,7 @@ console.log(name,"-----------------");
           token: createJWT(foundUserWithEmailAddress._id),
         });
       } else {
-        console.log(`case3`);
+        // console.log(`case3`);
 
         // Create a new user.
         var newUserDetail = {};
@@ -639,7 +639,7 @@ console.log(name,"-----------------");
       appleToken = req?.body?.apple_token,
       deviceToken = req?.body?.device_token;
 
-    console.log(`req.body`, req.body);
+    // console.log(`req.body`, req.body);
 
     // if (!isValidString(name.trim())) return failureJSONResponse(res, { message: `Please enter valid name` });
     if (!isValidString(appleId.trim()))
@@ -677,7 +677,7 @@ console.log(name,"-----------------");
     );
 
     if (foundUser && Object.keys(foundUser).length) {
-      console.log(`case 1`);
+      // console.log(`case 1`);
 
       const updateDeviceInfo = await User.update(
         { _id: foundUser._id },
@@ -729,7 +729,7 @@ console.log(name,"-----------------");
         foundUserWithEmailAddress &&
         Object.keys(foundUserWithEmailAddress).length
       ) {
-        console.log(`case2 `);
+        // console.log(`case2 `);
 
         const updateDeviceInfo = await User.update(
           { _id: foundUserWithEmailAddress._id },
@@ -767,7 +767,7 @@ console.log(name,"-----------------");
           token: createJWT(foundUserWithEmailAddress._id),
         });
       } else {
-        console.log(`case3`);
+        // console.log(`case3`);
 
         // Create a new user.
         var newUserDetail = {};
@@ -855,7 +855,7 @@ console.log(name,"-----------------");
       );
 
       if (checkUserDetail?.length) {
-        console.log(checkUserDetail[0]?._id,`sjdfhkjdshfkjs sdkjbfdshbfsd `);
+        // console.log(checkUserDetail[0]?._id,`sjdfhkjdshfkjs sdkjbfdshbfsd `);
         if (!checkUserDetail[0]?.userInfo?.password) {
           return res.json({
             status: 400,
@@ -965,7 +965,7 @@ console.log(name,"-----------------");
                 //     return failureJSONResponse(res, { message: `something went wrong` });
                 // })
               } else if (email_address) {
-                console.log(checkUserDetail[0]._id,"jnjvnjdnjdnvjjnnvnkjd");
+                // console.log(checkUserDetail[0]._id,"jnjvnjdnjdnvjjnnvnkjd");
                 let OtpClear =  await OTP.deleteMany({
                   user: { $in: [checkUserDetail[0]._id] },
                   });
@@ -1162,7 +1162,7 @@ console.log(name,"-----------------");
       })
         .then(async (foundOTP) => {
           if (foundOTP) {
-            console.log("object",foundOTP);
+            // console.log("object",foundOTP);
             await OTP.findByIdAndDelete({ _id: foundOTP._id });
 
             User.updateOne(
@@ -1495,7 +1495,7 @@ console.log(name,"-----------------");
         { for: 2 },
       ],
     }).then(async (foundEmailOTP) => {
-      console.log(foundEmailOTP, "bchdbc nj");
+      // console.log(foundEmailOTP, "bchdbc nj");
       if (foundEmailOTP) {
         await OTP.deleteOne({ _id: foundEmailOTP._id });
 
@@ -1553,7 +1553,7 @@ console.log(name,"-----------------");
 
   ////////////
   forget_password: async function (req, res, next) {
-    console.log(req.body);
+    // console.log(req.body);
     const email_address = (req?.body?.email_address).toLowerCase();
 
     if (!email_address)
@@ -1607,7 +1607,7 @@ console.log(name,"-----------------");
 
   verify_forget_password_otp: async function (req, res, next) {
     // console.log(`req.body`);
-    console.log(req.body);
+    // console.log(req.body);
 
     const { otp, user_id } = req.body;
 
@@ -1721,8 +1721,8 @@ console.log(name,"-----------------");
   },
 
   update_profile: async function (req, res, next) {
-    console.log(`anmsbdnas`, req.body);
-    console.log(`sSas`, req.file);
+    // console.log(`anmsbdnas`, req.body);
+    // console.log(`sSas`, req.file);
 
     try {
       const userId = req.userId;
@@ -1743,7 +1743,7 @@ console.log(name,"-----------------");
       } = req.body;
       // console.log(vali(Date(date_of_birth)));
       let picture = req?.file?.path;
-      console.log(picture);
+      // console.log(picture);
 
       if (name && !isValidString(name))
         return failureJSONResponse(res, { message: `Invalid Name` });
@@ -1861,7 +1861,7 @@ console.log(name,"-----------------");
         });
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
@@ -1902,7 +1902,7 @@ console.log(name,"-----------------");
       if (email_address) {
         User.findOne(dbQuery)
           .then((foundUser) => {
-            console.log(`foundUser`, foundUser);
+            // console.log(`foundUser`, foundUser);
             if (foundUser) {
               return failureJSONResponse(
                 res,
@@ -2053,7 +2053,7 @@ console.log(name,"-----------------");
             for: 2,
           })
             .then((foundOTP) => {
-              console.log(`foundOTP`, foundOTP);
+              // console.log(`foundOTP`, foundOTP);
 
               if (!foundOTP)
                 return failureJSONResponse(res, {
@@ -2084,7 +2084,7 @@ console.log(name,"-----------------");
             for: 2,
           });
 
-          console.log(`OTPForOldEmail`, newOTPForNewEmail);
+          // console.log(`OTPForOldEmail`, newOTPForNewEmail);
           let verifiy_url = `https://menehariya.netscapelabs.com/verifiy_email?secret=${newOTPForNewEmail?._id}`;
           if (!newOTPForNewEmail) {
             OTPCreatedForBoth = false;
@@ -2106,7 +2106,7 @@ console.log(name,"-----------------");
             for: 2,
           });
 
-          console.log(`OTPForOldEmail`, OTPForOldEmail);
+          // console.log(`OTPForOldEmail`, OTPForOldEmail);
 
           if (!OTPForOldEmail) {
             OTPCreatedForBoth = false;
@@ -2184,7 +2184,7 @@ console.log(name,"-----------------");
       }
     } catch (err) {
       console.log(err);
-      console.log("4");
+      // console.log("4");
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
@@ -2232,7 +2232,7 @@ console.log(name,"-----------------");
         for: 2,
       })
         .then((foundOTP) => {
-          console.log(`foundOTP`, foundOTP);
+          // console.log(`foundOTP`, foundOTP);
 
           if (!foundOTP)
             return failureJSONResponse(res, {
@@ -2253,7 +2253,7 @@ console.log(name,"-----------------");
         });
     } catch (err) {
       console.log(err);
-      console.log("4");
+      // console.log("4");
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
@@ -2374,7 +2374,7 @@ console.log(name,"-----------------");
                 { new: true }
               )
                 .then((updatedUser) => {
-                  console.log(updatedUser);
+                  // console.log(updatedUser);
 
                   if (updatedUser) {
                     return successJSONResponse(res, {
@@ -2382,7 +2382,7 @@ console.log(name,"-----------------");
                       data: { email_address },
                     });
                   } else {
-                    console.log(`working`);
+                    // console.log(`working`);
                     return failureJSONResponse(res, {
                       message: `something went wrong`,
                     });
@@ -2443,7 +2443,7 @@ console.log(name,"-----------------");
                 null,
               createdAt: user?.createdAt || null,
             };
-            console.log("haigi aaa ", data);
+            // console.log("haigi aaa ", data);
             return successJSONResponse(res, { user: data });
           }
         })
@@ -2688,7 +2688,7 @@ console.log(name,"-----------------");
   generate_otp_for_signup_email_mobile: async function (req, res) {
     try {
       const userId = req.userId;
-      console.log(req.body, "body hai ye");
+      // console.log(req.body, "body hai ye");
       // let new_email = req?.body?.new_email_address?.toLowerCase()
       // console.log(new_email);
       // let find_new_email = await User.findOne({"userInfo.email_address":new_email})

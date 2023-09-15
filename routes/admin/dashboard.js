@@ -32,7 +32,7 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage: storage,  });
 
 function validateImage(req, res, next) {
-    console.log(req.file.mimetype)
+    // console.log(req.file.mimetype)
 
     const fileType = req.file.mimetype.split('/')[1];
     if (fileType !== 'jpg' && fileType !== 'jpeg' && fileType !== 'png') {

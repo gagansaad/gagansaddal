@@ -400,7 +400,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
 exports.createbizAds = async (req, res, next) => {
   try {
-    console.log(req.body, "this is body data ");
+    // console.log(req.body, "this is body data ");
     const {
       isfeatured,
       status,
@@ -488,7 +488,7 @@ exports.createbizAds = async (req, res, next) => {
 
     if (req.files.photos) {
       for (var i = 0; i < req.files.photos.length; i++) {
-        console.log(req.files.photos);
+        // console.log(req.files.photos);
 
         if (req.files.photos[i].fieldname === `photos`) {
           let type_of_file = req.files.photos[i].mimetype;
@@ -509,7 +509,7 @@ exports.createbizAds = async (req, res, next) => {
         }
       }
     }
-    console.log(req.files.accreditation_document);
+    // console.log(req.files.accreditation_document);
     if (req.files.accreditation_document) {
       if (accreditation_name.length != req.files.accreditation_document.length) {
         return failureJSONResponse(res, {
@@ -531,7 +531,7 @@ exports.createbizAds = async (req, res, next) => {
             url_type: type_of_file,
           });
           
-          console.log(productDoc, "hdhcbdhh");
+          // console.log(productDoc, "hdhcbdhh");
       
           let accreditation = {
             name: accreditation_name[j], // Use the 'j' index to match the accreditation name with the file
@@ -542,7 +542,7 @@ exports.createbizAds = async (req, res, next) => {
       }
       
     }
-    console.log(tagline, "this is tagline array");
+    // console.log(tagline, "this is tagline array");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -590,7 +590,7 @@ exports.createbizAds = async (req, res, next) => {
     const truncatedHash = hash.slice(0, 10);
     const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
     let ad_Id = numericHash.toString().padStart(10, '0') 
-  console.log(newbizPost);
+  // console.log(newbizPost);
    await postbizAndServicesAd.findByIdAndUpdate({_id:newbizPost._id},{$set:{advertisement_id:ad_Id}})
     
     const bizAndServices = {};
@@ -675,7 +675,7 @@ exports.editbizAds = async (req, res, next) => {
       hide_my_secondary_phone,
       hide_my_email,
     } = req.body;
-   console.log(req.body,"------------------------------------------------------------");
+  //  console.log(req.body,"------------------------------------------------------------");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -712,7 +712,7 @@ exports.editbizAds = async (req, res, next) => {
         }
       }
     }
-    console.log(req.files.accreditation_document,"--------------------------------------------------------");
+    // console.log(req.files.accreditation_document,"--------------------------------------------------------");
     if (req.files.accreditation_document) {
       if (accreditation_name.length != req.files.accreditation_document.length) {
         return failureJSONResponse(res, {
@@ -734,7 +734,7 @@ exports.editbizAds = async (req, res, next) => {
             url_type: type_of_file,
           });
           
-          console.log(productDoc, "hdhcbdhh");
+          // console.log(productDoc, "hdhcbdhh");
       
           let accreditation = {
             name: accreditation_name[j], // Use the 'j' index to match the accreditation name with the file
@@ -911,7 +911,7 @@ exports.editbizAds = async (req, res, next) => {
         },
       },
     };
-    console.log(dataObjq,"/////////////////////////////////////////////////////////////////////////////");
+    // console.log(dataObjq,"/////////////////////////////////////////////////////////////////////////////");
     const updatebiz = await postbizAndServicesAd.findByIdAndUpdate(
       { _id: bizId },
       { $set: dataObjq },
@@ -996,7 +996,7 @@ exports.fetchAll = async (req, res, next) => {
     let Distance
     
     if(maxDistance === "0" || !maxDistance){
-      console.log("bol");
+      // console.log("bol");
       Distance =  200000
     }else{
       Distance =maxDistance*1000
@@ -1053,7 +1053,7 @@ exports.fetchAll = async (req, res, next) => {
      const currentDateOnly = currentISODate.substring(0, 10);
      dbQuery.status = "active";
      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-     console.log(dbQuery);
+    //  console.log(dbQuery);
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
@@ -1139,9 +1139,9 @@ exports.fetchonead = async (req, res, next) => {
     
     if (records) {
       const ads_type =records.adsType.toString();
-    console.log(ads_type,"------------");
+    // console.log(ads_type,"------------");
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(Typename,"nfjdnfcjed");
+    // console.log(Typename,"nfjdnfcjed");
     let dbQuery ={
       userId:myid,
       ad:records._id,
@@ -1149,10 +1149,10 @@ exports.fetchonead = async (req, res, next) => {
     } 
     
      let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
-     console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
+    //  console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
       if(!checkview){
       let data=  await PostViews.create(dbQuery)
-      console.log(data,"billo ni tere kale kalle naina ");
+      // console.log(data,"billo ni tere kale kalle naina ");
       }
       const jobData = {
         ...records._doc,
@@ -1421,7 +1421,7 @@ exports.fetchBizData = async (req, res, next) => {
       });
     }
 
-    console.log(responseArray);
+    // console.log(responseArray);
 
     return successJSONResponse(res, {
       message: `success`,

@@ -53,7 +53,7 @@ exports.fetchAll = async (req, res, next) => {
     let Distance
     
     if(maxDistance === "0" || !maxDistance){
-      console.log("bol");
+      // console.log("bol");
       Distance =  200000
     }else{
       Distance =maxDistance*1000
@@ -125,7 +125,7 @@ exports.fetchAll = async (req, res, next) => {
      const currentDateOnly = currentISODate.substring(0, 10);
      dbQuery.status = "active";
      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-console.log(dbQuery,"77777777777777777777777777777777777777777777777");
+// console.log(dbQuery,"77777777777777777777777777777777777777777777777");
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
@@ -213,7 +213,7 @@ exports.fetchOne = async (req, res, next) => {
       const ads_type =records.adsType.toString();
     
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(Typename,"nfjdnfcjed");
+    // console.log(Typename,"nfjdnfcjed");
     let dbQuery ={
       userId:myid,
       ad:records._id,
@@ -221,10 +221,10 @@ exports.fetchOne = async (req, res, next) => {
     } 
     
      let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
-     console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
+    //  console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
       if(!checkview){
       let data=  await PostViews.create(dbQuery)
-      console.log(data,"billo ni tere kale kalle naina ");
+      // console.log(data,"billo ni tere kale kalle naina ");
       }
       const jobData = {
         ...records._doc,

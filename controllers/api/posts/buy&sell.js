@@ -651,14 +651,14 @@ exports.createBuySellAds = async (req, res, next) => {
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
         let tags = await tagline_keywords.findOne({ keywords: taglines[i] });
-        console.log(tags);
+        // console.log(tags);
         if (!tags) {
           let tag = {
             keywords: taglines[i],
             ads_type: ads_type,
           };
           let ja = await tagline_keywords.create(tag);
-          console.log(ja, "jaj");
+          // console.log(ja, "jaj");
         }
       }
     }
@@ -690,7 +690,7 @@ exports.createBuySellAds = async (req, res, next) => {
     //   .split(",");
     // }
 
-    console.log(mode_payment, "jai ho jai jai jai gagan ki jai");
+    // console.log(mode_payment, "jai ho jai jai jai gagan ki jai");
     const dataObj = {
       isfeatured,
       status: status,
@@ -762,7 +762,7 @@ exports.createBuySellAds = async (req, res, next) => {
 
 exports.editBuySellAds = async (req, res, next) => {
   try {
-    console.log(req.params);
+    // console.log(req.params);
     const buyAndSellId = req?.params?.buyAndSellId;
 
     const validate_id = await postBuySellAd.findById(buyAndSellId);
@@ -808,7 +808,7 @@ exports.editBuySellAds = async (req, res, next) => {
       // preferableModeContact,
     } = req.body;
 
-    console.log(req.body, "----------------------------------------");
+    // console.log(req.body, "----------------------------------------");
     let iscontact = false
     if (is_contact == "true") {
       iscontact = true;
@@ -835,7 +835,7 @@ exports.editBuySellAds = async (req, res, next) => {
       imageArr.push(productImages._id);
     }
 
-    console.log(`imageArr`, imageArr);
+    // console.log(`imageArr`, imageArr);
 
     const dataObj = {},
       adsInfoObj = {},
@@ -926,8 +926,8 @@ exports.editBuySellAds = async (req, res, next) => {
       },
     };
 
-    console.log(dataObjq);
-    console.log("object", { image: imageArr });
+    // console.log(dataObjq);
+    // console.log("object", { image: imageArr });
 
     const updateProduct = await postBuySellAd.findByIdAndUpdate(
       { _id: buyAndSellId },
@@ -961,7 +961,7 @@ exports.editBuySellAds = async (req, res, next) => {
 /////----------------------Update Buy Sell Status -------------------/////
 
 exports.editBuySellStatus = async (req, res, next) => {
-  console.log(`kejhrjhyewgrjhew`);
+  // console.log(`kejhrjhyewgrjhew`);
   try {
     const buyAndSellId = req?.params?.buyAndSellId;
 
@@ -1054,7 +1054,7 @@ exports.fetchAll = async (req, res, next) => {
     let Distance
 
     if (maxDistance === "0" || !maxDistance) {
-      console.log("bol");
+      // console.log("bol");
       Distance = 200000
     } else {
       Distance = maxDistance * 1000
@@ -1144,7 +1144,7 @@ exports.fetchAll = async (req, res, next) => {
     const currentDateOnly = currentISODate.substring(0, 10);
     dbQuery.status = "active";
     dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-    console.log(dbQuery, "77777777777777777777777777777777777777777777777");
+    // console.log(dbQuery, "77777777777777777777777777777777777777777777777");
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
@@ -1239,7 +1239,7 @@ exports.fetchonead = async (req, res, next) => {
       const ads_type = records.adsType.toString();
 
       let { ModelName, Typename } = await ModelNameByAdsType(ads_type)
-      console.log(Typename, "nfjdnfcjed");
+      // console.log(Typename, "nfjdnfcjed");
       let dbQuery = {
         userId: myid,
         ad: records._id,
@@ -1247,10 +1247,10 @@ exports.fetchonead = async (req, res, next) => {
       }
 
       let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
-      console.log(checkview, "tere nakhre maare mainu ni mai ni jan da  tainu ni");
+      // console.log(checkview, "tere nakhre maare mainu ni mai ni jan da  tainu ni");
       if (!checkview) {
         let data = await PostViews.create(dbQuery)
-        console.log(data, "billo ni tere kale kalle naina ");
+        // console.log(data, "billo ni tere kale kalle naina ");
       }
       const jobData = {
         ...records._doc,
@@ -1693,7 +1693,7 @@ exports.fetchBuysellData = async (req, res, next) => {
       });
     }
 
-    console.log(responseArray);
+    // console.log(responseArray);
 
     return successJSONResponse(res, {
       message: `success`,

@@ -99,12 +99,12 @@ exports.deleteNewSubCategories = async (req, res, next) => {
                     return successJSONResponse(res, { message: "Success", newCategory: newCategory });
                 }
             }).catch((err) => {
-                console.log(err,"bdhbvjdn")
+                // console.log(err,"bdhbvjdn")
                 return failureJSONResponse(res, { message: `Something went wrong` });
             })
 
     } catch (err) {
-        console.log(err,"yyyyiiiiiii")
+        // console.log(err,"yyyyiiiiiii")
         return failureJSONResponse(res, { message: `something went wrong` })
     }
 }
@@ -119,7 +119,7 @@ exports.updateSubCategories = async (req, res) => {
         
         if(name)dbQuery.name =name
         if(status)dbQuery.status=status
-console.log(dbQuery,"nhedchbcs");
+// console.log(dbQuery,"nhedchbcs");
         if (!sub_category_id) return failureJSONResponse(res, { message: `Please provide ads id` });
 
 

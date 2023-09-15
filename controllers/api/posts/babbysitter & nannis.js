@@ -284,11 +284,11 @@ exports.createAds = async (req, res, next) => {
       image,
       is_contact
     } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     const userId = req.userId;
     const imageArr = [];
     let iscontact;
-    console.log(typeof(is_contact),"===============");
+    // console.log(typeof(is_contact),"===============");
     if (is_contact == "true") {
       iscontact = true;
     }else{
@@ -307,7 +307,7 @@ exports.createAds = async (req, res, next) => {
         }
       }
     }
-    console.log(req.files,"qwertyuikol;nhbvfcdxsdfghjkjhgfds");
+    // console.log(req.files,"qwertyuikol;nhbvfcdxsdfghjkjhgfds");
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path;
 
@@ -349,7 +349,7 @@ exports.createAds = async (req, res, next) => {
 
       userId: userId,
     };
-    console.log(dataObj, "vhebjvbdsgjvhbesdvgbedhcvwsehjcbsdbvjhyudsbvghr");
+    // console.log(dataObj, "vhebjvbdsgjvhbesdvgbedhcvwsehjcbsdbvjhyudsbvghr");
     const newPost = await postbabyAd.create(dataObj);
     const stringToHash = newPost._id.toString();
     const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
@@ -388,9 +388,9 @@ exports.createAds = async (req, res, next) => {
 ///--------------------------Edit babbysitter & nannis-----------------------------///
 
 exports.editAds = async (req, res, next) => {
-  console.log(`kejhrjhyewgrjhew`);
+  // console.log(`kejhrjhyewgrjhew`);
   try {
-    console.log(req.params);
+    // console.log(req.params);
     const productId = req?.params?.productId;
     // console.log(productId, "id dsso hai gi ja nhi ");
     const validate_id = await postbabyAd.findById(productId);
@@ -435,17 +435,17 @@ exports.editAds = async (req, res, next) => {
       is_contact
     } = req.body;
     let iscontact;
-    console.log(typeof(is_contact),"===============");
+    // console.log(typeof(is_contact),"===============");
     if (is_contact == "true") {
-      console.log(is_contact,"===============");
+      // console.log(is_contact,"===============");
       iscontact = true;
     }else{
       iscontact = false;
     }
-    console.log(
-      tagline,
-      "vdhvdbhdbvhdbvhdvdbdhvbdh----------------------------------------"
-    );
+    // console.log(
+    //   tagline,
+    //   "vdhvdbhdbvhdbvhdvdbdhvbdh----------------------------------------"
+    // );
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -676,12 +676,12 @@ exports.fetchAll = async (req, res, next) => {
       // Add filter for rent amount
       dbQuery["addons_validity.name"] = add_on;
     }
-    console.log(req.query,"---------------");
+    // console.log(req.query,"---------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     let Distance
     
     if(maxDistance === "0" || !maxDistance){
-      console.log("bol");
+      // console.log("bol");
       Distance =  200000
     }else{
       Distance =maxDistance*1000
@@ -843,7 +843,7 @@ exports.fetchonead = async (req, res, next) => {
       const ads_type =records.adsType.toString();
     
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(Typename,"nfjdnfcjed");
+    // console.log(Typename,"nfjdnfcjed");
     let dbQuery ={
       userId:myid,
       ad:records._id,
@@ -851,10 +851,10 @@ exports.fetchonead = async (req, res, next) => {
     } 
     
      let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
-     console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
+    //  console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
       if(!checkview){
       let data=  await PostViews.create(dbQuery)
-      console.log(data,"billo ni tere kale kalle naina ");
+      // console.log(data,"billo ni tere kale kalle naina ");
       }
       const jobData = {
         ...records._doc,
@@ -922,7 +922,7 @@ exports.fetchBabyData = async (req, res, next) => {
       });
     }
 
-    console.log(responseArray);
+    // console.log(responseArray);
 
     return successJSONResponse(res, {
       message: `success`,

@@ -27,7 +27,7 @@ const mongoose = require("mongoose"),
 exports.fetchAll = async (req, res, next) => {
   try {
     let searchTerm = req.body.searchTerm;
-    console.log("objectuygtututu");
+    // console.log("objectuygtututu");
     let dbQuery = {};
     const {
       isfeatured,
@@ -49,13 +49,13 @@ exports.fetchAll = async (req, res, next) => {
       latitude,
       maxDistance,
     } = req.query;
-    console.log(req.query,"-------------------------------------------------------------------------------------------------------------------------------");
+    // console.log(req.query,"-------------------------------------------------------------------------------------------------------------------------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
     let Distance
     
     if(maxDistance === "0" || !maxDistance){
-      console.log("bol");
+      // console.log("bol");
       Distance =  200000
     }else{
       Distance =maxDistance*1000
@@ -193,7 +193,7 @@ exports.fetchAll = async (req, res, next) => {
 exports.fetchOne = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
-    console.log("object",adsId);
+    // console.log("object",adsId);
     let data_Obj
     let checkId = await postJobAd.findOne({_id:adsId})
     if(!checkId){
@@ -220,12 +220,12 @@ exports.fetchOne = async (req, res, next) => {
     .populate({ path: "favoriteCount", select: "_id" })
     .populate({ path: "viewCount" })
     .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-    console.log(records,"saun mahona chad da hai");
+    // console.log(records,"saun mahona chad da hai");
     if (records) {
       const ads_type =records.adsType.toString();
     
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(Typename,"nfjdnfcjed");
+    // console.log(Typename,"nfjdnfcjed");
     let dbQuery ={
       userId:myid,
       ad:records._id,

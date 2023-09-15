@@ -42,7 +42,7 @@ exports.fetchAllMyAds = async (req, res, next) => {
   try {
     let maxDistance = req.query.maxDistance || 200;
     let adstype = req.query.adsType;
-    console.log(adstype);
+    // console.log(adstype);
     var perPage = 10 || parseInt(req.query.perpage)
     var page = parseInt(req.query.page) || 1
     let dbquery = {};
@@ -106,7 +106,7 @@ exports.fetchAllMyAds = async (req, res, next) => {
 
 exports.fetchAll = async (req, res, next) => {
   try {
-    console.log("object-------------------------------");
+    // console.log("object-------------------------------");
     let myid 
     if(req.userId){
       myid=req.userId || "0"
@@ -119,14 +119,14 @@ exports.fetchAll = async (req, res, next) => {
     let Distance
     
     if(maxDistance === "0" || !maxDistance){
-      console.log("bol");
+      // console.log("bol");
       Distance =  200000
     }else{
       Distance =maxDistance*1000
     }
 
    
-  console.log(Distance,"aayayayayayayayyayayayayayyayayayayayyayayayayayayyayayayayya");
+  // console.log(Distance,"aayayayayayayayyayayayayayyayayayayayyayayayayayayyayayayayya");
     let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false,select:"url"})
    
     
@@ -209,7 +209,7 @@ exports.fetchAll = async (req, res, next) => {
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
       let data4Limit = adons === "Upcoming Event" ? (eventCount.length < 12 ? eventCount.length : 12) : eventlimt;
-      console.log(data4Limit);
+      // console.log(data4Limit);
       const data4 = await eventAd.find(dbQuery).sort({ createdAt: -1 }).limit(data4Limit)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
@@ -219,22 +219,22 @@ exports.fetchAll = async (req, res, next) => {
       const data6 = await roomrentAd.find(dbQuery).sort({ createdAt: -1 }).limit(roomlimit)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
-console.log(data6);
+// console.log(data6);
       const combinedData = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
       let filterData
       if (combinedData) {
          filterData = combinedData.map((job) => {
-          console.log("Job:", job);
-          console.log("Addons Validity:", job.addons_validity);
+          // console.log("Job:", job);
+          // console.log("Addons Validity:", job.addons_validity);
       
           const isFeaturedAddonValid = job.addons_validity && Array.isArray(job.addons_validity) &&
               job.addons_validity.some((addon) => {
                   const addonExpired = new Date(addon.expired_on) >= new Date();
-                  console.log(`Addon: ${addon.name}, Expired: ${addonExpired}`);
+                  // console.log(`Addon: ${addon.name}, Expired: ${addonExpired}`);
                   return addon.name === "Featured"  && addonExpired;
               });
       
-          console.log("Is Featured Addon Valid:", isFeaturedAddonValid);
+          // console.log("Is Featured Addon Valid:", isFeaturedAddonValid);
           return {
             ...job._doc,
             // Add other job fields as needed
@@ -252,7 +252,7 @@ console.log(data6);
           data: filterData
         });
       }
-        console.log(adonsData,"999999999999999999999")
+        // console.log(adonsData,"999999999999999999999")
       // Only add to mergedData if there is adonsData
       if (adonsData.length > 0) {
         mergedData.push(...adonsData);

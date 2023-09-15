@@ -334,7 +334,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
 exports.createEventAds = async (req, res, next) => {
   try {
-    console.log(req.body, "dccdcdc");
+    // console.log(req.body, "dccdcdc");
     const {
       isfeatured,
       status,
@@ -369,13 +369,7 @@ exports.createEventAds = async (req, res, next) => {
       other_platform,
       other_platform_name,
     } = req.body;
-    console.log(facebook_platform,
-      instagram_platform,
-      zoom_platform,
-      youtube_platform,
-      tiktok_platform,
-      other_platform,
-      other_platform_name,"????????????????????????????");
+    // console.log(facebook_platform,)
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -446,7 +440,7 @@ exports.createEventAds = async (req, res, next) => {
       productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
     }
-console.log(platforms,"---------------------------------");
+// console.log(platforms,"---------------------------------");
     const dataObj = {
       isfeatured,
       status: status,
@@ -487,7 +481,7 @@ console.log(platforms,"---------------------------------");
       tagline: taglines,
       userId: userId,
     };
-console.log(dataObj,"dvbfbfbfbfrb");
+// console.log(dataObj,"dvbfbfbfbfrb");
     const newEventPost = await eventAd.create(dataObj);
     const stringToHash = newEventPost._id.toString();
     const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
@@ -525,7 +519,7 @@ console.log(dataObj,"dvbfbfbfbfrb");
 ///--------------------------Edit event-----------------------------///
 
 exports.editEventAds = async (req, res, next) => {
-  console.log(req.body, "body hai je body");
+  // console.log(req.body, "body hai je body");
   try {
     const eventId = req?.params?.eventId;
 
@@ -740,7 +734,7 @@ exports.editEventAds = async (req, res, next) => {
         },
       },
     };
-    console.log(dataObjq,"66666666666666666666666666666666666666s");
+    // console.log(dataObjq,"66666666666666666666666666666666666666s");
     const updateEvent = await eventAd.findByIdAndUpdate(
       { _id: eventId },
       { $set: dataObjq },
@@ -840,7 +834,7 @@ exports.fetchAll = async (req, res, next) => {
       // Add filter for rent amount
       dbQuery["addons_validity.name"] = add_on;
     }
-    console.log(req.query,"--------------------------------");
+    // console.log(req.query,"--------------------------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
     let Distance
@@ -880,7 +874,7 @@ if (start_time && end_time) {
 
 
     if(maxDistance === "0" || !maxDistance){
-      console.log("bol");
+      // console.log("bol");
       Distance =  200000
     }else{
       Distance =maxDistance*1000
@@ -1032,7 +1026,7 @@ exports.fetchonead = async (req, res, next) => {
       const ads_type =records.adsType.toString();
     
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(Typename,"nfjdnfcjed");
+    // console.log(Typename,"nfjdnfcjed");
     let dbQuery ={
       userId:myid,
       ad:records._id,
@@ -1040,10 +1034,10 @@ exports.fetchonead = async (req, res, next) => {
     } 
     
      let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
-     console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
+    //  console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
       if(!checkview){
       let data=  await PostViews.create(dbQuery)
-      console.log(data,"billo ni tere kale kalle naina ");
+      // console.log(data,"billo ni tere kale kalle naina ");
       }
       const jobData = {
         ...records._doc,
@@ -1140,7 +1134,7 @@ exports.fetchEventData = async (req, res, next) => {
       });
     }
 
-    console.log(responseArray);
+    // console.log(responseArray);
 
     return successJSONResponse(res, {
       message: `success`,

@@ -19,7 +19,7 @@ exports.createNewCategories = async (req, res, next) => {
             name,
             ads_type,
         } = req.body
-console.log(req.body);
+// console.log(req.body);
         if (!isValidString(name)) return failureJSONResponse(res, { message: `Please provide name` });
         if (!ads_type) return failureJSONResponse(res, { message: `Please provide ads id` });
         // else if(){
@@ -62,16 +62,16 @@ exports.fetchNewCategories = async (req, res, next) => {
             .then((newCategory) => {
                 if (!newCategory) return failureJSONResponse(res, { message: `Something went wrong` });
                 else {
-                    console.log(newCategory,"jvhjrfbv");
+                    // console.log(newCategory,"jvhjrfbv");
                     return successJSONResponse(res, { message: "Success", categories: newCategory });
                 }
             }).catch((err) => {
-                console.log(err,"*******-------------++++++++");
+                // console.log(err,"*******-------------++++++++");
                 return failureJSONResponse(res, { message: `Something went wrong` });
             })
 
     } catch (err) {
-        console.log(err,"**catch eroor*****---------++++++");
+        // console.log(err,"**catch eroor*****---------++++++");
         return failureJSONResponse(res, { message: `something went wrong` })
     }
 }

@@ -38,12 +38,12 @@ exports.createFavoriteAd = async (req, res, next) => {
       if (!ads_type)
       return failureJSONResponse(res, { message: `Please provide ads type` });
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(ModelName ,"jcnhdjbcjdcjd",Typename);
+    // console.log(ModelName ,"jcnhdjbcjdcjd",Typename);
     if(userId)dbQuery.user = userId
     if(adId)dbQuery.ad = adId
     if(ads_type)dbQuery.ads_type = ads_type
     if(Typename)dbQuery.adType = Typename
-    console.log(dbQuery);
+    // console.log(dbQuery);
     try {
       let favoriteAd;
       let checkAlreadyexist = await FavoriteAd.findOne({ $and: [{ user: userId }, { ad: adId }] }).exec();

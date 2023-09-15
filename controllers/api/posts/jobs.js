@@ -318,7 +318,7 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
 exports.createJobAds = async (req, res, next) => {
   try {
-    console.log("hitt hoyi");
+    // console.log("hitt hoyi");
     const {
       isfeatured,
       status,
@@ -349,7 +349,7 @@ exports.createJobAds = async (req, res, next) => {
       image,
       video,
     } = req.body;
-  console.log("gori gori body",req.body,"gori gori body");
+  // console.log("gori gori body",req.body,"gori gori body");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -447,9 +447,9 @@ exports.createJobAds = async (req, res, next) => {
 ///--------------------------Edit Job-----------------------------///
 
 exports.editJobAds = async (req, res, next) => {
-  console.log(`kejhrjhyewgrjhew`);
+  // console.log(`kejhrjhyewgrjhew`);
   try {
-    console.log(req.files);
+    // console.log(req.files);
     const jobId = req?.params?.jobId;
     const validate_id = await postJobAd.findById(jobId);
     if (!validate_id) {
@@ -500,7 +500,7 @@ exports.editJobAds = async (req, res, next) => {
       hide_my_email,
       // preferableModeContact,
     } = req.body;
-console.log(req.body,"lpalpa lpai lpa lpa lpai");
+// console.log(req.body,"lpalpa lpai lpa lpa lpai");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -515,7 +515,7 @@ console.log(req.body,"lpalpa lpai lpa lpa lpai");
       }
     }
 
-    console.log(req.body.hideAddress, "ddeedr");
+    // console.log(req.body.hideAddress, "ddeedr");
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
@@ -525,7 +525,7 @@ console.log(req.body,"lpalpa lpai lpa lpa lpai");
       imageArr.push(productImages._id);
     }
 
-    console.log(`imageArr`, imageArr);
+    // console.log(`imageArr`, imageArr);
 
     const dataObj = {},
       adsInfoObj = {},
@@ -610,8 +610,8 @@ console.log(req.body,"lpalpa lpai lpa lpa lpai");
       },
     };
 
-    console.log(dataObjq);
-    console.log("object", { image: imageArr });
+    // console.log(dataObjq);
+    // console.log("object", { image: imageArr });
 
     const updateJob = await postJobAd.findByIdAndUpdate(
       { _id: jobId },
@@ -643,7 +643,7 @@ console.log(req.body,"lpalpa lpai lpa lpa lpai");
 /////----------------------Update Job Status -------------------/////
 
 exports.editJobStatus = async (req, res, next) => {
-  console.log(`kejhrjhyewgrjhew`);
+  // console.log(`kejhrjhyewgrjhew`);
   try {
     const jobId = req?.params?.jobId;
 
@@ -676,7 +676,7 @@ exports.editJobStatus = async (req, res, next) => {
       });
     }
   } catch (err) {
-    console.log(err);
+    (err);
   }
 };
 
@@ -685,7 +685,7 @@ exports.editJobStatus = async (req, res, next) => {
 exports.fetchAllAds = async (req, res, next) => {
   try {
     let searchTerm = req.body.searchTerm;
-    console.log("objectuygtututu");
+    // console.log("objectuygtututu");
     let dbQuery = {};
     const {
       isfeatured,
@@ -715,13 +715,13 @@ exports.fetchAllAds = async (req, res, next) => {
       // Add filter for rent amount
       dbQuery["addons_validity.name"] = add_on;
     }
-    console.log(req.query,"-------------------------------------------------------------------------------------------------------------------------------");
+    // console.log(req.query,"-------------------------------------------------------------------------------------------------------------------------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
     let Distance
     
     if(maxDistance === "0" || !maxDistance){
-      console.log("bol");
+      // console.log("bol");
       Distance =  200000
     }else{
       Distance =maxDistance*1000
@@ -955,7 +955,7 @@ console.log(recordsWithTodayDate);
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
-    console.log("object",adsId);
+    // console.log("object",adsId);
     let data_Obj
     let checkId = await postJobAd.findOne({_id:adsId})
     if(!checkId){
@@ -982,12 +982,12 @@ exports.fetchonead = async (req, res, next) => {
     .populate({ path: "favoriteCount", select: "_id" })
     .populate({ path: "viewCount" })
     .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-    console.log(records,"saun mahona chad da hai");
+    // console.log(records,"saun mahona chad da hai");
     if (records) {
       const ads_type =records.adsType.toString();
     
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(Typename,"nfjdnfcjed");
+    // console.log(Typename,"nfjdnfcjed");
     let dbQuery ={
       userId:myid,
       ad:records._id,
@@ -1097,7 +1097,7 @@ exports.fetchJobData = async (req, res, next) => {
       });
     }
 
-    console.log(responseArray);
+    // console.log(responseArray);
 
     return successJSONResponse(res, {
       message: `success`,

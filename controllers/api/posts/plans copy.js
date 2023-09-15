@@ -20,21 +20,21 @@ exports.fetchPlanForAds = async (req, res, next) => {
         
         // const {adsId} = req?.params?.adsId;  
         const {adsId} = req.body;
-        console.log("iadsid",req.query);
-        console.log("iadsid",adsId);
+        // console.log("iadsid",req.query);
+        // console.log("iadsid",adsId);
         
         AdsPlan.find({
             ads_type: planObjectId
         }).populate("add_ons")
         .then(result => {
-            console.log('result ',result);
+            // console.log('result ',result);
 
             if (!result){
-                console.log('fail');
+                // console.log('fail');
                 return failureJSONResponse(res, {message: `something went wrong` })
             }
-            console.log('success');
-            console.log(result);
+            // console.log('success');
+            // console.log(result);
             return  successJSONResponse(res, { data: result })
         })
         .catch(err=>{

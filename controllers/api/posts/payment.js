@@ -50,7 +50,7 @@ exports.validatepaymentData = async (req, res, next) => {
   try {
     const { ads, plan_id, adstype } = req.body;
 
-    console.log(plan_id);
+    // console.log(plan_id);
 
     if (!plan_id)
       return failureJSONResponse(res, { message: `Please provide plan id` });
@@ -132,7 +132,7 @@ const paymentIntentCreate = async (
   let successUrl;
   let cancelUrl;
   let UserId = dataobj.user;
-  console.log(UserId, "bol ve channa bol");
+  // console.log(UserId, "bol ve channa bol");
   if (deviceType != null) dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
   if (dataobj.total_amount == 0) {
@@ -158,13 +158,13 @@ const paymentIntentCreate = async (
     let sessionName = findModelName.name;
     // if (request.body.add_ons.length > 0)
     //   sessionName +=" and " + request.body.add_ons.length.toString() + " addons";
-console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsrequest.body.add_onsrequest.body.add_ons");
+// console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsrequest.body.add_onsrequest.body.add_ons");
     if (request.body.add_ons.length > 0) {
       let addonsId =request.body.add_ons;
       
       let addonsName ='';
       let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
-    console.log(result,'sessionresultresultresultresultresultName');
+    // console.log(result,'sessionresultresultresultresultresultName');
     
       if(result.length){
         result.forEach((item) => {
@@ -207,7 +207,7 @@ console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsreques
       success_url: successUrl,
       cancel_url: cancelUrl,
     });
-    console.log("eh chaalu hoya");
+    // console.log("eh chaalu hoya");
   } else {
     // List the customer's payment methods to find one to charge
     // const paymentMethods = await stripe.paymentMethods.list({
@@ -227,7 +227,7 @@ console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsreques
       // off_session: true,
       // payment_method: paymentMethods.data[0].id,
     });
-    console.log(paymentIntent, "po po po po po ki ku ka ll oii cc bd yf jg nv");
+    // console.log(paymentIntent, "po po po po po ki ku ka ll oii cc bd yf jg nv");
   }
 
   await PaymentModel.findOneAndUpdate(
@@ -244,7 +244,7 @@ console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsreques
 
 exports.create_payment_intent = async (req, res) => {
   try {
-    console.log(req.body, "body hai je");
+    // console.log(req.body, "body hai je");
     let deviceType = null;
     if (req.headers["m-device-type"] == "web") deviceType = "web";
     else deviceType = "mobile";
@@ -256,11 +256,11 @@ exports.create_payment_intent = async (req, res) => {
 
     let planId = req.body.planId;
     //-----find plan -----//
-    console.log(planId, "plan Id");
+    // console.log(planId, "plan Id");
     let find_ads_type = await AdsPlan.find({ _id: planId }).populate("add_ons");
-    console.log(find_ads_type, "vndvndj");
+    // console.log(find_ads_type, "vndvndj");
     let adstype = find_ads_type[0].ads_type;
-    console.log(adstype, "njdnjd");
+    // console.log(adstype, "njdnjd");
     let plan_price = find_ads_type[0].price.amount;
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
     let addonsId = req.body.add_ons;
@@ -306,20 +306,20 @@ exports.create_payment_intent = async (req, res) => {
         });
       });
 
-      console.log(foundObjects, "hhhhhjjjjjj00000");
+      // console.log(foundObjects, "hhhhhjjjjjj00000");
       const totalAmount = foundObjects.reduce(
         (acc, obj) => acc + obj.amount,
         0
       );
       totalprice = plan_price + totalAmount;
     }
-    console.log(
-      userInfoModel,
-      "vhndsjvnsdjnsnvskjdrvkrsd --------------->>>>>>>>>>>>>>>>"
-    );
+    // console.log(
+    //   userInfoModel,
+    //   "vhndsjvnsdjnsnvskjdrvkrsd --------------->>>>>>>>>>>>>>>>"
+    // );
 
     let customerStripeId = await getStripeCustomer(userID);
-    console.log(customerStripeId, "25-25 =50 mainu kithe eh line chldi dikha ");
+    // console.log(customerStripeId, "25-25 =50 mainu kithe eh line chldi dikha ");
     // return customerStripeId;
 
     const ephemeralKey = await stripe.ephemeralKeys.create(
@@ -327,7 +327,7 @@ exports.create_payment_intent = async (req, res) => {
       { apiVersion: "2022-11-15" }
     );
 
-    console.log(ephemeralKey, "25-25=70 je tu na aayi terer pain ge chitter");
+    // console.log(ephemeralKey, "25-25=70 je tu na aayi terer pain ge chitter");
     let paymentModelInfo = await PaymentModel.findOne({
       ads: req.body.postId,
       payment_status: "pending",
@@ -422,14 +422,14 @@ exports.create_payment_intent = async (req, res) => {
       dbQu.price_drop = price;
     }
     if (Object.keys(dbQu).length > 0) {
-      console.log(dbQu, "dvdvvdcdcccc");
+      // console.log(dbQu, "dvdvvdcdcccc");
 
       try {
         let datarr = await ModelName.findByIdAndUpdate(req.body.postId, dbQu, {
           new: true,
         });
 
-        console.log(datarr, "Key updated successfully.");
+        // console.log(datarr, "Key updated successfully.");
       } catch (error) {
         console.error("Error updating document:", error);
       }
@@ -446,7 +446,7 @@ exports.create_payment_intent = async (req, res) => {
       statusCode
     );
   } catch (error) {
-    console.log("vdvdvdvvvvdvvvdvdvdvdvdvdvdvdvd", error, "bbooklakituramu");
+    // console.log("vdvdvdvvvvdvvvdvdvdvdvdvdvdvdvd", error, "bbooklakituramu");
     return failureJSONResponse(res, {
       message: `Something went wrong`,
       error: error.message,
@@ -458,7 +458,7 @@ exports.create_payment_intent = async (req, res) => {
       let ModelName
       let getNotification;
       let event = request.body;
-      console.log(event, "this is event");
+      // console.log(event, "this is event");
       let payment_id = event.data.object.metadata.payment_id;
       if (payment_id == "" || payment_id == null || payment_id == undefined)
         return successJSONResponse(
@@ -468,7 +468,7 @@ exports.create_payment_intent = async (req, res) => {
         );
       // Handle the event
       let findUser = await PaymentModel.findById({ _id: payment_id });
-      console.log(findUser, "findUser");
+      // console.log(findUser, "findUser");
       let UserId = findUser.user.toString();
       let Adstype_Id = findUser.ads_type.toString();
       let getAdDetails = await category.findById({ _id: Adstype_Id });
@@ -504,8 +504,8 @@ exports.create_payment_intent = async (req, res) => {
           let alertdata = await Alert.find({Typename:adsName})
           const userIds = alertdata.map(alert => String(alert.userId));
 
-          console.log(userIds);
-console.log(userIds,alertdata,":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+//           console.log(userIds);
+// console.log(userIds,alertdata,":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
           
           getNotification = await getNotificationTitles(event.type);
           await Notification.sendNotifications(
@@ -527,7 +527,7 @@ console.log(userIds,alertdata,":::::::::::::::::::::::::::::::::::::::::::::::::
         case "checkout.session.completed":
           paymentSuccessModelUpdate(payment_id, UserId);
            ModelName = await getModelNameByAdsType(Adstype_Id);
-          console.log(ModelName,"--------",adsName,"--------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+          // console.log(ModelName,"--------",adsName,"--------------------------------------------------------------------------------------------------------------------------------------------------------------------");
           getNotification = await getNotificationTitles(event.type);
 
           await Notification.sendNotifications(

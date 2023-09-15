@@ -86,7 +86,7 @@ exports.fetchAll = async (req, res, next) => {
     let jobs = await jobsAd.find();
     let buysell = await buysellAd.find().populate({ path: "viewCount" })
       
-      console.log(records);
+      // console.log(records);
      
      
      

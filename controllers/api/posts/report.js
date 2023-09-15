@@ -40,13 +40,13 @@ exports.createreport = async (req, res, next) => {
       return failureJSONResponse(res, { message: `Please provide ads_type` });
       let findAd = await ReportAd.create(dbQuery);
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(ModelName ,"jcnhdjbcjdcjd",Typename);
+    // console.log(ModelName ,"jcnhdjbcjdcjd",Typename);
     if(userId)dbQuery.userId = userId
     if(adsid)dbQuery.adsid = adsid
     if(Typename)dbQuery.ads_type = Typename
     if(message)dbQuery.message = message
     
-    console.log(dbQuery);
+    // console.log(dbQuery);
       let RepotAd;
       
       RepotAd = await ReportAd.create(dbQuery);

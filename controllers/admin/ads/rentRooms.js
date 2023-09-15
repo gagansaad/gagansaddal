@@ -50,7 +50,7 @@ const mongoose = require("mongoose"),
           maxDistance,
           prefered_age,
         } = req.query;
-        console.log(req.query,"aayi");
+        // console.log(req.query,"aayi");
         var perPage = parseInt(req.query.perpage) || 40;
         var page = parseInt(req.query.page) || 1;
         const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
@@ -130,7 +130,7 @@ const mongoose = require("mongoose"),
             ]
           };
         }
-        console.log(sortval);
+        // console.log(sortval);
         let myid = req.userId;
         let records = await RoomRentsAds.find({
           $or: [queryFinal],
@@ -142,13 +142,13 @@ const mongoose = require("mongoose"),
           .sort(sortval)
           .skip(perPage * page - perPage)
           .limit(perPage);
-          console.log(records);
+          // console.log(records);
          
           const totalCount = await RoomRentsAds.find({
             $or: [queryFinal],
           });
           let responseModelCount = totalCount.length;
-          console.log(responseModelCount);
+          // console.log(responseModelCount);
         if (records) {
           const jobData = records.map((job) => {
             return {
@@ -212,7 +212,7 @@ exports.fetchOne = async (req, res, next) => {
       const ads_type =records.adsType.toString();
     
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(Typename,"nfjdnfcjed");
+    // console.log(Typename,"nfjdnfcjed");
     let dbQuery ={
       userId:myid,
       ad:records._id,
@@ -220,10 +220,10 @@ exports.fetchOne = async (req, res, next) => {
     } 
     
      let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
-     console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
+    //  console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
       if(!checkview){
       let data=  await PostViews.create(dbQuery)
-      console.log(data,"billo ni tere kale kalle naina ");
+      // console.log(data,"billo ni tere kale kalle naina ");
       }
       const jobData = {
         ...records._doc,

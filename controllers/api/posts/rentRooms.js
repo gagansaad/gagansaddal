@@ -29,7 +29,7 @@ exports.fetchDynamicsData = async (req, res, next) => {
     .find()
     .select({ keywords: 1, _id: 1 });
   
-  console.log(records,"tere tag tag tere");
+  // console.log(records,"tere tag tag tere");
   const objtSend = {
     tagline: records,
     rental_type: [
@@ -153,7 +153,7 @@ exports.fetchRoomData = async (req, res, next) => {
       });
     }
 
-    console.log(responseArray);
+    // console.log(responseArray);
 
     return successJSONResponse(res, {
       message: `success`,
@@ -203,7 +203,7 @@ exports.validateRoomRentsAdsData = async (req, res, next) => {
       location_name,
       tagline,
     } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     // accommodates: '',
     // attachedBath: '',
     // amount: '',
@@ -291,11 +291,11 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hideAddress,
       preferableModeContact,
     } = req.body;
-    console.log(typeof hideAddress, "yyyyyyyyyyyyyyyyyyyyyy");
-    console.log(
-      "isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)",
-      isValidBoolean(hideAddress)
-    );
+    // console.log(typeof hideAddress, "yyyyyyyyyyyyyyyyyyyyyy");
+    // console.log(
+    //   "isValidBoolean(hideAddress)isValidBoolean(hideAddress)isValidBoolean(hideAddress)",
+    //   isValidBoolean(hideAddress)
+    // );
     // if (countryCode && isNaN(Number(countryCode)))
     // return failureJSONResponse(res, {
     //   message: `Please provide valid country code`,
@@ -366,8 +366,8 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     latitude,
     longitude
   } = req.body;
-  console.log(negotiable,is_contact,"----------------------------------------------------------------------------------------------------------");
-  console.log(req.body,"+++++++++++++++++++++++++++++++++++++++++++{++++++++++++++++++++");
+  // console.log(negotiable,is_contact,"----------------------------------------------------------------------------------------------------------");
+  // console.log(req.body,"+++++++++++++++++++++++++++++++++++++++++++{++++++++++++++++++++");
   let taglines = tagline;
   if (taglines) {
     for (i = 0; i < taglines.length; i++) {
@@ -473,10 +473,10 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     userId: userId,
   };
 
-  console.log(dataObj, "jdnjd---------------------------------");
+  // console.log(dataObj, "jdnjd---------------------------------");
   const newRoomRentPost = await RoomRentsAds.create(dataObj);
   const stringToHash = newRoomRentPost._id.toString();
-  console.log(stringToHash,"hbvhjd xb hdbhd vhdb hnd  ddb nhd nhdb nd  b cn dn n",newRoomRentPost._id);
+  // console.log(stringToHash,"hbvhjd xb hdbhd vhdb hnd  ddb nhd nhdb nd  b cn dn n",newRoomRentPost._id);
   const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
   const truncatedHash = hash.slice(0, 10);
   const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
@@ -494,7 +494,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
       roomtRentObjToSend[key] = newRoomRentPost[key];
     }
   }
-console.log(roomtRentObjToSend);
+// console.log(roomtRentObjToSend);
   return successJSONResponse(res, {
     message: `success`,
     roomtRentObjToSend,
@@ -552,7 +552,7 @@ exports.editRoomRentAds = async (req, res, next) => {
   if (is_contact == "true") {
     iscontact = true;
   }
-  console.log(req.body,"-----------09999999999999999900000000000000000999999999999090");
+  // console.log(req.body,"-----------09999999999999999900000000000000000999999999999090");
   let taglines = tagline;
   if (taglines) {
     for (i = 0; i < taglines.length; i++) {
@@ -574,9 +574,9 @@ exports.editRoomRentAds = async (req, res, next) => {
 
     productImages = await Media.create({ url: thumbnail });
     imageArr.push(productImages._id);
-    console.log(productImages);
+    // console.log(productImages);
   }
-  console.log(productImages, "fvhfbbbbbbbbbbbvvbfhvfbhvbfhbvf");
+  // console.log(productImages, "fvhfbbbbbbbbbbbvvbfhvfbhvbfhbvf");
   // console.log(imageArr.map());
   const dataObj = {},
     adsInfoObj = {},
@@ -631,12 +631,12 @@ exports.editRoomRentAds = async (req, res, next) => {
   let immidiate = false;
   if (!custom_date) {
     immidiate = true;
-    console.log(1);
+    // console.log(1);
   } else {
     immidiate = false;
-    console.log(2);
+    // console.log(2);
   }
-  console.log(immidiate);
+  // console.log(immidiate);
   let rent = {};
   let availability = {};
   if (status) dataObj.status = status;
@@ -704,13 +704,13 @@ if(longitude && latitude){
       },
     },
   };
-  console.log(dataObjq,"----------------------------------------");
+  // console.log(dataObjq,"----------------------------------------");
   const updateRoomRents = await RoomRentsAds.findByIdAndUpdate(
     { _id: roomRentId },
     { $set: dataObjq },
     { new: true }
   );
-  console.log(updateRoomRents, "ebdhebhefcebcfheb");
+  // console.log(updateRoomRents, "ebdhebhefcebcfheb");
   let updateRoomAdObjToSend = {};
   for (let key in updateRoomRents.toObject()) {
     if (!fieldsToExclude.hasOwnProperty(String(key))) {
@@ -768,7 +768,7 @@ exports.fetchAll = async (req, res, next) => {
       min_price,
       max_price
     } = req.query;
-    console.log(req.query,"aayi");
+    // console.log(req.query,"aayi");
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
@@ -879,7 +879,7 @@ if (prefered_age) {
         ]
       };
     }
-    console.log(sortval);
+    // console.log(sortval);
     let myid = req.userId;
     let records = await RoomRentsAds.find({
       $or: [queryFinal],
@@ -891,13 +891,13 @@ if (prefered_age) {
       .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
-      console.log(records);
+      // console.log(records);
      
       const totalCount = await RoomRentsAds.find({
         $or: [queryFinal],
       });
       let responseModelCount = totalCount.length;
-      console.log(responseModelCount);
+      // console.log(responseModelCount);
     if (records) {
       const jobData = records.map((job) => {
         return {
@@ -958,7 +958,7 @@ exports.fetchonead = async (req, res, next) => {
       const ads_type =records.adsType.toString();
     
     let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(Typename,"nfjdnfcjed");
+    // console.log(Typename,"nfjdnfcjed");
     let dbQuery ={
       userId:myid,
       ad:records._id,
@@ -966,10 +966,10 @@ exports.fetchonead = async (req, res, next) => {
     } 
     
      let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
-     console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
+    //  console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
       if(!checkview){
       let data=  await PostViews.create(dbQuery)
-      console.log(data,"billo ni tere kale kalle naina ");
+      // console.log(data,"billo ni tere kale kalle naina ");
       }
       const jobData = {
         ...records._doc,

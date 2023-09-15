@@ -19,7 +19,7 @@ const mongoose = require("mongoose"),
 
   exports.createBanner = async (req, res, next) => {
     try {
-     console.log(BannerSchema);
+    //  console.log(BannerSchema);
       const {
         image,
         caption,

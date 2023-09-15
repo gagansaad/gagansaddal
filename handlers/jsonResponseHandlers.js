@@ -11,7 +11,7 @@ const mongoose = require("mongoose"),
   tagline_keywords = mongoose.model("keywords")
 
 exports.successJSONResponseWithPagination = async (res, responseModel, OnPage, perPage = 10, dbquery, message = `Record found successfully`, data, httpStatusCode = 200) => {
-    console.log(responseModel)
+    // console.log(responseModel)
     if (res) {
         let responseModelWithLimit;
         if(dbquery){
@@ -19,7 +19,7 @@ exports.successJSONResponseWithPagination = async (res, responseModel, OnPage, p
         }else{
             responseModelWithLimit = await responseModel.find().populate({ path: 'adsInfo.image', strictPopulate: false, select: 'url' }).sort({ createdAt: -1 }).skip((perPage * OnPage) - perPage).limit(perPage)
         }
-        console.log(responseModelWithLimit);
+        // console.log(responseModelWithLimit);
         const responseModelCount = await responseModel.count();
         const mainData = {
             message: message,

@@ -32,20 +32,20 @@ module.exports = {
                 await Notification.insertMany(notificationData);
             }
             // console.log((Object.keys(sendEmailNotification).length  > 0));
-            console.log(sendEmailNotification, "this is array");
+            // console.log(sendEmailNotification, "this is array");
             if (Object.keys(sendEmailNotification).length > 0) {
-                console.log('ssss1');
+                // console.log('ssss1');
                 convertedIds.map(async userId => {
-                    console.log(userId);
+                    // console.log(userId);
                     let UserDetails = await User.findById({ "_id": userId })
                     
-                    console.log(UserDetails);
+                    // console.log(UserDetails);
                     //   let subject = 'Thank you for Use Menehariya!'
                     let replacements = { 'name': UserDetails.userInfo.name };
                     if (Object.keys(sendEmailNotification.data).length > 0)
                         replacements = ({ ...replacements, ...sendEmailNotification.data });
 
-                    console.log("object of replacement ", replacements);
+                    // console.log("object of replacement ", replacements);
                     let sendToEmail = UserDetails?.userInfo?.email_address;
                     if (sendEmailNotification.data.newEmailAddress)
                         sendToEmail = sendEmailNotification.data.newEmailAddress;
@@ -54,7 +54,7 @@ module.exports = {
                 });
 
             }
-            console.log('ssss222222222');
+            // console.log('ssss222222222');
             const userDeviceTypes = await User.aggregate([
                 { $match: { "_id": { $in: convertedIds } } }, // match ids data only
                 { $unwind: "$user_device_info" }, // Unwind the user_device_info array
@@ -70,14 +70,14 @@ module.exports = {
             webTokens = userDeviceTypes.find(type => type._id === 3)?.devices || [];
             if (androidTokens.length) {
                 androidTokens = androidTokens.map(user => user.token);
-                console.log(androidTokens);
+                // console.log(androidTokens);
 
                 sendAndroidNotifications(androidTokens, title, body, data);
             }
             if (iosTokens.length) {
 
                 iosTokens = iosTokens.map(user => user.token);
-                console.log(iosTokens,"------------------------------------------------------------------>>>>>>>>>>>>>>>>>>>>>>.");
+                // console.log(iosTokens,"------------------------------------------------------------------>>>>>>>>>>>>>>>>>>>>>>.");
                 sendAppleNotification(iosTokens, title, body, data);
             }
             // if (deviceType3Array.length) {
@@ -98,7 +98,7 @@ module.exports = {
 
 };
 let sendAndroidNotifications = (deviceTokens, title, body, data = null) => {
-    console.log(deviceTokens);
+    // console.log(deviceTokens);
     try {
         var message = {
             registration_ids: deviceTokens,
@@ -124,7 +124,7 @@ let sendAndroidNotifications = (deviceTokens, title, body, data = null) => {
 }
 
 let sendAppleNotification = (deviceTokens, title, body, data = null) => {
-    console.log(deviceTokens);
+    // console.log(deviceTokens);
     try {
         var message = {
             registration_ids: deviceTokens,

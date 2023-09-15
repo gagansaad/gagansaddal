@@ -14,7 +14,7 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
             token = req.headers.authorization.split(' ')[1];
         }
 
-        console.log(`token`, token)
+        // console.log(`token`, token)
 
         if (!token) return res.json({
             status: 401,
@@ -24,7 +24,7 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
         else {
 
             const decodedPayload = verifyAndDecodeToken(token);
-            console.log(`decodedPayload`,decodedPayload)
+            // console.log(`decodedPayload`,decodedPayload)
         
 
             if (!((decodedPayload && decodedPayload.userId))) {
