@@ -888,6 +888,7 @@ if (prefered_age) {
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
       .populate({ path: "viewCount" })
+      .populate({path: "userNotificationRentals",select: "rental",match: { user: userId }})
       .populate({ path: "ReportCount", select: "_id" })
       .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
       .sort(sortval)
