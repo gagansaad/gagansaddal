@@ -216,6 +216,21 @@ roomRentsSchema.virtual("favoriteCount", {
         return { user: this.userId };
       },
   });
+  roomRentsSchema.virtual("ReportCount", {
+    ref: "Report",
+    localField: "_id",
+    foreignField: "adsid",
+    count: true,
+  });
+  roomRentsSchema.virtual("isReported", {
+    ref: "Report",
+    localField: "_id",
+    foreignField: "adsid",
+    justOne: true,  
+    match: function () {
+        return { user: this.userId };
+      },
+  });
   // Create a 2dsphere index on the coordinates field
 //   roomRentsSchema.index({ "adsInfo.location.coordinates": "2dsphere" });
 

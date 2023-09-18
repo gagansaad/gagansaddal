@@ -957,6 +957,8 @@ if (start_time && end_time) {
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
+      .populate({ path: "ReportCount", select: "_id" })
+      .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
       .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);

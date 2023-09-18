@@ -87,7 +87,8 @@ const planRoutes = require(`./routes/api/ads/plans copy`)
 const AllAdsRoutes = require(`./routes/api/ads/fetchAllAds`)
 const All_Tags = require(`./routes/api/ads/tagline`)
 const favorite = require(`./routes/api/ads/favoriteAd`)
-const Report = require(`./routes/api/ads/notifucationAlert`)
+const Report = require(`./routes/api/ads/report`)
+const NotificationAlert = require(`./routes/api/ads/notificationAlert`)
 
 //admin
 const adsCategoriesRoutes = require('./routes/admin/categories');
@@ -150,6 +151,7 @@ app.use('/v1/api/posts/ads', AllAdsRoutes)
 app.use('/v1/api/posts/ads', planRoutes)
 app.use('/v1/api/posts/ads', favorite)
 app.use('/v1/api/posts/ads', Report)
+app.use('/v1/api/posts/ads', NotificationAlert)
 
 // logging http activity
 if (process.env.MODE.toLowerCase() === `dev`) {

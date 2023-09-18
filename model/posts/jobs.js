@@ -178,6 +178,21 @@ roomRentsSchema.virtual("favoriteCount", {
         return { user: this.userId };
       },
   });
+  roomRentsSchema.virtual("ReportCount", {
+    ref: "Report",
+    localField: "_id",
+    foreignField: "adsid",
+    count: true,
+  });
+  roomRentsSchema.virtual("isReported", {
+    ref: "Report",
+    localField: "_id",
+    foreignField: "adsid",
+    justOne: true,  
+    match: function () {
+        return { user: this.userId };
+      },
+  });
   roomRentsSchema.virtual("viewCount", {
     ref: "Post_view",
     localField: "_id",

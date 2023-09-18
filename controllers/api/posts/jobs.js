@@ -850,6 +850,8 @@ exports.fetchAllAds = async (req, res, next) => {
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
+      .populate({ path: "ReportCount", select: "_id" })
+      .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
       .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
@@ -867,31 +869,57 @@ exports.fetchAllAds = async (req, res, next) => {
           favorite_count: job.favoriteCount,
           is_favorite: !!job.isFavorite, 
         };
-      });
-      30 % 3
-      let adonsData = await postJobAd.find({ "addons_validity.name": "Bump up" })
+      });//////
+      let FeaturedData = await postJobAd.find({ "addons_validity.name": "Bump up" })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
     
-    let bumpUpDates = adonsData.map((data) => {
+    const featuredRecordsToPick = 6;
+    const FeaturedpickedRecords = [];
+    
+    while (FeaturedpickedRecords.length < featuredRecordsToPick && FeaturedData.length > 0) {
+      const randomIndex = Math.floor(Math.random() * FeaturedData.length);
+      const randomRecord = FeaturedData.splice(randomIndex, 1)[0]; // Remove and pick the record
+      FeaturedpickedRecords.push(randomRecord);
+    }
+    
+      
+       
+        const featuredData = FeaturedpickedRecords.map((job) => {
+          return {
+            ...job._doc,
+            // Add other job fields as needed
+            view_count: job.viewCount,
+            favorite_count: job.favoriteCount,
+            is_favorite: !!job.isFavorite,
+          };
+        })
+      /////
+      let BumpupData = await postJobAd.find({ "addons_validity.name": "Bump up" })
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
+    
+    let bumpUpDates = BumpupData.map((data) => {
       // Filter addons_validity to get only the "Bump up" addon
       let bumpUpAddon = data.addons_validity.find((addon) => addon.name === "Bump up");
       if (bumpUpAddon) {
         return {
           active_on: bumpUpAddon.active_on,
           expired_on: bumpUpAddon.expired_on,
+          interval: bumpUpAddon.days, // Add the interval property
         };
       }
       return null; // If "Bump up" addon is not found, return null
     }).filter((dates) => dates !== null);
     
-    const interval = 3; // The interval you want (3 days in this case)
     const resultDates = [];
     
     for (const dateRange of bumpUpDates) {
-      const { active_on, expired_on } = dateRange;
+      const { active_on, expired_on, interval } = dateRange;
       const startDate = new Date(active_on);
       const endDate = new Date(expired_on);
       const recordDates = []; // Create a separate array for each record
@@ -904,27 +932,28 @@ exports.fetchAllAds = async (req, res, next) => {
       resultDates.push(recordDates); // Push the record's dates array into the result array
     }
     
-    console.log(resultDates);
+    
+    
     const today = new Date().toISOString().split("T")[0]; // Get today's date in the format "YYYY-MM-DD"
-
-// Filter adonsData to find records where resultDates array contains today's date
-const recordsWithTodayDate = adonsData.filter((data, index) => {
-  const recordDates = resultDates[index]; // Get the resultDates array for the current record
-  return recordDates.includes(today);
-});
-const numberOfRecordsToPick = 3;
-const pickedRecords = [];
-
-while (pickedRecords.length < numberOfRecordsToPick && recordsWithTodayDate.length > 0) {
-  const randomIndex = Math.floor(Math.random() * recordsWithTodayDate.length);
-  const randomRecord = recordsWithTodayDate.splice(randomIndex, 1)[0]; // Remove and pick the record
-  pickedRecords.push(randomRecord);
-}
-
-console.log(pickedRecords);
-console.log(recordsWithTodayDate);
+    
+    // Filter adonsData to find records where resultDates array contains today's date
+    const recordsWithTodayDate = BumpupData.filter((data, index) => {
+      const recordDates = resultDates[index]; // Get the resultDates array for the current record
+      return recordDates.includes(today);
+    });
+    
+    const numberOfRecordsToPick = 3;
+    const pickedRecords = [];
+    
+    while (pickedRecords.length < numberOfRecordsToPick && recordsWithTodayDate.length > 0) {
+      const randomIndex = Math.floor(Math.random() * recordsWithTodayDate.length);
+      const randomRecord = recordsWithTodayDate.splice(randomIndex, 1)[0]; // Remove and pick the record
+      pickedRecords.push(randomRecord);
+    }
+    
+    
      
-      const AdOnsData = pickedRecords.map((job) => {
+      const bumpupData = pickedRecords.map((job) => {
         return {
           ...job._doc,
           // Add other job fields as needed
@@ -940,7 +969,10 @@ console.log(recordsWithTodayDate);
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
         records:jobData,
-        AdOnsData,
+        AdOnsData:{
+          bumpupData,
+          featuredData
+        },
         status: 200,
       });
     } else {

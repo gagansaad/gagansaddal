@@ -178,4 +178,19 @@ BuySellSchema.virtual("favoriteCount", {
     foreignField: "ad",
     count: true,
   });
+  BuySellSchema.virtual("ReportCount", {
+    ref: "Report",
+    localField: "_id",
+    foreignField: "adsid",
+    count: true,
+  });
+  BuySellSchema.virtual("isReported", {
+    ref: "Report",
+    localField: "_id",
+    foreignField: "adsid",
+    justOne: true,  
+    match: function () {
+        return { user: this.userId };
+      },
+  });
 module.exports = mongoose.model('Buy & Sell', BuySellSchema);

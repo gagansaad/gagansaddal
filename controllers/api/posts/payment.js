@@ -661,14 +661,13 @@ console.log(updateQuery);
           add_ons_id: _id.toString(),
           name: name,
           amount: amount,
+          days:days,
           expired_on: expired,
           active_on: currentDate.toISOString().split("T")[0],
         };
         
         // Add the "days" property when the name is "Bump up"
-        if (name === "Bump up") {
-          addOn.days = days; // Replace with the desired number of days
-        }
+       
         
         // Push the object into AddOnsArr
        return AddOnsArr.push(addOn);

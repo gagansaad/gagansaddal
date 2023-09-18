@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const Admin = require('../../../model/accounts/admin');
+const Controller = require("../../../controllers/accounts/admin/users")
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -46,6 +47,8 @@ console.log(req.body.email_address,"sdfghjkl;");
         })
     })
 })
+
+router.post("/forget-password",Controller.forget_password)
 
 
 module.exports = router

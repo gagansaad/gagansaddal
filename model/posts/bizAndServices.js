@@ -175,6 +175,21 @@ bizAndServices.virtual("favoriteCount", {
         return { user: this.userId };
       },
   });
+  bizAndServices.virtual("ReportCount", {
+    ref: "Report",
+    localField: "_id",
+    foreignField: "adsid",
+    count: true,
+  });
+  bizAndServices.virtual("isReported", {
+    ref: "Report",
+    localField: "_id",
+    foreignField: "adsid",
+    justOne: true,  
+    match: function () {
+        return { user: this.userId };
+      },
+  });
   bizAndServices.virtual("viewCount", {
     ref: "Post_view",
     localField: "_id",

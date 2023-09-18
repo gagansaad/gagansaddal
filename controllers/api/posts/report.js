@@ -2,7 +2,7 @@ const { json } = require("express");
 const user = require("../accounts/user");
 
 const mongoose = require("mongoose"),
-  ReportAd = mongoose.model("report"),
+  ReportAd = mongoose.model("Report"),
   eventAd = mongoose.model("event"),
   bizAd = mongoose.model("Local_biz & Service"),
   buysellAd = mongoose.model("Buy & Sell"),

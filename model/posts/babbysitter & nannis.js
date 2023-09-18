@@ -180,4 +180,19 @@ babysitter_Schema.virtual("favoriteCount", {
     foreignField: "adsid",
     count: true,
   });
+  babysitter_Schema.virtual("ReportCount", {
+    ref: "Report",
+    localField: "_id",
+    foreignField: "adsid",
+    count: true,
+  });
+  babysitter_Schema.virtual("isReported", {
+    ref: "Report",
+    localField: "_id",
+    foreignField: "adsid",
+    justOne: true,  
+    match: function () {
+        return { user: this.userId };
+      },
+  });
 module.exports = mongoose.model('babysitter & nannie', babysitter_Schema);

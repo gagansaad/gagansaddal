@@ -212,5 +212,20 @@ events_Schema.virtual("favoriteCount", {
     foreignField: "ad",
     count: true,
   });
+  events_Schema.virtual("ReportCount", {
+    ref: "Report",
+    localField: "_id",
+    foreignField: "adsid",
+    count: true,
+  });
+  events_Schema.virtual("isReported", {
+    ref: "Report",
+    localField: "_id",
+    foreignField: "adsid",
+    justOne: true,  
+    match: function () {
+        return { user: this.userId };
+      },
+  });
 module.exports = mongoose.model('event', events_Schema);
 

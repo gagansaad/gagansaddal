@@ -120,7 +120,7 @@ exports.AccountDeleteEmail = (email_address = ``, name = ``) => {
 };
 exports.sendEmail = async (email_address, subject, fileName, replacements = []) => {
     try {
-        // console.log("html =====================>", html);
+        console.log("html =====================>", email_address, subject, fileName, replacements);
         let transporter = nodemailer.createTransport({
             host: 'smtp-relay.sendinblue.com',
             port: 587,
