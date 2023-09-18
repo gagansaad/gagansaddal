@@ -868,6 +868,8 @@ exports.fetchAllAds = async (req, res, next) => {
           view_count: job.viewCount,
           favorite_count: job.favoriteCount,
           is_favorite: !!job.isFavorite, 
+          Report_count: job.ReportCount,
+          is_Reported: !!job.isReported, 
         };
       });//////
       let FeaturedData = await postJobAd.find({ "addons_validity.name": "Bump up" })

@@ -52,7 +52,7 @@ exports.createreport = async (req, res, next) => {
       RepotAd = await ReportAd.create(dbQuery);
        
       if (RepotAd) {
-        return successJSONResponse(res, { message: `success`, ReportAd: RepotAd });
+        return successJSONResponse(res, { message: `Report Successfully`, ReportAd: RepotAd });
       } else {
         return failureJSONResponse(res, { message: `failure` });
       }

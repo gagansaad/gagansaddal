@@ -975,6 +975,8 @@ if (start_time && end_time) {
             view_count: job.viewCount,
             favorite_count: job.favoriteCount,
             is_favorite: !!job.isFavorite, 
+            Report_count: job.ReportCount,
+            is_Reported: !!job.isReported, 
           };
         });
       return successJSONResponse(res, {
