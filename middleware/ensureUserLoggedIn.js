@@ -76,11 +76,7 @@ exports.ensureUserLoggedInDummy = async (req, res, next) => {
 
         // console.log(`token`, token)
 
-        if (!token) return res.json({
-            status: 401,
-            message: `InvalidToken` ,
-            
-        }) 
+        if (!token) return next();
         else {
 
             const decodedPayload = verifyAndDecodeToken(token);
@@ -88,7 +84,10 @@ exports.ensureUserLoggedInDummy = async (req, res, next) => {
         
 
             if (!((decodedPayload && decodedPayload.userId))) {
-                return next();
+                return res.status(401).json({
+                    status: 403,
+                    message: `unauthorized`,
+                })
             } else {
 
                 userId = decodedPayload.userId.trim();
