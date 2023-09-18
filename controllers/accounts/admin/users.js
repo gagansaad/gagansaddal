@@ -67,7 +67,7 @@ exports.forget_password = async function (req, res, next) {
             },
             tokenSecret,
             {
-              expiresIn: "10m",
+              expiresIn: "1m",
             }
           );
           let verify_url = `https://menehariya-admin.netscapelabs.com/reset-password/${token}`;
