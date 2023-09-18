@@ -58,7 +58,11 @@ router.post(`/new-job`, upload.array('photos', 10),
     controllers.createJobAds
 )
 router.get(`/fetchAds`,
-    authMiddleware.ensureUserLoggedIn,
+    authMiddleware.ensureUserLoggedInDummy,
+    controllers.fetchAllAds
+);
+router.get(`/guest/fetchAds`,
+    // authMiddleware.ensureUserLoggedIn,
     controllers.fetchAllAds
 );
 router.get(`/menu`,

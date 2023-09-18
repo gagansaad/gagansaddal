@@ -63,6 +63,63 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
     }
 
 }
+exports.ensureUserLoggedInDummy = async (req, res, next) => {
+
+
+    try {
+
+        let token = null;
+
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+            token = req.headers.authorization.split(' ')[1];
+        }
+
+        // console.log(`token`, token)
+
+        if (!token) return res.json({
+            status: 401,
+            message: `InvalidToken` ,
+            
+        }) 
+        else {
+
+            const decodedPayload = verifyAndDecodeToken(token);
+            // console.log(`decodedPayload`,decodedPayload)
+        
+
+            if (!((decodedPayload && decodedPayload.userId))) {
+                return next();
+            } else {
+
+                userId = decodedPayload.userId.trim();
+
+                const dbQuery = {
+                    // "userInfo.status": 1, //checking if user is active or not
+                    _id: userId
+                };
+
+                const user = await User.findOne(dbQuery);
+
+                if (!user) return res.status(401).json({
+                    status: 404,
+                    message: `User  not found`
+                });
+                req.userId = user._id;
+            }
+
+        }
+
+        return next();
+    } catch (err) {
+        console.log(err)
+        res.status(401).json({
+            status: 401,
+            message: `InvalidToken`,
+
+        }) 
+    }
+
+}
 
 function verifyqJWT(token) {
     jwt.verify(token, `AbCdEfGhIjKlMnOPYT`, function (err, decoded) {
