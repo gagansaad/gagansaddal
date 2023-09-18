@@ -904,6 +904,7 @@ module.exports = {
                 checkUserDetail[0]?.userInfo?.mobile_number?.country_code ||
                 null,
               is_active: checkUserDetail[0]?.userInfo?.is_active,
+              userId: checkUserDetail[0]?._id,
             };
 
             delete data["password"];
