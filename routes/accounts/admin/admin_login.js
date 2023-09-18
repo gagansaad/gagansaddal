@@ -49,6 +49,7 @@ console.log(req.body.email_address,"sdfghjkl;");
 })
 
 router.post("/forget-password",Controller.forget_password)
+router.post("/reset-password",Controller.update_password)
 
 
 module.exports = router

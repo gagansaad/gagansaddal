@@ -70,10 +70,11 @@ router.patch(`/edit/:roomRentId`,
     controllers.editRoomRentAds
 );
 router.get(`/fetchAds`,
-    // authMiddleware.ensureUserLoggedIn,
+authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchAll
 );
 router.get(`/ad_details`,
+    authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchonead
 );
 module.exports = router;

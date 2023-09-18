@@ -67,9 +67,11 @@ router.patch(`/edit-status/:eventId`,
     controllers.editEventStatus
 );
 router.get(`/fetchAds`,
+authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchAll
 );
 router.get(`/ad_details`,
+authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchonead
 );
 module.exports = router;

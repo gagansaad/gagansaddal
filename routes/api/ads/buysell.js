@@ -68,10 +68,12 @@ router.patch(`/edit-role/:buyAndSellId`,
 );
 
 router.get(`/fetchAds`,
+authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchAll
 );
 
 router.get(`/ad_details`,
+authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchonead
 );
 module.exports = router;

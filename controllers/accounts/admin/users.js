@@ -7,7 +7,7 @@ const Users = require('../../../model/accounts/users'),
 let Notification = require("../../../resources/sendEmailFunction");
 const jwt = require('jsonwebtoken');
 
-
+let tokenSecret = 'this is dummy text'
 
 exports.userList = async(req,res, next) => {
         try {
@@ -65,7 +65,7 @@ exports.forget_password = async function (req, res, next) {
             {
               email_address: foundUser.email_address,
             },
-            'this is dummy text',
+            tokenSecret,
             {
               expiresIn: "10m",
             }
@@ -107,4 +107,77 @@ exports.forget_password = async function (req, res, next) {
   }
 }
 
+exports.update_password = async function (req, res, next) {
+  let newPassword = req.body.newPassword;
 
+    let token = req.body.token
+let userId
+  if (!newPassword) {
+    return res.json({
+      status: 400,
+      message: `Please Provide New Password and Confirm Password`,
+    });
+  }
+
+  if (!token) {
+    return res.json({
+      status: 400,
+      message: `Please Resent Forget Password Email`,
+    });
+  }
+  let decodedPayload = jwt.verify(token, tokenSecret);
+  if (!((decodedPayload && decodedPayload.userId))) {
+    return res.status(401).json({
+        status: 403,
+        message: `unauthorized`,
+    })
+} else {
+
+    userId = decodedPayload.userId.trim();
+
+    const dbQuery = {
+        // "userInfo.status": 1, //checking if user is active or not
+        _id: userId
+    };
+
+    const user = await users.findOne(dbQuery);
+
+    if (!user) return res.status(401).json({
+        status: 404,
+        message: `User  not found`
+    });
+    userId = user._id;
+}
+
+ 
+
+  newPassword = bcrypt.hashSync(newPassword, 8);
+
+  users.updateOne(
+    { "_id": userId },
+    {
+      $set: {
+        "password": newPassword,
+      },
+    }
+  ).then((data) => {
+      if (data) {
+        return res.json({
+          status: 200,
+          message: `success`,
+        });
+      } else {
+        return res.json({
+          status: 400,
+          message: `Something went wrong`,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.json({
+        status: 400,
+        message: `fail`,
+      });
+    });
+}

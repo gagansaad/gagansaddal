@@ -61,10 +61,7 @@ router.get(`/fetchAds`,
     authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchAllAds
 );
-router.get(`/guest/fetchAds`,
-    // authMiddleware.ensureUserLoggedIn,
-    controllers.fetchAllAds
-);
+
 router.get(`/menu`,
     controllers.fetchJobData
 );
@@ -81,7 +78,7 @@ router.patch(`/edit-role/:jobId`,
     controllers.editJobStatus
 );
 router.get(`/ad_details`,
-    // authMiddleware.ensureUserLoggedIn,
+authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchonead
 );
 module.exports = router;
