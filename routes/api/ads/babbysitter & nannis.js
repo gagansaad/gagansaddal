@@ -67,7 +67,7 @@ router.patch(`/edit/:productId`, upload.array('photos', 10),
 //     controllers.editBuySellStatus
 // );
 router.get(`/fetchAds`,
-authMiddleware.ensureUserLoggedInDummy,
+    authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchAll
 );
 router.get(`/ad_details`,
