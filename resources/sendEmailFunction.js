@@ -130,6 +130,7 @@ exports.sendEmail = async (email_address, subject, fileName, replacements = []) 
             },
         });
         fileName = "./view/Email-Templetes/" + fileName + ".ejs";
+        console.log(fileName);
         let templateFile = fs.readFileSync(fileName).toString();
         var template = ejs.compile(templateFile);
         var htmlToSend = template(replacements);

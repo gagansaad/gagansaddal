@@ -45,54 +45,66 @@ exports.userList = async(req,res, next) => {
         }
       
 };
-exports.forget_password= async function (req, res, next) {
-  // console.log(req.body);
-  const address = req.body.email_address
+exports.forget_password = async function (req, res, next) {
+  try {
+    const address = req.body.email_address;
+    if (!address)
+      return res.json({ status: 400, message: `Email not provided` });
 
-  if (!address)
-    return res.json({ status: 400, message: `Email not exist` });
-  let email_address = address.toLowerCase();
-    let verifiy_url = `https://menehariya-admin.netscapelabs.com/reset-password/?secret`;
-  users.findOne({
-    "userInfo.email_address": email_address,
-  })
-    .then(async(foundUser) => {
-      if (foundUser) {
-        console.log(foundUser);
-        const token = jwt.sign({
-          "email_address":foundUser.email_address,
+    // Convert email address to lowercase
+    const email_address = address.toLowerCase();
 
-      },
-      'this is dummy text',
-      {
-          expiresIn:"10m"
-      });
-        await Notification.sendEmail(
-          foundUser.email_address,
-          {
-            subject: "Reset Password!",
-            email_template: "adminResetPassword",
-            verify_url: verifiy_url,
-          }
-        );
-        return res.json({
-          status: 200,
-          userId: foundUser._id,
-          message: `Reset Password Link Successfully Sent Out To Your Email Address`,
-        });
-      } else {
+    users.findOne({
+      "userInfo.email_address": email_address,
+    })
+      .then(async (foundUser) => {
+        if (foundUser) {
+          console.log(foundUser);
+
+          const token = jwt.sign(
+            {
+              email_address: foundUser.email_address,
+            },
+            'this is dummy text',
+            {
+              expiresIn: "10m",
+            }
+          );
+          let verify_url = `https://menehariya-admin.netscapelabs.com/reset-password/${token}`;
+          const emailSubject = "Reset Password!";
+          const emailFileName = "adminResetPassword"; // Replace with the correct template file name
+          const replacements = {
+            verify_url: verify_url,
+          };
+
+          await Notification.sendEmail(email_address, emailSubject, emailFileName, replacements);
+
+          return res.json({
+            status: 200,
+            userId: foundUser._id,
+            message: `Reset Password Link Successfully Sent Out To Your Email Address`,
+          });
+        } else {
+          return res.json({
+            status: 400,
+            message: `Email Not Found`,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
         return res.json({
           status: 400,
-          message: `Email Not Exists`,
+          message: `Failed to reset password`,
         });
-      }
-    })
-    .catch((err) => {
-      return res.json({
-        status: 400,
-        message: `fail`,
       });
+  } catch (error) {
+    console.error(error);
+    return res.json({
+      status: 400,
+      message: `Failed to reset password`,
     });
+  }
 }
 
 
