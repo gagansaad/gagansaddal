@@ -6,7 +6,7 @@ const Users = require('../../../model/accounts/users'),
 } = require(`../../../handlers/jsonResponseHandlers`);
 let Notification = require("../../../resources/sendEmailFunction");
 const jwt = require('jsonwebtoken');
-
+const bcrypt = require("bcryptjs")
 let tokenSecret = 'this is dummy text'
 
 exports.userList = async(req,res, next) => {
