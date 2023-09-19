@@ -1158,7 +1158,6 @@ exports.fetchEventData = async (req, res, next) => {
 
       const totalCount = subcategoryData.reduce((total, item) => total + item.count, 0);
       lalcount.push(totalCount)
-      let RedZone = lalcount.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
       responseArray.push({
         name: category,
         count: totalCount,
@@ -1167,6 +1166,7 @@ exports.fetchEventData = async (req, res, next) => {
     }
 
     // console.log(responseArray);
+    let RedZone = lalcount.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
     return successJSONResponse(res, {
       message: `success`,

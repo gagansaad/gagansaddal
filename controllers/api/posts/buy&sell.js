@@ -1695,7 +1695,6 @@ exports.fetchBuysellData = async (req, res, next) => {
 
       const totalCount = subcategoryData.reduce((total, item) => total + item.count, 0);
       lalcount.push(totalCount)
-      let RedZone = lalcount.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
       responseArray.push({
         name: category,
         count: totalCount,
@@ -1703,6 +1702,7 @@ exports.fetchBuysellData = async (req, res, next) => {
         sub_categories: subcategoryData,
       });
     }
+    let RedZone = lalcount.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
     // console.log(responseArray);
 
