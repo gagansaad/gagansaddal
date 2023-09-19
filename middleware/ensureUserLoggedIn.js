@@ -66,7 +66,7 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
 }
 exports.ensureUserLoggedInAdmin = async (req, res, next) => {
 
-
+console.log(req.headers.authorization);
     try {
 
         let token = null;
@@ -75,7 +75,7 @@ exports.ensureUserLoggedInAdmin = async (req, res, next) => {
             token = req.headers.authorization.split(' ')[1];
         }
 
-        // console.log(`token`, token)
+        console.log(`token`, token)
 
         if (!token) return res.json({
             status: 401,
