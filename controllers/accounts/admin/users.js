@@ -1,4 +1,5 @@
 const users = require('../../../model/accounts/admin');
+const mongoose = require('mongoose');
 const Users = require('../../../model/accounts/users'),
 {
     successJSONResponse,
@@ -8,7 +9,7 @@ let Notification = require("../../../resources/sendEmailFunction");
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs")
 let tokenSecret = 'AbCdEfGhIjKlMnOPYT'
-
+const ObjectId = mongoose.Types.ObjectId;
 exports.userList = async(req,res, next) => {
         try {
           const {
@@ -223,7 +224,7 @@ exports.update_profile= async function (req, res, next) {
   try {
     const userId = req.userId;
     console.log(userId);
-    let data = await users.findById({"_id":userId})
+    let data = await users.findById(userId)
     if(!data){
       return res.status(401).json({
         msg:'Please provide your valid Id'
