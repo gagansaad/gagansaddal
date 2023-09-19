@@ -154,10 +154,11 @@ exports.fetchRoomData = async (req, res, next) => {
     }
 
     // console.log(responseArray);
+   let RedZone = lalcount.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
     return successJSONResponse(res, {
       message: `success`,
-      totalCount:lalcount,
+      totalCount:RedZone,
       data: responseArray,
     });
   } catch (error) {
