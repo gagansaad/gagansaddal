@@ -4,8 +4,8 @@ const router = express.Router();
 const Admin = require('../../../model/accounts/admin');
 const Controller = require("../../../controllers/accounts/admin/users")
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-
+const jwt = require('jsonwebtoken'),
+authMiddleware = require(`../../../middleware/ensureUserLoggedIn`);
 router.post('/',(req,res,next)=>{
 console.log(req.body.email_address,"sdfghjkl;");
     Admin.find({email_address:req.body.email_address})
@@ -26,7 +26,7 @@ console.log(req.body.email_address,"sdfghjkl;");
             }
             if (result) {
                 const token = jwt.sign({
-                    "email_address":admin[0].email_address,
+                    "userId":admin[0]._id,
 
                 },
                 'this is dummy text',
@@ -50,6 +50,8 @@ console.log(req.body.email_address,"sdfghjkl;");
 
 router.post("/forget-password",Controller.forget_password)
 router.post("/reset-password",Controller.update_password)
+router.post("/fetch-profile",authMiddleware.ensureUserLoggedInAdmin,Controller.fetchProfileDetails)
+router.post("/update-profile",authMiddleware.ensureUserLoggedInAdmin,Controller.update_profile)
 
 
 module.exports = router

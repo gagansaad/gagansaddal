@@ -58,10 +58,9 @@ exports.fetchDynamicsData = async (req, res, next) => {
     ],
     currency: ["USD", "AED", "AUD", "AWG", "CAD", "EUR", "GBP", "INR", "USN"],
     rent_info: [
-      "/day",
-      "/week",
       "/month",
-      
+      "/week",
+      "/day", 
     ],
     roomType: [`Single`, `Double`, `Triple`, `Quad`],
     occupation: [`employed`, `self employed`, `engineer`],

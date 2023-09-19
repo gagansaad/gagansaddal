@@ -181,3 +181,97 @@ let userId
       });
     });
 }
+
+
+exports.fetchProfileDetails = async function (req, res) {
+  try {
+    const userId = req.userId;
+
+    if (!userId)
+      return failureJSONResponse(res, { message: `please provide your Id` });
+
+      users.findById({ _id: userId })
+      .then((user) => {
+        console.log(user);
+        if (!user)
+          return failureJSONResponse(res, {
+            message: `something went worng`,
+          });
+        else {
+          const data = {
+            name: user?.name || null,
+            email_address: user?.email_address || null,
+            phone_number: user?.phone_number || null,
+            createdAt: user?.createdAt || null,
+          };
+          // console.log("haigi aaa ", data);
+          return successJSONResponse(res, { user: data });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        return failureJSONResponse(res, {
+          message: `something went wrong`,
+        });
+      });
+  } catch (error) {
+    return failureJSONResponse(res, { message: `something went wrong` });
+  }
+}
+
+exports.update_profile= async function (req, res, next) {
+  try {
+    const userId = req.userId;
+    let data = await users.findById({_id:userId})
+    if(!data.length){
+      return res.status(401).json({
+        msg:'Please provide your valid Id'
+    })
+    }
+    const {
+      name,
+      old_password,
+      new_password,
+    } = req.body;
+    
+    const dataObj={}
+    if (name && !isValidString(name))
+      return failureJSONResponse(res, { message: `Invalid Name` });
+    // if (date_of_birth && !vali(date_of_birth)) return failureJSONResponse(res, { message: `Invalid Date Of Birth` });
+    if(name){
+      dataObj.name= name
+    }
+  
+   if(old_password && new_password){
+    bcrypt.compare(old_password,data?.password,(err,result)=>{
+      if (!result) {
+          return res.status(401).json({
+              msg:'password matching fail'
+          })
+      }
+      if(result){
+        dataObj.password = bcrypt.hashSync(new_password, 8);
+      }
+
+   })
+   };
+    var updatedProfileRes = await users.updateOne(
+      { _id: userId },
+      { $set: dataObj },
+      { new: true }
+    );
+
+    if (updatedProfileRes) {
+      return successJSONResponse(res, {
+        message: `success`,
+      });
+    } else {
+      return failureJSONResponse(res, {
+        message: `Failed to update profile`,
+      });
+    }
+  } catch (err) {
+    // console.log(err);
+    return failureJSONResponse(res, { message: `something went wrong` });
+  }
+}
