@@ -659,6 +659,7 @@ exports.fetchAll = async (req, res, next) => {
       min_price,
       max_price
     } = req.query;
+    console.log(req.query,"jassi ki jai");
     if (is_contact !== undefined) {
       // Add filter for is_contact
       dbQuery["adsInfo.expected_salary_amount.is_contact"] = is_contact === true || is_contact === "true";
