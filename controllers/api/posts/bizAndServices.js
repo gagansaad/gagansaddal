@@ -1428,7 +1428,6 @@ exports.fetchBizData = async (req, res, next) => {
       responseArray.push({
         name: category,
         count: totalCount,
-        totalCount:RedZone,
         sub_categories: subcategoryData,
       });
     }
@@ -1438,6 +1437,7 @@ exports.fetchBizData = async (req, res, next) => {
 
     return successJSONResponse(res, {
       message: `success`,
+      totalCount:RedZone,
       data: responseArray,
     });
   } catch (error) {
