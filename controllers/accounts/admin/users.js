@@ -201,7 +201,7 @@ exports.fetchProfileDetails = async function (req, res) {
           const data = {
             name: user?.name || null,
             email_address: user?.email_address || null,
-            phone_number: user?.mobile_number || null,
+            mobile_number: user?.mobile_number || null,
             createdAt: user?.createdAt || null,
           };
           // console.log("haigi aaa ", data);
@@ -222,14 +222,17 @@ exports.fetchProfileDetails = async function (req, res) {
 exports.update_profile= async function (req, res, next) {
   try {
     const userId = req.userId;
-    let data = await users.findById({_id:userId})
-    if(!data.length){
+    console.log(userId);
+    let data = await users.findById({"_id":userId})
+    if(!data){
       return res.status(401).json({
         msg:'Please provide your valid Id'
     })
     }
     const {
       name,
+      email_address,
+      mobile_number,
       old_password,
       new_password,
     } = req.body;
