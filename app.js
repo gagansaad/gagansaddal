@@ -118,7 +118,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/v1/api/', signUp);
-app.use('/admin/login', adminSignIp);
+app.use('/admin', adminSignIp);
 app.use('/api/admin/users', usercontrol);
 
 app.use('/v1/api/configurations', configurationsRoute);

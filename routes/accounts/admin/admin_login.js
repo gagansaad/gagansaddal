@@ -6,7 +6,7 @@ const Controller = require("../../../controllers/accounts/admin/users")
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken'),
 authMiddleware = require(`../../../middleware/ensureUserLoggedIn`);
-router.post('/',(req,res,next)=>{
+router.post('/login',(req,res,next)=>{
 console.log(req.body.email_address,"sdfghjkl;");
     Admin.find({email_address:req.body.email_address})
     .exec()
@@ -50,7 +50,7 @@ console.log(req.body.email_address,"sdfghjkl;");
 
 router.post("/forget-password",Controller.forget_password)
 router.post("/reset-password",Controller.update_password)
-router.post("/fetch-profile",authMiddleware.ensureUserLoggedInAdmin,Controller.fetchProfileDetails)
+router.get("/fetch-profile",authMiddleware.ensureUserLoggedInAdmin,Controller.fetchProfileDetails)
 router.post("/update-profile",authMiddleware.ensureUserLoggedInAdmin,Controller.update_profile)
 
 
