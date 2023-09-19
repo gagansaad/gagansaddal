@@ -83,9 +83,10 @@ console.log(req.headers.authorization);
             
         }) 
         else {
-
+            console.log(`token here`, token)
             const decodedPayload = verifyAndDecodeToken(token);
-            // console.log(`decodedPayload`,decodedPayload)
+
+            console.log(`decodedPayload`,decodedPayload)
         
 
             if (!((decodedPayload && decodedPayload.userId))) {
