@@ -191,7 +191,7 @@ exports.fetchProfileDetails = async function (req, res) {
     if (!userId)
       return failureJSONResponse(res, { message: `please provide your Id` });
 
-      users.findById({ _id: userId })
+      users.findById(userId)
       .then((user) => {
         console.log(user);
         if (!user)
@@ -250,7 +250,7 @@ exports.update_profile= async function (req, res, next) {
     bcrypt.compare(old_password,data?.password,(err,result)=>{
       if (!result) {
           return res.status(401).json({
-              msg:'password matching fail'
+              msg:'Please provide valid old password'
           })
       }
       if(result){
