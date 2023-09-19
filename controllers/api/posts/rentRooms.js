@@ -110,7 +110,7 @@ exports.fetchRoomData = async (req, res, next) => {
     };
     
     const responseArray = [];
-
+    const lalcount = []
     for (const category in sub_categories) {
       const subCategoryArray = sub_categories[category];
       const subcategoryData = [];
@@ -145,7 +145,7 @@ exports.fetchRoomData = async (req, res, next) => {
       }
 
       const totalCount = subcategoryData.reduce((total, item) => total + item.count, 0);
-
+      lalcount.push(totalCount)
       responseArray.push({
         name: category,
         count: totalCount,
@@ -157,6 +157,7 @@ exports.fetchRoomData = async (req, res, next) => {
 
     return successJSONResponse(res, {
       message: `success`,
+      totalCount:lalcount,
       data: responseArray,
     });
   } catch (error) {
