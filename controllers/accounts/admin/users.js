@@ -238,7 +238,7 @@ exports.update_profile= async function (req, res, next) {
       old_password,
       new_password,
     } = req.body;
-    
+    console.log(req.body);
     const dataObj={}
     if (name && !isValidString(name))
       return failureJSONResponse(res, { message: `Invalid Name` });
