@@ -4,6 +4,7 @@ const { listeners } = require("../../../model/posts/roomRents");
 const {mongoose,ObjectId, modelNames} = require("mongoose"),
   RoomRentsAds = mongoose.model("rental"),
   PostViews = mongoose.model("Post_view"),
+  Users = mongoose.model("user"),
   Media = mongoose.model("media"),
   tagline_keywords = mongoose.model("keywords"),
   {
@@ -881,6 +882,8 @@ if (prefered_age) {
     }
     // console.log(sortval);
     let myid = req.userId;
+    let notification = await Users.findOne({_id:myid}).select('userNotification.rental')
+    let valueofnotification = notification?.userNotification?.rental;
     let records = await RoomRentsAds.find({
       $or: [queryFinal],
     })
@@ -888,7 +891,6 @@ if (prefered_age) {
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
       .populate({ path: "viewCount" })
-      .populate({path: "userNotificationRentals",select: "rental",match: { user: userId }})
       .populate({ path: "ReportCount", select: "_id" })
       .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
       .sort(sortval)
@@ -911,14 +913,17 @@ if (prefered_age) {
             is_favorite: !!job.isFavorite, 
             Report_count: job.ReportCount,
             is_Reported: !!job.isReported, 
-        };
+        };  
+        
       });
+     
       return successJSONResponse(res, {
         message: `success`,
         total: responseModelCount,
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
+        notification:valueofnotification,
         records:jobData,
         status: 200, 
       });

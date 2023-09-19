@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const mongoose = require("mongoose"),
   postJobAd = mongoose.model("job"),
   PostViews = mongoose.model("Post_view"),
+  Users = mongoose.model("user"),
   Media = mongoose.model("media"),
   tagline_keywords = mongoose.model("keywords"),
   {
@@ -844,6 +845,10 @@ exports.fetchAllAds = async (req, res, next) => {
     }
  
     let myid = req.userId;
+
+    let notification = await Users.findOne({_id:myid}).select('userNotification.job')
+    let valueofnotification = notification?.userNotification?.job;
+
     let records = await postJobAd
       .find({ $or: [queryFinal] })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
@@ -970,6 +975,7 @@ exports.fetchAllAds = async (req, res, next) => {
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
+        notification:valueofnotification,
         records:jobData,
         AdOnsData:{
           bumpupData,

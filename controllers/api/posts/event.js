@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const mongoose = require("mongoose"),
   eventAd = mongoose.model("event"),
   Media = mongoose.model("media"),
+  Users = mongoose.model("user"),
   PostViews = mongoose.model("Post_view"),
   tagline_keywords = mongoose.model("keywords"),
   {
@@ -951,6 +952,10 @@ if (start_time && end_time) {
       };
     }
     let myid = req.userId;
+    
+        
+    let notification = await Users.findOne({_id:myid}).select('userNotification.event')
+    let valueofnotification = notification?.userNotification?.event;
     let records = await eventAd
       .find({ $or: [queryFinal] })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
@@ -985,6 +990,7 @@ if (start_time && end_time) {
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
+        notification:valueofnotification,
         records:jobData,
         status: 200,
       });

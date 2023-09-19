@@ -2,6 +2,7 @@ const { json } = require("express");
 const crypto = require('crypto');
 const mongoose = require("mongoose"),
   Media = mongoose.model("media"),
+  Users = mongoose.model("user"),
   postbizAndServicesAd = mongoose.model("Local_biz & Service"),
   PostViews = mongoose.model("Post_view"),
   tagline_keywords = mongoose.model("keywords"),
@@ -1066,6 +1067,10 @@ exports.fetchAll = async (req, res, next) => {
     }
 
     let myid = req.userId;
+    
+       
+    let notification = await Users.findOne({_id:myid}).select('userNotification.localBiz')
+    let valueofnotification = notification?.userNotification?.localBiz;
     let records = await postbizAndServicesAd
       .find({ $or: [queryFinal] })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
@@ -1101,6 +1106,7 @@ exports.fetchAll = async (req, res, next) => {
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
+        notification:valueofnotification,
         records:jobData,
         status: 200,
       });

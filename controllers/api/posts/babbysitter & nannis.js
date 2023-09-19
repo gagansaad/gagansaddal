@@ -5,6 +5,7 @@ const mongoose = require("mongoose"),
   PostViews = mongoose.model("Post_view"),
   Media = mongoose.model("media"),
   tagline_keywords = mongoose.model("keywords"),
+  Users = mongoose.model("user"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -765,6 +766,8 @@ exports.fetchAll = async (req, res, next) => {
       };
     }
     let myid = req.userId;
+    let notification = await Users.findOne({_id:myid}).select('userNotification.careService')
+    let valueofnotification = notification?.userNotification?.careService;
     let records = await postbabyAd
       .find({ $or: [queryFinal] })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
@@ -800,6 +803,7 @@ exports.fetchAll = async (req, res, next) => {
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
+        notification:valueofnotification,
         records:jobData,
         status: 200,
       });

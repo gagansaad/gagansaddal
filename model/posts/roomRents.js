@@ -231,15 +231,7 @@ roomRentsSchema.virtual("favoriteCount", {
         return { user: this.userId };
       },
   });
-  roomRentsSchema.virtual("userNotificationRentals", {
-    ref: "user",
-    foreignField: "_id",
-    justOne: true,
-    populate: {
-      path: "userNotification.rental",
-      select: "rental",
-    },
-  });
+ 
  
 
 module.exports = mongoose.model('rental', roomRentsSchema);

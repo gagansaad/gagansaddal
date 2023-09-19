@@ -22,9 +22,9 @@ exports.create_configuration = async (req, res, next) => {
     const existingPrivacyPolicy = await Privacy.findOne();
     const existingAboutUs = await AboutUS.findOne();
    
-    if (!term_text) return failureJSONResponse(res, { message: `Please provide Term And Conditions` });
-    if (!privacy_text) return failureJSONResponse(res, { message: `Please provide Privacy Policy` });
-    if (!about_text) return failureJSONResponse(res, { message: `Please provide About Us` });
+    // if (!term_text) return failureJSONResponse(res, { message: `Please provide Term And Conditions` });
+    // if (!privacy_text) return failureJSONResponse(res, { message: `Please provide Privacy Policy` });
+    // if (!about_text) return failureJSONResponse(res, { message: `Please provide About Us` });
     if (existingTermCondition) {
         // If data exists, update it
         existingTermCondition.htmlText = term_text;
