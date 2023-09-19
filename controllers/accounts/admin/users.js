@@ -201,7 +201,7 @@ exports.fetchProfileDetails = async function (req, res) {
           const data = {
             name: user?.name || null,
             email_address: user?.email_address || null,
-            phone_number: user?.phone_number || null,
+            phone_number: user?.mobile_number || null,
             createdAt: user?.createdAt || null,
           };
           // console.log("haigi aaa ", data);
