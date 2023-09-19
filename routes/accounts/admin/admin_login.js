@@ -29,7 +29,7 @@ console.log(req.body.email_address,"sdfghjkl;");
                     "userId":admin[0]._id,
 
                 },
-                'this is dummy text',
+                'AbCdEfGhIjKlMnOPYT',
                 {
                     expiresIn:"24h"
                 });
