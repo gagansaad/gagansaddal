@@ -248,7 +248,8 @@ exports.update_profile= async function (req, res, next) {
     }
   
    if(old_password && new_password){
-    const result = await bcrypt.compare(old_password, data?.password);
+    console.log("object");
+    const result = await bcrypt.compare(old_password,data?.password);
     console.log(result,"-----------------------------------------------------");
     if (!result) {
       return res.status(401).json({
