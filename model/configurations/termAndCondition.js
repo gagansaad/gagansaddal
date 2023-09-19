@@ -4,7 +4,7 @@ const termAndConditionSchema = new mongoose.Schema({
 
     htmlText: {
         type: String,
-        required: true
+        // required: true
     },
 
 }, { timestamps: true });
