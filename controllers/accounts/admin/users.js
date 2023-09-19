@@ -248,17 +248,17 @@ exports.update_profile= async function (req, res, next) {
     }
   
    if(old_password && new_password){
-    bcrypt.compare(old_password,data?.password,(err,result)=>{
-      if (!result) {
-          return res.status(401).json({
-              msg:'Please provide valid old password'
-          })
-      }
+    const result = await bcrypt.compare(old_password, data?.password);
+    
+    if (!result) {
+      return res.status(401).json({
+        msg: 'Please provide a valid old password'
+      });
+    }
+
       if(result){
         dataObj.password = bcrypt.hashSync(new_password, 8);
       }
-
-   })
    };
     var updatedProfileRes = await users.updateOne(
       { _id: userId },
