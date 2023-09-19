@@ -225,6 +225,7 @@ exports.update_profile= async function (req, res, next) {
     const userId = req.userId;
     console.log(userId);
     let data = await users.findById(userId)
+    console.log(data,"vikaasssssss ki jai")
     if(!data){
       return res.status(401).json({
         msg:'Please provide your valid Id'
