@@ -685,7 +685,7 @@ exports.editJobStatus = async (req, res, next) => {
 
 exports.fetchAllAds = async (req, res, next) => {
   try {
-    let searchTerm = req.body.searchTerm;
+    let searchTerm = req.query.search_term || "";;
     // console.log("objectuygtututu");
     let dbQuery = {};
     const {

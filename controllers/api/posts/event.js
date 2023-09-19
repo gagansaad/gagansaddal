@@ -806,7 +806,7 @@ exports.editEventStatus = async (req, res, next) => {
 ////////////////
 exports.fetchAll = async (req, res, next) => {
   try {
-    let searchTerm = req.body.searchTerm;
+    let searchTerm = req.query.search_term || "";
     let dbQuery = {};
     const {
       status,
