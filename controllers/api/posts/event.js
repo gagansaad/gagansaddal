@@ -819,6 +819,7 @@ exports.fetchAll = async (req, res, next) => {
       end_date,
       start_time,
       end_time,
+      time_zone,
       regular_ticket_price,
       min_price,
       max_price,
@@ -870,6 +871,26 @@ if (start_time && end_time) {
 } else if (end_time) {
   dbQuery["adsInfo.date_time.end_time"] = {
     $lte: end_time
+  };
+}
+if (time_zone) {
+  dbQuery["adsInfo.date_time.time_zone"] = time_zone
+}
+time_zone
+if (start_date && end_date) {
+  dbQuery["adsInfo.date_time.start_date"] = {
+    $gte: start_date
+  };
+  dbQuery["adsInfo.date_time.end_date"] = {
+    $lte: end_date
+  };
+} else if (start_date) {
+  dbQuery["adsInfo.date_time.start_date"] = {
+    $gte: start_date
+  };
+} else if (end_date) {
+  dbQuery["adsInfo.date_time.end_date"] = {
+    $lte: end_date
   };
 }
 
