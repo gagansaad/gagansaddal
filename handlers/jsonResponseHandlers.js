@@ -6,7 +6,7 @@ const mongoose = require("mongoose"),
   babysitterAd = mongoose.model("babysitter & nannie"),
   roomrentAd = mongoose.model("rental"),
   jobsAd = mongoose.model("job"),
-  category = mongoose.model("posttype"),
+  category = mongoose.model("PostType"),
   Media = mongoose.model("media"),
   tagline_keywords = mongoose.model("keywords")
 
