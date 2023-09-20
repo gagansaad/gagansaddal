@@ -14,7 +14,7 @@ authMiddleware.ensureUserLoggedIn,
 );
 
 router.get(`/adons-ads`,
-// authMiddleware.ensureUserLoggedIn,
+authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchAll
 );
 

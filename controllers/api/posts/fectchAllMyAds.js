@@ -135,9 +135,12 @@ exports.fetchAll = async (req, res, next) => {
     let commonPopulateOptions = [
       { path: "adsType", strictPopulate: false, select: "name" },
       { path: "adsInfo.image", strictPopulate: false, select: "url" },
+      { path: "favoriteCount", select: "_id" },
       { path: "viewCount" },
-      { path: "createdAt" },
-      { path: 'isFavorite', select: 'user', match: { user: myid } }
+      { path: "ReportCount" },
+      { path: "ReportCount", select: "_id" },
+      { path: 'isReported', select: 'userId', match: { userId: myid } },
+      { path: 'isFavorite', select: 'user', match: { user: myid } },
   ];
   
   let commonSelectFields = {
@@ -243,7 +246,9 @@ exports.fetchAll = async (req, res, next) => {
             // Add other job fields as needed
             view_count: job.viewCount,
             favorite_count: job.favoriteCount,
-            is_favorite: !!job.isFavorite,
+            is_favorite: !!job.isFavorite, 
+            Report_count: job.ReportCount,
+            is_Reported: !!job.isReported, 
             is_featured: isFeaturedAddonValid || false, // Set to false if addons_validity doesn't exist
           };
         });
