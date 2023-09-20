@@ -67,7 +67,7 @@ exports.ModelNameByAdsType = async (ads_type) => {
         Typename = "job"
         ModelName = jobsAd
         break;
-      case "Local Biz & Service":
+      case "Local Biz & Services":
         Typename = "Local_biz & Service"
         ModelName = bizAd
         break;
