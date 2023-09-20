@@ -52,16 +52,21 @@ exports.createFavoriteAd = async (req, res, next) => {
         favoriteAd = await FavoriteAd.findOneAndDelete(
           {_id:checkAlreadyexist._id},
           );
+          if (favoriteAd) {
+            return successJSONResponse(res, { message: `success`, favoriteAd: false});
+          } else {
+            return failureJSONResponse(res, { message: `failure` });
+          }
       } else {
         favoriteAd = await FavoriteAd.create(dbQuery);
-       
+        if (favoriteAd) {
+          return successJSONResponse(res, { message: `success`, favoriteAd: true});
+        } else {
+          return failureJSONResponse(res, { message: `failure` });
+        }
       }
       
-      if (favoriteAd) {
-        return successJSONResponse(res, { message: `success`, favoriteAd: favoriteAd });
-      } else {
-        return failureJSONResponse(res, { message: `failure` });
-      }
+      
     } catch (error) {
       console.log(error);
       return failureJSONResponse(res, { message: `Something went wrong` });
