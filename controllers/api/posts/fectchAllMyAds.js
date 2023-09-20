@@ -146,6 +146,9 @@ exports.fetchAll = async (req, res, next) => {
       "adsInfo.location": 1,
       "_id": 1,
   };
+  let pricejobs={
+    "adsInfo.salary":1
+  };
 
 
     for (const adons of adons_name) {
