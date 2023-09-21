@@ -710,8 +710,10 @@ exports.fetchAllAds = async (req, res, next) => {
       maxDistance,
       add_on,
       min_price,
-      max_price
+      max_price,
+      isfavorite
     } = req.query;
+   
     if (add_on){
       // Add filter for rent amount
       dbQuery["addons_validity.name"] = add_on;
@@ -821,6 +823,12 @@ exports.fetchAllAds = async (req, res, next) => {
       dbQuery["adsInfo.tagline"] = tagline;
     }
     if (userId) dbQuery.userId = userId;
+    const isFavoriteFilter = isfavorite === 'true' ? true : undefined;
+
+    // If isfavorite is true, add a filter to dbQuery
+    if (isFavoriteFilter !== undefined) {
+      dbQuery.isFavorite = isFavoriteFilter;
+    }
      // Get the current date
      const currentDate = new Date();
      // Convert the date to ISO 8601 format
