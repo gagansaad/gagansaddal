@@ -830,7 +830,8 @@ exports.fetchAll = async (req, res, next) => {
       longitude,
       latitude,
       maxDistance,
-      add_on
+      add_on,
+      is_favorite,
     } = req.query;
     if (add_on){
       // Add filter for rent amount
@@ -986,15 +987,14 @@ if (start_date && end_date) {
       .populate({ path: "ReportCount", select: "_id" })
       .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
       .sort(sortval)
-      .skip(perPage * page - perPage)
-      .limit(perPage);
+     
       const totalCount = await eventAd.find({
         $or: [queryFinal],
       });
       let responseModelCount = totalCount.length;
    
     if (records) {
-        const jobData = records.map((job) => {
+        let jobData = records.map((job) => {
           return {
             ...job._doc,
             // Add other job fields as needed
@@ -1004,15 +1004,30 @@ if (start_date && end_date) {
             Report_count: job.ReportCount,
             is_Reported: !!job.isReported, 
           };
+          
         });
+        const isFavoriteFilter = is_favorite === 'true' ? true : undefined;
+        if (isFavoriteFilter) {
+          jobData = jobData.filter((job) => job.is_favorite === true);
+        }
+      
+        // Pagination
+        const totalCount = jobData.length;
+        const perPage = parseInt(req.query.perpage) || 5;
+        const page = parseInt(req.query.page) || 1;
+      
+        const startIndex = (page - 1) * perPage;
+        const endIndex = startIndex + perPage;
+      
+        const paginatedData = jobData.slice(startIndex, endIndex);
       return successJSONResponse(res, {
         message: `success`,
-        total: responseModelCount,
+        total: totalCount,
         perPage: perPage,
-        totalPages: Math.ceil(responseModelCount / perPage),
+        totalPages: Math.ceil(totalCount / perPage),
         currentPage: page,
         notification:valueofnotification,
-        records:jobData,
+        records:paginatedData,
         status: 200,
       });
     } else {

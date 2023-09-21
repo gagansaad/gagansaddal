@@ -711,7 +711,7 @@ exports.fetchAllAds = async (req, res, next) => {
       add_on,
       min_price,
       max_price,
-      isfavorite
+      is_favorite
     } = req.query;
    
     if (add_on){
@@ -823,12 +823,12 @@ exports.fetchAllAds = async (req, res, next) => {
       dbQuery["adsInfo.tagline"] = tagline;
     }
     if (userId) dbQuery.userId = userId;
-    const isFavoriteFilter = isfavorite === 'true' ? true : undefined;
+   
 
     // If isfavorite is true, add a filter to dbQuery
-    if (isFavoriteFilter !== undefined) {
-      dbQuery.isFavorite = isFavoriteFilter;
-    }
+    // if (isFavoriteFilter !== undefined) {
+    //   dbQuery.isFavorite = isFavoriteFilter;
+    // }
      // Get the current date
      const currentDate = new Date();
      // Convert the date to ISO 8601 format
@@ -866,15 +866,13 @@ exports.fetchAllAds = async (req, res, next) => {
       .populate({ path: "ReportCount", select: "_id" })
       .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
       .sort(sortval)
-      .skip(perPage * page - perPage)
-      .limit(perPage);
       const totalCount = await postJobAd.find({
         $or: [queryFinal],
       });
       let responseModelCount = totalCount.length;
    
     if (records) {
-      const jobData = records.map((job) => {
+      let jobData = records.map((job) => {
         return {
           ...job._doc,
           // Add other job fields as needed
@@ -885,6 +883,21 @@ exports.fetchAllAds = async (req, res, next) => {
           is_Reported: !!job.isReported, 
         };
       });//////
+      const isFavoriteFilter = is_favorite === 'true' ? true : undefined;
+      if (isFavoriteFilter) {
+        jobData = jobData.filter((job) => job.is_favorite === true);
+      }
+    
+      // Pagination
+      const totalCount = jobData.length;
+      const perPage = parseInt(req.query.perpage) || 5;
+      const page = parseInt(req.query.page) || 1;
+    
+      const startIndex = (page - 1) * perPage;
+      const endIndex = startIndex + perPage;
+    
+      const paginatedData = jobData.slice(startIndex, endIndex);
+      
       let FeaturedData = await postJobAd.find({ "addons_validity.name": "Bump up" })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
@@ -979,12 +992,12 @@ exports.fetchAllAds = async (req, res, next) => {
       })
       return successJSONResponse(res, {
         message: `success`,
-        total: responseModelCount,
+        total: totalCount,
         perPage: perPage,
-        totalPages: Math.ceil(responseModelCount / perPage),
+        totalPages: Math.ceil(totalCount / perPage),
         currentPage: page,
         notification:valueofnotification,
-        records:jobData,
+        records:paginatedData,
         AdOnsData:{
           bumpupData,
           featuredData
