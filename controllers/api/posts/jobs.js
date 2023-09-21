@@ -846,8 +846,8 @@ exports.fetchAllAds = async (req, res, next) => {
       queryFinal = {
         ...dbQuery,
         $or: [
-          { "adsInfo.title": { $regex: searchTerm, $options: "i" } },
-          { "adsInfo.tagline": { $regex: searchTerm, $options: "i" } }
+          { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
+          { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } }
         ]
       };
     }

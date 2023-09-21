@@ -759,11 +759,12 @@ exports.fetchAll = async (req, res, next) => {
      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
     let queryFinal = dbQuery;
     if (searchTerm) {
+    
       queryFinal = {
         ...dbQuery,
         $or: [
-          { "adsInfo.title": { $regex: searchTerm, $options: "i" } },
-          { "adsInfo.tagline": { $regex: searchTerm, $options: "i" } }
+          { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
+          { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } }
         ]
       };
     }
