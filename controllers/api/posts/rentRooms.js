@@ -768,7 +768,8 @@ exports.fetchAll = async (req, res, next) => {
       custom_date,
       add_on,
       min_price,
-      max_price
+      max_price,
+      is_favorite
     } = req.query;
     // console.log(req.query,"aayi");
     var perPage = parseInt(req.query.perpage) || 40;
@@ -895,8 +896,7 @@ if (prefered_age) {
       .populate({ path: "ReportCount", select: "_id" })
       .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
       .sort(sortval)
-      .skip(perPage * page - perPage)
-      .limit(perPage);
+   
       // console.log(records);
      
       const totalCount = await RoomRentsAds.find({

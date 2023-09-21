@@ -780,8 +780,7 @@ exports.fetchAll = async (req, res, next) => {
       .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
       .sort(sortval)
-      .skip(perPage * page - perPage)
-      .limit(perPage);
+
       const totalCount = await postbabyAd.find({
         $or: [queryFinal],
       });
