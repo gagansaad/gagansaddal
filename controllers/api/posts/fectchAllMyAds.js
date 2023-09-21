@@ -221,6 +221,192 @@ exports.fetchAll = async (req, res, next) => {
       .select(commonSelectFields);
       const data5 = await jobsAd.find(dbQuery).sort({ createdAt: -1 }).limit(joblimit)
       .populate(commonPopulateOptions)
+      .select(commonSelectFields);
+      const data6 = await roomrentAd.find(dbQuery).sort({ createdAt: -1 }).limit(roomlimit)
+      .populate(commonPopulateOptions)
+      .select(commonSelectFields);
+// console.log(data6);
+      const combinedData = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
+      let filterData
+      if (combinedData) {
+         filterData = combinedData.map((job) => {
+          // console.log("Job:", job);
+          // console.log("Addons Validity:", job.addons_validity);
+      
+          const isFeaturedAddonValid = job.addons_validity && Array.isArray(job.addons_validity) &&
+              job.addons_validity.some((addon) => {
+                  const addonExpired = new Date(addon.expired_on) >= new Date();
+                  // console.log(`Addon: ${addon.name}, Expired: ${addonExpired}`);
+                  return addon.name === "Featured"  && addonExpired;
+              });
+      
+          // console.log("Is Featured Addon Valid:", isFeaturedAddonValid);
+          return {
+            ...job._doc,
+            // Add other job fields as needed
+            view_count: job.viewCount,
+            favorite_count: job.favoriteCount,
+            is_favorite: !!job.isFavorite,
+            is_featured: isFeaturedAddonValid || false, // Set to false if addons_validity doesn't exist
+          };
+        });
+      
+      // Only add to adonsData if there is data
+      if (filterData.length >= 0) {
+        adonsData.push({
+          name: adons,
+          data: filterData
+        });
+      }
+        // console.log(adonsData,"999999999999999999999")
+      // Only add to mergedData if there is adonsData
+      if (adonsData.length > 0) {
+        mergedData.push(...adonsData);
+      }
+    }
+  }
+    return successJSONResponse(res, {
+      message: "success",
+      data: mergedData,banner
+    });
+  
+  } catch (err) {
+    console.log(err);
+    return failureJSONResponse(res, { message: `something went wrong` }, { error: err.message });
+  }
+};
+
+exports.fetchAll1 = async (req, res, next) => {
+  try {
+    // console.log("object-------------------------------");
+    let myid 
+    if(req.userId){
+      myid=req.userId || "0"
+    }
+    const {
+      longitude,
+      latitude,
+      maxDistance,
+    } = req.query;
+    let Distance
+    
+    if(maxDistance === "0" || !maxDistance){
+      // console.log("bol");
+      Distance =  200000
+    }else{
+      Distance =maxDistance*1000
+    }
+
+   
+  // console.log(Distance,"aayayayayayayayyayayayayayyayayayayayyayayayayayayyayayayayya");
+    let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false,select:"url"})
+   
+    
+    const adons_name = ["Homepage Gallery", "Urgent", "Upcoming Event", "Price Drop"];
+    const mergedData = [];
+    let commonPopulateOptions = [
+      { path: "adsType", strictPopulate: false, select: "name" },
+      { path: "adsInfo.image", strictPopulate: false, select: "url" },
+      { path: "favoriteCount", select: "_id" },
+      { path: "viewCount" },
+      { path: "ReportCount" },
+      { path: "ReportCount", select: "_id" },
+      { path: 'isReported', select: 'userId', match: { userId: myid } },
+      { path: 'isFavorite', select: 'user', match: { user: myid } },
+  ];
+  
+  let commonSelectFields = {
+      "addons_validity.":1,
+      "adsInfo.title": 1,
+      "adsInfo.location": 1,
+      "_id": 1,
+  };
+  let pricejobs={
+    "adsInfo.salary":1
+  };
+
+
+    for (const adons of adons_name) {
+      const adonsData = [];
+      let dbQuery={ "addons_validity": {
+        $elemMatch: {
+          "name": adons,
+          "expired_on": { $gte: new Date("2023-09-18") } // Check if expired_on is less than or equal to the current date
+        }
+      } }
+      
+      if (longitude && latitude && Distance) {
+        const targetPoint = {
+          type: 'Point',
+          coordinates: [longitude, latitude]
+        };
+        dbQuery["adsInfo.location.coordinates"] = {
+         
+            $near: {
+              $geometry: targetPoint,
+              $maxDistance: Distance
+            }
+          
+      }
+    }
+    console.log("dbQuery:", dbQuery); 
+    const eventCount = await eventAd.find(dbQuery);
+    console.log(eventCount);
+    const bizCount = await bizAd.find(dbQuery);
+    console.log(bizCount);
+    const babysitterCount = await babysitterAd.find(dbQuery);
+    console.log(babysitterCount);
+    const roomrentCount = await roomrentAd.find(dbQuery);
+    console.log(roomrentCount);
+    const jobsCount = await jobsAd.find(dbQuery);
+    console.log(jobsCount);
+    const buysellCount = await buysellAd.find(dbQuery);
+    console.log(buysellCount);
+    let eventlimt   = 2;
+    let bizlimit  = 2;
+    let babylimit = 2;
+    let roomlimit = 2;
+    let joblimit  = 2;
+    let buylimit  = 2;
+
+    if(eventCount.length < 2){
+      eventlimt = 0
+    }
+    if(bizCount.length < 2){
+      bizlimit = 0
+    }
+    if(babysitterCount.length < 2){
+      babylimit = 0
+    }
+    if(roomrentCount.length < 2){
+      roomlimit = 0
+    }
+    if(jobsCount.length < 2){
+      joblimit = 0
+    }
+    if(buysellCount.length < 2){
+      buylimit = 0
+    }
+      const data1 = await babysitterAd.find(dbQuery)
+      .sort({ createdAt: -1 })
+      // .limit(babylimit)
+      .populate(commonPopulateOptions)
+      .select(commonSelectFields);
+      const data2 = await buysellAd.find(dbQuery).sort({ createdAt: -1 })
+      // .limit(buylimit)
+      .populate(commonPopulateOptions)
+      .select(commonSelectFields);
+      const data3 = await bizAd.find(dbQuery).sort({ createdAt: -1 })
+      // .limit(bizlimit)
+      .populate(commonPopulateOptions)
+      .select(commonSelectFields);
+      let data4Limit = adons === "Upcoming Event" ? (eventCount.length < 12 ? eventCount.length : 12) : eventlimt;
+      // console.log(data4Limit);
+      const data4 = await eventAd.find(dbQuery).sort({ createdAt: -1 }).limit(data4Limit)
+      .populate(commonPopulateOptions)
+      .select(commonSelectFields);
+      const data5 = await jobsAd.find(dbQuery).sort({ createdAt: -1 }).limit(joblimit)
+      .populate(commonPopulateOptions)
       .select({ ...commonSelectFields, ...pricejobs });
       // console.log(data5,"lmalmlm lma");
       const modifiedData5 = data5.map(item => {
@@ -251,12 +437,12 @@ exports.fetchAll = async (req, res, next) => {
           console.log("Job:", job);
           // console.log("Addons Validity:", job.addons_validity);
       
-          const isFeaturedAddonValid = job.addons_validity && Array.isArray(job.addons_validity) &&
-              job.addons_validity.some((addon) => {
-                  const addonExpired = new Date(addon.expired_on) >= new Date();
-                  // console.log(`Addon: ${addon.name}, Expired: ${addonExpired}`);
-                  return addon.name === "Featured"  && addonExpired;
-              });
+          // const isFeaturedAddonValid = job.addons_validity && Array.isArray(job.addons_validity) &&
+          //     job.addons_validity.some((addon) => {
+          //         const addonExpired = new Date(addon.expired_on) >= new Date();
+          //         // console.log(`Addon: ${addon.name}, Expired: ${addonExpired}`);
+          //         return addon.name === "Featured"  && addonExpired;
+          //     });
       
           // console.log("Is Featured Addon Valid:", isFeaturedAddonValid);
           return {
@@ -267,7 +453,7 @@ exports.fetchAll = async (req, res, next) => {
             is_favorite: !!job.isFavorite, 
             Report_count: job.ReportCount,
             is_Reported: !!job.isReported, 
-            is_featured: isFeaturedAddonValid || false, // Set to false if addons_validity doesn't exist
+            // is_featured: isFeaturedAddonValid || false, // Set to false if addons_validity doesn't exist
           };
         });
       
@@ -295,7 +481,5 @@ exports.fetchAll = async (req, res, next) => {
     return failureJSONResponse(res, { message: `something went wrong` }, { error: err.message });
   }
 };
-
-
 
 
