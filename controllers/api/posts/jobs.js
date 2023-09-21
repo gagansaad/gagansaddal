@@ -890,7 +890,7 @@ exports.fetchAllAds = async (req, res, next) => {
     
       // Pagination
       const totalCount = jobData.length;
-      const perPage = parseInt(req.query.perpage) || 5;
+      const perPage = parseInt(req.query.perpage) || 40;
       const page = parseInt(req.query.page) || 1;
     
       const startIndex = (page - 1) * perPage;
