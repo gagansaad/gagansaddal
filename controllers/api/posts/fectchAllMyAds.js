@@ -221,16 +221,34 @@ exports.fetchAll = async (req, res, next) => {
       .select(commonSelectFields);
       const data5 = await jobsAd.find(dbQuery).sort({ createdAt: -1 }).limit(joblimit)
       .populate(commonPopulateOptions)
-      .select(commonSelectFields);
+      .select({ ...commonSelectFields, ...pricejobs });
+      // console.log(data5,"lmalmlm lma");
+      const modifiedData5 = data5.map(item => {
+        if (item.adsInfo && item.adsInfo.salary !== undefined) {
+          item.adsInfo.price = item.adsInfo.salary;
+          delete item.adsInfo.salary;
+        }
+        return {
+          ...item._doc,
+          adsInfo: {
+            price: item.adsInfo.price, // Include only the 'price' field
+            location: item.adsInfo.location,
+            image: item.adsInfo.image,
+            title: item.adsInfo.title,
+          },
+        };
+  
+      });
+      // console.log(modifiedData5,"ji haan");
       const data6 = await roomrentAd.find(dbQuery).sort({ createdAt: -1 }).limit(roomlimit)
       .populate(commonPopulateOptions)
       .select(commonSelectFields);
 // console.log(data6);
-      const combinedData = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
+      const combinedData = [...data1, ...data2, ...data3, data4, ...modifiedData5, ...data6];
       let filterData
       if (combinedData) {
          filterData = combinedData.map((job) => {
-          // console.log("Job:", job);
+          console.log("Job:", job);
           // console.log("Addons Validity:", job.addons_validity);
       
           const isFeaturedAddonValid = job.addons_validity && Array.isArray(job.addons_validity) &&
