@@ -11,22 +11,20 @@ const mongoose = require("mongoose"),
 
 
 
-exports.create_configuration = async (req, res, next) => {
+exports.create_tconfiguration = async (req, res, next) => {
     try{
     const {
         term_text,
-        privacy_text,
-        about_text,
+        
     } = req.body
     const existingTermCondition = await TermAndCondition.findOne();
-    const existingPrivacyPolicy = await Privacy.findOne();
-    const existingAboutUs = await AboutUS.findOne();
+    
    
-    // if (!term_text) return failureJSONResponse(res, { message: `Please provide Term And Conditions` });
+    if (!term_text) return failureJSONResponse(res, { message: `Please provide Term And Conditions` });
     // if (!privacy_text) return failureJSONResponse(res, { message: `Please provide Privacy Policy` });
     // if (!about_text) return failureJSONResponse(res, { message: `Please provide About Us` });
-    if(term_text.length){
-      if (existingTermCondition) {
+    
+    if (existingTermCondition) {
         // If data exists, update it
         existingTermCondition.htmlText = term_text;
         await existingTermCondition.save();
@@ -35,8 +33,29 @@ exports.create_configuration = async (req, res, next) => {
         await TermAndCondition.create({ htmlText: term_text });
       }
   
-    }
-   if(privacy_text.length){
+    
+      return successJSONResponse(res, { message: "Success" });
+    
+} catch (err) {
+    console.log(err,"------------------------------");
+    return failureJSONResponse(res, { message: `something went wrong` })
+}
+
+}
+exports.create_pconfiguration = async (req, res, next) => {
+  try{
+  const {
+    
+      privacy_text,
+     
+  } = req.body
+ 
+  const existingPrivacyPolicy = await Privacy.findOne();
+
+ 
+  if (!privacy_text) return failureJSONResponse(res, { message: `Please provide Privacy Policy` });
+ 
+  
     if (existingPrivacyPolicy) {
       existingPrivacyPolicy.htmlText = privacy_text;
       await existingPrivacyPolicy.save();
@@ -44,22 +63,40 @@ exports.create_configuration = async (req, res, next) => {
       await Privacy.create({ htmlText: privacy_text });
     }
 
-   }
-
-  if(about_text.length){
-      if (existingAboutUs) {
-        existingAboutUs.htmlText = about_text;
-        await existingAboutUs.save();
-      } else {
-        await AboutUS.create({ htmlText: about_text });
-      }
-  }
-     
-      return successJSONResponse(res, { message: "Success" });
-    
+    return successJSONResponse(res, { message: "Success" });
+  
 } catch (err) {
-    console.log(err,"------------------------------");
-    return failureJSONResponse(res, { message: `something went wrong` })
+  console.log(err,"------------------------------");
+  return failureJSONResponse(res, { message: `something went wrong` })
+}
+
+}
+exports.create_aconfiguration = async (req, res, next) => {
+  try{
+  const {
+     
+      about_text,
+  } = req.body
+  
+  const existingAboutUs = await AboutUS.findOne();
+ 
+
+  if (!about_text) return failureJSONResponse(res, { message: `Please provide About Us` });
+  
+
+
+  
+    if (existingAboutUs) {
+      existingAboutUs.htmlText = about_text;
+      await existingAboutUs.save();
+    } else {
+      await AboutUS.create({ htmlText: about_text });
+    }
+    return successJSONResponse(res, { message: "Success" });
+  
+} catch (err) {
+  console.log(err,"------------------------------");
+  return failureJSONResponse(res, { message: `something went wrong` })
 }
 
 }
