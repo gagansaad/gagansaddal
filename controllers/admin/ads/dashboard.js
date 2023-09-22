@@ -136,7 +136,7 @@ exports.fetchAlldashboard = async (req, res, next) => {
     let tomorrow1 = new Date(today1);
     tomorrow1.setDate(today1.getDate() + 1); // Set the time to the start of the next day
     
-    const todayClients = await users.countDocuments({
+    const todayclients = await users.countDocuments({
       createdAt: {
         $gte: today1, // Greater than or equal to the start of today
         $lt: tomorrow1, // Less than the start of tomorrow
