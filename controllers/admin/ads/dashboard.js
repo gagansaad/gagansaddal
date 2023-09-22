@@ -7,6 +7,7 @@ const mongoose = require("mongoose"),
   babysitterAd = mongoose.model("babysitter & nannie"),
   roomrentAd = mongoose.model("rental"),
   jobsAd = mongoose.model("job"),
+  users = mongoose.model("user")
   paymentModel = mongoose.model("payment"),
   {
     successJSONResponse,
@@ -127,7 +128,21 @@ exports.fetchAlldashboard = async (req, res, next) => {
     const roomrentCount = await roomrentAd.countDocuments();
     const jobsCount = await jobsAd.countDocuments();
     const buysellCount = await buysellAd.countDocuments();
+    const totalclients =await users.countDocuments();
 
+    let today1 = new Date();
+    today1.setHours(0, 0, 0, 0); // Set the time to the start of the day
+    
+    let tomorrow1 = new Date(today1);
+    tomorrow1.setDate(today1.getDate() + 1); // Set the time to the start of the next day
+    
+    const todayClients = await users.countDocuments({
+      createdAt: {
+        $gte: today1, // Greater than or equal to the start of today
+        $lt: tomorrow1, // Less than the start of tomorrow
+      },
+    });
+    
     // Calculate the total sum
     const totalSum = eventCount + bizCount + babysitterCount + roomrentCount + jobsCount + buysellCount;
     let featuredTotalCount
@@ -239,6 +254,8 @@ const counts = {
         todayAdsCount,
         totalAmount, 
         todayTotalAmount,
+        totalclients,
+        todayclients,
         status: 200,
       });
     } else {
