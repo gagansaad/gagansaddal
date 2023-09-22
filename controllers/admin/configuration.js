@@ -46,7 +46,7 @@ exports.create_configuration = async (req, res, next) => {
 
    }
 
-  if(about_text){
+  if(about_text.length){
       if (existingAboutUs) {
         existingAboutUs.htmlText = about_text;
         await existingAboutUs.save();
