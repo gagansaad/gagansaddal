@@ -643,43 +643,43 @@ exports.editJobAds = async (req, res, next) => {
 
 /////----------------------Update Job Status -------------------/////
 
-exports.editJobStatus = async (req, res, next) => {
-  // console.log(`kejhrjhyewgrjhew`);
-  try {
-    const jobId = req?.params?.jobId;
+// exports.editJobStatus = async (req, res, next) => {
+//   // console.log(`kejhrjhyewgrjhew`);
+//   try {
+//     const jobId = req.query.ads_id;
 
-    if (!jobId)
-      return successJSONResponse(res, {
-        message: `success`,
-        newJobPost,
-        status: 200,
-      });
-    const dataObj = {};
-    const { status } = req.body;
+//     if (!jobId)
+//       return successJSONResponse(res, {
+//         message: `success`,
+//         newJobPost,
+//         status: 200,
+//       });
+//     const dataObj = {};
+//     const { status } = req.body;
 
-    if (status) dataObj.status = parseInt(status);
+//     if (status) dataObj.status = parseInt(status);
 
-    const updateJob = await postJobAd.findByIdAndUpdate(
-      { _id: jobId },
-      { $set: dataObj },
-      { new: true }
-    );
+//     const updateJob = await postJobAd.findByIdAndUpdate(
+//       { _id: jobId },
+//       { $set: dataObj },
+//       { new: true }
+//     );
 
-    if (updateJob) {
-      return successJSONResponse(res, {
-        message: `success`,
-        updateJob,
-      });
-    } else {
-      return failureJSONResponse(res, {
-        message: `Something went wrong`,
-        updatejob: null,
-      });
-    }
-  } catch (err) {
-    (err);
-  }
-};
+//     if (updateJob) {
+//       return successJSONResponse(res, {
+//         message: `success`,
+//         updateJob,
+//       });
+//     } else {
+//       return failureJSONResponse(res, {
+//         message: `Something went wrong`,
+//         updatejob: null,
+//       });
+//     }
+//   } catch (err) {
+//     (err);
+//   }
+// };
 
 ///////////////////
 

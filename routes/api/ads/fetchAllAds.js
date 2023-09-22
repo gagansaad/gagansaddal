@@ -18,6 +18,9 @@ authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchAll
 );
 
-
+router.get(`/adons-ads1`,
+authMiddleware.ensureUserLoggedInDummy,
+    controllers.fetchAll1
+);
 
 module.exports = router;

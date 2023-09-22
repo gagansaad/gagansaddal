@@ -72,11 +72,11 @@ router.patch(`/edit/:jobId`,
     controllers.validateListerBasicinfo,
     controllers.editJobAds
 );
-router.patch(`/edit-role/:jobId`,
-    authMiddleware.ensureUserLoggedIn,
-    controllers.validateJobAdsData,
-    controllers.editJobStatus
-);
+// router.patch(`/edit-role/:jobId`,
+//     authMiddleware.ensureUserLoggedIn,
+//     controllers.validateJobAdsData,
+//     controllers.editJobStatus
+// );
 router.get(`/ad_details`,
 authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchonead
