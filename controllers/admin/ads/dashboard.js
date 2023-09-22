@@ -9,6 +9,7 @@ const mongoose = require("mongoose"),
   jobsAd = mongoose.model("job"),
   users = mongoose.model("user"),
   paymentModel = mongoose.model("payment"),
+  posttype = mongoose.model("PostType"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -122,9 +123,27 @@ exports.fetchAll = async (req, res, next) => {
 
 exports.fetchAlldashboard = async (req, res, next) => {
   try {
-
+    
+    let post_type = await posttype.find();
+    let totalAmountSums = []; // Initialize an array to store the sums
+    
+    for (const ids of post_type) {
+      console.log(ids, "/////");
+      let reve = await paymentModel.find({ "ads_type": ids._id });
+     
+      let totalAmountSum = 0;
+      for (const payment of reve) {
+        totalAmountSum += payment.total_amount;
+      }
+    
+      // Push the sum into the array along with the corresponding ads_type
+      totalAmountSums.push({totalrevenue: totalAmountSum });
+    }
+    
+    console.log("Total Amount Sums:", totalAmountSums);
+    
     let totalAmount = 0;
-let todayTotalAmount = 0;
+    let todayTotalAmount = 0;
     const eventCount = await eventAd.countDocuments();
     const bizCount = await bizAd.countDocuments();
     const babysitterCount = await babysitterAd.countDocuments();
@@ -224,26 +243,32 @@ const counts = {
   event: {
     total: eventCount,
     featured: featuredcounts.featuredevent,
+    totalrevenue:totalAmountSums[0].totalrevenue
   },
   biz: {
     total: bizCount,
     featured: featuredcounts.featuredbiz,
+    totalrevenue:totalAmountSums[1].totalrevenue
   },
   babysitter: {
     total: babysitterCount,
     featured: featuredcounts.featuredbabysitter,
+    totalrevenue:totalAmountSums[2].totalrevenue
   },
   roomrent: {
     total: roomrentCount,
     featured: featuredcounts.featuredroomrent,
+    totalrevenue:totalAmountSums[3].totalrevenue
   },
   jobs: {
     total: jobsCount,
     featured: featuredcounts.featuredjobs,
+    totalrevenue:totalAmountSums[4].totalrevenue
   },
   buysell: {
     total: buysellCount,
     featured: featuredcounts.featuredbuysell,
+    totalrevenue:totalAmountSums[5].totalrevenue
   },
 };
 
