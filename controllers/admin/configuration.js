@@ -25,7 +25,8 @@ exports.create_configuration = async (req, res, next) => {
     // if (!term_text) return failureJSONResponse(res, { message: `Please provide Term And Conditions` });
     // if (!privacy_text) return failureJSONResponse(res, { message: `Please provide Privacy Policy` });
     // if (!about_text) return failureJSONResponse(res, { message: `Please provide About Us` });
-    if (existingTermCondition) {
+    if(term_text.length){
+      if (existingTermCondition) {
         // If data exists, update it
         existingTermCondition.htmlText = term_text;
         await existingTermCondition.save();
@@ -34,19 +35,26 @@ exports.create_configuration = async (req, res, next) => {
         await TermAndCondition.create({ htmlText: term_text });
       }
   
-      if (existingPrivacyPolicy) {
-        existingPrivacyPolicy.htmlText = privacy_text;
-        await existingPrivacyPolicy.save();
-      } else {
-        await Privacy.create({ htmlText: privacy_text });
-      }
-  
+    }
+   if(privacy_text.length){
+    if (existingPrivacyPolicy) {
+      existingPrivacyPolicy.htmlText = privacy_text;
+      await existingPrivacyPolicy.save();
+    } else {
+      await Privacy.create({ htmlText: privacy_text });
+    }
+
+   }
+
+  if(about_text){
       if (existingAboutUs) {
         existingAboutUs.htmlText = about_text;
         await existingAboutUs.save();
       } else {
         await AboutUS.create({ htmlText: about_text });
       }
+  }
+     
       return successJSONResponse(res, { message: "Success" });
     
 } catch (err) {
