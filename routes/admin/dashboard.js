@@ -48,6 +48,11 @@ router.get(`/total`,
     controllers.fetchAlldashboard
    
 );
+router.get(`/dashboard-graph`,
+    // authMiddleware.ensureUserLoggedIn,
+    controllers.fetchGraph
+   
+);
 router.get(`/featured`,
     // authMiddleware.ensureUserLoggedIn,
     controllers.fetchAllFeaturedAds
