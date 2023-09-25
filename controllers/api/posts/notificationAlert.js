@@ -35,29 +35,35 @@ const Category = mongoose.model("PostType");
 
 exports.createAlert = async (req, res, next) => {
   try {
-    const { ads_type, notification_status } = req.body;
+    const { ads_type,add_name, notification_status } = req.body;
     const userId = req.userId;
+    const adsName='';
     // console.log(req.body);
-    if (!ads_type && !notification_status) {
+    if ((!ads_type || !add_name) && !notification_status) {
       return failureJSONResponse(res, {
         message: "Please provide ads type and notification status",
       });
     }
+if(add_name==''){
 
-    const category = await Category.findById(ads_type);
+  const category = await Category.findById(ads_type);
 
-    if (!category) {
-      return failureJSONResponse(res, {
-        message: "Invalid ads_type Category not found.",
-      });
-    }
+  if (!category) {
+    return failureJSONResponse(res, {
+      message: "Invalid ads_type Category not found.",
+    });
+  }
 
-    const adsName = category.name;
-    const updateQuery = {};
+   adsName = category.name;
+
+}else{
+   adsName = add_name;
+} 
+ const updateQuery = {};
 
     switch (adsName) {
       case "Events":
-        updateQuery["userNotification.+"] = notification_status;
+        updateQuery["userNotification.event"] = notification_status;
         break;
       case "Jobs":
         updateQuery["userNotification.job"] = notification_status;
@@ -98,11 +104,13 @@ exports.getAlerts = async (req, res, next) => {
     let myid = req.userId;
 
     let notification = await User.findOne({_id:myid}).select('userNotification')
+    let category = await category.find()
 // console.log(notification);
 let returnNotification=[
   {
     category:"Buy & Sell",
     value: notification?.userNotification?.buysell || false,
+    
   } ,
   {
     category:"Babysitters & Nannies",
