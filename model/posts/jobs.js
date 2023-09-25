@@ -193,6 +193,7 @@ roomRentsSchema.virtual("favoriteCount", {
         return { user: this.userId };
       },
   });
+ 
   roomRentsSchema.virtual("viewCount", {
     ref: "Post_view",
     localField: "_id",

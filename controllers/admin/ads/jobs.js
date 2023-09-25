@@ -26,6 +26,9 @@ const mongoose = require("mongoose"),
 
 exports.fetchAll = async (req, res, next) => {
   try {
+    let totalViewCount = 0; // Initialize the total view count variable
+    let todayViewCount = 0; // Initialize the view count for records created today
+    let todayRecordsCount = 0;
     let searchTerm = req.body.searchTerm;
     // console.log("objectuygtututu");
     let dbQuery = {};
@@ -161,8 +164,23 @@ exports.fetchAll = async (req, res, next) => {
         $or: [queryFinal],
       });
       let responseModelCount = totalCount.length;
-   
+
     if (records) {
+
+      const currentDate = new Date();
+      const currentDateOnly = currentDate.toISOString().substring(0, 10);
+      // Calculate the total view count
+      records.forEach((job) => {
+        totalViewCount += job.viewCount;
+        if (
+          job.createdAt.toISOString().substring(0, 10) === currentDateOnly
+        ) {
+          todayViewCount += job.viewCount;
+          todayRecordsCount += 1;
+        }
+      });
+     
+    
       const jobData = records.map((job) => {
         return {
           ...job._doc,
@@ -179,6 +197,9 @@ exports.fetchAll = async (req, res, next) => {
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
         records:jobData,
+        totalViewCount: totalViewCount, // Include total view count in the response
+        todayViewCount: todayViewCount, 
+        todayRecordsCount:todayRecordsCount,// Include view count for today in the response
         status: 200,
       });
     } else {
