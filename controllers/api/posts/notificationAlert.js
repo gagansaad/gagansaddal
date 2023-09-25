@@ -93,7 +93,19 @@ exports.createAlert = async (req, res, next) => {
   }
 };
 
+exports.getAlerts = async (req, res, next) => {
+  try {
+    let myid = req.userId;
 
+    let notification = await User.findOne({_id:myid}).select('userNotification.job')
+
+
+    return successJSONResponse(res, { message: "Success", notification:notification.userNotification});
+  } catch (error) {
+    console.error(error);
+    return failureJSONResponse(res, { message: "Something went wrong" });
+  }
+};
 
 
 

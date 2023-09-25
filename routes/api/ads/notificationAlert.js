@@ -7,6 +7,7 @@ const router = require(`express`).Router(),
     
     
 router.post(`/create-alert`,authMiddleware.ensureUserLoggedIn,controllers.createAlert)
+router.get(`/get-alerts`,authMiddleware.ensureUserLoggedIn,controllers.getAlerts)
 
 
 
