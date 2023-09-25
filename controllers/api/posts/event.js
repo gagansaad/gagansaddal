@@ -1066,7 +1066,9 @@ exports.fetchonead = async (req, res, next) => {
     .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
     .populate({ path: "favoriteCount", select: "_id" })
     .populate({ path: "viewCount" })
-    .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
+    .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
+    .populate({ path: "ReportCount", select: "_id" })
+    .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
     
     if (records) {
       const ads_type =records.adsType.toString();
@@ -1089,7 +1091,9 @@ exports.fetchonead = async (req, res, next) => {
         ...records._doc,
         view_count: records.viewCount,
         favorite_count: records.favoriteCount,
-        is_favorite: !!records.isFavorite
+        is_favorite: !!records.isFavorite,
+        Report_count: records.ReportCount,
+        is_Reported: !!records.isReported, 
       };
       return successJSONResponse(res, {
         message: `success`,

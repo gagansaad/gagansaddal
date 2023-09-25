@@ -3,6 +3,7 @@ const mongoose = require("mongoose"),
   postJobAd = mongoose.model("job"),
   PostViews = mongoose.model("Post_view"),
   tagline_keywords = mongoose.model("keywords"),
+  paymentModel = mongoose.model('payment'),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -170,7 +171,9 @@ exports.fetchAll = async (req, res, next) => {
       const currentDate = new Date();
       const currentDateOnly = currentDate.toISOString().substring(0, 10);
       // Calculate the total view count
+      let sadsid
       records.forEach((job) => {
+        sadsid= job.adsType
         totalViewCount += job.viewCount;
         if (
           job.createdAt.toISOString().substring(0, 10) === currentDateOnly
@@ -179,8 +182,45 @@ exports.fetchAll = async (req, res, next) => {
           todayRecordsCount += 1;
         }
       });
-     
+      const paymentStatus = "confirmed"; // Replace with the actual payment_status value you want to search for
+
+      // Calculate the start and end dates for today
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set the time to the beginning of the day (midnight)
+      const endDate = new Date(today); // Create a copy of the start date
+      endDate.setDate(today.getDate() + 1); // Set the end date to the next day
+      
+      const query = {
+        $and: [
+          { ads_type: sadsid },
+          // { payment_status: paymentStatus },
+          {
+            createdAt: {
+              $gte: today,
+              $lt: endDate,
+            },
+          },
+        ],
+      };
+      const query2 = {
+        $and: [
+          { ads_type: sadsid },
+          // { payment_status: paymentStatus },
+        ],
+      };
+      
+      let reve = await paymentModel.find(query2);
+      let treve = await paymentModel.find(query);
+      let totalAmountSum = 0;
+      for (const payment of reve) {
+        totalAmountSum += payment.total_amount;
+      }
     
+      let totayAmountSum = 0;
+      for (const payment of treve) {
+        totayAmountSum += payment.total_amount;
+      }
+     
       const jobData = records.map((job) => {
         return {
           ...job._doc,
@@ -199,7 +239,9 @@ exports.fetchAll = async (req, res, next) => {
         records:jobData,
         totalViewCount: totalViewCount, // Include total view count in the response
         todayViewCount: todayViewCount, 
-        todayRecordsCount:todayRecordsCount,// Include view count for today in the response
+        todayRecordsCount:todayRecordsCount,
+        totalrevenue:totalAmountSum,
+        todayrevenue:totayAmountSum,// Include view count for today in the response
         status: 200,
       });
     } else {

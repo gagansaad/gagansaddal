@@ -467,6 +467,7 @@ exports.create_payment_intent = async (req, res) => {
           200
         );
       // Handle the event
+      let dataobj={}
       let findUser = await PaymentModel.findById({ _id: payment_id });
       // console.log(findUser, "findUser");
       let UserId = findUser.user.toString();
@@ -486,11 +487,23 @@ exports.create_payment_intent = async (req, res) => {
           break;
         case "payment_intent.created":
           paymentStatus = "confirmed";
+          dataobj = {
+            payment_id: payment_id,
+            payment_status: paymentStatus,
+            payment_intent: event,
+          };
+          await PaymentEventModel.create(dataobj);
           const paymentIntentCreated = event.data.object;
           // Then define and call a function to handle the event payment_intent.created
           break;
         case "payment_intent.payment_failed":
           paymentStatus = "failed";
+          dataobj = {
+            payment_id: payment_id,
+            payment_status: paymentStatus,
+            payment_intent: event,
+          };
+          await PaymentEventModel.create(dataobj);
           const paymentIntentPaymentFailed = event.data.object;
           // Then define and call a function to handle the event payment_intent.payment_failed
           break;
@@ -548,12 +561,7 @@ exports.create_payment_intent = async (req, res) => {
         default:
           console.log(`Unhandled event type ${event.type}`);
       }
-      let dataobj = {
-        payment_id: payment_id,
-        payment_status: paymentStatus,
-        payment_intent: event,
-      };
-      await PaymentEventModel.create(dataobj);
+      
       return successJSONResponse(
         response,
         { status: 200, message: event.type + " success" },
