@@ -92,7 +92,7 @@ if(add_name==''){
       { new: true, upsert: true }
     );
 
-    return successJSONResponse(res, { message: "Success", alert });
+    return successJSONResponse(res, { message: "Success", alert:alert.userNotification });
   } catch (error) {
     console.error(error);
     return failureJSONResponse(res, { message: "Something went wrong" });
