@@ -57,7 +57,7 @@ exports.createAlert = async (req, res, next) => {
 
     switch (adsName) {
       case "Events":
-        updateQuery["userNotification.event"] = notification_status;
+        updateQuery["userNotification.+"] = notification_status;
         break;
       case "Jobs":
         updateQuery["userNotification.job"] = notification_status;
@@ -97,10 +97,18 @@ exports.getAlerts = async (req, res, next) => {
   try {
     let myid = req.userId;
 
-    let notification = await User.findOne({_id:myid}).select('userNotification.job')
+    let notification = await User.findOne({_id:myid}).select('userNotification')
 
-
-    return successJSONResponse(res, { message: "Success", notification:notification.userNotification});
+let returnNotification={
+  "buysell": notification?.userNotification?.buysell || false,
+  "careService":notification?.userNotification?.careService || false,
+  "event": notification?.userNotification?.event || false,
+  "rental": notification?.userNotification?.rental || false,
+  "job":notification?.userNotification?.job || false,
+  "localBiz": notification?.userNotification?.localBiz || false
+};
+    // return successJSONResponse(res, { message: "Success", notification:notification.userNotification});
+    return successJSONResponse(res, { message: "Success", notification:returnNotification});
   } catch (error) {
     console.error(error);
     return failureJSONResponse(res, { message: "Something went wrong" });
