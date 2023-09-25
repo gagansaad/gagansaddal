@@ -37,7 +37,7 @@ exports.createAlert = async (req, res, next) => {
   try {
     const { ads_type,add_name, notification_status } = req.body;
     const userId = req.userId;
-    const adsName='';
+    let adsName='';
     // console.log(req.body);
     if ((!ads_type || !add_name) && !notification_status) {
       return failureJSONResponse(res, {
