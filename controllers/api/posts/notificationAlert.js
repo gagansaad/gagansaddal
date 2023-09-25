@@ -31,7 +31,7 @@ const mongoose = require("mongoose"),
 ////-----------------------Dynamic Data---------------------------////
 
 
-const Category = mongoose.model("PostType");
+// const Category = mongoose.model("PostType");
 
 exports.createAlert = async (req, res, next) => {
   try {
@@ -104,7 +104,7 @@ exports.getAlerts = async (req, res, next) => {
     let myid = req.userId;
 
     let notification = await User.findOne({_id:myid}).select('userNotification')
-    let category = await category.find()
+    // let category = await category.find()
 // console.log(notification);
 let returnNotification=[
   {
