@@ -193,4 +193,15 @@ BuySellSchema.virtual("favoriteCount", {
         return { user: this.userId };
       },
   });
+
+  BuySellSchema.virtual('price_default')
+.get(function () {
+  return this.adsInfo.price;
+})
+.set(function (value) {
+  this.adsInfo.price = value;
+});
+
+// Make sure to include 'toJSON' transform to include virtual properties when converting to JSON
+BuySellSchema.set('toJSON', { virtuals: true });
 module.exports = mongoose.model('Buy & Sell', BuySellSchema);

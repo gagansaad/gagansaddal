@@ -227,5 +227,18 @@ events_Schema.virtual("favoriteCount", {
         return { user: this.userId };
       },
   });
+
+    // Define a virtual property to alias 'expected_salary_amount' as 'price_default'
+    events_Schema.virtual('price_default')
+.get(function () {
+  return this.adsInfo.ticket_price;
+})
+.set(function (value) {
+  this.adsInfo.ticket_price = value;
+});
+
+// Make sure to include 'toJSON' transform to include virtual properties when converting to JSON
+events_Schema.set('toJSON', { virtuals: true });
+
 module.exports = mongoose.model('event', events_Schema);
 

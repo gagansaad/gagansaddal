@@ -278,30 +278,26 @@ exports.fetchAll = async (req, res, next) => {
 
 exports.fetchAll1 = async (req, res, next) => {
   try {
-    console.log("object-------------------------------", new Date("2023-09-18T00:00:00.000Z").toISOString());
-    let myid 
-    if(req.userId){
-      myid=req.userId || "0"
+    console.log("object-------------------------------", new Date().toISOString());
+    let myid;
+    if (req.userId) {
+      myid = req.userId || "0";
     }
     const {
       longitude,
       latitude,
       maxDistance,
     } = req.query;
-    let Distance
-    
-    if(maxDistance === "0" || !maxDistance){
-      // console.log("bol");
-      Distance =  200000
-    }else{
-      Distance =maxDistance*1000
+    let Distance;
+
+    if (maxDistance === "0" || !maxDistance) {
+      Distance = 200000;
+    } else {
+      Distance = maxDistance * 1000;
     }
 
-   
-  // console.log(Distance,"aayayayayayayayyayayayayayyayayayayayyayayayayayayyayayayayya");
-    let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false,select:"url"})
-   
-    
+    let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false, select: "url" });
+
     const adons_name = ["Homepage Gallery", "Urgent", "Upcoming Event", "Price Drop"];
     const mergedData = [];
     let commonPopulateOptions = [
@@ -313,62 +309,136 @@ exports.fetchAll1 = async (req, res, next) => {
       { path: "ReportCount", select: "_id" },
       { path: 'isReported', select: 'userId', match: { userId: myid } },
       { path: 'isFavorite', select: 'user', match: { user: myid } },
-  ];
-  
-  let commonSelectFields = {
-      "addons_validity.":1,
+    ];
+
+    let commonSelectFields = {
+      "addons_validity.": 1,
       "adsInfo.title": 1,
       "adsInfo.location": 1,
       "_id": 1,
-  };
-  let pricejobs={
-    "adsInfo.salary":1
-  };
-let eventCount
+    };
+    let priceBabySitter = {
+      "adsInfo.expected_salary_amount": 1,
+    };
+    let priceJobs = {
+      "adsInfo.salary": 1
+    };
+    let priceBuysell={
+      "adsInfo.price": 1
+    };
+    let priceEvent={
+      "adsInfo.ticket_price": 1
+    };
+    let priceRoomrent={
+      "adsInfo.rent": 1
+    };
+    let eventCount;
 
     for (const adons of adons_name) {
       const adonsData = [];
-      let dbQuery={ "addons_validity": {
-        $elemMatch: {
-          "name": adons,
-          "expired_on": {$gte: new Date("2023-09-18T00:00:00.000Z").toISOString()} // Check if expired_on is less than or equal to the current date
+      let dbQuery = {
+        "addons_validity": {
+          $elemMatch: {
+            "name": adons,
+            "expired_on": {
+              $gte: new Date("2023-09-18").toISOString() // Construct ISODate manually
+            }
+          }
         }
-      } }
-      
+      };
+
       if (longitude && latitude && Distance) {
         const targetPoint = {
           type: 'Point',
           coordinates: [longitude, latitude]
         };
         dbQuery["adsInfo.location.coordinates"] = {
-         
-            $near: {
-              $geometry: targetPoint,
-              $maxDistance: Distance
-            }
-          
+          $near: {
+            $geometry: targetPoint,
+            $maxDistance: Distance
+          }
+        }
+      }
+      // console.log("dbQuery:", dbQuery);
+      // eventCount = await eventAd.find(dbQuery);
+      // console.log(eventCount.length);
+      // const bizCount = await bizAd.find(dbQuery);
+      // console.log(bizCount.length);
+      // const babysitterCount = await babysitterAd.find(dbQuery);
+      // console.log(babysitterCount.length);
+      // const roomrentCount = await roomrentAd.find(dbQuery);
+      // console.log(roomrentCount.length);
+      // const jobsCount = await jobsAd.find(dbQuery);
+      // console.log(jobsCount.length);
+      // const buysellCount = await buysellAd.find(dbQuery);
+      // console.log(buysellCount.length);
+
+      const data1 = await babysitterAd.find(dbQuery)
+      .sort({ randomField: 1}).limit(3)
+      .populate(commonPopulateOptions).select({...commonSelectFields,...priceBabySitter}).exec()
+      // return successJSONResponse(res, {
+      //   message: "success",
+      //   data: data1,
+      //   banner
+      // });
+      const data2 = await buysellAd.find(dbQuery)
+      .sort({ randomField: 1 }).limit(3)
+      .populate(commonPopulateOptions).select({...commonSelectFields,...priceBuysell})
+      
+      const data3 = await bizAd.find(dbQuery)
+      .sort({ randomField: 1}).limit(3)
+      .populate(commonPopulateOptions).select(commonSelectFields)
+      
+     
+      const data4 = await eventAd.find(dbQuery)
+      .sort({ randomField: 1 }).limit(3)
+      .populate(commonPopulateOptions).select({...commonSelectFields,...priceEvent})
+      
+      const data5 = await jobsAd.find(dbQuery)
+      .sort({ randomField: 1}).limit(3)
+      .populate(commonPopulateOptions).select({...commonSelectFields,...priceJobs})
+    
+      const data6 = await roomrentAd.find(dbQuery)
+      .sort({ randomField: 1 }).limit(3)
+      .populate(commonPopulateOptions).select({...commonSelectFields,...priceRoomrent})
+      
+      const combinedData = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
+      // console.log(combinedData);
+      let filterData
+      if (combinedData) {
+         filterData = combinedData.map((job) => {
+       
+          return {
+            ...job._doc,
+            // Add other job fields as needed
+            price_default: job.price_default,
+            view_count: job.viewCount,
+            favorite_count: job.favoriteCount,
+            is_favorite: !!job.isFavorite,
+            // is_featured: isFeaturedAddonValid || false, // Set to false if addons_validity doesn't exist
+          };
+        });
+      // console.log(filterData,"----------------------");
+      // Only add to adonsData if there is data
+      if (filterData.length ) {
+        adonsData.push({
+          name: adons,
+          data: filterData
+        });
+      }
+        console.log(adonsData,"999999999999999999999")
+      // Only add to mergedData if there is adonsData
+      if (adonsData.length) {
+        mergedData.push(...adonsData);
       }
     }
-    console.log("dbQuery:", dbQuery); 
-    eventCount = await eventAd.find(dbQuery);
-    console.log(eventCount);
-    const bizCount = await bizAd.find(dbQuery);
-    console.log(bizCount);
-    const babysitterCount = await babysitterAd.find(dbQuery);
-    console.log(babysitterCount);
-    const roomrentCount = await roomrentAd.find(dbQuery);
-    console.log(roomrentCount);
-    const jobsCount = await jobsAd.find(dbQuery);
-    console.log(jobsCount);
-    const buysellCount = await buysellAd.find(dbQuery);
-    console.log(buysellCount);
 
-  }
+    }
     return successJSONResponse(res, {
       message: "success",
-      data: eventCount,banner
+      data: mergedData,
+      banner
     });
-  
   } catch (err) {
     console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` }, { error: err.message });

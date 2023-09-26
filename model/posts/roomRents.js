@@ -232,7 +232,18 @@ roomRentsSchema.virtual("favoriteCount", {
       },
   });
  
- 
+   // Define a virtual property to alias 'expected_salary_amount' as 'price_default'
+   roomRentsSchema.virtual('price_default')
+.get(function () {
+  return this.adsInfo.rent;
+})
+.set(function (value) {
+  this.adsInfo.rent = value;
+});
+
+// Make sure to include 'toJSON' transform to include virtual properties when converting to JSON
+roomRentsSchema.set('toJSON', { virtuals: true });
+
 
 module.exports = mongoose.model('rental', roomRentsSchema);
 

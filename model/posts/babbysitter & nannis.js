@@ -195,4 +195,16 @@ babysitter_Schema.virtual("favoriteCount", {
         return { user: this.userId };
       },
   });
+  // Define a virtual property to alias 'expected_salary_amount' as 'price_default'
+babysitter_Schema.virtual('price_default')
+.get(function () {
+  return this.adsInfo.expected_salary_amount;
+})
+.set(function (value) {
+  this.adsInfo.expected_salary_amount = value;
+});
+
+// Make sure to include 'toJSON' transform to include virtual properties when converting to JSON
+babysitter_Schema.set('toJSON', { virtuals: true });
+
 module.exports = mongoose.model('babysitter & nannie', babysitter_Schema);
