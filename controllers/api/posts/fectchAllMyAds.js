@@ -299,8 +299,12 @@ exports.fetchAll = async (req, res, next) => {
     let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false, select: "url" });
 
     const adons_name = ["Homepage Gallery", "Urgent", "Upcoming Event", "Price Drop"];
-    const adons_nameLimit = { "Homepage_Gallery": 3, "Urgent": 6, "Upcoming_Event": 18, "Price_Drop": 18 };
-    const adons_nameModelActive = { "Homepage_Gallery": { 'babysitterAd': true, 'buysellAd': true, 'bizAd': true, 'eventAd': true, 'jobsAd': true, 'roomrentAd': true }, "Urgent": { 'babysitterAd': true, 'buysellAd': true, 'bizAd': true, 'eventAd': true, 'jobsAd': true, 'roomrentAd': true }, "Upcoming_Event": { 'babysitterAd': true, 'buysellAd': true, 'bizAd': true, 'eventAd': true, 'jobsAd': true, 'roomrentAd': true }, "Price_Drop": { 'babysitterAd': true, 'buysellAd': true, 'bizAd': true, 'eventAd': true, 'jobsAd': true, 'roomrentAd': true } };
+    const adons_nameLimit = { "Homepage_Gallery": 3, "Urgent": 4, "Upcoming_Event": 16, "Price_Drop": 16 };
+    const adons_nameModelActive = {
+       "Homepage_Gallery": { 'babysitterAd': true, 'buysellAd': true, 'bizAd': true, 'eventAd': true, 'jobsAd': true, 'roomrentAd': true }, 
+       "Urgent": { 'babysitterAd': true, 'buysellAd': true, 'bizAd': false, 'eventAd': false, 'jobsAd': true, 'roomrentAd': true }, 
+       "Upcoming_Event": { 'babysitterAd': false, 'buysellAd': false, 'bizAd': false, 'eventAd': true, 'jobsAd': false, 'roomrentAd': false }, 
+       "Price_Drop": { 'babysitterAd': false, 'buysellAd': true, 'bizAd': false, 'eventAd': false, 'jobsAd': false, 'roomrentAd': false } };
 
     const mergedData = [];
     let commonPopulateOptions = [
