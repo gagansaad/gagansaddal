@@ -46,15 +46,15 @@ exports.createAlert = async (req, res, next) => {
     }
 if(add_name==''){
 
-  const category = await category.findById(ads_type);
+  const Category = await category.findById(ads_type);
 
-  if (!category) {
+  if (!Category) {
     return failureJSONResponse(res, {
       message: "Invalid ads_type Category not found.",
     });
   }
 
-   adsName = category.name;
+   adsName = Category.name;
 
 }else{
    adsName = add_name;
