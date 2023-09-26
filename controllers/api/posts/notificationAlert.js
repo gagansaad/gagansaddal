@@ -46,7 +46,7 @@ exports.createAlert = async (req, res, next) => {
     }
 if(add_name==''){
 
-  const category = await Category.findById(ads_type);
+  const category = await category.findById(ads_type);
 
   if (!category) {
     return failureJSONResponse(res, {
