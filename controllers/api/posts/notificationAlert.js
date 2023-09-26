@@ -31,7 +31,7 @@ const mongoose = require("mongoose"),
 ////-----------------------Dynamic Data---------------------------////
 
 
-// const Category = mongoose.model("PostType");
+const Category = mongoose.model("PostType");
 
 exports.createAlert = async (req, res, next) => {
   try {
@@ -44,17 +44,17 @@ exports.createAlert = async (req, res, next) => {
         message: "Please provide ads type and notification status",
       });
     }
-if(add_name==''){
+if(add_name=='' || add_name == undefined || add_name == null){
 
-  const Category = await category.findById(ads_type);
+  const category = await Category.findById(ads_type);
 
-  if (!Category) {
+  if (!category) {
     return failureJSONResponse(res, {
       message: "Invalid ads_type Category not found.",
     });
   }
 
-   adsName = Category.name;
+   adsName = category.name;
 
 }else{
    adsName = add_name;
