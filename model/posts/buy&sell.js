@@ -195,12 +195,17 @@ BuySellSchema.virtual("favoriteCount", {
   });
 
   BuySellSchema.virtual('price_default')
-.get(function () {
-  return this.adsInfo.price;
-})
-.set(function (value) {
-  this.adsInfo.price = value;
-});
+  .get(function () {
+    return {
+      price: this.adsInfo.price,
+      priceDrop: this.price_drop
+    };
+  })
+  .set(function (value) {
+    this.adsInfo.price = value.Price;
+    this.adsInfo.price_drop = value.priceDrop; // Corrected from this.adsInfo.price_drop
+  });
+
 
 // Make sure to include 'toJSON' transform to include virtual properties when converting to JSON
 BuySellSchema.set('toJSON', { virtuals: true });

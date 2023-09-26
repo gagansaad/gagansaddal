@@ -203,12 +203,16 @@ roomRentsSchema.virtual("favoriteCount", {
 
     // Define a virtual property to alias 'expected_salary_amount' as 'price_default'
     roomRentsSchema.virtual('price_default')
-.get(function () {
-  return this.adsInfo.salary;
-})
-.set(function (value) {
-  this.adsInfo.salary = value;
-});
+    .get(function () {
+        return {
+          price: this.adsInfo.salary,
+          price_info: this.adsInfo.salary_info
+        };
+      })
+      .set(function (value) {
+        this.adsInfo.price = value.price;
+        this.adsInfo.price_info = value.price_info; // Corrected from this.adsInfo.price_drop
+      });
 
 // Make sure to include 'toJSON' transform to include virtual properties when converting to JSON
 roomRentsSchema.set('toJSON', { virtuals: true });

@@ -104,7 +104,7 @@ exports.fetchAllMyAds = async (req, res, next) => {
   }
 }
 
-exports.fetchAll1 = async (req, res, next) => {
+exports.fetchAll = async (req, res, next) => {
   try {
     console.log("object-------------------------------", new Date().toISOString());
     let myid;
@@ -152,21 +152,35 @@ exports.fetchAll1 = async (req, res, next) => {
       "adsInfo.location": 1,
       "_id": 1,
     };
-    let priceBabySitter = {
+    let price_babysitterAd = {
       "adsInfo.expected_salary_amount": 1,
+      "adsInfo.expected_salary_rate": 1,
+     
     };
-    let priceJobs = {
-      "adsInfo.salary": 1
+    let price_jobsAd = {
+      "adsInfo.salary": 1,
+      "adsInfo.salary_info": 1
     };
-    let priceBuysell = {
-      "adsInfo.price": 1
+    let price_buysellAd = {
+      "adsInfo.price": 1,
+      "price_drop":1
     };
-    let priceEvent = {
+    let price_eventAd = {
       "adsInfo.ticket_price": 1
     };
-    let priceRoomrent = {
-      "adsInfo.rent": 1
+    let price_roomrentAd = {
+      "adsInfo.rent": 1,
+      "adsInfo.rent_info": 1
     };
+    let mergedPrices = {
+      price_babysitterAd,
+      price_buysellAd,
+      price_jobsAd,
+      price_eventAd,
+      price_roomrentAd
+    };
+   
+    console.log(mergedPrices);
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -216,16 +230,18 @@ exports.fetchAll1 = async (req, res, next) => {
 
 for (let [modelLabel, modelName] of Object.entries(addsModel)) {
  
-  console.log(adons_nameModelActive[adonsSlug][modelLabel])
+  console.log(modelLabel);
+  console.log();
+  let priceDefaultSelect = `price_${modelLabel}`;
+ ;
  
   let data=[];
   if (adons_nameModelActive[adonsSlug][modelLabel] == true) {
   let YourModel = mongoose.model(modelName); 
-
  
             data = await YourModel.find(dbQuery)
           
-            .populate(commonPopulateOptions).select({ ...commonSelectFields }).exec()
+            .populate(commonPopulateOptions).select({ ...commonSelectFields,...mergedPrices[priceDefaultSelect] }).exec()
             
             data = shuffleArray(data);
         }
@@ -305,7 +321,7 @@ for (let [modelLabel, modelName] of Object.entries(addsModel)) {
   }
 };
 
-exports.fetchAll = async (req, res, next) => {
+exports.fetchAll1 = async (req, res, next) => {
   try {
     console.log("object-------------------------------", new Date().toISOString());
     let myid;

@@ -198,11 +198,17 @@ babysitter_Schema.virtual("favoriteCount", {
   // Define a virtual property to alias 'expected_salary_amount' as 'price_default'
 babysitter_Schema.virtual('price_default')
 .get(function () {
-  return this.adsInfo.expected_salary_amount;
-})
-.set(function (value) {
-  this.adsInfo.expected_salary_amount = value;
-});
+    return {
+      price: this.adsInfo.expected_salary_amount,
+      price_info: this.adsInfo.expected_salary_rate
+    };
+  })
+  .set(function (value) {
+    this.adsInfo.price = value.price;
+    this.adsInfo.price_info = value.price_info; // Corrected from this.adsInfo.price_drop
+  });
+
+
 
 // Make sure to include 'toJSON' transform to include virtual properties when converting to JSON
 babysitter_Schema.set('toJSON', { virtuals: true });

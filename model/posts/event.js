@@ -230,12 +230,14 @@ events_Schema.virtual("favoriteCount", {
 
     // Define a virtual property to alias 'expected_salary_amount' as 'price_default'
     events_Schema.virtual('price_default')
-.get(function () {
-  return this.adsInfo.ticket_price;
-})
-.set(function (value) {
-  this.adsInfo.ticket_price = value;
-});
+    .get(function () {
+        return {
+          price: this.adsInfo.ticket_price,
+        };
+      })
+      .set(function (value) {
+        this.adsInfo.price = value // Corrected from this.adsInfo.price_drop
+      });
 
 // Make sure to include 'toJSON' transform to include virtual properties when converting to JSON
 events_Schema.set('toJSON', { virtuals: true });
