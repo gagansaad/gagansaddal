@@ -104,7 +104,7 @@ exports.fetchAllMyAds = async (req, res, next) => {
   }
 }
 
-exports.fetchAll = async (req, res, next) => {
+exports.fetchAll1 = async (req, res, next) => {
   try {
     // console.log("object-------------------------------");
     let myid 
@@ -276,7 +276,7 @@ exports.fetchAll = async (req, res, next) => {
   }
 };
 
-exports.fetchAll1 = async (req, res, next) => {
+exports.fetchAll = async (req, res, next) => {
   try {
     console.log("object-------------------------------", new Date().toISOString());
     let myid;
@@ -299,6 +299,8 @@ exports.fetchAll1 = async (req, res, next) => {
     let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false, select: "url" });
 
     const adons_name = ["Homepage Gallery", "Urgent", "Upcoming Event", "Price Drop"];
+    const adons_nameLimit = {"Homepage Gallery":3, "Urgent":6, "Upcoming Event":18, "Price Drop":18};
+
     const mergedData = [];
     let commonPopulateOptions = [
       { path: "adsType", strictPopulate: false, select: "name" },
