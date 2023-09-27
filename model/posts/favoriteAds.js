@@ -19,6 +19,11 @@ const favoriteAdSchema = new mongoose.Schema({
     ref: "adType",
     required: true,
   },
+  ads_type:{
+    type:  mongoose.Schema.Types.ObjectId,
+    ref: "adType",
+    required: true,
+  },
   adType: {
     type: String,
     required: true,

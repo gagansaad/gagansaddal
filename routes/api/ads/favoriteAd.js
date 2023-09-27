@@ -9,6 +9,7 @@ const router = require(`express`).Router(),
 router.post(`/create-favorite`,authMiddleware.ensureUserLoggedIn,controllers.createFavoriteAd)
 
 router.post(`/edit-status`,authMiddleware.ensureUserLoggedIn,controllers1.setStatus)
+router.get(`/favorite-count`,authMiddleware.ensureUserLoggedIn,controllers.CountFavoriteAd)
 
 // router.get(`/all-favorite`,
 // authMiddleware.ensureUserLoggedIn,
