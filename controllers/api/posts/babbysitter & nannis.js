@@ -986,6 +986,7 @@ exports.fetchonead = async (req, res, next) => {
     let dbQuery ={
       userId:myid,
       ad:records._id,
+      ads_type:ads_type,
       adType:Typename
     } 
     

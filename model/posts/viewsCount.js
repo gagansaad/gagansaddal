@@ -19,6 +19,11 @@ const viewSchema = new mongoose.Schema({
     ref: "adType",
   
   },
+  ads_type: {
+    type:  mongoose.Schema.Types.ObjectId,
+    ref: "adType",
+  
+  },
   adType: {
     type: String,
     enum: ["babysitter & nannie", "Local_biz & Service", "Buy & Sell","event","job","rental"],

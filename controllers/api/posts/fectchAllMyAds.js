@@ -10,6 +10,7 @@ const mongoose = require("mongoose"),
   jobsAd = mongoose.model("job"),
   category = mongoose.model("PostType"),
   BannerSchema = mongoose.model("Banner"),
+  viewModel = mongoose.model("Post_view"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -123,7 +124,23 @@ exports.fetchAll = async (req, res, next) => {
     } else {
       Distance = maxDistance * 1000;
     }
+    let adTypes = [
+      { key: "job", label: "Jobs" },
+      { key: "event", label: "Events" },
+      { key: "Buy & Sell", label: "Buy & Sell" },
+      { key: "babysitter & nannie", label: "Babysitters & Nannies" },
+      { key: "Local_biz & Service", label: "Local Biz & Services" },
+      { key: "rental", label: "Rentals" }
+    ];
+    let results = [];
+    for (const adType of adTypes) {
 
+    let checkAlreadyExist = await viewModel.find({ $and: [{ userId: myid }, { adType : adType.key  }] }).exec();
+    let adTypeCount = checkAlreadyExist.length;
+    let adTypeAds = checkAlreadyExist.map(result => result.ad);
+    results.push({ Category:adType.label, Count: adTypeCount,id:adTypeAds});
+    }
+    console.log(results);
     let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false, select: "url" });
 
     const adons_name = ["Homepage Gallery", "Urgent", "Upcoming Event", "Price Drop"];

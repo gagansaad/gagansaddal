@@ -1285,7 +1285,8 @@ exports.fetchonead = async (req, res, next) => {
     let dbQuery ={
       userId:myid,
       ad:records._id,
-      adType:Typename
+      adType:Typename,
+      ads_type:ads_type,
     } 
     
      let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })

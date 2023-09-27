@@ -16,12 +16,12 @@ const favoriteAdSchema = new mongoose.Schema({
   },
   ad: {
     type:  mongoose.Schema.Types.ObjectId,
-    ref: "adType",
+    refPath: 'adType',
     required: true,
   },
   ads_type:{
     type:  mongoose.Schema.Types.ObjectId,
-    ref: "adType",
+    ref: "PostType",
     required: true,
   },
   adType: {

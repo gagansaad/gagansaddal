@@ -12,6 +12,7 @@ const mongoose = require("mongoose"),
   category = mongoose.model("PostType"),
   Media = mongoose.model("media"),
   tagline_keywords = mongoose.model("keywords"),
+  viewModel = mongoose.model("Post_view"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -82,7 +83,7 @@ exports.CountFavoriteAd = async (req, res, next) => {
   
  
   let  userId = req.userId
-
+console.log(userId);
   try {
     let adTypes = [
       { key: "job", label: "Jobs" },
@@ -95,8 +96,14 @@ exports.CountFavoriteAd = async (req, res, next) => {
     let results = [];
     for (const adType of adTypes) {
 
-    let checkAlreadyExist = await FavoriteAd.find({ $and: [{ user: userId }, { adType : adType.key  }] }).exec();
-    let adTypeCount = checkAlreadyExist.length;
+    let checkAlreadyExist = await FavoriteAd.find({ $and: [{ user: userId }, { adType : adType.key  }] }).populate('ad').exec();
+    const currentDate = new Date().toISOString(); // Get the current date in ISO string format
+    const filteredAds = checkAlreadyExist.filter((favoriteAd) => {
+      const expiredDate = favoriteAd.ad.plan_validity.expired_on;
+      return expiredDate >= currentDate; // Check if expiredDate is greater than or equal to currentDate
+    });
+
+    const adTypeCount = filteredAds.length;
     results.push({ Category:adType.label, Count: adTypeCount});
     }
           return successJSONResponse(res, { message: `success`, results});
@@ -110,14 +117,3 @@ exports.CountFavoriteAd = async (req, res, next) => {
 
 
 
-// if(favoriteAd){
-//   await ModelName.findByIdAndUpdate({_id:adId},
-//   { $push: { favorite:userId} },
-//   { new: true },)
-// }
-
-
-
-// await ModelName.findByIdAndUpdate({_id:adId},
-//   { $pull: { favorite: userId } },
-//   { new: true },)
