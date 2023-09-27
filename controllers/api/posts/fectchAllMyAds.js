@@ -106,7 +106,7 @@ exports.fetchAllMyAds = async (req, res, next) => {
 
 exports.fetchAll = async (req, res, next) => {
   try {
-    console.log("object-------------------------------", new Date().toISOString());
+   
     let myid;
     if (req.userId) {
       myid = req.userId || "0";
@@ -230,8 +230,7 @@ exports.fetchAll = async (req, res, next) => {
 
 for (let [modelLabel, modelName] of Object.entries(addsModel)) {
  
-  console.log(modelLabel);
-  console.log();
+
   let priceDefaultSelect = `price_${modelLabel}`;
  ;
  
