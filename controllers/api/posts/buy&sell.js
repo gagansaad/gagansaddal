@@ -1029,6 +1029,7 @@ exports.fetchAll = async (req, res, next) => {
       max_price,
       is_favorite
     } = req.query;
+    let adOnsQuery = {};
     if (min_price && max_price) {
       dbQuery["adsInfo.price.amount"] = {
         $gte: parseFloat(min_price),
@@ -1066,6 +1067,15 @@ exports.fetchAll = async (req, res, next) => {
         type: 'Point',
         coordinates: [longitude, latitude]
       };
+     
+      adOnsQuery["adsInfo.location.coordinates"] = {
+       
+        $near: {
+          $geometry: targetPoint,
+          $maxDistance: Distance
+        }
+  }
+  
       dbQuery["adsInfo.location.coordinates"] = {
 
         $near: {
@@ -1146,6 +1156,8 @@ exports.fetchAll = async (req, res, next) => {
     const currentDateOnly = currentISODate.substring(0, 10);
     dbQuery.status = "active";
     dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+    adOnsQuery.status = "active";
+    adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
     // console.log(dbQuery, "77777777777777777777777777777777777777777777777");
     let queryFinal = dbQuery;
     if (searchTerm) {
@@ -1204,7 +1216,39 @@ exports.fetchAll = async (req, res, next) => {
       const endIndex = startIndex + perPage;
     
       const paginatedData = jobData.slice(startIndex, endIndex);
-
+      let FeaturedData = await postBuySellAd.find({...adOnsQuery, "addons_validity": {
+        $elemMatch: {
+          "name": "Featured",
+          "expired_on": {
+            $gte: currentDateOnly // Construct ISODate manually
+          }
+        }
+      },})
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
+    console.log(FeaturedData);
+    const featuredRecordsToPick = 6;
+    const FeaturedpickedRecords = [];
+    
+    while (FeaturedpickedRecords.length < featuredRecordsToPick && FeaturedData.length > 0) {
+      const randomIndex = Math.floor(Math.random() * FeaturedData.length);
+      const randomRecord = FeaturedData.splice(randomIndex, 1)[0]; // Remove and pick the record
+      FeaturedpickedRecords.push(randomRecord);
+    }
+    
+      
+       
+        const featuredData = FeaturedpickedRecords.map((job) => {
+          return {
+            ...job._doc,
+            // Add other job fields as needed
+            view_count: job.viewCount,
+            favorite_count: job.favoriteCount,
+            is_favorite: !!job.isFavorite,
+          };
+        })
       //////
       return successJSONResponse(res, {
         message: `success`,
@@ -1214,6 +1258,9 @@ exports.fetchAll = async (req, res, next) => {
         currentPage: page,
         notification:valueofnotification,
         records: paginatedData,
+        AdOnsData:{
+          featuredData
+        },
         status: 200,
       });
     } else {
