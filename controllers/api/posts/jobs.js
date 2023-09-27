@@ -713,7 +713,7 @@ exports.fetchAllAds = async (req, res, next) => {
       max_price,
       is_favorite
     } = req.query;
-   
+    let adOnsQuery = {};
     if (add_on){
       // Add filter for rent amount
       dbQuery["addons_validity.name"] = add_on;
@@ -729,11 +729,19 @@ exports.fetchAllAds = async (req, res, next) => {
     }else{
       Distance =maxDistance*1000
     }
+    
   if (longitude && latitude && Distance) {
       const targetPoint = {
         type: 'Point',
         coordinates: [longitude, latitude]
       };
+      adOnsQuery["adsInfo.location.coordinates"] = {
+       
+        $near: {
+          $geometry: targetPoint,
+          $maxDistance: Distance
+        }
+  }
       dbQuery["adsInfo.location.coordinates"] = {
        
           $near: {
@@ -743,7 +751,7 @@ exports.fetchAllAds = async (req, res, next) => {
     }
    
   }
-  console.log(dbQuery,"---------------------------------------------------------------------------");
+  // console.log(dbQuery,"---------------------------------------------------------------------------");
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
     if (isfeatured) {
@@ -838,7 +846,7 @@ exports.fetchAllAds = async (req, res, next) => {
      const currentDateOnly = currentISODate.substring(0, 10);
      dbQuery.status = "active";
      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-     let adOnsQuery = {};
+     
     adOnsQuery.status = "active";
     adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
 
@@ -898,13 +906,20 @@ exports.fetchAllAds = async (req, res, next) => {
       const endIndex = startIndex + perPage;
     
       const paginatedData = jobData.slice(startIndex, endIndex);
-      
-      let FeaturedData = await postJobAd.find({ "addons_validity.name": "Bump up" })
+    
+      let FeaturedData = await postJobAd.find({...adOnsQuery, "addons_validity": {
+        $elemMatch: {
+          "name": "Featured",
+          "expired_on": {
+            $gte: currentDateOnly // Construct ISODate manually
+          }
+        }
+      },})
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
       .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-    
+    console.log(FeaturedData);
     const featuredRecordsToPick = 6;
     const FeaturedpickedRecords = [];
     
@@ -926,7 +941,7 @@ exports.fetchAllAds = async (req, res, next) => {
           };
         })
       /////
-      let BumpupData = await postJobAd.find({ "addons_validity.name": "Bump up" })
+      let BumpupData = await postJobAd.find({ ...adOnsQuery,"addons_validity.name": "Bump up" })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })

@@ -660,6 +660,7 @@ exports.fetchAll = async (req, res, next) => {
       max_price,
       is_favorite
     } = req.query;
+    let adOnsQuery = {};
     console.log(req.query,"jassi ki jai");
     if (is_contact !== undefined) {
       // Add filter for is_contact
@@ -695,6 +696,13 @@ exports.fetchAll = async (req, res, next) => {
         type: 'Point',
         coordinates: [longitude, latitude]
       };
+      adOnsQuery["adsInfo.location.coordinates"] = {
+       
+        $near: {
+          $geometry: targetPoint,
+          $maxDistance: Distance
+        }
+  }
       dbQuery["adsInfo.location.coordinates"] = {
        
           $near: {
@@ -755,6 +763,8 @@ exports.fetchAll = async (req, res, next) => {
      const currentISODate = currentDate.toISOString();
      // Extract only the date portion
      const currentDateOnly = currentISODate.substring(0, 10);
+     adOnsQuery.status = "active";
+     adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
      dbQuery.status = "active";
      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
     let queryFinal = dbQuery;
@@ -814,7 +824,14 @@ exports.fetchAll = async (req, res, next) => {
       
         const paginatedData = jobData.slice(startIndex, endIndex);
         
-        let FeaturedData = await postbabyAd.find({ "addons_validity.name": "Bump up" })
+        let FeaturedData = await postbabyAd.find({...adOnsQuery, "addons_validity": {
+          $elemMatch: {
+            "name": "Featured",
+            "expired_on": {
+              $gte: currentDateOnly // Construct ISODate manually
+            }
+          }
+        },})
         .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
         .populate({ path: "favoriteCount", select: "_id" })
         .populate({ path: "viewCount" })
@@ -841,7 +858,7 @@ exports.fetchAll = async (req, res, next) => {
             };
           })
         /////
-        let BumpupData = await postbabyAd.find({ "addons_validity.name": "Bump up" })
+        let BumpupData = await postbabyAd.find({...adOnsQuery, "addons_validity.name": "Bump up" })
         .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
         .populate({ path: "favoriteCount", select: "_id" })
         .populate({ path: "viewCount" })

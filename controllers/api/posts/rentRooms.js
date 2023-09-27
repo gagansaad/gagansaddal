@@ -771,6 +771,7 @@ exports.fetchAll = async (req, res, next) => {
       max_price,
       is_favorite
     } = req.query;
+    let adOnsQuery = {};
     // console.log(req.query,"aayi");
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
@@ -789,6 +790,13 @@ exports.fetchAll = async (req, res, next) => {
         type: 'Point',
         coordinates: [longitude, latitude]
       };
+      adOnsQuery["adsInfo.location.coordinates"] = {
+       
+        $near: {
+          $geometry: targetPoint,
+          $maxDistance: Distance
+        }
+  }
       dbQuery["adsInfo.location.coordinates"] = {
        
           $near: {
@@ -871,6 +879,8 @@ if (prefered_age) {
     const currentDateOnly = currentISODate.substring(0, 10);
     dbQuery.status = "active";
     dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+    adOnsQuery.status = "active";
+    adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
     if (userId) dbQuery.userId = userId;
     let queryFinal = dbQuery;
     if (searchTerm) {
@@ -931,7 +941,14 @@ if (prefered_age) {
       
         const paginatedData = jobData.slice(startIndex, endIndex);
         
-        let FeaturedData = await RoomRentsAds.find({ "addons_validity.name": "Bump up" })
+        let FeaturedData = await RoomRentsAds.find({...adOnsQuery, "addons_validity": {
+          $elemMatch: {
+            "name": "Featured",
+            "expired_on": {
+              $gte: currentDateOnly // Construct ISODate manually
+            }
+          }
+        },})
         .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
         .populate({ path: "favoriteCount", select: "_id" })
         .populate({ path: "viewCount" })
@@ -958,7 +975,7 @@ if (prefered_age) {
             };
           })
         /////
-        let BumpupData = await RoomRentsAds.find({ "addons_validity.name": "Bump up" })
+        let BumpupData = await RoomRentsAds.find({...adOnsQuery, "addons_validity.name": "Bump up" })
         .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
         .populate({ path: "favoriteCount", select: "_id" })
         .populate({ path: "viewCount" })

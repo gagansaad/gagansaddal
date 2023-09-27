@@ -84,13 +84,20 @@ exports.CountFavoriteAd = async (req, res, next) => {
   let  userId = req.userId
 
   try {
-    let adTypes = ["job","event","Buy & Sell","babysitter & nannie","Local_biz & Service","rental"]
+    let adTypes = [
+      { key: "job", label: "Jobs" },
+      { key: "event", label: "Events" },
+      { key: "Buy & Sell", label: "Buy & Sell" },
+      { key: "babysitter & nannie", label: "Babysitters & Nannies" },
+      { key: "Local_biz & Service", label: "Local Biz & Services" },
+      { key: "rental", label: "Rentals" }
+    ];
     let results = [];
     for (const adType of adTypes) {
 
-    let checkAlreadyExist = await FavoriteAd.find({ $and: [{ user: userId }, { adType : adType  }] }).exec();
+    let checkAlreadyExist = await FavoriteAd.find({ $and: [{ user: userId }, { adType : adType.key  }] }).exec();
     let adTypeCount = checkAlreadyExist.length;
-    results.push({ Category:adType, Count: adTypeCount});
+    results.push({ Category:adType.label, Count: adTypeCount});
     }
           return successJSONResponse(res, { message: `success`, results});
     
