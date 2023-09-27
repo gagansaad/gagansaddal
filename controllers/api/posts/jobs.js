@@ -743,6 +743,7 @@ exports.fetchAllAds = async (req, res, next) => {
     }
    
   }
+  console.log(dbQuery,"---------------------------------------------------------------------------");
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
     if (isfeatured) {
