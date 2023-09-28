@@ -80,10 +80,9 @@ exports.createFavoriteAd = async (req, res, next) => {
 
 
 exports.CountFavoriteAd = async (req, res, next) => {
-  
- 
-  let  userId = req.userId
-console.log(userId);
+  let userId = req.userId;
+  console.log(userId);
+
   try {
     let adTypes = [
       { key: "job", label: "Jobs" },
@@ -91,29 +90,35 @@ console.log(userId);
       { key: "Buy & Sell", label: "Buy & Sell" },
       { key: "babysitter & nannie", label: "Babysitters & Nannies" },
       { key: "Local_biz & Service", label: "Local Biz & Services" },
-      { key: "rental", label: "Rentals" }
+      { key: "rental", label: "Rentals" },
     ];
     let results = [];
     for (const adType of adTypes) {
+      let checkAlreadyExist = await FavoriteAd.find({
+        $and: [{ user: userId }, { adType: adType.key }],
+      })
+        .populate('ad')
+        .exec();
+      const currentDate = new Date().toISOString(); // Get the current date in ISO string format
+      const filteredAds = checkAlreadyExist.filter((favoriteAd) => {
+        const planValidity = favoriteAd.ad.plan_validity;
+        if (planValidity && planValidity.expired_on) {
+          const expiredDate = planValidity.expired_on;
+          return expiredDate >= currentDate; // Check if expiredDate is greater than or equal to currentDate
+        }
+        return false; // Ignore this favoriteAd if plan_validity or expired_on is missing
+      });
 
-    let checkAlreadyExist = await FavoriteAd.find({ $and: [{ user: userId }, { adType : adType.key  }] }).populate('ad').exec();
-    const currentDate = new Date().toISOString(); // Get the current date in ISO string format
-    const filteredAds = checkAlreadyExist.filter((favoriteAd) => {
-      const expiredDate = favoriteAd.ad.plan_validity.expired_on;
-      return expiredDate >= currentDate; // Check if expiredDate is greater than or equal to currentDate
-    });
-
-    const adTypeCount = filteredAds.length;
-    results.push({ Category:adType.label, Count: adTypeCount});
+      const adTypeCount = filteredAds.length;
+      results.push({ Category: adType.label, Count: adTypeCount });
     }
-          return successJSONResponse(res, { message: `success`, results});
-    
+    return successJSONResponse(res, { message: `success`, results });
   } catch (error) {
     console.log(error);
     return failureJSONResponse(res, { message: `Something went wrong` });
   }
-  
-}
+};
+
 
 
 
