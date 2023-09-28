@@ -101,12 +101,11 @@ exports.CountFavoriteAd = async (req, res, next) => {
         .exec();
       const currentDate = new Date().toISOString(); // Get the current date in ISO string format
       const filteredAds = checkAlreadyExist.filter((favoriteAd) => {
-        const planValidity = favoriteAd.ad.plan_validity;
-        if (planValidity && planValidity.expired_on) {
-          const expiredDate = planValidity.expired_on;
+        if (favoriteAd && favoriteAd.ad && favoriteAd.ad.plan_validity && favoriteAd.ad.plan_validity.expired_on) {
+          const expiredDate = favoriteAd.ad.plan_validity.expired_on;
           return expiredDate >= currentDate; // Check if expiredDate is greater than or equal to currentDate
         }
-        return false; // Ignore this favoriteAd if plan_validity or expired_on is missing
+        return false; // Ignore this favoriteAd if any property is missing
       });
 
       const adTypeCount = filteredAds.length;
@@ -118,6 +117,7 @@ exports.CountFavoriteAd = async (req, res, next) => {
     return failureJSONResponse(res, { message: `Something went wrong` });
   }
 };
+
 
 
 
