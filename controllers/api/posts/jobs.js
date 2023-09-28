@@ -854,6 +854,9 @@ exports.fetchAllAds = async (req, res, next) => {
      // Extract only the date portion
      const currentDateOnly = currentISODate.substring(0, 10);
      let myid = req.userId;
+     if (is_myad =='true' && !myid) {
+      return failureJSONResponse(res, { message: 'Please login to your account' });
+    }
      if(is_myad != 'true'){
      dbQuery.status = "active";
      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
