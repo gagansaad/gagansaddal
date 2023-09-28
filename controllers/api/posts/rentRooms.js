@@ -769,7 +769,8 @@ exports.fetchAll = async (req, res, next) => {
       add_on,
       min_price,
       max_price,
-      is_favorite
+      is_favorite,
+      is_myad,
     } = req.query;
     let adOnsQuery = {};
     // console.log(req.query,"aayi");
@@ -885,10 +886,15 @@ if (prefered_age) {
     const currentISODate = currentDate.toISOString();
     // Extract only the date portion
     const currentDateOnly = currentISODate.substring(0, 10);
+    let myid = req.userId;
+    if(is_myad != 'true'){
     dbQuery.status = "active";
     dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
     adOnsQuery.status = "active";
     adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+    }else{
+      dbQuery.userId = myid;
+     }
     if (userId) dbQuery.userId = userId;
     let queryFinal = dbQuery;
     if (searchTerm) {
@@ -901,7 +907,7 @@ if (prefered_age) {
       };
     }
     // console.log(sortval);
-    let myid = req.userId;
+    
     let notification = await Users.findOne({_id:myid}).select('userNotification.rental')
     let valueofnotification = notification?.userNotification?.rental;
     let records = await RoomRentsAds.find({
@@ -948,7 +954,9 @@ if (prefered_age) {
         const endIndex = startIndex + perPage;
       
         const paginatedData = jobData.slice(startIndex, endIndex);
-        
+        let featuredData;
+        let bumpupData;
+        if(is_myad != 'true'){
         let FeaturedData = await RoomRentsAds.find({...adOnsQuery, "addons_validity": {
           $elemMatch: {
             "name": "Featured",
@@ -973,7 +981,7 @@ if (prefered_age) {
       
         
          
-          const featuredData = FeaturedpickedRecords.map((job) => {
+          featuredData = FeaturedpickedRecords.map((job) => {
             return {
               ...job._doc,
               // Add other job fields as needed
@@ -1039,7 +1047,7 @@ if (prefered_age) {
       
       
        
-        const bumpupData = pickedRecords.map((job) => {
+         bumpupData = pickedRecords.map((job) => {
           return {
             ...job._doc,
             // Add other job fields as needed
@@ -1047,21 +1055,20 @@ if (prefered_age) {
             favorite_count: job.favoriteCount,
             is_favorite: !!job.isFavorite,
           };
-        })
-        return successJSONResponse(res, {
+        })}
+        let finalResponse = {
           message: `success`,
           total: totalCount,
           perPage: perPage,
           totalPages: Math.ceil(totalCount / perPage),
           currentPage: page,
-          notification:valueofnotification,
-          records:paginatedData,
-          AdOnsData:{
-            bumpupData,
-            featuredData
-          },
+          notification: valueofnotification,
+          records: paginatedData,
           status: 200,
-        });
+          ...((is_myad == 'true') ? {} : { AdOnsData: {bumpupData, featuredData } })
+        };
+        return successJSONResponse(res, finalResponse);
+        
       } else {
       return failureJSONResponse(res, { message: `ads not Available` });
     }

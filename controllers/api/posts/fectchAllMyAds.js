@@ -104,7 +104,32 @@ exports.fetchAllMyAds = async (req, res, next) => {
     return failureJSONResponse(res, { message: `something went wrong` }, { error: err.message })
   }
 }
+exports.CountMyAd = async (req, res, next) => {
+  let TheyMy = req.userId;
+  
 
+  try {
+    let adTypes = [
+      { key: "job", label: "Jobs" },
+      { key: "event", label: "Events" },
+      { key: "Buy & Sell", label: "Buy & Sell" },
+      { key: "babysitter & nannie", label: "Babysitters & Nannies" },
+      { key: "Local_biz & Service", label: "Local Biz & Services" },
+      { key: "rental", label: "Rentals" },
+    ];
+    let results = [];
+    for (const adType of adTypes) {
+      let YourModel = mongoose.model(adType.key)
+      let checkAlreadyExist = await YourModel.find({ userId: TheyMy }).exec();
+      const adTypeCount = checkAlreadyExist.length;
+      results.push({ Category: adType.label, Count: adTypeCount });
+    }
+    return successJSONResponse(res, { message: `success`, results });
+  } catch (error) {
+    console.log(error);
+    return failureJSONResponse(res, { message: `Something went wrong` });
+  }
+};
 exports.fetchAll = async (req, res, next) => {
   try {
    
@@ -342,7 +367,7 @@ exports.fetchAll1 = async (req, res, next) => {
       Distance = maxDistance * 1000;
     }
     let adTypes = [
-      { key: "job", label: "Jobs", select: {"adsInfo.categories":1} },
+      { key: "job", label: "Jobs", select: "adsInfo.categories" },
       { key: "event", label: "Events", select: "adsInfo.category" },
       { key: "Buy & Sell", label: "Buy & Sell", select: "adsInfo.category" },
       { key: "babysitter & nannie", label: "Babysitters & Nannies", select: "adsInfo.category.category_name" },
@@ -359,37 +384,71 @@ exports.fetchAll1 = async (req, res, next) => {
       results.push({ Category: adType.key, Count: adTypeCount, id: adTypeAds });
     }
     
-    let checkedDoc=[]
+    let checkedDoc = [];
+    
     for (const adType of adTypes) {
       let YourModel = mongoose.model(adType.key);
       const foundDocuments = [];
-      for (const category of results) {
-        for (const id of category.id) {
-          const foundDocument = await YourModel.findById(id).select(adType.select); // Use the dynamically selected model
-          if (foundDocument) {
-            // Modify the foundDocument to remove the double _id and price_default
-            const modifiedDocument = {
-              ...foundDocument.toObject(),
-              id: foundDocument.id,
-            };
-            delete modifiedDocument._id;
-            delete modifiedDocument.price_default;
-            
-            foundDocuments.push(modifiedDocument);
+      const uniqueCategoriesSet = new Set();
+    
+      for (const category of results.find(result => result.Category === adType.key).id) {
+        const foundDocument = await YourModel.findById(category).select(adType.select);
+    
+        if (foundDocument) {
+          const modifiedDocument = {
+            ...foundDocument.toObject(),
+            id: foundDocument.id,
+          };
+          delete modifiedDocument._id;
+          delete modifiedDocument.price_default;
+    
+          foundDocuments.push(modifiedDocument);
+    
+          if (foundDocument.adsInfo) {
+            const { category, categories, category_name } = foundDocument.adsInfo;
+    
+            if (category && !uniqueCategoriesSet.has(category)) {
+              uniqueCategoriesSet.add(category);
+              const recommendedDataByCategory = await YourModel.find({
+                'adsInfo.category': category,
+                _id: { $nin: results.find(result => result.Category === adType.key).id },
+              }).limit(5);
+    
+              foundDocuments.push(...recommendedDataByCategory);
+            }
+    
+            if (category_name && !uniqueCategoriesSet.has(category_name)) {
+              uniqueCategoriesSet.add(category_name);
+              const recommendedDataByCategoryName = await YourModel.find({
+                'adsInfo.category.category_name': category_name,
+                _id: { $nin: results.find(result => result.Category === adType.key).id },
+              }).limit(5);
+    
+              foundDocuments.push(...recommendedDataByCategoryName);
+            }
+    
+            if (categories && !uniqueCategoriesSet.has(categories)) {
+              uniqueCategoriesSet.add(categories);
+              const recommendedDataByCategories = await YourModel.find({
+                'adsInfo.categories': categories,
+                _id: { $nin: results.find(result => result.Category === adType.key).id },
+              }).limit(5);
+    
+              foundDocuments.push(...recommendedDataByCategories);
+            }
           }
         }
       }
+    
       checkedDoc.push({ Category: adType.key, data: foundDocuments });
     }
-    
-    
     
     // Now, foundDocuments contains the documents corresponding to each ID
     return successJSONResponse(res, {
       message: "success",
       data: checkedDoc,
-     
     });
+    
     console.log(foundDocuments,"----------------");
     console.log(results);
     let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false, select: "url" });

@@ -711,7 +711,8 @@ exports.fetchAllAds = async (req, res, next) => {
       add_on,
       min_price,
       max_price,
-      is_favorite
+      is_favorite,
+      is_myad,
     } = req.query;
     let adOnsQuery = {};
     if (add_on){
@@ -852,12 +853,16 @@ exports.fetchAllAds = async (req, res, next) => {
      const currentISODate = currentDate.toISOString();
      // Extract only the date portion
      const currentDateOnly = currentISODate.substring(0, 10);
+     let myid = req.userId;
+     if(is_myad != 'true'){
      dbQuery.status = "active";
      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
      
     adOnsQuery.status = "active";
     adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-
+     }else{
+      dbQuery.userId = myid;
+     }
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
@@ -869,7 +874,7 @@ exports.fetchAllAds = async (req, res, next) => {
       };
     }
  
-    let myid = req.userId;
+    
 
     let notification = await Users.findOne({_id:myid}).select('userNotification.job')
     let valueofnotification = notification?.userNotification?.job;
@@ -914,7 +919,9 @@ exports.fetchAllAds = async (req, res, next) => {
       const endIndex = startIndex + perPage;
     
       const paginatedData = jobData.slice(startIndex, endIndex);
-    
+      let featuredData;
+      let bumpupData;
+      if(is_myad != 'true'){
       let FeaturedData = await postJobAd.find({...adOnsQuery, "addons_validity": {
         $elemMatch: {
           "name": "Featured",
@@ -939,7 +946,7 @@ exports.fetchAllAds = async (req, res, next) => {
     
       
        
-        const featuredData = FeaturedpickedRecords.map((job) => {
+        featuredData = FeaturedpickedRecords.map((job) => {
           return {
             ...job._doc,
             // Add other job fields as needed
@@ -1005,7 +1012,7 @@ exports.fetchAllAds = async (req, res, next) => {
     
     
      
-      const bumpupData = pickedRecords.map((job) => {
+      bumpupData = pickedRecords.map((job) => {
         return {
           ...job._doc,
           // Add other job fields as needed
@@ -1014,20 +1021,20 @@ exports.fetchAllAds = async (req, res, next) => {
           is_favorite: !!job.isFavorite,
         };
       })
-      return successJSONResponse(res, {
+    }
+      let finalResponse = {
         message: `success`,
         total: totalCount,
         perPage: perPage,
         totalPages: Math.ceil(totalCount / perPage),
         currentPage: page,
-        notification:valueofnotification,
-        records:paginatedData,
-        AdOnsData:{
-          bumpupData,
-          featuredData
-        },
+        notification: valueofnotification,
+        records: paginatedData,
         status: 200,
-      });
+        ...((is_myad == 'true') ? {} : { AdOnsData: {bumpupData, featuredData } })
+      };
+      return successJSONResponse(res, finalResponse);
+      
     } else {
       return failureJSONResponse(res, { message: `ads not Available` });
     }

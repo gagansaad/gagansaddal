@@ -1027,9 +1027,12 @@ exports.fetchAll = async (req, res, next) => {
       is_contact,
       min_price,
       max_price,
-      is_favorite
+      is_favorite,
+      is_myad,
     } = req.query;
     let adOnsQuery = {};
+    // let is_myadCheck;
+    // is_myadCheck=(!is_myad && is_myad==false && is_myad==null && is_myad ==undefined)?false:true;
     if (min_price && max_price) {
       dbQuery["adsInfo.price.amount"] = {
         $gte: parseFloat(min_price),
@@ -1162,11 +1165,17 @@ exports.fetchAll = async (req, res, next) => {
     // Extract only the date portion
     
     const currentDateOnly = currentISODate.substring(0, 10);
+    let myid = req.userId;
+
+   if(is_myad != 'true'){
     dbQuery.status = "active";
     dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
     adOnsQuery.status = "active";
     adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
     // console.log(dbQuery, "77777777777777777777777777777777777777777777777");
+   }else{
+    dbQuery.userId = myid;
+   }
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
@@ -1178,7 +1187,6 @@ exports.fetchAll = async (req, res, next) => {
       };
     }
 
-    let myid = req.userId;
     
     let notification = await Users.findOne({_id:myid}).select('userNotification.buysell')
     let valueofnotification = notification?.userNotification?.buysell;
@@ -1224,6 +1232,8 @@ exports.fetchAll = async (req, res, next) => {
       const endIndex = startIndex + perPage;
     
       const paginatedData = jobData.slice(startIndex, endIndex);
+      let featuredData
+      if(is_myad != 'true'){
       let FeaturedData = await postBuySellAd.find({...adOnsQuery, "addons_validity": {
         $elemMatch: {
           "name": "Featured",
@@ -1248,7 +1258,7 @@ exports.fetchAll = async (req, res, next) => {
     
       
        
-        const featuredData = FeaturedpickedRecords.map((job) => {
+        featuredData = FeaturedpickedRecords.map((job) => {
           return {
             ...job._doc,
             // Add other job fields as needed
@@ -1257,20 +1267,20 @@ exports.fetchAll = async (req, res, next) => {
             is_favorite: !!job.isFavorite,
           };
         })
+      }
       //////
-      return successJSONResponse(res, {
+      let finalResponse = {
         message: `success`,
         total: totalCount,
         perPage: perPage,
         totalPages: Math.ceil(totalCount / perPage),
         currentPage: page,
-        notification:valueofnotification,
+        notification: valueofnotification,
         records: paginatedData,
-        AdOnsData:{
-          featuredData
-        },
         status: 200,
-      });
+        ...((is_myad == 'true') ? {} : { AdOnsData: { featuredData } })
+      };
+      return successJSONResponse(res, finalResponse);
     } else {
       return failureJSONResponse(res, { message: `ads not Available` });
     }
