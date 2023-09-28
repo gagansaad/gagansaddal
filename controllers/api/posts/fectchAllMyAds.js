@@ -359,8 +359,7 @@ exports.fetchAll1 = async (req, res, next) => {
       results.push({ Category: adType.key, Count: adTypeCount, id: adTypeAds });
     }
     
-    
-   let checkedDoc =[]
+    let checkedDoc=[]
     for (const adType of adTypes) {
       let YourModel = mongoose.model(adType.key);
       const foundDocuments = [];
@@ -368,15 +367,21 @@ exports.fetchAll1 = async (req, res, next) => {
         for (const id of category.id) {
           const foundDocument = await YourModel.findById(id).select(adType.select); // Use the dynamically selected model
           if (foundDocument) {
-            foundDocuments.push(foundDocument);
+            // Modify the foundDocument to remove the double _id and price_default
+            const modifiedDocument = {
+              ...foundDocument.toObject(),
+              id: foundDocument.id,
+            };
+            delete modifiedDocument._id;
+            delete modifiedDocument.price_default;
+            
+            foundDocuments.push(modifiedDocument);
           }
-          
         }
-
       }
-      checkedDoc.push({ Category: adType.key, data: foundDocuments,})
-      
+      checkedDoc.push({ Category: adType.key, data: foundDocuments });
     }
+    
     
     
     // Now, foundDocuments contains the documents corresponding to each ID
