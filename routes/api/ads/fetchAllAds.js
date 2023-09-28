@@ -8,9 +8,9 @@ const router = require(`express`).Router(),
     
 
 
-router.get(`/my-all-ads`,
-authMiddleware.ensureUserLoggedIn,
-    controllers.fetchAllMyAds
+router.get(`/my-ads-count`,
+    authMiddleware.ensureUserLoggedIn,
+    controllers.CountMyAd
 );
 
 router.get(`/adons-ads`,
