@@ -124,23 +124,7 @@ exports.fetchAll = async (req, res, next) => {
     } else {
       Distance = maxDistance * 1000;
     }
-    let adTypes = [
-      { key: "job", label: "Jobs" },
-      { key: "event", label: "Events" },
-      { key: "Buy & Sell", label: "Buy & Sell" },
-      { key: "babysitter & nannie", label: "Babysitters & Nannies" },
-      { key: "Local_biz & Service", label: "Local Biz & Services" },
-      { key: "rental", label: "Rentals" }
-    ];
-    let results = [];
-    for (const adType of adTypes) {
-
-    let checkAlreadyExist = await viewModel.find({ $and: [{ userId: myid }, { adType : adType.key  }] }).exec();
-    let adTypeCount = checkAlreadyExist.length;
-    let adTypeAds = checkAlreadyExist.map(result => result.ad);
-    results.push({ Category:adType.label, Count: adTypeCount,id:adTypeAds});
-    }
-    console.log(results);
+   
     let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false, select: "url" });
 
     const adons_name = ["Homepage Gallery", "Urgent", "Upcoming Event", "Price Drop"];
@@ -167,6 +151,7 @@ exports.fetchAll = async (req, res, next) => {
       "addons_validity": 1,
       "adsInfo.title": 1,
       "adsInfo.location": 1,
+      "createdAt":1,
       "_id": 1,
     };
     let price_babysitterAd = {
@@ -339,7 +324,7 @@ for (let [modelLabel, modelName] of Object.entries(addsModel)) {
 
 exports.fetchAll1 = async (req, res, next) => {
   try {
-    console.log("object-------------------------------", new Date().toISOString());
+   
     let myid;
     if (req.userId) {
       myid = req.userId || "0";
@@ -356,7 +341,37 @@ exports.fetchAll1 = async (req, res, next) => {
     } else {
       Distance = maxDistance * 1000;
     }
+    let adTypes = [
+      { key: "job", label: "Jobs" },
+      { key: "event", label: "Events" },
+      { key: "Buy & Sell", label: "Buy & Sell" },
+      { key: "babysitter & nannie", label: "Babysitters & Nannies" },
+      { key: "Local_biz & Service", label: "Local Biz & Services" },
+      { key: "rental", label: "Rentals" }
+    ];
+    let results = [];
+    for (const adType of adTypes) {
 
+    let checkAlreadyExist = await viewModel.find({ $and: [{ userId: myid }, { adType : adType.key  }] }).exec();
+    let adTypeCount = checkAlreadyExist.length;
+    let adTypeAds = checkAlreadyExist.map(result => result.ad);
+    results.push({ Category:adType.key, Count: adTypeCount,id:adTypeAds});
+    }
+    const foundDocuments = [];
+    for (const category of results) {
+      let YourModel = mongoose.model(category.Category)
+      console.log(YourModel,"--------------");
+      for (const id of category.id) {
+        const foundDocument = await YourModel.findById(id); // Use the dynamically selected model
+        if (foundDocument) {
+          foundDocuments.push(foundDocument);
+        }
+      }
+    }
+
+    // Now, foundDocuments contains the documents corresponding to each ID
+    console.log(foundDocuments,"----------------");
+    console.log(results);
     let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false, select: "url" });
 
     const adons_name = ["Homepage Gallery", "Urgent", "Upcoming Event", "Price Drop"];
@@ -380,27 +395,47 @@ exports.fetchAll1 = async (req, res, next) => {
     ];
 
     let commonSelectFields = {
-      "addons_validity.": 1,
+      "addons_validity": 1,
       "adsInfo.title": 1,
       "adsInfo.location": 1,
       "_id": 1,
     };
-    let priceBabySitter = {
+    let price_babysitterAd = {
       "adsInfo.expected_salary_amount": 1,
+      "adsInfo.expected_salary_rate": 1,
+     
     };
-    let priceJobs = {
-      "adsInfo.salary": 1
+    let price_jobsAd = {
+      "adsInfo.salary": 1,
+      "adsInfo.salary_info": 1
     };
-    let priceBuysell = {
-      "adsInfo.price": 1
+    let price_buysellAd = {
+      "adsInfo.price": 1,
+      "price_drop":1
     };
-    let priceEvent = {
+    let price_eventAd = {
       "adsInfo.ticket_price": 1
     };
-    let priceRoomrent = {
-      "adsInfo.rent": 1
+    let price_roomrentAd = {
+      "adsInfo.rent": 1,
+      "adsInfo.rent_info": 1
+    };
+    let mergedPrices = {
+      price_babysitterAd,
+      price_buysellAd,
+      price_jobsAd,
+      price_eventAd,
+      price_roomrentAd
     };
    
+    console.log(mergedPrices);
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
     for (const adons of adons_name) {
       const adonsData = [];
       let adonsSlug = adons.replace(/\s+/g, '_');
@@ -427,53 +462,81 @@ exports.fetchAll1 = async (req, res, next) => {
           }
         }
       }
-      //       console.log(adons_nameLimit[adonsSlug]);
-      //       console.log(adons_nameLimit);
-      //       console.log(adonsSlug);
-      // return adons_nameLimit[adonsSlug];
+ 
 
-      let data1=[], data2=[], data3=[], data4=[], data5=[], data6=[];
 
-      if (adons_nameModelActive[adonsSlug].babysitterAd == true) {
-        data1 = await babysitterAd.find(dbQuery)
-          .sort({ randomField: 1 }).limit(adons_nameLimit[adonsSlug])
-          .populate(commonPopulateOptions).select({ ...commonSelectFields, ...priceBabySitter }).exec()
+     
+      let addsModel={
+        babysitterAd: 'babysitter & nannie',
+        buysellAd: 'Buy & Sell',
+        bizAd: 'Local_biz & Service',
+        eventAd: 'event',
+        jobsAd: 'job',
+        roomrentAd: 'rental'
       }
+      let combinedData=[];
 
-      if (adons_nameModelActive[adonsSlug].buysellAd == true) {
-        data2 = await buysellAd.find(dbQuery)
-          .sort({ randomField: 1 }).limit(adons_nameLimit[adonsSlug])
-          .populate(commonPopulateOptions).select({ ...commonSelectFields, ...priceBuysell })
-      }
-      if (adons_nameModelActive[adonsSlug].bizAd == true) {
-        data3 = await bizAd.find(dbQuery)
-          .sort({ randomField: 1 }).limit(adons_nameLimit[adonsSlug])
-          .populate(commonPopulateOptions).select(commonSelectFields)
+for (let [modelLabel, modelName] of Object.entries(addsModel)) {
+ 
 
-      }
-      if (adons_nameModelActive[adonsSlug].eventAd == true) {
-        data4 = await eventAd.find(dbQuery)
-          .sort({ randomField: 1 }).limit(adons_nameLimit[adonsSlug])
-          .populate(commonPopulateOptions).select({ ...commonSelectFields, ...priceEvent })
-      }
-      if (adons_nameModelActive[adonsSlug].jobsAd == true) {
-        data5 = await jobsAd.find(dbQuery)
-          .sort({ randomField: 1 }).limit(adons_nameLimit[adonsSlug])
-          .populate(commonPopulateOptions).select({ ...commonSelectFields, ...priceJobs })
-      }
-      if (adons_nameModelActive[adonsSlug].roomrentAd == true) {
-        data6 = await roomrentAd.find(dbQuery)
-          .sort({ randomField: 1 }).limit(adons_nameLimit[adonsSlug])
-          .populate(commonPopulateOptions).select({ ...commonSelectFields, ...priceRoomrent })
-      }
-      const combinedData = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
+  let priceDefaultSelect = `price_${modelLabel}`;
+ ;
+ 
+  let data=[];
+  if (adons_nameModelActive[adonsSlug][modelLabel] == true) {
+  let YourModel = mongoose.model(modelName); 
+ 
+            data = await YourModel.find(dbQuery)
+          
+            .populate(commonPopulateOptions).select({ ...commonSelectFields,...mergedPrices[priceDefaultSelect] }).exec()
+            
+            data = shuffleArray(data);
+        }
+        let randomlyPickedData = data.slice(0, adons_nameLimit[adonsSlug]);
+
+        combinedData = [...combinedData, ...randomlyPickedData];
+
+}
+// combinedData
+// return successJSONResponse(res, {
+//   message: "success",
+//   data: combinedData,
+//   banner
+// });
+      // if (adons_nameModelActive[adonsSlug].buysellAd == true) {
+      //   data2 = await buysellAd.find(dbQuery)
+      //     .sort({ randomField: 1 }).limit(adons_nameLimit[adonsSlug])
+      //     .populate(commonPopulateOptions).select({ ...commonSelectFields, ...priceBuysell })
+      // }
+      // if (adons_nameModelActive[adonsSlug].bizAd == true) {
+      //   data3 = await bizAd.find(dbQuery)
+      //     .sort({ randomField: 1 }).limit(adons_nameLimit[adonsSlug])
+      //     .populate(commonPopulateOptions).select(commonSelectFields)
+
+      // }
+      // if (adons_nameModelActive[adonsSlug].eventAd == true) {
+      //   data4 = await eventAd.find(dbQuery)
+      //     .sort({ randomField: 1 }).limit(adons_nameLimit[adonsSlug])
+      //     .populate(commonPopulateOptions).select({ ...commonSelectFields, ...priceEvent })
+      // }
+      // if (adons_nameModelActive[adonsSlug].jobsAd == true) {
+      //   data5 = await jobsAd.find(dbQuery)
+      //     .sort({ randomField: 1 }).limit(adons_nameLimit[adonsSlug])
+      //     .populate(commonPopulateOptions).select({ ...commonSelectFields, ...priceJobs })
+      // }
+      // if (adons_nameModelActive[adonsSlug].roomrentAd == true) {
+      //   data6 = await roomrentAd.find(dbQuery)
+      //     .sort({ randomField: 1 }).limit(adons_nameLimit[adonsSlug])
+      //     .populate(commonPopulateOptions).select({ ...commonSelectFields, ...priceRoomrent })
+      // }
+      // const combinedData = [...data1, ...data2, ...data3, ...data4, ...data5, ...data6];
       // console.log(combinedData);
       let filterData
       // if (combinedData) {
         filterData = combinedData.map((job) => {
           return {
             ...job._doc,
-            // Add other job fields as needed
+           
             price_default: job.price_default,
             view_count: job.viewCount,
             favorite_count: job.favoriteCount,
