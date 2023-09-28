@@ -835,8 +835,16 @@ exports.fetchAll = async (req, res, next) => {
     } = req.query;
     let adOnsQuery = {};
     if (add_on){
-      // Add filter for rent amount
-      dbQuery["addons_validity.name"] = add_on;
+      dbQuery = {
+        "addons_validity": {
+          $elemMatch: {
+            "name": add_on,
+            "expired_on": {
+              $gte: new Date("2023-09-18").toISOString() // Construct ISODate manually
+            }
+          }
+        }
+      };
     }
     // console.log(req.query,"--------------------------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };

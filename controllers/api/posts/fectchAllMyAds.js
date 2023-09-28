@@ -342,34 +342,49 @@ exports.fetchAll1 = async (req, res, next) => {
       Distance = maxDistance * 1000;
     }
     let adTypes = [
-      { key: "job", label: "Jobs" },
-      { key: "event", label: "Events" },
-      { key: "Buy & Sell", label: "Buy & Sell" },
-      { key: "babysitter & nannie", label: "Babysitters & Nannies" },
-      { key: "Local_biz & Service", label: "Local Biz & Services" },
-      { key: "rental", label: "Rentals" }
+      { key: "job", label: "Jobs", select: {"adsInfo.categories":1} },
+      { key: "event", label: "Events", select: "adsInfo.category" },
+      { key: "Buy & Sell", label: "Buy & Sell", select: "adsInfo.category" },
+      { key: "babysitter & nannie", label: "Babysitters & Nannies", select: "adsInfo.category.category_name" },
+      { key: "Local_biz & Service", label: "Local Biz & Services", select: "adsInfo.categories" },
+      { key: "rental", label: "Rentals", select: "adsInfo.category" }
     ];
+    
     let results = [];
+    
     for (const adType of adTypes) {
-
-    let checkAlreadyExist = await viewModel.find({ $and: [{ userId: myid }, { adType : adType.key  }] }).exec();
-    let adTypeCount = checkAlreadyExist.length;
-    let adTypeAds = checkAlreadyExist.map(result => result.ad);
-    results.push({ Category:adType.key, Count: adTypeCount,id:adTypeAds});
+      let checkAlreadyExist = await viewModel.find({ userId: myid, adType: adType.key }).exec();
+      let adTypeCount = checkAlreadyExist.length;
+      let adTypeAds = checkAlreadyExist.map(result => result.ad);
+      results.push({ Category: adType.key, Count: adTypeCount, id: adTypeAds });
     }
-    const foundDocuments = [];
-    for (const category of results) {
-      let YourModel = mongoose.model(category.Category)
-      console.log(YourModel,"--------------");
-      for (const id of category.id) {
-        const foundDocument = await YourModel.findById(id); // Use the dynamically selected model
-        if (foundDocument) {
-          foundDocuments.push(foundDocument);
+    
+    
+   let checkedDoc =[]
+    for (const adType of adTypes) {
+      let YourModel = mongoose.model(adType.key);
+      const foundDocuments = [];
+      for (const category of results) {
+        for (const id of category.id) {
+          const foundDocument = await YourModel.findById(id).select(adType.select); // Use the dynamically selected model
+          if (foundDocument) {
+            foundDocuments.push(foundDocument);
+          }
+          
         }
-      }
-    }
 
+      }
+      checkedDoc.push({ Category: adType.key, data: foundDocuments,})
+      
+    }
+    
+    
     // Now, foundDocuments contains the documents corresponding to each ID
+    return successJSONResponse(res, {
+      message: "success",
+      data: checkedDoc,
+     
+    });
     console.log(foundDocuments,"----------------");
     console.log(results);
     let banner = await BannerSchema.find().populate({ path: "image", strictPopulate: false, select: "url" });

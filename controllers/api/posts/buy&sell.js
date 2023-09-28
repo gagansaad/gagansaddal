@@ -1049,8 +1049,16 @@ exports.fetchAll = async (req, res, next) => {
       dbQuery["adsInfo.price.is_contact"] = is_contact === true || is_contact === "true";
     }
     if (add_on) {
-      // Add filter for rent amount
-      dbQuery["addons_validity.name"] = add_on;
+      dbQuery = {
+        "addons_validity": {
+          $elemMatch: {
+            "name": add_on,
+            "expired_on": {
+              $gte: new Date("2023-09-18").toISOString() // Construct ISODate manually
+            }
+          }
+        }
+      };
     }
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     // console.log(longitude, latitude,'longitude, latitude');
