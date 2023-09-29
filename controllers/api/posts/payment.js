@@ -706,8 +706,8 @@ console.log(updateQuery);
       [userID],
       title,
       body,
-      { model_id: userID, model: "user" },
-      false,
+      { model_id: ads_id, model: `${ModelName}` },
+      true,
       {
         subject: "Post Successfully Created!",
         email_template: "postSuccess",
