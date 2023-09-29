@@ -342,7 +342,7 @@ for (let [modelLabel, modelName] of Object.entries(addsModel)) {
 
     return successJSONResponse(res, {
       message: "success",
-      // unseen_total:unseen_total,
+      unseen_total:unseen_total,
       data: mergedData,
       banner
     });
