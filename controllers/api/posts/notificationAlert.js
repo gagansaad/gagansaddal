@@ -11,7 +11,8 @@ const mongoose = require("mongoose"),
   jobsAd = mongoose.model("job"),
   category = mongoose.model("PostType"),
   Media = mongoose.model("media"),
-  User = mongoose.model("user")
+  User = mongoose.model("user"),
+  Notification = mongoose.model("notification")
   tagline_keywords = mongoose.model("keywords"),
   {
     successJSONResponse,
@@ -144,17 +145,72 @@ let returnNotification=[
   }
 };
 
+exports.getMyNotifications = async (req, res, next) => {
+  try {
+    let myid = req.userId;
+    let page = req.query.page || 1;
+    let pageSize = req.query.pageSize || 10;
+
+    // Calculate the number of documents to skip based on the page number and page size
+    let skip = (page - 1) * pageSize;
+
+    // Query to get the total count of notifications for the user
+    const totalNotifications = await Notification.countDocuments({ user_id: myid });
+
+    // Query to retrieve paginated notifications
+    const notifications = await Notification.find({ user_id: myid })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(pageSize)
+      .exec();
+
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(totalNotifications / pageSize);
+
+    return successJSONResponse(res, {
+      message: "Success",
+        total: totalNotifications,
+        perPage: pageSize,
+        page: page,
+        totalPages: totalPages,
+      notifications,
+    });
+  } catch (error) {
+    console.error(error);
+    return failureJSONResponse(res, { message: "Something went wrong" });
+  }
+};
 
 
 
-// if(favoriteAd){
-//   await ModelName.findByIdAndUpdate({_id:adId},
-//   { $push: { favorite:userId} },
-//   { new: true },)
-// }
+exports.Notifications_status = async (req, res, next) => {
+  try {
+    let myid = req.userId;
+    const{read_all,read_id} = req.query;
+    let notification;
+    if(read_all == 'true'){
+      notification = await Notification.updateMany(
+        { $and: [{ user_id: myid }, { status: "unseen" }] },
+        { $set: { status: "seen" } }
+      );
+      
+    }else{
+      if(!read_id.length){
+        return failureJSONResponse(res, { message: "Please provide notificationId" });
+      }
+      notification = await Notification.updateOne(
+        {  _id: read_id  },
+        { $set: { status: "seen" } }
+      );
+    }
+    if(notification){
+      return successJSONResponse(res, { message: "Success"});
 
+    }
+    
+  } catch (error) {
+    console.error(error);
+    return failureJSONResponse(res, { message: "Something went wrong" });
+  }
+};
 
-
-// await ModelName.findByIdAndUpdate({_id:adId},
-//   { $pull: { favorite: userId } },
-//   { new: true },)

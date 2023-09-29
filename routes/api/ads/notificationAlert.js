@@ -8,6 +8,8 @@ const router = require(`express`).Router(),
     
 router.post(`/create-alert`,authMiddleware.ensureUserLoggedIn,controllers.createAlert)
 router.get(`/get-alerts`,authMiddleware.ensureUserLoggedIn,controllers.getAlerts)
+router.get(`/fetch-notifications`,authMiddleware.ensureUserLoggedIn,controllers.getMyNotifications)
+router.get(`/read-notifications`,authMiddleware.ensureUserLoggedIn,controllers.Notifications_status)
 
 
 
