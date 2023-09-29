@@ -12,7 +12,7 @@ const mongoose = require("mongoose"),
   category = mongoose.model("PostType"),
   Media = mongoose.model("media"),
   User = mongoose.model("user"),
-  Notification = mongoose.model("notification")
+  Notification = mongoose.model("notification"),
   tagline_keywords = mongoose.model("keywords"),
   {
     successJSONResponse,
@@ -156,6 +156,7 @@ exports.getMyNotifications = async (req, res, next) => {
 
     // Query to get the total count of notifications for the user
     const totalNotifications = await Notification.countDocuments({ user_id: myid });
+    const unseen_total = await Notification.countDocuments( { $and: [{ user_id: myid }, { status: "unseen" }] });
 
     // Query to retrieve paginated notifications
     const notifications = await Notification.find({ user_id: myid })
@@ -169,6 +170,7 @@ exports.getMyNotifications = async (req, res, next) => {
 
     return successJSONResponse(res, {
       message: "Success",
+        unseen_total:unseen_total,
         total: totalNotifications,
         perPage: pageSize,
         page: page,

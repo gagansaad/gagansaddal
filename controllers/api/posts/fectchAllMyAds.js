@@ -11,6 +11,8 @@ const mongoose = require("mongoose"),
   category = mongoose.model("PostType"),
   BannerSchema = mongoose.model("Banner"),
   viewModel = mongoose.model("Post_view"),
+  NotificationsSchema = mongoose.model("notification"),
+
   {
     successJSONResponse,
     failureJSONResponse,
@@ -336,8 +338,11 @@ for (let [modelLabel, modelName] of Object.entries(addsModel)) {
       // }
 
     }
+    const unseen_total = await NotificationsSchema.countDocuments( { $and: [{ user_id: myid }, { status: "unseen" }] });
+
     return successJSONResponse(res, {
       message: "success",
+      // unseen_total:unseen_total,
       data: mergedData,
       banner
     });
