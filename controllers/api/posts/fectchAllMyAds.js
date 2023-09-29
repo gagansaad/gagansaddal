@@ -317,7 +317,7 @@ for (let [modelLabel, modelName] of Object.entries(addsModel)) {
         filterData = combinedData.map((job) => {
           return {
             ...job._doc,
-           
+      
             price_default: job.price_default,
             view_count: job.viewCount,
             favorite_count: job.favoriteCount,
