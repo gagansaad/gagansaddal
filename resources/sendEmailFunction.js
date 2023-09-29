@@ -120,7 +120,7 @@ exports.AccountDeleteEmail = (email_address = ``, name = ``) => {
 };
 exports.sendEmail = async (email_address, subject, fileName, replacements = []) => {
     try {
-        console.log("html =====================>", email_address, subject, fileName, replacements);
+        // console.log("html =====================>", email_address, subject, fileName, replacements);
         let transporter = nodemailer.createTransport({
             host: 'smtp-relay.sendinblue.com',
             port: 587,
@@ -130,7 +130,7 @@ exports.sendEmail = async (email_address, subject, fileName, replacements = []) 
             },
         });
         fileName = "./view/Email-Templetes/" + fileName + ".ejs";
-        console.log(fileName);
+        // console.log(fileName);
         let templateFile = fs.readFileSync(fileName).toString();
         var template = ejs.compile(templateFile);
         var htmlToSend = template(replacements);
@@ -140,14 +140,14 @@ exports.sendEmail = async (email_address, subject, fileName, replacements = []) 
             subject: subject,
             html: htmlToSend,
         };
-        console.log("mailOptions", mailOptions);
+        // console.log("mailOptions", mailOptions);
 
         let emailSent = await transporter.sendMail(mailOptions, function (error, response) {
             if (error) {
                 console.log(error);
             }
         });
-        console.log("emailSent ===============================>", emailSent);
+        // console.log("emailSent ===============================>", emailSent);
     } catch (err) {
         console.error('mail send err', err)
         throw new Error('Somethind went wrong!')

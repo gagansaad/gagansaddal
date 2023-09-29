@@ -60,7 +60,7 @@ exports.forget_password = async function (req, res, next) {
     })
       .then(async (foundUser) => {
         if (foundUser) {
-          console.log(foundUser);
+          // console.log(foundUser);
 
           const token = jwt.sign(
             {
@@ -193,7 +193,7 @@ exports.fetchProfileDetails = async function (req, res) {
 
       users.findById(userId)
       .then((user) => {
-        console.log(user);
+        // console.log(user);
         if (!user)
           return failureJSONResponse(res, {
             message: `something went worng`,
@@ -223,9 +223,9 @@ exports.fetchProfileDetails = async function (req, res) {
 exports.update_profile= async function (req, res, next) {
   try {
     const userId = req.userId;
-    console.log(userId);
+    // console.log(userId);
     let data = await users.findById(userId)
-    console.log(data,"vikaasssssss ki jai")
+    // console.log(data,"vikaasssssss ki jai")
     if(!data){
       return res.status(401).json({
         msg:'Please provide your valid Id'
@@ -238,7 +238,7 @@ exports.update_profile= async function (req, res, next) {
       old_password,
       new_password,
     } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     const dataObj={}
     if (name && !isValidString(name))
       return failureJSONResponse(res, { message: `Invalid Name` });
@@ -248,9 +248,9 @@ exports.update_profile= async function (req, res, next) {
     }
   
    if(old_password && new_password){
-    console.log("object");
+    // console.log("object");
     const result = await bcrypt.compare(old_password,data?.password);
-    console.log(result,"-----------------------------------------------------");
+    // console.log(result,"-----------------------------------------------------");
     if (!result) {
       return res.status(401).json({
         msg: 'Please provide a valid old password'

@@ -66,7 +66,7 @@ exports.ensureUserLoggedIn = async (req, res, next) => {
 }
 exports.ensureUserLoggedInAdmin = async (req, res, next) => {
 
-console.log(req.headers.authorization);
+// console.log(req.headers.authorization);
     try {
 
         let token = null;
@@ -75,7 +75,7 @@ console.log(req.headers.authorization);
             token = req.headers.authorization.split(' ')[1];
         }
 
-        console.log(`token`, token)
+        // console.log(`token`, token)
 
         if (!token) return res.json({
             status: 401,
@@ -83,10 +83,10 @@ console.log(req.headers.authorization);
             
         }) 
         else {
-            console.log(`token here`, token)
+            // console.log(`token here`, token)
             const decodedPayload = verifyAndDecodeToken(token);
 
-            console.log(`decodedPayload`,decodedPayload)
+            // console.log(`decodedPayload`,decodedPayload)
         
 
             if (!((decodedPayload && decodedPayload.userId))) {

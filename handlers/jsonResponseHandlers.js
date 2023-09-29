@@ -50,10 +50,10 @@ exports.successJSONResponse = (res = null, data = null, httpStatusCode = 200) =>
     }
 }
 exports.ModelNameByAdsType = async (ads_type) => {
-console.log(ads_type,"ttttt");
+// console.log(ads_type,"ttttt");
     let findModelName = await category.findById({ "_id": ads_type})
 
-    console.log(findModelName);
+    // console.log(findModelName);
     let ModelName;
   let Typename;
     switch (findModelName.name) {
