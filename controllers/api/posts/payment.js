@@ -469,9 +469,10 @@ exports.create_payment_intent = async (req, res) => {
       // Handle the event
       let dataobj={}
       let findUser = await PaymentModel.findById({ _id: payment_id });
-      console.log(findUser, "findUser--------------------------------------------------------------------------------------------");
+      // console.log(findUser, "findUser--------------------------------------------------------------------------------------------");
       let UserId = findUser.user.toString();
       let Adstype_Id = findUser.ads_type.toString();
+      let Ad_id = findUser.ads.toString();
       let getAdDetails = await category.findById({ _id: Adstype_Id });
       let adsName = getAdDetails.name;
       // console.log(findUser.user, "jsncjsn", getAdDetails, "dasshbc", Adstype_Id);
@@ -525,7 +526,7 @@ exports.create_payment_intent = async (req, res) => {
             [UserId],
             getNotification.title,
             getNotification.body,
-            { model_id: Adstype_Id, model: adsName },
+            { model_id: Ad_id, model: adsName },
             true,
             {
               subject: "Payment succeedded of post",
@@ -547,7 +548,7 @@ exports.create_payment_intent = async (req, res) => {
             [UserId],
             getNotification.title,
             getNotification.body,
-            { model_id: Adstype_Id, model: adsName },
+            { model_id: Ad_id, model: adsName },
             true,
             {
               subject: "Payment succedded of post",
