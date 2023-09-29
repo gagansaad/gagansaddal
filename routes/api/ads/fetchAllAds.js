@@ -14,12 +14,12 @@ router.get(`/my-ads-count`,
 );
 
 router.get(`/adons-ads`,
-authMiddleware.ensureUserLoggedInDummy,
+    authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchAll
 );
 
 router.get(`/adons-ads1`,
-authMiddleware.ensureUserLoggedInDummy,
+    authMiddleware.ensureUserLoggedInDummy,
     controllers.fetchAll1
 );
 

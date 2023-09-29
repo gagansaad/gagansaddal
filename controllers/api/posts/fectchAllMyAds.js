@@ -122,7 +122,7 @@ exports.CountMyAd = async (req, res, next) => {
       let YourModel = mongoose.model(adType.key)
       let checkAlreadyExist = await YourModel.find({ userId: MyId }).exec();
       const adTypeCount = checkAlreadyExist.length;
-      results.push({ Category: adType.label, Count: adTypeCount });
+      results.push({ category: adType.label, count: adTypeCount });
     }
     return successJSONResponse(res, { message: `success`, results });
   } catch (error) {

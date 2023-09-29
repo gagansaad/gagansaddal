@@ -719,7 +719,7 @@ console.log(updateQuery);
       title1,
       body1,
       { model_id: ads_id, model: `${ModelName}`},
-      false,
+      true,
       {
         subject: `${adsName} New Post Added`,
         email_template: "postSuccess",
