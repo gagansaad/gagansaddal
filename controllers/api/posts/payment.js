@@ -567,6 +567,7 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
   if (adsName) {
     let alertdata = await USER.find(updateQuery);
     userIds = alertdata.map((alert) => String(alert._id));
+    console.log(userIds,"------------------------------------------------------------------------------------------");
   }
   let title1 = `${adsName}`;
   let body1 = `${adsName} New Post Added Click to See`;
