@@ -320,6 +320,7 @@ exports.createJobAds = async (req, res, next) => {
       image,
       video,
     } = req.body;
+    let userID = req.userId
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -376,7 +377,7 @@ exports.createJobAds = async (req, res, next) => {
         image: imageArr,
         video,
       },
-      userId: userId,
+      userId: userID,
     };
 
     const newJobPost = await postJobAd.create(dataObj);
@@ -472,8 +473,10 @@ exports.editJobAds = async (req, res, next) => {
       hide_my_phone,
       hide_my_secondary_phone,
       hide_my_email,
+
       // preferableModeContact,
     } = req.body;
+    let userID = req.userId
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -527,7 +530,7 @@ exports.editJobAds = async (req, res, next) => {
 
     if (status) dataObj.status = status;
     if (adsType) dataObj.adsType = adsType;
-
+    if(userID) dataObj.userId = userID;
     if (title) adsInfoObj.title = title;
     if (tagline) adsInfoObj.tagline = tagline;
     if (descriptions) adsInfoObj.descriptions = descriptions;
