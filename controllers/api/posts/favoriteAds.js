@@ -111,7 +111,10 @@ exports.CountFavoriteAd = async (req, res, next) => {
       });
 
       const adTypeCount = filteredAds.length;
-      results.push({ category: adType.label, count: adTypeCount });
+      if(adTypeCount != 0){
+        results.push({ category: adType.label, count: adTypeCount });
+
+      }
     }
     return successJSONResponse(res, { message: `success`, results });
   } catch (error) {
