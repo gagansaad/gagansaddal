@@ -568,13 +568,6 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
     let alertdata = await USER.find(updateQuery);
     userIds = alertdata.map((alert) => String(alert._id));
     console.log(userIds,"------------------------------------------------------------------------------------------");
-    const myidIndex = userIds.indexOf(String(userID));
-
-if (myidIndex !== -1) {
-  // If myid is found, remove it from the array
-  userIds.splice(myidIndex, 1);
-}
-console.log(userIds,"------------------------------------------------------------------------------------------");
   }
   let title1 = `${adsName}`;
   let body1 = `${adsName} New Post Added Click to See`;
