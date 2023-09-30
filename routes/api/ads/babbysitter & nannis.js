@@ -38,7 +38,7 @@ function validateImage(req, res, next) {
 
 router.get(
   `/dynamics-data`,
-  authMiddleware.ensureUserLoggedIn,
+  authMiddleware.ensureUserLoggedInDummy,
   controllers.getDnymicsData
 );
 router.get(`/menu`, controllers.fetchBabyData);

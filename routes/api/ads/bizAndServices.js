@@ -29,7 +29,7 @@ const upload = multer({
 
 router.get(
   `/dynamics-data`,
-  authMiddleware.ensureUserLoggedIn,
+  authMiddleware.ensureUserLoggedInDummy,
   controllers.getDnymicsData
 );
 router.get(`/menu`, controllers.fetchBizData);
