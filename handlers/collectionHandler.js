@@ -7,22 +7,21 @@ const mongoose = require("mongoose"),
   roomrentAd = mongoose.model("RoomRent"),
   jobsAd = mongoose.model("job");
 
+let records = [
+  ...eventAd,
+  ...bizAd,
+  ...babysitterAd,
+  ...roomrentAd,
+  ...jobsAd,
+  ...buysellAd,
+];
 
-  let records = [
-    ...eventAd,
-    ...bizAd,
-    ...babysitterAd,
-    ...roomrentAd,
-    ...jobsAd,
-    ...buysellAd,
-  ];
-  
-  if (records) {
-    return successJSONResponse(res, {
-      message: `success`,
-      isfeatured: Object.keys(records).length,
-      status: 200,
-    });
-  } else {
-    return failureJSONResponse(res, { message: `Ads not available` });
-  }
+if (records) {
+  return successJSONResponse(res, {
+    message: `success`,
+    isfeatured: Object.keys(records).length,
+    status: 200,
+  });
+} else {
+  return failureJSONResponse(res, { message: `Ads not available` });
+}

@@ -1,5 +1,5 @@
 const { json } = require("express");
-const crypto = require('crypto');
+const crypto = require("crypto");
 const mongoose = require("mongoose"),
   eventAd = mongoose.model("event"),
   Media = mongoose.model("media"),
@@ -27,10 +27,7 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 
 exports.getDnymicsData = async (req, res, next) => {
- 
-  let records = await tagline_keywords
-    .find()
-    .select({ keywords: 1, _id: 1 });
+  let records = await tagline_keywords.find().select({ keywords: 1, _id: 1 });
 
   const dynamicsData = {
     tagline: records,
@@ -135,7 +132,6 @@ exports.validateEventAdsData = async (req, res, next) => {
       latitude,
       longitude,
     } = req.body;
-    // console.log(req.body, "is validate ki body");
     if (
       status &&
       status != `active` &&
@@ -145,11 +141,11 @@ exports.validateEventAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please enter status active inactive or draft`,
       });
-      if (!latitude && !longitude) {
-        return failureJSONResponse(res, {
-          message: `Please provide both latitude and longitude`,
-        });
-      }
+    if (!latitude && !longitude) {
+      return failureJSONResponse(res, {
+        message: `Please provide both latitude and longitude`,
+      });
+    }
     if (!adsType)
       return failureJSONResponse(res, { message: `Please provide ads type` });
     // else if (adsType && !isValidMongoObjId(mongoose, adsType)) return failureJSONResponse(res, { message: `Please provide valid ads type` });
@@ -293,37 +289,12 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid hosted by`,
       });
-    // if (countryCode && isNaN(Number(countryCode)))
-    // return failureJSONResponse(res, {
-    //   message: `Please provide valid country code`,
-    // });
-    // if(preferableModeContact){
-    //   if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".") ){
-    //     return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
-    //   } else if (preferableModeContact != 1 && preferableModeContact != 2  && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });}
-    // }
-    // if (preferableModeContact && isNaN(Number(preferableModeContact))){
-    //   return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
-    // }
 
     if (emailAddress && !isValidEmailAddress(emailAddress)) {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
     }
-
-    // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
-
-    // if (["true", "false"].includes(hideAddress) == false) {
-    //   return failureJSONResponse(res, {
-    //     message: `Please provide us hide/show address (true/false)`
-    //   })
-    // }
-
-    // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
-    // return failureJSONResponse(res, {
-    //   message: `Please provide valid phone number`,
-    // });
 
     return next();
   } catch (err) {
@@ -335,7 +306,6 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
 exports.createEventAds = async (req, res, next) => {
   try {
-    // console.log(req.body, "dccdcdc");
     const {
       isfeatured,
       status,
@@ -370,7 +340,6 @@ exports.createEventAds = async (req, res, next) => {
       other_platform,
       other_platform_name,
     } = req.body;
-    // console.log(facebook_platform,)
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -441,7 +410,6 @@ exports.createEventAds = async (req, res, next) => {
       productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
     }
-// console.log(platforms,"---------------------------------");
     const dataObj = {
       isfeatured,
       status: status,
@@ -463,9 +431,9 @@ exports.createEventAds = async (req, res, next) => {
         },
         recurring_type,
         image: imageArr,
-        location:{
-          location_name:location_name,
-          coordinates:[longitude,latitude]
+        location: {
+          location_name: location_name,
+          coordinates: [longitude, latitude],
         },
         venue_name,
         date_time: {
@@ -482,15 +450,20 @@ exports.createEventAds = async (req, res, next) => {
       tagline: taglines,
       userId: userId,
     };
-// console.log(dataObj,"dvbfbfbfbfrb");
     const newEventPost = await eventAd.create(dataObj);
     const stringToHash = newEventPost._id.toString();
-    const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
+    const hash = await crypto
+      .createHash("sha256")
+      .update(stringToHash)
+      .digest("hex");
     const truncatedHash = hash.slice(0, 10);
-    const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
-    let ad_Id = numericHash.toString().padStart(10, '0') 
-  
-   await eventAd.findByIdAndUpdate({_id:newEventPost._id},{$set:{advertisement_id:ad_Id}})
+    const numericHash = parseInt(truncatedHash, 16) % Math.pow(10, 10);
+    let ad_Id = numericHash.toString().padStart(10, "0");
+
+    await eventAd.findByIdAndUpdate(
+      { _id: newEventPost._id },
+      { $set: { advertisement_id: ad_Id } }
+    );
     const postEventAdObjToSend = {};
 
     for (let key in newEventPost.toObject()) {
@@ -520,7 +493,6 @@ exports.createEventAds = async (req, res, next) => {
 ///--------------------------Edit event-----------------------------///
 
 exports.editEventAds = async (req, res, next) => {
-  // console.log(req.body, "body hai je body");
   try {
     const eventId = req?.params?.eventId;
 
@@ -702,11 +674,11 @@ exports.editEventAds = async (req, res, next) => {
     if (ticketPrice) adsInfoObj.ticket_price = ticketPrice;
     if (imageArr.length) adsInfoObj.image = imageArr;
     if (platforms.length) adsInfoObj.live_event = platforms;
-    let locationobj={}
-    if(longitude && latitude){
-      locationobj={
-        coordinates:[longitude,latitude]
-      }
+    let locationobj = {};
+    if (longitude && latitude) {
+      locationobj = {
+        coordinates: [longitude, latitude],
+      };
     }
     if (location_name) locationobj.location_name = location_name;
     if (locationobj) adsInfoObj.location = locationobj;
@@ -719,7 +691,7 @@ exports.editEventAds = async (req, res, next) => {
       adsInfo: adsInfoObj,
       lister_basic_info: {
         organization_name,
-        name:hosted_by,
+        name: hosted_by,
         emailAddress,
         website_link,
         hide_my_phone: my_phone,
@@ -735,7 +707,6 @@ exports.editEventAds = async (req, res, next) => {
         },
       },
     };
-    // console.log(dataObjq,"66666666666666666666666666666666666666s");
     const updateEvent = await eventAd.findByIdAndUpdate(
       { _id: eventId },
       { $set: dataObjq },
@@ -835,106 +806,98 @@ exports.fetchAll = async (req, res, next) => {
       is_myad,
     } = req.query;
     let adOnsQuery = {};
-    if (add_on){
+    if (add_on) {
       dbQuery = {
-        "addons_validity": {
+        addons_validity: {
           $elemMatch: {
-            "name": add_on,
-            "expired_on": {
-              $gte: new Date("2023-09-18").toISOString() // Construct ISODate manually
-            }
-          }
-        }
+            name: add_on,
+            expired_on: {
+              $gte: new Date("2023-09-18").toISOString(), // Construct ISODate manually
+            },
+          },
+        },
       };
     }
-    // console.log(req.query,"--------------------------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
-    // console.log(longitude, latitude,'longitude, latitude');
-    let Distance
+    let Distance;
     if (regular_ticket_price) {
       dbQuery["adsInfo.ticket_price.regular_ticket_price"] = {
-        $lte: parseFloat(regular_ticket_price) // Parse the input as a float if it's not already
+        $lte: parseFloat(regular_ticket_price), // Parse the input as a float if it's not already
       };
     }
     if (min_price && max_price) {
       dbQuery["adsInfo.ticket_price.regular_ticket_price"] = {
         $gte: parseFloat(min_price),
-        $lte: parseFloat(max_price)
+        $lte: parseFloat(max_price),
       };
     }
-    
+
     if (recurring_type) {
       dbQuery["adsInfo.recurring_type"] = recurring_type;
     }
-    
 
-if (start_time && end_time) {
-  dbQuery["adsInfo.date_time.start_time"] = {
-    $gte: start_time
-  };
-  dbQuery["adsInfo.date_time.end_time"] = {
-    $lte: end_time
-  };
-} else if (start_time) {
-  dbQuery["adsInfo.date_time.start_time"] = {
-    $gte: start_time
-  };
-} else if (end_time) {
-  dbQuery["adsInfo.date_time.end_time"] = {
-    $lte: end_time
-  };
-}
-if (time_zone) {
-  dbQuery["adsInfo.date_time.time_zone"] = time_zone
-}
-time_zone
-if (start_date && end_date) {
-  dbQuery["adsInfo.date_time.start_date"] = {
-    $gte: start_date
-  };
-  dbQuery["adsInfo.date_time.end_date"] = {
-    $lte: end_date
-  };
-} else if (start_date) {
-  dbQuery["adsInfo.date_time.start_date"] = {
-    $gte: start_date
-  };
-} else if (end_date) {
-  dbQuery["adsInfo.date_time.end_date"] = {
-    $lte: end_date
-  };
-}
-
-
-    if(maxDistance === "0" || !maxDistance){
-      // console.log("bol");
-      Distance =  200000
-    }else{
-      Distance =maxDistance*1000
-    }
-  if (longitude && latitude && Distance) {
-      const targetPoint = {
-        type: 'Point',
-        coordinates: [longitude, latitude]
+    if (start_time && end_time) {
+      dbQuery["adsInfo.date_time.start_time"] = {
+        $gte: start_time,
       };
-     
+      dbQuery["adsInfo.date_time.end_time"] = {
+        $lte: end_time,
+      };
+    } else if (start_time) {
+      dbQuery["adsInfo.date_time.start_time"] = {
+        $gte: start_time,
+      };
+    } else if (end_time) {
+      dbQuery["adsInfo.date_time.end_time"] = {
+        $lte: end_time,
+      };
+    }
+    if (time_zone) {
+      dbQuery["adsInfo.date_time.time_zone"] = time_zone;
+    }
+    time_zone;
+    if (start_date && end_date) {
+      dbQuery["adsInfo.date_time.start_date"] = {
+        $gte: start_date,
+      };
+      dbQuery["adsInfo.date_time.end_date"] = {
+        $lte: end_date,
+      };
+    } else if (start_date) {
+      dbQuery["adsInfo.date_time.start_date"] = {
+        $gte: start_date,
+      };
+    } else if (end_date) {
+      dbQuery["adsInfo.date_time.end_date"] = {
+        $lte: end_date,
+      };
+    }
+
+    if (maxDistance === "0" || !maxDistance) {
+      Distance = 200000;
+    } else {
+      Distance = maxDistance * 1000;
+    }
+    if (longitude && latitude && Distance) {
+      const targetPoint = {
+        type: "Point",
+        coordinates: [longitude, latitude],
+      };
+
       adOnsQuery["adsInfo.location.coordinates"] = {
-       
         $near: {
           $geometry: targetPoint,
-          $maxDistance: Distance
-        }
-  }
-  
+          $maxDistance: Distance,
+        },
+      };
+
       dbQuery["adsInfo.location.coordinates"] = {
-       
-          $near: {
-            $geometry: targetPoint,
-            $maxDistance: Distance
-          }
-        
+        $near: {
+          $geometry: targetPoint,
+          $maxDistance: Distance,
+        },
+      };
     }
-  }
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
 
@@ -973,134 +936,148 @@ if (start_date && end_date) {
     if (venue_name) {
       dbQuery["adsInfo.venue_name"] = venue_name;
     }
-     // Get the current date
-     const currentDate = new Date();
-     // Convert the date to ISO 8601 format
-     const currentISODate = currentDate.toISOString();
-     // Extract only the date portion
-     const currentDateOnly = currentISODate.substring(0, 10);
-     let myid = req.userId;
-     if (is_myad =='true' && !myid) {
-      return failureJSONResponse(res, { message: 'Please login to your account' });
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    const currentDateOnly = currentISODate.substring(0, 10);
+    let myid = req.userId;
+    if (is_myad == "true" && !myid) {
+      return failureJSONResponse(res, {
+        message: "Please login to your account",
+      });
     }
-     if(is_myad != 'true'){
-     dbQuery.status = "active";
-     dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-     adOnsQuery.status = "active";
-     adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-     }else{
+    if (is_myad != "true") {
+      dbQuery.status = "active";
+      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+      adOnsQuery.status = "active";
+      adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+    } else {
       dbQuery.userId = myid;
-     }
+    }
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
         ...dbQuery,
         $or: [
           { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
-          { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } }
-        ]
+          { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } },
+        ],
       };
     }
-   
-    
-        
-    let notification = await Users.findOne({_id:myid}).select('userNotification.event')
+
+    let notification = await Users.findOne({ _id: myid }).select(
+      "userNotification.event"
+    );
     let valueofnotification = notification?.userNotification?.event;
     let records = await eventAd
       .find({ $or: [queryFinal] })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
-      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
       .populate({ path: "ReportCount", select: "_id" })
-      .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
-      .sort(sortval)
-     
-      const totalCount = await eventAd.find({
-        $or: [queryFinal],
-      });
-      let responseModelCount = totalCount.length;
-   
+      .populate({
+        path: "isReported",
+        select: "userId",
+        match: { userId: myid },
+      })
+      .sort(sortval);
+
+    const totalCount = await eventAd.find({
+      $or: [queryFinal],
+    });
+    let responseModelCount = totalCount.length;
+
     if (records) {
-        let jobData = records.map((job) => {
+      let jobData = records.map((job) => {
+        return {
+          ...job._doc,
+          // Add other job fields as needed
+          view_count: job.viewCount,
+          favorite_count: job.favoriteCount,
+          is_favorite: !!job.isFavorite,
+          Report_count: job.ReportCount,
+          is_Reported: !!job.isReported,
+        };
+      });
+      const isFavoriteFilter = is_favorite === "true" ? true : undefined;
+      if (isFavoriteFilter) {
+        jobData = jobData.filter((job) => job.is_favorite === true);
+      }
+
+      // Pagination
+      const totalCount = jobData.length;
+      const perPage = parseInt(req.query.perpage) || 40;
+      const page = parseInt(req.query.page) || 1;
+
+      const startIndex = (page - 1) * perPage;
+      const endIndex = startIndex + perPage;
+
+      const paginatedData = jobData.slice(startIndex, endIndex);
+      let featuredData;
+
+      if (is_myad != "true") {
+        let FeaturedData = await eventAd
+          .find({
+            ...adOnsQuery,
+            addons_validity: {
+              $elemMatch: {
+                name: "Featured",
+                expired_on: {
+                  $gte: currentDateOnly, // Construct ISODate manually
+                },
+              },
+            },
+          })
+          .populate({
+            path: "adsInfo.image",
+            strictPopulate: false,
+            select: "url",
+          })
+          .populate({ path: "favoriteCount", select: "_id" })
+          .populate({ path: "viewCount" })
+          .populate({
+            path: "isFavorite",
+            select: "user",
+            match: { user: myid },
+          });
+        const featuredRecordsToPick = 6;
+        const FeaturedpickedRecords = [];
+
+        while (
+          FeaturedpickedRecords.length < featuredRecordsToPick &&
+          FeaturedData.length > 0
+        ) {
+          const randomIndex = Math.floor(Math.random() * FeaturedData.length);
+          const randomRecord = FeaturedData.splice(randomIndex, 1)[0]; // Remove and pick the record
+          FeaturedpickedRecords.push(randomRecord);
+        }
+
+        featuredData = FeaturedpickedRecords.map((job) => {
           return {
             ...job._doc,
             // Add other job fields as needed
             view_count: job.viewCount,
             favorite_count: job.favoriteCount,
-            is_favorite: !!job.isFavorite, 
-            Report_count: job.ReportCount,
-            is_Reported: !!job.isReported, 
+            is_favorite: !!job.isFavorite,
           };
-          
         });
-        const isFavoriteFilter = is_favorite === 'true' ? true : undefined;
-        if (isFavoriteFilter) {
-          jobData = jobData.filter((job) => job.is_favorite === true);
-        }
-      
-        // Pagination
-        const totalCount = jobData.length;
-        const perPage = parseInt(req.query.perpage) || 40;
-        const page = parseInt(req.query.page) || 1;
-      
-        const startIndex = (page - 1) * perPage;
-        const endIndex = startIndex + perPage;
-      
-        const paginatedData = jobData.slice(startIndex, endIndex);
-        let featuredData;
-       
-        if(is_myad != 'true'){
-        let FeaturedData = await eventAd.find({...adOnsQuery, "addons_validity": {
-          $elemMatch: {
-            "name": "Featured",
-            "expired_on": {
-              $gte: currentDateOnly // Construct ISODate manually
-            }
-          }
-        },})
-        .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-        .populate({ path: "favoriteCount", select: "_id" })
-        .populate({ path: "viewCount" })
-        .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-      console.log(FeaturedData);
-      const featuredRecordsToPick = 6;
-      const FeaturedpickedRecords = [];
-      
-      while (FeaturedpickedRecords.length < featuredRecordsToPick && FeaturedData.length > 0) {
-        const randomIndex = Math.floor(Math.random() * FeaturedData.length);
-        const randomRecord = FeaturedData.splice(randomIndex, 1)[0]; // Remove and pick the record
-        FeaturedpickedRecords.push(randomRecord);
       }
-      
-        
-         
-         featuredData = FeaturedpickedRecords.map((job) => {
-            return {
-              ...job._doc,
-              // Add other job fields as needed
-              view_count: job.viewCount,
-              favorite_count: job.favoriteCount,
-              is_favorite: !!job.isFavorite,
-            };
-          })
 
-
-        }
-
-          let finalResponse = {
-            message: `success`,
-            total: totalCount,
-            perPage: perPage,
-            totalPages: Math.ceil(totalCount / perPage),
-            currentPage: page,
-            notification: valueofnotification,
-            records: paginatedData,
-            status: 200,
-            ...((is_myad == 'true') ? {} : { AdOnsData: {featuredData } })
-          };
-          return successJSONResponse(res, finalResponse);
-      
+      let finalResponse = {
+        message: `success`,
+        total: totalCount,
+        perPage: perPage,
+        totalPages: Math.ceil(totalCount / perPage),
+        currentPage: page,
+        notification: valueofnotification,
+        records: paginatedData,
+        status: 200,
+        ...(is_myad == "true" ? {} : { AdOnsData: { featuredData } }),
+      };
+      return successJSONResponse(res, finalResponse);
     } else {
       return failureJSONResponse(res, { message: `Room not Available` });
     }
@@ -1110,54 +1087,59 @@ if (start_date && end_date) {
   }
 };
 
-
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
-    let data_Obj
-    let checkId = await eventAd.findOne({_id:adsId})
-    if(!checkId){
-        return failureJSONResponse(res, { message: `Please provide valid ad id` });
+    let data_Obj;
+    let checkId = await eventAd.findOne({ _id: adsId });
+    if (!checkId) {
+      return failureJSONResponse(res, {
+        message: `Please provide valid ad id`,
+      });
     }
-     // Get the current date
-     const currentDate = new Date();
-     // Convert the date to ISO 8601 format
-     const currentISODate = currentDate.toISOString();
-     // Extract only the date portion
-     const currentDateOnly = currentISODate.substring(0, 10);
-     if(adsId){
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    const currentDateOnly = currentISODate.substring(0, 10);
+    if (adsId) {
       data_Obj = {
-          _id:adsId,
-          status :"active" ,
-          "plan_validity.expired_on" :{ $gte: currentDateOnly }
-      }
+        _id: adsId,
+        status: "active",
+        "plan_validity.expired_on": { $gte: currentDateOnly },
+      };
     }
-    let myid = req.userId
-    let records = await eventAd.findOne(data_Obj)
-    .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-    .populate({ path: "favoriteCount", select: "_id" })
-    .populate({ path: "viewCount" })
-    .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
-    .populate({ path: "ReportCount", select: "_id" })
-    .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
-    
+    let myid = req.userId;
+    let records = await eventAd
+      .findOne(data_Obj)
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+      .populate({ path: "ReportCount", select: "_id" })
+      .populate({
+        path: "isReported",
+        select: "userId",
+        match: { userId: myid },
+      });
+
     if (records) {
-      const ads_type =records.adsType.toString();
-    
-    let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    // console.log(Typename,"nfjdnfcjed");
-    let dbQuery ={
-      userId:myid,
-      ad:records._id,
-      ads_type:ads_type,
-      adType:Typename
-    } 
-    
-     let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
-    //  console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
-      if(!checkview){
-      let data=  await PostViews.create(dbQuery)
-      // console.log(data,"billo ni tere kale kalle naina ");
+      const ads_type = records.adsType.toString();
+
+      let { ModelName, Typename } = await ModelNameByAdsType(ads_type);
+      let dbQuery = {
+        userId: myid,
+        ad: records._id,
+        ads_type: ads_type,
+        adType: Typename,
+      };
+
+      let checkview = await PostViews.findOne({
+        $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }],
+      });
+      if (!checkview) {
+        let data = await PostViews.create(dbQuery);
       }
       const jobData = {
         ...records._doc,
@@ -1165,7 +1147,7 @@ exports.fetchonead = async (req, res, next) => {
         favorite_count: records.favoriteCount,
         is_favorite: !!records.isFavorite,
         Report_count: records.ReportCount,
-        is_Reported: !!records.isReported, 
+        is_Reported: !!records.isReported,
       };
       return successJSONResponse(res, {
         message: `success`,
@@ -1181,47 +1163,45 @@ exports.fetchonead = async (req, res, next) => {
   }
 };
 
-
-
 exports.fetchEventData = async (req, res, next) => {
   try {
     let maxDistance = req.query.maxDistance || 200;
     const sub_categories = {
-      "Events": [
+      Events: [
         "Sport event",
-      "Festival",
-      "Religious",
-      "Political gatherings",
-      "Community Gatherings",
-      "Music concert",
-      "Night party",
-      "Health care advisor",
-      "Education",
-      "Training",
-      "Food & drink",
-      "Fund Raising",
-      "Candlelight Vigil",
-      "Drama",
-      "Theatre",
-      "Movie",
-      "Wedding",
-      "Funneral",
-      "Anniversary",
-      "Welcome",
-      "Farewell",
-      "Markets & Auction",
-      "Spritual",
-      "Valentines day",
-      "Exhibition",
-      "Seminar",
-      "Aerobics",
-      "Webinar",
-      "Other",
+        "Festival",
+        "Religious",
+        "Political gatherings",
+        "Community Gatherings",
+        "Music concert",
+        "Night party",
+        "Health care advisor",
+        "Education",
+        "Training",
+        "Food & drink",
+        "Fund Raising",
+        "Candlelight Vigil",
+        "Drama",
+        "Theatre",
+        "Movie",
+        "Wedding",
+        "Funneral",
+        "Anniversary",
+        "Welcome",
+        "Farewell",
+        "Markets & Auction",
+        "Spritual",
+        "Valentines day",
+        "Exhibition",
+        "Seminar",
+        "Aerobics",
+        "Webinar",
+        "Other",
       ],
     };
-  
+
     const responseArray = [];
-    const lalcount = []
+    const lalcount = [];
     for (const category in sub_categories) {
       const subCategoryArray = sub_categories[category];
       const subcategoryData = [];
@@ -1231,24 +1211,34 @@ exports.fetchEventData = async (req, res, next) => {
       // Extract only the date portion
       const currentDateOnly = currentISODate.substring(0, 10);
       for (const subCategory of subCategoryArray) {
-        const query = {"adsInfo.category": subCategory ,"status" :"active",["plan_validity.expired_on"]:{ $gte: currentDateOnly }};
+        const query = {
+          "adsInfo.category": subCategory,
+          status: "active",
+          ["plan_validity.expired_on"]: { $gte: currentDateOnly },
+        };
         if (req.query.longitude && req.query.latitude) {
           // Assuming you have longitude and latitude fields in your data
           query["adsInfo.location.coordinates"] = {
             $geoWithin: {
               $centerSphere: [
-                [parseFloat(req.query.longitude), parseFloat(req.query.latitude)],
-                maxDistance / 6371 // 6371 is the Earth's radius in kilometers
-              ]
-            }
+                [
+                  parseFloat(req.query.longitude),
+                  parseFloat(req.query.latitude),
+                ],
+                maxDistance / 6371, // 6371 is the Earth's radius in kilometers
+              ],
+            },
           };
         }
         const count = await eventAd.countDocuments(query);
         subcategoryData.push({ sub_category_name: subCategory, count });
       }
 
-      const totalCount = subcategoryData.reduce((total, item) => total + item.count, 0);
-      lalcount.push(totalCount)
+      const totalCount = subcategoryData.reduce(
+        (total, item) => total + item.count,
+        0
+      );
+      lalcount.push(totalCount);
       responseArray.push({
         name: category,
         count: totalCount,
@@ -1256,18 +1246,19 @@ exports.fetchEventData = async (req, res, next) => {
       });
     }
 
-    // console.log(responseArray);
-    let RedZone = lalcount.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    let RedZone = lalcount.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0
+    );
 
     return successJSONResponse(res, {
       message: `success`,
-      totalCount:RedZone,
+      totalCount: RedZone,
       data: responseArray,
     });
   } catch (error) {
-    console.error('Error:', error);
     return failureJSONResponse(res, {
-      message: 'An error occurred',
+      message: "An error occurred",
       error: error.message,
     });
   }

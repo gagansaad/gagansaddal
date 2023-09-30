@@ -20,8 +20,8 @@ const mongoose = require("mongoose"),
   jobsAd = mongoose.model("job"),
   USER = mongoose.model("user"),
   category = mongoose.model("PostType"),
-  Alert = mongoose.model("Alert")
-  payment_logs = require("../../../model/posts/paymentEvent"),
+  Alert = mongoose.model("Alert");
+(payment_logs = require("../../../model/posts/paymentEvent")),
   ({
     successJSONResponse,
     failureJSONResponse,
@@ -37,7 +37,7 @@ const mongoose = require("mongoose"),
     isValidUrl,
     isValidlink,
   } = require(`../../../utils/validators`));
-  let Notification = require("../../../resources/notification");
+let Notification = require("../../../resources/notification");
 
 const env = require("dotenv").config({ path: "../../" });
 
@@ -46,11 +46,8 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 ///-----------------------Validate Data---------------------------//
 
 exports.validatepaymentData = async (req, res, next) => {
-  //   console.log(req.body)
   try {
     const { ads, plan_id, adstype } = req.body;
-
-    // console.log(plan_id);
 
     if (!plan_id)
       return failureJSONResponse(res, { message: `Please provide plan id` });
@@ -111,14 +108,12 @@ const getStripeCustomer = async (userID) => {
           { "userInfo.stripe_id": customer.id }
         );
       } else {
-        console.error("Error retrieving customer from Stripe:", error);
         throw error;
       }
     }
 
     customerStripeId = customer.id;
   }
-  // customerStripeId = userInfoModel.stripe_id;
   return customerStripeId;
 };
 const paymentIntentCreate = async (
@@ -132,7 +127,6 @@ const paymentIntentCreate = async (
   let successUrl;
   let cancelUrl;
   let UserId = dataobj.user;
-  // console.log(UserId, "bol ve channa bol");
   if (deviceType != null) dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
   if (dataobj.total_amount == 0) {
@@ -156,30 +150,26 @@ const paymentIntentCreate = async (
       _id: dataobj.ads_type.toString(),
     });
     let sessionName = findModelName.name;
-    // if (request.body.add_ons.length > 0)
-    //   sessionName +=" and " + request.body.add_ons.length.toString() + " addons";
-// console.log(request.body.add_ons,"request.body.add_onsrequest.body.add_onsrequest.body.add_onsrequest.body.add_ons");
+
     if (request.body.add_ons.length > 0) {
-      let addonsId =request.body.add_ons;
-      
-      let addonsName ='';
+      let addonsId = request.body.add_ons;
+
+      let addonsName = "";
       let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
-    // console.log(result,'sessionresultresultresultresultresultName');
-    
-      if(result.length){
+
+      if (result.length) {
         result.forEach((item) => {
-          addonsName += item.name + ', ';
-        })
+          addonsName += item.name + ", ";
+        });
       }
-      
+
       if (addonsName.endsWith(", ")) {
         addonsName = addonsName.slice(0, -2);
       }
       sessionName += " and Ad-  ons (" + addonsName + ")";
-      
     }
     paymentIntent = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_types: ["card"],
       line_items: [
         {
           price_data: {
@@ -194,27 +184,18 @@ const paymentIntentCreate = async (
         },
       ],
       payment_intent_data: {
-        setup_future_usage: "on_session"
+        setup_future_usage: "on_session",
       },
       mode: "payment",
       customer: customerStripeId,
-      // customer_email: request.body.useremail,
       metadata: {
         payment_id: PaymentModelId._id.toString(),
       },
 
-
       success_url: successUrl,
       cancel_url: cancelUrl,
     });
-    // console.log("eh chaalu hoya");
   } else {
-    // List the customer's payment methods to find one to charge
-    // const paymentMethods = await stripe.paymentMethods.list({
-    //   customer: customerStripeId,
-    //   type: "card"
-    // });
-    // console.log(paymentMethods,"payment methods");
     paymentIntent = await stripe.paymentIntents.create({
       amount: (totalprice.toFixed(2) * 100).toFixed(0),
       currency: "usd",
@@ -224,10 +205,7 @@ const paymentIntentCreate = async (
         payment_id: PaymentModelId._id.toString(),
       },
       payment_method_types: ["card"],
-      // off_session: true,
-      // payment_method: paymentMethods.data[0].id,
     });
-    // console.log(paymentIntent, "po po po po po ki ku ka ll oii cc bd yf jg nv");
   }
 
   await PaymentModel.findOneAndUpdate(
@@ -244,7 +222,6 @@ const paymentIntentCreate = async (
 
 exports.create_payment_intent = async (req, res) => {
   try {
-    // console.log(req.body, "body hai je");
     let deviceType = null;
     if (req.headers["m-device-type"] == "web") deviceType = "web";
     else deviceType = "mobile";
@@ -256,11 +233,8 @@ exports.create_payment_intent = async (req, res) => {
 
     let planId = req.body.planId;
     //-----find plan -----//
-    // console.log(planId, "plan Id");
     let find_ads_type = await AdsPlan.find({ _id: planId }).populate("add_ons");
-    // console.log(find_ads_type, "vndvndj");
     let adstype = find_ads_type[0].ads_type;
-    // console.log(adstype, "njdnjd");
     let plan_price = find_ads_type[0].price.amount;
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
     let addonsId = req.body.add_ons;
@@ -268,7 +242,6 @@ exports.create_payment_intent = async (req, res) => {
     let adsModel = await ModelName.findOne({
       _id: req.body.postId,
     });
-    // console.log(adstype,"**",ModelName,"&&&&",req.body.postId,"***",adsModel"adsmodal",adsModel.status);
     if (adsModel?.status == "active") {
       return failureJSONResponse(
         res,
@@ -278,17 +251,10 @@ exports.create_payment_intent = async (req, res) => {
         422
       );
     }
-    // console.log(addonsId,"arraya ");
     let foundObjects = [];
 
-    // if (userID != adsModel.userId) {
-    //   return failureJSONResponse(res, {
-    //     message: "This Add doesn't belongs to your profile.",
-    //   }, 422);
-    // }
     //-----find add ons -----//
     let totalprice = plan_price;
-    //  console.log(totalprice,"arraya ", addonsId, "aala kala bala tala mala ola yala uala pala nala mala vala cala xala zala");
     if (addonsId.length) {
       if (!Array.isArray(req.body.add_ons)) {
         addonsId = JSON.parse(req.body.add_ons);
@@ -306,28 +272,20 @@ exports.create_payment_intent = async (req, res) => {
         });
       });
 
-      // console.log(foundObjects, "hhhhhjjjjjj00000");
       const totalAmount = foundObjects.reduce(
         (acc, obj) => acc + obj.amount,
         0
       );
       totalprice = plan_price + totalAmount;
     }
-    // console.log(
-    //   userInfoModel,
-    //   "vhndsjvnsdjnsnvskjdrvkrsd --------------->>>>>>>>>>>>>>>>"
-    // );
 
     let customerStripeId = await getStripeCustomer(userID);
-    // console.log(customerStripeId, "25-25 =50 mainu kithe eh line chldi dikha ");
-    // return customerStripeId;
 
     const ephemeralKey = await stripe.ephemeralKeys.create(
       { customer: customerStripeId },
       { apiVersion: "2022-11-15" }
     );
 
-    // console.log(ephemeralKey, "25-25=70 je tu na aayi terer pain ge chitter");
     let paymentModelInfo = await PaymentModel.findOne({
       ads: req.body.postId,
       payment_status: "pending",
@@ -336,9 +294,7 @@ exports.create_payment_intent = async (req, res) => {
 
     let paymentIntentClientSecret = null;
     let statusCode = 200;
-    // return console.log(paymentModelInfo, paymentModelInfo.payment_intent.client_secret, (paymentModelInfo == null || paymentModelInfo == ""), (paymentModelInfo.total_amount != totalprice), '**/*//////****', totalprice, '*****', paymentModelInfo.total_amount);
     if (paymentModelInfo == null || paymentModelInfo == "") {
-      //payment intene
       let dataObj = {
         plan_id: planId,
         plan_addons: foundObjects,
@@ -384,7 +340,6 @@ exports.create_payment_intent = async (req, res) => {
           paymentModelInfo.payment_intent.client_secret;
       }
     }
-    // return console.log(paymentIntentClientSecret,statusCode,(paymentIntentClientSecret == null || paymentIntentClientSecret ==''));
     if (
       paymentIntentClientSecret == null ||
       paymentIntentClientSecret == "" ||
@@ -422,14 +377,10 @@ exports.create_payment_intent = async (req, res) => {
       dbQu.price_drop = price;
     }
     if (Object.keys(dbQu).length > 0) {
-      // console.log(dbQu, "dvdvvdcdcccc");
-
       try {
         let datarr = await ModelName.findByIdAndUpdate(req.body.postId, dbQu, {
           new: true,
         });
-
-        // console.log(datarr, "Key updated successfully.");
       } catch (error) {
         console.error("Error updating document:", error);
       }
@@ -446,137 +397,127 @@ exports.create_payment_intent = async (req, res) => {
       statusCode
     );
   } catch (error) {
-    // console.log("vdvdvdvvvvdvvvdvdvdvdvdvdvdvdvd", error, "bbooklakituramu");
     return failureJSONResponse(res, {
       message: `Something went wrong`,
       error: error.message,
     });
   }
 };
-  exports.webhooks = async (request, response) => {
-    try {
-      let ModelName
-      let getNotification;
-      let event = request.body;
-      // console.log(event, "this is event");
-      let payment_id = event.data.object.metadata.payment_id;
-      if (payment_id == "" || payment_id == null || payment_id == undefined)
-        return successJSONResponse(
-          response,
-          { status: 200, message: `paymentn Id not found` },
-          200
-        );
-      // Handle the event
-      let dataobj={}
-      let findUser = await PaymentModel.findById({ _id: payment_id });
-      // console.log(findUser, "findUser--------------------------------------------------------------------------------------------");
-      let UserId = findUser.user.toString();
-      let Adstype_Id = findUser.ads_type.toString();
-      let Ad_id = findUser.ads.toString();
-      let getAdDetails = await category.findById({ _id: Adstype_Id });
-      let adsName = getAdDetails.name;
-      // console.log(findUser.user, "jsncjsn", getAdDetails, "dasshbc", Adstype_Id);
-      let paymentStatus = "pending";
-      switch (event.type) {
-        case "payment_intent.amount_capturable_updated":
-          const paymentIntentAmountCapturableUpdated = event.data.object;
-          // Then define and call a function to handle the event payment_intent.amount_capturable_updated
-          break;
-        case "payment_intent.canceled":
-          const paymentIntentCanceled = event.data.object;
-          // Then define and call a function to handle the event payment_intent.canceled
-          break;
-        case "payment_intent.created":
-          paymentStatus = "confirmed";
-          dataobj = {
-            payment_id: payment_id,
-            payment_status: paymentStatus,
-            payment_intent: event,
-          };
-          await PaymentEventModel.create(dataobj);
-          const paymentIntentCreated = event.data.object;
-          // Then define and call a function to handle the event payment_intent.created
-          break;
-        case "payment_intent.payment_failed":
-          paymentStatus = "failed";
-          dataobj = {
-            payment_id: payment_id,
-            payment_status: paymentStatus,
-            payment_intent: event,
-          };
-          await PaymentEventModel.create(dataobj);
-          const paymentIntentPaymentFailed = event.data.object;
-          // Then define and call a function to handle the event payment_intent.payment_failed
-          break;
-        case "payment_intent.processing":
-          const paymentIntentProcessing = event.data.object;
-          // Then define and call a function to handle the event payment_intent.processing
-          break;
-
-        case "payment_intent.succeeded":
-          paymentSuccessModelUpdate(payment_id, UserId);
-          // let alertdata = await Alert.find({Typename:adsName})
-          // const userIds = alertdata.map(alert => String(alert.userId));
-
-//           console.log(userIds);
-// console.log(userIds,alertdata,":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
-          
-          getNotification = await getNotificationTitles(event.type);
-          await Notification.sendNotifications(
-            [UserId],
-            getNotification.title,
-            getNotification.body,
-            { model_id: Ad_id, model: adsName },
-            true,
-            {
-              subject: "Payment succeedded of post",
-              email_template: "paymentstatus",
-              data: { payment_status: "succeeded" },
-            }
-          );
-
-          const paymentIntentSucceeded = event.data.object;
-          // Then define and call a function to handle the event payment_intent.succeeded
-          break;
-        case "checkout.session.completed":
-          paymentSuccessModelUpdate(payment_id, UserId);
-           ModelName = await getModelNameByAdsType(Adstype_Id);
-          // console.log(ModelName,"--------",adsName,"--------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-          getNotification = await getNotificationTitles(event.type);
-
-          await Notification.sendNotifications(
-            [UserId],
-            getNotification.title,
-            getNotification.body,
-            { model_id: Ad_id, model: adsName },
-            true,
-            {
-              subject: "Payment succedded of post",
-              email_template: "paymentstatus",
-              data: { payment_status: "succeeded" },
-            }
-          );
-
-          break;
-        // ... handle other event types
-        default:
-          console.log(`Unhandled event type ${event.type}`);
-      }
-      
+exports.webhooks = async (request, response) => {
+  try {
+    let ModelName;
+    let getNotification;
+    let event = request.body;
+    let payment_id = event.data.object.metadata.payment_id;
+    if (payment_id == "" || payment_id == null || payment_id == undefined)
       return successJSONResponse(
         response,
-        { status: 200, message: event.type + " success" },
+        { status: 200, message: `paymentn Id not found` },
         200
       );
-    } catch (error) {
-      console.log(error);
-      return response.status(422).send({
-        error: {
-          message: error.message,
-        },
-      });
+    // Handle the event
+    let dataobj = {};
+    let findUser = await PaymentModel.findById({ _id: payment_id });
+    let UserId = findUser.user.toString();
+    let Adstype_Id = findUser.ads_type.toString();
+    let Ad_id = findUser.ads.toString();
+    let getAdDetails = await category.findById({ _id: Adstype_Id });
+    let adsName = getAdDetails.name;
+    let paymentStatus = "pending";
+    switch (event.type) {
+      case "payment_intent.amount_capturable_updated":
+        const paymentIntentAmountCapturableUpdated = event.data.object;
+        // Then define and call a function to handle the event payment_intent.amount_capturable_updated
+        break;
+      case "payment_intent.canceled":
+        const paymentIntentCanceled = event.data.object;
+        // Then define and call a function to handle the event payment_intent.canceled
+        break;
+      case "payment_intent.created":
+        paymentStatus = "confirmed";
+        dataobj = {
+          payment_id: payment_id,
+          payment_status: paymentStatus,
+          payment_intent: event,
+        };
+        await PaymentEventModel.create(dataobj);
+        const paymentIntentCreated = event.data.object;
+        // Then define and call a function to handle the event payment_intent.created
+        break;
+      case "payment_intent.payment_failed":
+        paymentStatus = "failed";
+        dataobj = {
+          payment_id: payment_id,
+          payment_status: paymentStatus,
+          payment_intent: event,
+        };
+        await PaymentEventModel.create(dataobj);
+        const paymentIntentPaymentFailed = event.data.object;
+        // Then define and call a function to handle the event payment_intent.payment_failed
+        break;
+      case "payment_intent.processing":
+        const paymentIntentProcessing = event.data.object;
+        // Then define and call a function to handle the event payment_intent.processing
+        break;
+
+      case "payment_intent.succeeded":
+        paymentSuccessModelUpdate(payment_id, UserId);
+
+        getNotification = await getNotificationTitles(event.type);
+        await Notification.sendNotifications(
+          [UserId],
+          getNotification.title,
+          getNotification.body,
+          { model_id: Ad_id, model: adsName },
+          true,
+          {
+            subject: "Payment succeedded of post",
+            email_template: "paymentstatus",
+            data: { payment_status: "succeeded" },
+          }
+        );
+
+        const paymentIntentSucceeded = event.data.object;
+        // Then define and call a function to handle the event payment_intent.succeeded
+        break;
+      case "checkout.session.completed":
+        paymentSuccessModelUpdate(payment_id, UserId);
+        ModelName = await getModelNameByAdsType(Adstype_Id);
+        getNotification = await getNotificationTitles(event.type);
+
+        await Notification.sendNotifications(
+          [UserId],
+          getNotification.title,
+          getNotification.body,
+          { model_id: Ad_id, model: adsName },
+          true,
+          {
+            subject: "Payment succedded of post",
+            email_template: "paymentstatus",
+            data: { payment_status: "succeeded" },
+          }
+        );
+
+        break;
+      // ... handle other event types
+      default:
+        console.log(`Unhandled event type ${event.type}`);
     }
-  };
+
+    return successJSONResponse(
+      response,
+      { status: 200, message: event.type + " success" },
+      200
+    );
+  } catch (error) {
+    console.log(error);
+    return response.status(422).send({
+      error: {
+        message: error.message,
+      },
+    });
+  }
+};
 
 const paymentSuccessModelUpdate = async (payment_id, userId) => {
   // let userID = req.userId;
@@ -588,57 +529,58 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
     ads_type = paymentDetails.ads_type;
     // Continue with your logic...
   }
-  const newPaymentStatus = "confirmed"; 
- await PaymentModel.findByIdAndUpdate({ _id: payment_id }, { $set: { payment_status: newPaymentStatus } },
-    { new: true });
+  const newPaymentStatus = "confirmed";
+  await PaymentModel.findByIdAndUpdate(
+    { _id: payment_id },
+    { $set: { payment_status: newPaymentStatus } },
+    { new: true }
+  );
   let getAdDetails = await category.findById({ _id: ads_type });
-      let adsName = getAdDetails.name;
-      let userIds
-      const updateQuery = {};
+  let adsName = getAdDetails.name;
+  let userIds;
+  const updateQuery = {};
 
-    switch (adsName) {
-      case "Events":
-        updateQuery["userNotification.event"] = true;
-        break;
-      case "Jobs":
-        updateQuery["userNotification.job"] = true;
-        break;
-      case "Rentals":
-        updateQuery["userNotification.rental"] = true;
-        break;
-      case "Local Biz & Services":
-        updateQuery["userNotification.localBiz"] = true;
-        break;
-      case "Buy & Sell":
-        updateQuery["userNotification.buysell"] = true;
-        break;
-      case "Babysitters & Nannies":
-        updateQuery["userNotification.careService"] = true;
-        break;
-      default:
-        return failureJSONResponse(res, {
-          message: "Invalid adsName. Cannot update notification status.",
-        });
-    }
-console.log(updateQuery);
-      if(adsName){
-        let alertdata = await USER.find(updateQuery)
-        userIds = alertdata.map(alert => String(alert._id));
-      }
-     let  title1 = `${adsName}`;
-     let  body1 = `${adsName} New Post Added Click to See`;
+  switch (adsName) {
+    case "Events":
+      updateQuery["userNotification.event"] = true;
+      break;
+    case "Jobs":
+      updateQuery["userNotification.job"] = true;
+      break;
+    case "Rentals":
+      updateQuery["userNotification.rental"] = true;
+      break;
+    case "Local Biz & Services":
+      updateQuery["userNotification.localBiz"] = true;
+      break;
+    case "Buy & Sell":
+      updateQuery["userNotification.buysell"] = true;
+      break;
+    case "Babysitters & Nannies":
+      updateQuery["userNotification.careService"] = true;
+      break;
+    default:
+      return failureJSONResponse(res, {
+        message: "Invalid adsName. Cannot update notification status.",
+      });
+  }
+  if (adsName) {
+    let alertdata = await USER.find(updateQuery);
+    userIds = alertdata.map((alert) => String(alert._id));
+  }
+  let title1 = `${adsName}`;
+  let body1 = `${adsName} New Post Added Click to See`;
 
-      
   let AddOnsArr = [];
   let currentDate = new Date();
   let activedate = currentDate.toISOString().split("T")[0];
   let planDuration = await AdsPlan.findById({ _id: plan_id });
-  
- let expired_data =new Date(
-  currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
-)
-  .toISOString()
-  .split("T")[0];
+
+  let expired_data = new Date(
+    currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
+  )
+    .toISOString()
+    .split("T")[0];
   let plan_obj = {
     plan_id: planDuration._id.toString(),
     active_on: activedate,
@@ -660,30 +602,26 @@ console.log(updateQuery);
       let result = await AddOns.find({ "price._id": { $in: _id.toString() } })
         .select("name")
         .exec();
-        let name = result[0].name;
-        let expired = duration;
-        
-        if (name === "Bump up") {
-          expired = expired_data;
-          // days = days // Replace with the actual value
-        }
-        console.log(days,"-------------------------");
-        // Create the object
-        const addOn = {
-          add_ons_id: _id.toString(),
-          name: name,
-          amount: amount,
-          days:days,
-          expired_on: expired,
-          active_on: currentDate.toISOString().split("T")[0],
-        };
-        
-        // Add the "days" property when the name is "Bump up"
-       
-        
-        // Push the object into AddOnsArr
-       return AddOnsArr.push(addOn);
-        
+      let name = result[0].name;
+      let expired = duration;
+
+      if (name === "Bump up") {
+        expired = expired_data;
+      }
+      // Create the object
+      const addOn = {
+        add_ons_id: _id.toString(),
+        name: name,
+        amount: amount,
+        days: days,
+        expired_on: expired,
+        active_on: currentDate.toISOString().split("T")[0],
+      };
+
+      // Add the "days" property when the name is "Bump up"
+
+      // Push the object into AddOnsArr
+      return AddOnsArr.push(addOn);
     })
   );
 
@@ -694,16 +632,13 @@ console.log(updateQuery);
   };
 
   let ModelName = await getModelNameByAdsType(ads_type);
-  // console.log(ModelName.modelName,"-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
   let statusUpdate = await ModelName.findByIdAndUpdate(
     { _id: ads_id },
     { $set: data_Obj }
   );
   let title = "Post Created!";
   let body = "Your Post is Successfully Created!";
-  if (statusUpdate){
-
-  
+  if (statusUpdate) {
     await Notification.sendNotifications(
       [userID],
       title,
@@ -720,7 +655,7 @@ console.log(updateQuery);
       userIds,
       title1,
       body1,
-      { model_id: ads_id, model: ModelName.modelName},
+      { model_id: ads_id, model: ModelName.modelName },
       true,
       {
         subject: `${adsName} New Post Added`,
@@ -728,9 +663,8 @@ console.log(updateQuery);
         data: {},
       }
     );
-    }
-   
-    
+  }
+
   return true;
 };
 const getNotificationTitles = async (status) => {
@@ -776,7 +710,7 @@ const getModelNameByAdsType = async (ads_type) => {
     default:
       console.log(`Please provide valid ads id`);
   }
-  
+
   return ModelName;
 };
 
@@ -804,10 +738,13 @@ exports.billingInfo = async (req, res) => {
     } else {
       return successJSONResponse(
         res,
-        { status: 200, message: " Does not have any card", paymentMethods: { paymentMethods: paymentMethods.data } },
+        {
+          status: 200,
+          message: " Does not have any card",
+          paymentMethods: { paymentMethods: paymentMethods.data },
+        },
         200
       );
-
     }
   } catch (error) {
     return failureJSONResponse(res, {
@@ -824,7 +761,6 @@ exports.detachcard = async (req, res) => {
     if (payment_id.length) {
       paymentMethods = await stripe.paymentMethods.detach(payment_id);
     }
-
 
     if (paymentMethods) {
       return successJSONResponse(
@@ -849,30 +785,25 @@ exports.defaultcard = async (req, res) => {
     let userId = req.userId;
     let cusId;
     let paymentMethods;
-    let card_id = req.body.card_id
+    let card_id = req.body.card_id;
     if (userId) {
       cusId = await UserModel.findById({ _id: userId });
       cusId = cusId.userInfo.stripe_id;
     }
     if (cusId) {
-      paymentMethods = await stripe.paymentMethods.attach(
-        card_id,
-        { customer: cusId }
-      );
+      paymentMethods = await stripe.paymentMethods.attach(card_id, {
+        customer: cusId,
+      });
     }
 
     if (paymentMethods) {
       return successJSONResponse(
         res,
-        { status: 200, message: " success", },
+        { status: 200, message: " success" },
         200
       );
     } else {
-      return successJSONResponse(
-        res,
-        { status: 200, message: "failure", },
-        200
-      );
+      return successJSONResponse(res, { status: 200, message: "failure" }, 200);
     }
   } catch (error) {
     return failureJSONResponse(res, {
@@ -883,16 +814,13 @@ exports.defaultcard = async (req, res) => {
 };
 exports.createcard = async (req, res) => {
   try {
-    const {number,
-    exp_month,
-    exp_year,
-    cvc,} = req.body
-    let userID=req.userId
-let customerStripeId = await getStripeCustomer(userID);
-let paymentMethod;
-    if(customerStripeId){
+    const { number, exp_month, exp_year, cvc } = req.body;
+    let userID = req.userId;
+    let customerStripeId = await getStripeCustomer(userID);
+    let paymentMethod;
+    if (customerStripeId) {
       paymentMethod = await stripe.paymentMethods.create({
-        type: 'card',
+        type: "card",
         card: {
           number: number,
           exp_month: exp_month,
@@ -900,12 +828,10 @@ let paymentMethod;
           cvc: cvc,
         },
       });
-     
-      
-      paymentMethod = await stripe.paymentMethods.attach(
-        paymentMethod.id,
-        {customer: customerStripeId}
-      );
+
+      paymentMethod = await stripe.paymentMethods.attach(paymentMethod.id, {
+        customer: customerStripeId,
+      });
     }
     if (paymentMethod) {
       return successJSONResponse(

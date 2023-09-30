@@ -1,24 +1,22 @@
 const jwt = require(`jsonwebtoken`),
-    bcrypt = require(`bcryptjs`);
+  bcrypt = require(`bcryptjs`);
 
 const tokenSecret = `AbCdEfGhIjKlMnOPYT`;
 
 exports.generateJWT = (id, entity) => {
-    return jwt.sign({ id, entity }, tokenSecret);
-}
+  return jwt.sign({ id, entity }, tokenSecret);
+};
 
 exports.verifyAndDecodeToken = (token) => {
-    return jwt.verify(token, tokenSecret);
-}
+  return jwt.verify(token, tokenSecret);
+};
 
 exports.hashPassword = (password = null, saltRounds = 10) => {
+  const parsedSaltRounds = Number(saltRounds);
+  if (isNaN(parsedSaltRounds) || parsedSaltRounds < 1) {
+    throw new TypeError(`Salt round count must be a valid positive integer`);
+  }
 
-    const parsedSaltRounds = Number(saltRounds);
-    if (isNaN(parsedSaltRounds) || (parsedSaltRounds < 1)) {
-        throw new TypeError(`Salt round count must be a valid positive integer`);
-    }
-
-    const hash = bcrypt.hashSync(password, parsedSaltRounds);
-    return hash;
-}
-
+  const hash = bcrypt.hashSync(password, parsedSaltRounds);
+  return hash;
+};

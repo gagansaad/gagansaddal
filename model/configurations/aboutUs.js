@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 
-const aboutUsSchema = new mongoose.Schema({
-
+const aboutUsSchema = new mongoose.Schema(
+  {
     htmlText: {
-        type: String,
-        // required: true
+      type: String,
+      // required: true
     },
+  },
+  { timestamps: true }
+);
 
-}, { timestamps: true });
-
-module.exports = mongoose.model('aboutus', aboutUsSchema);
+module.exports = mongoose.model("aboutus", aboutUsSchema);

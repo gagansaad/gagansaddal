@@ -1,33 +1,32 @@
 const mongoose = require("mongoose");
 
-const {
-    defaultStringConfig,
-} = require(`../../utils/mongoose`);
+const { defaultStringConfig } = require(`../../utils/mongoose`);
 
-const roomRentsSchema = new mongoose.Schema({
-
+const roomRentsSchema = new mongoose.Schema(
+  {
     entity: {
-        ...defaultStringConfig,
-        default: `adsCategories`,
-        required: true,
-        immutable: true
+      ...defaultStringConfig,
+      default: `adsCategories`,
+      required: true,
+      immutable: true,
     },
     status: {
-        type: String,
-        enum: [`active`, `inactive`],
-        required: true,
-        default: "active"
+      type: String,
+      enum: [`active`, `inactive`],
+      required: true,
+      default: "active",
     },
-    name:{
-        ...defaultStringConfig,
-        required: true,
+    name: {
+      ...defaultStringConfig,
+      required: true,
     },
 
-    ads_type:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `PostType`
-    }
- 
-}, { timestamps: true });
+    ads_type: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: `PostType`,
+    },
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model('adsCategory', roomRentsSchema);
+module.exports = mongoose.model("adsCategory", roomRentsSchema);

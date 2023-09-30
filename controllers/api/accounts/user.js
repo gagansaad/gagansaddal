@@ -75,7 +75,6 @@ module.exports = {
   signup_with_email: async function (req, res) {
     try {
       var newUser = req.body;
-      // console.log(newUser, "eh haigi aa body");
       newUser.email = newUser.email.trim().toLowerCase();
 
       // Check If email is register with any user via other platforms like facebook,google or email.
@@ -180,16 +179,6 @@ module.exports = {
 
               if (result?.userInfo?.mobile_number?.phone_number) {
                 MobileNumberVerificationOTPByUserId(result._id, null);
-                // console.log(`kjasjhkasdgasjgd`);
-                // OTP.create({
-                //     code: generateOTP(4),
-                //     user: result._id,
-                //     for: 1
-
-                // }).then((data) => {
-                //     console.log(data)
-                //     MobileNumberVerificationOTP(result?.userInfo?.mobile_number?.phone_number, result?.userInfo?.name, data.code)
-                // })
               }
 
               if (result?.userInfo?.email_address) {
@@ -202,7 +191,6 @@ module.exports = {
                     (result?.userInfo?.email_address).toLowerCase(),
                   for: 2,
                 }).then((data) => {
-                  // console.log(data);
                   EmailOTPVerification(
                     result?.userInfo?.email_address,
                     result?.userInfo?.name,
@@ -223,15 +211,12 @@ module.exports = {
 
   // Standard signup with Google.
   login_signup_with_google: async function (req, res) {
-    // console.log(req.body);
-
     const emailAddress = req?.body?.email_address,
       name = req?.body?.name,
       deviceType = req?.body?.device_type,
       googleId = req?.body?.google_id,
       googleToken = req?.body?.google_token,
       deviceToken = req?.body?.device_token;
-// console.log(name,"-----------------");
     if (!isValidString(name.trim()))
       return failureJSONResponse(res, { message: `Please enter valid name` });
     if (!isValidString(googleId.trim()))
@@ -269,8 +254,6 @@ module.exports = {
     );
 
     if (foundUser && Object.keys(foundUser).length) {
-      // console.log(`case 1`);
-
       const updateDeviceInfo = await User.update(
         { _id: foundUser._id },
         {
@@ -321,8 +304,6 @@ module.exports = {
         foundUserWithEmailAddress &&
         Object.keys(foundUserWithEmailAddress).length
       ) {
-        // console.log(`case2 `);
-
         const updateDeviceInfo = await dbSchema.User.update(
           { _id: foundUserWithEmailAddress._id },
           {
@@ -359,8 +340,6 @@ module.exports = {
           token: createJWT(foundUserWithEmailAddress._id),
         });
       } else {
-        // console.log(`case3`);
-
         // Create a new user.
         var newUserDetail = {};
         var user_status = {
@@ -472,8 +451,6 @@ module.exports = {
     );
 
     if (foundUser && Object.keys(foundUser).length) {
-      // console.log(`case 1`);
-
       const updateDeviceInfo = await User.update(
         { _id: foundUser._id },
         {
@@ -505,8 +482,6 @@ module.exports = {
         token: createJWT(foundUser._id),
       });
     } else {
-      // console.log(`dvnavsndvsah`);
-
       const foundUserWithEmailAddress = await User.findOne(
         {
           "userInfo.email_address": emailAddress.toLowerCase(),
@@ -526,8 +501,6 @@ module.exports = {
         foundUserWithEmailAddress &&
         Object.keys(foundUserWithEmailAddress).length
       ) {
-        // console.log(`case2 `);
-
         const updateDeviceInfo = User.update(
           { _id: foundUserWithEmailAddress._id },
           {
@@ -564,8 +537,6 @@ module.exports = {
           token: createJWT(foundUserWithEmailAddress._id),
         });
       } else {
-        // console.log(`case3`);
-
         // Create a new user.
         var newUserDetail = {};
         var user_status = {
@@ -639,9 +610,6 @@ module.exports = {
       appleToken = req?.body?.apple_token,
       deviceToken = req?.body?.device_token;
 
-    // console.log(`req.body`, req.body);
-
-    // if (!isValidString(name.trim())) return failureJSONResponse(res, { message: `Please enter valid name` });
     if (!isValidString(appleId.trim()))
       return failureJSONResponse(res, { message: `apple id missing` });
     if (!isValidString(appleToken.trim()))
@@ -677,8 +645,6 @@ module.exports = {
     );
 
     if (foundUser && Object.keys(foundUser).length) {
-      // console.log(`case 1`);
-
       const updateDeviceInfo = await User.update(
         { _id: foundUser._id },
         {
@@ -729,8 +695,6 @@ module.exports = {
         foundUserWithEmailAddress &&
         Object.keys(foundUserWithEmailAddress).length
       ) {
-        // console.log(`case2 `);
-
         const updateDeviceInfo = await User.update(
           { _id: foundUserWithEmailAddress._id },
           {
@@ -767,8 +731,6 @@ module.exports = {
           token: createJWT(foundUserWithEmailAddress._id),
         });
       } else {
-        // console.log(`case3`);
-
         // Create a new user.
         var newUserDetail = {};
         var user_status = {
@@ -851,11 +813,10 @@ module.exports = {
 
       const checkUserDetail = await User.find(
         { "userInfo.email_address": userData.email.trim() },
-        {_id: 1, userInfo: 1, userBasicInfo: 1, userStatus: 1 }
+        { _id: 1, userInfo: 1, userBasicInfo: 1, userStatus: 1 }
       );
 
       if (checkUserDetail?.length) {
-        // console.log(checkUserDetail[0]?._id,`sjdfhkjdshfkjs sdkjbfdshbfsd `);
         if (!checkUserDetail[0]?.userInfo?.password) {
           return res.json({
             status: 400,
@@ -912,13 +873,12 @@ module.exports = {
 
             if (!is_active) {
               if (phone_number && email_address) {
-                
-                let OtpClear =  await OTP.deleteMany({
+                let OtpClear = await OTP.deleteMany({
                   user: { $in: [checkUserDetail[0]._id] },
-                  });
-                  if(!OtpClear){
-                    console.log("not deleted");
-                  }
+                });
+                if (!OtpClear) {
+                  console.log("not deleted");
+                }
                 OTP.create({
                   is_active: true,
                   code: generateOTP(4),
@@ -952,27 +912,13 @@ module.exports = {
                       message: `something went wrong`,
                     });
                   });
-
-                // OTP.create({
-                //     code: generateOTP(4),
-                //     user: checkUserDetail[0]._id,
-                //     for: 1
-
-                // }).then((data) => {
-                //     MobileNumberVerificationOTP(checkUserDetail[0]?.userInfo?.mobile_number?.phone_number, checkUserDetail[0]?.userInfo?.name, data.code)
-
-                // }).catch((err) => {
-                //     console.log(err)
-                //     return failureJSONResponse(res, { message: `something went wrong` });
-                // })
               } else if (email_address) {
-                // console.log(checkUserDetail[0]._id,"jnjvnjdnjdnvjjnnvnkjd");
-                let OtpClear =  await OTP.deleteMany({
+                let OtpClear = await OTP.deleteMany({
                   user: { $in: [checkUserDetail[0]._id] },
-                  });
-                  if(!OtpClear){
-                    console.log("not deleted");
-                  }
+                });
+                if (!OtpClear) {
+                  console.log("not deleted");
+                }
                 OTP.create({
                   is_active: true,
                   code: generateOTP(4),
@@ -1064,7 +1010,7 @@ module.exports = {
           code: otp_for_mobile_number,
           for: 1,
         }).then(async (foundMobileOTP) => {
-          if(foundMobileOTP){
+          if (foundMobileOTP) {
             invalidOTP = 0;
           }
           if (!foundMobileOTP) {
@@ -1076,11 +1022,11 @@ module.exports = {
           }
 
           if (invalidOTP === 0) {
-          let success = await OTP.deleteMany({
+            let success = await OTP.deleteMany({
               _id: { $in: [foundMobileOTP._id, foundEmailOTP._id] },
             });
-            if(success){
-              console.log(success,"done");
+            if (success) {
+              console.log(success, "done");
             }
             User.updateOne(
               { _id: req.userId },
@@ -1156,14 +1102,9 @@ module.exports = {
           { code: otp_for_email },
           { for: 2 },
         ],
-        // is_active: true,
-        // user: req.userId,
-        // code: otp_for_email,
-        // source: 2
       })
         .then(async (foundOTP) => {
           if (foundOTP) {
-            // console.log("object",foundOTP);
             await OTP.findByIdAndDelete({ _id: foundOTP._id });
 
             User.updateOne(
@@ -1338,7 +1279,9 @@ module.exports = {
         phone_number: phoneNumber,
         used_for: 3,
         code: phoneNumberOTP,
-        for: 1}).then(async (foundMobileOTP) => {
+        for: 1,
+      })
+        .then(async (foundMobileOTP) => {
           if (!foundMobileOTP)
             return failureJSONResponse(res, { message: `invalid OTP` });
           else {
@@ -1496,7 +1439,6 @@ module.exports = {
         { for: 2 },
       ],
     }).then(async (foundEmailOTP) => {
-      // console.log(foundEmailOTP, "bchdbc nj");
       if (foundEmailOTP) {
         await OTP.deleteOne({ _id: foundEmailOTP._id });
 
@@ -1554,7 +1496,6 @@ module.exports = {
 
   ////////////
   forget_password: async function (req, res, next) {
-    // console.log(req.body);
     const email_address = (req?.body?.email_address).toLowerCase();
 
     if (!email_address)
@@ -1563,13 +1504,13 @@ module.exports = {
     User.findOne({
       "userInfo.email_address": email_address,
     })
-      .then(async(foundUser) => {
-        let OtpClear =  await OTP.deleteMany({
+      .then(async (foundUser) => {
+        let OtpClear = await OTP.deleteMany({
           user: { $in: [foundUser._id] },
-          });
-          if(!OtpClear){
-            console.log("not deleted");
-          }
+        });
+        if (!OtpClear) {
+          console.log("not deleted");
+        }
         if (foundUser) {
           OTP.create({
             is_active: true,
@@ -1607,9 +1548,6 @@ module.exports = {
   },
 
   verify_forget_password_otp: async function (req, res, next) {
-    // console.log(`req.body`);
-    // console.log(req.body);
-
     const { otp, user_id } = req.body;
 
     if (!otp) {
@@ -1722,9 +1660,6 @@ module.exports = {
   },
 
   update_profile: async function (req, res, next) {
-    // console.log(`anmsbdnas`, req.body);
-    // console.log(`sSas`, req.file);
-
     try {
       const userId = req.userId;
       let data = {
@@ -1742,13 +1677,10 @@ module.exports = {
         phone_number,
         location,
       } = req.body;
-      // console.log(vali(Date(date_of_birth)));
       let picture = req?.file?.path;
-      // console.log(picture);
 
       if (name && !isValidString(name))
         return failureJSONResponse(res, { message: `Invalid Name` });
-      // if (date_of_birth && !vali(date_of_birth)) return failureJSONResponse(res, { message: `Invalid Date Of Birth` });
       if (gender && isNaN(Number(gender)))
         return failureJSONResponse(res, { message: `Invalid Gender` });
 
@@ -1769,71 +1701,6 @@ module.exports = {
       } else {
         dataObj["userBasicInfo.profile_image"] = req?.body?.picture;
       }
-
-      // const pictureUrl = req?.body?.picture;
-      // console.log(`pictureUrl`,pictureUrl )
-
-      // if(!pictureUrl){
-
-      // // }
-
-      // if (picture) {
-      //   userBasicInfo = {
-      //     ...userBasicInfo,
-      //     "profile_image": picture,
-      //   };
-      // }
-
-      // profileDataObj.userInfo = userInfo
-
-      // profileDataObj.userBasicInfo = userBasicInfo
-
-      // userInfo = {
-      //   ...profileDataObj,
-      //   "userInfo.name": name,
-
-      // }
-
-      // profileDataObj = {
-      //   ...profileDataObj,
-      //   "userInfo.date_of_birth": Date(date_of_birth),
-      // }
-
-      // profileDataObj = {
-      //   ...profileDataObj,
-      //   "userInfo.gender": gender,
-      // }
-
-      // profileDataObj = {
-      //   ...profileDataObj,
-      //   "userBasicInfo.short_bio": short_bio,
-      // };
-
-      // profileDataObj = {
-      //   ...profileDataObj,
-      //   "userBasicInfo.my_website": my_website,
-      // }
-
-      // profileDataObj = {
-      //   ...profileDataObj,
-      //   "userBasicInfo.location": data.location,
-      // };
-
-      // // console.log(profileDataObj, "gfgfgsss");
-
-      // profileDataObj = {
-      //   ...profileDataObj,
-      //   'userBasicInfo.data': data,
-      // }
-      // profileDataObj = {
-      //   ...profileDataObj,
-      //   'coordinates': lat,
-      // }
-
-      // profileDataObj = {
-      //   ...profileDataObj,
-      //   'coordinates': long,
-      // }
 
       var updatedProfileRes = await User.updateOne(
         { _id: userId },
@@ -1862,30 +1729,10 @@ module.exports = {
         });
       }
     } catch (err) {
-      // console.log(err);
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
-  
-  //   const dbQuery = { _id: { $ne: req.userId } };
 
-  //   if (email_address)
-  //     dbQuery[`userInfo.email_address`] = email_address.toLowerCase();
-
-  //   User.findOne(dbQuery)
-  //     .then(async (foundUser) => {
-  //       if (foundUser) {
-  //         return failureJSONResponse(res, {
-  //           message: `Account with that ${email_address} already exists`,
-  //         });
-  //       } else {
-  //         return next();
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       return failureJSONResponse(res, { message: `something went wrong` });
-  //     });
-  // },
   check_email_already_exists: async function (req, res, next) {
     try {
       const email_address = req?.body?.email_address?.toLowerCase();
@@ -1903,7 +1750,6 @@ module.exports = {
       if (email_address) {
         User.findOne(dbQuery)
           .then((foundUser) => {
-            // console.log(`foundUser`, foundUser);
             if (foundUser) {
               return failureJSONResponse(
                 res,
@@ -1917,7 +1763,6 @@ module.exports = {
             }
           })
           .catch((err) => {
-            console.log(err);
             return failureJSONResponse(res, {
               message: `something went wrong`,
             });
@@ -1930,7 +1775,6 @@ module.exports = {
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
- 
 
   // change email address
 
@@ -2054,8 +1898,6 @@ module.exports = {
             for: 2,
           })
             .then((foundOTP) => {
-              // console.log(`foundOTP`, foundOTP);
-
               if (!foundOTP)
                 return failureJSONResponse(res, {
                   message: `something went wrong`,
@@ -2085,7 +1927,6 @@ module.exports = {
             for: 2,
           });
 
-          // console.log(`OTPForOldEmail`, newOTPForNewEmail);
           let verifiy_url = `https://menehariya.netscapelabs.com/verifiy_email?secret=${newOTPForNewEmail?._id}`;
           if (!newOTPForNewEmail) {
             OTPCreatedForBoth = false;
@@ -2095,7 +1936,6 @@ module.exports = {
           } else {
             OTPCreatedForBoth = true;
             EmailOTPVerification(newEmailAddress, `Hi`, verifiy_url);
-            // return successJSONResponse(res, { message: `OTP send successfully on ${newOTPForNewEmail}` });
           }
 
           const OTPForOldEmail = await OTP.create({
@@ -2106,8 +1946,6 @@ module.exports = {
             user: userId,
             for: 2,
           });
-
-          // console.log(`OTPForOldEmail`, OTPForOldEmail);
 
           if (!OTPForOldEmail) {
             OTPCreatedForBoth = false;
@@ -2127,65 +1965,11 @@ module.exports = {
             return failureJSONResponse(res, {
               message: `something went wrong`,
             });
-          // OTP.create({
-          //   is_active: true,
-          //   code: generateOTP(4),
-          //   email_address: newEmailAddress.toLowerCase(),
-          //   used_for: 3,
-          //   user: userId,
-          //   for: 2,
-          // })
-          //   .then((foundOTP) => {
-          //     if (!foundOTP) {
-          //       return failureJSONResponse(res, {
-          //         message: `something went wrong`,
-          //       });
-          //     } else {
-
-          //       EmailOTPVerification(newEmailAddress `Hi`, foundOTP?.code);
-          //       // return successJSONResponse(res, { message: `success` });
-
-          //       OTP.create({
-          //         is_active: true,
-          //         code: generateOTP(4),
-          //         email_address: old_email_address.toLowerCase(),
-          //         used_for: 2,
-          //         user: userId,
-          //         for: 2,
-          //       })
-          //         .then((foundOTP) => {
-          //           console.log(foundOTP);
-          //           if (!foundOTP) {
-          //             console.log("1");
-          //             return failureJSONResponse(res, {
-          //               message: `something went wrong`,
-          //             });
-          //           } else {
-          //             EmailOTPVerification(user?.userInfo?.email_address, `Hi`, foundOTP?.code);
-          //             return successJSONResponse(res, { message: `success` });
-          //           }
-          //         })
-          //         .catch((err) => {
-          //           console.log(err);
-          //           console.log("2");
-          //           return failureJSONResponse(res, {
-          //             message: `something went wrong`,
-          //           });
-          //         });
-          //     }
-          //   })
-          //   .catch((err) => {
-          //     console.log(err);
-          //     console.log("3");
-          //     return failureJSONResponse(res, {
-          //       message: `something went wrong`,
-          //     });
-          //   });
         }
       }
     } catch (err) {
       console.log(err);
-      // console.log("4");
+
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
@@ -2218,12 +2002,12 @@ module.exports = {
         return failureJSONResponse(res, { message: `Old  email not found` });
 
       let oldEmailAddress = foundUser?.userInfo?.email_address;
-      let OtpClear =  await OTP.deleteMany({
+      let OtpClear = await OTP.deleteMany({
         user: { $in: [foundUser._id] },
-        });
-        if(!OtpClear){
-          console.log("not deleted");
-        }
+      });
+      if (!OtpClear) {
+        console.log("not deleted");
+      }
       OTP.create({
         is_active: true,
         code: generateOTP(4),
@@ -2233,8 +2017,6 @@ module.exports = {
         for: 2,
       })
         .then((foundOTP) => {
-          // console.log(`foundOTP`, foundOTP);
-
           if (!foundOTP)
             return failureJSONResponse(res, {
               message: `something went wrong`,
@@ -2254,11 +2036,11 @@ module.exports = {
         });
     } catch (err) {
       console.log(err);
-      // console.log("4");
+
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
-  //
+
   update_email_or_phone_number: async function (req, res) {
     try {
       const userId = req.userId;
@@ -2375,15 +2157,12 @@ module.exports = {
                 { new: true }
               )
                 .then((updatedUser) => {
-                  // console.log(updatedUser);
-
                   if (updatedUser) {
                     return successJSONResponse(res, {
                       message: `success`,
                       data: { email_address },
                     });
                   } else {
-                    // console.log(`working`);
                     return failureJSONResponse(res, {
                       message: `something went wrong`,
                     });
@@ -2420,7 +2199,6 @@ module.exports = {
       User.findById({ _id: userId })
         .select(`userInfo userBasicInfo createdAt`)
         .then((user) => {
-          console.log(user);
           if (!user)
             return failureJSONResponse(res, {
               message: `something went worng`,
@@ -2444,7 +2222,6 @@ module.exports = {
                 null,
               createdAt: user?.createdAt || null,
             };
-            // console.log("haigi aaa ", data);
             return successJSONResponse(res, { user: data });
           }
         })
@@ -2462,17 +2239,17 @@ module.exports = {
   logout: async function (req, res) {
     const deviceType = req?.body?.device_type;
     const deviceToken = req?.body?.device_token;
-  
+
     if (!isValidString(deviceToken?.trim())) {
-      return failureJSONResponse(res, { message: 'Device token missing.' });
+      return failureJSONResponse(res, { message: "Device token missing." });
     }
-  
+
     if (!deviceType) {
-      return failureJSONResponse(res, { message: 'Device type missing.' });
+      return failureJSONResponse(res, { message: "Device type missing." });
     } else if (isNaN(deviceType)) {
-      return failureJSONResponse(res, { message: 'Invalid device type.' });
+      return failureJSONResponse(res, { message: "Invalid device type." });
     }
-  
+
     try {
       const user = await User.updateOne(
         { _id: req.userId },
@@ -2485,14 +2262,14 @@ module.exports = {
           },
         }
       );
-  
+
       if (user.modifiedCount === 1) {
-        return successJSONResponse(res, { message: 'Logout successful.' });
+        return successJSONResponse(res, { message: "Logout successful." });
       } else {
-        return failureJSONResponse(res, { message: 'Device token not found.' });
+        return failureJSONResponse(res, { message: "Device token not found." });
       }
     } catch (error) {
-      return failureJSONResponse(res, { message: 'Something went wrong.' });
+      return failureJSONResponse(res, { message: "Something went wrong." });
     }
   },
 
@@ -2617,7 +2394,6 @@ module.exports = {
           });
         }
 
-        console.log(checkUserDetail, "jcbnhchyegc");
         if (!oldPassword) {
           return res.json({
             status: 400,
@@ -2631,7 +2407,6 @@ module.exports = {
           });
         }
 
-        console.log(checkUserDetail?.userInfo?.password, "hvegcvgd");
         let passwordIsValid = await bcrypt.compare(
           oldPassword,
           checkUserDetail?.userInfo?.password
@@ -2689,21 +2464,12 @@ module.exports = {
   generate_otp_for_signup_email_mobile: async function (req, res) {
     try {
       const userId = req.userId;
-      // console.log(req.body, "body hai ye");
-      // let new_email = req?.body?.new_email_address?.toLowerCase()
-      // console.log(new_email);
-      // let find_new_email = await User.findOne({"userInfo.email_address":new_email})
-      // return console.log(find_new_email,"cfhbchf");
-      // if(find_new_email) return failureJSONResponse(res, {
-      //     message: `email address already exist`,
-      //   });
 
       find_old_email = await User.findById({ _id: userId });
-      //  return console.log(find_old_email.userInfo.email_address,"dnxdjdnj");
+
       const source = Math.abs(req?.body?.source),
-            email_address = req?.body?.email_address?.toLowerCase(),
-            phone_number = req?.body?.phone_number;
-console.log(source,"------------------------------------------------------------------------------------------------------------------------------------------");
+        email_address = req?.body?.email_address?.toLowerCase(),
+        phone_number = req?.body?.phone_number;
       if (!source)
         return failureJSONResponse(res, { message: `please provide soruce` });
       else if (source && isNaN(source))
@@ -2716,12 +2482,11 @@ console.log(source,"------------------------------------------------------------
         });
 
       User.findById({ _id: userId })
-        .then( async (user) => {
+        .then(async (user) => {
           if (!user)
             return failureJSONResponse(res, { message: `User not exits` });
 
           if (source === 1) {
-            console.log(`working`);
             if (!phone_number)
               return failureJSONResponse(res, {
                 message: `please provide phone number`,
@@ -2731,10 +2496,9 @@ console.log(source,"------------------------------------------------------------
             return successJSONResponse(res, {
               message: `A new OTP has successfully sent out to your phone number`,
             });
-          } 
-           if (source === 2) {
+          }
+          if (source === 2) {
             if (!email_address) {
-              // console.log("yes i am error !");
               return failureJSONResponse(res, {
                 message: `please provide email address`,
               });
@@ -2742,21 +2506,13 @@ console.log(source,"------------------------------------------------------------
               return failureJSONResponse(res, {
                 message: `please provide valid  email address`,
               });
-//             let oldOtp = await OTP.find({
-//                 $and: [
-//                   { is_active: true },
-//                   { user: req.userId },
-//                   { used_for: 2 },
-//                   { for: 2 },
-//                 ],
-//               })
-// console.log(oldOtp._id,"dss fr ayea ke naghi");
-            let OtpClear =  await OTP.deleteMany({
+
+            let OtpClear = await OTP.deleteMany({
               user: { $in: [req.userId] },
-              });
-              if(!OtpClear){
-                console.log("not deleted");
-              }
+            });
+            if (!OtpClear) {
+              console.log("not deleted");
+            }
             OTP.create({
               is_active: true,
               code: generateOTP(4),
@@ -2784,7 +2540,6 @@ console.log(source,"------------------------------------------------------------
               })
               .catch((err) => {
                 console.log(err);
-                console.log("3");
                 return failureJSONResponse(res, {
                   message: `something went wrong`,
                 });
@@ -2792,7 +2547,6 @@ console.log(source,"------------------------------------------------------------
           }
         })
         .catch((err) => {
-          console.log(err,"njvbdhbvhdbvhdbvhdfs vnj,bvnhjzxvnhiiujkfkjnvkjjk");
           return failureJSONResponse(res, { message: `something went wrong` });
         });
     } catch (err) {

@@ -15,7 +15,7 @@ const mongoose = require("mongoose"),
   {
     successJSONResponse,
     failureJSONResponse,
-    ModelNameByAdsType
+    ModelNameByAdsType,
   } = require(`../../../handlers/jsonResponseHandlers`),
   { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
@@ -30,51 +30,44 @@ const mongoose = require("mongoose"),
 ////-----------------------Dynamic Data---------------------------////
 
 exports.createreport = async (req, res, next) => {
-    try {
-        const {adsid,ads_type ,message} = req.body;
-    let dbQuery={}
-    let  userId = req.userId
+  try {
+    const { adsid, ads_type, message } = req.body;
+    let dbQuery = {};
+    let userId = req.userId;
     if (!adsid)
-      return failureJSONResponse(res, { message: `Please provide adsid` }); 
+      return failureJSONResponse(res, { message: `Please provide adsid` });
     if (!ads_type)
       return failureJSONResponse(res, { message: `Please provide ads_type` });
-      let findAd = await ReportAd.create(dbQuery);
-    let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    // console.log(ModelName ,"jcnhdjbcjdcjd",Typename);
-    if(userId)dbQuery.userId = userId
-    if(adsid)dbQuery.adsid = adsid
-    if(Typename)dbQuery.ads_type = Typename
-    if(message)dbQuery.message = message
-    
-    // console.log(dbQuery);
-      let RepotAd;
-      
-      RepotAd = await ReportAd.create(dbQuery);
-       
-      if (RepotAd) {
-        return successJSONResponse(res, { message: `Report Successfully`, ReportAd: RepotAd });
-      } else {
-        return failureJSONResponse(res, { message: `failure` });
-      }
-    } catch (error) {
-      console.log(error);
-      return failureJSONResponse(res, { message: `Something went wrong` });
+    let findAd = await ReportAd.create(dbQuery);
+    let { ModelName, Typename } = await ModelNameByAdsType(ads_type);
+    if (userId) dbQuery.userId = userId;
+    if (adsid) dbQuery.adsid = adsid;
+    if (Typename) dbQuery.ads_type = Typename;
+    if (message) dbQuery.message = message;
+
+    let RepotAd;
+
+    RepotAd = await ReportAd.create(dbQuery);
+
+    if (RepotAd) {
+      return successJSONResponse(res, {
+        message: `Report Successfully`,
+        ReportAd: RepotAd,
+      });
+    } else {
+      return failureJSONResponse(res, { message: `failure` });
     }
-    
-}
-
-
-
-
-
+  } catch (error) {
+    console.log(error);
+    return failureJSONResponse(res, { message: `Something went wrong` });
+  }
+};
 
 // if(favoriteAd){
 //   await ModelName.findByIdAndUpdate({_id:adId},
 //   { $push: { favorite:userId} },
 //   { new: true },)
 // }
-
-
 
 // await ModelName.findByIdAndUpdate({_id:adId},
 //   { $pull: { favorite: userId } },

@@ -23,10 +23,12 @@ const addPlanSchema = new mongoose.Schema(
       ...defaultBooleanConfig,
       required: true,
     },
-    add_ons:[{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: `plan_addons`,
-    }],
+    add_ons: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `plan_addons`,
+      },
+    ],
     name: {
       ...defaultStringConfig,
       required: true,
@@ -40,7 +42,7 @@ const addPlanSchema = new mongoose.Schema(
       ref: `PostType`,
     },
     price: {
-      isfree:defaultBooleanConfig,
+      isfree: defaultBooleanConfig,
       amount: defaultPriceProperty,
       currency: defaultCurrencyProperty,
     },

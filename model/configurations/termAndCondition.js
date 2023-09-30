@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 
-const termAndConditionSchema = new mongoose.Schema({
-
+const termAndConditionSchema = new mongoose.Schema(
+  {
     htmlText: {
-        type: String,
-        // required: true
+      type: String,
+      // required: true
     },
+  },
+  { timestamps: true }
+);
 
-}, { timestamps: true });
-
-module.exports = mongoose.model('termandcondition', termAndConditionSchema);
+module.exports = mongoose.model("termandcondition", termAndConditionSchema);

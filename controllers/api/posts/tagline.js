@@ -19,13 +19,12 @@ const mongoose = require("mongoose"),
     isValidUrl,
   } = require(`../../../utils/validators`);
 
-
 ////////////////
 
 exports.fetchAllTags = async (req, res, next) => {
   try {
     // let adtype = req.body.adType
-    let records = await tagline_keywords.find().select({"keywords":1,"_id":0});
+    let records = await tagline_keywords.find().select({ keywords: 1, _id: 0 });
     if (records) {
       return successJSONResponse(res, {
         message: `success`,

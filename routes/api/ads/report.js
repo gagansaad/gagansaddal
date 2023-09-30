@@ -1,14 +1,12 @@
 const router = require(`express`).Router(),
-    authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
-    controllers = require(`../../../controllers/api/posts/report`);
-   
+  authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
+  controllers = require(`../../../controllers/api/posts/report`);
 
-    
-    
-    
-router.post(`/create-report`,authMiddleware.ensureUserLoggedIn,controllers.createreport)
-
-
+router.post(
+  `/create-report`,
+  authMiddleware.ensureUserLoggedIn,
+  controllers.createreport
+);
 
 // router.get(`/all-favorite`,
 // authMiddleware.ensureUserLoggedIn,
@@ -18,7 +16,5 @@ router.post(`/create-report`,authMiddleware.ensureUserLoggedIn,controllers.creat
 // // authMiddleware.ensureUserLoggedIn,
 //     controllers.fetchAll
 // );
-
-
 
 module.exports = router;

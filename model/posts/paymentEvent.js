@@ -1,32 +1,30 @@
 const mongoose = require("mongoose");
 
 const {
-    defaultStringConfig,
-    nonEmptyArrayValidator,
-    defaultPriceProperty,
-    defaultCurrencyProperty,
-    getAlphaNumID,
-    defaultBooleanConfig
+  defaultStringConfig,
+  nonEmptyArrayValidator,
+  defaultPriceProperty,
+  defaultCurrencyProperty,
+  getAlphaNumID,
+  defaultBooleanConfig,
 } = require(`../../utils/mongoose`);
 // const defaultPaymentStatus="pending";
-const roomRentsSchema = new mongoose.Schema({
+const roomRentsSchema = new mongoose.Schema(
+  {
     payment_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `payment`,
-        required: true
-
+      type: mongoose.Schema.Types.ObjectId,
+      ref: `payment`,
+      required: true,
     },
-    payment_status:{
-        type: String,
-        enum: [`pending`, `paid`,`failed`,`confirmed`,`expired`],
-        required: true,
-        default: "pending"
+    payment_status: {
+      type: String,
+      enum: [`pending`, `paid`, `failed`, `confirmed`, `expired`],
+      required: true,
+      default: "pending",
     },
-    payment_intent: {
+    payment_intent: {},
+  },
+  { timestamps: true }
+);
 
-    },
-
-
-}, { timestamps: true });
-
-module.exports = mongoose.model('payment_event', roomRentsSchema);
+module.exports = mongoose.model("payment_event", roomRentsSchema);

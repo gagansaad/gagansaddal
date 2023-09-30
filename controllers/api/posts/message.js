@@ -1,6 +1,6 @@
 const { json } = require("express");
 
-const crypto = require('crypto');
+const crypto = require("crypto");
 const mongoose = require("mongoose"),
   Message = mongoose.model("message"),
   Media = mongoose.model("media"),
@@ -20,39 +20,34 @@ const mongoose = require("mongoose"),
     isValidIndianMobileNumber,
     isValidNumber,
   } = require(`../../../utils/validators`);
-  
-  exports.sendMessage =  async(req,res,next)=>{
-    try {
-        const senderId = req.userId;
 
-        const{
-            senderName,
-            recieverId,
-            message,
-        } = req.body;
+exports.sendMessage = async (req, res, next) => {
+  try {
+    const senderId = req.userId;
 
-        //console.log(req.body,"cur id: ", senderId);
-        const newMessage = Message({
-            senderId,
-            senderName,
-            recieverId,
-            message:{
-                text:message,
-                image:''
-            }
-        });
-     
-        const saveMessage = await newMessage.save();
+    const { senderName, recieverId, message } = req.body;
 
-        return successJSONResponse(res, {
-            message: `success`,
-            data:saveMessage,
-        })
-    } catch (err) {
-        console.log(err);
-        return failureJSONResponse(res, { message: `something went wrong` });
-    }
-}
+    const newMessage = Message({
+      senderId,
+      senderName,
+      recieverId,
+      message: {
+        text: message,
+        image: "",
+      },
+    });
+
+    const saveMessage = await newMessage.save();
+
+    return successJSONResponse(res, {
+      message: `success`,
+      data: saveMessage,
+    });
+  } catch (err) {
+    console.log(err);
+    return failureJSONResponse(res, { message: `something went wrong` });
+  }
+};
 
 // exports.allFriends = async(req,res,next)=>{
 
@@ -61,7 +56,7 @@ const mongoose = require("mongoose"),
 
 //         const allUsers = await User.find({}).limit(10)
 //                         .select('-password -__v -timestamp');
-//         const friends =  allUsers.filter(usr=>usr._id!=current_id);                
+//         const friends =  allUsers.filter(usr=>usr._id!=current_id);
 
 //         return successReponse(res,200,"successfull!",friends);
 //     } catch (err) {
@@ -127,14 +122,14 @@ const mongoose = require("mongoose"),
 //             senderId,
 //             recieverId,
 //         } = formFields.fields;
-        
+
 //         if(!senderName||!senderId||!recieverId||!image){
 //             return ThrowError(res,400,"fill all fields");
-//         }      
+//         }
 //        //filter image
 //         if(!image.mimetype.startsWith('image')){
 //             return ThrowError(res,400,"invalid image");
-//         } 
+//         }
 //         if(image.size>1024*1024*5){
 //             return ThrowError(res,400,"image size greater than 5 migabyte");
 //         }
@@ -144,7 +139,7 @@ const mongoose = require("mongoose"),
 //         image.newFilename =  random+'-'+image.originalFilename;
 //         //new path
 //         const newPath  = __dirname+'/../client/build/uploads/sentImages/'+image.newFilename;
-       
+
 //         const fileCopying = await new Promise((fill,reject)=>{
 //             fs.copyFile(image.filepath,newPath,(err)=>{
 //                 if(err){
@@ -164,9 +159,9 @@ const mongoose = require("mongoose"),
 //                 image:image.newFilename
 //             }
 //         });
-//         const save = await newImgaeMessage.save(); 
+//         const save = await newImgaeMessage.save();
 
-//      return successReponse(res,200,"image uploaded suceessfully ",save);   
+//      return successReponse(res,200,"image uploaded suceessfully ",save);
 //     } catch (err) {
 //         return ThrowError(res,500,err.message);
 //     }

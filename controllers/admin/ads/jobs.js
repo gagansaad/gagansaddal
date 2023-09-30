@@ -3,13 +3,13 @@ const mongoose = require("mongoose"),
   postJobAd = mongoose.model("job"),
   PostViews = mongoose.model("Post_view"),
   tagline_keywords = mongoose.model("keywords"),
-  paymentModel = mongoose.model('payment'),
+  paymentModel = mongoose.model("payment"),
   {
     successJSONResponse,
     failureJSONResponse,
     ModelNameByAdsType,
   } = require(`../../../handlers/jsonResponseHandlers`),
-  { fieldsToExclude,listerBasicInfo } = require(`../../../utils/mongoose`),
+  { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
     isValidString,
     isValidMongoObjId,
@@ -18,12 +18,10 @@ const mongoose = require("mongoose"),
     isValidDate,
     isValidEmailAddress,
     isValidIndianMobileNumber,
-    isValidNumber
+    isValidNumber,
   } = require(`../../../utils/validators`);
 
-
 ///////////////////
-
 
 exports.fetchAll = async (req, res, next) => {
   try {
@@ -31,7 +29,6 @@ exports.fetchAll = async (req, res, next) => {
     let todayViewCount = 0; // Initialize the view count for records created today
     let todayRecordsCount = 0;
     let searchTerm = req.body.searchTerm;
-    // console.log("objectuygtututu");
     let dbQuery = {};
     const {
       isfeatured,
@@ -53,31 +50,26 @@ exports.fetchAll = async (req, res, next) => {
       latitude,
       maxDistance,
     } = req.query;
-    // console.log(req.query,"-------------------------------------------------------------------------------------------------------------------------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
-    // console.log(longitude, latitude,'longitude, latitude');
-    let Distance
-    
-    if(maxDistance === "0" || !maxDistance){
-      // console.log("bol");
-      Distance =  200000
-    }else{
-      Distance =maxDistance*1000
+    let Distance;
+
+    if (maxDistance === "0" || !maxDistance) {
+      Distance = 200000;
+    } else {
+      Distance = maxDistance * 1000;
     }
-  if (longitude && latitude && Distance) {
+    if (longitude && latitude && Distance) {
       const targetPoint = {
-        type: 'Point',
-        coordinates: [longitude, latitude]
+        type: "Point",
+        coordinates: [longitude, latitude],
       };
       dbQuery["adsInfo.location.coordinates"] = {
-       
-          $near: {
-            $geometry: targetPoint,
-            $maxDistance: Distance
-          }
-        
+        $near: {
+          $geometry: targetPoint,
+          $maxDistance: Distance,
+        },
+      };
     }
-  }
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
     if (isfeatured) {
@@ -131,14 +123,14 @@ exports.fetchAll = async (req, res, next) => {
       dbQuery["adsInfo.tagline"] = tagline;
     }
     if (userId) dbQuery.userId = userId;
-     // Get the current date
-     const currentDate = new Date();
-     // Convert the date to ISO 8601 format
-     const currentISODate = currentDate.toISOString();
-     // Extract only the date portion
-     const currentDateOnly = currentISODate.substring(0, 10);
-     dbQuery.status = "active";
-     dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    const currentDateOnly = currentISODate.substring(0, 10);
+    dbQuery.status = "active";
+    dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
 
     let queryFinal = dbQuery;
     if (searchTerm) {
@@ -146,38 +138,35 @@ exports.fetchAll = async (req, res, next) => {
         ...dbQuery,
         $or: [
           { "adsInfo.title": { $regex: searchTerm, $options: "i" } },
-          { "adsInfo.tagline": { $regex: searchTerm, $options: "i" } }
-        ]
+          { "adsInfo.tagline": { $regex: searchTerm, $options: "i" } },
+        ],
       };
     }
- 
+
     let myid = req.userId;
     let records = await postJobAd
       .find({ $or: [queryFinal] })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
-      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
       .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
-      const totalCount = await postJobAd.find({
-        $or: [queryFinal],
-      });
-      let responseModelCount = totalCount.length;
+    const totalCount = await postJobAd.find({
+      $or: [queryFinal],
+    });
+    let responseModelCount = totalCount.length;
 
     if (records) {
-
       const currentDate = new Date();
       const currentDateOnly = currentDate.toISOString().substring(0, 10);
       // Calculate the total view count
-      let sadsid
+      let sadsid;
       records.forEach((job) => {
-        sadsid= job.adsType
+        sadsid = job.adsType;
         totalViewCount += job.viewCount;
-        if (
-          job.createdAt.toISOString().substring(0, 10) === currentDateOnly
-        ) {
+        if (job.createdAt.toISOString().substring(0, 10) === currentDateOnly) {
           todayViewCount += job.viewCount;
           todayRecordsCount += 1;
         }
@@ -189,7 +178,7 @@ exports.fetchAll = async (req, res, next) => {
       today.setHours(0, 0, 0, 0); // Set the time to the beginning of the day (midnight)
       const endDate = new Date(today); // Create a copy of the start date
       endDate.setDate(today.getDate() + 1); // Set the end date to the next day
-      
+
       const query = {
         $and: [
           { ads_type: sadsid },
@@ -208,26 +197,26 @@ exports.fetchAll = async (req, res, next) => {
           // { payment_status: paymentStatus },
         ],
       };
-      
+
       let reve = await paymentModel.find(query2);
       let treve = await paymentModel.find(query);
       let totalAmountSum = 0;
       for (const payment of reve) {
         totalAmountSum += payment.total_amount;
       }
-    
+
       let totayAmountSum = 0;
       for (const payment of treve) {
         totayAmountSum += payment.total_amount;
       }
-     
+
       const jobData = records.map((job) => {
         return {
           ...job._doc,
           // Add other job fields as needed
           view_count: job.viewCount,
           favorite_count: job.favoriteCount,
-          is_favorite: !!job.isFavorite, 
+          is_favorite: !!job.isFavorite,
         };
       });
       return successJSONResponse(res, {
@@ -236,12 +225,12 @@ exports.fetchAll = async (req, res, next) => {
         perPage: perPage,
         totalPages: Math.ceil(responseModelCount / perPage),
         currentPage: page,
-        records:jobData,
+        records: jobData,
         totalViewCount: totalViewCount, // Include total view count in the response
-        todayViewCount: todayViewCount, 
-        todayRecordsCount:todayRecordsCount,
-        totalrevenue:totalAmountSum,
-        todayrevenue:totayAmountSum,// Include view count for today in the response
+        todayViewCount: todayViewCount,
+        todayRecordsCount: todayRecordsCount,
+        totalrevenue: totalAmountSum,
+        todayrevenue: totayAmountSum, // Include view count for today in the response
         status: 200,
       });
     } else {
@@ -256,54 +245,56 @@ exports.fetchAll = async (req, res, next) => {
 exports.fetchOne = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
-    // console.log("object",adsId);
-    let data_Obj
-    let checkId = await postJobAd.findOne({_id:adsId})
-    if(!checkId){
-        return failureJSONResponse(res, { message: `Please provide valid ad id` });
+    let data_Obj;
+    let checkId = await postJobAd.findOne({ _id: adsId });
+    if (!checkId) {
+      return failureJSONResponse(res, {
+        message: `Please provide valid ad id`,
+      });
     }
-     // Get the current date
-     const currentDate = new Date();
-     // Convert the date to ISO 8601 format
-     const currentISODate = currentDate.toISOString();
-     // Extract only the date portion
-     const currentDateOnly = currentISODate.substring(0, 10);
-     if(adsId){
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    const currentDateOnly = currentISODate.substring(0, 10);
+    if (adsId) {
       data_Obj = {
-          _id:adsId,
-          status :"active" ,
-          "plan_validity.expired_on" :{ $gte: currentDateOnly }
-      }
-    }else{
+        _id: adsId,
+        status: "active",
+        "plan_validity.expired_on": { $gte: currentDateOnly },
+      };
+    } else {
       return failureJSONResponse(res, { message: `ad id not Available` });
     }
-    let myid = req.userId
-    let records = await postJobAd.findOne(data_Obj)
-    .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-    .populate({ path: "favoriteCount", select: "_id" })
-    .populate({ path: "viewCount" })
-    .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-    // console.log(records,"saun mahona chad da hai");
+    let myid = req.userId;
+    let records = await postJobAd
+      .findOne(data_Obj)
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } });
     if (records) {
-      const ads_type =records.adsType.toString();
-    
-    let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    // console.log(Typename,"nfjdnfcjed");
-    let dbQuery ={
-      userId:myid,
-      ad:records._id,
-      adType:Typename
-    } 
-    
-     let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
-      if(!checkview){
-      let data=  await PostViews.create(dbQuery)
+      const ads_type = records.adsType.toString();
+
+      let { ModelName, Typename } = await ModelNameByAdsType(ads_type);
+      let dbQuery = {
+        userId: myid,
+        ad: records._id,
+        adType: Typename,
+      };
+
+      let checkview = await PostViews.findOne({
+        $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }],
+      });
+      if (!checkview) {
+        let data = await PostViews.create(dbQuery);
       }
       const jobData = {
         ...records._doc,
         view_count: records.viewCount,
         favorite_count: records.favoriteCount,
-        is_favorite: records.isFavorite
+        is_favorite: records.isFavorite,
       };
       return successJSONResponse(res, {
         message: `success`,
@@ -317,25 +308,24 @@ exports.fetchOne = async (req, res, next) => {
     console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` });
   }
-}
+};
 
 exports.fetchOneDelete = async (req, res, next) => {
   try {
-    
-    let dbQuery ={
-      _id:req.query.adsId
+    let dbQuery = {
+      _id: req.query.adsId,
     };
 
-      let records = await  postJobAd.findOneAndDelete(dbQuery);
-      if (records) {
-          return successJSONResponse(res, {
-              message: `success`,
-              status: 200,
-          })
-      } else {
-          return failureJSONResponse(res, { message: `Ad not available` })
-      }
+    let records = await postJobAd.findOneAndDelete(dbQuery);
+    if (records) {
+      return successJSONResponse(res, {
+        message: `success`,
+        status: 200,
+      });
+    } else {
+      return failureJSONResponse(res, { message: `Ad not available` });
+    }
   } catch (err) {
-      return failureJSONResponse(res, { message: `something went wrong` })
+    return failureJSONResponse(res, { message: `something went wrong` });
   }
-}
+};

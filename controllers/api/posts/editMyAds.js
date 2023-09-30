@@ -15,7 +15,7 @@ const mongoose = require("mongoose"),
   {
     successJSONResponse,
     failureJSONResponse,
-    ModelNameByAdsType
+    ModelNameByAdsType,
   } = require(`../../../handlers/jsonResponseHandlers`),
   { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
@@ -30,73 +30,39 @@ const mongoose = require("mongoose"),
 ////-----------------------Dynamic Data---------------------------////
 
 exports.setStatus = async (req, res, next) => {
- 
-    // console.log(dbQuery);
-    try {
-      const {adId ,ads_type} = req.body;
-      let dbQuery={}
-      let  userId = req.userId
-      if (!adId){
-        return failureJSONResponse(res, { message: `Please provide ad id` });
-  
-      }
-      if (!ads_type){
-          return failureJSONResponse(res, { message: `Please provide ads type` });
-       }
-      //  console.log(ads_type);
-      let findModelName = await category.findById({ "_id": ads_type})
-      if(findModelName){
-        let {ModelName,Typename}= await ModelNameByAdsType(ads_type);
-      
-         console.log(ModelName);
-         let checkAlreadyexist = await ModelName.findOne({ $and: [{ userId: userId }, { _id: adId }] }).exec();
-         if (checkAlreadyexist) {
-         console.log(checkAlreadyexist,"--------------------------------");
-       
-           // favoriteAd = await FavoriteAd.findOneAndDelete(
-           //   {_id:checkAlreadyexist._id},
-           //   );
-           //   if (favoriteAd) {
-           //     return successJSONResponse(res, { message: `success`, favoriteAd: false});
-           //   } else {
-           //     return failureJSONResponse(res, { message: `failure` });
-           //   }
-         // } else {
-         //   favoriteAd = await FavoriteAd.create(dbQuery);
-         //   if (favoriteAd) {
-         //     return successJSONResponse(res, { message: `success`, favoriteAd: true});
-         //   } else {
-         //     return failureJSONResponse(res, { message: `failure` });
-         //   }
-         }
-         
-      }else{
-
-        return failureJSONResponse(res, { message: `Please provide valid ads_type id` });
-
-      }
-  
-      
-      
-    } catch (error) {
-      console.log(error);
-      return failureJSONResponse(res, { message: `Something went wrong` });
+  try {
+    const { adId, ads_type } = req.body;
+    let dbQuery = {};
+    let userId = req.userId;
+    if (!adId) {
+      return failureJSONResponse(res, { message: `Please provide ad id` });
     }
-    
-}
+    if (!ads_type) {
+      return failureJSONResponse(res, { message: `Please provide ads type` });
+    }
+    let findModelName = await category.findById({ _id: ads_type });
+    if (findModelName) {
+      let { ModelName, Typename } = await ModelNameByAdsType(ads_type);
 
-
-
-
-
+      let checkAlreadyexist = await ModelName.findOne({
+        $and: [{ userId: userId }, { _id: adId }],
+      }).exec();
+    } else {
+      return failureJSONResponse(res, {
+        message: `Please provide valid ads_type id`,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return failureJSONResponse(res, { message: `Something went wrong` });
+  }
+};
 
 // if(favoriteAd){
 //   await ModelName.findByIdAndUpdate({_id:adId},
 //   { $push: { favorite:userId} },
 //   { new: true },)
 // }
-
-
 
 // await ModelName.findByIdAndUpdate({_id:adId},
 //   { $pull: { favorite: userId } },

@@ -16,7 +16,7 @@ const mongoose = require("mongoose"),
   {
     successJSONResponse,
     failureJSONResponse,
-    ModelNameByAdsType
+    ModelNameByAdsType,
   } = require(`../../../handlers/jsonResponseHandlers`),
   { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
@@ -31,57 +31,54 @@ const mongoose = require("mongoose"),
 ////-----------------------Dynamic Data---------------------------////
 
 exports.createFavoriteAd = async (req, res, next) => {
-    const {adId ,ads_type} = req.body;
-    let dbQuery={}
-    let  userId = req.userId
-    if (!adId)
-      return failureJSONResponse(res, { message: `Please provide ad id` });
-      if (!ads_type)
-      return failureJSONResponse(res, { message: `Please provide ads type` });
-    let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    console.log(ModelName ,"jcnhdjbcjdcjd",Typename);
-    if(userId)dbQuery.user = userId
-    if(adId)dbQuery.ad = adId
-    if(ads_type)dbQuery.ads_type = ads_type
-    if(Typename)dbQuery.adType = Typename
-    // console.log(dbQuery);
-    try {
-      let favoriteAd;
-      let checkAlreadyexist = await FavoriteAd.findOne({ $and: [{ user: userId }, { ad: adId }] }).exec();
-      if (checkAlreadyexist) {
-    
-        favoriteAd = await FavoriteAd.findOneAndDelete(
-          {_id:checkAlreadyexist._id},
-          );
-          if (favoriteAd) {
-            return successJSONResponse(res, { message: `success`, favoriteAd: false});
-          } else {
-            return failureJSONResponse(res, { message: `failure` });
-          }
+  const { adId, ads_type } = req.body;
+  let dbQuery = {};
+  let userId = req.userId;
+  if (!adId)
+    return failureJSONResponse(res, { message: `Please provide ad id` });
+  if (!ads_type)
+    return failureJSONResponse(res, { message: `Please provide ads type` });
+  let { ModelName, Typename } = await ModelNameByAdsType(ads_type);
+  if (userId) dbQuery.user = userId;
+  if (adId) dbQuery.ad = adId;
+  if (ads_type) dbQuery.ads_type = ads_type;
+  if (Typename) dbQuery.adType = Typename;
+  try {
+    let favoriteAd;
+    let checkAlreadyexist = await FavoriteAd.findOne({
+      $and: [{ user: userId }, { ad: adId }],
+    }).exec();
+    if (checkAlreadyexist) {
+      favoriteAd = await FavoriteAd.findOneAndDelete({
+        _id: checkAlreadyexist._id,
+      });
+      if (favoriteAd) {
+        return successJSONResponse(res, {
+          message: `success`,
+          favoriteAd: false,
+        });
       } else {
-        favoriteAd = await FavoriteAd.create(dbQuery);
-        if (favoriteAd) {
-          return successJSONResponse(res, { message: `success`, favoriteAd: true});
-        } else {
-          return failureJSONResponse(res, { message: `failure` });
-        }
+        return failureJSONResponse(res, { message: `failure` });
       }
-      
-      
-    } catch (error) {
-      console.log(error);
-      return failureJSONResponse(res, { message: `Something went wrong` });
+    } else {
+      favoriteAd = await FavoriteAd.create(dbQuery);
+      if (favoriteAd) {
+        return successJSONResponse(res, {
+          message: `success`,
+          favoriteAd: true,
+        });
+      } else {
+        return failureJSONResponse(res, { message: `failure` });
+      }
     }
-    
-}
-
-
-
-
+  } catch (error) {
+    console.log(error);
+    return failureJSONResponse(res, { message: `Something went wrong` });
+  }
+};
 
 exports.CountFavoriteAd = async (req, res, next) => {
   let userId = req.userId;
-  console.log(userId);
 
   try {
     let adTypes = [
@@ -97,11 +94,16 @@ exports.CountFavoriteAd = async (req, res, next) => {
       let checkAlreadyExist = await FavoriteAd.find({
         $and: [{ user: userId }, { adType: adType.key }],
       })
-        .populate('ad')
+        .populate("ad")
         .exec();
       const currentDate = new Date().toISOString(); // Get the current date in ISO string format
       const filteredAds = checkAlreadyExist.filter((favoriteAd) => {
-        if (favoriteAd && favoriteAd.ad && favoriteAd.ad.plan_validity && favoriteAd.ad.plan_validity.expired_on) {
+        if (
+          favoriteAd &&
+          favoriteAd.ad &&
+          favoriteAd.ad.plan_validity &&
+          favoriteAd.ad.plan_validity.expired_on
+        ) {
           const expiredDate = favoriteAd.ad.plan_validity.expired_on;
           return expiredDate >= currentDate; // Check if expiredDate is greater than or equal to currentDate
         }
@@ -117,8 +119,3 @@ exports.CountFavoriteAd = async (req, res, next) => {
     return failureJSONResponse(res, { message: `Something went wrong` });
   }
 };
-
-
-
-
-

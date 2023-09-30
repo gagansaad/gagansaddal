@@ -1,77 +1,114 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>payment status</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
-        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <style>
-        a {
-            text-decoration: none;
-            color: #ffff;
-            line-height: 30px;
-        }
+      a {
+        text-decoration: none;
+        color: #ffff;
+        line-height: 30px;
+      }
 
-       
-
-     
-        @media only screen and (max-width: 767px) {
-            .mover-logo img {
-                width: 100% !important;
-            }
-        .mail-logo{
-            width: 100% !important;
+      @media only screen and (max-width: 767px) {
+        .mover-logo img {
+          width: 100% !important;
         }
-            .banner h1 {
-                font-size: 26px;
-            }
-            .iconimg img{
-                width: 100%!important;
-            }
+        .mail-logo {
+          width: 100% !important;
         }
+        .banner h1 {
+          font-size: 26px;
+        }
+        .iconimg img {
+          width: 100% !important;
+        }
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <main>
-        <div class="email-container" style="background: #ffffff;
-        box-shadow: rgb(149 157 165 / 20%) 0px 8px 24px;
-        padding: 3rem 2rem;
-        max-width: 800px;
-        margin: 60px auto;">
-            <div class="email-body">
-                <div class="mover-logo">
-                    <img src="https://menehariya.netscapelabs.com/images/logo Manehariya 2.png" class="mail.logo" alt="">
-                </div>
-                <div class="banner">
-                    <h1 style=" font-size: 35px;
-                    font-family: sans-serif;
-                    color: #fd7e14;
-                    text-transform: capitalize;">Payment Status <%=payment_status%></h1>
-                </div>
-                <div class="email-content">
-                    <p style=" font-size: 14px;
-                    color: #242424;
-                    font-weight: 500;
-                    font-family: sans-serif;">Dear  <%=name%></p>
-                    <p style=" font-size: 14px;
-                    color: #242424;
-                    font-weight: 500;
-                    font-family: sans-serif;">
-                        Your transaction was successful!</p>
-                    
-                    <div style="display: flex; margin-top: 30px;">
-                        <a class="iconimg" href="https://menehariya.netscapelabs.com/"><img src="https://menehariya.netscapelabs.com/images/playstore.png" alt=""style="width:40%;"> </a><br>
-                        <a class="iconimg"  href="https://menehariya.netscapelabs.com/"><img src="https://menehariya.netscapelabs.com/images/appstire.png" alt=""style="width:40%;"> </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-</body>
+      <div
+        class="email-container"
+        style="
+          background: #ffffff;
+          box-shadow: rgb(149 157 165 / 20%) 0px 8px 24px;
+          padding: 3rem 2rem;
+          max-width: 800px;
+          margin: 60px auto;
+        "
+      >
+        <div class="email-body">
+          <div class="mover-logo">
+            <img
+              src="https://menehariya.netscapelabs.com/images/logo Manehariya 2.png"
+              class="mail.logo"
+              alt=""
+            />
+          </div>
+          <div class="banner">
+            <h1
+              style="
+                font-size: 35px;
+                font-family: sans-serif;
+                color: #fd7e14;
+                text-transform: capitalize;
+              "
+            >
+              Payment Status <%=payment_status%>
+            </h1>
+          </div>
+          <div class="email-content">
+            <p
+              style="
+                font-size: 14px;
+                color: #242424;
+                font-weight: 500;
+                font-family: sans-serif;
+              "
+            >
+              Dear <%=name%>
+            </p>
+            <p
+              style="
+                font-size: 14px;
+                color: #242424;
+                font-weight: 500;
+                font-family: sans-serif;
+              "
+            >
+              Your transaction was successful!
+            </p>
 
+            <div style="display: flex; margin-top: 30px">
+              <a class="iconimg" href="https://menehariya.netscapelabs.com/"
+                ><img
+                  src="https://menehariya.netscapelabs.com/images/playstore.png"
+                  alt=""
+                  style="width: 40%"
+                /> </a
+              ><br />
+              <a class="iconimg" href="https://menehariya.netscapelabs.com/"
+                ><img
+                  src="https://menehariya.netscapelabs.com/images/appstire.png"
+                  alt=""
+                  style="width: 40%"
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
 </html>

@@ -1,13 +1,9 @@
 const router = require(`express`).Router(),
-    authMiddleware = require(`../../middleware/ensureUserLoggedIn`),
-    controllers = require(`../../controllers/api/posts/types`);
+  authMiddleware = require(`../../middleware/ensureUserLoggedIn`),
+  controllers = require(`../../controllers/api/posts/types`);
 
-router.get(`/`,
-    controllers.fetchPostsTypes
-);
+router.get(`/`, controllers.fetchPostsTypes);
 
-router.post(`/`,
-    controllers.createPostsTypes
-);
+router.post(`/`, controllers.createPostsTypes);
 
 module.exports = router;

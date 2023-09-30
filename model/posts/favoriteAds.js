@@ -5,29 +5,36 @@ const {
   defaultPriceProperty,
   defaultCurrencyProperty,
   getAlphaNumID,
-  defaultBooleanConfig
+  defaultBooleanConfig,
 } = require(`../../utils/mongoose`);
 
 const favoriteAdSchema = new mongoose.Schema({
   user: {
-    type:  mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
   ad: {
-    type:  mongoose.Schema.Types.ObjectId,
-    refPath: 'adType',
+    type: mongoose.Schema.Types.ObjectId,
+    refPath: "adType",
     required: true,
   },
-  ads_type:{
-    type:  mongoose.Schema.Types.ObjectId,
+  ads_type: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: "PostType",
     required: true,
   },
   adType: {
     type: String,
     required: true,
-    enum: ["babysitter & nannie", "Local_biz & Service", "Buy & Sell","event","job","rental"],
+    enum: [
+      "babysitter & nannie",
+      "Local_biz & Service",
+      "Buy & Sell",
+      "event",
+      "job",
+      "rental",
+    ],
   },
 });
 

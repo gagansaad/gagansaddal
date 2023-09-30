@@ -1,5 +1,5 @@
 const { json } = require("express");
-const crypto = require('crypto');
+const crypto = require("crypto");
 const mongoose = require("mongoose"),
   postbabyAd = mongoose.model("babysitter & nannie"),
   PostViews = mongoose.model("Post_view"),
@@ -24,9 +24,7 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   // let adtype = req.query.ads_type;
-  let records = await tagline_keywords
-    .find()
-    .select({ keywords: 1, _id: 1 });
+  let records = await tagline_keywords.find().select({ keywords: 1, _id: 1 });
   const dynamicsData = {
     tagline: records,
     category: ["I want a Babysitter/Nanny", "I am a Babysitter/Nanny"],
@@ -132,7 +130,6 @@ exports.validateAdsData = async (req, res, next) => {
       latitude,
       longitude,
     } = req.body;
-    // console.log(req.body, "ye boDY HAI");
     if (
       status &&
       status != `active` &&
@@ -142,11 +139,11 @@ exports.validateAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please enter status active inactive or draft`,
       });
-      if (!latitude && !longitude) {
-        return failureJSONResponse(res, {
-          message: `Please provide both latitude and longitude`,
-        });
-      }
+    if (!latitude && !longitude) {
+      return failureJSONResponse(res, {
+        message: `Please provide both latitude and longitude`,
+      });
+    }
     if (!ads_type)
       return failureJSONResponse(res, { message: `Please provide ads type` });
     else if (ads_type && !isValidMongoObjId(mongoose, ads_type))
@@ -220,36 +217,12 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hide_adress,
       preferableModeContact,
     } = req.body;
-    // if (countryCode && isNaN(Number(countryCode)))
-    // return failureJSONResponse(res, {
-    //   message: `Please provide valid country code`,
-    // });
-    // if(preferableModeContact){
-    //   if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".") ){
-    //     return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
-    //   } else if (preferableModeContact != 1 && preferableModeContact != 2  && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });}
-    // }
-    // if (preferableModeContact && isNaN(Number(preferableModeContact))){
-    //   return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
-    // }
+
     if (email_address && !isValidEmailAddress(email_address)) {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
     }
-
-    // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
-
-    // if (["true", "false"].includes(hideAddress) == false) {
-    //   return failureJSONResponse(res, {
-    //     message: `Please provide us hide/show address (true/false)`
-    //   })
-    // }
-
-    // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
-    // return failureJSONResponse(res, {
-    //   message: `Please provide valid phone number`,
-    // });
 
     return next();
   } catch (err) {
@@ -283,16 +256,15 @@ exports.createAds = async (req, res, next) => {
       latitude,
       tagline,
       image,
-      is_contact
+      is_contact,
     } = req.body;
-    // console.log(req.body);
+
     const userId = req.userId;
     const imageArr = [];
     let iscontact;
-    // console.log(typeof(is_contact),"===============");
     if (is_contact == "true") {
       iscontact = true;
-    }else{
+    } else {
       iscontact = false;
     }
     let taglines = tagline;
@@ -308,7 +280,6 @@ exports.createAds = async (req, res, next) => {
         }
       }
     }
-    // console.log(req.files,"qwertyuikol;nhbvfcdxsdfghjkjhgfds");
     for (var i = 0; i < req.files.length; i++) {
       var thumbnail = req.files[i].path;
 
@@ -319,7 +290,7 @@ exports.createAds = async (req, res, next) => {
     const dataObj = {
       isfeatured,
       status: status,
-      adsType:ads_type,
+      adsType: ads_type,
       adsInfo: {
         title,
         category: {
@@ -340,9 +311,9 @@ exports.createAds = async (req, res, next) => {
         },
         expected_salary_rate,
         description,
-        location:{
-          location_name:location_name,
-          coordinates:[longitude,latitude]
+        location: {
+          location_name: location_name,
+          coordinates: [longitude, latitude],
         },
         tagline,
         image: imageArr,
@@ -350,15 +321,20 @@ exports.createAds = async (req, res, next) => {
 
       userId: userId,
     };
-    // console.log(dataObj, "vhebjvbdsgjvhbesdvgbedhcvwsehjcbsdbvjhyudsbvghr");
     const newPost = await postbabyAd.create(dataObj);
     const stringToHash = newPost._id.toString();
-    const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
+    const hash = await crypto
+      .createHash("sha256")
+      .update(stringToHash)
+      .digest("hex");
     const truncatedHash = hash.slice(0, 10);
-    const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
-    let ad_Id = numericHash.toString().padStart(10, '0') 
-  
-   await postbabyAd.findByIdAndUpdate({_id:newPost._id},{$set:{advertisement_id:ad_Id}})
+    const numericHash = parseInt(truncatedHash, 16) % Math.pow(10, 10);
+    let ad_Id = numericHash.toString().padStart(10, "0");
+
+    await postbabyAd.findByIdAndUpdate(
+      { _id: newPost._id },
+      { $set: { advertisement_id: ad_Id } }
+    );
     const Babysitter_Nannies = {};
 
     for (let key in newPost.toObject()) {
@@ -389,11 +365,8 @@ exports.createAds = async (req, res, next) => {
 ///--------------------------Edit babbysitter & nannis-----------------------------///
 
 exports.editAds = async (req, res, next) => {
-  // console.log(`kejhrjhyewgrjhew`);
   try {
-    // console.log(req.params);
     const productId = req?.params?.productId;
-    // console.log(productId, "id dsso hai gi ja nhi ");
     const validate_id = await postbabyAd.findById(productId);
     if (!validate_id) {
       return failureJSONResponse(res, {
@@ -433,20 +406,15 @@ exports.editAds = async (req, res, next) => {
       address_info,
       preferable_contact_mode,
       image,
-      is_contact
+      is_contact,
     } = req.body;
     let iscontact;
-    // console.log(typeof(is_contact),"===============");
     if (is_contact == "true") {
-      // console.log(is_contact,"===============");
       iscontact = true;
-    }else{
+    } else {
       iscontact = false;
     }
-    // console.log(
-    //   tagline,
-    //   "vdhvdbhdbvhdbvhdvdbdhvbdh----------------------------------------"
-    // );
+
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -511,15 +479,16 @@ exports.editAds = async (req, res, next) => {
     if (currency) expected_salary_amount.currency = currency;
     if (is_contact) expected_salary_amount.is_contact = iscontact;
     if (tagline) adsInfoObj.tagline = tagline;
-    if (amount || is_contact == "true") adsInfoObj.expected_salary_amount = expected_salary_amount;
+    if (amount || is_contact == "true")
+      adsInfoObj.expected_salary_amount = expected_salary_amount;
     if (expected_salary_rate)
       adsInfoObj.expected_salary_rate = expected_salary_rate;
     if (description) adsInfoObj.description = description;
-    let locationobj={}
-    if(longitude && latitude){
-      locationobj={
-        coordinates:[longitude,latitude]
-      }
+    let locationobj = {};
+    if (longitude && latitude) {
+      locationobj = {
+        coordinates: [longitude, latitude],
+      };
     }
     if (location_name) locationobj.location_name = location_name;
     if (locationobj) adsInfoObj.location = locationobj;
@@ -660,68 +629,61 @@ exports.fetchAll = async (req, res, next) => {
       max_price,
       is_favorite,
       is_myad,
-
     } = req.query;
     let adOnsQuery = {};
-    console.log(req.query,"jassi ki jai");
     if (is_contact !== undefined) {
       // Add filter for is_contact
-      dbQuery["adsInfo.expected_salary_amount.is_contact"] = is_contact === true || is_contact === "true";
+      dbQuery["adsInfo.expected_salary_amount.is_contact"] =
+        is_contact === true || is_contact === "true";
     }
     if (min_price && max_price) {
       dbQuery["adsInfo.expected_salary_amount.amount"] = {
         $gte: parseFloat(min_price),
-        $lte: parseFloat(max_price)
+        $lte: parseFloat(max_price),
       };
     }
     if (amount) {
       // Add filter for rent amount
       dbQuery["adsInfo.expected_salary_amount.amount"] = { $lte: amount };
     }
-    if (add_on){
+    if (add_on) {
       dbQuery = {
-        "addons_validity": {
+        addons_validity: {
           $elemMatch: {
-            "name": add_on,
-            "expired_on": {
-              $gte: new Date("2023-09-18").toISOString() // Construct ISODate manually
-            }
-          }
-        }
+            name: add_on,
+            expired_on: {
+              $gte: new Date("2023-09-18").toISOString(), // Construct ISODate manually
+            },
+          },
+        },
       };
     }
-    // console.log(req.query,"---------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
-    let Distance
-    
-    if(maxDistance === "0" || !maxDistance){
-      // console.log("bol");
-      Distance =  200000
-    }else{
-      Distance =maxDistance*1000
+    let Distance;
+
+    if (maxDistance === "0" || !maxDistance) {
+      Distance = 200000;
+    } else {
+      Distance = maxDistance * 1000;
     }
-    // console.log(longitude, latitude,'longitude, latitude');
-  if (longitude && latitude && Distance) {
+    if (longitude && latitude && Distance) {
       const targetPoint = {
-        type: 'Point',
-        coordinates: [longitude, latitude]
+        type: "Point",
+        coordinates: [longitude, latitude],
       };
       adOnsQuery["adsInfo.location.coordinates"] = {
-       
         $near: {
           $geometry: targetPoint,
-          $maxDistance: Distance
-        }
-  }
+          $maxDistance: Distance,
+        },
+      };
       dbQuery["adsInfo.location.coordinates"] = {
-       
-          $near: {
-            $geometry: targetPoint,
-            $maxDistance: Distance
-          }
-        
+        $near: {
+          $geometry: targetPoint,
+          $maxDistance: Distance,
+        },
+      };
     }
-  }
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
 
@@ -767,37 +729,40 @@ exports.fetchAll = async (req, res, next) => {
     if (tagline) {
       dbQuery["adsInfo.tagline"] = tagline;
     }
-     // Get the current date
-     const currentDate = new Date();
-     // Convert the date to ISO 8601 format
-     const currentISODate = currentDate.toISOString();
-     // Extract only the date portion
-     const currentDateOnly = currentISODate.substring(0, 10);
-     let myid = req.userId;
-     if (is_myad =='true' && !myid) {
-      return failureJSONResponse(res, { message: 'Please login to your account' });
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    const currentDateOnly = currentISODate.substring(0, 10);
+    let myid = req.userId;
+    if (is_myad == "true" && !myid) {
+      return failureJSONResponse(res, {
+        message: "Please login to your account",
+      });
     }
-     if(is_myad != 'true'){
-     adOnsQuery.status = "active";
-     adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-     dbQuery.status = "active";
-     dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-     }else{
+    if (is_myad != "true") {
+      adOnsQuery.status = "active";
+      adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+      dbQuery.status = "active";
+      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+    } else {
       dbQuery.userId = myid;
-     }
+    }
     let queryFinal = dbQuery;
     if (searchTerm) {
-    
       queryFinal = {
         ...dbQuery,
         $or: [
           { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
-          { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } }
-        ]
+          { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } },
+        ],
       };
     }
-   
-    let notification = await Users.findOne({_id:myid}).select('userNotification.careService')
+
+    let notification = await Users.findOne({ _id: myid }).select(
+      "userNotification.careService"
+    );
     let valueofnotification = notification?.userNotification?.careService;
     let records = await postbabyAd
       .find({ $or: [queryFinal] })
@@ -806,135 +771,86 @@ exports.fetchAll = async (req, res, next) => {
       .populate({ path: "viewCount" })
       .populate({ path: "ReportCount" })
       .populate({ path: "ReportCount", select: "_id" })
-      .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
-      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
-      .sort(sortval)
+      .populate({
+        path: "isReported",
+        select: "userId",
+        match: { userId: myid },
+      })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+      .sort(sortval);
 
-      const totalCount = await postbabyAd.find({
-        $or: [queryFinal],
-      });
-      let responseModelCount = totalCount.length;
-   
-      if (records) {
-        let jobData = records.map((job) => {
-          return {
-            ...job._doc,
-            // Add other job fields as needed
-            view_count: job.viewCount,
-            favorite_count: job.favoriteCount,
-            is_favorite: !!job.isFavorite, 
-            Report_count: job.ReportCount,
-            is_Reported: !!job.isReported, 
-          };
-        });//////
-        const isFavoriteFilter = is_favorite === 'true' ? true : undefined;
-        if (isFavoriteFilter) {
-          jobData = jobData.filter((job) => job.is_favorite === true);
-        }
-      
-        // Pagination
-        const totalCount = jobData.length;
-        const perPage = parseInt(req.query.perpage) || 40;
-        const page = parseInt(req.query.page) || 1;
-      
-        const startIndex = (page - 1) * perPage;
-        const endIndex = startIndex + perPage;
-      
-        const paginatedData = jobData.slice(startIndex, endIndex);
-        let featuredData;
-        let bumpupData;
-        if(is_myad != 'true'){
-        let FeaturedData = await postbabyAd.find({...adOnsQuery, "addons_validity": {
-          $elemMatch: {
-            "name": "Featured",
-            "expired_on": {
-              $gte: currentDateOnly // Construct ISODate manually
-            }
-          }
-        },})
-        .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-        .populate({ path: "favoriteCount", select: "_id" })
-        .populate({ path: "viewCount" })
-        .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-      
-      const featuredRecordsToPick = 6;
-      const FeaturedpickedRecords = [];
-      
-      while (FeaturedpickedRecords.length < featuredRecordsToPick && FeaturedData.length > 0) {
-        const randomIndex = Math.floor(Math.random() * FeaturedData.length);
-        const randomRecord = FeaturedData.splice(randomIndex, 1)[0]; // Remove and pick the record
-        FeaturedpickedRecords.push(randomRecord);
+    const totalCount = await postbabyAd.find({
+      $or: [queryFinal],
+    });
+    let responseModelCount = totalCount.length;
+
+    if (records) {
+      let jobData = records.map((job) => {
+        return {
+          ...job._doc,
+          // Add other job fields as needed
+          view_count: job.viewCount,
+          favorite_count: job.favoriteCount,
+          is_favorite: !!job.isFavorite,
+          Report_count: job.ReportCount,
+          is_Reported: !!job.isReported,
+        };
+      }); //////
+      const isFavoriteFilter = is_favorite === "true" ? true : undefined;
+      if (isFavoriteFilter) {
+        jobData = jobData.filter((job) => job.is_favorite === true);
       }
-      
-        
-         
-          featuredData = FeaturedpickedRecords.map((job) => {
-            return {
-              ...job._doc,
-              // Add other job fields as needed
-              view_count: job.viewCount,
-              favorite_count: job.favoriteCount,
-              is_favorite: !!job.isFavorite,
-            };
+
+      // Pagination
+      const totalCount = jobData.length;
+      const perPage = parseInt(req.query.perpage) || 40;
+      const page = parseInt(req.query.page) || 1;
+
+      const startIndex = (page - 1) * perPage;
+      const endIndex = startIndex + perPage;
+
+      const paginatedData = jobData.slice(startIndex, endIndex);
+      let featuredData;
+      let bumpupData;
+      if (is_myad != "true") {
+        let FeaturedData = await postbabyAd
+          .find({
+            ...adOnsQuery,
+            addons_validity: {
+              $elemMatch: {
+                name: "Featured",
+                expired_on: {
+                  $gte: currentDateOnly, // Construct ISODate manually
+                },
+              },
+            },
           })
-        /////
-        let BumpupData = await postbabyAd.find({...adOnsQuery, "addons_validity.name": "Bump up" })
-        .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-        .populate({ path: "favoriteCount", select: "_id" })
-        .populate({ path: "viewCount" })
-        .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-      
-      let bumpUpDates = BumpupData.map((data) => {
-        // Filter addons_validity to get only the "Bump up" addon
-        let bumpUpAddon = data.addons_validity.find((addon) => addon.name === "Bump up");
-        if (bumpUpAddon) {
-          return {
-            active_on: bumpUpAddon.active_on,
-            expired_on: bumpUpAddon.expired_on,
-            interval: bumpUpAddon.days, // Add the interval property
-          };
+          .populate({
+            path: "adsInfo.image",
+            strictPopulate: false,
+            select: "url",
+          })
+          .populate({ path: "favoriteCount", select: "_id" })
+          .populate({ path: "viewCount" })
+          .populate({
+            path: "isFavorite",
+            select: "user",
+            match: { user: myid },
+          });
+
+        const featuredRecordsToPick = 6;
+        const FeaturedpickedRecords = [];
+
+        while (
+          FeaturedpickedRecords.length < featuredRecordsToPick &&
+          FeaturedData.length > 0
+        ) {
+          const randomIndex = Math.floor(Math.random() * FeaturedData.length);
+          const randomRecord = FeaturedData.splice(randomIndex, 1)[0]; // Remove and pick the record
+          FeaturedpickedRecords.push(randomRecord);
         }
-        return null; // If "Bump up" addon is not found, return null
-      }).filter((dates) => dates !== null);
-      
-      const resultDates = [];
-      
-      for (const dateRange of bumpUpDates) {
-        const { active_on, expired_on, interval } = dateRange;
-        const startDate = new Date(active_on);
-        const endDate = new Date(expired_on);
-        const recordDates = []; // Create a separate array for each record
-      
-        while (startDate <= endDate) {
-          recordDates.push(startDate.toISOString().split("T")[0]);
-          startDate.setDate(startDate.getDate() + interval);
-        }
-      
-        resultDates.push(recordDates); // Push the record's dates array into the result array
-      }
-      
-      
-      
-      const today = new Date().toISOString().split("T")[0]; // Get today's date in the format "YYYY-MM-DD"
-      
-      // Filter adonsData to find records where resultDates array contains today's date
-      const recordsWithTodayDate = BumpupData.filter((data, index) => {
-        const recordDates = resultDates[index]; // Get the resultDates array for the current record
-        return recordDates.includes(today);
-      });
-      
-      const numberOfRecordsToPick = 3;
-      const pickedRecords = [];
-      
-      while (pickedRecords.length < numberOfRecordsToPick && recordsWithTodayDate.length > 0) {
-        const randomIndex = Math.floor(Math.random() * recordsWithTodayDate.length);
-        const randomRecord = recordsWithTodayDate.splice(randomIndex, 1)[0]; // Remove and pick the record
-        pickedRecords.push(randomRecord);
-      }
-      
-      
-       
-         bumpupData = pickedRecords.map((job) => {
+
+        featuredData = FeaturedpickedRecords.map((job) => {
           return {
             ...job._doc,
             // Add other job fields as needed
@@ -942,26 +858,104 @@ exports.fetchAll = async (req, res, next) => {
             favorite_count: job.favoriteCount,
             is_favorite: !!job.isFavorite,
           };
-        })
+        });
+        /////
+        let BumpupData = await postbabyAd
+          .find({ ...adOnsQuery, "addons_validity.name": "Bump up" })
+          .populate({
+            path: "adsInfo.image",
+            strictPopulate: false,
+            select: "url",
+          })
+          .populate({ path: "favoriteCount", select: "_id" })
+          .populate({ path: "viewCount" })
+          .populate({
+            path: "isFavorite",
+            select: "user",
+            match: { user: myid },
+          });
+
+        let bumpUpDates = BumpupData.map((data) => {
+          // Filter addons_validity to get only the "Bump up" addon
+          let bumpUpAddon = data.addons_validity.find(
+            (addon) => addon.name === "Bump up"
+          );
+          if (bumpUpAddon) {
+            return {
+              active_on: bumpUpAddon.active_on,
+              expired_on: bumpUpAddon.expired_on,
+              interval: bumpUpAddon.days, // Add the interval property
+            };
+          }
+          return null; // If "Bump up" addon is not found, return null
+        }).filter((dates) => dates !== null);
+
+        const resultDates = [];
+
+        for (const dateRange of bumpUpDates) {
+          const { active_on, expired_on, interval } = dateRange;
+          const startDate = new Date(active_on);
+          const endDate = new Date(expired_on);
+          const recordDates = []; // Create a separate array for each record
+
+          while (startDate <= endDate) {
+            recordDates.push(startDate.toISOString().split("T")[0]);
+            startDate.setDate(startDate.getDate() + interval);
+          }
+
+          resultDates.push(recordDates); // Push the record's dates array into the result array
+        }
+
+        const today = new Date().toISOString().split("T")[0]; // Get today's date in the format "YYYY-MM-DD"
+
+        // Filter adonsData to find records where resultDates array contains today's date
+        const recordsWithTodayDate = BumpupData.filter((data, index) => {
+          const recordDates = resultDates[index]; // Get the resultDates array for the current record
+          return recordDates.includes(today);
+        });
+
+        const numberOfRecordsToPick = 3;
+        const pickedRecords = [];
+
+        while (
+          pickedRecords.length < numberOfRecordsToPick &&
+          recordsWithTodayDate.length > 0
+        ) {
+          const randomIndex = Math.floor(
+            Math.random() * recordsWithTodayDate.length
+          );
+          const randomRecord = recordsWithTodayDate.splice(randomIndex, 1)[0]; // Remove and pick the record
+          pickedRecords.push(randomRecord);
+        }
+
+        bumpupData = pickedRecords.map((job) => {
+          return {
+            ...job._doc,
+            // Add other job fields as needed
+            view_count: job.viewCount,
+            favorite_count: job.favoriteCount,
+            is_favorite: !!job.isFavorite,
+          };
+        });
       }
-        let finalResponse = {
-          message: `success`,
-          total: totalCount,
-          perPage: perPage,
-          totalPages: Math.ceil(totalCount / perPage),
-          currentPage: page,
-          notification: valueofnotification,
-          records: paginatedData,
-          status: 200,
-          ...((is_myad == 'true') ? {} : { AdOnsData: {bumpupData, featuredData } })
-        };
-        return successJSONResponse(res, finalResponse);
-       
-      }else {
+      let finalResponse = {
+        message: `success`,
+        total: totalCount,
+        perPage: perPage,
+        totalPages: Math.ceil(totalCount / perPage),
+        currentPage: page,
+        notification: valueofnotification,
+        records: paginatedData,
+        status: 200,
+        ...(is_myad == "true"
+          ? {}
+          : { AdOnsData: { bumpupData, featuredData } }),
+      };
+      return successJSONResponse(res, finalResponse);
+    } else {
       return failureJSONResponse(res, { message: `ads not Available` });
     }
   } catch (err) {
-    console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
@@ -971,50 +965,56 @@ exports.fetchAll = async (req, res, next) => {
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
-    let data_Obj
-    let checkId = await postbabyAd.findOne({_id:adsId})
-    if(!checkId){
-        return failureJSONResponse(res, { message: `Please provide valid ad id` });
+    let data_Obj;
+    let checkId = await postbabyAd.findOne({ _id: adsId });
+    if (!checkId) {
+      return failureJSONResponse(res, {
+        message: `Please provide valid ad id`,
+      });
     }
-     // Get the current date
-     const currentDate = new Date();
-     // Convert the date to ISO 8601 format
-     const currentISODate = currentDate.toISOString();
-     // Extract only the date portion
-     const currentDateOnly = currentISODate.substring(0, 10);
-     if(adsId){
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    const currentDateOnly = currentISODate.substring(0, 10);
+    if (adsId) {
       data_Obj = {
-          _id:adsId,
-          status :"active" ,
-          "plan_validity.expired_on" :{ $gte: currentDateOnly }
-      }
+        _id: adsId,
+        status: "active",
+        "plan_validity.expired_on": { $gte: currentDateOnly },
+      };
     }
-    let myid = req.userId
-    let records = await postbabyAd.findOne(data_Obj)
-    .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-    .populate({ path: "favoriteCount", select: "_id" })
-    .populate({ path: "viewCount" })
-    .populate({ path: "ReportCount", select: "_id" })
-    .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
-    .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-    
+    let myid = req.userId;
+    let records = await postbabyAd
+      .findOne(data_Obj)
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: "ReportCount", select: "_id" })
+      .populate({
+        path: "isReported",
+        select: "userId",
+        match: { userId: myid },
+      })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } });
+
     if (records) {
-      const ads_type =records.adsType.toString();
-    
-    let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    // console.log(Typename,"nfjdnfcjed");
-    let dbQuery ={
-      userId:myid,
-      ad:records._id,
-      ads_type:ads_type,
-      adType:Typename
-    } 
-    
-     let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
-    //  console.log(checkview,"tere nakhre maare mainu ni mai ni jan da  tainu ni");
-      if(!checkview){
-      let data=  await PostViews.create(dbQuery)
-      // console.log(data,"billo ni tere kale kalle naina ");
+      const ads_type = records.adsType.toString();
+
+      let { ModelName, Typename } = await ModelNameByAdsType(ads_type);
+      let dbQuery = {
+        userId: myid,
+        ad: records._id,
+        ads_type: ads_type,
+        adType: Typename,
+      };
+
+      let checkview = await PostViews.findOne({
+        $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }],
+      });
+      if (!checkview) {
+        let data = await PostViews.create(dbQuery);
       }
       const jobData = {
         ...records._doc,
@@ -1022,7 +1022,7 @@ exports.fetchonead = async (req, res, next) => {
         favorite_count: records.favoriteCount,
         is_favorite: !!records.isFavorite,
         Report_count: records.ReportCount,
-        is_Reported: !!records.isReported, 
+        is_Reported: !!records.isReported,
       };
       return successJSONResponse(res, {
         message: `success`,
@@ -1043,13 +1043,13 @@ exports.fetchBabyData = async (req, res, next) => {
     let maxDistance = req.query.maxDistance || 200;
     const sub_categories = {
       "Babysitter & nannies": [
-        "I want a Babysitter/Nanny", 
-        "I am a Babysitter/Nanny"
+        "I want a Babysitter/Nanny",
+        "I am a Babysitter/Nanny",
       ],
     };
-    
+
     const responseArray = [];
-    const lalcount = []
+    const lalcount = [];
     const currentDate = new Date();
     // Convert the date to ISO 8601 format
     const currentISODate = currentDate.toISOString();
@@ -1060,43 +1060,54 @@ exports.fetchBabyData = async (req, res, next) => {
       const subcategoryData = [];
 
       for (const subCategory of subCategoryArray) {
-        const query = {"adsInfo.category.category_name": subCategory ,"status" :"active",["plan_validity.expired_on"]:{ $gte: currentDateOnly }};
+        const query = {
+          "adsInfo.category.category_name": subCategory,
+          status: "active",
+          ["plan_validity.expired_on"]: { $gte: currentDateOnly },
+        };
         if (req.query.longitude && req.query.latitude) {
           // Assuming you have longitude and latitude fields in your data
           query["adsInfo.location.coordinates"] = {
             $geoWithin: {
               $centerSphere: [
-                [parseFloat(req.query.longitude), parseFloat(req.query.latitude)],
-                maxDistance / 6371 // 6371 is the Earth's radius in kilometers
-              ]
-            }
+                [
+                  parseFloat(req.query.longitude),
+                  parseFloat(req.query.latitude),
+                ],
+                maxDistance / 6371, // 6371 is the Earth's radius in kilometers
+              ],
+            },
           };
         }
         const count = await postbabyAd.countDocuments(query);
         subcategoryData.push({ sub_category_name: subCategory, count });
       }
 
-      const totalCount = subcategoryData.reduce((total, item) => total + item.count, 0);
-      lalcount.push(totalCount)
+      const totalCount = subcategoryData.reduce(
+        (total, item) => total + item.count,
+        0
+      );
+      lalcount.push(totalCount);
       responseArray.push({
         name: category,
         count: totalCount,
         sub_categories: subcategoryData,
       });
     }
-    let RedZone = lalcount.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-
-    // console.log(responseArray);
+    let RedZone = lalcount.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0
+    );
 
     return successJSONResponse(res, {
       message: `success`,
-      totalCount:RedZone,
+      totalCount: RedZone,
       data: responseArray,
     });
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     return failureJSONResponse(res, {
-      message: 'An error occurred',
+      message: "An error occurred",
       error: error.message,
     });
   }

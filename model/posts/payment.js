@@ -1,56 +1,51 @@
 const mongoose = require("mongoose");
 
 const {
-    defaultStringConfig,
-    nonEmptyArrayValidator,
-    defaultPriceProperty,
-    defaultCurrencyProperty,
-    getAlphaNumID,
-    defaultBooleanConfig
+  defaultStringConfig,
+  nonEmptyArrayValidator,
+  defaultPriceProperty,
+  defaultCurrencyProperty,
+  getAlphaNumID,
+  defaultBooleanConfig,
 } = require(`../../utils/mongoose`);
 // const defaultPaymentStatus="pending";
-const roomRentsSchema = new mongoose.Schema({
+const roomRentsSchema = new mongoose.Schema(
+  {
     plan_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `adsplan`,
-        required: true
-
+      type: mongoose.Schema.Types.ObjectId,
+      ref: `adsplan`,
+      required: true,
     },
 
-    plan_addons:[{
-        
-    }],
-    plan_price:defaultPriceProperty,
-    coupan_discount:defaultPriceProperty,
-    total_amount:defaultPriceProperty,
-    
+    plan_addons: [{}],
+    plan_price: defaultPriceProperty,
+    coupan_discount: defaultPriceProperty,
+    total_amount: defaultPriceProperty,
 
     ads: {
-        type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
     },
     ads_type: { ...defaultStringConfig },
     user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `user`,
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: `user`,
+      required: true,
     },
-    payment_status:{
-        type: String,
-        enum: [`pending`, `paid`,`failed`,`confirmed`,`expired`],
-        required: true,
-        default: "pending"
+    payment_status: {
+      type: String,
+      enum: [`pending`, `paid`, `failed`, `confirmed`, `expired`],
+      required: true,
+      default: "pending",
     },
-     device_type:{
-        type: String,
-        enum: [`mobile`, `web`],
-        required: true,
-        default: "mobile"
+    device_type: {
+      type: String,
+      enum: [`mobile`, `web`],
+      required: true,
+      default: "mobile",
     },
-    payment_intent: {
+    payment_intent: {},
+  },
+  { timestamps: true }
+);
 
-    },
-
-
-}, { timestamps: true });
-
-module.exports = mongoose.model('payment', roomRentsSchema);
+module.exports = mongoose.model("payment", roomRentsSchema);

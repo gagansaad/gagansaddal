@@ -1,32 +1,27 @@
 const router = require(`express`).Router(),
-    authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
-    controllers = require(`../../../controllers/api/posts/message`);
+  authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
+  controllers = require(`../../../controllers/api/posts/message`);
 
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
-
-
 
 // import {v2 as cloudinary} from 'cloudinary';
 const CLOUD_NAME = process.env.CLOUD_NAME;
 const CLOUD_API_KEY = process.env.CLOUD_API_KEY;
 const CLOUD_SECRET = process.env.CLOUD_SECRET;
 
-
 cloudinary.config({
-    cloud_name: CLOUD_NAME,
-    api_key: CLOUD_API_KEY,
-    api_secret: CLOUD_SECRET,
+  cloud_name: CLOUD_NAME,
+  api_key: CLOUD_API_KEY,
+  api_secret: CLOUD_SECRET,
 });
 
-
 const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: "DEV",
-    },
-
+  cloudinary: cloudinary,
+  params: {
+    folder: "DEV",
+  },
 });
 
 const upload = multer({ storage: storage });
@@ -44,10 +39,11 @@ const upload = multer({ storage: storage });
 //         return res.status(200).json({ status: 400, error: 'Only JPEG or PNG images are allowed.' });
 //       }
 //     }
-//   }, 
+//   },
 
-router.post(`/create-message`,
-    authMiddleware.ensureUserLoggedIn,
-    controllers.sendMessage
-)
+router.post(
+  `/create-message`,
+  authMiddleware.ensureUserLoggedIn,
+  controllers.sendMessage
+);
 module.exports = router;

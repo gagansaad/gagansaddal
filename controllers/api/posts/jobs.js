@@ -1,5 +1,5 @@
 const { json } = require("express");
-const crypto = require('crypto');
+const crypto = require("crypto");
 const mongoose = require("mongoose"),
   postJobAd = mongoose.model("job"),
   PostViews = mongoose.model("Post_view"),
@@ -25,10 +25,7 @@ const mongoose = require("mongoose"),
 
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
-  
-  let records = await tagline_keywords
-    .find()
-    .select({ keywords: 1, _id: 1 });
+  let records = await tagline_keywords.find().select({ keywords: 1, _id: 1 });
 
   const dynamicsData = {
     tagline: records,
@@ -121,7 +118,6 @@ exports.getDnymicsData = async (req, res, next) => {
 ///-----------------------Validate Data---------------------------//
 
 exports.validateJobAdsData = async (req, res, next) => {
-  //   console.log(req.body)
   try {
     const {
       status,
@@ -164,11 +160,11 @@ exports.validateJobAdsData = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide valid ads type`,
       });
-      if (!latitude && !longitude) {
-        return failureJSONResponse(res, {
-          message: `Please provide both latitude and longitude`,
-        });
-      }
+    if (!latitude && !longitude) {
+      return failureJSONResponse(res, {
+        message: `Please provide both latitude and longitude`,
+      });
+    }
     if (!isValidString(listing_type))
       return failureJSONResponse(res, {
         message: `Please provide valid listing type`,
@@ -278,36 +274,11 @@ exports.validateListerBasicinfo = async (req, res, next) => {
       hideAddress,
     } = req.body;
 
-    // if (countryCode && isNaN(Number(countryCode)))
-    // return failureJSONResponse(res, {
-    //   message: `Please provide valid country code`,
-    // });
-    // if (preferableModeContact) {
-    //   if (preferableModeContact < 1 || preferableModeContact > 3 || preferableModeContact.includes(".")) {
-    //     return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` });
-    //   } else if (preferableModeContact != 1 && preferableModeContact != 2 && preferableModeContact != 3) { return failureJSONResponse(res, { message: `Please enter preferable Contact Mode between 1 to 3` }); }
-    // }
-    // if (preferableModeContact && isNaN(Number(preferableModeContact))) {
-    //   return failureJSONResponse(res, { message: "Please provide valid preferable Contact Mode" });
-    // }
     if (email_address && !isValidEmailAddress(email_address)) {
       return failureJSONResponse(res, {
         message: `Please provide valid email address`,
       });
     }
-
-    // console.log("isValidBoolean(hideAddress)",typeof isValidBoolean(hideAddress));
-
-    // if (["true", "false"].includes(hideAddress) == false) {
-    //   return failureJSONResponse(res, {
-    //     message: `Please provide us hide/show address (true/false)`
-    //   })
-    // }
-
-    // if (phoneNumber && !isValidIndianMobileNumber(phoneNumber))
-    // return failureJSONResponse(res, {
-    //   message: `Please provide valid phone number`,
-    // });
 
     return next();
   } catch (err) {
@@ -319,7 +290,6 @@ exports.validateListerBasicinfo = async (req, res, next) => {
 
 exports.createJobAds = async (req, res, next) => {
   try {
-    // console.log("hitt hoyi");
     const {
       isfeatured,
       status,
@@ -350,7 +320,6 @@ exports.createJobAds = async (req, res, next) => {
       image,
       video,
     } = req.body;
-  // console.log("gori gori body",req.body,"gori gori body");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -398,9 +367,9 @@ exports.createJobAds = async (req, res, next) => {
         salary_info,
         no_of_opening,
         work_authorization,
-        location:{
-          location_name:location_name,
-          coordinates:[longitude,latitude]
+        location: {
+          location_name: location_name,
+          coordinates: [longitude, latitude],
         },
         tagline,
         preferred_gender: preferred_gender,
@@ -412,12 +381,18 @@ exports.createJobAds = async (req, res, next) => {
 
     const newJobPost = await postJobAd.create(dataObj);
     const stringToHash = newJobPost._id.toString();
-    const hash = await crypto.createHash('sha256').update(stringToHash).digest('hex');
+    const hash = await crypto
+      .createHash("sha256")
+      .update(stringToHash)
+      .digest("hex");
     const truncatedHash = hash.slice(0, 10);
-    const numericHash = parseInt(truncatedHash, 16) % (Math.pow(10, 10));
-    let ad_Id = numericHash.toString().padStart(10, '0') 
-  
-   await postJobAd.findByIdAndUpdate({_id:newJobPost._id},{$set:{advertisement_id:ad_Id}})
+    const numericHash = parseInt(truncatedHash, 16) % Math.pow(10, 10);
+    let ad_Id = numericHash.toString().padStart(10, "0");
+
+    await postJobAd.findByIdAndUpdate(
+      { _id: newJobPost._id },
+      { $set: { advertisement_id: ad_Id } }
+    );
     const postJobAdObjToSend = {};
 
     for (let key in newJobPost.toObject()) {
@@ -448,9 +423,7 @@ exports.createJobAds = async (req, res, next) => {
 ///--------------------------Edit Job-----------------------------///
 
 exports.editJobAds = async (req, res, next) => {
-  // console.log(`kejhrjhyewgrjhew`);
   try {
-    // console.log(req.files);
     const jobId = req?.params?.jobId;
     const validate_id = await postJobAd.findById(jobId);
     if (!validate_id) {
@@ -501,7 +474,6 @@ exports.editJobAds = async (req, res, next) => {
       hide_my_email,
       // preferableModeContact,
     } = req.body;
-// console.log(req.body,"lpalpa lpai lpa lpa lpai");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -516,7 +488,6 @@ exports.editJobAds = async (req, res, next) => {
       }
     }
 
-    // console.log(req.body.hideAddress, "ddeedr");
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
@@ -525,8 +496,6 @@ exports.editJobAds = async (req, res, next) => {
       productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
     }
-
-    // console.log(`imageArr`, imageArr);
 
     const dataObj = {},
       adsInfoObj = {},
@@ -573,14 +542,14 @@ exports.editJobAds = async (req, res, next) => {
     if (no_of_opening) adsInfoObj.no_of_opening = no_of_opening;
     if (experience) adsInfoObj.experience = JSON.parse(experience);
     if (work_authorization) adsInfoObj.work_authorization = work_authorization;
-    let locationobj={}
-    if(longitude && latitude){
-      locationobj={
-        coordinates:[longitude,latitude]
-      }
+    let locationobj = {};
+    if (longitude && latitude) {
+      locationobj = {
+        coordinates: [longitude, latitude],
+      };
     }
     if (location_name) locationobj.location_name = location_name;
-   
+
     if (locationobj) adsInfoObj.location = locationobj;
     if (preferred_gender) adsInfoObj.preferred_gender = preferred_gender;
     if (imageArr.length) adsInfoObj.image = imageArr;
@@ -610,9 +579,6 @@ exports.editJobAds = async (req, res, next) => {
         },
       },
     };
-
-    // console.log(dataObjq);
-    // console.log("object", { image: imageArr });
 
     const updateJob = await postJobAd.findByIdAndUpdate(
       { _id: jobId },
@@ -685,8 +651,7 @@ exports.editJobAds = async (req, res, next) => {
 
 exports.fetchAllAds = async (req, res, next) => {
   try {
-    let searchTerm = req.query.search_term || "";;
-    // console.log("objectuygtututu");
+    let searchTerm = req.query.search_term || "";
     let dbQuery = {};
     const {
       isfeatured,
@@ -715,52 +680,45 @@ exports.fetchAllAds = async (req, res, next) => {
       is_myad,
     } = req.query;
     let adOnsQuery = {};
-    if (add_on){
+    if (add_on) {
       dbQuery = {
-        "addons_validity": {
+        addons_validity: {
           $elemMatch: {
-            "name": add_on,
-            "expired_on": {
-              $gte: new Date("2023-09-18").toISOString() // Construct ISODate manually
-            }
-          }
-        }
+            name: add_on,
+            expired_on: {
+              $gte: new Date("2023-09-18").toISOString(), // Construct ISODate manually
+            },
+          },
+        },
       };
     }
-    // console.log(req.query,"-------------------------------------------------------------------------------------------------------------------------------");
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
-    // console.log(longitude, latitude,'longitude, latitude');
-    let Distance
-    
-    if(maxDistance === "0" || !maxDistance){
-      // console.log("bol");
-      Distance =  200000
-    }else{
-      Distance =maxDistance*1000
+    let Distance;
+
+    if (maxDistance === "0" || !maxDistance) {
+      Distance = 200000;
+    } else {
+      Distance = maxDistance * 1000;
     }
-    
-  if (longitude && latitude && Distance) {
+
+    if (longitude && latitude && Distance) {
       const targetPoint = {
-        type: 'Point',
-        coordinates: [longitude, latitude]
+        type: "Point",
+        coordinates: [longitude, latitude],
       };
       adOnsQuery["adsInfo.location.coordinates"] = {
-       
         $near: {
           $geometry: targetPoint,
-          $maxDistance: Distance
-        }
-  }
+          $maxDistance: Distance,
+        },
+      };
       dbQuery["adsInfo.location.coordinates"] = {
-       
-          $near: {
-            $geometry: targetPoint,
-            $maxDistance: Distance
-          }
+        $near: {
+          $geometry: targetPoint,
+          $maxDistance: Distance,
+        },
+      };
     }
-   
-  }
-  // console.log(dbQuery,"---------------------------------------------------------------------------");
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
     if (isfeatured) {
@@ -792,8 +750,10 @@ exports.fetchAllAds = async (req, res, next) => {
 
     if (employment_type) {
       // Convert prefered_age to an array if it's not already
-      const employment_typeArray = Array.isArray(employment_type) ? employment_type : [employment_type];
-    
+      const employment_typeArray = Array.isArray(employment_type)
+        ? employment_type
+        : [employment_type];
+
       // Add $in query to filter based on prefered_age
       dbQuery["adsInfo.employment_type"] = {
         $in: employment_typeArray,
@@ -802,22 +762,23 @@ exports.fetchAllAds = async (req, res, next) => {
     if (language) {
       // Convert prefered_age to an array if it's not already
       const languageArray = Array.isArray(language) ? language : [language];
-    
+
       // Add $in query to filter based on prefered_age
       dbQuery["adsInfo.language"] = {
         $in: languageArray,
       };
-    }  
-      if (work_authorization) {
+    }
+    if (work_authorization) {
       // Convert prefered_age to an array if it's not already
-      const work_authorizationArray = Array.isArray(work_authorization) ? work_authorization : [work_authorization];
-    
+      const work_authorizationArray = Array.isArray(work_authorization)
+        ? work_authorization
+        : [work_authorization];
+
       // Add $in query to filter based on prefered_age
       dbQuery["adsInfo.work_authorization"] = {
         $in: work_authorizationArray,
       };
     }
-
 
     if (amount) {
       dbQuery["adsInfo.salary.amount"] = amount;
@@ -825,10 +786,10 @@ exports.fetchAllAds = async (req, res, next) => {
     if (min_price && max_price) {
       dbQuery["adsInfo.salary.amount"] = {
         $gte: parseFloat(min_price),
-        $lte: parseFloat(max_price)
+        $lte: parseFloat(max_price),
       };
     }
-    
+
     if (preferred_gender) {
       dbQuery["adsInfo.preferedGender"] = preferred_gender;
     }
@@ -841,45 +802,46 @@ exports.fetchAllAds = async (req, res, next) => {
       dbQuery["adsInfo.tagline"] = tagline;
     }
     if (userId) dbQuery.userId = userId;
-   
 
     // If isfavorite is true, add a filter to dbQuery
     // if (isFavoriteFilter !== undefined) {
     //   dbQuery.isFavorite = isFavoriteFilter;
     // }
-     // Get the current date
-     const currentDate = new Date();
-     // Convert the date to ISO 8601 format
-     const currentISODate = currentDate.toISOString();
-     // Extract only the date portion
-     const currentDateOnly = currentISODate.substring(0, 10);
-     let myid = req.userId;
-     if (is_myad =='true' && !myid) {
-      return failureJSONResponse(res, { message: 'Please login to your account' });
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    const currentDateOnly = currentISODate.substring(0, 10);
+    let myid = req.userId;
+    if (is_myad == "true" && !myid) {
+      return failureJSONResponse(res, {
+        message: "Please login to your account",
+      });
     }
-     if(is_myad != 'true'){
-     dbQuery.status = "active";
-     dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-     
-    adOnsQuery.status = "active";
-    adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
-     }else{
+    if (is_myad != "true") {
+      dbQuery.status = "active";
+      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+
+      adOnsQuery.status = "active";
+      adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+    } else {
       dbQuery.userId = myid;
-     }
+    }
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
         ...dbQuery,
         $or: [
           { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
-          { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } }
-        ]
+          { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } },
+        ],
       };
     }
- 
-    
 
-    let notification = await Users.findOne({_id:myid}).select('userNotification.job')
+    let notification = await Users.findOne({ _id: myid }).select(
+      "userNotification.job"
+    );
     let valueofnotification = notification?.userNotification?.job;
 
     let records = await postJobAd
@@ -887,15 +849,19 @@ exports.fetchAllAds = async (req, res, next) => {
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
-      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
       .populate({ path: "ReportCount", select: "_id" })
-      .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
-      .sort(sortval)
-      const totalCount = await postJobAd.find({
-        $or: [queryFinal],
-      });
-      let responseModelCount = totalCount.length;
-   
+      .populate({
+        path: "isReported",
+        select: "userId",
+        match: { userId: myid },
+      })
+      .sort(sortval);
+    const totalCount = await postJobAd.find({
+      $or: [queryFinal],
+    });
+    let responseModelCount = totalCount.length;
+
     if (records) {
       let jobData = records.map((job) => {
         return {
@@ -903,52 +869,64 @@ exports.fetchAllAds = async (req, res, next) => {
           // Add other job fields as needed
           view_count: job.viewCount,
           favorite_count: job.favoriteCount,
-          is_favorite: !!job.isFavorite, 
+          is_favorite: !!job.isFavorite,
           Report_count: job.ReportCount,
-          is_Reported: !!job.isReported, 
+          is_Reported: !!job.isReported,
         };
-      });//////
-      const isFavoriteFilter = is_favorite === 'true' ? true : undefined;
+      }); //////
+      const isFavoriteFilter = is_favorite === "true" ? true : undefined;
       if (isFavoriteFilter) {
         jobData = jobData.filter((job) => job.is_favorite === true);
       }
-    
+
       // Pagination
       const totalCount = jobData.length;
       const perPage = parseInt(req.query.perpage) || 40;
       const page = parseInt(req.query.page) || 1;
-    
+
       const startIndex = (page - 1) * perPage;
       const endIndex = startIndex + perPage;
-    
+
       const paginatedData = jobData.slice(startIndex, endIndex);
       let featuredData;
       let bumpupData;
-      if(is_myad != 'true'){
-      let FeaturedData = await postJobAd.find({...adOnsQuery, "addons_validity": {
-        $elemMatch: {
-          "name": "Featured",
-          "expired_on": {
-            $gte: currentDateOnly // Construct ISODate manually
-          }
+      if (is_myad != "true") {
+        let FeaturedData = await postJobAd
+          .find({
+            ...adOnsQuery,
+            addons_validity: {
+              $elemMatch: {
+                name: "Featured",
+                expired_on: {
+                  $gte: currentDateOnly, // Construct ISODate manually
+                },
+              },
+            },
+          })
+          .populate({
+            path: "adsInfo.image",
+            strictPopulate: false,
+            select: "url",
+          })
+          .populate({ path: "favoriteCount", select: "_id" })
+          .populate({ path: "viewCount" })
+          .populate({
+            path: "isFavorite",
+            select: "user",
+            match: { user: myid },
+          });
+        const featuredRecordsToPick = 6;
+        const FeaturedpickedRecords = [];
+
+        while (
+          FeaturedpickedRecords.length < featuredRecordsToPick &&
+          FeaturedData.length > 0
+        ) {
+          const randomIndex = Math.floor(Math.random() * FeaturedData.length);
+          const randomRecord = FeaturedData.splice(randomIndex, 1)[0]; // Remove and pick the record
+          FeaturedpickedRecords.push(randomRecord);
         }
-      },})
-      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-      .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "viewCount" })
-      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-    console.log(FeaturedData);
-    const featuredRecordsToPick = 6;
-    const FeaturedpickedRecords = [];
-    
-    while (FeaturedpickedRecords.length < featuredRecordsToPick && FeaturedData.length > 0) {
-      const randomIndex = Math.floor(Math.random() * FeaturedData.length);
-      const randomRecord = FeaturedData.splice(randomIndex, 1)[0]; // Remove and pick the record
-      FeaturedpickedRecords.push(randomRecord);
-    }
-    
-      
-       
+
         featuredData = FeaturedpickedRecords.map((job) => {
           return {
             ...job._doc,
@@ -957,74 +935,86 @@ exports.fetchAllAds = async (req, res, next) => {
             favorite_count: job.favoriteCount,
             is_favorite: !!job.isFavorite,
           };
-        })
-      /////
-      let BumpupData = await postJobAd.find({ ...adOnsQuery,"addons_validity.name": "Bump up" })
-      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-      .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "viewCount" })
-      .populate({ path: 'isFavorite', select: 'user', match: { user: myid } });
-    
-    let bumpUpDates = BumpupData.map((data) => {
-      // Filter addons_validity to get only the "Bump up" addon
-      let bumpUpAddon = data.addons_validity.find((addon) => addon.name === "Bump up");
-      if (bumpUpAddon) {
-        return {
-          active_on: bumpUpAddon.active_on,
-          expired_on: bumpUpAddon.expired_on,
-          interval: bumpUpAddon.days, // Add the interval property
-        };
+        });
+        /////
+        let BumpupData = await postJobAd
+          .find({ ...adOnsQuery, "addons_validity.name": "Bump up" })
+          .populate({
+            path: "adsInfo.image",
+            strictPopulate: false,
+            select: "url",
+          })
+          .populate({ path: "favoriteCount", select: "_id" })
+          .populate({ path: "viewCount" })
+          .populate({
+            path: "isFavorite",
+            select: "user",
+            match: { user: myid },
+          });
+
+        let bumpUpDates = BumpupData.map((data) => {
+          // Filter addons_validity to get only the "Bump up" addon
+          let bumpUpAddon = data.addons_validity.find(
+            (addon) => addon.name === "Bump up"
+          );
+          if (bumpUpAddon) {
+            return {
+              active_on: bumpUpAddon.active_on,
+              expired_on: bumpUpAddon.expired_on,
+              interval: bumpUpAddon.days, // Add the interval property
+            };
+          }
+          return null; // If "Bump up" addon is not found, return null
+        }).filter((dates) => dates !== null);
+
+        const resultDates = [];
+
+        for (const dateRange of bumpUpDates) {
+          const { active_on, expired_on, interval } = dateRange;
+          const startDate = new Date(active_on);
+          const endDate = new Date(expired_on);
+          const recordDates = []; // Create a separate array for each record
+
+          while (startDate <= endDate) {
+            recordDates.push(startDate.toISOString().split("T")[0]);
+            startDate.setDate(startDate.getDate() + interval);
+          }
+
+          resultDates.push(recordDates); // Push the record's dates array into the result array
+        }
+
+        const today = new Date().toISOString().split("T")[0]; // Get today's date in the format "YYYY-MM-DD"
+
+        // Filter adonsData to find records where resultDates array contains today's date
+        const recordsWithTodayDate = BumpupData.filter((data, index) => {
+          const recordDates = resultDates[index]; // Get the resultDates array for the current record
+          return recordDates.includes(today);
+        });
+
+        const numberOfRecordsToPick = 3;
+        const pickedRecords = [];
+
+        while (
+          pickedRecords.length < numberOfRecordsToPick &&
+          recordsWithTodayDate.length > 0
+        ) {
+          const randomIndex = Math.floor(
+            Math.random() * recordsWithTodayDate.length
+          );
+          const randomRecord = recordsWithTodayDate.splice(randomIndex, 1)[0]; // Remove and pick the record
+          pickedRecords.push(randomRecord);
+        }
+
+        bumpupData = pickedRecords.map((job) => {
+          return {
+            ...job._doc,
+            // Add other job fields as needed
+            view_count: job.viewCount,
+            favorite_count: job.favoriteCount,
+            is_favorite: !!job.isFavorite,
+          };
+        });
       }
-      return null; // If "Bump up" addon is not found, return null
-    }).filter((dates) => dates !== null);
-    
-    const resultDates = [];
-    
-    for (const dateRange of bumpUpDates) {
-      const { active_on, expired_on, interval } = dateRange;
-      const startDate = new Date(active_on);
-      const endDate = new Date(expired_on);
-      const recordDates = []; // Create a separate array for each record
-    
-      while (startDate <= endDate) {
-        recordDates.push(startDate.toISOString().split("T")[0]);
-        startDate.setDate(startDate.getDate() + interval);
-      }
-    
-      resultDates.push(recordDates); // Push the record's dates array into the result array
-    }
-    
-    
-    
-    const today = new Date().toISOString().split("T")[0]; // Get today's date in the format "YYYY-MM-DD"
-    
-    // Filter adonsData to find records where resultDates array contains today's date
-    const recordsWithTodayDate = BumpupData.filter((data, index) => {
-      const recordDates = resultDates[index]; // Get the resultDates array for the current record
-      return recordDates.includes(today);
-    });
-    
-    const numberOfRecordsToPick = 3;
-    const pickedRecords = [];
-    
-    while (pickedRecords.length < numberOfRecordsToPick && recordsWithTodayDate.length > 0) {
-      const randomIndex = Math.floor(Math.random() * recordsWithTodayDate.length);
-      const randomRecord = recordsWithTodayDate.splice(randomIndex, 1)[0]; // Remove and pick the record
-      pickedRecords.push(randomRecord);
-    }
-    
-    
-     
-      bumpupData = pickedRecords.map((job) => {
-        return {
-          ...job._doc,
-          // Add other job fields as needed
-          view_count: job.viewCount,
-          favorite_count: job.favoriteCount,
-          is_favorite: !!job.isFavorite,
-        };
-      })
-    }
       let finalResponse = {
         message: `success`,
         total: totalCount,
@@ -1034,10 +1024,11 @@ exports.fetchAllAds = async (req, res, next) => {
         notification: valueofnotification,
         records: paginatedData,
         status: 200,
-        ...((is_myad == 'true') ? {} : { AdOnsData: {bumpupData, featuredData } })
+        ...(is_myad == "true"
+          ? {}
+          : { AdOnsData: { bumpupData, featuredData } }),
       };
       return successJSONResponse(res, finalResponse);
-      
     } else {
       return failureJSONResponse(res, { message: `ads not Available` });
     }
@@ -1050,51 +1041,57 @@ exports.fetchAllAds = async (req, res, next) => {
 exports.fetchonead = async (req, res, next) => {
   try {
     const adsId = req.query.adsId;
-    // console.log("object",adsId);
-    let data_Obj
-    let checkId = await postJobAd.findOne({_id:adsId})
-    if(!checkId){
-        return failureJSONResponse(res, { message: `Please provide valid ad id` });
+    let data_Obj;
+    let checkId = await postJobAd.findOne({ _id: adsId });
+    if (!checkId) {
+      return failureJSONResponse(res, {
+        message: `Please provide valid ad id`,
+      });
     }
-     // Get the current date
-     const currentDate = new Date();
-     // Convert the date to ISO 8601 format
-     const currentISODate = currentDate.toISOString();
-     // Extract only the date portion
-     const currentDateOnly = currentISODate.substring(0, 10);
-     if(adsId){
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    const currentDateOnly = currentISODate.substring(0, 10);
+    if (adsId) {
       data_Obj = {
-          _id:adsId,
-          status :"active" ,
-          "plan_validity.expired_on" :{ $gte: currentDateOnly }
-      }
-    }else{
+        _id: adsId,
+        status: "active",
+        "plan_validity.expired_on": { $gte: currentDateOnly },
+      };
+    } else {
       return failureJSONResponse(res, { message: `ad id not Available` });
     }
-    let myid = req.userId
-    let records = await postJobAd.findOne(data_Obj)
-    .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-    .populate({ path: "favoriteCount", select: "_id" })
-    .populate({ path: "viewCount" })
-    .populate({ path: 'isFavorite', select: 'user', match: { user: myid } })
-    .populate({ path: "ReportCount", select: "_id" })
-    .populate({ path: 'isReported', select: 'userId', match: { userId: myid } })
-    // console.log(records,"saun mahona chad da hai");
+    let myid = req.userId;
+    let records = await postJobAd
+      .findOne(data_Obj)
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+      .populate({ path: "ReportCount", select: "_id" })
+      .populate({
+        path: "isReported",
+        select: "userId",
+        match: { userId: myid },
+      });
     if (records) {
-      const ads_type =records.adsType.toString();
-    
-    let {ModelName,Typename}= await ModelNameByAdsType(ads_type)
-    // console.log(Typename,"nfjdnfcjed");
-    let dbQuery ={
-      userId:myid,
-      ad:records._id,
-      ads_type:ads_type,
-      adType:Typename
-    } 
-    
-     let checkview = await PostViews.findOne({ $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }] })
-      if(!checkview){
-      let data=  await PostViews.create(dbQuery)
+      const ads_type = records.adsType.toString();
+
+      let { ModelName, Typename } = await ModelNameByAdsType(ads_type);
+      let dbQuery = {
+        userId: myid,
+        ad: records._id,
+        ads_type: ads_type,
+        adType: Typename,
+      };
+
+      let checkview = await PostViews.findOne({
+        $and: [{ userId: dbQuery.userId }, { ad: dbQuery.ad }],
+      });
+      if (!checkview) {
+        let data = await PostViews.create(dbQuery);
       }
       const jobData = {
         ...records._doc,
@@ -1102,7 +1099,7 @@ exports.fetchonead = async (req, res, next) => {
         favorite_count: records.favoriteCount,
         is_favorite: !!records.isFavorite,
         Report_count: records.ReportCount,
-        is_Reported: !!records.isReported, 
+        is_Reported: !!records.isReported,
       };
       return successJSONResponse(res, {
         message: `success`,
@@ -1118,12 +1115,11 @@ exports.fetchonead = async (req, res, next) => {
   }
 };
 
-
 exports.fetchJobData = async (req, res, next) => {
   try {
     let maxDistance = req.query.maxDistance || 200;
     const sub_categories = {
-      "Jobs": [
+      Jobs: [
         "Accounting and Finance",
         "Tax Services",
         "Bar and Restaurant",
@@ -1160,9 +1156,9 @@ exports.fetchJobData = async (req, res, next) => {
         "Other",
       ],
     };
-    
+
     const responseArray = [];
-    const lalcount = []
+    const lalcount = [];
     for (const category in sub_categories) {
       const subCategoryArray = sub_categories[category];
       const subcategoryData = [];
@@ -1172,43 +1168,53 @@ exports.fetchJobData = async (req, res, next) => {
       // Extract only the date portion
       const currentDateOnly = currentISODate.substring(0, 10);
       for (const subCategory of subCategoryArray) {
-        const query = {"adsInfo.categories": subCategory ,"status" :"active",["plan_validity.expired_on"]:{ $gte: currentDateOnly }};
+        const query = {
+          "adsInfo.categories": subCategory,
+          status: "active",
+          ["plan_validity.expired_on"]: { $gte: currentDateOnly },
+        };
         if (req.query.longitude && req.query.latitude) {
           // Assuming you have longitude and latitude fields in your data
           query["adsInfo.location.coordinates"] = {
             $geoWithin: {
               $centerSphere: [
-                [parseFloat(req.query.longitude), parseFloat(req.query.latitude)],
-                maxDistance / 6371 // 6371 is the Earth's radius in kilometers
-              ]
-            }
+                [
+                  parseFloat(req.query.longitude),
+                  parseFloat(req.query.latitude),
+                ],
+                maxDistance / 6371, // 6371 is the Earth's radius in kilometers
+              ],
+            },
           };
         }
         const count = await postJobAd.countDocuments(query);
         subcategoryData.push({ sub_category_name: subCategory, count });
       }
 
-      const totalCount = subcategoryData.reduce((total, item) => total + item.count, 0);
-      lalcount.push(totalCount)
+      const totalCount = subcategoryData.reduce(
+        (total, item) => total + item.count,
+        0
+      );
+      lalcount.push(totalCount);
       responseArray.push({
         name: category,
         count: totalCount,
         sub_categories: subcategoryData,
       });
     }
-    let RedZone = lalcount.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-
-    // console.log(responseArray);
+    let RedZone = lalcount.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0
+    );
 
     return successJSONResponse(res, {
       message: `success`,
-      totalCount:RedZone,
+      totalCount: RedZone,
       data: responseArray,
     });
   } catch (error) {
-    console.error('Error:', error);
     return failureJSONResponse(res, {
-      message: 'An error occurred',
+      message: "An error occurred",
       error: error.message,
     });
   }

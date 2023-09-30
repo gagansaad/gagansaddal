@@ -2,35 +2,31 @@ let multer = require("multer");
 let fs = require("fs");
 let path = require("path");
 
-
 const cloudinary = require("cloudinary").v2;
-    const { CloudinaryStorage } = require("multer-storage-cloudinary");
-    const multer = require("multer");
-    
-    const CLOUD_NAME = process.env.CLOUD_NAME;
-    const CLOUD_API_KEY = process.env.CLOUD_API_KEY;
-    const CLOUD_SECRET = process.env.CLOUD_SECRET;
-    
-    
-    cloudinary.config({
-        cloud_name: CLOUD_NAME,
-        api_key: CLOUD_API_KEY,
-        api_secret: CLOUD_SECRET,
-    });
-    
-    const storage = new CloudinaryStorage({
-        cloudinary: cloudinary,
-        params: {
-            folder: "DEV",
-        },
-    
-    });
-    
-    
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const multer = require("multer");
+
+const CLOUD_NAME = process.env.CLOUD_NAME;
+const CLOUD_API_KEY = process.env.CLOUD_API_KEY;
+const CLOUD_SECRET = process.env.CLOUD_SECRET;
+
+cloudinary.config({
+  cloud_name: CLOUD_NAME,
+  api_key: CLOUD_API_KEY,
+  api_secret: CLOUD_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "DEV",
+  },
+});
+
 // var storage = multer.diskStorage({
 //     destination: (req, file, cb) => {
 //       if (file.fieldname === "profileImg") {
-        
+
 //         cb(null, "./public/ProfileImage");
 //       } else if (file.fieldname === "Aadharcard") {
 //         fs.mkdir("./public/AadharCard", { recursive: true }, (err) => {
@@ -39,7 +35,7 @@ const cloudinary = require("cloudinary").v2;
 //             return;
 //           }
 //         });
-  
+
 //         cb(null, "./public/AadharCard");
 //       }
 //     },
@@ -58,7 +54,7 @@ const cloudinary = require("cloudinary").v2;
 //     },
 //   });
 //   const maxSize = 1 * 1024 * 1024;
-  
+
 //   var upload = multer({
 //     storage: storage,
 //     limits: { fileSize: maxSize },
@@ -88,10 +84,10 @@ const cloudinary = require("cloudinary").v2;
 //       name: "profileImg",
 //       maxCount: 10,
 //     },
-  //   {
-  //     name: "Aadharcard",
-  //     maxCount: 1,
-  //   },
-  // ]);
+//   {
+//     name: "Aadharcard",
+//     maxCount: 1,
+//   },
+// ]);
 
-  module.exports = storage
+module.exports = storage;

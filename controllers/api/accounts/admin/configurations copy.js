@@ -12,7 +12,6 @@ const addons_plan = mongoose.model("plan_addons");
 //////////------------------//////////
 exports.postconfigurations = async (req, res, next) => {
   try {
-    // console.log(req.body);
     const {
       main_categories,
       post_15_currency,
@@ -68,7 +67,6 @@ exports.postconfigurations = async (req, res, next) => {
 
 exports.posttypeconfigurations = async (req, res, next) => {
   try {
-    // console.log(req.body);
     const {
       is_active,
       visible,
@@ -99,11 +97,9 @@ exports.posttypeconfigurations = async (req, res, next) => {
         });
       })
       .catch((err) => {
-        console.log(err, "jdnvdnjdnjd");
         return failureJSONResponse(res, { message: `something went wrong` });
       });
   } catch (err) {
-    console.log(err, "jdnvdnjdnjd");
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
@@ -112,20 +108,32 @@ exports.posttypeconfigurations = async (req, res, next) => {
 
 exports.create_adons = async (req, res) => {
   try {
-    const { name, plan_id, isfree, duration, amount, currency, price,example_description,example_image,example_title,color_code,description } =
-      req.body;
+    const {
+      name,
+      plan_id,
+      isfree,
+      duration,
+      amount,
+      currency,
+      price,
+      example_description,
+      example_image,
+      example_title,
+      color_code,
+      description,
+    } = req.body;
 
     const addOnsPlan = {
       name: name,
       plan_id: plan_id,
       price: price,
     };
-    if(description) addOnsPlan.description=description;
-    if(example_description) addOnsPlan.example_description=example_description;
-    if(example_image) addOnsPlan.example_image=example_image;
-    if(example_title) addOnsPlan.example_title=example_title;
-    if(color_code) addOnsPlan.color_code=color_code;
-    console.log(addOnsPlan,"tt-------");
+    if (description) addOnsPlan.description = description;
+    if (example_description)
+      addOnsPlan.example_description = example_description;
+    if (example_image) addOnsPlan.example_image = example_image;
+    if (example_title) addOnsPlan.example_title = example_title;
+    if (color_code) addOnsPlan.color_code = color_code;
     let addons_result = await addons_plan.create(addOnsPlan);
     if (addons_result) {
       let pushdata = await AdsPlan.findByIdAndUpdate(
@@ -140,28 +148,25 @@ exports.create_adons = async (req, res) => {
       }
     }
   } catch (err) {
-    console.log(err, "jdnvdnjdnjd");
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
 
 exports.edit_adons = async (req, res) => {
   try {
-    const { addons_id, example_title, example_desc, color,description } = req.body;
+    const { addons_id, example_title, example_desc, color, description } =
+      req.body;
     let dbQuery = {};
     let Images;
-    //    console.log(req.file);
     if (req.file) {
       var thumbnail = req.file.path;
-      //   console.log(thumbnail);
       Images = await Media.create({ url: thumbnail });
     }
     if (example_title) dbQuery.example_title = example_title;
     if (example_desc) dbQuery.example_description = example_desc;
     if (Images) dbQuery.example_image = Images.url;
     if (color) dbQuery.color_code = color;
-    if(description)dbQuery.description = description;
-    // console.log(Images.url,"dnvhjjdfhjvdfjhb");
+    if (description) dbQuery.description = description;
     let result = await addons_plan.findByIdAndUpdate(
       { _id: addons_id },
       { $set: dbQuery },
@@ -174,7 +179,6 @@ exports.edit_adons = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err, "jdnvdnjdnjd");
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
@@ -183,7 +187,9 @@ exports.edit_adons = async (req, res) => {
 
 exports.gettypeconfigurations = async (req, res, next) => {
   try {
-    let plans = await AdsPlan.findOne({"_id":req.query.plan_id}).populate("add_ons");
+    let plans = await AdsPlan.findOne({ _id: req.query.plan_id }).populate(
+      "add_ons"
+    );
     // if(plans){
     // let addons = await AdsPlan.find().populate("add_ons");
     if (plans) {
