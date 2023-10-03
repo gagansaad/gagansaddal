@@ -394,10 +394,12 @@ exports.createEventAds = async (req, res, next) => {
       });
     }
     if (other_platform) {
+      for (let i = 0; i < other_platform.length; i++) {
       platforms.push({
-        live_platform: other_platform_name,
-        platform_link: other_platform,
+        live_platform: other_platform_name[i],
+        platform_link: other_platform[i],
       });
+    }
     }
 
     const userId = req.userId;
