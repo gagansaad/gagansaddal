@@ -42,7 +42,7 @@ let Notification = require("../../../resources/notification");
 const env = require("dotenv").config({ path: "../../" });
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-const stripHtml = require("strip-html");
+const stripHtml = require("string-strip-html");
 ///-----------------------Validate Data---------------------------//
 
 exports.validatepaymentData = async (req, res, next) => {
