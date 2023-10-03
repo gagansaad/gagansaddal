@@ -42,7 +42,7 @@ let Notification = require("../../../resources/notification");
 const env = require("dotenv").config({ path: "../../" });
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-const stripHtml = require("string-strip-html");
+// const stripHtml = require('string-strip-html');
 ///-----------------------Validate Data---------------------------//
 
 exports.validatepaymentData = async (req, res, next) => {
@@ -656,7 +656,19 @@ console.log(userIds,"-----------------------------------------------------------
   let body = "Your Post is Successfully Created!";
 
   if (statusUpdate) {
-    let cleanDescription = stripHtml(statusUpdate.adsInfo.descriptions);
+// Use dynamic import to import the library
+import('string-strip-html').then((stripHtmlModule) => {
+  const stripHtml = stripHtmlModule.default; // Access the default export
+
+  // Remove HTML tags from the string
+  cleanDescription = stripHtml(statusUpdate.adsInfo.descriptions);
+
+  console.log(cleanDescription);
+}).catch((error) => {
+  console.error('Error loading the string-strip-html library:', error);
+});
+
+    
     console.log(cleanDescription ,"-----------------------------------");
     let words = cleanDescription.split(' ');
 
