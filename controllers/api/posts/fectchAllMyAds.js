@@ -525,7 +525,7 @@ exports.editStatus = async (req, res, next) => {
     }
     console.log("fuufufufufufufu");
      let {ModelName} = await ModelNameByAdsType(ads_type)
-     console.log(ModelName,"fnejfjedjendenfc");
+     console.log({ModelName},"fnejfjedjendenfc");
      const data = { ModelName };
       console.log(data, "fnejfjedjendenfc");
      let yourModel = mongoose.model(ModelName.ModelName)
