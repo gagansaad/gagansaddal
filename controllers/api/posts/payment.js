@@ -539,25 +539,32 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
   let adsName = getAdDetails.name;
   let userIds;
   const updateQuery = {};
+let adlink
 
   switch (adsName) {
     case "Events":
       updateQuery["userNotification.event"] = true;
+      adlink=`https://menehariya.netscapelabs.com/eventDetails/${ads_id}`
       break;
     case "Jobs":
       updateQuery["userNotification.job"] = true;
+      adlink=`https://menehariya.netscapelabs.com/jobDetails/${ads_id}`
       break;
     case "Rentals":
       updateQuery["userNotification.rental"] = true;
+      adlink=`https://menehariya.netscapelabs.com/rentDetails/${ads_id}`
       break;
     case "Local Biz & Services":
       updateQuery["userNotification.localBiz"] = true;
+      adlink=`https://menehariya.netscapelabs.com/localBizDetails/${ads_id}`
       break;
     case "Buy & Sell":
       updateQuery["userNotification.buysell"] = true;
+      adlink=`https://menehariya.netscapelabs.com/buySellDetails/${ads_id}`
       break;
     case "Babysitters & Nannies":
       updateQuery["userNotification.careService"] = true;
+      adlink=`https://menehariya.netscapelabs.com/babySitterDetails/${ads_id}`
       break;
     default:
       return failureJSONResponse(res, {
@@ -647,6 +654,7 @@ console.log(userIds,"-----------------------------------------------------------
   let title = "Post Created!";
   let body = "Your Post is Successfully Created!";
   if (statusUpdate) {
+    
     await Notification.sendNotifications(
       [userID],
       title,
@@ -667,8 +675,8 @@ console.log(userIds,"-----------------------------------------------------------
       true,
       {
         subject: `${adsName} New Post Added`,
-        email_template: "postSuccess",
-        data: {},
+        email_template: "newpostalert",
+        data: {title:statusUpdate.adsInfo.title,discription:statusUpdate.adsInfo.description,adlink},
       }
     );
   }

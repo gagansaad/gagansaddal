@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Menehariya</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      a {
+        text-decoration: none;
+        color: #ffff;
+        line-height: 30px;
+      }
+
+      @media only screen and (max-width: 767px) {
+        .mover-logo img {
+          width: 100% !important;
+        }
+        .mail-logo {
+          width: 100% !important;
+        }
+        .banner h1 {
+          font-size: 26px;
+          text-align: center;
+        }
+        .iconimg img {
+          width: 100% !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <div
+        class="email-container"
+        style="
+          background: #ffffff;
+          box-shadow: rgb(149 157 165 / 20%) 0px 8px 24px;
+          padding: 3rem 2rem;
+          max-width: 800px;
+          margin: 60px auto;
+        "
+      >
+        <div class="email-body">
+          <div class="mover-logo">
+            <img
+              src="https://menehariya.netscapelabs.com/images/logo Manehariya 2.png"
+              class="mail.logo"
+              alt=""
+            />
+          </div>
+          <div class="banner" style="text-align: center">
+            <img
+              src="https://menehariya.netscapelabs.com/images/59945-success-confetti.gif"
+              alt=""
+              style="width: 70px; height: 70px"
+            />
+          </div>
+          <div class="banner">
+            <h1
+              style="
+                font-size: 20px;
+                font-family: sans-serif;
+                color: #fd7e14;
+                text-transform: capitalize;
+                text-align: center;
+              "
+            >
+              <%=category%>New Ad Posted - Click to Visit!
+            </h1>
+          </div>
+          <div class="email-content">
+            <p
+              style="
+                font-size: 14px;
+                color: #242424;
+                font-weight: 500;
+                font-family: sans-serif;
+              "
+            >
+              Dear <%=name%>
+            </p>
+            <p
+              style="
+                font-size: 14px;
+                color: #242424;
+                font-weight: 500;
+                font-family: sans-serif;
+              "
+            >
+              We are excited to inform you that a new ad has just been posted on our platform that might be of interest to you. Don't miss out on this opportunity - click the link below to visit the ad and learn more:
+            </p>
+              <p
+              style="
+                font-size: 14px;
+                color: #242424;
+                font-weight: 500;
+                font-family: sans-serif;
+              "
+            >
+              Title:-<%=title%>
+            </p>
+                 <p
+              style="
+                font-size: 14px;
+                color: #242424;
+                font-weight: 500;
+                font-family: sans-serif;
+              "
+            >
+              Discription:-<%=discription%>
+            </p>
+                <div style="text-align:center;">
+                    <a href="<%= adlink %>" style="background-color:#fd7e14; color:#fff; text-decoration:none; padding:10px 20px; display:inline-block; border-radius:5px;">Click to Visit Ad</a>
+                </div>
+                <br>
+            <p
+              style="
+                font-size: 14px;
+                color: #242424;
+                font-weight: 500;
+                font-family: sans-serif;
+              "
+            >
+              Best regards,
+            </p>
+            <p
+              style="
+                font-size: 14px;
+                color: #242424;
+                font-weight: 500;
+                font-family: sans-serif;
+              "
+            >
+              (Menehariya Team)
+            </p>
+            <div style="display: flex; margin-top: 30px">
+              <a class="iconimg" href="https://menehariya.netscapelabs.com/"
+                ><img
+                  src="https://menehariya.netscapelabs.com/images/playstore.png"
+                  alt=""
+                  style="width: 40%"
+                /> </a
+              ><br />
+              <a class="iconimg" href="https://menehariya.netscapelabs.com/"
+                ><img
+                  src="https://menehariya.netscapelabs.com/images/appstire.png"
+                  alt=""
+                  style="width: 40%"
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
