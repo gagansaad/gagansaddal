@@ -539,8 +539,8 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
   let adsName = getAdDetails.name;
   let userIds;
   const updateQuery = {};
-let adlink
-
+let adlink;
+let description;
   switch (adsName) {
     case "Events":
       updateQuery["userNotification.event"] = true;
@@ -653,8 +653,18 @@ console.log(userIds,"-----------------------------------------------------------
   );
   let title = "Post Created!";
   let body = "Your Post is Successfully Created!";
+
   if (statusUpdate) {
-    
+    let words = statusUpdate.adsInfo.descriptions.split(' ');
+
+// Check if the description has more than 20 words
+if (words.length > 20) {
+    // If it does, select the first 20 words and join them back into a string
+    description = words.slice(0, 20).join(' ') + '...';
+}else{
+  description = statusUpdate.adsInfo.descriptions
+}
+
     await Notification.sendNotifications(
       [userID],
       title,
@@ -676,7 +686,7 @@ console.log(userIds,"-----------------------------------------------------------
       {
         subject: `${adsName} New Post Added`,
         email_template: "newpostalert",
-        data: {category:adsName,title:statusUpdate.adsInfo.title,discription:statusUpdate.adsInfo.description,adlink},
+        data: {category:adsName,title:statusUpdate.adsInfo.title,description:description,adlink},
       }
     );
   }
