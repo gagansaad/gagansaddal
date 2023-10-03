@@ -116,7 +116,7 @@ exports.fetchAll = async (req, res, next) => {
     }
 
     if (details) {
-      dbQuery["adsInfo.details"] = details;
+      dbQuery["adsInfo.descriptions"] = details;
     }
 
     if (recurring_type) {
