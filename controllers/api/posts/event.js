@@ -393,6 +393,7 @@ exports.createEventAds = async (req, res, next) => {
         platform_link: tiktok_platform,
       });
     }
+    console.log(other_platform_name,other_platform,"-----------------------------------------");
     if (other_platform) {
       for (let i = 0; i < other_platform.length; i++) {
       platforms.push({
