@@ -42,7 +42,7 @@ let Notification = require("../../../resources/notification");
 const env = require("dotenv").config({ path: "../../" });
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-
+const { sanitize } = require("dompurify");
 ///-----------------------Validate Data---------------------------//
 
 exports.validatepaymentData = async (req, res, next) => {
@@ -541,6 +541,7 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
   const updateQuery = {};
 let adlink;
 let description;
+let cleanDescription;
   switch (adsName) {
     case "Events":
       updateQuery["userNotification.event"] = true;
@@ -655,14 +656,15 @@ console.log(userIds,"-----------------------------------------------------------
   let body = "Your Post is Successfully Created!";
 
   if (statusUpdate) {
-    let words = statusUpdate.adsInfo.descriptions.split(' ');
+    let cleanDescription = sanitize(statusUpdate.adsInfo.descriptions, { ALLOWED_TAGS: [] });
+    let words = cleanDescription.split(' ');
 
 // Check if the description has more than 20 words
 if (words.length > 20) {
     // If it does, select the first 20 words and join them back into a string
     description = words.slice(0, 20).join(' ') + '...';
 }else{
-  description = statusUpdate.adsInfo.descriptions
+  description = cleanDescription
 }
 
     await Notification.sendNotifications(
