@@ -656,7 +656,7 @@ console.log(userIds,"-----------------------------------------------------------
   let body = "Your Post is Successfully Created!";
 
   if (statusUpdate) {
-    let cleanDescription = stripHtml(statusUpdate.adsInfo.descriptions).result;
+    let cleanDescription = stripHtml(statusUpdate.adsInfo.descriptions);
     console.log(cleanDescription ,"-----------------------------------");
     let words = cleanDescription.split(' ');
 
