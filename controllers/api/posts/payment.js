@@ -676,7 +676,7 @@ console.log(userIds,"-----------------------------------------------------------
       {
         subject: `${adsName} New Post Added`,
         email_template: "newpostalert",
-        data: {title:statusUpdate.adsInfo.title,discription:statusUpdate.adsInfo.description,adlink},
+        data: {category:adsName,title:statusUpdate.adsInfo.title,discription:statusUpdate.adsInfo.description,adlink},
       }
     );
   }
