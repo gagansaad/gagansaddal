@@ -656,13 +656,14 @@ console.log(userIds,"-----------------------------------------------------------
 
   if (statusUpdate) {
     let words = statusUpdate.adsInfo.descriptions.replace(/<[^>]+>/g, "");
-        words.split(' ');
-// Check if the description has more than 20 words
-    if (words.length > 20) {
+    let wordArray = words.split(' ');
+    
+    // Check if the description has more than 20 words
+    if (wordArray.length > 20) {
         // If it does, select the first 20 words and join them back into a string
-        description = words.slice(0, 20).join(' ') + '...';
-    }else{
-      description = statusUpdate.adsInfo.descriptions
+        description = wordArray.slice(0, 20).join(' ') + '...';
+    } else {
+        description = statusUpdate.adsInfo.descriptions;
     }
 
     await Notification.sendNotifications(
