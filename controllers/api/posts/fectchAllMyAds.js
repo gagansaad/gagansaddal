@@ -506,45 +506,59 @@ exports.fetchAll1 = async (req, res, next) => {
 
 
 exports.editStatus = async (req, res, next) => {
-  console.log("fuufufufufufufu");
   try {
-    const {ads_id,ads_type} =req.query;
-
-
+    const {ads_id,ads_type,status} =req.query;
+    let dbQuery={};
+   
     if (!ads_id){
       return failureJSONResponse(res, {
         message: `Please provide valid ads id`,
-        updatejob: null,
+        
       });
     } 
     if (!ads_type){
       return failureJSONResponse(res, {
         message: `Please provide valid adstype`,
-        updatejob: null,
+       
       });
     }
-    console.log("fuufufufufufufu");
-     let {ModelName} = await ModelNameByAdsType(ads_type)
-     console.log({ModelName},"fnejfjedjendenfc");
-     const data = { ModelName };
-      console.log(data, "fnejfjedjendenfc");
-     let yourModel = mongoose.model(ModelName.ModelName)
-     console.log(yourModel,"fnejfjedjendenfc");
-    //  if(!ModelName.modelname){
-    //   return failureJSONResponse(res, {
-    //     message: `Please provide valid adstype`,
-    //     updatejob: null,
-    //   });
-    //  }
-return ''
-    const dataObj = {};
-    const { status } = req.body;
+   
+     let {Typename} = await ModelNameByAdsType(ads_type)
+     
+     
+     if(!Typename){
+       return failureJSONResponse(res, {
+         message: `Please provide valid adstype`,
+         
+        });
+      }
+      let yourModel = mongoose.model(Typename);
 
-    if (status) dataObj.status = parseInt(status);
 
-    const updateJob = await postJobAd.findByIdAndUpdate(
+   
+      if (status == 0) {
+        let checkvalidity = await yourModel.findById(ads_id)
+        const expiredDate = new Date(checkvalidity.plan_validity.expired_on);
+         const currentDate = new Date();
+
+         if (expiredDate <= currentDate) {
+         console.log("The plan has expired.");
+         return failureJSONResponse(res, {
+          message: `Your Ad plan has expired.`,
+          
+        });
+        }
+        dbQuery.status = "active";
+      }
+      if (status == 1) {
+        dbQuery.status = "inactive";
+      }
+      if (status == 2) {
+        dbQuery.status = "draft";
+      }
+    const updateJob = await yourModel.findByIdAndUpdate(
       { _id: ads_id },
-      { $set: dataObj },
+      { $set: dbQuery },
       { new: true }
     );
 
