@@ -42,7 +42,7 @@ let Notification = require("../../../resources/notification");
 const env = require("dotenv").config({ path: "../../" });
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-const { sanitize } = require("dompurify");
+const DOMPurify = require("dompurify");
 ///-----------------------Validate Data---------------------------//
 
 exports.validatepaymentData = async (req, res, next) => {
@@ -656,7 +656,7 @@ console.log(userIds,"-----------------------------------------------------------
   let body = "Your Post is Successfully Created!";
 
   if (statusUpdate) {
-    let cleanDescription = sanitize(statusUpdate.adsInfo.descriptions, { ALLOWED_TAGS: [] });
+    let cleanDescription = DOMPurify.sanitize(statusUpdate.adsInfo.descriptions, { ALLOWED_TAGS: [] });
     let words = cleanDescription.split(' ');
 
 // Check if the description has more than 20 words
