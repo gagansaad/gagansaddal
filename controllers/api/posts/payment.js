@@ -657,6 +657,7 @@ console.log(userIds,"-----------------------------------------------------------
 
   if (statusUpdate) {
     let cleanDescription = stripHtml(statusUpdate.adsInfo.descriptions).result;
+    console.log(cleanDescription ,"-----------------------------------");
     let words = cleanDescription.split(' ');
 
 // Check if the description has more than 20 words
