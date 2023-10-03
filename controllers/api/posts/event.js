@@ -421,7 +421,7 @@ exports.createEventAds = async (req, res, next) => {
         title,
         type,
         category,
-        details,
+        descriptions:details,
         ticket_price: {
           regular_ticket_price,
           currency,
@@ -657,7 +657,7 @@ exports.editEventAds = async (req, res, next) => {
     if (title) adsInfoObj.title = title;
     if (type) adsInfoObj.type = type;
     if (category) adsInfoObj.category = category;
-    if (details) adsInfoObj.details = details;
+    if (details) adsInfoObj.descriptions = details;
     if (time_zone) date_time.time_zone = time_zone;
     if (start_date) date_time.start_date = start_date;
     if (end_date) date_time.end_date = end_date;
@@ -920,7 +920,7 @@ exports.fetchAll = async (req, res, next) => {
     }
 
     if (details) {
-      dbQuery["adsInfo.details"] = details;
+      dbQuery["adsInfo.descriptions"] = details;
     }
 
     if (recurring_type) {

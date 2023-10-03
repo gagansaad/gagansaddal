@@ -53,7 +53,7 @@ const events_Schema = new mongoose.Schema(
         ...defaultStringConfig,
         required: true,
       },
-      details: {
+      descriptions: {
         ...defaultStringConfig,
         required: true,
       },

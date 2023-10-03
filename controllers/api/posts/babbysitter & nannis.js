@@ -310,7 +310,7 @@ exports.createAds = async (req, res, next) => {
           is_contact: iscontact,
         },
         expected_salary_rate,
-        description,
+        descriptions:description,
         location: {
           location_name: location_name,
           coordinates: [longitude, latitude],
@@ -483,7 +483,7 @@ exports.editAds = async (req, res, next) => {
       adsInfoObj.expected_salary_amount = expected_salary_amount;
     if (expected_salary_rate)
       adsInfoObj.expected_salary_rate = expected_salary_rate;
-    if (description) adsInfoObj.description = description;
+    if (description) adsInfoObj.descriptions = description;
     let locationobj = {};
     if (longitude && latitude) {
       locationobj = {

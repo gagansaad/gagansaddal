@@ -98,7 +98,7 @@ const babysitter_Schema = new mongoose.Schema(
         ...defaultStringConfig,
       },
 
-      description: {
+      descriptions: {
         ...defaultStringConfig,
         required: true,
       },
