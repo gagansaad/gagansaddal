@@ -655,6 +655,7 @@ console.log(userIds,"-----------------------------------------------------------
   let body = "Your Post is Successfully Created!";
 
   if (statusUpdate) {
+    if (statusUpdate.adsInfo.descriptions) {
     let words = statusUpdate.adsInfo.descriptions.replace(/<[^>]+>/g, "");
     let wordArray = words.split(' ');
     
@@ -665,7 +666,7 @@ console.log(userIds,"-----------------------------------------------------------
     } else {
         description = statusUpdate.adsInfo.descriptions;
     }
-
+  }
     await Notification.sendNotifications(
       [userID],
       title,
