@@ -1000,6 +1000,15 @@ exports.fetchAll = async (req, res, next) => {
       dbQuery.status = "active";
       dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
     } else {
+      if (status == 0) {
+        dbQuery.status = "active";
+      }
+      if (status == 1) {
+        dbQuery.status = "inactive";
+      }
+      if (status == 2) {
+        dbQuery.status = "draft";
+      }
       dbQuery.userId = myid;
     }
     let queryFinal = dbQuery;

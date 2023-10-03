@@ -753,7 +753,7 @@ exports.fetchAll = async (req, res, next) => {
         immidiate === "true" || immidiate === true;
     }
     if (isfeatured) dbQuery.isfeatured = isfeatured;
-    if (status) dbQuery.status = status;
+    
     if (adsType) dbQuery.adsType = adsType;
     if (category) dbQuery["adsInfo.rental_type"] = category;
     if (sub_category) dbQuery["adsInfo.category"] = sub_category;
@@ -794,12 +794,22 @@ exports.fetchAll = async (req, res, next) => {
       });
     }
     if (is_myad != "true") {
-      dbQuery.status = "active";
+      
       dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
       adOnsQuery.status = "active";
       adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+      
     } else {
       dbQuery.userId = myid;
+      if (status == 0) {
+        dbQuery.status = "active";
+      }
+      if (status == 1) {
+        dbQuery.status = "inactive";
+      }
+      if (status == 2) {
+        dbQuery.status = "draft";
+      }
     }
     if (userId) dbQuery.userId = userId;
     let queryFinal = dbQuery;

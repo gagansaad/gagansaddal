@@ -19,5 +19,10 @@ router.get(
   authMiddleware.ensureUserLoggedInDummy,
   controllers.fetchAll1
 );
+router.get(
+  `/edit-status`,
+  authMiddleware.ensureUserLoggedIn,
+  controllers.editStatus
+);
 
 module.exports = router;

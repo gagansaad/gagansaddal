@@ -1042,9 +1042,7 @@ exports.fetchAll = async (req, res, next) => {
     }
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
-    if (status) {
-      dbQuery.status = status;
-    }
+  
 
     if (ads_type) {
       dbQuery.adsType = ads_type;
@@ -1119,6 +1117,15 @@ exports.fetchAll = async (req, res, next) => {
       adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
     } else {
       dbQuery.userId = myid;
+      if (status == 0) {
+        dbQuery.status = "active";
+      }
+      if (status == 1) {
+        dbQuery.status = "inactive";
+      }
+      if (status == 2) {
+        dbQuery.status = "draft";
+      }
     }
     let queryFinal = dbQuery;
     if (searchTerm) {

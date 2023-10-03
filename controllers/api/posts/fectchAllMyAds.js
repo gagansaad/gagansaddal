@@ -16,6 +16,7 @@ const mongoose = require("mongoose"),
     successJSONResponse,
     failureJSONResponse,
     successJSONResponseWithPagination,
+    ModelNameByAdsType,
   } = require(`../../../handlers/jsonResponseHandlers`),
   { fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`),
   {
@@ -500,5 +501,69 @@ exports.fetchAll1 = async (req, res, next) => {
       { message: `something went wrong` },
       { error: err.message }
     );
+  }
+};
+
+
+exports.editStatus = async (req, res, next) => {
+  console.log("fuufufufufufufu");
+  try {
+    const {ads_id,ads_type} =req.query;
+
+
+    if (!ads_id){
+      return failureJSONResponse(res, {
+        message: `Please provide valid ads id`,
+        updatejob: null,
+      });
+    } 
+    if (!ads_type){
+      return failureJSONResponse(res, {
+        message: `Please provide valid adstype`,
+        updatejob: null,
+      });
+    }
+    console.log("fuufufufufufufu");
+     let {ModelName} = await ModelNameByAdsType(ads_type)
+     console.log(ModelName,"fnejfjedjendenfc");
+     const data = { ModelName };
+      console.log(data, "fnejfjedjendenfc");
+     let yourModel = mongoose.model(ModelName.ModelName)
+     console.log(yourModel,"fnejfjedjendenfc");
+    //  if(!ModelName.modelname){
+    //   return failureJSONResponse(res, {
+    //     message: `Please provide valid adstype`,
+    //     updatejob: null,
+    //   });
+    //  }
+return ''
+    const dataObj = {};
+    const { status } = req.body;
+
+    if (status) dataObj.status = parseInt(status);
+
+    const updateJob = await postJobAd.findByIdAndUpdate(
+      { _id: ads_id },
+      { $set: dataObj },
+      { new: true }
+    );
+
+    if (updateJob) {
+      return successJSONResponse(res, {
+        message: `success`,
+        updateJob,
+      });
+    } else {
+      return failureJSONResponse(res, {
+        message: `Something went wrong`,
+        updatejob: null,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return failureJSONResponse(res, {
+      message: `Something went wrong`,
+      updatejob: null,
+    });
   }
 };

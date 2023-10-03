@@ -612,43 +612,43 @@ exports.editJobAds = async (req, res, next) => {
 
 /////----------------------Update Job Status -------------------/////
 
-// exports.editJobStatus = async (req, res, next) => {
-//   // console.log(`kejhrjhyewgrjhew`);
-//   try {
-//     const jobId = req.query.ads_id;
+exports.editJobStatus = async (req, res, next) => {
+  // console.log(`kejhrjhyewgrjhew`);
+  try {
+    const jobId = req.query.ads_id;
 
-//     if (!jobId)
-//       return successJSONResponse(res, {
-//         message: `success`,
-//         newJobPost,
-//         status: 200,
-//       });
-//     const dataObj = {};
-//     const { status } = req.body;
+    if (!jobId)
+      return successJSONResponse(res, {
+        message: `success`,
+        newJobPost,
+        status: 200,
+      });
+    const dataObj = {};
+    const { status } = req.body;
 
-//     if (status) dataObj.status = parseInt(status);
+    if (status) dataObj.status = parseInt(status);
 
-//     const updateJob = await postJobAd.findByIdAndUpdate(
-//       { _id: jobId },
-//       { $set: dataObj },
-//       { new: true }
-//     );
+    const updateJob = await postJobAd.findByIdAndUpdate(
+      { _id: jobId },
+      { $set: dataObj },
+      { new: true }
+    );
 
-//     if (updateJob) {
-//       return successJSONResponse(res, {
-//         message: `success`,
-//         updateJob,
-//       });
-//     } else {
-//       return failureJSONResponse(res, {
-//         message: `Something went wrong`,
-//         updatejob: null,
-//       });
-//     }
-//   } catch (err) {
-//     (err);
-//   }
-// };
+    if (updateJob) {
+      return successJSONResponse(res, {
+        message: `success`,
+        updateJob,
+      });
+    } else {
+      return failureJSONResponse(res, {
+        message: `Something went wrong`,
+        updatejob: null,
+      });
+    }
+  } catch (err) {
+    (err);
+  }
+};
 
 ///////////////////
 
@@ -727,10 +727,7 @@ exports.fetchAllAds = async (req, res, next) => {
     if (isfeatured) {
       dbQuery.isfeatured = isfeatured;
     }
-    if (status) {
-      dbQuery.status = status;
-    }
-
+   
     if (adsType) {
       dbQuery.adsType = adsType;
     }
@@ -830,6 +827,15 @@ exports.fetchAllAds = async (req, res, next) => {
       adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
     } else {
       dbQuery.userId = myid;
+      if (status == 0) {
+        dbQuery.status = "active";
+      }
+      if (status == 1) {
+        dbQuery.status = "inactive";
+      }
+      if (status == 2) {
+        dbQuery.status = "draft";
+      }
     }
     let queryFinal = dbQuery;
     if (searchTerm) {
