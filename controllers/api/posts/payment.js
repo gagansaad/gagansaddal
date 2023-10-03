@@ -42,7 +42,7 @@ let Notification = require("../../../resources/notification");
 const env = require("dotenv").config({ path: "../../" });
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-// const stripHtml = require('string-strip-html');
+
 ///-----------------------Validate Data---------------------------//
 
 exports.validatepaymentData = async (req, res, next) => {
@@ -541,7 +541,6 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
   const updateQuery = {};
 let adlink;
 let description;
-let cleanDescription;
   switch (adsName) {
     case "Events":
       updateQuery["userNotification.event"] = true;
@@ -656,29 +655,15 @@ console.log(userIds,"-----------------------------------------------------------
   let body = "Your Post is Successfully Created!";
 
   if (statusUpdate) {
-// Use dynamic import to import the library
-import('string-strip-html').then((stripHtmlModule) => {
-  const stripHtml = stripHtmlModule.default; // Access the default export
-
-  // Remove HTML tags from the string
-  cleanDescription = stripHtml(statusUpdate.adsInfo.descriptions);
-
-  console.log(cleanDescription);
-}).catch((error) => {
-  console.error('Error loading the string-strip-html library:', error);
-});
-
-    
-    console.log(cleanDescription ,"-----------------------------------");
-    let words = cleanDescription.split(' ');
-
+    let words = statusUpdate.adsInfo.descriptions.replace(/<[^>]+>/g, "");
+        words.split(' ');
 // Check if the description has more than 20 words
-if (words.length > 20) {
-    // If it does, select the first 20 words and join them back into a string
-    description = words.slice(0, 20).join(' ') + '...';
-}else{
-  description = cleanDescription
-}
+    if (words.length > 20) {
+        // If it does, select the first 20 words and join them back into a string
+        description = words.slice(0, 20).join(' ') + '...';
+    }else{
+      description = statusUpdate.adsInfo.descriptions
+    }
 
     await Notification.sendNotifications(
       [userID],
