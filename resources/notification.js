@@ -31,7 +31,7 @@ module.exports = {
         data: data,
         user_id: userId,
       }));
-
+console.log("gagan ki maya ka jaal kaala maal laal maal ",notificationData,"jinga la la hu hu");
       if (saveNotification == true) {
         await Notification.insertMany(notificationData);
       }
