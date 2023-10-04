@@ -33,7 +33,8 @@ module.exports = {
       }));
 console.log("gagan ki maya ka jaal kaala maal laal maal ",notificationData,"jinga la la hu hu");
       if (saveNotification == true) {
-        await Notification.insertMany(notificationData);
+       let data = await Notification.insertMany(notificationData);
+       console.log(data,"hra hra rang tainu lgdi na sang kri ki tu ni jave roti v na khave");
       }
       if (Object.keys(sendEmailNotification).length > 0) {
         convertedIds.map(async (userId) => {
