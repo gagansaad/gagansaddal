@@ -698,7 +698,7 @@ console.log(userIds,"-----------------------------------------------------------
       [userID],
       title,
       body,
-      { model_id: ads_id, model: ModelName.modelName },
+      { model_id: ads_id, model: adsName},
       true,
       {
         subject: "Post Successfully Created!",
@@ -710,7 +710,7 @@ console.log(userIds,"-----------------------------------------------------------
       userIds,
       title1,
       body1,
-      { model_id: ads_id.toString(), model: ModelName.modelName },
+      { model_id: ads_id.toString(), model: adsName },
       true,
       {
         subject: `${adsName} New Post Added`,
