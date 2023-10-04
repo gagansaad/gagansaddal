@@ -12,6 +12,7 @@ const mongoose = require("mongoose"),
   BannerSchema = mongoose.model("Banner"),
   viewModel = mongoose.model("Post_view"),
   NotificationsSchema = mongoose.model("notification"),
+  UserModel = mongoose.model("user"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -37,6 +38,7 @@ let dynamicBuysell = require("./buy&sell");
 let dynamicEvent = require("./event");
 const { CallPage } = require("twilio/lib/rest/api/v2010/account/call");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const { findByIdAndUpdate } = require("../../../model/otp");
 
 ////////////////
 
@@ -162,13 +164,28 @@ exports.fetchAll = async (req, res, next) => {
     if (req.userId) {
       myid = req.userId || "0";
     }
-    const { longitude, latitude, maxDistance } = req.query;
+    const {location_name, longitude, latitude, maxDistance } = req.query;
+    console.log(myid,req.query,"----------");
     let Distance;
 
     if (maxDistance === "0" || !maxDistance) {
       Distance = 200000;
     } else {
       Distance = maxDistance * 1000;
+    }
+  let live_location = {};
+    if (longitude && latitude) {
+      live_location = {
+        coordinates: [longitude, latitude],
+      };
+    }
+    if (location_name) live_location.location_name = location_name;
+    console.log(live_location,"---------------");
+
+    if(myid != "0"){
+      if(longitude && latitude){
+        await UserModel.findByIdAndUpdate(myid, { $set: { 'userBasicInfo.live_location': live_location } }, { new: true });
+      }
     }
 
     let banner = await BannerSchema.find().populate({

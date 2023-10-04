@@ -538,6 +538,7 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
   let getAdDetails = await category.findById({ _id: ads_type });
   let adsName = getAdDetails.name;
   let userIds;
+  let ModelName = await getModelNameByAdsType(ads_type);
   const updateQuery = {};
 let adlink;
 let description;
@@ -572,6 +573,32 @@ let description;
       });
   }
   if (adsName) {
+    let adLocation = await ModelName.findById(ads_id)
+    console.log(adLocation);
+    let long ;
+    let lat ;
+    if(adLocation.adsInfo.coordinates){
+      long = adLocation.adsInfo.coordinates[0]
+      lat = adLocation.adsInfo.coordinates[1]
+    }
+  
+     let Distance = 200000;
+    
+
+    if (long && lat && Distance) {
+      const targetPoint = {
+        type: "Point",
+        coordinates: [long, lat],
+      };
+     
+      updateQuery["userBasicInfo.live_location.coordinates"] = {
+        $near: {
+          $geometry: targetPoint,
+          $maxDistance: Distance,
+        },
+      };
+    }
+   
     let alertdata = await USER.find(updateQuery);
     userIds = alertdata.map((alert) => String(alert._id));
     console.log(userIds,"------------------------------------------------------------------------------------------");
@@ -646,7 +673,7 @@ console.log(userIds,"-----------------------------------------------------------
     addons_validity: AddOnsArr,
   };
 
-  let ModelName = await getModelNameByAdsType(ads_type);
+  
   let statusUpdate = await ModelName.findByIdAndUpdate(
     { _id: ads_id },
     { $set: data_Obj }
