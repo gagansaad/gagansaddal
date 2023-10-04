@@ -694,18 +694,18 @@ console.log(userIds,"-----------------------------------------------------------
         description = statusUpdate.adsInfo.descriptions;
     }
   }
-    await Notification.sendNotifications(
-      [userID],
-      title,
-      body,
-      { model_id: ads_id, model: adsName},
-      true,
-      {
-        subject: "Post Successfully Created!",
-        email_template: "postSuccess",
-        data: {},
-      }
-    );
+    // await Notification.sendNotifications(
+    //   [userID],
+    //   title,
+    //   body,
+    //   { model_id: ads_id, model: adsName},
+    //   true,
+    //   {
+    //     subject: "Post Successfully Created!",
+    //     email_template: "postSuccess",
+    //     data: {},
+    //   }
+    // );
     await Notification.sendNotifications(
       userIds,
       title1,
