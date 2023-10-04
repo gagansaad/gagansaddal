@@ -164,7 +164,7 @@ exports.fetchAll = async (req, res, next) => {
     if (req.userId) {
       myid = req.userId || "0";
     }
-    const {location_name, longitude, latitude, maxDistance } = req.query;
+    const {longitude, latitude, maxDistance } = req.query;
     console.log(myid,req.query,"----------");
     let Distance;
 
@@ -179,15 +179,11 @@ exports.fetchAll = async (req, res, next) => {
         coordinates: [longitude, latitude],
       };
     }
-    if (location_name) live_location.location_name = location_name;
-    console.log(live_location,"---------------");
-
     if(myid != "0"){
       if(longitude && latitude){
         await UserModel.findByIdAndUpdate(myid, { $set: { 'userBasicInfo.live_location': live_location } }, { new: true });
       }
     }
-
     let banner = await BannerSchema.find().populate({
       path: "image",
       strictPopulate: false,
