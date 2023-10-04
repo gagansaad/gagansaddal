@@ -19,7 +19,7 @@ const NotificationSchema = new mongoose.Schema(
       // required: true
     },
     data: {
-      ...defaultStringConfig,
+      type:String,
       // required: true
     },
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: "user" },

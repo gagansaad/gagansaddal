@@ -27,7 +27,7 @@ module.exports = {
       notificationData = convertedIds.map((userId) => ({
         title: title,
         body: body,
-        data: JSON.stringify(data),
+        data: data,
         user_id: userId,
       }));
 
