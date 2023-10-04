@@ -129,10 +129,10 @@ const paymentIntentCreate = async (
   let UserId = dataobj.user;
   if (deviceType != null) dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
-  if (dataobj.total_amount == 0) {
-    await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
-    return null;
-  }
+  // if (dataobj.total_amount == 0) {
+  //   await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
+  //   return null;
+  // }
   let paymentIntent = null;
   if (deviceType == "web") {
     if (request.body.redirect_uri_success) {
@@ -694,18 +694,18 @@ console.log(userIds,"-----------------------------------------------------------
         description = statusUpdate.adsInfo.descriptions;
     }
   }
-    // await Notification.sendNotifications(
-    //   [userID],
-    //   title,
-    //   body,
-    //   { model_id: ads_id, model: adsName},
-    //   true,
-    //   {
-    //     subject: "Post Successfully Created!",
-    //     email_template: "postSuccess",
-    //     data: {},
-    //   }
-    // );
+    await Notification.sendNotifications(
+      [userID],
+      title,
+      body,
+      { model_id: ads_id, model: adsName},
+      true,
+      {
+        subject: "Post Successfully Created!",
+        email_template: "postSuccess",
+        data: {},
+      }
+    );
     await Notification.sendNotifications(
       userIds,
       title1,
