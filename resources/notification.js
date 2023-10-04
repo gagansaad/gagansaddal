@@ -32,10 +32,17 @@ module.exports = {
         user_id: userId,
       }));
 console.log("gagan ki maya ka jaal kaala maal laal maal ",notificationData,"jinga la la hu hu");
-      if (saveNotification == true) {
-       let data = await Notification.insertMany(notificationData);
-       console.log(data,"hra hra rang tainu lgdi na sang kri ki tu ni jave roti v na khave");
-      }
+if (saveNotification == true) {
+    // Use a for...of loop to iterate over the notificationData array
+    for (let i = 0; i < notificationData.length; i++) {
+      let data = await Notification.create(notificationData[i]);
+      console.log(
+        data,
+        "hra hra rang tainu lgdi na sang kri ki tu ni jave roti v na khave"
+      );
+    }
+  }
+  
       if (Object.keys(sendEmailNotification).length > 0) {
         convertedIds.map(async (userId) => {
           let UserDetails = await User.findById({ _id: userId });
