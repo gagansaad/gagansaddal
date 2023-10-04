@@ -710,7 +710,7 @@ console.log(userIds,"-----------------------------------------------------------
       userIds,
       title1,
       body1,
-      { model_id: ads_id, model: ModelName.modelName },
+      { model_id: ads_id.toString(), model: ModelName.modelName },
       true,
       {
         subject: `${adsName} New Post Added`,
