@@ -21,6 +21,7 @@ module.exports = {
       let notificationData;
       let emailData;
       const convertedIds = userIds.map((id) => mongoose.Types.ObjectId(id));
+      console.log(convertedIds,"=======================");
       let androidTokens;
       let iosTokens;
       let webTokens;
@@ -70,7 +71,7 @@ module.exports = {
       webTokens = userDeviceTypes.find((type) => type._id === 3)?.devices || [];
       if (androidTokens.length) {
         androidTokens = androidTokens.map((user) => user.token);
-
+console.log(androidTokens,"---------------------------");
         sendAndroidNotifications(androidTokens, title, body, data);
       }
       if (iosTokens.length) {
