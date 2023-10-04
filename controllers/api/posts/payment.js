@@ -130,7 +130,7 @@ const paymentIntentCreate = async (
   if (deviceType != null) dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
   if (dataobj.total_amount == 0) {
-    // await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
+    await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
     return null;
   }
   let paymentIntent = null;
@@ -333,6 +333,7 @@ exports.create_payment_intent = async (req, res) => {
         deviceType
       );
     } else {
+      console.log("rana maaf krna");
       if (deviceType == "web") {
         paymentIntentClientSecret = paymentModelInfo.payment_intent.url;
       } else {
