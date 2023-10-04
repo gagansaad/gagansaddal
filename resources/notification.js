@@ -96,6 +96,7 @@ let sendAndroidNotifications = (deviceTokens, title, body, data = null) => {
       notification: {
         title: title,
         body: body,
+        data:data,
       },
     };
     if (data != null) message.data = data;
