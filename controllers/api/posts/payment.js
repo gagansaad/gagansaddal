@@ -313,12 +313,8 @@ exports.create_payment_intent = async (req, res) => {
         deviceType
       );
       statusCode = 201;
-     
-    } 
-    if(paymentModelInfo.total_amount == 0){
-      return null
-    }
-    if (paymentModelInfo.total_amount != totalprice) {
+      
+    } else if (paymentModelInfo.total_amount != totalprice) {
       let dataObj = {
         plan_id: planId,
         plan_addons: foundObjects,
