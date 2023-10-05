@@ -341,10 +341,10 @@ exports.createJobAds = async (req, res, next) => {
     let roles = role;
     if (roles) {
       for (i = 0; i < roles.length; i++) {
-        let tags = await Skills.findOne({ skills: roles[i] });
+        let tags = await Skills.findOne({ keywords: roles[i] });
         if (!tags) {
           let tag = {
-            skills: roles[i],
+            keywords: roles[i],
             ads_type: adsType,
           };
           await Skills.create(tag);
@@ -510,10 +510,10 @@ exports.editJobAds = async (req, res, next) => {
     let roles = role;
     if (roles) {
       for (i = 0; i < roles.length; i++) {
-        let tags = await Skills.findOne({ skills: roles[i] });
+        let tags = await Skills.findOne({ keywords: roles[i] });
         if (!tags) {
           let tag = {
-            skills: roles[i],
+            keywords: roles[i],
             ads_type: adsType,
           };
           await Skills.create(tag);

@@ -12,7 +12,7 @@ const { Task } = require("twilio/lib/twiml/VoiceResponse");
 
 const tagline = new mongoose.Schema(
   {
-    skills: {
+    keywords: {
       ...defaultStringConfig,
     },
     ads_type: {
