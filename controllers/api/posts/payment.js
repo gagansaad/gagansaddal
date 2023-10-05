@@ -333,7 +333,9 @@ exports.create_payment_intent = async (req, res) => {
         customerStripeId,
         deviceType
       );
-    } else {
+    }else if(paymentModelInfo.total_amount == 0){
+      return null
+    }else {
       console.log("rana maaf krna");
       if (deviceType == "web") {
         paymentIntentClientSecret = paymentModelInfo.payment_intent.url;
