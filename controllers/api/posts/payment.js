@@ -350,6 +350,7 @@ exports.create_payment_intent = async (req, res) => {
           paymentModelInfo.payment_intent.client_secret;
       }
     }
+    console.log(paymentIntentClientSecret,"{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{");
     if (
       paymentIntentClientSecret == null ||
       paymentIntentClientSecret == "" ||
