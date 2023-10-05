@@ -340,6 +340,7 @@ exports.createEventAds = async (req, res, next) => {
       other_platform,
       other_platform_name,
     } = req.body;
+    console.log(currency,"000000000");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -556,7 +557,7 @@ exports.editEventAds = async (req, res, next) => {
       primary_phone_number,
       secondary_phone_number,
     } = req.body;
-
+console.log(currency,"000000000");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
