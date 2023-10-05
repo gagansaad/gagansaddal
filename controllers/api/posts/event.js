@@ -424,7 +424,7 @@ exports.createEventAds = async (req, res, next) => {
         descriptions:details,
         ticket_price: {
           regular_ticket_price,
-          currency,
+          currency:currency,
           vip_ticket_price,
         },
 
