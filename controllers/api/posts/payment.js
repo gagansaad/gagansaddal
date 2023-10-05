@@ -129,8 +129,8 @@ const paymentIntentCreate = async (
   let UserId = dataobj.user;
   if (deviceType != null) dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
-  if (totalprice == 0) {
-    
+  if (dataobj.total_amount == 0) {
+    await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
     return null;
   }
   let paymentIntent = null;
@@ -294,9 +294,7 @@ exports.create_payment_intent = async (req, res) => {
 
     let paymentIntentClientSecret = null;
     let statusCode = 200;
-
     if (paymentModelInfo == null || paymentModelInfo == "") {
-      console.log("''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''object''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''");
       let dataObj = {
         plan_id: planId,
         plan_addons: foundObjects,
@@ -315,14 +313,7 @@ exports.create_payment_intent = async (req, res) => {
         deviceType
       );
       statusCode = 201;
-      //  if(paymentModelInfo.total_amount == 0){
-      //   console.log("return ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
-      //   return null
-      // }
-    } 
-    
-    else if (paymentModelInfo.total_amount != totalprice) {
-      ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"
+    } else if (paymentModelInfo.total_amount != totalprice) {
       let dataObj = {
         plan_id: planId,
         plan_addons: foundObjects,
@@ -341,8 +332,8 @@ exports.create_payment_intent = async (req, res) => {
         customerStripeId,
         deviceType
       );
-    }else {
-      console.log("rana maaf krna========================================================================================");
+    } else {
+      console.log("rana maaf krna");
       if (deviceType == "web") {
         paymentIntentClientSecret = paymentModelInfo.payment_intent.url;
       } else {
@@ -350,13 +341,11 @@ exports.create_payment_intent = async (req, res) => {
           paymentModelInfo.payment_intent.client_secret;
       }
     }
-    console.log(paymentIntentClientSecret,"{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{");
     if (
       paymentIntentClientSecret == null ||
       paymentIntentClientSecret == "" ||
       paymentIntentClientSecret == undefined
     ) {
-      console.log(paymentIntentClientSecret,"rana maaf krna========================================================================================");
       let dataObj = {
         plan_id: planId,
         plan_addons: foundObjects,
@@ -367,9 +356,6 @@ exports.create_payment_intent = async (req, res) => {
         user: userID,
         payment_status: "pending",
       };
-      if(dataObj.total_amount == 0){
-        await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
-      }
       paymentIntentClientSecret = await paymentIntentCreate(
         req,
         dataObj,
@@ -616,7 +602,7 @@ let description;
    
     let alertdata = await USER.find(updateQuery);
     userIds = alertdata.map((alert) => String(alert._id));
-    // console.log(userIds,"------------------------------------------------------------------------------------------");
+    console.log(userIds,"------------------------------------------------------------------------------------------");
   }
   const myidIndex = userIds.indexOf(String(userID));
 
@@ -624,7 +610,7 @@ let description;
     // If myid is found, remove it from the array
     userIds.splice(myidIndex, 1);
   }
-// console.log(userIds,"------------------------------------------------------------------------------------------");
+console.log(userIds,"------------------------------------------------------------------------------------------");
   let title1 = `${adsName}`;
   let body1 = `${adsName} New Post Added Click to See`;
 
