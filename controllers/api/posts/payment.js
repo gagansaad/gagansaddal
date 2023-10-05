@@ -129,7 +129,7 @@ const paymentIntentCreate = async (
   let UserId = dataobj.user;
   if (deviceType != null) dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
-  if (dataobj.total_amount == 0) {
+  if (dataobj?.total_amount == 0) {
     console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
     await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
     return null;
@@ -292,10 +292,11 @@ exports.create_payment_intent = async (req, res) => {
       payment_status: "pending",
       device_type: deviceType,
     });
-
+console.log("rajncdjncjdnvjdfnvkjndfkbvndgkinvkidfnvkdenbjkdfnvkjdfnvkjdnfkjv=-----------------------------------------------------------------------------");
     let paymentIntentClientSecret = null;
     let statusCode = 200;
     if (paymentModelInfo == null || paymentModelInfo == "") {
+      console.log("===============================================================================================================================================================");
       let dataObj = {
         plan_id: planId,
         plan_addons: foundObjects,
@@ -314,7 +315,8 @@ exports.create_payment_intent = async (req, res) => {
         deviceType
       );
       statusCode = 201;
-    } else if (paymentModelInfo.total_amount != totalprice) {
+    } 
+     if (paymentModelInfo.total_amount != totalprice) {
       let dataObj = {
         plan_id: planId,
         plan_addons: foundObjects,
