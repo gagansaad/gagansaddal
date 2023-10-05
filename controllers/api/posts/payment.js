@@ -356,7 +356,7 @@ exports.create_payment_intent = async (req, res) => {
       paymentIntentClientSecret == "" ||
       paymentIntentClientSecret == undefined
     ) {
-      console.log("rana maaf krna========================================================================================");
+      console.log(paymentIntentClientSecret,"rana maaf krna========================================================================================");
       let dataObj = {
         plan_id: planId,
         plan_addons: foundObjects,
