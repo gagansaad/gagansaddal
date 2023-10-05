@@ -131,14 +131,7 @@ const paymentIntentCreate = async (
   let PaymentModelId = await PaymentModel.create(dataobj);
   if (dataobj.total_amount == 0) {
     await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
-    return successJSONResponse(
-      res,
-      {
-        status: 201,
-        message: `success`,
-      },
-      201
-    );
+    return null;
   }
   let paymentIntent = null;
   if (deviceType == "web") {
@@ -363,15 +356,18 @@ exports.create_payment_intent = async (req, res) => {
         user: userID,
         payment_status: "pending",
       };
-      paymentIntentClientSecret = await paymentIntentCreate(
-        req,
-        dataObj,
-        totalprice,
-        customerStripeId,
-        deviceType
-      );
-      statusCode = 201;
-    }
+      if(total_amount != 0){
+        paymentIntentClientSecret = await paymentIntentCreate(
+          req,
+          dataObj,
+          totalprice,
+          customerStripeId,
+          deviceType
+        );
+        statusCode = 201;
+      }
+      }
+    
 
     let link = req.body.website_url;
     let price = req.body.price_drop;
