@@ -130,7 +130,7 @@ const paymentIntentCreate = async (
   if (deviceType != null) dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
   if (dataobj.total_amount == 0) {
-    await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
+    // await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
     return null;
   }
   let paymentIntent = null;
@@ -413,7 +413,7 @@ exports.webhooks = async (request, response) => {
     if (payment_id == "" || payment_id == null || payment_id == undefined)
       return successJSONResponse(
         response,
-        { status: 200, message: `paymentn Id not found` },
+        { status: 200, message: `payment Id not found` },
         200
       );
     // Handle the event
