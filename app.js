@@ -42,6 +42,7 @@ require(`./model/image/image`);
 require(`./model/posts/paymentEvent`);
 require(`./model/posts/payment`);
 require("./model/posts/tagline");
+require("./model/posts/skills");
 require("./model/posts/report");
 require("./model/posts/notificationAlert");
 require(`./model/posts/adsCategories`);

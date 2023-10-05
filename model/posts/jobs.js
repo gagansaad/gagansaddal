@@ -62,7 +62,9 @@ const roomRentsSchema = new mongoose.Schema(
         ...defaultStringConfig,
         required: true,
       },
-      role: [],
+      role: {
+        type: Array,
+    },
       employment_type: {
         type: Array,
         // required: true

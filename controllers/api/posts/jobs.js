@@ -6,6 +6,7 @@ const mongoose = require("mongoose"),
   Users = mongoose.model("user"),
   Media = mongoose.model("media"),
   tagline_keywords = mongoose.model("keywords"),
+  Skills = mongoose.model("skill"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -26,9 +27,11 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   let records = await tagline_keywords.find().select({ keywords: 1, _id: 1 });
+  let skills = await Skills.find().select({ skills: 1, _id: 1 });
 
   const dynamicsData = {
     tagline: records,
+    skills:skills,
     categories: [
       "Accounting and Finance",
       "Tax Services",
@@ -319,6 +322,7 @@ exports.createJobAds = async (req, res, next) => {
       tagline,
       image,
       video,
+      
     } = req.body;
     let userID = req.userId
     let taglines = tagline;
@@ -331,6 +335,19 @@ exports.createJobAds = async (req, res, next) => {
             ads_type: adsType,
           };
           await tagline_keywords.create(tag);
+        }
+      }
+    };
+    let roles = role;
+    if (roles) {
+      for (i = 0; i < roles.length; i++) {
+        let tags = await Skills.findOne({ skills: roles[i] });
+        if (!tags) {
+          let tag = {
+            skills: roles[i],
+            ads_type: adsType,
+          };
+          await Skills.create(tag);
         }
       }
     }
@@ -490,7 +507,19 @@ exports.editJobAds = async (req, res, next) => {
         }
       }
     }
-
+    let roles = role;
+    if (roles) {
+      for (i = 0; i < roles.length; i++) {
+        let tags = await Skills.findOne({ skills: roles[i] });
+        if (!tags) {
+          let tag = {
+            skills: roles[i],
+            ads_type: adsType,
+          };
+          await Skills.create(tag);
+        }
+      }
+    }
     const imageArr = [];
 
     for (var i = 0; i < req.files.length; i++) {
