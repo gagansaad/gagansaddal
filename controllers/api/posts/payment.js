@@ -295,6 +295,7 @@ exports.create_payment_intent = async (req, res) => {
     let paymentIntentClientSecret = null;
     let statusCode = 200;
     if (paymentModelInfo == null || paymentModelInfo == "") {
+      console.log("''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''object''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''");
       let dataObj = {
         plan_id: planId,
         plan_addons: foundObjects,
@@ -316,9 +317,11 @@ exports.create_payment_intent = async (req, res) => {
       
     } 
     else if(paymentModelInfo.total_amount == 0){
+      console.log("return ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
       return null
     }
     else if (paymentModelInfo.total_amount != totalprice) {
+      ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"
       let dataObj = {
         plan_id: planId,
         plan_addons: foundObjects,
@@ -338,7 +341,7 @@ exports.create_payment_intent = async (req, res) => {
         deviceType
       );
     }else {
-      console.log("rana maaf krna");
+      console.log("rana maaf krna========================================================================================");
       if (deviceType == "web") {
         paymentIntentClientSecret = paymentModelInfo.payment_intent.url;
       } else {
@@ -607,7 +610,7 @@ let description;
    
     let alertdata = await USER.find(updateQuery);
     userIds = alertdata.map((alert) => String(alert._id));
-    console.log(userIds,"------------------------------------------------------------------------------------------");
+    // console.log(userIds,"------------------------------------------------------------------------------------------");
   }
   const myidIndex = userIds.indexOf(String(userID));
 
@@ -615,7 +618,7 @@ let description;
     // If myid is found, remove it from the array
     userIds.splice(myidIndex, 1);
   }
-console.log(userIds,"------------------------------------------------------------------------------------------");
+// console.log(userIds,"------------------------------------------------------------------------------------------");
   let title1 = `${adsName}`;
   let body1 = `${adsName} New Post Added Click to See`;
 
