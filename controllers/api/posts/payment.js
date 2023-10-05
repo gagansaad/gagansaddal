@@ -356,7 +356,9 @@ exports.create_payment_intent = async (req, res) => {
         user: userID,
         payment_status: "pending",
       };
-      if(dataObj.total_amount != 0){
+      if(dataObj.total_amount == 0){
+        paymentIntentClientSecret = null
+      }else{
         paymentIntentClientSecret = await paymentIntentCreate(
           req,
           dataObj,
