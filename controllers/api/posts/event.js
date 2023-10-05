@@ -340,7 +340,7 @@ exports.createEventAds = async (req, res, next) => {
       other_platform,
       other_platform_name,
     } = req.body;
-    console.log(currency,"000000000");
+    console.log(currency,"000000000",req.body);
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
