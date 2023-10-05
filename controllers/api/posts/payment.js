@@ -130,7 +130,7 @@ const paymentIntentCreate = async (
   if (deviceType != null) dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
   if (totalprice == 0) {
-    await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
+    
     return null;
   }
   let paymentIntent = null;
@@ -367,7 +367,7 @@ exports.create_payment_intent = async (req, res) => {
         payment_status: "pending",
       };
       if(dataObj.total_amount == 0){
-        return null
+        await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
       }
       paymentIntentClientSecret = await paymentIntentCreate(
         req,
