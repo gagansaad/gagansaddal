@@ -131,7 +131,14 @@ const paymentIntentCreate = async (
   let PaymentModelId = await PaymentModel.create(dataobj);
   if (dataobj.total_amount == 0) {
     await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
-    return null;
+    return successJSONResponse(
+      res,
+      {
+        status: 201,
+        message: `success`,
+      },
+      201
+    );
   }
   let paymentIntent = null;
   if (deviceType == "web") {
