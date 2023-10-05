@@ -27,7 +27,7 @@ const mongoose = require("mongoose"),
 ///-----------------------Dynamic Data---------------------------////
 exports.getDnymicsData = async (req, res, next) => {
   let records = await tagline_keywords.find().select({ keywords: 1, _id: 1 });
-  let skills = await Skills.find().select({ skills: 1, _id: 1 });
+  let skills = await Skills.find().select({ keywords: 1, _id: 1 });
 
   const dynamicsData = {
     tagline: records,
