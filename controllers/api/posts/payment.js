@@ -130,7 +130,6 @@ const paymentIntentCreate = async (
   if (deviceType != null) dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
   if (dataobj?.total_amount == 0) {
-    console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
     await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
     return null;
   }
@@ -292,11 +291,10 @@ exports.create_payment_intent = async (req, res) => {
       payment_status: "pending",
       device_type: deviceType,
     });
-console.log("rajncdjncjdnvjdfnvkjndfkbvndgkinvkidfnvkdenbjkdfnvkjdfnvkjdnfkjv=-----------------------------------------------------------------------------");
+
     let paymentIntentClientSecret = null;
     let statusCode = 200;
-    if (paymentModelInfo == null || paymentModelInfo == "") {
-      console.log("===============================================================================================================================================================");
+    if (paymentModelInfo == null || paymentModelInfo == "" || paymentModelInfo.total_amount != totalprice) {
       let dataObj = {
         plan_id: planId,
         plan_addons: foundObjects,
@@ -316,26 +314,27 @@ console.log("rajncdjncjdnvjdfnvkjndfkbvndgkinvkidfnvkdenbjkdfnvkjdfnvkjdnfkjv=--
       );
       statusCode = 201;
     } 
-     if (paymentModelInfo.total_amount != totalprice) {
-      let dataObj = {
-        plan_id: planId,
-        plan_addons: foundObjects,
-        plan_price: plan_price,
-        total_amount: JSON.parse(totalprice.toFixed(2)),
-        ads: req.body.postId,
-        ads_type: adstype,
-        user: userID,
-        payment_status: "pending",
-      };
-      statusCode = 201;
-      paymentIntentClientSecret = await paymentIntentCreate(
-        req,
-        dataObj,
-        totalprice,
-        customerStripeId,
-        deviceType
-      );
-    } else {
+    // else if (paymentModelInfo.total_amount != totalprice) {
+    //   let dataObj = {
+    //     plan_id: planId,
+    //     plan_addons: foundObjects,
+    //     plan_price: plan_price,
+    //     total_amount: JSON.parse(totalprice.toFixed(2)),
+    //     ads: req.body.postId,
+    //     ads_type: adstype,
+    //     user: userID,
+    //     payment_status: "pending",
+    //   };
+    //   statusCode = 201;
+    //   paymentIntentClientSecret = await paymentIntentCreate(
+    //     req,
+    //     dataObj,
+    //     totalprice,
+    //     customerStripeId,
+    //     deviceType
+    //   );
+    // } 
+    else {
       console.log("rana maaf krna");
       if (deviceType == "web") {
         paymentIntentClientSecret = paymentModelInfo.payment_intent.url;
