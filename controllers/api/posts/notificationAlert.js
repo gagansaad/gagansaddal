@@ -150,7 +150,9 @@ exports.getMyNotifications = async (req, res, next) => {
     let myid = req.userId;
     let page = req.query.page || 1;
     let pageSize = req.query.pageSize || 10;
-
+    if (typeof page === 'string') {
+      page = JSON.parse(page);
+    }
     // Calculate the number of documents to skip based on the page number and page size
     let skip = (page - 1) * pageSize;
 
