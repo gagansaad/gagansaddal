@@ -580,7 +580,7 @@ exports.editStatus = async (req, res, next) => {
     if (updateJob) {
       return successJSONResponse(res, {
         message: `success`,
-        adstatus:updateJob.status,
+        update_ad:updateJob,
         status: 200,
       });
     } else {
