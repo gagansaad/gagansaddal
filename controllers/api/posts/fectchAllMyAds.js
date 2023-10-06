@@ -580,12 +580,13 @@ exports.editStatus = async (req, res, next) => {
     if (updateJob) {
       return successJSONResponse(res, {
         message: `success`,
-        status:updateJob.status,
+        adstatus:updateJob.status,
+        status: 200,
       });
     } else {
       return failureJSONResponse(res, {
         message: `your not Owner of this ad`,
-        status: null,
+        status: 401,
       });
     }
   } catch (err) {
