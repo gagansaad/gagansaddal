@@ -521,6 +521,7 @@ exports.fetchAll1 = async (req, res, next) => {
 exports.editStatus = async (req, res, next) => {
   try {
     const {ads_id,ads_type,status} =req.query;
+    let userId = req.userId
     let dbQuery={};
    
     if (!ads_id){
@@ -569,8 +570,9 @@ exports.editStatus = async (req, res, next) => {
       if (status == 2) {
         dbQuery.status = "draft";
       }
-    const updateJob = await yourModel.findByIdAndUpdate(
-      { _id: ads_id },
+     
+    const updateJob = await yourModel.findOneAndUpdate(
+      {$and: [{ userId: userId }, { _id: ads_id}]},
       { $set: dbQuery },
       { new: true }
     );
@@ -578,19 +580,18 @@ exports.editStatus = async (req, res, next) => {
     if (updateJob) {
       return successJSONResponse(res, {
         message: `success`,
-        updateJob,
+        status:updateJob.status,
       });
     } else {
       return failureJSONResponse(res, {
-        message: `Something went wrong`,
-        updatejob: null,
+        message: `your not Owner of this ad`,
+        status: null,
       });
     }
   } catch (err) {
     console.log(err);
     return failureJSONResponse(res, {
       message: `Something went wrong`,
-      updatejob: null,
     });
   }
 };
