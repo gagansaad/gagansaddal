@@ -298,7 +298,7 @@ exports.fetchAll = async (req, res, next) => {
           $elemMatch: {
             name: adons,
             expired_on: {
-              $gte: new Date("2023-09-18").toISOString(), // Construct ISODate manually
+              $gte: new Date().toISOString(), // Construct ISODate manually
             },
           },
         },
