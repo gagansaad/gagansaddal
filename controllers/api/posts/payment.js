@@ -596,14 +596,16 @@ console.log(long,lat) ,"--------------------------------------------------------
         coordinates: [long, lat],
       };
      
-      updateQuery["userBasicInfo.live_location.coordinates"] = {
-        $near: {
-          $geometry: targetPoint,
-          $maxDistance: Distance,
+      updateQuery = {
+        "userBasicInfo.live_location.coordinates": {
+          $near: {
+            $geometry: targetPoint,
+            $maxDistance: Distance,
+          },
         },
       };
     }
-   
+   console.log(object);
     let alertdata = await USER.find(updateQuery);
     userIds = alertdata.map((alert) => String(alert._id));
     console.log(userIds,"------------------------------------------------------------------------------------------");
