@@ -582,14 +582,14 @@ let description;
     console.log(adLocation);
     let long ;
     let lat ;
-    if(adLocation.adsInfo.coordinates){
-      long = adLocation.adsInfo.coordinates[0]
-      lat = adLocation.adsInfo.coordinates[1]
+    if(adLocation.adsInfo.location.coordinates){
+      long = adLocation.adsInfo.location.coordinates[0]
+      lat = adLocation.adsInfo.location.coordinates[1]
     }
   
      let Distance = 200000;
     
-
+console.log(long,lat) ,"----------------------------------------------------------------------------------------------------------------------------------------------";
     if (long && lat && Distance) {
       const targetPoint = {
         type: "Point",
