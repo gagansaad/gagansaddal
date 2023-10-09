@@ -578,8 +578,9 @@ let conditions = [];
         message: "Invalid adsName. Cannot update notification status.",
       });
   }
+  const userCollection = USER.collection;
   
-    let dpsIndex=  await USER.createIndex({ 'userBasicInfo.live_location.coordinates': '2dsphere' });
+    let dpsIndex=  await userCollection.createIndex({ 'userBasicInfo.live_location.coordinates': '2dsphere' });
      
   if (adsName) {
     let adLocation = await ModelName.findById(ads_id)
