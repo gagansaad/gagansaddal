@@ -589,21 +589,25 @@ let description;
   
      let Distance = 200000;
     
-console.log(long,lat) ,"----------------------------------------------------------------------------------------------------------------------------------------------";
+console.log(long,lat,"----------------------------------------------------------------------------------------------------------------------------------------------") 
     if (long && lat && Distance) {
       const targetPoint = {
         type: "Point",
         coordinates: [long, lat],
       };
      
-      updateQuery = {
-        "userBasicInfo.live_location.coordinates": {
-          $near: {
-            $geometry: targetPoint,
-            $maxDistance: Distance,
+      updateQuery["userBasicInfo.live_location.coordinates"]= {
+          $geoWithin: {
+            $centerSphere: [
+              [
+                parseFloat(req.query.longitude),
+                parseFloat(req.query.latitude),
+              ],
+              maxDistance / 6371, // 6371 is the Earth's radius in kilometers
+            ],
           },
-        },
-      };
+        };
+      
     }
    
     let alertdata = await USER.find(updateQuery);
