@@ -85,11 +85,11 @@ const userSchema = new mongoose.Schema(
         ],
       },
       live_location: {
-        coordinates: [
-          {
-            type: String,
-          },
-        ],
+        coordinates: {
+          type: [Number], // [longitude, latitude]
+          index: "2dsphere",
+          default: [0, 0], // Specify a 2dsphere index for geospatial querying
+        },
       },
     },
 
