@@ -609,7 +609,7 @@ console.log(long,lat,"----------------------------------------------------------
         };
       
     }
-   
+   console.log(updateQuery,",vdfkvdkvmkdfnbkjdfnbkdfbnfjkbn");
     let alertdata = await USER.find(updateQuery);
     userIds = alertdata.map((alert) => String(alert._id));
     console.log(userIds,"------------------------------------------------------------------------------------------");
