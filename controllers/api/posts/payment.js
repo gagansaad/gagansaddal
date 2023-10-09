@@ -600,10 +600,10 @@ console.log(long,lat,"----------------------------------------------------------
           $geoWithin: {
             $centerSphere: [
               [
-                parseFloat(req.query.longitude),
-                parseFloat(req.query.latitude),
+                parseFloat(long),
+                parseFloat(lat),
               ],
-              maxDistance / 6371, // 6371 is the Earth's radius in kilometers
+             20000 / 6371, // 6371 is the Earth's radius in kilometers
             ],
           },
         };
