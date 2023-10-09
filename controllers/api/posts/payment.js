@@ -596,20 +596,14 @@ console.log(long,lat,"----------------------------------------------------------
         coordinates: [long, lat],
       };
      
-      updateQuery["userBasicInfo.live_location.coordinates"]= {
-          $geoWithin: {
-            $centerSphere: [
-              [
-                parseFloat(long),
-                parseFloat(lat),
-              ],
-             20000 / 6371, // 6371 is the Earth's radius in kilometers
-            ],
+      updateQuery["userBasicInfo.live_location.coordinates"]={
+          $near: {
+            $geometry: targetPoint,
+            $maxDistance: Distance,
           },
-        };
-      
+        }
     }
-   console.log(updateQuery,",vdfkvdkvmkdfnbkjdfnbkdfbnfjkbn");
+   
     let alertdata = await USER.find(updateQuery);
     userIds = alertdata.map((alert) => String(alert._id));
     console.log(userIds,"------------------------------------------------------------------------------------------");
