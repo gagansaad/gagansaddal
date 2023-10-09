@@ -544,7 +544,7 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
   let adsName = getAdDetails.name;
   let userIds;
   let ModelName = await getModelNameByAdsType(ads_type);
-  const updateQuery = {};
+  let updateQuery = {};
 let adlink;
 let description;
   switch (adsName) {
