@@ -544,32 +544,33 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
   let adsName = getAdDetails.name;
   let userIds;
   let ModelName = await getModelNameByAdsType(ads_type);
-  let updateQuery = {};
+  
 let adlink;
 let description;
+let conditions = [];
   switch (adsName) {
     case "Events":
-      updateQuery["userNotification.event"] = true;
+       conditions.push({ "userNotification.event": true}) ;
       adlink=`https://menehariya.netscapelabs.com/eventDetails/${ads_id}`
       break;
     case "Jobs":
-      updateQuery["userNotification.job"] = true;
+       conditions.push({ "userNotification.job": true}) ;
       adlink=`https://menehariya.netscapelabs.com/jobDetails/${ads_id}`
       break;
     case "Rentals":
-      updateQuery["userNotification.rental"] = true;
+       conditions.push({ "userNotification.rental": true}) ;
       adlink=`https://menehariya.netscapelabs.com/rentDetails/${ads_id}`
       break;
     case "Local Biz & Services":
-      updateQuery["userNotification.localBiz"] = true;
+       conditions.push({ "userNotification.localBiz": true}) ;
       adlink=`https://menehariya.netscapelabs.com/localBizDetails/${ads_id}`
       break;
     case "Buy & Sell":
-      updateQuery["userNotification.buysell"] = true;
+       conditions.push({ "userNotification.buysell": true}) ;
       adlink=`https://menehariya.netscapelabs.com/buySellDetails/${ads_id}`
       break;
     case "Babysitters & Nannies":
-      updateQuery["userNotification.careService"] = true;
+       conditions.push({ "userNotification.careService": true}) ;
       adlink=`https://menehariya.netscapelabs.com/babySitterDetails/${ads_id}`
       break;
     default:
@@ -596,14 +597,16 @@ console.log(long,lat,"----------------------------------------------------------
         coordinates: [long, lat],
       };
      
-      updateQuery["userBasicInfo.live_location.coordinates"]={
+      conditions.push({
+        "userBasicInfo.live_location.coordinates": {
           $near: {
             $geometry: targetPoint,
             $maxDistance: Distance,
           },
-        }
+        },
+      });
     }
-   
+    let updateQuery = { $and: conditions };
     let alertdata = await USER.find(updateQuery);
     userIds = alertdata.map((alert) => String(alert._id));
     console.log(userIds,"------------------------------------------------------------------------------------------");
