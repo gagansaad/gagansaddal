@@ -164,7 +164,7 @@ exports.fetchAll = async (req, res, next) => {
     if (req.userId) {
       myid = req.userId || "0";
     }
-    const {longitude, latitude, maxDistance } = req.query;
+    const {longitude, latitude, maxDistance,location_name} = req.query;
     console.log(myid,req.query,"----------");
     let Distance;
 
@@ -174,8 +174,9 @@ exports.fetchAll = async (req, res, next) => {
       Distance = maxDistance * 1000;
     }
   let live_location = {};
-    if (longitude && latitude) {
+    if (longitude && latitude && location_name) {
       live_location = {
+        location_name:location_name,
         coordinates: [longitude, latitude],
       };
     }
@@ -387,126 +388,50 @@ exports.fetchAll = async (req, res, next) => {
   }
 };
 
-exports.fetchAll1 = async (req, res, next) => {
+exports.removemedia = async (req, res, next) => {
   try {
-    let myid;
-    if (req.userId) {
-      myid = req.userId || "0";
-    }
-    const { longitude, latitude, maxDistance } = req.query;
-    let Distance;
-
-    if (maxDistance === "0" || !maxDistance) {
-      Distance = 200000;
-    } else {
-      Distance = maxDistance * 1000;
-    }
-    let adTypes = [
-      { key: "job", label: "Jobs", select: "adsInfo.categories" },
-      { key: "event", label: "Events", select: "adsInfo.category" },
-      { key: "Buy & Sell", label: "Buy & Sell", select: "adsInfo.category" },
-      {
-        key: "babysitter & nannie",
-        label: "Babysitters & Nannies",
-        select: "adsInfo.category.category_name",
-      },
-      {
-        key: "Local_biz & Service",
-        label: "Local Biz & Services",
-        select: "adsInfo.categories",
-      },
-      { key: "rental", label: "Rentals", select: "adsInfo.category" },
-    ];
-
-    let results = [];
-
-    for (const adType of adTypes) {
-      let checkAlreadyExist = await viewModel
-        .find({ userId: myid, adType: adType.key })
-        .exec();
-      let adTypeCount = checkAlreadyExist.length;
-      let adTypeAds = checkAlreadyExist.map((result) => result.ad);
-      results.push({ Category: adType.key, Count: adTypeCount, id: adTypeAds });
-    }
-
-    let checkedDoc = [];
-
-    for (const adType of adTypes) {
-      let YourModel = mongoose.model(adType.key);
-      const foundDocuments = [];
-      const uniqueCategoriesSet = new Set();
-
-      for (const category of results.find(
-        (result) => result.Category === adType.key
-      ).id) {
-        const foundDocument = await YourModel.findById(category).select(
-          adType.select
-        );
-
-        if (foundDocument) {
-          const modifiedDocument = {
-            ...foundDocument.toObject(),
-            id: foundDocument.id,
-          };
-          delete modifiedDocument._id;
-          delete modifiedDocument.price_default;
-
-          foundDocuments.push(modifiedDocument);
-
-          if (foundDocument.adsInfo) {
-            const { category, categories, category_name } =
-              foundDocument.adsInfo;
-
-            if (category && !uniqueCategoriesSet.has(category)) {
-              uniqueCategoriesSet.add(category);
-              const recommendedDataByCategory = await YourModel.find({
-                "adsInfo.category": category,
-                _id: {
-                  $nin: results.find((result) => result.Category === adType.key)
-                    .id,
-                },
-              }).limit(5);
-
-              foundDocuments.push(...recommendedDataByCategory);
-            }
-
-            if (category_name && !uniqueCategoriesSet.has(category_name)) {
-              uniqueCategoriesSet.add(category_name);
-              const recommendedDataByCategoryName = await YourModel.find({
-                "adsInfo.category.category_name": category_name,
-                _id: {
-                  $nin: results.find((result) => result.Category === adType.key)
-                    .id,
-                },
-              }).limit(5);
-
-              foundDocuments.push(...recommendedDataByCategoryName);
-            }
-
-            if (categories && !uniqueCategoriesSet.has(categories)) {
-              uniqueCategoriesSet.add(categories);
-              const recommendedDataByCategories = await YourModel.find({
-                "adsInfo.categories": categories,
-                _id: {
-                  $nin: results.find((result) => result.Category === adType.key)
-                    .id,
-                },
-              }).limit(5);
-
-              foundDocuments.push(...recommendedDataByCategories);
-            }
-          }
-        }
-      }
-
-      checkedDoc.push({ Category: adType.key, data: foundDocuments });
-    }
-
-    // Now, foundDocuments contains the documents corresponding to each ID
+    let userId = req.userId 
+    
+    const { ads_id, ads_type, image_id } = req.body;
+   
+    let {Typename} = await ModelNameByAdsType(ads_type)
+     
+     
+    if(!Typename){
+      return failureJSONResponse(res, {
+        message: `Please provide valid adstype`,
+        
+       });
+     }
+     let dbQuery = {
+      $and: [
+        {
+          "_id": ads_id, // Replace "ads_id" with the actual value you want to match
+        },
+        {
+          "userId": userId,
+        },
+      ],
+    };
+    console.log(dbQuery,"--------------------------------------------------------------------------------------------------p--------gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg-");
+     let YourModel = mongoose.model(Typename);
+         let UpdateMedia= await YourModel.updateOne(
+          dbQuery,
+            {
+              $pull: {
+                "adsInfo.image": {
+                  
+                    $in: [image_id]
+                 
+                }
+              }
+            })
+   if(UpdateMedia){
     return successJSONResponse(res, {
-      message: "success",
-      data: checkedDoc,
+      message: "Media successfully removed",
+     
     });
+   }
   } catch (err) {
     console.log(err);
     return failureJSONResponse(

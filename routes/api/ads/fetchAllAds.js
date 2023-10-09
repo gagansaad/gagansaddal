@@ -14,10 +14,10 @@ router.get(
   controllers.fetchAll
 );
 
-router.get(
-  `/adons-ads1`,
+router.put(
+  `/remove-media`,
   authMiddleware.ensureUserLoggedInDummy,
-  controllers.fetchAll1
+  controllers.removemedia
 );
 router.get(
   `/edit-status`,

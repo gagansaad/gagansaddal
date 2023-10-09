@@ -1043,8 +1043,6 @@ exports.fetchonead = async (req, res, next) => {
     if (adsId) {
       data_Obj = {
         _id: adsId,
-        status: "active",
-        "plan_validity.expired_on": { $gte: currentDateOnly },
       };
     }
     let myid = req.userId;

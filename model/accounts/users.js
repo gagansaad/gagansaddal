@@ -85,6 +85,7 @@ const userSchema = new mongoose.Schema(
         ],
       },
       live_location: {
+        location_name: { type: String },
         coordinates: {
           type: [Number], // [longitude, latitude]
           index: "2dsphere",

@@ -1095,8 +1095,7 @@ exports.fetchonead = async (req, res, next) => {
     if (adsId) {
       data_Obj = {
         _id: adsId,
-        status: "active",
-        "plan_validity.expired_on": { $gte: currentDateOnly },
+       
       };
     } else {
       return failureJSONResponse(res, { message: `ad id not Available` });
