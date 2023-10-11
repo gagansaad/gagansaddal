@@ -520,15 +520,19 @@ exports.editJobAds = async (req, res, next) => {
         }
       }
     }
-    const imageArr = [];
-
-    for (var i = 0; i < req.files.length; i++) {
-      var thumbnail = req.files[i].path;
-
-      productImages = await Media.create({ url: thumbnail });
-      imageArr.push(productImages._id);
-    }
-
+    let imageArr = [];
+    if (req.files && req.files.length > 0) {
+      for (var i = 0; i < req.files.length; i++) {
+        var thumbnail = req.files[i].path;
+    
+        productImages = await Media.create({ url: thumbnail });
+        imageArr.push(productImages._id);
+      }
+      }
+      const existingRoomRents = await RoomRentsAds.findById(jobId);
+      if (existingRoomRents) {
+        imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
+      }
     const dataObj = {},
       adsInfoObj = {},
       listerBasicInfoObj = {};
