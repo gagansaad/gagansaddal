@@ -491,6 +491,10 @@ exports.editRoomRentAds = async (req, res, next) => {
     }
   }
   let imageArr = [];
+  const existingRoomRents = await RoomRentsAds.findById(roomRentId);
+  if (existingRoomRents) {
+    imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
+  }
   let productImages;
   if (req.files && req.files.length > 0) {
   for (var i = 0; i < req.files.length; i++) {
@@ -500,10 +504,7 @@ exports.editRoomRentAds = async (req, res, next) => {
     imageArr.push(productImages._id);
   }
   }
-  const existingRoomRents = await RoomRentsAds.findById(roomRentId);
-  if (existingRoomRents) {
-    imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
-  }
+  
   const dataObj = {},
     adsInfoObj = {},
     listerBasicInfoObj = {};

@@ -429,6 +429,10 @@ exports.editAds = async (req, res, next) => {
       }
     }
     let imageArr = [];
+    const existingRoomRents = await postbabyAd.findById(productId);
+    if (existingRoomRents) {
+      imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
+    }
     if (req.files && req.files.length > 0) {
       for (var i = 0; i < req.files.length; i++) {
         var thumbnail = req.files[i].path;
@@ -437,10 +441,7 @@ exports.editAds = async (req, res, next) => {
         imageArr.push(productImages._id);
       }
       }
-      const existingRoomRents = await postbabyAd.findById(productId);
-      if (existingRoomRents) {
-        imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
-      }
+     
     let my_phone = false;
     let my_email = false;
     let secondary_phone = false;

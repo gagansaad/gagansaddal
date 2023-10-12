@@ -620,6 +620,10 @@ console.log(currency,"000000000");
     }
     }
     let imageArr = [];
+    const existingRoomRents = await eventAd.findById(eventId);
+      if (existingRoomRents) {
+        imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
+      }
     if (req.files && req.files.length > 0) {
       for (var i = 0; i < req.files.length; i++) {
         var thumbnail = req.files[i].path;
@@ -628,10 +632,7 @@ console.log(currency,"000000000");
         imageArr.push(productImages._id);
       }
       }
-      const existingRoomRents = await eventAd.findById(eventId);
-      if (existingRoomRents) {
-        imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
-      }
+      
     const dataObj = {},
       adsInfoObj = {},
       ticketPrice = {},
