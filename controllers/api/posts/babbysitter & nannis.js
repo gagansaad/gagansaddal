@@ -437,7 +437,7 @@ exports.editAds = async (req, res, next) => {
         imageArr.push(productImages._id);
       }
       }
-      const existingRoomRents = await RoomRentsAds.findById(productId);
+      const existingRoomRents = await postbabyAd.findById(productId);
       if (existingRoomRents) {
         imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
       }

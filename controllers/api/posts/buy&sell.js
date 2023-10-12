@@ -793,7 +793,7 @@ exports.editBuySellAds = async (req, res, next) => {
         imageArr.push(productImages._id);
       }
       }
-      const existingRoomRents = await RoomRentsAds.findById(buyAndSellId);
+      const existingRoomRents = await postBuySellAd.findById(buyAndSellId);
       if (existingRoomRents) {
         imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
       }

@@ -682,7 +682,7 @@ exports.editbizAds = async (req, res, next) => {
       }
     }
     
-      const existingRoomRents = await RoomRentsAds.findById(bizId);
+      const existingRoomRents = await postbizAndServicesAd.findById(bizId);
       if (existingRoomRents) {
         imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
       }

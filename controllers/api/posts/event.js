@@ -628,7 +628,7 @@ console.log(currency,"000000000");
         imageArr.push(productImages._id);
       }
       }
-      const existingRoomRents = await RoomRentsAds.findById(eventId);
+      const existingRoomRents = await eventAd.findById(eventId);
       if (existingRoomRents) {
         imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
       }

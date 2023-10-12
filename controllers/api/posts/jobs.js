@@ -529,7 +529,7 @@ exports.editJobAds = async (req, res, next) => {
         imageArr.push(productImages._id);
       }
       }
-      const existingRoomRents = await RoomRentsAds.findById(jobId);
+      const existingRoomRents = await postJobAd.findById(jobId);
       if (existingRoomRents) {
         imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
       }
