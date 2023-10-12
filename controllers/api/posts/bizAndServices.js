@@ -1259,6 +1259,11 @@ exports.fetchonead = async (req, res, next) => {
     let records = await postbizAndServicesAd
       .findOne(data_Obj)
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({
+        path: "adsInfo.accreditation_file.file",
+        strictPopulate: false,
+        select: "url",
+      })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
       .populate({ path: "ReportCount", select: "_id" })
