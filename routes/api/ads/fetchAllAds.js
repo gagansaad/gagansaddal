@@ -14,7 +14,7 @@ router.get(
   controllers.fetchAll
 );
 
-router.put(
+router.patch(
   `/remove-media`,
   authMiddleware.ensureUserLoggedInDummy,
   controllers.removemedia
