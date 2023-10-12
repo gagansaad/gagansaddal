@@ -104,7 +104,7 @@ const bizAndServices = new mongoose.Schema(
           name: {
             ...defaultStringConfig,
           },
-          url: {
+          file: {
             type: mongoose.Schema.Types.ObjectId,
             ref: `media`,
           },

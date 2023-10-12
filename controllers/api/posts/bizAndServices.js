@@ -507,7 +507,7 @@ exports.createbizAds = async (req, res, next) => {
 
           let accreditation = {
             name: accreditation_name[j], // Use the 'j' index to match the accreditation name with the file
-            url: productDoc._id,
+            file: productDoc._id,
           };
           accreditationArr.push(accreditation);
         }
@@ -714,7 +714,7 @@ exports.editbizAds = async (req, res, next) => {
 
           let accreditation = {
             name: accreditation_name[j], // Use the 'j' index to match the accreditation name with the file
-            url: productDoc._id,
+            file: productDoc._id,
           };
           accreditationArr.push(accreditation);
         }
@@ -1037,7 +1037,7 @@ exports.fetchAll = async (req, res, next) => {
       .find({ $or: [queryFinal] })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({
-        path: "adsInfo.accreditation_file.url",
+        path: "adsInfo.accreditation_file.file",
         strictPopulate: false,
         select: "url",
       })
