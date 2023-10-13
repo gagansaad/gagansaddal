@@ -511,7 +511,42 @@ exports.editStatus = async (req, res, next) => {
     } else {
       return failureJSONResponse(res, {
         message: `your not Owner of this ad`,
-        status: 401,
+        
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return failureJSONResponse(res, {
+      message: `Something went wrong`,
+    });
+  }
+};
+
+exports.recomended_ads = async (req, res, next) => {
+  try {
+    let userId = req.userId
+    let dbQuery={};
+   
+    if (!userId){
+      return failureJSONResponse(res, {
+        message: `Please login to your account`,
+        
+      });
+    } 
+     
+    const updateJob = await viewModel.find(
+     { userId: userId }
+    );
+
+    if (updateJob) {
+      return successJSONResponse(res, {
+        message: `success`,
+        recomended_ads:updateJob,
+        status: 200,
+      });
+    } else {
+      return failureJSONResponse(res, {
+        message: `Recomended Ads not Available`,
       });
     }
   } catch (err) {

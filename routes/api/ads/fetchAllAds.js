@@ -25,4 +25,11 @@ router.get(
   controllers.editStatus
 );
 
+router.get(
+  `/recomended-ads`,
+  authMiddleware.ensureUserLoggedIn,
+  controllers.recomended_ads
+);
+
+
 module.exports = router;

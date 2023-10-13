@@ -32,7 +32,7 @@ const viewSchema = new mongoose.Schema({
       "rental",
     ],
   },
-});
+}, { timestamps: true });
 
 // favoriteAdSchema.virtual("favoritesCount", {
 //   ref: "FavoriteAd",
