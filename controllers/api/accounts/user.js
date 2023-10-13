@@ -2220,7 +2220,7 @@ module.exports = {
               long:
                 user?.userBasicInfo?.location?.coordinates?.[1] ||
                 null,
-              live_location :live_location,
+              live_location:user?.userBasicInfo?.live_location,
 
               
               createdAt: user?.createdAt || null,
