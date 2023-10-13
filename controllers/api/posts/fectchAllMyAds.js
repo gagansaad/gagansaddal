@@ -180,7 +180,7 @@ exports.fetchAll = async (req, res, next) => {
         coordinates: [longitude, latitude],
       };
     }
-    console.log(live_location);
+    console.log(live_location,"-----------------");
     if(myid != "0"){
       if(longitude && latitude){
         await UserModel.findByIdAndUpdate(myid, { $set: { 'userBasicInfo.live_location': live_location } }, { new: true });
