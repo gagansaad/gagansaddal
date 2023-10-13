@@ -16,6 +16,7 @@ const viewSchema = new mongoose.Schema({
   ad: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "adType",
+
   },
   ads_type: {
     type: mongoose.Schema.Types.ObjectId,

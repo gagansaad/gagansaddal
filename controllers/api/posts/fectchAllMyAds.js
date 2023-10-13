@@ -534,10 +534,8 @@ exports.recomended_ads = async (req, res, next) => {
         
       });
     } 
-     
-    const updateJob = await viewModel.find(
-     { userId: userId }
-    );
+  // let adType = ["event","rental","job","Local_biz & Service","Buy & Sell","babysitter & nannie"]
+    const updateJob = await viewModel.find({ userId: userId }).populate({path:'ad', model: 'adType', match: { adType: { $in: "adType" } }})
 
     if (updateJob) {
       return successJSONResponse(res, {

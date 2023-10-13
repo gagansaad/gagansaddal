@@ -2215,11 +2215,14 @@ module.exports = {
               my_website: user?.userBasicInfo?.my_website || null,
               address: user?.userBasicInfo?.location?.address || null,
               lat:
-                user?.userBasicInfo?.location?.coordinates?.coordinates?.[0] ||
+                user?.userBasicInfo?.location?.coordinates?.[0] ||
                 null,
               long:
-                user?.userBasicInfo?.location?.coordinates?.coordinates?.[1] ||
+                user?.userBasicInfo?.location?.coordinates?.[1] ||
                 null,
+              live_location :live_location,
+
+              
               createdAt: user?.createdAt || null,
             };
             return successJSONResponse(res, { user: data });
