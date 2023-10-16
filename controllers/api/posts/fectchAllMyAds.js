@@ -476,11 +476,9 @@ exports.remove_accredation_media = async (req, res, next) => {
             {
               $pull: {
                 "adsInfo.accreditation_file": {
-                  
-                    $in: [file_id]
-                 
-                }
-              }
+                  "_id": { $in: file_id },
+                },
+              },
             })
    if(UpdateMedia){
     return successJSONResponse(res, {

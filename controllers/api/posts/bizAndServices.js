@@ -667,12 +667,7 @@ exports.editbizAds = async (req, res, next) => {
     let imageArr = [];
     let accreditationArr = [];
     const existingRoomRents = await postbizAndServicesAd.findById(bizId);
-    if (existingRoomRents) {
-      imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
-    }
-    if (existingRoomRents) {
-      accreditationArr = accreditationArr.concat(existingRoomRents.adsInfo.accreditation_file || []);
-    }
+   
     if (req.files.photos && req.files.photos.length > 0) {
       for (var i = 0; i < req.files.photos.length; i++) {
         if (req.files.photos[i].fieldname === `photos`) {
@@ -688,7 +683,10 @@ exports.editbizAds = async (req, res, next) => {
       }
     }
     
-     
+    if (existingRoomRents) {
+      imageArr = imageArr.concat(existingRoomRents.adsInfo.image || []);
+    }
+    
     if (req.files.accreditation_document && req.files.accreditation_document.length > 0) {
       if (
         accreditation_name.length != req.files.accreditation_document.length
@@ -723,7 +721,9 @@ exports.editbizAds = async (req, res, next) => {
         }
       }
     }
-    
+    if (existingRoomRents) {
+      accreditationArr = accreditationArr.concat(existingRoomRents?.adsInfo?.accreditation_file || []);
+    }
     let working_hour;
     let weekday = {
       is_available: false,

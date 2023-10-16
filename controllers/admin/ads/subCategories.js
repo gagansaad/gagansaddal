@@ -17,33 +17,65 @@ exports.createNewSubCategories = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide category id`,
       });
-    let checking = await AdsSubCategory.findOne({$and: [
-      { name: name },
-      { category: category_id }
-    ] });
-    if (checking) {
-      return failureJSONResponse(res, {
-        message: `sub category already exist`,
-      });
-    } else {
-      const dataObj = {};
-      if (name) dataObj.name = name;
-      if (category_id) dataObj.category = category_id;
-
-      AdsSubCategory.create(dataObj)
-        .then((newCategory) => {
-          if (!newCategory)
-            return failureJSONResponse(res, {
-              message: `Something went wrong`,
-            });
-          else {
-            return successJSONResponse(res, { message: "Success" });
+      let value = [
+        "Tea table",
+        "Sudy table",
+        "Double bed",
+        "Curtains",
+        "Book shelf",
+        "Center table",
+        "Dining table and chairs",
+        "Coffee tables",
+        "Drawers",
+        "Television stand",
+        "Office furniture",
+        "Bed & Bedroom furniture",
+        "Chairs",
+        "Computer table",
+        "Cabinets",
+        "Doors",
+        "Couch",
+        "Modular kitchen",
+        "Windows",
+        "Other",
+      ];
+    // let checking = await AdsSubCategory.findOne({$and: [
+      async function createCategory(element) {
+        try {
+          let dataObj = {
+            name: element,
+            category_id: category_id, // Ensure ads_type is defined before this code
+          };
+      
+          let checking = await AdsSubCategory.findOne({
+            $and: [
+              { name: dataObj.name },
+              { category_id: dataObj.category_id },
+            ],
+          });
+      
+          if (checking) {
+            res.status(409).json({ message: `Category already exists` });
+          } else {
+            const newCategory = await AdsSubCategory.create(dataObj);
+            if (!newCategory) {
+              res.status(500).json({ message: `Something went wrong` });
+            } 
           }
-        })
-        .catch((err) => {
-          return failureJSONResponse(res, { message: `Something went wrong` });
-        });
-    }
+        } catch (error) {
+          res.status(500).json({ message: `Something went wrong` });
+        }
+      }
+      
+      // Iterate through the values and create or handle categories
+      for (const element of value) {
+        if (element) {
+          createCategory(element);
+        }
+      }
+      // else {
+    return res.status(201).json({ message: "Success" });
+      // }
   } catch (err) {
     return failureJSONResponse(res, { message: `something went wrong` });
   }
