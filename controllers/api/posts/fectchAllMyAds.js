@@ -444,6 +444,59 @@ exports.removemedia = async (req, res, next) => {
 };
 
 
+exports.remove_accredation_media = async (req, res, next) => {
+  try {
+    let userId = req.userId 
+    
+    const { ads_id, ads_type, file_id } = req.body;
+   
+    let {Typename} = await ModelNameByAdsType(ads_type)
+     
+     
+    if(!Typename){
+      return failureJSONResponse(res, {
+        message: `Please provide valid adstype`,
+        
+       });
+     }
+     let dbQuery = {
+      $and: [
+        {
+          "_id": ads_id, // Replace "ads_id" with the actual value you want to match
+        },
+        {
+          "userId": userId,
+        },
+      ],
+    };
+    console.log(dbQuery,"--------------------------------------------------------------------------------------------------p--------gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg-");
+     let YourModel = mongoose.model(Typename);
+         let UpdateMedia= await YourModel.updateOne(
+          dbQuery,
+            {
+              $pull: {
+                "adsInfo.accreditation_file": {
+                  
+                    $in: [file_id]
+                 
+                }
+              }
+            })
+   if(UpdateMedia){
+    return successJSONResponse(res, {
+      message: "Media successfully removed",
+     
+    });
+   }
+  } catch (err) {
+    console.log(err);
+    return failureJSONResponse(
+      res,
+      { message: `something went wrong` },
+      { error: err.message }
+    );
+  }
+};
 exports.editStatus = async (req, res, next) => {
   try {
     const {ads_id,ads_type,status} =req.query;

@@ -19,6 +19,11 @@ router.patch(
   authMiddleware.ensureUserLoggedInDummy,
   controllers.removemedia
 );
+router.patch(
+  `/remove-accredation-file`,
+  authMiddleware.ensureUserLoggedInDummy,
+  controllers.remove_accredation_media
+);
 router.get(
   `/edit-status`,
   authMiddleware.ensureUserLoggedIn,
