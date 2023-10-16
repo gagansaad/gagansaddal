@@ -691,8 +691,9 @@ exports.editbizAds = async (req, res, next) => {
       if (
         accreditation_name.length != req.files.accreditation_document.length
       ) {
+        console.log(accreditation_name.length,req.files.accreditation_document.length,"ayaya re aya re aaya");
         return failureJSONResponse(res, {
-          message: `Please provide accreditation_name"gagan da jssi lyi check"`,
+          message: `Please provide accreditation_name`,
         });
       }
       for (
