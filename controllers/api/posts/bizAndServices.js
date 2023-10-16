@@ -692,7 +692,7 @@ exports.editbizAds = async (req, res, next) => {
         accreditation_name.length != req.files.accreditation_document.length
       ) {
         return failureJSONResponse(res, {
-          message: `Please provide accreditation_name`,
+          message: `Please provide accreditation_name"gagan da jssi lyi check"`,
         });
       }
       for (
