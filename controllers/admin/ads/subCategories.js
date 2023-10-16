@@ -17,7 +17,10 @@ exports.createNewSubCategories = async (req, res, next) => {
       return failureJSONResponse(res, {
         message: `Please provide category id`,
       });
-    let checking = await AdsSubCategory.findOne({ name: name });
+    let checking = await AdsSubCategory.findOne({$and: [
+      { name: name },
+      { category: category_id }
+    ] });
     if (checking) {
       return failureJSONResponse(res, {
         message: `sub category already exist`,
