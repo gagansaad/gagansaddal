@@ -18,7 +18,10 @@ exports.createNewCategories = async (req, res, next) => {
     const dataObj = {};
     if (name) dataObj.name = name;
     if (ads_type) dataObj.ads_type = ads_type;
-    let checking = await AdsCategories.findOne({ name: name });
+    let checking = await AdsCategories.findOne({  $and: [
+      { name: name },
+      { ads_type: ads_type }
+    ] });
     if (checking) {
       return failureJSONResponse(res, { message: `category already exist` });
     } else {
