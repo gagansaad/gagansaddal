@@ -271,12 +271,12 @@ exports.create_payment_intent = async (req, res) => {
           if (currentDate <= expiredOnDate.toISOString()) {
             console.log(`Add-on "${addonValidity.name}" is valid. //////////////////////////////////////////////////////////////////////////////////////////////`);
             // Remove the valid add-on from addonsId
+           return failureJSONResponse(res, {
+              message: `${addonValidity.name} Already Valid till ${addonValidity.expired_on}`,
+            });
             addonsId.splice(addonIndex, 1);
             
-          } else {
-            console.log(`Add-on "${addonValidity.name}" has expired.//////////////////////////////////////////////////////////////////////////////////`);
-            
-          }
+          } 
         }
         
       }
