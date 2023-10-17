@@ -264,18 +264,19 @@ exports.create_payment_intent = async (req, res) => {
       // Iterate through the addons_validity array
       for (const addonValidity of adsModel.addons_validity) {
         const addonIndex = addonsId.indexOf(addonValidity.add_ons_id);
-      
-        if (addonIndex !== -1) {
+      console.log("gagan");
+        if (addonIndex != -1) {
           const expiredOnDate = new Date(addonValidity.expired_on);
       
           if (currentDate >= expiredOnDate.toISOString()) {
-            console.log(`Add-on "${addonValidity.name}" is valid.`);
+            console.log(`Add-on "${addonValidity.name}" is valid. //////////////////////////////////////////////////////////////////////////////////////////////`);
             // Remove the valid add-on from addonsId
             addonsId.splice(addonIndex, 1);
           } else {
-            console.log(`Add-on "${addonValidity.name}" has expired.`);
+            console.log(`Add-on "${addonValidity.name}" has expired.//////////////////////////////////////////////////////////////////////////////////`);
           }
         }
+        return ""
       }
       
       let result = await AddOns.find({ "price._id": { $in: addonsId } }).exec();
