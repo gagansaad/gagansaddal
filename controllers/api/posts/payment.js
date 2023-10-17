@@ -744,7 +744,7 @@ AddOnsArr.forEach(itemB => {
     oldval.push(itemB);
   }
 });
-console.log(oldval,"----------------------------------------------------------");
+console.log(oldval,"----------------------------------------jnenvjrnvjkfjvbfjv fj vjmfbvhjfnkjfnjfnvjfhjmvbdfjvbfvbfjhjfvjhfhjfvjh------------------");
   let data_Obj = {
     status: "active",
     plan_validity: plan_obj,
