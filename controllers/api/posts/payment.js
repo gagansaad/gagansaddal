@@ -274,9 +274,11 @@ exports.create_payment_intent = async (req, res) => {
            return failureJSONResponse(res, {
               message: `${addonValidity.name} Already Valid till ${addonValidity.expired_on}`,
             });
-            addonsId.splice(addonIndex, 1);
+           
             
-          } 
+          } else{
+
+          }
         }
         
       }
@@ -721,7 +723,8 @@ console.log(userIds,"-----------------------------------------------------------
       return AddOnsArr.push(addOn);
     })
   );
-
+let checkdata = await ModelName.findById(ads_id)
+console.log(checkdata.addons_validity,"================",AddOnsArr,"*************************************");
   let data_Obj = {
     status: "active",
     plan_validity: plan_obj,
