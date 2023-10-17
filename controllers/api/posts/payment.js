@@ -242,20 +242,15 @@ exports.create_payment_intent = async (req, res) => {
     let adsModel = await ModelName.findOne({
       _id: req.body.postId,
     });
-    // if (adsModel?.status == "active") {
-    //   return failureJSONResponse(
-    //     res,
-    //     {
-    //       message: "Add is already active",
-    //     },
-    //     422
-    //   );
-    // }
-    let paymentModelInfo = await PaymentModel.findOne({
-      ads: req.body.postId,
-      payment_status: "pending",
-      device_type: deviceType,
-    });
+    if (adsModel?.status == "active") {
+      return failureJSONResponse(
+        res,
+        {
+          message: "Add is already active",
+        },
+        422
+      );
+    }
     let foundObjects = [];
 
     //-----find add ons -----//
@@ -272,6 +267,7 @@ exports.create_payment_intent = async (req, res) => {
             (priceObj) => priceObj._id == targetId
           );
           if (foundObj) {
+            console.log(foundObj,"----------------------------------");
             foundObjects.push(foundObj);
           }
         });
@@ -291,11 +287,35 @@ exports.create_payment_intent = async (req, res) => {
       { apiVersion: "2022-11-15" }
     );
 
-    
+    let paymentModelInfo = await PaymentModel.findOne({
+      ads: req.body.postId,
+      payment_status: "pending",
+      device_type: deviceType,
+    });
 
     let paymentIntentClientSecret = null;
     let statusCode = 200;
-    if (paymentModelInfo == null || paymentModelInfo == "") {
+    if(adsModel?.status == "active"){
+      let dataObj = {
+        plan_id: planId,
+        plan_addons: foundObjects,
+        plan_price: plan_price,
+        total_amount: JSON.parse(totalprice.toFixed(2)),
+        ads: req.body.postId,
+        ads_type: adstype,
+        user: userID,
+        payment_status: "pending",
+      };
+      statusCode = 201;
+      paymentIntentClientSecret = await paymentIntentCreate(
+        req,
+        dataObj,
+        totalprice,
+        customerStripeId,
+        deviceType
+      );
+    }
+    else if (paymentModelInfo == null || paymentModelInfo == "") {
       let dataObj = {
         plan_id: planId,
         plan_addons: foundObjects,
@@ -685,8 +705,7 @@ console.log(userIds,"-----------------------------------------------------------
     plan_validity: plan_obj,
     addons_validity: AddOnsArr,
   };
-let checkad = await ModelName.findById(ads_id)
-console.log(checkad.status);
+
   
   let statusUpdate = await ModelName.findByIdAndUpdate(
     { _id: ads_id },
