@@ -242,15 +242,15 @@ exports.create_payment_intent = async (req, res) => {
     let adsModel = await ModelName.findOne({
       _id: req.body.postId,
     });
-    if (adsModel?.status == "active") {
-      return failureJSONResponse(
-        res,
-        {
-          message: "Add is already active",
-        },
-        422
-      );
-    }
+    // if (adsModel?.status == "active") {
+    //   return failureJSONResponse(
+    //     res,
+    //     {
+    //       message: "Add is already active",
+    //     },
+    //     422
+    //   );
+    // }
     let foundObjects = [];
 
     //-----find add ons -----//
