@@ -724,7 +724,27 @@ console.log(userIds,"-----------------------------------------------------------
     })
   );
 let checkdata = await ModelName.findById(ads_id)
+let oldval = checkdata.addons_validity
 console.log(checkdata.addons_validity,"================",AddOnsArr,"*************************************");
+let aNameMap = {};
+oldval.forEach(item => {
+  aNameMap[item.name] = item;
+});
+
+// Iterate over the b array and update a
+AddOnsArr.forEach(itemB => {
+  if (aNameMap.hasOwnProperty(itemB.name)) {
+    // Replace values in a with values from b
+    const itemA = aNameMap[itemB.name];
+    for (const key in itemA) {
+      itemA[key] = itemB[key];
+    }
+  } else {
+    // Push new values to a
+    oldval.push(itemB);
+  }
+});
+console.log(oldval,"----------------------------------------------------------");
   let data_Obj = {
     status: "active",
     plan_validity: plan_obj,
