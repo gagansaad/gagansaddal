@@ -748,7 +748,7 @@ console.log(oldval,"----------------------------------------jnenvjrnvjkfjvbfjv f
   let data_Obj = {
     status: "active",
     plan_validity: plan_obj,
-    addons_validity: AddOnsArr,
+    addons_validity: oldval,
   };
 
   
