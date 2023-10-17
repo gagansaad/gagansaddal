@@ -20,12 +20,13 @@ const mongoose = require("mongoose"),
   jobsAd = mongoose.model("job"),
   USER = mongoose.model("user"),
   category = mongoose.model("PostType"),
-  Alert = mongoose.model("Alert");
-(payment_logs = require("../../../model/posts/paymentEvent")),
-  ({
+  Alert = mongoose.model("Alert"),
+  {
     successJSONResponse,
     failureJSONResponse,
-  } = require(`../../../handlers/jsonResponseHandlers`)),
+  } = require(`../../../handlers/jsonResponseHandlers`);
+  (payment_logs = require("../../../model/posts/paymentEvent")),
+  
   ({ fieldsToExclude, listerBasicInfo } = require(`../../../utils/mongoose`)),
   ({
     isValidString,
@@ -273,6 +274,7 @@ exports.create_payment_intent = async (req, res) => {
             // Remove the valid add-on from addonsId
            return failureJSONResponse(res, {
               message: `${addonValidity.name} Already Valid till ${addonValidity.expired_on}`,
+              status: 400,
             });
            
             
