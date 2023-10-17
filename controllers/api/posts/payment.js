@@ -251,6 +251,11 @@ exports.create_payment_intent = async (req, res) => {
     //     422
     //   );
     // }
+    let paymentModelInfo = await PaymentModel.findOne({
+      ads: req.body.postId,
+      payment_status: "pending",
+      device_type: deviceType,
+    });
     let foundObjects = [];
 
     //-----find add ons -----//
@@ -286,11 +291,7 @@ exports.create_payment_intent = async (req, res) => {
       { apiVersion: "2022-11-15" }
     );
 
-    let paymentModelInfo = await PaymentModel.findOne({
-      ads: req.body.postId,
-      payment_status: "pending",
-      device_type: deviceType,
-    });
+    
 
     let paymentIntentClientSecret = null;
     let statusCode = 200;
@@ -684,7 +685,8 @@ console.log(userIds,"-----------------------------------------------------------
     plan_validity: plan_obj,
     addons_validity: AddOnsArr,
   };
-
+let checkad = await ModelName.findById(ads_id)
+console.log(checkad.status);
   
   let statusUpdate = await ModelName.findByIdAndUpdate(
     { _id: ads_id },
