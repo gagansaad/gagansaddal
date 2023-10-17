@@ -268,7 +268,7 @@ exports.create_payment_intent = async (req, res) => {
         if (addonIndex != -1) {
           const expiredOnDate = new Date(addonValidity.expired_on);
       
-          if (currentDate >= expiredOnDate.toISOString()) {
+          if (currentDate <= expiredOnDate.toISOString()) {
             console.log(`Add-on "${addonValidity.name}" is valid. //////////////////////////////////////////////////////////////////////////////////////////////`);
             // Remove the valid add-on from addonsId
             addonsId.splice(addonIndex, 1);
