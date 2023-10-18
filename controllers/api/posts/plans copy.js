@@ -19,7 +19,7 @@ exports.fetchPlanForAds = async (req, res, next) => {
      
     }
 
-    if(req?.query?.post_id){
+    if(req?.query?.ads_id){
       postid = req?.query?.ads_id;
     }else if(req?.body?.ads_id){
       postid = req?.body?.ads_id;
@@ -53,13 +53,13 @@ if(postid){
           const thedata = []; // Create an array to store the modified addons
         
           result[0].add_ons.forEach((addon) => {
-            const addonValidity = previousdata.addons_validity.find(
+            const addonValidity = previousdata?.addons_validity.find(
               (addonValidity) => addonValidity.name === addon.name
             );
             let status = false
         
             if (addonValidity) {
-              const expiredDate = new Date(addonValidity.expired_on);
+              const expiredDate = new Date(addonValidity?.expired_on);
         
               if (expiredDate > currentDate) {
                 status = true;
