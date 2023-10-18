@@ -727,10 +727,11 @@ console.log(userIds,"-----------------------------------------------------------
   );
 let checkdata = await ModelName.findById(ads_id)
 let oldval = checkdata.addons_validity
-let expiredDate = new Date(plan_validity.expired_on)
+let plan_duration = checkdata.plan_validity
+let expiredDate = new Date(plan_duration.expired_on)
   let currentDae = new Date()
 if(checkdata.status == 'active' && expiredDate.toISOString() > currentDae.toISOString()){
-  let plan_duration = checkdata.plan_validity
+  
   plan_obj = plan_duration
 }
 console.log(checkdata.addons_validity,"================",AddOnsArr,"*************************************");
