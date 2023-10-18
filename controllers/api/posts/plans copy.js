@@ -14,7 +14,7 @@ exports.fetchPlanForAds = async (req, res, next) => {
     } else if (req?.body?.adsId) {
       planObjectId = req?.body?.adsId;
     }
-
+console.log(planObjectId,"==============--------------o0lkmn ");
     const { adsId } = req.body;
 
     AdsPlan.find({
