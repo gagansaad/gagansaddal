@@ -3,20 +3,26 @@ const mongoose = require("mongoose"),
   {
     successJSONResponse,
     failureJSONResponse,
+    ModelNameByAdsType,
   } = require(`../../../handlers/jsonResponseHandlers`);
 
 exports.fetchPlanForAds = async (req, res, next) => {
   try {
     let planObjectId = "";
-
+    let postid =''
     if (req?.query?.adsId) {
       planObjectId = req?.query?.adsId;
+      postid = req?.query?.post_id;
+
     } else if (req?.body?.adsId) {
       planObjectId = req?.body?.adsId;
+      postid = req?.body?.post_id;
     }
 console.log(planObjectId,"==============--------------o0lkmn ");
-    const { adsId } = req.body;
-
+let Typename = await ModelNameByAdsType(planObjectId)
+let YourModel = mongoose.model(Typename);
+let previousdata = await YourModel.findById(postid)
+console.log(previousdata);
     AdsPlan.find({
       ads_type: planObjectId,
     })
