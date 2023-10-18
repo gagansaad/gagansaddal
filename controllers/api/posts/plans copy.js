@@ -8,7 +8,7 @@ const mongoose = require("mongoose"),
 
 exports.fetchPlanForAds = async (req, res, next) => {
   try {
-    console.log(req.query,"lmvkfrkvmrfkvmfrkmvfkmvk");
+    // console.log(req.query,"lmvkfrkvmrfkvmfrkmvfkmvk");
     let planObjectId = "";
     let postid
     if (req?.query?.ads_type) {
@@ -50,7 +50,7 @@ if(postid){
       
           const currentDate = new Date();
           let thisplan = previousdata?.plan_validity;
-          console.log(thisplan);
+          // console.log(thisplan);
           const thedata = []; // Create an array to store the modified addons
         
           result[0].add_ons.forEach((addon) => {
@@ -93,7 +93,7 @@ if(postid){
           });
         
           // Now, the 'thedata' array should contain modified add-ons
-          console.log(thedata,"emekmkdemckedmckmdekcmek");
+          // console.log(thedata,"emekmkdemckedmckmdekcmek");
           return successJSONResponse(res, { data: thedata });
        
         
