@@ -16,7 +16,7 @@ exports.fetchPlanForAds = async (req, res, next) => {
     }
 
     const { adsId } = req.body;
-
+console.log(planObjectId,"gksakdkdkd=dwdefer============================================================----------------------------------------09876567876545678");
     AdsPlan.find({
       ads_type: planObjectId,
     })
