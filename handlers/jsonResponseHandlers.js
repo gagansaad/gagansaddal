@@ -138,7 +138,7 @@ exports.failureJSONResponse = (
 ) => {
   const objToSend = {
     status: `error`,
-    message,
+    message: typeof message === 'string' ? message : message,
   };
 
   if (errorCode) objToSend.code = errorCode;

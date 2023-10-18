@@ -100,10 +100,10 @@ if(postid){
       })
       .catch((err) => {
         console.log(err);
-        return failureJSONResponse(res, { message: `something went wrong` });
+        return failureJSONResponse(res, `something went wrong` );
       });
   } catch (err) {
     console.log(err);
-    return failureJSONResponse(res, { message: `something went wrong` });
+    return failureJSONResponse(res, `something went wrong` );
   }
 };
