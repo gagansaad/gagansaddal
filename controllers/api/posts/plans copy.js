@@ -8,6 +8,7 @@ const mongoose = require("mongoose"),
 
 exports.fetchPlanForAds = async (req, res, next) => {
   try {
+    console.log(req.query,"lmvkfrkvmrfkvmfrkmvfkmvk");
     let planObjectId = "";
     let postid
     if (req?.query?.ads_type) {
