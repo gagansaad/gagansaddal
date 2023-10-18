@@ -10,19 +10,19 @@ exports.fetchPlanForAds = async (req, res, next) => {
   try {
     let planObjectId = "";
     let postid
-    if (req?.query?.adsId) {
-      planObjectId = req?.query?.adsId;
+    if (req?.query?.ads_type) {
+      planObjectId = req?.query?.ads_type;
       
 
-    } else if (req?.body?.adsId) {
-      planObjectId = req?.body?.adsId;
+    } else if (req?.body?.ads_type) {
+      planObjectId = req?.body?.ads_type;
      
     }
 
     if(req?.query?.post_id){
-      postid = req?.query?.post_id;
-    }else if(req?.body?.post_id){
-      postid = req?.body?.post_id;
+      postid = req?.query?.ads_id;
+    }else if(req?.body?.ads_id){
+      postid = req?.body?.ads_id;
     }
 // console.log(planObjectId,"==============--------------o0lkmn ");
 let {Typename} = await ModelNameByAdsType(planObjectId)
