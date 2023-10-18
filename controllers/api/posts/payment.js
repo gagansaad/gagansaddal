@@ -727,6 +727,10 @@ console.log(userIds,"-----------------------------------------------------------
   );
 let checkdata = await ModelName.findById(ads_id)
 let oldval = checkdata.addons_validity
+if(checkdata.status == 'active'){
+  let plan_duration = checkdata.plan_validity
+  plan_obj = plan_duration
+}
 console.log(checkdata.addons_validity,"================",AddOnsArr,"*************************************");
 let aNameMap = {};
 oldval.forEach(item => {
