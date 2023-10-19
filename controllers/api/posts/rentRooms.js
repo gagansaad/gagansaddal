@@ -853,6 +853,9 @@ exports.fetchAll = async (req, res, next) => {
     let responseModelCount = totalCount.length;
     if (records) {
       let jobData = records.map((job) => {
+      // let addons_status=  job?.addons_validity?.map((date)=>{
+
+      // })
         return {
           ...job._doc,
           // Add other job fields as needed

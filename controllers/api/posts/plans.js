@@ -1,35 +1,126 @@
 const mongoose = require("mongoose"),
-  AdsPlan = mongoose.model("adsplan"),
+  AdsPlan = mongoose.model("plan"),
   {
     successJSONResponse,
     failureJSONResponse,
+    ModelNameByAdsType,
   } = require(`../../../handlers/jsonResponseHandlers`);
 
 exports.fetchPlanForAds = async (req, res, next) => {
   try {
+    // console.log(req.query,"lmvkfrkvmrfkvmfrkmvfkmvk");
     let planObjectId = "";
+    let postid
+    if (req?.query?.ads_type) {
+      planObjectId = req?.query?.ads_type;
+      
 
-    if (req?.query?.adsId) {
-      planObjectId = req?.query?.adsId;
-    } else if (req?.body?.adsId) {
-      planObjectId = req?.body?.adsId;
+    } else if (req?.body?.ads_type) {
+      planObjectId = req?.body?.ads_type;
+     
     }
 
-    const { adsId } = req.body;
-// console.log(planObjectId,"gksakdkdkd=dwdefer============================================================----------------------------------------09876567876545678");
-    AdsPlan.find({
-      ads_type: planObjectId,
-    })
-      .then((result) => {
-        if (!result) {
-          return failureJSONResponse(res, { message: `something went wrong` });
-        }
-        return successJSONResponse(res, { data: result });
-      })
-      .catch((err) => {
-        return failureJSONResponse(res, { message: `something went wrong` });
-      });
+    if(req?.query?.ads_id){
+      postid = req?.query?.ads_id;
+    }else if(req?.body?.ads_id){
+      postid = req?.body?.ads_id;
+    }
+// console.log(planObjectId,"==============--------------o0lkmn ");
+let {Typename} = await ModelNameByAdsType(planObjectId)
+let YourModel = mongoose.model(Typename);
+let previousdata
+if(postid){
+  previousdata = await YourModel.findById(postid)
+
+}
+let ods = await AdsPlan.aggregate([
+  {
+    $match: { ads_type: planObjectId }, // Filter AdsPlan documents
+  },
+  {
+    $lookup: {
+      from: YourModel, // Replace with the name of your collection
+      localField: postid, // Field from AdsPlan collection
+      foreignField: _id, // Field from previousdata collection
+      as: "joinedData", // Alias for the joined data
+    },
+  },
+  {
+    $unwind: "$joinedData", // Unwind the array (optional)
+  },
+])
+console.log(ods,"kjncesnsejceskncec-----------==============");
+// console.log(previousdata);
+    // AdsPlan.find({
+    //   ads_type: planObjectId,
+    // })
+    //   .populate("add_ons")
+    //   .then((result) => {
+    
+        
+    //     if (!result) {
+    //       return failureJSONResponse(res, { message: `something went wrong` });
+    //     }
+    //     if (!result) {
+    //       return failureJSONResponse(res, { message: `something went wrong` });
+    //     }
+      
+    //       const currentDate = new Date();
+    //       let thisplan = previousdata?.plan_validity;
+    //       // console.log(thisplan);
+    //       const thedata = []; // Create an array to store the modified addons
+        
+    //       result[0].add_ons.forEach((addon) => {
+    //         const addonValidity = previousdata?.addons_validity.find(
+    //           (addonValidity) => addonValidity.name === addon.name
+    //         );
+    //         let status = false
+        
+    //         if (addonValidity) {
+    //           const expiredDate = new Date(addonValidity?.expired_on);
+        
+    //           if (expiredDate > currentDate) {
+    //             status = true;
+    //           } else {
+    //             status = false;
+    //           }
+        
+    //           // Add the modified addon to the thedata array
+    //           thedata.push({
+    //             ...addon._doc,
+    //             current_plan:{
+    //               validity:thisplan
+    //             },
+    //             current_addon: {
+    //              validity: addonValidity,
+    //               status: status,
+    //             },
+    //           });
+    //         } else {
+    //           // If no matching add-on found, add a modified addon with expired_on and status set to false
+    //           thedata.push({
+    //             ...addon._doc,
+    //             current_plan:{validity:null},
+    //             current_addon: {
+    //               validity: null,
+    //               status: status,
+    //             },
+    //           });
+    //         }
+    //       });
+        
+    //       // Now, the 'thedata' array should contain modified add-ons
+    //       // console.log(thedata,"emekmkdemckedmckmdekcmek");
+    //       return successJSONResponse(res, { data: thedata });
+       
+        
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     return failureJSONResponse(res, `something went wrong` );
+    //   });
   } catch (err) {
-    return failureJSONResponse(res, { message: `something went wrong` });
+    console.log(err);
+    return failureJSONResponse(res, `something went wrong` );
   }
 };
