@@ -29,5 +29,9 @@ const addPlanSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
+addPlanSchema.virtual("dummy_val").get(function () {
+  let total = 0;
+  
+  return total;
+});
 module.exports = mongoose.model("plan_addons", addPlanSchema);

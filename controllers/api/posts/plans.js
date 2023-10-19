@@ -39,9 +39,9 @@ let ods = await AdsPlan.aggregate([
   },
   {
     $lookup: {
-      from: YourModel, // Replace with the name of your collection
-      localField: postid, // Field from AdsPlan collection
-      foreignField: _id, // Field from previousdata collection
+      from: 'rentals', // Replace with the name of your collection
+      localField: "_id", // Field from AdsPlan collection
+      foreignField: "", // Field from previousdata collection
       as: "joinedData", // Alias for the joined data
     },
   },
