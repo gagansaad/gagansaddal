@@ -33,11 +33,11 @@ let postid
     if (!results ) {
       return failureJSONResponse(res, { message: "No matching results found" });
     }
-    if (postid.length > 0){
-    if(postid){
+    if (postid){
+    
       previousdata = await YourModel.findById(postid)
     
-    }
+    
     const currentDate = new Date();
     const modifiedResults = [];
     // let thisplan = previousdata?.plan_validity;
