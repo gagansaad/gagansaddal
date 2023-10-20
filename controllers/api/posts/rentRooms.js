@@ -6,6 +6,9 @@ const { mongoose, ObjectId, modelNames } = require("mongoose"),
   PostViews = mongoose.model("Post_view"),
   Users = mongoose.model("user"),
   Media = mongoose.model("media"),
+  Category = mongoose.model("adsCategory"),
+  subCategory = mongoose.model("adsSubCategory"),
+  
   tagline_keywords = mongoose.model("keywords"),
   {
     successJSONResponse,
@@ -24,9 +27,62 @@ const { mongoose, ObjectId, modelNames } = require("mongoose"),
 
 exports.fetchDynamicsData = async (req, res, next) => {
   let records;
-
-  records = await tagline_keywords.find().select({ keywords: 1, _id: 1 });
-
+  // const ads_type = req.query.ads_type;
+  // const categories = await Category.aggregate([
+  //   {
+  //     $match: {
+  //       status: "active", // Filter "adsCategory" documents with an "active" status
+  //     }
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "adssubcategories", // Name of the "adsSubCategory" collection
+  //       localField: "_id",       // Field from the "adsCategory" collection
+  //       foreignField: "category", // Field from the "adsSubCategory" collection
+  //       as: "subcategories"       // Name for the new field that holds the joined data
+  //     }
+  //   },
+  //   {
+  //     $project: {
+  //       _id: 1,
+  //       name: 1,
+  //       subcategories: {
+  //         $filter: {
+  //           input: "$subcategories",
+  //           as: "sub",
+  //           cond: {
+  //             $eq: ["$$sub.status", "active"] // Include only "active" subcategories
+  //           }
+  //         }
+  //       }
+  //     }
+  //   },
+  //   {
+  //     $project: {
+  //       _id: 1,
+  //       name: 1,
+  //       "subcategories._id": 1,
+  //       "subcategories.name": 1
+  //     }
+  //   }
+  // ]);
+// // console.log(categories[0].sub_categories);
+//   // Step 2: Update categories with related subcategory IDs
+//   for (const category of categories) {
+//     // Step 3: Find subcategories for the category
+//     const subCategories = await subCategory.find({ category: category._id });
+  
+//     // Step 4: Get an array of subcategory _ids
+//     const subCategoryIds = subCategories.map(subCategory => subCategory._id);
+  
+//     // Step 5: Update the category's sub_categories field
+//     category.sub_categories = subCategoryIds;
+  
+//     // Step 6: Save the updated category
+//     await category.save();
+//   }
+  
+// console.log(categories);
   const objtSend = {
     tagline: records,
     rental_type: [
@@ -67,6 +123,7 @@ exports.fetchDynamicsData = async (req, res, next) => {
   return successJSONResponse(res, {
     message: `success`,
     data: objtSend,
+    // categories
   });
 };
 

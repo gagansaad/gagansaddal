@@ -32,6 +32,7 @@ const mongoose = require("mongoose"),
   
         AdsSubCategory.create(dataObj)
           .then((newCategory) => {
+            
             if (!newCategory)
               return failureJSONResponse(res, {
                 message: `Something went wrong`,

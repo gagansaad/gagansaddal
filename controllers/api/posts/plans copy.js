@@ -40,6 +40,9 @@ let postid
     const currentDate = new Date();
     const modifiedResults = [];
     // let thisplan = previousdata?.plan_validity;
+    if (postid.length > 0){
+
+  
     for (let result of results) {
       const finaldata = JSON.parse(JSON.stringify(result));
       let thisplan = previousdata?.plan_validity;
@@ -81,7 +84,9 @@ let postid
       modifiedResults.push(finaldata);
     }
     return successJSONResponse(res, { data: modifiedResults });
-    
+  }else{
+    return successJSONResponse(res, { data: results });
+  }
 
      
   } catch (err) {

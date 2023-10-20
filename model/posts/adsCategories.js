@@ -20,7 +20,10 @@ const roomRentsSchema = new mongoose.Schema(
       ...defaultStringConfig,
       required: true,
     },
-
+    sub_categories: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: `adsSubCategory`,
+    }],
     ads_type: {
       type: mongoose.Schema.Types.ObjectId,
       ref: `PostType`,
