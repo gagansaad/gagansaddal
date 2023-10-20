@@ -25,10 +25,7 @@ let postid
     let {Typename} = await ModelNameByAdsType(planObjectId)
     let YourModel = mongoose.model(Typename);
     let previousdata
-    if(postid){
-      previousdata = await YourModel.findById(postid)
     
-    }
     let results = await AdsPlan.find({
       ads_type: planObjectId,
     }).populate("add_ons");
@@ -36,11 +33,15 @@ let postid
     if (!results ) {
       return failureJSONResponse(res, { message: "No matching results found" });
     }
+    if (postid.length > 0){
+    if(postid){
+      previousdata = await YourModel.findById(postid)
     
+    }
     const currentDate = new Date();
     const modifiedResults = [];
     // let thisplan = previousdata?.plan_validity;
-    if (postid.length > 0){
+   
 
   
     for (let result of results) {
