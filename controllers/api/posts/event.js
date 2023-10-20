@@ -960,9 +960,9 @@ exports.fetchAll = async (req, res, next) => {
     }
     if (is_myad != "true") {
       dbQuery.status = "active";
-      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+      dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
       adOnsQuery.status = "active";
-      adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+      adOnsQuery["plan_validity.expired_on"] = { $gte: currentISODate };
     } else {
       if (status == 0) {
         dbQuery.status = "active";
@@ -1232,7 +1232,7 @@ exports.fetchEventData = async (req, res, next) => {
         const query = {
           "adsInfo.category": subCategory,
           status: "active",
-          ["plan_validity.expired_on"]: { $gte: currentDateOnly },
+          ["plan_validity.expired_on"]: { $gte: currentISODate },
         };
         if (req.query.longitude && req.query.latitude) {
           // Assuming you have longitude and latitude fields in your data

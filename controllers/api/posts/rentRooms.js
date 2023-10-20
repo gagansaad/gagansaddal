@@ -175,7 +175,7 @@ exports.fetchRoomData = async (req, res, next) => {
           "adsInfo.rental_type": category,
           "adsInfo.category": subCategory,
           status: "active",
-          "plan_validity.expired_on": { $gte: currentDateOnly },
+          "plan_validity.expired_on": { $gte: currentISODate },
         };
         if (req.query.longitude && req.query.latitude) {
           // Assuming you have longitude and latitude fields in your data
@@ -857,9 +857,9 @@ exports.fetchAll = async (req, res, next) => {
     }
     if (is_myad != "true") {
       
-      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+      dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
       adOnsQuery.status = "active";
-      adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+      adOnsQuery["plan_validity.expired_on"] = { $gte: currentISODate };
       
     } else {
       dbQuery.userId = myid;

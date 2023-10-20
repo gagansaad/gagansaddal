@@ -855,10 +855,10 @@ exports.fetchAllAds = async (req, res, next) => {
     }
     if (is_myad != "true") {
       dbQuery.status = "active";
-      dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+      dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
 
       adOnsQuery.status = "active";
-      adOnsQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+      adOnsQuery["plan_validity.expired_on"] = { $gte: currentISODate };
     } else {
       dbQuery.userId = myid;
       if (status == 0) {
@@ -1213,7 +1213,7 @@ exports.fetchJobData = async (req, res, next) => {
         const query = {
           "adsInfo.categories": subCategory,
           status: "active",
-          ["plan_validity.expired_on"]: { $gte: currentDateOnly },
+          ["plan_validity.expired_on"]: { $gte: currentISODate },
         };
         if (req.query.longitude && req.query.latitude) {
           // Assuming you have longitude and latitude fields in your data

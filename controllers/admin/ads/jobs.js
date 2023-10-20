@@ -128,9 +128,8 @@ exports.fetchAll = async (req, res, next) => {
     // Convert the date to ISO 8601 format
     const currentISODate = currentDate.toISOString();
     // Extract only the date portion
-    const currentDateOnly = currentISODate.substring(0, 10);
     dbQuery.status = "active";
-    dbQuery["plan_validity.expired_on"] = { $gte: currentDateOnly };
+    dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
 
     let queryFinal = dbQuery;
     if (searchTerm) {
@@ -257,12 +256,11 @@ exports.fetchOne = async (req, res, next) => {
     // Convert the date to ISO 8601 format
     const currentISODate = currentDate.toISOString();
     // Extract only the date portion
-    const currentDateOnly = currentISODate.substring(0, 10);
     if (adsId) {
       data_Obj = {
         _id: adsId,
         status: "active",
-        "plan_validity.expired_on": { $gte: currentDateOnly },
+        "plan_validity.expired_on": { $gte: currentISODate },
       };
     } else {
       return failureJSONResponse(res, { message: `ad id not Available` });

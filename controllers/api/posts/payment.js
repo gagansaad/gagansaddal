@@ -674,7 +674,7 @@ console.log(userIds,"-----------------------------------------------------------
 
   let AddOnsArr = [];
   let currentDate = new Date();
-  let activedate = currentDate.toISOString().split("T")[0];
+  let activedate = currentDate;
   let planDuration = await AdsPlan.findById({ _id: plan_id });
 
   let expired_data = new Date(
@@ -688,8 +688,7 @@ console.log(userIds,"-----------------------------------------------------------
     expired_on: new Date(
       currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
     )
-      .toISOString()
-      .split("T")[0],
+    
   };
   await Promise.all(
     paymentDetails?.plan_addons?.map(async (obj) => {
