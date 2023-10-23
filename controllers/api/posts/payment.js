@@ -681,7 +681,6 @@ console.log(userIds,"-----------------------------------------------------------
     currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
   )
     .toISOString()
-    .split("T")[0];
   let plan_obj = {
     plan_id: planDuration._id.toString(),
     active_on: activedate,
