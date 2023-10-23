@@ -680,13 +680,14 @@ console.log(userIds,"-----------------------------------------------------------
   let expired_data = new Date(
     currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
   )
-    .toISOString();
+    .toISOString()
+    .split("T")[0];
   let plan_obj = {
     plan_id: planDuration._id.toString(),
     active_on: activedate,
     expired_on: new Date(
       currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
-    )
+    ).toISOString()
     
   };
   await Promise.all(
