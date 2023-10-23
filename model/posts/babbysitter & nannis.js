@@ -12,7 +12,7 @@ const babysitter_Schema = new mongoose.Schema(
   {
     status: {
       type: String,
-      enum: [`active`, `inactive`, `draft`],
+      enum: [`active`, `inactive`, `draft`, `deleted`],
       required: true,
       default: "draft",
 
@@ -149,6 +149,11 @@ const babysitter_Schema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
+    deletedAt:{
+      type :String,
+      default:null
+      
+        },
   },
   { timestamps: true }
 );

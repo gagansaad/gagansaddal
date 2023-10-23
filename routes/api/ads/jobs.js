@@ -55,6 +55,11 @@ router.post(
   controllers.validateJobAdsData,
   controllers.createJobAds
 );
+router.patch(
+  `/remove`,
+  authMiddleware.ensureUserLoggedIn,
+  controllers.fetchOneUpdate
+);
 router.get(
   `/fetchAds`,
   authMiddleware.ensureUserLoggedInDummy,

@@ -43,7 +43,11 @@ router.post(
   controllers.validatebizAdsData,
   controllers.createbizAds
 );
-
+router.patch(
+  `/remove`,
+  authMiddleware.ensureUserLoggedIn,
+  controllers.fetchOneUpdate
+);
 router.patch(
   `/edit/:bizId`,
   upload.fields([

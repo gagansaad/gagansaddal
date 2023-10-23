@@ -40,6 +40,11 @@ router.get(
   authMiddleware.ensureUserLoggedInDummy,
   controllers.getDnymicsData
 );
+router.patch(
+  `/remove`,
+  authMiddleware.ensureUserLoggedIn,
+  controllers.fetchOneUpdate
+);
 router.get(`/menu`, controllers.fetchBuysellData);
 router.post(
   `/create`,

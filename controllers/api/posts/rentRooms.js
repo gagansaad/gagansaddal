@@ -24,7 +24,42 @@ const { mongoose, ObjectId, modelNames } = require("mongoose"),
     isValidEmailAddress,
     isValidIndianMobileNumber,
   } = require(`../../../utils/validators`);
-
+  exports.fetchOneUpdate = async (req, res, next) => {
+    try {
+      if (!req.query.ads_id || !req.userId) {
+        return failureJSONResponse(res, { message: "Missing required parameters" });
+      }
+  
+      let dbQuery = {
+        $and: [
+          { _id: req.query.ads_id },
+          { userid: req.userId }
+        ]
+      };
+  
+      let updateFields = {
+        $set: {
+          status: "deleted",
+          deletedAt: new Date().toISOString()// Add your temporary field and its value here
+        }
+      };
+  
+      let records = await RoomRentsAds.update(dbQuery, updateFields, { new: true });
+  
+      if (records) {
+        return successJSONResponse(res, {
+          message: "Success",
+          status: 200,
+          
+        });
+      } else {
+        return failureJSONResponse(res, { message: "Ad not available" });
+      }
+    } catch (err) {
+      return failureJSONResponse(res, { message: "Something went wrong" });
+    }
+  };
+  
 exports.fetchDynamicsData = async (req, res, next) => {
   let records;
   // const ads_type = req.query.ads_type;

@@ -67,6 +67,11 @@ router.get(
   authMiddleware.ensureUserLoggedInDummy,
   controllers.fetchAll
 );
+router.patch(
+  `/remove`,
+  authMiddleware.ensureUserLoggedIn,
+  controllers.fetchOneUpdate
+);
 router.get(
   `/ad_details`,
   authMiddleware.ensureUserLoggedInDummy,

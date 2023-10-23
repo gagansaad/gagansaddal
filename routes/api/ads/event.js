@@ -48,6 +48,11 @@ router.post(
   controllers.validateEventAdsData,
   controllers.createEventAds
 );
+router.patch(
+  `/remove`,
+  authMiddleware.ensureUserLoggedIn,
+  controllers.fetchOneUpdate
+);
 
 router.patch(
   `/edit/:eventId`,

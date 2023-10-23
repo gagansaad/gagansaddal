@@ -50,7 +50,11 @@ router.post(
   controllers.validateRoomRentsAdsData,
   controllers.creatingRoomRentsAds
 );
-
+router.patch(
+  `/remove`,
+  authMiddleware.ensureUserLoggedIn,
+  controllers.fetchOneUpdate
+);
 router.patch(
   `/edit/:roomRentId`,
   upload.array("photos", 10),

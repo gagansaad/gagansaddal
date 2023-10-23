@@ -1,6 +1,6 @@
 const { json } = require("express");
 const crypto = require("crypto");
-const mongoose = require("mongoose"),
+const { mongoose, ObjectId, modelNames } = require("mongoose"),
   eventAd = mongoose.model("event"),
   Media = mongoose.model("media"),
   Users = mongoose.model("user"),
@@ -24,6 +24,43 @@ const mongoose = require("mongoose"),
     isValidPlink,
   } = require(`../../../utils/validators`);
 
+
+  exports.fetchOneUpdate = async (req, res, next) => {
+    try {
+      if (!req.query.ads_id || !req.userId) {
+        return failureJSONResponse(res, { message: "Missing required parameters" });
+      }
+  
+      let dbQuery = {
+        $and: [
+          { _id: req.query.ads_id },
+          { userid: req.userId }
+        ]
+      };
+  
+      let updateFields = {
+        $set: {
+          status: "deleted",
+          deletedAt: new Date().toISOString()// Add your temporary field and its value here
+        }
+      };
+  
+      let records = await eventAd.update(dbQuery, updateFields, { new: true });
+  
+      if (records) {
+        return successJSONResponse(res, {
+          message: "Success",
+          status: 200,
+          
+        });
+      } else {
+        return failureJSONResponse(res, { message: "Ad not available" });
+      }
+    } catch (err) {
+      return failureJSONResponse(res, { message: "Something went wrong" });
+    }
+  };
+  
 ///-----------------------Dynamic Data---------------------------////
 
 exports.getDnymicsData = async (req, res, next) => {
