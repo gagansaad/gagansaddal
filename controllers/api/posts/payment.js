@@ -673,7 +673,7 @@ console.log(userIds,"-----------------------------------------------------------
   let body1 = `${adsName} New Post Added Click to See`;
 
   let AddOnsArr = [];
-  let currentDate = new Date().toISOString();
+  let currentDate = new Date();
   let activedate = currentDate;
   let planDuration = await AdsPlan.findById({ _id: plan_id });
 
@@ -681,12 +681,13 @@ console.log(userIds,"-----------------------------------------------------------
     currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
   )
     .toISOString()
+    .split("T")[0];
   let plan_obj = {
     plan_id: planDuration._id.toString(),
     active_on: activedate,
     expired_on: new Date(
       currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
-    ).toISOString()
+    )
     
   };
   await Promise.all(
