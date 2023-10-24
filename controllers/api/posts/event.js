@@ -27,8 +27,11 @@ const { mongoose, ObjectId, modelNames } = require("mongoose"),
 
   exports.fetchOneUpdate = async (req, res, next) => {
     try {
-      if (!req.query.ads_id || !req.userId) {
-        return failureJSONResponse(res, { message: "Missing required parameters" });
+      if (!req.query.ads_id) {
+        return failureJSONResponse(res, { message: "Please provide adsId" });
+      }
+      if (!req.userId) {
+        return failureJSONResponse(res, { message: "Please provide UserId" });
       }
   
       let dbQuery = {
