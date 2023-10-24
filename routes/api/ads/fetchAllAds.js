@@ -24,7 +24,7 @@ router.patch(
   authMiddleware.ensureUserLoggedInDummy,
   controllers.remove_accredation_media
 );
-router.get(
+router.patch(
   `/edit-status`,
   authMiddleware.ensureUserLoggedIn,
   controllers.editStatus
