@@ -769,7 +769,7 @@ exports.fetchAllAds = async (req, res, next) => {
         },
       };
     }
-    const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
+    const sortval = sortBy === "Oldest" ? { 'plan_validity.active_on': 1 } : { 'plan_validity.active_on': -1 };
     let Distance;
 
     if (maxDistance === "0" || !maxDistance) {
