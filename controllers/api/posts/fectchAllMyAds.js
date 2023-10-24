@@ -534,9 +534,10 @@ exports.editStatus = async (req, res, next) => {
 
          if (expiredDate <= currentDate) {
          console.log("The plan has expired.");
-         return failureJSONResponse(res, {
+         
+        return successJSONResponse(res, {
           message: `Your Ad plan has expired.`,
-          
+          status: 200,
         });
         }
         dbQuery.status = "active";
@@ -561,6 +562,7 @@ exports.editStatus = async (req, res, next) => {
         status: 200,
       });
     } else {
+      
       return failureJSONResponse(res, {
         message: `your not Owner of this ad`,
         
