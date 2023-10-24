@@ -537,7 +537,7 @@ exports.editStatus = async (req, res, next) => {
          
         return successJSONResponse(res, {
           message: `Your Ad plan has expired.`,
-          status: 200,
+          status: 201,
         });
         }
         dbQuery.status = "active";
