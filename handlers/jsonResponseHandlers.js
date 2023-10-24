@@ -67,10 +67,11 @@ exports.successJSONResponse = (
   httpStatusCode = 200
 ) => {
   if (res) {
-    // let httpStatusCodeToUse = 200;
+
+    let httpStatusCodeToUse = 200;
     if (httpStatusCode && Number(httpStatusCode))
       httpStatusCodeToUse = Number(httpStatusCode);
-
+console.log(httpStatusCodeToUse);
     return res.status(httpStatusCodeToUse).json({
       status: httpStatusCodeToUse,
       ...data,
