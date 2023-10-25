@@ -1022,6 +1022,7 @@ exports.fetchAll = async (req, res, next) => {
         $or: [
           { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
           { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } },
+          {"advertisement_id":searchTerm}
         ],
       };
     }
