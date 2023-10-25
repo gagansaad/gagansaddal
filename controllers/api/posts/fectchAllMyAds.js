@@ -608,3 +608,315 @@ exports.recomended_ads = async (req, res, next) => {
     });
   }
 };
+
+exports.search = async (req, res, next) => {
+  try {
+    let searchTerm = req.query.search_term || "";
+    let dbQuery = {};
+    let filterd =[];
+    const {
+      userId,
+      status,
+      sortBy,
+      longitude,
+      latitude,
+      maxDistance, 
+      amount,
+      add_on,
+      min_price,
+      max_price,
+      is_favorite,
+      is_myad,
+    } = req.query;
+    
+    let commonSelectFields = {
+      addons_validity: 1,
+      "adsInfo.title": 1,
+      "adsInfo.location": 1,
+      createdAt: 1,
+      _id: 1,
+    };
+    const sortval = sortBy === "Oldest" ? { 'plan_validity.active_on': 1 } : { 'plan_validity.active_on': -1 };
+    let Distance;
+
+    if (maxDistance === "0" || !maxDistance) {
+      Distance = 200000;
+    } else {
+      Distance = maxDistance * 1000;
+    }
+    if (longitude && latitude && Distance) {
+      const targetPoint = {
+        type: "Point",
+        coordinates: [longitude, latitude],
+      };
+     
+      dbQuery["adsInfo.location.coordinates"] = {
+        $near: {
+          $geometry: targetPoint,
+          $maxDistance: Distance,
+        },
+      };
+    }
+
+    if (amount) {
+      // Add filter for rent amount
+      dbQuery["adsInfo.rent.amount"] = { $lte: amount };
+    }
+    if (min_price && max_price) {
+      dbQuery["adsInfo.rent.amount"] = {
+        $gte: parseFloat(min_price),
+        $lte: parseFloat(max_price),
+      };
+    }
+
+    if (add_on) {
+      dbQuery = {
+        addons_validity: {
+          $elemMatch: {
+            name: add_on,
+            expired_on: {
+              $gte: new Date("2023-09-18").toISOString(), // Construct ISODate manually
+            },
+          },
+        },
+      };
+    }
+
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    const currentDateOnly = currentISODate.substring(0, 10);
+    let myid = req.userId;
+    if (is_myad == "true" && !myid) {
+      return failureJSONResponse(res, {
+        message: "Please login to your account",
+      });
+    }
+    if (is_myad != "true") {
+      
+      dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
+     
+      
+    } else {
+      dbQuery.userId = myid;
+      if (status == 0) {
+        dbQuery.status = "active";
+      }
+      if (status == 1) {
+        dbQuery.status = "inactive";
+      }
+      if (status == 2) {
+        dbQuery.status = "draft";
+      }
+    }
+    if (userId) dbQuery.userId = userId;
+    let queryFinal = dbQuery;
+    if (searchTerm) {
+      queryFinal = {
+        ...dbQuery,
+        $or: [
+          { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
+          { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } },
+          {"advertisement_id":searchTerm}
+        ],
+      };
+    }
+
+   if(searchTerm.length > 0){
+
+ 
+    let records = await roomrentAd.find({
+      $or: [queryFinal],
+    })
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+      .populate({ path: "viewCount" })
+      .populate({ path: "ReportCount", select: "_id" })
+      .populate({
+        path: "isReported",
+        select: "userId",
+        match: { userId: myid },
+      }).select({ addons_validity: 1,
+        "adsInfo.title": 1,
+        "adsInfo.location": 1,
+        createdAt: 1,
+        advertisement_id:1,
+        _id: 1,
+        "adsInfo.rent": 1,
+        "adsInfo.rent_info": 1,})
+      .sort(sortval);
+      let records1 = await jobsAd
+      .find({ $or: [queryFinal] })
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+      .populate({ path: "ReportCount", select: "_id" })
+      .populate({
+        path: "isReported",
+        select: "userId",
+        match: { userId: myid },
+      }).select({ addons_validity: 1,
+        "adsInfo.title": 1,
+        "adsInfo.location": 1,
+        createdAt: 1,
+        advertisement_id:1,
+        _id: 1,
+        "adsInfo.salary": 1,
+        "adsInfo.salary_info": 1,})
+      .sort(sortval);
+
+     
+      let records2 = await bizAd
+      .find({ $or: [queryFinal] })
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({
+        path: "adsInfo.accreditation_file.file",
+        strictPopulate: false,
+        select: "url",
+      })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+      .populate({ path: "ReportCount", select: "_id" })
+      .populate({
+        path: "isReported",
+        select: "userId",
+        match: { userId: myid },
+      }).select({ addons_validity: 1,
+        "adsInfo.title": 1,
+        "adsInfo.location": 1,
+        createdAt: 1,
+        advertisement_id:1,
+        _id: 1,})
+      .sort(sortval);
+      let records3 = await eventAd
+      .find({ $or: [queryFinal] })
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+      .populate({ path: "ReportCount", select: "_id" })
+      .populate({
+        path: "isReported",
+        select: "userId",
+        match: { userId: myid },
+      }).select({ addons_validity: 1,
+        "adsInfo.title": 1,
+        "adsInfo.location": 1,
+        createdAt: 1,
+        advertisement_id:1,
+        _id: 1,
+        "adsInfo.ticket_price": 1,})
+      .sort(sortval);
+      let records4 = await buysellAd
+      .find({ $or: [queryFinal] })
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+      .populate({ path: "ReportCount", select: "_id" })
+      .populate({
+        path: "isReported",
+        select: "userId",
+        match: { userId: myid },
+      }).select({ addons_validity: 1,
+        "adsInfo.title": 1,
+        "adsInfo.location": 1,
+        createdAt: 1,
+        advertisement_id:1,
+        _id: 1,
+        "adsInfo.price": 1,
+        price_drop: 1,})
+      .sort(sortval);
+      let records5 = await babysitterAd
+      .find({ $or: [queryFinal] })
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: "ReportCount" })
+      .populate({ path: "ReportCount", select: "_id" })
+      .populate({
+        path: "isReported",
+        select: "userId",
+        match: { userId: myid },
+      }).select({ addons_validity: 1,
+        "adsInfo.title": 1,
+        "adsInfo.location": 1,
+        createdAt: 1,
+        advertisement_id:1,
+        _id: 1,
+        "adsInfo.expected_salary_amount": 1,
+        "adsInfo.expected_salary_rate": 1,})
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+      .sort(sortval);
+    
+   filterd = [...records,...records1,...records2,...records3,...records4,...records5]
+  }
+    if (filterd) {
+    
+      let jobData = filterd.map((job) => {
+      
+        return {
+          ...job._doc,
+          // Add other job fields as needed
+          view_count: job.viewCount,
+          favorite_count: job.favoriteCount,
+          is_favorite: !!job.isFavorite,
+          Report_count: job.ReportCount,
+          is_Reported: !!job.isReported,
+        };
+      }); //////
+      const isFavoriteFilter = is_favorite === "true" ? true : undefined;
+      if (isFavoriteFilter) {
+        jobData = jobData.filter((job) => job.is_favorite === true);
+      }
+
+      // Pagination
+      const totalCount = jobData.length;
+      const perPage = parseInt(req.query.perpage) || 40;
+      const page = parseInt(req.query.page) || 1;
+
+      const startIndex = (page - 1) * perPage;
+      const endIndex = startIndex + perPage;
+        // Shuffle the sorted data
+        for (let i = jobData.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [jobData[i], jobData[j]] = [jobData[j], jobData[i]];
+        }
+      // jobData.sort((a, b) => a.createdAt - b.createdAt);
+
+    
+      const paginatedData = jobData.slice(startIndex, endIndex);
+   
+      let finalResponse = {
+        message: `success`,
+        total: totalCount,
+        perPage: perPage,
+        totalPages: Math.ceil(totalCount / perPage),
+        currentPage: page,
+        records: paginatedData,
+        status: 200,
+       
+      };
+      return successJSONResponse(res, finalResponse);
+    } else {
+      return failureJSONResponse(res, { message: `ads not Available` });
+    }
+  } catch (err) {
+    console.log(err);
+    return failureJSONResponse(res, { message: `something went wrong` });
+  }
+};
+
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+

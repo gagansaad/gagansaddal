@@ -13,7 +13,11 @@ router.get(
   authMiddleware.ensureUserLoggedInDummy,
   controllers.fetchAll
 );
-
+router.get(
+  `/search`,
+  authMiddleware.ensureUserLoggedInDummy,
+  controllers.search
+);
 router.patch(
   `/remove-media`,
   authMiddleware.ensureUserLoggedInDummy,
