@@ -16,9 +16,9 @@ const events_Schema = new mongoose.Schema(
       required: true,
       default: "draft",
 
-      //1 = active
-      //2 = inactive
-      //3 = draft
+      //0 = active
+      //1 = inactive
+      //2 = draft
     },
     advertisement_id: defaultStringConfig,
     plan_validity: {

@@ -790,6 +790,7 @@ exports.fetchAll = async (req, res, next) => {
     } else {
       Distance = maxDistance * 1000;
     }
+    console.log(longitude,latitude,"------------------kjfhnh");
     if (longitude && latitude && Distance) {
       const targetPoint = {
         type: "Point",

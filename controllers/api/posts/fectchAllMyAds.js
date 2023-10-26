@@ -588,12 +588,116 @@ exports.recomended_ads = async (req, res, next) => {
       });
     } 
   // let adType = ["event","rental","job","Local_biz & Service","Buy & Sell","babysitter & nannie"]
-    const updateJob = await viewModel.find({ userId: userId }).populate({path:'ad', model: 'adType', match: { adType: { $in: "adType" } }})
+    const updateJob = await viewModel.aggregate([
+      {
+        $match: {
+          userId: ObjectId("650d443efa1d18f52e7734d2")
+        }
+      },
+      {
+        $sort: {
+          adType: 1,
+          createdAt: -1
+        }
+      },
+      {
+        $group: {
+          _id: "$adType",
+          data: {
+            $push: "$$ROOT"
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          adType: "$_id",
+          data: {
+            $slice: ["$data", 3]
+          }
+        }
+      },
+      {
+        $unwind: "$data"
+      },
+      {
+        $replaceRoot: {
+          newRoot: "$data"
+        }
+      },
+      {
+        $group: {
+          _id: "$adType",
+          data: {
+            $push: "$$ROOT"
+          }
+        }
+      }
+    ]);
+    
+    const promises = [];
+
+    updateJob.forEach((category) => {
+      category.data.forEach((item) => {
+        const adid = item.ad;
+        const ads_type = item.ads_type;
+    
+        promises.push({
+          adid,
+          ads_type,
+        });
+      });
+    });
+    
+    // Now, you can process these values as needed, for example:
+     
+    const recordPromises = promises.map(async (data) => {
+      const adid = data.adid;
+      const ads_type = data.ads_type;
+    
+      const { Typename } = await ModelNameByAdsType(ads_type);
+    
+      if (!Typename) {
+        return failureJSONResponse(res, {
+          message: `Please provide a valid adstype`,
+        });
+      }
+    
+      const YourModel = mongoose.model(Typename);
+      // console.log(YourModel);
+      const record = await YourModel.findById(adid);
+      let dbQuery ={}
+      dbQuery.status = "active";
+      if(Typename== "rental"){
+        dbQuery["adsInfo.category"] = record.adsInfo.category;
+      }
+      if(Typename== "babysitter & nannie"){
+        dbQuery["adsInfo.category.category_name"] = record.adsInfo.category.category_name;
+      }
+      if(Typename== "event"){
+        dbQuery["adsInfo.category"] = record.adsInfo.category;
+      }
+      if(Typename== "job"){
+        dbQuery["adsInfo.categories"] = record.adsInfo.categories;
+      }
+      if(Typename== "Buy & Sell"){
+        dbQuery["adsInfo.sub_category"] = record.adsInfo.sub_category;
+      }
+      if(Typename== "Local_biz & Service"){
+        dbQuery["adsInfo.sub_categories"] = record.adsInfo.sub_categories;
+      }
+      // const record2 = await YourModel.find(adid);
+      return record;
+    });
+    
+    const recommendedAds = await Promise.all(recordPromises);
+    
+    
 
     if (updateJob) {
       return successJSONResponse(res, {
         message: `success`,
-        recomended_ads:updateJob,
+        recomended_ads:recommendedAds,
         status: 200,
       });
     } else {
