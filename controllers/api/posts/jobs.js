@@ -818,7 +818,7 @@ exports.fetchAllAds = async (req, res, next) => {
           $elemMatch: {
             name: add_on,
             expired_on: {
-              $gte: new Date("2023-09-18").toISOString(),
+              $gte: new Date().toISOString(),
             },
           },
         },
