@@ -803,13 +803,43 @@ exports.fetchAll = async (req, res, next) => {
           $maxDistance: Distance,
         },
       };
-      dbQuery["adsInfo.location.coordinates"] = {
+      // dbQuery["adsInfo.location.coordinates"] = {
+      //   $near: {
+      //     $geometry: targetPoint,
+      //     $maxDistance: Distance,
+      //   },
+      // };
+    }
+    let locationQuery = {}; // Separate object for location filter
+
+    if (longitude && latitude && Distance) {
+      const targetPoint = {
+        type: "Point",
+        coordinates: [longitude, latitude],
+      };
+      locationQuery["adsInfo.location.coordinates"] = {
         $near: {
           $geometry: targetPoint,
           $maxDistance: Distance,
         },
       };
     }
+    let addOnsQuery = {}; // Separate object for add_on filter
+
+    if (add_on) {
+      addOnsQuery = {
+        addons_validity: {
+          $elemMatch: {
+            name: add_on,
+            expired_on: {
+              $gte: new Date("2023-09-18").toISOString(),
+            },
+          },
+        },
+      };
+    }
+
+
 
     if (amount) {
       // Add filter for rent amount
@@ -822,18 +852,18 @@ exports.fetchAll = async (req, res, next) => {
       };
     }
 
-    if (add_on) {
-      dbQuery = {
-        addons_validity: {
-          $elemMatch: {
-            name: add_on,
-            expired_on: {
-              $gte: new Date("2023-09-18").toISOString(), // Construct ISODate manually
-            },
-          },
-        },
-      };
-    }
+    // if (add_on) {
+    //   dbQuery = {
+    //     addons_validity: {
+    //       $elemMatch: {
+    //         name: add_on,
+    //         expired_on: {
+    //           $gte: new Date("2023-09-18").toISOString(), // Construct ISODate manually
+    //         },
+    //       },
+    //     },
+    //   };
+    // }
     if (custom_date) {
       // Add filter for availability custom_date
       dbQuery["adsInfo.availability.custom_date"] = custom_date;
@@ -914,6 +944,9 @@ exports.fetchAll = async (req, res, next) => {
       }
     }
     if (userId) dbQuery.userId = userId;
+    dbQuery ={  ...dbQuery,
+      ...locationQuery,
+      ...addOnsQuery,}
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
