@@ -779,6 +779,7 @@ exports.fetchAll = async (req, res, next) => {
       is_favorite,
       is_myad,
     } = req.query;
+    console.log(req.query,"bnvdjnvjrdxjfdxfjbn dfxnv fjdsnvb");
     let adOnsQuery = {};
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
