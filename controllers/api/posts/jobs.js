@@ -789,13 +789,42 @@ exports.fetchAllAds = async (req, res, next) => {
           $maxDistance: Distance,
         },
       };
-      dbQuery["adsInfo.location.coordinates"] = {
+      // dbQuery["adsInfo.location.coordinates"] = {
+      //   $near: {
+      //     $geometry: targetPoint,
+      //     $maxDistance: Distance,
+      //   },
+      // };
+    }
+    let locationQuery = {}; // Separate object for location filter
+
+    if (longitude && latitude && Distance) {
+      const targetPoint = {
+        type: "Point",
+        coordinates: [longitude, latitude],
+      };
+      locationQuery["adsInfo.location.coordinates"] = {
         $near: {
           $geometry: targetPoint,
           $maxDistance: Distance,
         },
       };
     }
+    let addOnsQuery = {}; // Separate object for add_on filter
+
+    if (add_on) {
+      addOnsQuery = {
+        addons_validity: {
+          $elemMatch: {
+            name: add_on,
+            expired_on: {
+              $gte: new Date("2023-09-18").toISOString(),
+            },
+          },
+        },
+      };
+    }
+
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
     if (isfeatured) {
@@ -911,6 +940,9 @@ exports.fetchAllAds = async (req, res, next) => {
         dbQuery.status = "draft";
       }
     }
+    dbQuery ={  ...dbQuery,
+      ...locationQuery,
+      ...addOnsQuery,}
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
