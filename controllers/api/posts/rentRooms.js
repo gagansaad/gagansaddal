@@ -208,13 +208,13 @@ exports.fetchRoomData = async (req, res, next) => {
         // Convert the date to ISO 8601 format
         const currentISODate = currentDate.toISOString();
         // Extract only the date portion
-        const currentDateOnly = currentISODate.substring(0, 10);
+        // const currentDateOnly = currentISODate.substring(0, 10);
 
         const query = {
           "adsInfo.rental_type": category,
           "adsInfo.category": subCategory,
           status: "active",
-          "plan_validity.expired_on": { $gte: currentDateOnly },
+          "plan_validity.expired_on": { $gte: currentISODate },
         };
         if (req.query.longitude && req.query.latitude) {
           // Assuming you have longitude and latitude fields in your data
