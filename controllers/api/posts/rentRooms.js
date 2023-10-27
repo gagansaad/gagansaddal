@@ -168,6 +168,7 @@ exports.fetchDynamicsData = async (req, res, next) => {
 exports.fetchRoomData = async (req, res, next) => {
   try {
     const { longitude, latitude } = req.query; // Get longitude and latitude from the request query parameters
+    console.log(req.query,"dncdnvjdnjhdv");
     let maxDistance = req.query.maxDistance || 200;
     const sub_categories = {
       "Rooms for Rent": [
@@ -217,6 +218,7 @@ exports.fetchRoomData = async (req, res, next) => {
         };
         if (req.query.longitude && req.query.latitude) {
           // Assuming you have longitude and latitude fields in your data
+          console.log(req.query.longitude,req.query.latitude ,"njrdenvjfdnvjfdvjfnvjnfjvnfrn");
           query["adsInfo.location.coordinates"] = {
             $geoWithin: {
               $centerSphere: [
