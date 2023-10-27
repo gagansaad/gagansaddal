@@ -214,7 +214,7 @@ exports.fetchRoomData = async (req, res, next) => {
           "adsInfo.rental_type": category,
           "adsInfo.category": subCategory,
           status: "active",
-          "plan_validity.expired_on": { $gte: currentISODate },
+          "plan_validity.expired_on": { $gte: currentDateOnly },
         };
         if (req.query.longitude && req.query.latitude) {
           // Assuming you have longitude and latitude fields in your data
