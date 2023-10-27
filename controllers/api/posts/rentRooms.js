@@ -229,7 +229,9 @@ exports.fetchRoomData = async (req, res, next) => {
             },
           };
         }
+        console.log(query,"jaijdewndjewndjwndjwndjw");
         const count = await RoomRentsAds.countDocuments(query);
+        console.log(count);
         subcategoryData.push({ sub_category_name: subCategory, count });
       }
 
@@ -963,56 +965,10 @@ exports.fetchAll = async (req, res, next) => {
       "userNotification.rental"
     );
     let valueofnotification = notification?.userNotification?.rental;
-    let records = await RoomRentsAds.find({
-      $or: [queryFinal],
-    })
-      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-      .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
-      .populate({ path: "viewCount" })
-      .populate({ path: "ReportCount", select: "_id" })
-      .populate({
-        path: "isReported",
-        select: "userId",
-        match: { userId: myid },
-      })
-      .sort(sortval);
 
-    const totalCount = await RoomRentsAds.find({
-      $or: [queryFinal],
-    });
-    let responseModelCount = totalCount.length;
-    if (records) {
-      let jobData = records.map((job) => {
-      // let addons_status=  job?.addons_validity?.map((date)=>{
-
-      // })
-        return {
-          ...job._doc,
-          // Add other job fields as needed
-          view_count: job.viewCount,
-          favorite_count: job.favoriteCount,
-          is_favorite: !!job.isFavorite,
-          Report_count: job.ReportCount,
-          is_Reported: !!job.isReported,
-        };
-      }); //////
-      const isFavoriteFilter = is_favorite === "true" ? true : undefined;
-      if (isFavoriteFilter) {
-        jobData = jobData.filter((job) => job.is_favorite === true);
-      }
-
-      // Pagination
-      const totalCount = jobData.length;
-      const perPage = parseInt(req.query.perpage) || 40;
-      const page = parseInt(req.query.page) || 1;
-
-      const startIndex = (page - 1) * perPage;
-      const endIndex = startIndex + perPage;
-
-      const paginatedData = jobData.slice(startIndex, endIndex);
       let featuredData;
       let bumpupData;
+      let commonId;
       if (is_myad != "true") {
         let FeaturedData = await RoomRentsAds.find({
           ...adOnsQuery,
@@ -1060,9 +1016,11 @@ exports.fetchAll = async (req, res, next) => {
           };
         });
         /////
+        let excludedIds = featuredData.map(featuredItem => featuredItem._id)
         let BumpupData = await RoomRentsAds.find({
           ...adOnsQuery,
           "addons_validity.name": "Bump up",
+          _id: { $nin: excludedIds }
         })
           .populate({
             path: "adsInfo.image",
@@ -1139,10 +1097,75 @@ exports.fetchAll = async (req, res, next) => {
             is_favorite: !!job.isFavorite,
           };
         });
+        let bumpId = bumpupData.map(featuredItem => featuredItem._id)
+        commonId = [...excludedIds,...bumpId]
       }
+      let query = {
+        $or: [queryFinal]
+      };
+      
+      if (commonId && commonId.length > 0) {
+        query._id = { $nin: commonId };
+      }
+      let records = await RoomRentsAds.find(
+        query
+      )
+        .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+        .populate({ path: "favoriteCount", select: "_id" })
+        .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+        .populate({ path: "viewCount" })
+        .populate({ path: "ReportCount", select: "_id" })
+        .populate({
+          path: "isReported",
+          select: "userId",
+          match: { userId: myid },
+        })
+        .sort(sortval);
+  
+      // const totalCount = await RoomRentsAds.find({
+      //   $or: [queryFinal],
+      // });
+      // let responseModelCount = totalCount.length+bumpupData.length+featuredData+length;
+      if (records) {
+        let jobData = records.map((job) => {
+        // let addons_status=  job?.addons_validity?.map((date)=>{
+  
+        // })
+          return {
+            ...job._doc,
+            // Add other job fields as needed
+            view_count: job.viewCount,
+            favorite_count: job.favoriteCount,
+            is_favorite: !!job.isFavorite,
+            Report_count: job.ReportCount,
+            is_Reported: !!job.isReported,
+          };
+        }); //////
+        const isFavoriteFilter = is_favorite === "true" ? true : undefined;
+        if (isFavoriteFilter) {
+          jobData = jobData.filter((job) => job.is_favorite === true);
+        }
+  
+        // Pagination
+        let totalCount = jobData.length; 
+        let totalresult;
+        if(is_myad =="true"){
+          totalresult = totalCount
+        }else{
+          totalresult = totalCount + bumpupData.length + featuredData.length
+        }
+        console.log(totalresult);
+        const perPage = parseInt(req.query.perpage) || 40;
+        const page = parseInt(req.query.page) || 1;
+  
+        const startIndex = (page - 1) * perPage;
+        const endIndex = startIndex + perPage;
+  
+        const paginatedData = jobData.slice(startIndex, endIndex);
+      
       let finalResponse = {
         message: `success`,
-        total: totalCount,
+        total: totalresult,
         perPage: perPage,
         totalPages: Math.ceil(totalCount / perPage),
         currentPage: page,
