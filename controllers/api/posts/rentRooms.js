@@ -1159,6 +1159,7 @@ exports.fetchAll = async (req, res, next) => {
         if(is_myad == "true"){
           totalresult = totalCount
         }else{
+          console.log(totalCount);
           totalresult = totalCount + bumpupData.length + featuredData.length
         }
         console.log(totalresult);

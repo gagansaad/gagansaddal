@@ -770,6 +770,8 @@ exports.fetchAll = async (req, res, next) => {
 
     if (category) {
       dbQuery["adsInfo.category.category_name"] = category;
+      adOnsQuery["adsInfo.category.category_name"] = category;
+
     }
     if (work_type) {
       dbQuery["adsInfo.work_type"] = work_type;
@@ -850,54 +852,10 @@ exports.fetchAll = async (req, res, next) => {
       "userNotification.careService"
     );
     let valueofnotification = notification?.userNotification?.careService;
-    let records = await postbabyAd
-      .find({ $or: [queryFinal] })
-      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-      .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "viewCount" })
-      .populate({ path: "ReportCount" })
-      .populate({ path: "ReportCount", select: "_id" })
-      .populate({
-        path: "isReported",
-        select: "userId",
-        match: { userId: myid },
-      })
-      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
-      .sort(sortval);
-
-    const totalCount = await postbabyAd.find({
-      $or: [queryFinal],
-    });
-    let responseModelCount = totalCount.length;
-
-    if (records) {
-      let jobData = records.map((job) => {
-        return {
-          ...job._doc,
-          // Add other job fields as needed
-          view_count: job.viewCount,
-          favorite_count: job.favoriteCount,
-          is_favorite: !!job.isFavorite,
-          Report_count: job.ReportCount,
-          is_Reported: !!job.isReported,
-        };
-      }); //////
-      const isFavoriteFilter = is_favorite === "true" ? true : undefined;
-      if (isFavoriteFilter) {
-        jobData = jobData.filter((job) => job.is_favorite === true);
-      }
-
-      // Pagination
-      const totalCount = jobData.length;
-      const perPage = parseInt(req.query.perpage) || 40;
-      const page = parseInt(req.query.page) || 1;
-
-      const startIndex = (page - 1) * perPage;
-      const endIndex = startIndex + perPage;
-
-      const paginatedData = jobData.slice(startIndex, endIndex);
+   
       let featuredData;
       let bumpupData;
+      let commonId;
       if (is_myad != "true") {
         let FeaturedData = await postbabyAd
           .find({
@@ -946,8 +904,9 @@ exports.fetchAll = async (req, res, next) => {
           };
         });
         /////
+        let excludedIds = featuredData.map(featuredItem => featuredItem._id)
         let BumpupData = await postbabyAd
-          .find({ ...adOnsQuery, "addons_validity.name": "Bump up" })
+          .find({ ...adOnsQuery, "addons_validity.name": "Bump up" , _id: { $nin: excludedIds }})
           .populate({
             path: "adsInfo.image",
             strictPopulate: false,
@@ -1023,10 +982,72 @@ exports.fetchAll = async (req, res, next) => {
             is_favorite: !!job.isFavorite,
           };
         });
+        let bumpId = bumpupData.map(featuredItem => featuredItem._id)
+        commonId = [...excludedIds,...bumpId]
       }
+      let query = {
+        $or: [queryFinal]
+      };
+      
+      if (commonId && commonId.length > 0) {
+        query._id = { $nin: commonId };
+      }
+      let records = await postbabyAd
+      .find(query)
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "viewCount" })
+      .populate({ path: "ReportCount" })
+      .populate({ path: "ReportCount", select: "_id" })
+      .populate({
+        path: "isReported",
+        select: "userId",
+        match: { userId: myid },
+      })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+      .sort(sortval);
+
+    // const totalCount = await postbabyAd.find({
+    //   $or: [queryFinal],
+    // });
+    // let responseModelCount = totalCount.length;
+
+    if (records) {
+      let jobData = records.map((job) => {
+        return {
+          ...job._doc,
+          // Add other job fields as needed
+          view_count: job.viewCount,
+          favorite_count: job.favoriteCount,
+          is_favorite: !!job.isFavorite,
+          Report_count: job.ReportCount,
+          is_Reported: !!job.isReported,
+        };
+      }); //////
+      const isFavoriteFilter = is_favorite === "true" ? true : undefined;
+      if (isFavoriteFilter) {
+        jobData = jobData.filter((job) => job.is_favorite === true);
+      }
+
+      // Pagination
+      let totalCount = jobData.length; 
+      let totalresult;
+      if(is_myad == "true"){
+        totalresult = totalCount
+      }else{
+        console.log(totalCount);
+        totalresult = totalCount + bumpupData.length + featuredData.length
+      }
+      const perPage = parseInt(req.query.perpage) || 40;
+      const page = parseInt(req.query.page) || 1;
+
+      const startIndex = (page - 1) * perPage;
+      const endIndex = startIndex + perPage;
+
+      const paginatedData = jobData.slice(startIndex, endIndex);
       let finalResponse = {
         message: `success`,
-        total: totalCount,
+        total: totalresult,
         perPage: perPage,
         totalPages: Math.ceil(totalCount / perPage),
         currentPage: page,
