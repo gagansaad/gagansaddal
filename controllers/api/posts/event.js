@@ -1167,7 +1167,7 @@ exports.fetchAll = async (req, res, next) => {
           totalresult = totalCount
         }else{
           console.log(totalCount);
-          totalresult = totalCount + bumpupData.length + featuredData.length
+          totalresult = totalCount + featuredData.length
         }
       const perPage = parseInt(req.query.perpage) || 40;
       const page = parseInt(req.query.page) || 1;
