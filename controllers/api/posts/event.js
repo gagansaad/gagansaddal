@@ -1141,7 +1141,7 @@ exports.fetchAll = async (req, res, next) => {
     // const totalCount = await eventAd.find({
     //   $or: [queryFinal],
     // });
-    let responseModelCount = totalCount.length;
+    // let responseModelCount = totalCount.length;
 
     if (records) {
       let jobData = records.map((job) => {
