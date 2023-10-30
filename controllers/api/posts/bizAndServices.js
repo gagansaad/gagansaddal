@@ -1113,7 +1113,7 @@ exports.fetchAll = async (req, res, next) => {
       let featuredData;
       let bumpupData;
       let commonId;
-      if (is_myad != "true") {
+      if (is_myad != "true" && !searchTerm) {
         let FeaturedData = await postbizAndServicesAd
           .find({
             ...adOnsQuery,
@@ -1293,7 +1293,7 @@ exports.fetchAll = async (req, res, next) => {
       // Pagination
       let totalCount = jobData.length; 
         let totalresult;
-        if(is_myad == "true"){
+        if(is_myad == "true" || searchTerm){
           totalresult = totalCount
         }else{
           console.log(totalCount);

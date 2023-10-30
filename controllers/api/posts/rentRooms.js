@@ -932,7 +932,8 @@ exports.fetchAll = async (req, res, next) => {
         message: "Please login to your account",
       });
     }
-    if (is_myad != "true") {
+    if (is_myad != "true" ) {
+      console.log("rja ki jai ho");
       dbQuery.status = "active";
       dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
       adOnsQuery.status = "active";
@@ -974,7 +975,9 @@ exports.fetchAll = async (req, res, next) => {
       let featuredData;
       let bumpupData;
       let commonId;
-      if (is_myad != "true") {
+      console.log(searchTerm);
+      if (is_myad != "true" && !searchTerm) {
+        console.log("object");
         let FeaturedData = await RoomRentsAds.find({
          
           ...adOnsQuery,
@@ -1156,7 +1159,7 @@ exports.fetchAll = async (req, res, next) => {
         // Pagination
         let totalCount = jobData.length; 
         let totalresult;
-        if(is_myad == "true"){
+        if(is_myad == "true" || searchTerm){
           totalresult = totalCount
         }else{
           console.log(totalCount);

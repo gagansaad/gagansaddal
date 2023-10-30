@@ -1067,7 +1067,7 @@ exports.fetchAll = async (req, res, next) => {
 
       let featuredData;
       let commonId;
-      if (is_myad != "true") {
+      if (is_myad != "true" && !searchTerm) {
         let FeaturedData = await eventAd
           .find({
             ...adOnsQuery,
@@ -1163,7 +1163,7 @@ exports.fetchAll = async (req, res, next) => {
       // Pagination
       let totalCount = jobData.length; 
         let totalresult;
-        if(is_myad == "true"){
+        if(is_myad == "true" || searchTerm){
           totalresult = totalCount
         }else{
           console.log(totalCount);
@@ -1174,7 +1174,7 @@ exports.fetchAll = async (req, res, next) => {
 
       const startIndex = (page - 1) * perPage;
       const endIndex = startIndex + perPage;
-      
+
 
       const paginatedData = jobData.slice(startIndex, endIndex);
       let finalResponse = {
