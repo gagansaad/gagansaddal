@@ -892,7 +892,10 @@ exports.fetchAll = async (req, res, next) => {
     
     if (adsType) dbQuery.adsType = adsType;
     if (category) dbQuery["adsInfo.rental_type"] = category;
+    if (category) adOnsQuery["adsInfo.rental_type"] = category;
+
     if (sub_category) dbQuery["adsInfo.category"] = sub_category;
+    if (sub_category) adOnsQuery["adsInfo.category"] = sub_category;
     if (title) dbQuery["adsInfo.title"] = title;
     if (roomType) dbQuery["adsInfo.roomType"] = roomType;
     if (listerType) dbQuery["adsInfo.listerType"] = listerType;
@@ -973,6 +976,7 @@ exports.fetchAll = async (req, res, next) => {
       let commonId;
       if (is_myad != "true") {
         let FeaturedData = await RoomRentsAds.find({
+         
           ...adOnsQuery,
           addons_validity: {
             $elemMatch: {
@@ -1020,6 +1024,7 @@ exports.fetchAll = async (req, res, next) => {
         /////
         let excludedIds = featuredData.map(featuredItem => featuredItem._id)
         let BumpupData = await RoomRentsAds.find({
+          
           ...adOnsQuery,
           "addons_validity.name": "Bump up",
           _id: { $nin: excludedIds }
@@ -1151,7 +1156,7 @@ exports.fetchAll = async (req, res, next) => {
         // Pagination
         let totalCount = jobData.length; 
         let totalresult;
-        if(is_myad =="true"){
+        if(is_myad == "true"){
           totalresult = totalCount
         }else{
           totalresult = totalCount + bumpupData.length + featuredData.length

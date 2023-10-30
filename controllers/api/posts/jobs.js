@@ -922,6 +922,7 @@ exports.fetchAllAds = async (req, res, next) => {
         message: "Please login to your account",
       });
     }
+    
     if (is_myad != "true") {
       dbQuery.status = "active";
       dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
