@@ -1174,6 +1174,7 @@ exports.fetchAll = async (req, res, next) => {
 
       const startIndex = (page - 1) * perPage;
       const endIndex = startIndex + perPage;
+      
 
       const paginatedData = jobData.slice(startIndex, endIndex);
       let finalResponse = {
