@@ -249,7 +249,7 @@ exports.fetchRoomData = async (req, res, next) => {
         sub_categories: subcategoryData,
       });
     }
-
+console.log(lalcount,"lalalallala");
     let RedZone = lalcount.reduce(
       (accumulator, currentValue) => accumulator + currentValue,
       0
@@ -930,7 +930,7 @@ exports.fetchAll = async (req, res, next) => {
       });
     }
     if (is_myad != "true") {
-      
+      dbQuery.status = "active";
       dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
       adOnsQuery.status = "active";
       adOnsQuery["plan_validity.expired_on"] = { $gte: currentISODate };

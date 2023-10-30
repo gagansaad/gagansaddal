@@ -1022,6 +1022,7 @@ exports.fetchAll = async (req, res, next) => {
       is_favorite,
       is_myad,
     } = req.query;
+    console.log(req.query,"fkmvkfv");
     let adOnsQuery = {};
     // let is_myadCheck;
     // is_myadCheck=(!is_myad && is_myad==false && is_myad==null && is_myad ==undefined)?false:true;
@@ -1810,6 +1811,7 @@ exports.fetchBuysellData = async (req, res, next) => {
           ["plan_validity.expired_on"]: { $gte: currentISODate },
         };
         if (req.query.longitude && req.query.latitude) {
+          console.log(req.query.longitude,req.query.latitude);
           // Assuming you have longitude and latitude fields in your data
           query["adsInfo.location.coordinates"] = {
             $geoWithin: {
