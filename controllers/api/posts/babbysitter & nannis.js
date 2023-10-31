@@ -826,12 +826,7 @@ exports.fetchAll = async (req, res, next) => {
         dbQuery.status = "active";
       }
       if (status == 1) {
-        dbQuery = {
-  $or: [
-    { status: "inactive" },
-    { status: "deleted" }
-  ]
-}
+        dbQuery.status = { $in: ["inactive", "deleted"] };
       }
       if (status == 2) {
         dbQuery.status = "draft";

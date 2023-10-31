@@ -548,6 +548,7 @@ exports.editStatus = async (req, res, next) => {
       if (status == 2) {
         dbQuery.status = "draft";
       }
+      
      
     const updateJob = await yourModel.findOneAndUpdate(
       {$and: [{ userId: userId }, { _id: ads_id}]},
