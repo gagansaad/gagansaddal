@@ -1226,6 +1226,7 @@ exports.fetchAll = async (req, res, next) => {
    
       let featuredData;
       let commonId;
+      if(is_favorite != "true"){
       if (is_myad != "true" && !searchTerm) {
         let FeaturedData = await postBuySellAd
           .find({
@@ -1274,7 +1275,7 @@ exports.fetchAll = async (req, res, next) => {
         });
         let bumpId = featuredData.map(featuredItem => featuredItem._id)
         commonId = [...bumpId]
-      }
+      }}
       let query = {
         $or: [queryFinal]
       };
@@ -1322,7 +1323,7 @@ exports.fetchAll = async (req, res, next) => {
       // Pagination
       let totalCount = jobData.length; 
       let totalresult;
-      if(is_myad == "true" || searchTerm){
+      if(is_myad == "true" || searchTerm || is_favorite == "true"){
         totalresult = totalCount
       }else{
         console.log(totalCount);
