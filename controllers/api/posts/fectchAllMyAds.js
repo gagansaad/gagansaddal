@@ -257,6 +257,7 @@ exports.fetchAll = async (req, res, next) => {
       "adsInfo.location": 1,
       createdAt: 1,
       _id: 1,
+      plan_validity:1,
     };
     let price_babysitterAd = {
       "adsInfo.expected_salary_amount": 1,
