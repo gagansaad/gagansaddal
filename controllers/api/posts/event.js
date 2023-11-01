@@ -44,7 +44,9 @@ const { mongoose, ObjectId, modelNames } = require("mongoose"),
       let updateFields = {
         $set: {
           status: "deleted",
-          deletedAt: new Date().toISOString()// Add your temporary field and its value here
+          deletedAt: new Date().toISOString(),
+          "plan_validity.expired_on": new Date().toISOString(), // Set the plan validity expiry date
+          "addons_validity.$[].expired_on": new Date().toISOString(), // Add your temporary field and its value here
         }
       };
   
