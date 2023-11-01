@@ -1142,13 +1142,20 @@ exports.fetchAllAds = async (req, res, next) => {
    
     let totalCount = jobData.length; 
     let totalresult;
+    let paginationlength = req.query.perpage || 40
+    let freedata
     if(is_myad == "true" || searchTerm || is_favorite == "true"){
       totalresult = totalCount
+      freedata = JSON.parse(paginationlength)
     }else{
       console.log(totalCount);
       totalresult = totalCount + bumpupData.length + featuredData.length
+      adodata = bumpupData.length + featuredData.length
+      freedata = paginationlength - adodata
+      paginationlength= JSON.parse(paginationlength)
     }
-    const perPage = parseInt(req.query.perpage) || 40;
+    console.log(freedata);
+    const perPage = parseInt(freedata) || 40;
     const page = parseInt(req.query.page) || 1;
 
     const startIndex = (page - 1) * perPage;
@@ -1158,7 +1165,7 @@ exports.fetchAllAds = async (req, res, next) => {
       let finalResponse = {
         message: `success`,
         total: totalresult,
-        perPage: perPage,
+        perPage: paginationlength,
         totalPages: Math.ceil(totalCount / perPage),
         currentPage: page,
         notification: valueofnotification,
