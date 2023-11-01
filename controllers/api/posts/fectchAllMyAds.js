@@ -549,6 +549,21 @@ exports.editStatus = async (req, res, next) => {
       if (status == 2) {
         dbQuery.status = "draft";
       }
+      if (status == 3) {
+        let checkvalidity = await yourModel.findById(ads_id)
+        const expiredDate = new Date(checkvalidity.plan_validity.expired_on);
+         const currentDate = new Date();
+
+         if (expiredDate <= currentDate) {
+         console.log("The plan has expired.");
+         
+        return successJSONResponse(res, {
+          message: `Your Ad plan has expired.`,
+          status: 201,
+        });
+        }
+        dbQuery.status = "active";
+      }
       
      
     const updateJob = await yourModel.findOneAndUpdate(
