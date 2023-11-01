@@ -1152,16 +1152,24 @@ exports.fetchAllAds = async (req, res, next) => {
       totalresult = totalCount + bumpupData.length + featuredData.length
       adodata = bumpupData.length + featuredData.length
       freedata = paginationlength - adodata
+          freedata=Math.abs(freedata);
       paginationlength= JSON.parse(paginationlength)
     }
     console.log(freedata);
     const perPage = parseInt(freedata) || 40;
     const page = parseInt(req.query.page) || 1;
 
-    const startIndex = (page - 1) * perPage;
-    const endIndex = startIndex + perPage;
+    
+    let paginatedData
+    if (perPage === 0) {
+      paginatedData = []; // Create an empty array
+    } else {
+      const startIndex = (page - 1) * perPage;
+      const endIndex = startIndex + perPage;
+    
+      paginatedData = jobData.slice(startIndex, endIndex);
+    }
 
-    const paginatedData = jobData.slice(startIndex, endIndex);
       let finalResponse = {
         message: `success`,
         total: totalresult,

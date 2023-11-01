@@ -1042,21 +1042,29 @@ exports.fetchAll = async (req, res, next) => {
         console.log(totalCount);
         totalresult = totalCount + bumpupData.length + featuredData.length
         adodata =featuredData.length + bumpupData.length
-          freedata = paginationlength - adodata
+        freedata = paginationlength - adodata
+          freedata=Math.abs(freedata);
+
           paginationlength= JSON.parse(paginationlength)
       }
       const perPage = parseInt(freedata) || 40;
       const page = parseInt(req.query.page) || 1;
+      let paginatedData
+      if (perPage === 0) {
+        paginatedData = []; // Create an empty array
+      } else {
+        const startIndex = (page - 1) * perPage;
+        const endIndex = startIndex + perPage;
+      
+        paginatedData = jobData.slice(startIndex, endIndex);
+      }
 
-      const startIndex = (page - 1) * perPage;
-      const endIndex = startIndex + perPage;
-
-      const paginatedData = jobData.slice(startIndex, endIndex);
+      // const paginatedData = jobData.slice(startIndex, endIndex);
       let finalResponse = {
         message: `success`,
         total: totalresult,
         perPage: paginationlength,
-        totalPages: Math.ceil(totalCount / perPage),
+        totalPages: Math.ceil(totalresult / perPage),
         currentPage: page,
         notification: valueofnotification,
         records: paginatedData,
