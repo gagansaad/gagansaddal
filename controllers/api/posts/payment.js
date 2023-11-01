@@ -757,6 +757,7 @@ console.log(oldval,"----------------------------------------jnenvjrnvjkfjvbfjv f
     status: "active",
     plan_validity: plan_obj,
     addons_validity: oldval,
+    deletedAt:null
   };
 
   
