@@ -42,6 +42,7 @@ const { findByIdAndUpdate } = require("../../../model/otp");
 
 ////////////////
 
+
 exports.fetchAllMyAds = async (req, res, next) => {
   try {
     let maxDistance = req.query.maxDistance || 200;

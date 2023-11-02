@@ -50,6 +50,7 @@ require("./model/posts/adsSubCategories");
 require("./model/posts/notification");
 require("./model/posts/favoriteAds");
 require("./model/posts/viewsCount");
+require("./controllers/api/posts/cronjob")
 
 // admin configuration
 require(`./model/accounts/admin/configuration`);
