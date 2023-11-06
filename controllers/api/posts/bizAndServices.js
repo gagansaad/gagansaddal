@@ -1134,6 +1134,11 @@ exports.fetchAll = async (req, res, next) => {
             strictPopulate: false,
             select: "url",
           })
+      .populate({
+        path: "adsInfo.accreditation_file.file",
+        strictPopulate: false,
+        select: "url",
+      })
           .populate({ path: "favoriteCount", select: "_id" })
           .populate({ path: "viewCount" })
           .populate({
@@ -1169,6 +1174,11 @@ exports.fetchAll = async (req, res, next) => {
           .find({ ...adOnsQuery, "addons_validity.name": "Bump up" , _id: { $nin: excludedIds }})
           .populate({
             path: "adsInfo.image",
+            strictPopulate: false,
+            select: "url",
+          })
+          .populate({
+            path: "adsInfo.accreditation_file.file",
             strictPopulate: false,
             select: "url",
           })
