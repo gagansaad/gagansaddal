@@ -186,6 +186,7 @@ if(!MyId){
     let commonSelectFields = {
       addons_validity: 1,
       "adsInfo.title": 1,
+      "adsInfo.descriptions": 1,
       "adsInfo.location": 1,
       createdAt: 1,
       _id: 1,
