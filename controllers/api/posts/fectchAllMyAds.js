@@ -184,52 +184,15 @@ if(!MyId){
     ];
 
     let commonSelectFields = {
-      addons_validity: 1,
+      "addons_validity": 1,
       "adsInfo.title": 1,
       "adsInfo.descriptions": 1,
       "adsInfo.location": 1,
-      createdAt: 1,
-      _id: 1,
-      plan_validity:1,
+      "createdAt": 1,
+      "_id": 1,
+      "plan_validity":1,
     };
-    let price_babysitterAd = {
-      "adsInfo.expected_salary_amount": 1,
-      "adsInfo.expected_salary_rate": 1,
-    };
-    let price_jobsAd = {
-      "adsInfo.salary": 1,
-      "adsInfo.salary_info": 1,
-    };
-    let price_buysellAd = {
-      "adsInfo.price": 1,
-      "price_drop": 1,
-    };
-    let price_eventAd = {
-      "adsInfo.ticket_price": 1,
-    };
-    let price_roomrentAd = {
-      "adsInfo.rent": 1,
-      "adsInfo.rent_info": 1,
-    };
-    let mergedPrices = {
-      price_babysitterAd,
-      price_buysellAd,
-      price_jobsAd,
-      price_eventAd,
-      price_roomrentAd,
-    };
-
-     let addsModel = {
-       jobsAd: "job",
-       eventAd: "event",
-       buysellAd: "Buy & Sell",
-        babysitterAd: "babysitter & nannie",
-        bizAd: "Local_biz & Service",
-        roomrentAd: "rental",
-      };
-      let combinedData = [];
-
-      
+    
       // Get the current date
       const currentDate = new Date();
       // Convert the date to ISO 8601 format
@@ -270,16 +233,14 @@ if(!MyId){
       // for (let [modelLabel, modelName] of Object.entries(addsModel)) {
 
         let priceDefaultSelect = adType.value;
-      console.log(priceDefaultSelect);
+        let selectFields = { ...commonSelectFields, ...priceDefaultSelect };
+      console.log({...priceDefaultSelect,...commonSelectFields});
       let YourModel = mongoose.model(adType.key);
       let checkAlreadyExist = await YourModel.find(dbQuery)
         .populate(commonPopulateOptions)
-        .select({
-          ...commonSelectFields,
-          ...priceDefaultSelect,
-        })
+        .select(selectFields)
         .exec();
-// console.log(object); 
+// console.log(checkAlreadyExist); 
      
      adTypeCount = checkAlreadyExist;
       

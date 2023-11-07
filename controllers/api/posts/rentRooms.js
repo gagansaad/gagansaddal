@@ -1223,6 +1223,7 @@ exports.fetchonead = async (req, res, next) => {
     const adsId = req.query.adsId;
     let data_Obj;
     let checkId = await RoomRentsAds.findOne({ _id: adsId });
+  console.log(checkId);
     if (!checkId) {
       return failureJSONResponse(res, {
         message: `Please provide valid ad id`,
@@ -1241,6 +1242,7 @@ exports.fetchonead = async (req, res, next) => {
     }
     let myid = req.userId;
     let records = await RoomRentsAds.findOne(data_Obj)
+      .populate({ path: "userId", select: "_id userInfo.name createdAt" })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
