@@ -1036,7 +1036,7 @@ exports.fetchAll = async (req, res, next) => {
           
           ...adOnsQuery,
           "addons_validity.name": "Bump up",
-          _id: { $nin: excludedIds }
+          // _id: { $nin: excludedIds }
         })
           .populate({
             path: "adsInfo.image",
@@ -1120,9 +1120,9 @@ exports.fetchAll = async (req, res, next) => {
         $or: [queryFinal]
       };
       
-      if (commonId && commonId.length > 0) {
-        query._id = { $nin: commonId };
-      }
+      // if (commonId && commonId.length > 0) {
+      //   query._id = { $nin: commonId };
+      // }
       let records = await RoomRentsAds.find(
         query
       )
@@ -1166,22 +1166,22 @@ exports.fetchAll = async (req, res, next) => {
         let totalCount = jobData.length; 
         let totalresult;
         let paginationlength = req.query.perpage || 40
-        let freedata
-        if(is_myad == "true" || searchTerm || is_favorite == "true"){
-          totalresult = totalCount
-          freedata = JSON.parse(paginationlength)
-        }else{
+        // let freedata
+        // if(is_myad == "true" || searchTerm || is_favorite == "true"){
+        //   totalresult = totalCount
+        //   freedata = JSON.parse(paginationlength)
+        // }else{
           console.log("totalCount");
-          totalresult = totalCount + bumpupData.length + featuredData.length
-          adodata = bumpupData.length + featuredData.length
-          freedata = paginationlength - adodata
-          freedata=Math.abs(freedata);
+          totalresult = totalCount
+          // adodata = bumpupData.length + featuredData.length
+          // freedata = paginationlength - adodata
+          // freedata=Math.abs(freedata);
           
           paginationlength= JSON.parse(paginationlength)
-        }
+        // }
         console.log(totalresult);
-        console.log(freedata,"gg");
-        const perPage = parseInt(freedata) || 40;
+        // console.log(freedata,"gg");
+        const perPage = parseInt(paginationlength) || 40;
         const page = parseInt(req.query.page) || 1;
   
         let paginatedData
