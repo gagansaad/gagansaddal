@@ -2557,4 +2557,54 @@ module.exports = {
       return failureJSONResponse(res, { message: `something went wrong` });
     }
   },
+
+  fetchSellerUserDetails: async function (req, res) {
+    try {
+      const userId = req.query.userId;
+
+      if (!userId)
+        return failureJSONResponse(res, { message: `please provide user id` });
+
+      User.findById({ _id: userId })
+        .select(`userInfo userBasicInfo createdAt`)
+        .then((user) => {
+          if (!user)
+            return failureJSONResponse(res, {
+              message: `something went worng`,
+            });
+          else {
+            const data = {
+              name: user?.userInfo?.name || null,
+              email_address: user?.userInfo?.email_address || null,
+              phone_number: user?.userInfo?.mobile_number?.phone_number || null,
+              gender: user?.userInfo?.gender || null,
+              date_of_birth: user?.userInfo?.date_of_birth || null,
+              profile_image: user?.userBasicInfo?.profile_image || null,
+              short_bio: user?.userBasicInfo?.short_bio || null,
+              my_website: user?.userBasicInfo?.my_website || null,
+              address: user?.userBasicInfo?.location?.address || null,
+              lat:
+                user?.userBasicInfo?.location?.coordinates?.[0] ||
+                null,
+              long:
+                user?.userBasicInfo?.location?.coordinates?.[1] ||
+                null,
+              live_location:user?.userBasicInfo?.live_location,
+
+              
+              createdAt: user?.createdAt || null,
+            };
+            return successJSONResponse(res, { user: data });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          return failureJSONResponse(res, {
+            message: `something went wrong`,
+          });
+        });
+    } catch (error) {
+      return failureJSONResponse(res, { message: `something went wrong` });
+    }
+  },
 };

@@ -40,6 +40,11 @@ router.get(
   authMiddleware.ensureUserLoggedIn,
   controllers.fetchProfileDetails
 );
+router.get(
+  `/profile-details`,
+  // authMiddleware.ensureUserLoggedIn,
+  controllers.fetchSellerUserDetails
+);
 
 router.post(
   `/signup-with-email`,
