@@ -220,11 +220,11 @@ if(!MyId){
     };
 
      let addsModel = {
+       jobsAd: "job",
+       eventAd: "event",
+       buysellAd: "Buy & Sell",
         babysitterAd: "babysitter & nannie",
-        buysellAd: "Buy & Sell",
         bizAd: "Local_biz & Service",
-        eventAd: "event",
-        jobsAd: "job",
         roomrentAd: "rental",
       };
       let combinedData = [];
@@ -257,6 +257,7 @@ if(!MyId){
       { key: "rental", label: "Rentals" },
     ];
     let results = [];
+    let adTypeCount;
     for (const adType of adTypes) {
       for (let [modelLabel, modelName] of Object.entries(addsModel)) {
         let priceDefaultSelect = `price_${modelLabel}`;
@@ -269,11 +270,12 @@ if(!MyId){
           ...mergedPrices[priceDefaultSelect],
         })
         .exec();
-
+// console.log(object); 
      
-      const adTypeCount = checkAlreadyExist;
-      results.push(...adTypeCount);
+     adTypeCount = checkAlreadyExist;
+      
     }
+    results.push(...adTypeCount);
   }
   let filterData;
       filterData = results.map((job) => {
