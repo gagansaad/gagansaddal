@@ -40,5 +40,9 @@ router.get(
   controllers.recomended_ads
 );
 
-
+router.get(
+  `/seller-ads`,
+  // authMiddleware.ensureUserLoggedIn,
+  controllers.fetchActive
+);
 module.exports = router;

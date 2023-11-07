@@ -159,6 +159,143 @@ exports.CountMyAd = async (req, res, next) => {
     return failureJSONResponse(res, { message: `Something went wrong` });
   }
 };
+exports.fetchActive = async (req, res, next) => {
+  let myid = req.userId
+  let MyId = req.query.userId;
+if(!MyId){
+  return failureJSONResponse(res,  `Please provide Seller Id` );
+}
+  else if (MyId && !isValidMongoObjId(mongoose, MyId)){
+    return failureJSONResponse(res,`Please provide valid Seller Id`);
+  }
+    
+  try {
+    let data =[]
+    const mergedData = [];
+    let commonPopulateOptions = [
+      { path: "adsType", strictPopulate: false, select: "name" },
+      { path: "adsInfo.image", strictPopulate: false, select: "url" },
+      { path: "favoriteCount", select: "_id" },
+      { path: "viewCount" },
+      { path: "ReportCount" },
+      { path: "ReportCount", select: "_id" },
+      { path: "isReported", select: "userId", match: { userId: myid } },
+      { path: "isFavorite", select: "user", match: { user: myid } },
+    ];
+
+    let commonSelectFields = {
+      addons_validity: 1,
+      "adsInfo.title": 1,
+      "adsInfo.location": 1,
+      createdAt: 1,
+      _id: 1,
+      plan_validity:1,
+    };
+    let price_babysitterAd = {
+      "adsInfo.expected_salary_amount": 1,
+      "adsInfo.expected_salary_rate": 1,
+    };
+    let price_jobsAd = {
+      "adsInfo.salary": 1,
+      "adsInfo.salary_info": 1,
+    };
+    let price_buysellAd = {
+      "adsInfo.price": 1,
+      price_drop: 1,
+    };
+    let price_eventAd = {
+      "adsInfo.ticket_price": 1,
+    };
+    let price_roomrentAd = {
+      "adsInfo.rent": 1,
+      "adsInfo.rent_info": 1,
+    };
+    let mergedPrices = {
+      price_babysitterAd,
+      price_buysellAd,
+      price_jobsAd,
+      price_eventAd,
+      price_roomrentAd,
+    };
+
+     let addsModel = {
+        babysitterAd: "babysitter & nannie",
+        buysellAd: "Buy & Sell",
+        bizAd: "Local_biz & Service",
+        eventAd: "event",
+        jobsAd: "job",
+        roomrentAd: "rental",
+      };
+      let combinedData = [];
+
+      
+      // Get the current date
+      const currentDate = new Date();
+      // Convert the date to ISO 8601 format
+      const currentISODate = currentDate.toISOString();
+    var dbQuery = {
+      $and: [
+        { status: "active" },
+        { "plan_validity.expired_on": { $gte: currentISODate } },
+        { userId: MyId }
+      ]
+    };
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+    let adTypes = [
+      { key: "job", label: "Jobs" },
+      { key: "event", label: "Events" },
+      { key: "Buy & Sell", label: "Buy & Sell" },
+      { key: "babysitter & nannie", label: "Babysitters & Nannies" },
+      { key: "Local_biz & Service", label: "Local Biz & Services" },
+      { key: "rental", label: "Rentals" },
+    ];
+    let results = [];
+    for (const adType of adTypes) {
+      for (let [modelLabel, modelName] of Object.entries(addsModel)) {
+        let priceDefaultSelect = `price_${modelLabel}`;
+      
+      let YourModel = mongoose.model(adType.key);
+      let checkAlreadyExist = await YourModel.find(dbQuery)
+        .populate(commonPopulateOptions)
+        .select({
+          ...commonSelectFields,
+          ...mergedPrices[priceDefaultSelect],
+        })
+        .exec();
+
+     
+      const adTypeCount = checkAlreadyExist;
+      results.push(...adTypeCount);
+    }
+  }
+  let filterData;
+      filterData = results.map((job) => {
+        return {
+          ...job._doc,
+
+          price_default: job.price_default,
+          view_count: job.viewCount,
+          favorite_count: job.favoriteCount,
+          is_favorite: !!job.isFavorite,
+        };
+      });
+      let adonsData =[]
+      adonsData.push(...filterData);
+
+      mergedData.push(...adonsData);
+  data = shuffleArray(mergedData);
+    return successJSONResponse(res, { message: `success`, data });
+  } catch (error) {
+    console.log(error);
+    return failureJSONResponse(res, { message: `Something went wrong` });
+  }
+};
 exports.fetchAll = async (req, res, next) => {
   try {
     let myid;
