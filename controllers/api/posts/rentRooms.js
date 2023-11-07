@@ -983,7 +983,7 @@ exports.fetchAll = async (req, res, next) => {
 
      
       if (is_myad != "true" && !searchTerm) {
-        console.log("object");
+        console.log("adOnsQuery",adOnsQuery);
         let FeaturedData = await RoomRentsAds.find({
          
           ...adOnsQuery,
@@ -1193,6 +1193,7 @@ exports.fetchAll = async (req, res, next) => {
         
           paginatedData = jobData.slice(startIndex, endIndex);
         }
+        
       
       let finalResponse = {
         message: `success`,
