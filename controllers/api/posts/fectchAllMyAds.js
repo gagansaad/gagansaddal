@@ -202,7 +202,7 @@ if(!MyId){
     };
     let price_buysellAd = {
       "adsInfo.price": 1,
-      price_drop: 1,
+      "price_drop": 1,
     };
     let price_eventAd = {
       "adsInfo.ticket_price": 1,
@@ -249,32 +249,41 @@ if(!MyId){
       return array;
     }
     let adTypes = [
-      { key: "job", label: "Jobs" },
-      { key: "event", label: "Events" },
-      { key: "Buy & Sell", label: "Buy & Sell" },
-      { key: "babysitter & nannie", label: "Babysitters & Nannies" },
-      { key: "Local_biz & Service", label: "Local Biz & Services" },
-      { key: "rental", label: "Rentals" },
+      { key: "job", label: "Jobs" ,value:{"adsInfo.salary": 1,
+      "adsInfo.salary_info": 1,}},
+      { key: "event", label: "Events",value:{ "adsInfo.ticket_price": 1} },
+      { key: "Buy & Sell", label: "Buy & Sell",value:{"adsInfo.price": 1,
+      "price_drop": 1} },
+      { key: "babysitter & nannie", label: "Babysitters & Nannies" ,value:{
+        "adsInfo.expected_salary_amount": 1,
+        "adsInfo.expected_salary_rate": 1,
+      }},
+      { key: "Local_biz & Service", label: "Local Biz & Services"},
+      { key: "rental", label: "Rentals" ,value:{
+        "adsInfo.rent": 1,
+        "adsInfo.rent_info": 1,
+      }},
     ];
     let results = [];
     let adTypeCount;
     for (const adType of adTypes) {
-      for (let [modelLabel, modelName] of Object.entries(addsModel)) {
-        let priceDefaultSelect = `price_${modelLabel}`;
-      
+      // for (let [modelLabel, modelName] of Object.entries(addsModel)) {
+
+        let priceDefaultSelect = adType.value;
+      console.log(priceDefaultSelect);
       let YourModel = mongoose.model(adType.key);
       let checkAlreadyExist = await YourModel.find(dbQuery)
         .populate(commonPopulateOptions)
         .select({
           ...commonSelectFields,
-          ...mergedPrices[priceDefaultSelect],
+          ...priceDefaultSelect,
         })
         .exec();
 // console.log(object); 
      
      adTypeCount = checkAlreadyExist;
       
-    }
+    // }
     results.push(...adTypeCount);
   }
   let filterData;
