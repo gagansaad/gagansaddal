@@ -278,17 +278,17 @@ if(!MyId){
   // }
 
   // const paginatedData = jobData.slice(startIndex, endIndex);
-  let finalResponse = {
-    message: `success`,
+  // let finalResponse = {
+   
+  // };
+  // return successJSONResponse(res, finalResponse);
+    return successJSONResponse(res, { message: `success`,
     total: totalresult,
     perPage: paginationlength,
     totalPages: Math.ceil(totalresult / perPage),
     currentPage: page,
     records: paginatedData,
-    status: 200,
-  };
-  // return successJSONResponse(res, finalResponse);
-    return successJSONResponse(res, { message: `success`, finalResponse });
+    status: 200,  });
   } catch (error) {
     console.log(error);
     return failureJSONResponse(res, { message: `Something went wrong` });
