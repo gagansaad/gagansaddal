@@ -1113,8 +1113,8 @@ exports.fetchAll = async (req, res, next) => {
             is_favorite: !!job.isFavorite,
           };
         });
-        let bumpId = bumpupData.map(featuredItem => featuredItem._id)
-        commonId = [...excludedIds,...bumpId]
+        // let bumpId = bumpupData.map(featuredItem => featuredItem._id)
+        // commonId = [...excludedIds,...bumpId]
       } }
       let query = {
         $or: [queryFinal]
@@ -1185,14 +1185,14 @@ exports.fetchAll = async (req, res, next) => {
         const page = parseInt(req.query.page) || 1;
   
         let paginatedData
-        if (perPage === 0) {
-          paginatedData = []; // Create an empty array
-        } else {
+        // if (perPage === 0) {
+        //   paginatedData = []; // Create an empty array
+        // } else {
           const startIndex = (page - 1) * perPage;
           const endIndex = startIndex + perPage;
         
           paginatedData = jobData.slice(startIndex, endIndex);
-        }
+        // }
         
       
       let finalResponse = {

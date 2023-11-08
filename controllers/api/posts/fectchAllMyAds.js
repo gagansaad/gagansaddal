@@ -294,6 +294,94 @@ if(!MyId){
     return failureJSONResponse(res, { message: `Something went wrong` });
   }
 };
+
+exports.fetchActie = async (req, res, next) => {
+ 
+  try {
+    let data =[]
+    const mergedData = [];
+    
+      const currentDate = new Date();
+      // Convert the date to ISO 8601 format
+      const currentISODate = currentDate.toISOString();
+    var dbQuery = {
+      $and: [
+        { status: "active" },
+        { "plan_validity.expired_on": { $gte: currentISODate } },
+      ]
+    };
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+    let adTypes = [
+      { key: "job", label: "Jobs"},
+      { key: "event", label: "Events"},
+      { key: "Buy & Sell", label: "Buy & Sell"},
+      { key: "babysitter & nannie", label: "Babysitters & Nannies" },
+      { key: "Local_biz & Service", label: "Local Biz & Services"},
+      { key: "rental", label: "Rentals"},
+    ];
+    let results = [];
+    let adTypeCount;
+    for (const adType of adTypes) {
+     
+      let YourModel = mongoose.model(adType.key);
+      let checkAlreadyExist = await YourModel.find(dbQuery).exec();
+
+     
+     adTypeCount = checkAlreadyExist;
+    
+    results.push(...adTypeCount);
+  }
+
+  // let filterData;
+  //     filterData = results.map((job) => {
+  //       return {
+  //         ...job._doc,
+
+  //         price_default: job.price_default,
+  //         view_count: job.viewCount,
+  //         favorite_count: job.favoriteCount,
+  //         is_favorite: !!job.isFavorite,
+  //       };
+  //     });
+  //     let adonsData =[]
+  //     adonsData.push(...filterData);
+
+  //     mergedData.push(...adonsData);
+  // data = shuffleArray(mergedData);
+  // let totalresult = data?.length
+  // let paginationlength = req.query.perpage || 40
+  // const perPage = parseInt(paginationlength) || 40;
+  // const page = parseInt(req.query.page) || 1;
+  // let paginatedData
+  // // if (perPage === 0) {
+  // //   paginatedData = []; // Create an empty array
+  // // } else {
+  //   const startIndex = (page - 1) * perPage;
+  //   const endIndex = startIndex + perPage;
+  
+  //   paginatedData = data.slice(startIndex, endIndex);
+  // // }
+
+  // // const paginatedData = jobData.slice(startIndex, endIndex);
+  // // let finalResponse = {
+   
+  // // };
+  // // return successJSONResponse(res, finalResponse);
+    return successJSONResponse(res, { message: `success`,
+    total: results });
+  } catch (error) {
+    console.log(error);
+    return failureJSONResponse(res, { message: `Something went wrong` });
+  }
+};
+
+
 exports.fetchAll = async (req, res, next) => {
   try {
     let myid;

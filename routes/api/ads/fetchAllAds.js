@@ -45,4 +45,12 @@ router.get(
   // authMiddleware.ensureUserLoggedIn,
   controllers.fetchActive
 );
+
+router.get(
+  `/seller-ad`,
+  // authMiddleware.ensureUserLoggedIn,
+  controllers.fetchActie
+);
+
+
 module.exports = router;

@@ -1047,7 +1047,7 @@ exports.fetchAll = async (req, res, next) => {
       //   freedata = paginationlength - adodata
       //     freedata=Math.abs(freedata);
 
-      //     paginationlength= JSON.parse(paginationlength)
+          paginationlength= JSON.parse(paginationlength)
       // }
       const perPage = parseInt(paginationlength) || 40;
       const page = parseInt(req.query.page) || 1;

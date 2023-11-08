@@ -1319,7 +1319,7 @@ exports.fetchAll = async (req, res, next) => {
         //   freedata=Math.abs(freedata);
         //   console.log("totalCount",freedata,paginationlength,adodata);
 
-        //   paginationlength= JSON.parse(paginationlength)
+          paginationlength= JSON.parse(paginationlength)
         // }
       const perPage = parseInt(paginationlength) || 40;
       const page = parseInt(req.query.page) || 1;
