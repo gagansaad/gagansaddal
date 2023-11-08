@@ -1017,7 +1017,9 @@ exports.fetchAllAds = async (req, res, next) => {
         let excludedIds = featuredData.map(featuredItem => featuredItem._id)
         /////
         let BumpupData = await postJobAd
-          .find({ ...adOnsQuery, "addons_validity.name": "Bump up" , _id: { $nin: excludedIds }})
+          .find({ ...adOnsQuery, "addons_validity.name": "Bump up" 
+          // , _id: { $nin: excludedIds }
+        })
           .populate({
             path: "adsInfo.image",
             strictPopulate: false,
@@ -1094,16 +1096,16 @@ exports.fetchAllAds = async (req, res, next) => {
           };
         });
         let bumpId = bumpupData.map(featuredItem => featuredItem._id)
-        commonId = [...excludedIds,...bumpId]
+        // commonId = [...excludedIds,...bumpId]
       }
     }
       let query = {
         $or: [queryFinal]
       };
       
-      if (commonId && commonId.length > 0) {
-        query._id = { $nin: commonId };
-      }
+      // if (commonId && commonId.length > 0) {
+      //   query._id = { $nin: commonId };
+      // }
 
     let records = await postJobAd
     .find(query)
@@ -1145,20 +1147,20 @@ exports.fetchAllAds = async (req, res, next) => {
     let totalCount = jobData.length; 
     let totalresult;
     let paginationlength = req.query.perpage || 40
-    let freedata
-    if(is_myad == "true" || searchTerm || is_favorite == "true"){
-      totalresult = totalCount
-      freedata = JSON.parse(paginationlength)
-    }else{
+    // let freedata
+    // if(is_myad == "true" || searchTerm || is_favorite == "true"){
+    //   totalresult = totalCount
+    //   freedata = JSON.parse(paginationlength)
+    // }else{
       console.log(totalCount);
-      totalresult = totalCount + bumpupData.length + featuredData.length
-      adodata = bumpupData.length + featuredData.length
-      freedata = paginationlength - adodata
-          freedata=Math.abs(freedata);
-      paginationlength= JSON.parse(paginationlength)
-    }
-    console.log(freedata);
-    const perPage = parseInt(freedata) || 40;
+      totalresult = totalCount
+    //   adodata = bumpupData.length + featuredData.length
+    //   freedata = paginationlength - adodata
+    //       freedata=Math.abs(freedata);
+    //   paginationlength= JSON.parse(paginationlength)
+    // }
+    // console.log(freedata);
+    const perPage = parseInt(paginationlength) || 40;
     const page = parseInt(req.query.page) || 1;
 
     
