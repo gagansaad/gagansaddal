@@ -263,7 +263,32 @@ if(!MyId){
 
       mergedData.push(...adonsData);
   data = shuffleArray(mergedData);
-    return successJSONResponse(res, { message: `success`, data });
+  let totalresult = data?.length
+  let paginationlength = req.query.perpage || 40
+  const perPage = parseInt(paginationlength) || 40;
+  const page = parseInt(req.query.page) || 1;
+  let paginatedData
+  // if (perPage === 0) {
+  //   paginatedData = []; // Create an empty array
+  // } else {
+    const startIndex = (page - 1) * perPage;
+    const endIndex = startIndex + perPage;
+  
+    paginatedData = data.slice(startIndex, endIndex);
+  // }
+
+  // const paginatedData = jobData.slice(startIndex, endIndex);
+  let finalResponse = {
+    message: `success`,
+    total: totalresult,
+    perPage: paginationlength,
+    totalPages: Math.ceil(totalresult / perPage),
+    currentPage: page,
+    records: paginatedData,
+    status: 200,
+  };
+  // return successJSONResponse(res, finalResponse);
+    return successJSONResponse(res, { message: `success`, finalResponse });
   } catch (error) {
     console.log(error);
     return failureJSONResponse(res, { message: `Something went wrong` });

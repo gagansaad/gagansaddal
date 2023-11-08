@@ -1042,7 +1042,7 @@ exports.fetchAll = async (req, res, next) => {
       //   freedata = JSON.parse(paginationlength)
       // }else{
         // console.log(totalCount);
-        totalresult = totalCount + bumpupData.length + featuredData.length
+        totalresult = totalCount
       //   adodata =featuredData.length + bumpupData.length
       //   freedata = paginationlength - adodata
       //     freedata=Math.abs(freedata);
