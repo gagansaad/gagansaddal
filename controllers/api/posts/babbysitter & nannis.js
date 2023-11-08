@@ -857,7 +857,7 @@ exports.fetchAll = async (req, res, next) => {
    
       let featuredData;
       let bumpupData;
-      let commonId;
+      // let commonId;
       if(is_favorite != "true"){
       if (is_myad != "true" && !searchTerm) {
         let FeaturedData = await postbabyAd
@@ -907,9 +907,9 @@ exports.fetchAll = async (req, res, next) => {
           };
         });
         /////
-        let excludedIds = featuredData.map(featuredItem => featuredItem._id)
+        // let excludedIds = featuredData.map(featuredItem => featuredItem._id)
         let BumpupData = await postbabyAd
-          .find({ ...adOnsQuery, "addons_validity.name": "Bump up" , _id: { $nin: excludedIds }})
+          .find({ ...adOnsQuery, "addons_validity.name": "Bump up" })
           .populate({
             path: "adsInfo.image",
             strictPopulate: false,
@@ -985,16 +985,16 @@ exports.fetchAll = async (req, res, next) => {
             is_favorite: !!job.isFavorite,
           };
         });
-        let bumpId = bumpupData.map(featuredItem => featuredItem._id)
-        commonId = [...excludedIds,...bumpId]
+        // let bumpId = bumpupData.map(featuredItem => featuredItem._id)
+        // commonId = [...excludedIds,...bumpId]
       }}
       let query = {
         $or: [queryFinal]
       };
       
-      if (commonId && commonId.length > 0) {
-        query._id = { $nin: commonId };
-      }
+      // if (commonId && commonId.length > 0) {
+      //   query._id = { $nin: commonId };
+      // }
       let records = await postbabyAd
       .find(query)
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
@@ -1037,29 +1037,29 @@ exports.fetchAll = async (req, res, next) => {
       let totalresult;
       let paginationlength = req.query.perpage || 40
         let freedata
-      if(is_myad == "true" || searchTerm || is_favorite == "true"){
-        totalresult = totalCount
-        freedata = JSON.parse(paginationlength)
-      }else{
-        console.log(totalCount);
+      // if(is_myad == "true" || searchTerm || is_favorite == "true"){
+      //   totalresult = totalCount
+      //   freedata = JSON.parse(paginationlength)
+      // }else{
+        // console.log(totalCount);
         totalresult = totalCount + bumpupData.length + featuredData.length
-        adodata =featuredData.length + bumpupData.length
-        freedata = paginationlength - adodata
-          freedata=Math.abs(freedata);
+      //   adodata =featuredData.length + bumpupData.length
+      //   freedata = paginationlength - adodata
+      //     freedata=Math.abs(freedata);
 
-          paginationlength= JSON.parse(paginationlength)
-      }
-      const perPage = parseInt(freedata) || 40;
+      //     paginationlength= JSON.parse(paginationlength)
+      // }
+      const perPage = parseInt(paginationlength) || 40;
       const page = parseInt(req.query.page) || 1;
       let paginatedData
-      if (perPage === 0) {
-        paginatedData = []; // Create an empty array
-      } else {
+      // if (perPage === 0) {
+      //   paginatedData = []; // Create an empty array
+      // } else {
         const startIndex = (page - 1) * perPage;
         const endIndex = startIndex + perPage;
       
         paginatedData = jobData.slice(startIndex, endIndex);
-      }
+      // }
 
       // const paginatedData = jobData.slice(startIndex, endIndex);
       let finalResponse = {

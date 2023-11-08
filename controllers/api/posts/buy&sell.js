@@ -1275,16 +1275,16 @@ exports.fetchAll = async (req, res, next) => {
             is_favorite: !!job.isFavorite,
           };
         });
-        let bumpId = featuredData.map(featuredItem => featuredItem._id)
-        commonId = [...bumpId]
+        // let bumpId = featuredData.map(featuredItem => featuredItem._id)
+        // commonId = [...bumpId]
       }}
       let query = {
         $or: [queryFinal]
       };
       
-      if (commonId && commonId.length > 0) {
-        query._id = { $nin: commonId };
-      }
+      // if (commonId && commonId.length > 0) {
+      //   query._id = { $nin: commonId };
+      // }
 
       let records = await postBuySellAd
       .find(query)
@@ -1326,30 +1326,30 @@ exports.fetchAll = async (req, res, next) => {
       let totalCount = jobData.length; 
       let totalresult;
       let paginationlength = req.query.perpage || 40
-      let freedata
-      if(is_myad == "true" || searchTerm || is_favorite == "true"){
+      // let freedata
+      // if(is_myad == "true" || searchTerm || is_favorite == "true"){
+      //   totalresult = totalCount
+      //   freedata = JSON.parse(paginationlength)
+      // }else{
+      //   console.log(totalCount);
         totalresult = totalCount
-        freedata = JSON.parse(paginationlength)
-      }else{
-        console.log(totalCount);
-        totalresult = totalCount + featuredData.length
-        adodata =featuredData.length
-        freedata = paginationlength - adodata
-        freedata=Math.abs(freedata);
-          paginationlength= JSON.parse(paginationlength)
-      }
-      const perPage = parseInt(freedata) || 40;
+      //   adodata =featuredData.length
+      //   freedata = paginationlength - adodata
+      //   freedata=Math.abs(freedata);
+      //     paginationlength= JSON.parse(paginationlength)
+      // }
+      const perPage = parseInt(paginationlength) || 40;
       const page = parseInt(req.query.page) || 1;
 
       let paginatedData
-      if (perPage === 0) {
-        paginatedData = []; // Create an empty array
-      } else {
+      // if (perPage === 0) {
+      //   paginatedData = []; // Create an empty array
+      // } else {
         const startIndex = (page - 1) * perPage;
         const endIndex = startIndex + perPage;
       
         paginatedData = jobData.slice(startIndex, endIndex);
-      }
+      // }
 
       //////
       let finalResponse = {
