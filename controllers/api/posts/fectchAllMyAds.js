@@ -295,91 +295,90 @@ if(!MyId){
   }
 };
 
-exports.fetchActie = async (req, res, next) => {
+// exports.fetchActie = async (req, res, next) => {
  
-  try {
-    let data =[]
-    const mergedData = [];
+//   try {
     
-      const currentDate = new Date();
-      // Convert the date to ISO 8601 format
-      const currentISODate = currentDate.toISOString();
-    var dbQuery = {
-      $and: [
-        { status: "active" },
-        { "plan_validity.expired_on": { $gte: currentISODate } },
-      ]
-    };
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
-    let adTypes = [
-      { key: "job", label: "Jobs"},
-      { key: "event", label: "Events"},
-      { key: "Buy & Sell", label: "Buy & Sell"},
-      { key: "babysitter & nannie", label: "Babysitters & Nannies" },
-      { key: "Local_biz & Service", label: "Local Biz & Services"},
-      { key: "rental", label: "Rentals"},
-    ];
-    let results = [];
-    let adTypeCount;
-    for (const adType of adTypes) {
-     
-      let YourModel = mongoose.model(adType.key);
-      let checkAlreadyExist = await YourModel.find(dbQuery).exec();
-
-     
-     adTypeCount = checkAlreadyExist;
     
-    results.push(...adTypeCount);
-  }
+//       const currentDate = new Date();
+//       // Convert the date to ISO 8601 format
+//       const currentISODate = currentDate.toISOString();
+//     var dbQuery = {
+//       $and: [
+//         { status: "active" },
+//         { "plan_validity.expired_on": { $gte: currentISODate } },
+//       ]
+//     };
+//     function shuffleArray(array) {
+//       for (let i = array.length - 1; i > 0; i--) {
+//         const j = Math.floor(Math.random() * (i + 1));
+//         [array[i], array[j]] = [array[j], array[i]];
+//       }
+//       return array;
+//     }
+//     let adTypes = [
+//       { key: "job", label: "Jobs"},
+//       { key: "event", label: "Events"},
+//       { key: "Buy & Sell", label: "Buy & Sell"},
+//       { key: "babysitter & nannie", label: "Babysitters & Nannies" },
+//       { key: "Local_biz & Service", label: "Local Biz & Services"},
+//       { key: "rental", label: "Rentals"},
+//     ];
+//     let results = [];
+//     let adTypeCount;
+//     for (const adType of adTypes) {
+     
+//       let YourModel = mongoose.model(adType.key);
+//       let checkAlreadyExist = await YourModel.find(dbQuery).exec();
 
-  // let filterData;
-  //     filterData = results.map((job) => {
-  //       return {
-  //         ...job._doc,
+     
+//      adTypeCount = checkAlreadyExist;
+    
+//     results.push(...adTypeCount);
+//   }
 
-  //         price_default: job.price_default,
-  //         view_count: job.viewCount,
-  //         favorite_count: job.favoriteCount,
-  //         is_favorite: !!job.isFavorite,
-  //       };
-  //     });
-  //     let adonsData =[]
-  //     adonsData.push(...filterData);
+//   // let filterData;
+//   //     filterData = results.map((job) => {
+//   //       return {
+//   //         ...job._doc,
 
-  //     mergedData.push(...adonsData);
-  // data = shuffleArray(mergedData);
-  // let totalresult = data?.length
-  // let paginationlength = req.query.perpage || 40
-  // const perPage = parseInt(paginationlength) || 40;
-  // const page = parseInt(req.query.page) || 1;
-  // let paginatedData
-  // // if (perPage === 0) {
-  // //   paginatedData = []; // Create an empty array
-  // // } else {
-  //   const startIndex = (page - 1) * perPage;
-  //   const endIndex = startIndex + perPage;
+//   //         price_default: job.price_default,
+//   //         view_count: job.viewCount,
+//   //         favorite_count: job.favoriteCount,
+//   //         is_favorite: !!job.isFavorite,
+//   //       };
+//   //     });
+//   //     let adonsData =[]
+//   //     adonsData.push(...filterData);
+
+//   //     mergedData.push(...adonsData);
+//   // data = shuffleArray(mergedData);
+//   // let totalresult = data?.length
+//   // let paginationlength = req.query.perpage || 40
+//   // const perPage = parseInt(paginationlength) || 40;
+//   // const page = parseInt(req.query.page) || 1;
+//   // let paginatedData
+//   // // if (perPage === 0) {
+//   // //   paginatedData = []; // Create an empty array
+//   // // } else {
+//   //   const startIndex = (page - 1) * perPage;
+//   //   const endIndex = startIndex + perPage;
   
-  //   paginatedData = data.slice(startIndex, endIndex);
-  // // }
+//   //   paginatedData = data.slice(startIndex, endIndex);
+//   // // }
 
-  // // const paginatedData = jobData.slice(startIndex, endIndex);
-  // // let finalResponse = {
+//   // // const paginatedData = jobData.slice(startIndex, endIndex);
+//   // // let finalResponse = {
    
-  // // };
-  // // return successJSONResponse(res, finalResponse);
-    return successJSONResponse(res, { message: `success`,
-    total: results });
-  } catch (error) {
-    console.log(error);
-    return failureJSONResponse(res, { message: `Something went wrong` });
-  }
-};
+//   // // };
+//   // // return successJSONResponse(res, finalResponse);
+//     return successJSONResponse(res, { message: `success`,
+//     total: results });
+//   } catch (error) {
+//     console.log(error);
+//     return failureJSONResponse(res, { message: `Something went wrong` });
+//   }
+// };
 
 
 exports.fetchAll = async (req, res, next) => {
@@ -974,13 +973,7 @@ exports.search = async (req, res, next) => {
       is_myad,
     } = req.query;
     
-    let commonSelectFields = {
-      addons_validity: 1,
-      "adsInfo.title": 1,
-      "adsInfo.location": 1,
-      createdAt: 1,
-      _id: 1,
-    };
+    let myid = req.userId;
     const sortval = sortBy === "Oldest" ? { 'plan_validity.active_on': 1 } : { 'plan_validity.active_on': -1 };
     let Distance;
 
@@ -1002,7 +995,7 @@ exports.search = async (req, res, next) => {
         },
       };
     }
-
+    let results = [];
     if (amount) {
       // Add filter for rent amount
       dbQuery["adsInfo.rent.amount"] = { $lte: amount };
@@ -1026,14 +1019,39 @@ exports.search = async (req, res, next) => {
         },
       };
     }
-
+    let commonPopulateOptions = [
+      { path: "adsType", strictPopulate: false, select: "name" },
+      { path: "adsInfo.image", strictPopulate: false, select: "url" },
+      { path: "favoriteCount", select: "_id" },
+      { path: "viewCount" },
+      { path: "ReportCount" },
+      { path: "ReportCount", select: "_id" },
+     
+    ];
+    if (myid) {
+      commonPopulateOptions.push(
+        { path: "isReported", select: "userId", match: { userId: myid } },
+        { path: "isFavorite", select: "user", match: { user: myid } }
+      );
+    }
+    let commonSelectFields = {
+      "addons_validity": 1,
+      "adsInfo.title": 1,
+      "adsInfo.descriptions": 1,
+      "adsInfo.location": 1,
+      "createdAt": 1,
+      "_id": 1,
+      "plan_validity":1,
+    };
+    
     // Get the current date
     const currentDate = new Date();
     // Convert the date to ISO 8601 format
     const currentISODate = currentDate.toISOString();
     // Extract only the date portion
     const currentDateOnly = currentISODate.substring(0, 10);
-    let myid = req.userId;
+  
+    
     if (is_myad == "true" && !myid) {
       return failureJSONResponse(res, {
         message: "Please login to your account",
@@ -1071,186 +1089,89 @@ exports.search = async (req, res, next) => {
 
    if(searchTerm.length > 0){
 
- 
-    let records = await roomrentAd.find({
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+    let adTypes = [
+      { key: "job", label: "Jobs" ,value:{"adsInfo.salary": 1,
+      "adsInfo.salary_info": 1,}},
+      { key: "event", label: "Events",value:{ "adsInfo.ticket_price": 1} },
+      { key: "Buy & Sell", label: "Buy & Sell",value:{"adsInfo.price": 1,
+      "price_drop": 1} },
+      { key: "babysitter & nannie", label: "Babysitters & Nannies" ,value:{
+        "adsInfo.expected_salary_amount": 1,
+        "adsInfo.expected_salary_rate": 1,
+      }},
+      { key: "Local_biz & Service", label: "Local Biz & Services"},
+      { key: "rental", label: "Rentals" ,value:{
+        "adsInfo.rent": 1,
+        "adsInfo.rent_info": 1,
+      }},
+    ];
+    
+    let adTypeCount;
+    for (const adType of adTypes) {
+  let priceDefaultSelect = adType.value;
+        let selectFields = { ...commonSelectFields, ...priceDefaultSelect };
+    let checkAlreadyExist = await roomrentAd.find({
       $or: [queryFinal],
     })
-      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-      .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
-      .populate({ path: "viewCount" })
-      .populate({ path: "ReportCount", select: "_id" })
-      .populate({
-        path: "isReported",
-        select: "userId",
-        match: { userId: myid },
-      }).select({ addons_validity: 1,
-        "adsInfo.title": 1,
-        "adsInfo.location": 1,
-        createdAt: 1,
-        advertisement_id:1,
-        _id: 1,
-        "adsInfo.rent": 1,
-        "adsInfo.rent_info": 1,})
-      .sort(sortval);
-      let records1 = await jobsAd
-      .find({ $or: [queryFinal] })
-      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-      .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "viewCount" })
-      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
-      .populate({ path: "ReportCount", select: "_id" })
-      .populate({
-        path: "isReported",
-        select: "userId",
-        match: { userId: myid },
-      }).select({ addons_validity: 1,
-        "adsInfo.title": 1,
-        "adsInfo.location": 1,
-        createdAt: 1,
-        advertisement_id:1,
-        _id: 1,
-        "adsInfo.salary": 1,
-        "adsInfo.salary_info": 1,})
-      .sort(sortval);
-
-     
-      let records2 = await bizAd
-      .find({ $or: [queryFinal] })
-      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-      .populate({
-        path: "adsInfo.accreditation_file.file",
-        strictPopulate: false,
-        select: "url",
-      })
-      .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "viewCount" })
-      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
-      .populate({ path: "ReportCount", select: "_id" })
-      .populate({
-        path: "isReported",
-        select: "userId",
-        match: { userId: myid },
-      }).select({ addons_validity: 1,
-        "adsInfo.title": 1,
-        "adsInfo.location": 1,
-        createdAt: 1,
-        advertisement_id:1,
-        _id: 1,})
-      .sort(sortval);
-      let records3 = await eventAd
-      .find({ $or: [queryFinal] })
-      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-      .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "viewCount" })
-      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
-      .populate({ path: "ReportCount", select: "_id" })
-      .populate({
-        path: "isReported",
-        select: "userId",
-        match: { userId: myid },
-      }).select({ addons_validity: 1,
-        "adsInfo.title": 1,
-        "adsInfo.location": 1,
-        createdAt: 1,
-        advertisement_id:1,
-        _id: 1,
-        "adsInfo.ticket_price": 1,})
-      .sort(sortval);
-      let records4 = await buysellAd
-      .find({ $or: [queryFinal] })
-      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-      .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "viewCount" })
-      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
-      .populate({ path: "ReportCount", select: "_id" })
-      .populate({
-        path: "isReported",
-        select: "userId",
-        match: { userId: myid },
-      }).select({ addons_validity: 1,
-        "adsInfo.title": 1,
-        "adsInfo.location": 1,
-        createdAt: 1,
-        advertisement_id:1,
-        _id: 1,
-        "adsInfo.price": 1,
-        price_drop: 1,})
-      .sort(sortval);
-      let records5 = await babysitterAd
-      .find({ $or: [queryFinal] })
-      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-      .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "viewCount" })
-      .populate({ path: "ReportCount" })
-      .populate({ path: "ReportCount", select: "_id" })
-      .populate({
-        path: "isReported",
-        select: "userId",
-        match: { userId: myid },
-      }).select({ addons_validity: 1,
-        "adsInfo.title": 1,
-        "adsInfo.location": 1,
-        createdAt: 1,
-        advertisement_id:1,
-        _id: 1,
-        "adsInfo.expected_salary_amount": 1,
-        "adsInfo.expected_salary_rate": 1,})
-      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
-      .sort(sortval);
+    .populate(commonPopulateOptions)
+    .select(selectFields)
+    .sort(sortval)
+    .exec();
+// console.log(checkAlreadyExist); 
+ 
+ adTypeCount = checkAlreadyExist;
+ if (adTypeCount) {
     
-   filterd = [...records,...records1,...records2,...records3,...records4,...records5]
+  let jobData = adTypeCount.map((job) => {
+  
+    return {
+      ...job._doc,
+      // Add other job fields as needed
+      view_count: job.viewCount,
+      favorite_count: job.favoriteCount,
+      is_favorite: !!job.isFavorite,
+      Report_count: job.ReportCount,
+      is_Reported: !!job.isReported,
+    };
+  }); //////
+  
+  const isFavoriteFilter = is_favorite === "true" ? true : undefined;
+  if (isFavoriteFilter) {
+    jobData = jobData.filter((job) => job.is_favorite === true);
   }
-    if (filterd) {
-    
-      let jobData = filterd.map((job) => {
-      
-        return {
-          ...job._doc,
-          // Add other job fields as needed
-          view_count: job.viewCount,
-          favorite_count: job.favoriteCount,
-          is_favorite: !!job.isFavorite,
-          Report_count: job.ReportCount,
-          is_Reported: !!job.isReported,
-        };
-      }); //////
-      const isFavoriteFilter = is_favorite === "true" ? true : undefined;
-      if (isFavoriteFilter) {
-        jobData = jobData.filter((job) => job.is_favorite === true);
-      }
-
-      // Pagination
-      const totalCount = jobData.length;
-      const perPage = parseInt(req.query.perpage) || 40;
+  
+  const totalCount = jobData.length;
+      const perPage = parseInt(req.query.perpage) || 18;
       const page = parseInt(req.query.page) || 1;
 
       const startIndex = (page - 1) * perPage;
       const endIndex = startIndex + perPage;
-        // Shuffle the sorted data
-        for (let i = jobData.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [jobData[i], jobData[j]] = [jobData[j], jobData[i]];
-        }
-      // jobData.sort((a, b) => a.createdAt - b.createdAt);
-
-    
       const paginatedData = jobData.slice(startIndex, endIndex);
-   
-      let finalResponse = {
-        message: `success`,
-        total: totalCount,
-        perPage: perPage,
-        totalPages: Math.ceil(totalCount / perPage),
-        currentPage: page,
-        records: paginatedData,
-        status: 200,
+      console.log(paginatedData);
+  results.push({category:adType.key,data:paginatedData,count:totalCount});
+}
+
+      
+      }
+  }
+    
+      
        
-      };
-      return successJSONResponse(res, finalResponse);
-    } else {
-      return failureJSONResponse(res, { message: `ads not Available` });
-    }
+       
+    
+  return successJSONResponse(res, {
+    message: `success`,
+    searchdata:results,
+    status: 200,
+  });
+    
   } catch (err) {
     console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` });
