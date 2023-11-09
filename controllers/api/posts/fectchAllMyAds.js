@@ -335,41 +335,6 @@ exports.fetchActie = async (req, res, next) => {
     results.push(...adTypeCount);
   }
 
-  // let filterData;
-  //     filterData = results.map((job) => {
-  //       return {
-  //         ...job._doc,
-
-  //         price_default: job.price_default,
-  //         view_count: job.viewCount,
-  //         favorite_count: job.favoriteCount,
-  //         is_favorite: !!job.isFavorite,
-  //       };
-  //     });
-  //     let adonsData =[]
-  //     adonsData.push(...filterData);
-
-  //     mergedData.push(...adonsData);
-  // data = shuffleArray(mergedData);
-  // let totalresult = data?.length
-  // let paginationlength = req.query.perpage || 40
-  // const perPage = parseInt(paginationlength) || 40;
-  // const page = parseInt(req.query.page) || 1;
-  // let paginatedData
-  // // if (perPage === 0) {
-  // //   paginatedData = []; // Create an empty array
-  // // } else {
-  //   const startIndex = (page - 1) * perPage;
-  //   const endIndex = startIndex + perPage;
-  
-  //   paginatedData = data.slice(startIndex, endIndex);
-  // // }
-
-  // // const paginatedData = jobData.slice(startIndex, endIndex);
-  // // let finalResponse = {
-   
-  // // };
-  // // return successJSONResponse(res, finalResponse);
     return successJSONResponse(res, { message: `success`,
     total: results });
   } catch (error) {

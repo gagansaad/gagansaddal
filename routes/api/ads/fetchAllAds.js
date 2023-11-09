@@ -46,11 +46,11 @@ router.get(
   controllers.fetchActive
 );
 
-// router.get(
-//   `/seller-ad`,
-//   // authMiddleware.ensureUserLoggedIn,
-//   controllers.fetchActie
-// );
+router.get(
+  `/seller-ad`,
+  // authMiddleware.ensureUserLoggedIn,
+  controllers.fetchActie
+);
 
 
 module.exports = router;
