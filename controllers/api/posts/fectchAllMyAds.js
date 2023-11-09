@@ -298,6 +298,7 @@ if(!MyId){
 exports.fetchActie = async (req, res, next) => {
  
   try {
+    let datas
       const currentDate = new Date();
       // Convert the date to ISO 8601 format
       const currentISODate = currentDate.toISOString();
@@ -365,15 +366,25 @@ exports.fetchActie = async (req, res, next) => {
       });
       let bumpId = recordsWithTodayDate.map(featuredItem => featuredItem._id)
       console.log(bumpId);
-    let datas =  await YourModel.updateMany(
-        { _id: { $in: bumpId } }, // Find documents with IDs in the array
-        { $set: {bumpupAt:date_of_time} })
-        console.log(datas);
-    results.push(...datas);
+      if(bumpId.length > 0){
+         datas =  await YourModel.updateMany(
+          { $and: [
+            { _id: { $in: bumpId } },
+            {
+              $or: [
+                { active_on_bumpup_at: { $lt: today } },
+                { active_on_bumpup_at: null }, // Add condition for active_on_bumpup_at < todayDate7am
+              ],
+            }, // Add condition for active_on_bumpup_at < todayDate7am
+          ]}, // Find documents with IDs in the array
+          { $set: {active_on_bumpup_at:date_of_time} })
+      }
+    
+    
   }
 
     return successJSONResponse(res, { message: `success`,
-    total: results });
+    total: datas });
   } catch (error) {
     console.log(error);
     return failureJSONResponse(res, { message: `Something went wrong` });

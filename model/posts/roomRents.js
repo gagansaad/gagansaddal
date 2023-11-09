@@ -191,7 +191,7 @@ const roomRentsSchema = new mongoose.Schema(
       default:null
       
         },
-    bumpupAt:{
+        active_on_bumpup_at:{
       type:String,
       default:null,
     },
@@ -199,7 +199,20 @@ const roomRentsSchema = new mongoose.Schema(
 
   { timestamps: true }
 );
+roomRentsSchema.virtual('active_on_virtual').get(function () {
+  // Check if bumpupAt is not null
+  if (this.active_on_bumpup_at !== null) {
+    return this.active_on_bumpup_at;
+  }
 
+  // Check if addons_validity is not empty
+  if (this.plan_validity && this.plan_validity.active_on) {
+    return this.plan_validity.active_on;
+  }
+
+  // Default value if neither bumpupAt nor "Bump up" add-on is present
+  return null;
+});
 roomRentsSchema.virtual("favoriteCount", {
   ref: "FavoriteAd",
   localField: "_id",

@@ -1145,11 +1145,12 @@ exports.fetchAll = async (req, res, next) => {
     //   $or: [queryFinal],
     // });
     // let responseModelCount = totalCount.length;
+    records = records.map(record => record.toObject({ virtuals: true }));
 
     if (records) {
       let jobData = records.map((job) => {
         return {
-          ...job._doc,
+          ...job,
           // Add other job fields as needed
           view_count: job.viewCount,
           favorite_count: job.favoriteCount,
@@ -1249,7 +1250,7 @@ exports.fetchonead = async (req, res, next) => {
         select: "userId",
         match: { userId: myid },
       });
-
+      records = records.toObject({ virtuals: true });
     if (records) {
       const ads_type = records.adsType.toString();
 
@@ -1268,7 +1269,7 @@ exports.fetchonead = async (req, res, next) => {
         let data = await PostViews.create(dbQuery);
       }
       const jobData = {
-        ...records._doc,
+        ...records,
         view_count: records.viewCount,
         favorite_count: records.favoriteCount,
         is_favorite: !!records.isFavorite,

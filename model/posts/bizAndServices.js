@@ -165,9 +165,27 @@ const bizAndServices = new mongoose.Schema(
       default:null
       
         },
+        active_on_bumpup_at:{
+          type:String,
+          default:null,
+        },
   },
   { timestamps: true }
 );
+bizAndServices.virtual('active_on_virtual').get(function () {
+  // Check if active_on_bumpup_at is not null
+  if (this.active_on_bumpup_at !== null) {
+    return this.active_on_bumpup_at;
+  }
+
+  // Check if addons_validity is not empty
+  if (this.plan_validity && this.plan_validity.active_on) {
+    return this.plan_validity.active_on;
+  }
+
+  // Default value if neither active_on_bumpup_at nor "Bump up" add-on is present
+  return null;
+});
 bizAndServices.virtual("favoriteCount", {
   ref: "FavoriteAd",
   localField: "_id",
