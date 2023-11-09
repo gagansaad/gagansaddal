@@ -1004,19 +1004,22 @@ exports.search = async (req, res, next) => {
         $lte: parseFloat(max_price),
       };
     }
-
-    if (add_on) {
-      dbQuery = {
-        addons_validity: {
-          $elemMatch: {
-            name: add_on,
-            expired_on: {
-              $gte: new Date("2023-09-18").toISOString(), // Construct ISODate manually
-            },
-          },
-        },
-      };
-    }
+    let currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    let currentISODate = currentDate.toISOString();
+    dbQuery = { "plan_validity.expired_on": { $gte: currentISODate } }
+    // if (add_on) {
+    //   dbQuery = {
+    //     addons_validity: {
+    //       $elemMatch: {
+    //         name: add_on,
+    //         expired_on: {
+    //           $gte: currentISODate, // Construct ISODate manually
+    //         },
+    //       },
+    //     },
+    //   };
+    // }
     let commonPopulateOptions = [
       { path: "adsType", strictPopulate: false, select: "name" },
       { path: "adsInfo.image", strictPopulate: false, select: "url" },
@@ -1043,9 +1046,7 @@ exports.search = async (req, res, next) => {
     };
     
     // Get the current date
-    const currentDate = new Date();
-    // Convert the date to ISO 8601 format
-    const currentISODate = currentDate.toISOString();
+
     // Extract only the date portion
     const currentDateOnly = currentISODate.substring(0, 10);
   
@@ -1055,24 +1056,8 @@ exports.search = async (req, res, next) => {
         message: "Please login to your account",
       });
     }
-    if (is_myad != "true") {
-      
-      dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
-     
-      
-    } else {
-      dbQuery.userId = myid;
-      if (status == 0) {
-        dbQuery.status = "active";
-      }
-      if (status == 1) {
-        dbQuery.status = "inactive";
-      }
-      if (status == 2) {
-        dbQuery.status = "draft";
-      }
-    }
-    if (userId) dbQuery.userId = userId;
+  
+  
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
@@ -1087,13 +1072,6 @@ exports.search = async (req, res, next) => {
 
    if(searchTerm.length > 0){
 
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
     let adTypes = [
       { key: "job", label: "Jobs" ,value:{"adsInfo.salary": 1,
       "adsInfo.salary_info": 1,}},
@@ -1113,19 +1091,21 @@ exports.search = async (req, res, next) => {
     
     let adTypeCount;
     for (const adType of adTypes) {
+      let YourModel = mongoose.model(adType.key);
   let priceDefaultSelect = adType.value;
         let selectFields = { ...commonSelectFields, ...priceDefaultSelect };
-    let checkAlreadyExist = await roomrentAd.find({
+        
+    let checkAlreadyExist = await YourModel.find({
       $or: [queryFinal],
     })
     .populate(commonPopulateOptions)
     .select(selectFields)
     .sort(sortval)
     .exec();
-// console.log(checkAlreadyExist); 
+console.log(checkAlreadyExist); 
  
  adTypeCount = checkAlreadyExist;
- if (adTypeCount) {
+ if (adTypeCount.length) {
     
   let jobData = adTypeCount.map((job) => {
   
