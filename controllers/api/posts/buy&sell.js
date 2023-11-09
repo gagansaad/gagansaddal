@@ -1398,7 +1398,7 @@ exports.fetchonead = async (req, res, next) => {
     let myid = req.userId;
     let records = await postBuySellAd
       .findOne(data_Obj)
-      .populate({ path: "userId", select: "_id userInfo.name createdAt" })
+      .populate({ path: "userId", select: "_id userInfo.name userBasicInfo.profile_image createdAt" })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
