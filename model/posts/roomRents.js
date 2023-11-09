@@ -191,6 +191,10 @@ const roomRentsSchema = new mongoose.Schema(
       default:null
       
         },
+    bumpupAt:{
+      type:String,
+      default:null,
+    },
   },
 
   { timestamps: true }

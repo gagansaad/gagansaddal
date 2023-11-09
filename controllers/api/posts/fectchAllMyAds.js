@@ -305,15 +305,10 @@ exports.fetchActie = async (req, res, next) => {
       $and: [
         { status: "active" },
         { "plan_validity.expired_on": { $gte: currentISODate } },
+        {"addons_validity.name": "Bump up"}
       ]
     };
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
+    
     let adTypes = [
       { key: "job", label: "Jobs"},
       { key: "event", label: "Events"},
@@ -330,9 +325,51 @@ exports.fetchActie = async (req, res, next) => {
       let checkAlreadyExist = await YourModel.find(dbQuery).exec();
 
      
-     adTypeCount = checkAlreadyExist;
-    
-    results.push(...adTypeCount);
+      let bumpUpDates = checkAlreadyExist.map((data) => {
+        // Filter addons_validity to get only the "Bump up" addon
+        let bumpUpAddon = data.addons_validity.find(
+          (addon) => addon.name === "Bump up"
+        );
+        if (bumpUpAddon) {
+          return {
+            active_on: bumpUpAddon.active_on,
+            expired_on: bumpUpAddon.expired_on,
+            interval: bumpUpAddon.days, // Add the interval property
+          };
+        }
+        return null; // If "Bump up" addon is not found, return null
+      }).filter((dates) => dates !== null);
+
+      const resultDates = [];
+
+      for (const dateRange of bumpUpDates) {
+        const { active_on, expired_on, interval } = dateRange;
+        const startDate = new Date(active_on);
+        const endDate = new Date(expired_on);
+        const recordDates = []; // Create a separate array for each record
+
+        while (startDate <= endDate) {
+          recordDates.push(startDate.toISOString().split("T")[0]);
+          startDate.setDate(startDate.getDate() + interval);
+        }
+
+        resultDates.push(recordDates); // Push the record's dates array into the result array
+      }
+
+      const today = new Date().toISOString().split("T")[0]; // Get today's date in the format "YYYY-MM-DD"
+      let date_of_time = new Date().toISOString()
+      // Filter adonsData to find records where resultDates array contains today's date
+      const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
+        const recordDates = resultDates[index]; // Get the resultDates array for the current record
+        return recordDates.includes(today);
+      });
+      let bumpId = recordsWithTodayDate.map(featuredItem => featuredItem._id)
+      console.log(bumpId);
+    let datas =  await YourModel.updateMany(
+        { _id: { $in: bumpId } }, // Find documents with IDs in the array
+        { $set: {bumpupAt:date_of_time} })
+        console.log(datas);
+    results.push(...datas);
   }
 
     return successJSONResponse(res, { message: `success`,
