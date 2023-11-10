@@ -1275,6 +1275,9 @@ exports.fetchonead = async (req, res, next) => {
         let data = await PostViews.create(dbQuery);
       }
       let userDetails = await Users.findById(records.userId)
+      const profileImageValue = userDetails?.userBasicInfo?.profile_image;
+
+const profile_img = profileImageValue !== "null" ? profileImageValue : null;
       const jobData = {
         ...records,
         view_count: records.viewCount,
@@ -1284,7 +1287,7 @@ exports.fetchonead = async (req, res, next) => {
         is_Reported: !!records.isReported,
         userDetails:{
           name:userDetails.userInfo.name,
-          profile_img:userDetails?.userBasicInfo?.profile_image || null,
+          profile_img:profile_img,
           createdAt:userDetails.createdAt
         },
       };
