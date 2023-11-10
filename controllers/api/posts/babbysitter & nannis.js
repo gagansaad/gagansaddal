@@ -901,7 +901,7 @@ exports.fetchAll = async (req, res, next) => {
      
         featuredData = FeaturedpickedRecords.map((job) => {
           return {
-            ...job._doc,
+            ...job,
             // Add other job fields as needed
             view_count: job.viewCount,
             favorite_count: job.favoriteCount,

@@ -1009,7 +1009,9 @@ exports.fetchAll = async (req, res, next) => {
             match: { user: myid },
           });
           if(FeaturedData){
+            console.log(FeaturedData,"ekmfckejnej");
             FeaturedData = FeaturedData.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
+            console.log(FeaturedData);
           }
         const featuredRecordsToPick = 6;
         const FeaturedpickedRecords = [];
@@ -1025,7 +1027,7 @@ exports.fetchAll = async (req, res, next) => {
       
         featuredData = FeaturedpickedRecords.map((job) => {
           return {
-            ...job._doc,
+            ...job,
             // Add other job fields as needed
             view_count: job.viewCount,
             favorite_count: job.favoriteCount,
