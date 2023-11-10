@@ -1224,10 +1224,11 @@ exports.fetchonead = async (req, res, next) => {
     let myid = req.userId;
     let records = await postJobAd
       .findOne(data_Obj)
-      .populate({ path: "userId", select: "_id userInfo.name userBasicInfo.profile_image createdAt" })
+      // .populate({ path: "userId", select: "_id userInfo.name userBasicInfo.profile_image createdAt" })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
+      // .populate("userDetails")
       .populate({ path: "isFavorite", select: "user", match: { user: myid } })
       .populate({ path: "ReportCount", select: "_id" })
       .populate({
@@ -1235,7 +1236,9 @@ exports.fetchonead = async (req, res, next) => {
         select: "userId",
         match: { userId: myid },
       });
+      
       records = records.toObject({ virtuals: true });
+      // records.userDetails = records.userDetails.toObject();
 
     if (records) {
       const ads_type = records.adsType.toString();
@@ -1254,6 +1257,8 @@ exports.fetchonead = async (req, res, next) => {
       if (!checkview) {
         let data = await PostViews.create(dbQuery);
       }
+      let userDetails = await Users.findById(records.userId)
+      console.log();
       const jobData = {
         ...records,
         view_count: records.viewCount,
@@ -1261,6 +1266,11 @@ exports.fetchonead = async (req, res, next) => {
         is_favorite: !!records.isFavorite,
         Report_count: records.ReportCount,
         is_Reported: !!records.isReported,
+        userDetails:{
+          name:userDetails.userInfo.name,
+          profile_img:userDetails.userBasicInfo.profile_image,
+          createdAt:userDetails.createdAt
+        },
       };
       return successJSONResponse(res, {
         message: `success`,

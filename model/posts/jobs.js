@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-
+const mongoose = require("mongoose"),
+      Users = mongoose.model("user");
 const {
   defaultStringConfig,
   nonEmptyArrayValidator,
@@ -160,6 +160,32 @@ const roomRentsSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+// roomRentsSchema.virtual('userDeta', {
+//   ref: 'user',
+//   localField: 'userId',
+//   foreignField: '_id',
+//   justOne: true,
+//   get: async function () {
+//     try {
+//       // Use await to wait for the result of the query
+//       const user = await mongoose.model('user').findById(this.userId);
+//       console.log(user);
+//       if (!user) {
+//         console.log("User not found");
+//         return null;
+//       }
+//       console.log(user.userInfo.name);
+//       return {
+//         userId:"._id",
+//         name: ".userInfo.name",
+//         // Add other user fields as needed
+//       };
+//     } catch (error) {
+//       console.error("Error fetching user:", error);
+//       return null;
+//     }
+//   },
+// });
 roomRentsSchema.virtual('active_on_virtual').get(function () {
   // Check if bumpupAt is not null
   if (this.active_on_bumpup_at !== null) {
