@@ -1258,6 +1258,7 @@ exports.fetchonead = async (req, res, next) => {
         let data = await PostViews.create(dbQuery);
       }
       let userDetails = await Users.findById(records.userId)
+      const profileImageValue = userDetails?.userBasicInfo?.profile_image;
       const profile_img = profileImageValue !== "null" ? profileImageValue : null;
       // console.log();
       const jobData = {

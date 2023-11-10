@@ -2579,7 +2579,7 @@ module.exports = {
               phone_number: user?.userInfo?.mobile_number?.phone_number || null,
               gender: user?.userInfo?.gender || null,
               date_of_birth: user?.userInfo?.date_of_birth || null,
-              profile_image: user?.userBasicInfo?.profile_image || null,
+              profile_image: user?.userBasicInfo?.profile_image !== "null" ? userDetails?.userBasicInfo?.profile_image : null,
               short_bio: user?.userBasicInfo?.short_bio || null,
               my_website: user?.userBasicInfo?.my_website || null,
               address: user?.userBasicInfo?.location?.address || null,
