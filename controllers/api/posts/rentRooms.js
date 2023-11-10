@@ -1030,6 +1030,9 @@ exports.fetchAll = async (req, res, next) => {
             is_favorite: !!job.isFavorite,
           };
         });
+        if(featuredData){
+          featuredData = featuredData.map(featuredData => featuredData.toObject({ virtuals: true }));
+        }
         /////
         let excludedIds = featuredData.map(featuredItem => featuredItem._id)
         let BumpupData = await RoomRentsAds.find({
@@ -1142,10 +1145,11 @@ exports.fetchAll = async (req, res, next) => {
       //   $or: [queryFinal],
       // });
       // let responseModelCount = totalCount.length+bumpupData.length+featuredData+length;
-      records = records.map(record => record.toObject({ virtuals: true }));
+     
 
       
       if (records) {
+        records = records.map(record => record.toObject({ virtuals: true }));
         let jobData = records.map((job) => {
         // let addons_status=  job?.addons_validity?.map((date)=>{
   
