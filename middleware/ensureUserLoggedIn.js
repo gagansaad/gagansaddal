@@ -117,7 +117,7 @@ exports.ensureUserLoggedInDummy = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
     }
 
-    if (!token) return next();
+    if (!token) {return next();}
     else {
       const decodedPayload = verifyAndDecodeToken(token);
 

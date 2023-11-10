@@ -1382,7 +1382,6 @@ exports.fetchonead = async (req, res, next) => {
     let myid = req.userId;
     let records = await postbizAndServicesAd
       .findOne(data_Obj)
-      .populate({ path: "userId", select: "_id userInfo.name userBasicInfo.profile_image createdAt" })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({
         path: "adsInfo.accreditation_file.file",
