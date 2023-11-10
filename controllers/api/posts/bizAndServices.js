@@ -1424,7 +1424,7 @@ exports.fetchonead = async (req, res, next) => {
         is_Reported: !!records.isReported,
         userDetails:{
           name:userDetails.userInfo.name,
-          profile_img:userDetails.userBasicInfo.profile_image,
+          profile_img:userDetails?.userBasicInfo?.profile_image || null,
           createdAt:userDetails.createdAt
         },
       };

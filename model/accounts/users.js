@@ -68,7 +68,7 @@ const userSchema = new mongoose.Schema(
           "GoogleEmail",
         ],
       },
-      profile_image: { type: String },
+      profile_image: { type: String,default:null},
 
       short_bio: {
         type: String,
