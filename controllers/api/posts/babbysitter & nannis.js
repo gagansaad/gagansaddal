@@ -1140,6 +1140,7 @@ exports.fetchonead = async (req, res, next) => {
       if (!checkview) {
         let data = await PostViews.create(dbQuery);
       }
+      let userDetails = await Users.findById(records.userId)
       const jobData = {
         ...records,
         view_count: records.viewCount,
@@ -1147,6 +1148,11 @@ exports.fetchonead = async (req, res, next) => {
         is_favorite: !!records.isFavorite,
         Report_count: records.ReportCount,
         is_Reported: !!records.isReported,
+        userDetails:{
+          name:userDetails.userInfo.name,
+          profile_img:userDetails.userBasicInfo.profile_image,
+          createdAt:userDetails.createdAt
+        },
       };
       return successJSONResponse(res, {
         message: `success`,

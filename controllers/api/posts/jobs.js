@@ -1258,7 +1258,7 @@ exports.fetchonead = async (req, res, next) => {
         let data = await PostViews.create(dbQuery);
       }
       let userDetails = await Users.findById(records.userId)
-      console.log();
+      // console.log();
       const jobData = {
         ...records,
         view_count: records.viewCount,
