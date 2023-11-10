@@ -993,6 +993,9 @@ exports.fetchAllAds = async (req, res, next) => {
             select: "user",
             match: { user: myid },
           });
+          if(FeaturedData){
+            FeaturedData = FeaturedData.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
+          }
         const featuredRecordsToPick = 6;
         const FeaturedpickedRecords = [];
 
@@ -1004,7 +1007,7 @@ exports.fetchAllAds = async (req, res, next) => {
           const randomRecord = FeaturedData.splice(randomIndex, 1)[0]; // Remove and pick the record
           FeaturedpickedRecords.push(randomRecord);
         }
-
+       
         featuredData = FeaturedpickedRecords.map((job) => {
           return {
             ...job._doc,
@@ -1014,7 +1017,8 @@ exports.fetchAllAds = async (req, res, next) => {
             is_favorite: !!job.isFavorite,
           };
         });
-        let excludedIds = featuredData.map(featuredItem => featuredItem._id)
+        
+        // let excludedIds = featuredData.map(featuredItem => featuredItem._id)
         /////
         let BumpupData = await postJobAd
           .find({ ...adOnsQuery, "addons_validity.name": "Bump up" 

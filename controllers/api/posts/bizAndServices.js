@@ -1146,7 +1146,9 @@ exports.fetchAll = async (req, res, next) => {
             select: "user",
             match: { user: myid },
           });
-
+          if(FeaturedData){
+            FeaturedData = FeaturedData.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
+          }
         const featuredRecordsToPick = 6;
         const FeaturedpickedRecords = [];
 
@@ -1158,7 +1160,7 @@ exports.fetchAll = async (req, res, next) => {
           const randomRecord = FeaturedData.splice(randomIndex, 1)[0]; // Remove and pick the record
           FeaturedpickedRecords.push(randomRecord);
         }
-
+     
         featuredData = FeaturedpickedRecords.map((job) => {
           return {
             ...job._doc,
