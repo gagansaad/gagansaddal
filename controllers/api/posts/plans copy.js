@@ -71,7 +71,9 @@ let postid
           // If no matching add-on found, add a modified addon with expired_on and status set to false
           thedata.push({
             ...addon,
-            current_plan: { validity: null },
+            current_plan: {
+              validity: thisplan,
+            },
             current_addon: {
               validity: null,
               status: false,
