@@ -84,8 +84,10 @@ let postid
       finaldata.add_ons = thedata;
       modifiedResults.push(finaldata);
     }
+    console.log(modifiedResults,"gagan");
     return successJSONResponse(res, { data: modifiedResults });
   }else{
+    console.log(results,"naman");
     return successJSONResponse(res, { data: results });
   }
 
