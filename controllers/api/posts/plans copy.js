@@ -56,7 +56,7 @@ let postid
 
         if (addonValidity) {
           const expiredDate = new Date(addonValidity.expired_on);
-          const status = expiredDate > currentDate;
+          const status = expiredDate >= currentDate;
           thedata.push({
             ...addon,
             current_plan: {
