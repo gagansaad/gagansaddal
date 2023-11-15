@@ -968,7 +968,7 @@ exports.fetchAllAds = async (req, res, next) => {
       let bumpupData;
       let commonId;
       if(is_favorite != "true"){
-      if (is_myad != "true"  && !searchTerm) {
+      if (is_myad != "true") {
         let FeaturedData = await postJobAd
           .find({
             ...adOnsQuery,

@@ -982,7 +982,7 @@ exports.fetchAll = async (req, res, next) => {
       if(is_favorite != "true"){
 
      
-      if (is_myad != "true" && !searchTerm) {
+      if (is_myad != "true" ) {
         console.log("adOnsQuery",adOnsQuery);
         let FeaturedData = await RoomRentsAds.find({
          

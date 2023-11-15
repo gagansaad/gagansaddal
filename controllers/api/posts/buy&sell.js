@@ -1229,7 +1229,7 @@ exports.fetchAll = async (req, res, next) => {
       let featuredData;
       let commonId;
       if(is_favorite != "true"){
-      if (is_myad != "true" && !searchTerm) {
+      if (is_myad != "true" ) {
         let FeaturedData = await postBuySellAd
           .find({
             ...adOnsQuery,
