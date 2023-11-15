@@ -262,8 +262,8 @@ if(!MyId){
       adonsData.push(...filterData);
 
       mergedData.push(...adonsData);
-  data = shuffleArray(mergedData);
-  let totalresult = data?.length
+  // data = shuffleArray(mergedData);
+  let totalresult = mergedData?.length
   let paginationlength = req.query.perpage || 40
   const perPage = parseInt(paginationlength) || 40;
   const page = parseInt(req.query.page) || 1;
@@ -274,7 +274,7 @@ if(!MyId){
     const startIndex = (page - 1) * perPage;
     const endIndex = startIndex + perPage;
   
-    paginatedData = data.slice(startIndex, endIndex);
+    paginatedData = mergedData.slice(startIndex, endIndex);
   // }
 
   // const paginatedData = jobData.slice(startIndex, endIndex);
