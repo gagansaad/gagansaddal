@@ -1212,6 +1212,12 @@ exports.fetchAll = async (req, res, next) => {
       ...addOnsQuery,}
     let queryFinal = dbQuery;
     if (searchTerm) {
+      adOnsQuery.$or = [
+        // { "adsInfo.title": { $regex: `^${searchTerm.trim()}`, $options: "i" } },
+        { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
+
+        { "advertisement_id": searchTerm },
+      ];
       queryFinal = {
         ...dbQuery,
         $or: [
