@@ -241,7 +241,8 @@ exports.create_payment_intent = async (req, res) => {
     let plan_price = find_ads_type[0].price.amount;
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
     let addonsId = req.body.add_ons;
-    let {ModelName,Typename} = await getModelNameByAdsType(adstype);
+    let ModelName = await getModelNameByAdsType(adstype);
+    let Typename = await getModelNameByAdsType(adstype);
     let adsModel = await ModelName.findOne({
       _id: req.body.postId,
     });
