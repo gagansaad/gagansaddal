@@ -851,7 +851,7 @@ const getModelNameByAdsType = async (ads_type) => {
       break;
     case "Events":
       ModelName = eventAd,
-      Typename = findModelName.name
+      Typename = "Events"
       break;
     case "Buy & Sell":
       ModelName = buysellAd;
