@@ -245,7 +245,11 @@ exports.create_payment_intent = async (req, res) => {
     let adsModel = await ModelName.findOne({
       _id: req.body.postId,
     });
-    console.log(adsModel,req.body.postId);
+    
+    if(ModelName == "Events"){
+      console.log(adsModel,req.body.postId);
+    }
+    
     // if (adsModel?.status == "active") {
     //   return failureJSONResponse(
     //     res,
