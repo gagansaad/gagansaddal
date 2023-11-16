@@ -246,7 +246,7 @@ exports.create_payment_intent = async (req, res) => {
       _id: req.body.postId,
     });
     
-    if(ModelName == "Events"){
+    if(ModelName == "eventAd"){
       console.log(adsModel,req.body.postId);
     }
     
