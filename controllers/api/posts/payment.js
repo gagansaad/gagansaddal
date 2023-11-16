@@ -125,7 +125,7 @@ const paymentIntentCreate = async (
   deviceType = null,
   user
 ) => {
-  console.log(dataobj,"vrkmrkrkrvkrkrkrkrkvrkvkrvkr");
+  console.log(dataobj,request,"vrkmrkrkrvkrkrkrkrkvrkvkrvkr");
   return ""
   let successUrl;
   let cancelUrl;
