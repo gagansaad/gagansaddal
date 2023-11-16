@@ -747,12 +747,12 @@ let plan_duration = checkdata.plan_validity
 let expiredDate = new Date(plan_duration.expired_on)
   let currentDae = new Date()
   if(checkdata.status == "deleted"){
-    console.log("---------------------------------------------------------------------------------------------------------------------------------------");
+    oldval.push(AddOnsArr);
   }
 if(checkdata.status == 'active' && expiredDate.toISOString() > currentDae.toISOString()){
   
   plan_obj = plan_duration
-}
+
 console.log(checkdata.addons_validity,"================",AddOnsArr,"*************************************");
 let aNameMap = {};
 oldval.forEach(item => {
@@ -772,6 +772,7 @@ AddOnsArr.forEach(itemB => {
     oldval.push(itemB);
   }
 });
+}
 console.log(oldval,"----------------------------------------jnenvjrnvjkfjvbfjv fj vjmfbvhjfnkjfnjfnvjfhjmvbdfjvbfvbfjhjfvjhfhjfvjh------------------");
   let data_Obj = {
     status: "active",
