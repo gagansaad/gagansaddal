@@ -837,7 +837,7 @@ const getModelNameByAdsType = async (ads_type) => {
   let findModelName = await category.findById({ _id: ads_type.toString() });
 
   let ModelName;
-  let Typename
+  let Typename;
 
   switch (findModelName.name) {
     case "Rentals":
