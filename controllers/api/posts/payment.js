@@ -246,7 +246,7 @@ exports.create_payment_intent = async (req, res) => {
     let adsModel = await ModelName.findOne({
       _id: req.body.postId,
     });
-    console.log(Typename);
+    console.log(Typename,"dvsdv55555555555555555555555555555555555555555555");
     if(ModelName == "event"){
       console.log(adsModel,req.body.postId);
     }
