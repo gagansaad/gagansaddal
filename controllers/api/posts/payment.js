@@ -125,7 +125,7 @@ const paymentIntentCreate = async (
   deviceType = null,
   user
 ) => {
-  console.log(dataobj,request,"vrkmrkrkrvkrkrkrkrkvrkvkrvkr");
+  console.log(dataobj,"vrkmrkrkrvkrkrkrkrkvrkvkrvkr");
   return ""
   let successUrl;
   let cancelUrl;
@@ -245,6 +245,7 @@ exports.create_payment_intent = async (req, res) => {
     let adsModel = await ModelName.findOne({
       _id: req.body.postId,
     });
+    console.log(adsModel,req.body.postId);
     // if (adsModel?.status == "active") {
     //   return failureJSONResponse(
     //     res,
