@@ -247,19 +247,20 @@ exports.create_payment_intent = async (req, res) => {
     }).populate("adsType");
     console.log(adsModel.adsType.name,"----------------------------");
     if(adsModel.adsType.name == "Events"){
-      let startDate = adsModel.adsInfo.date_time.start_date
-      let endDate = adsModel.adsInfo.date_time.start_date
-    // Set time to midnight for both dates
+      // Assuming start_date and end_date are valid date strings or Date objects
+let startDate = new Date(adsModel.adsInfo.date_time.start_date);
+let endDate = new Date(adsModel.adsInfo.date_time.end_date);
+
+// Set time to midnight for both dates
 startDate.setHours(0, 0, 0, 0);
 endDate.setHours(0, 0, 0, 0);
 
-// Calculate the difference in milliseconds
-let timeDifference = endDate.getTime() - startDate.getTime();
-
 // Calculate the difference in days
-let daysDifference = timeDifference / (1000 * 3600 * 24);
+let timeDifference = endDate.getTime() - startDate.getTime();
+let daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
 
 console.log(startDate, endDate, daysDifference, "fvmfmvkfmvkfmvkfvmfrk");
+
     }
     
     // if (adsModel?.status == "active") {
