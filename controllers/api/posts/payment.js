@@ -242,12 +242,11 @@ exports.create_payment_intent = async (req, res) => {
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
     let addonsId = req.body.add_ons;
     let ModelName = await getModelNameByAdsType(adstype);
-    let Typename = await getModelNameByAdsType(adstype);
     let adsModel = await ModelName.findOne({
       _id: req.body.postId,
     });
-    console.log(Typename,"dvsdv55555555555555555555555555555555555555555555");
-    if(ModelName == "event"){
+    console.log({adsModel,"----------------------------"});
+    if(ModelName == "events"){
       console.log(adsModel,req.body.postId);
     }
     
@@ -837,7 +836,6 @@ const getModelNameByAdsType = async (ads_type) => {
   let findModelName = await category.findById({ _id: ads_type.toString() });
 
   let ModelName;
-  let Typename;
 
   switch (findModelName.name) {
     case "Rentals":
@@ -850,8 +848,7 @@ const getModelNameByAdsType = async (ads_type) => {
       ModelName = bizAd;
       break;
     case "Events":
-      ModelName = eventAd,
-      Typename = "Events"
+      ModelName = eventAd;
       break;
     case "Buy & Sell":
       ModelName = buysellAd;
@@ -863,7 +860,7 @@ const getModelNameByAdsType = async (ads_type) => {
       console.log(`Please provide valid ads id`);
   }
 
-  return ModelName,Typename;
+  return ModelName;
 };
 
 exports.billingInfo = async (req, res) => {
