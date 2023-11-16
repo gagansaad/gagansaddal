@@ -45,7 +45,8 @@ const { mongoose, ObjectId, modelNames } = require("mongoose"),
           status: "deleted",
           deletedAt: new Date().toISOString(),// Add your temporary field and its value here
           "plan_validity.expired_on": new Date().toISOString(), // Set the plan validity expiry date
-          "addons_validity.$[].expired_on": new Date().toISOString(), 
+          "addons_validity": null,
+          "active_on_virtual":null
         }
       };
   
