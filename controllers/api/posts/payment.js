@@ -242,7 +242,7 @@ exports.create_payment_intent = async (req, res) => {
     let plan_currency = JSON.stringify(find_ads_type[0].price.currency);
     let addonsId = req.body.add_ons;
     let ModelName = await getModelNameByAdsType(adstype);
-    let Typename = await getModelNameByAdsType(adstype);
+    let {Typename} = await getModelNameByAdsType(adstype);
     let adsModel = await ModelName.findOne({
       _id: req.body.postId,
     });
@@ -863,7 +863,7 @@ const getModelNameByAdsType = async (ads_type) => {
       console.log(`Please provide valid ads id`);
   }
 
-  return ModelName;
+  return ModelName,Typename;
 };
 
 exports.billingInfo = async (req, res) => {
