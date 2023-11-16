@@ -125,8 +125,6 @@ const paymentIntentCreate = async (
   deviceType = null,
   user
 ) => {
-  console.log(dataobj,"vrkmrkrkrvkrkrkrkrkvrkvkrvkr");
-  return ""
   let successUrl;
   let cancelUrl;
   let UserId = dataobj.user;
@@ -262,7 +260,6 @@ let daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
 console.log(startDate, endDate, daysDifference, "fvmfmvkfmvkfmvkfvmfrk");
 
     }
-    
     // if (adsModel?.status == "active") {
     //   return failureJSONResponse(
     //     res,
