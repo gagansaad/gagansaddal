@@ -747,7 +747,7 @@ let plan_duration = checkdata.plan_validity
 let expiredDate = new Date(plan_duration.expired_on)
   let currentDae = new Date()
   
-  if(checkdata.status == "deleted"){
+  if(checkdata.status == "deleted" || checkdata.status == "draft"){
     oldval = [...AddOnsArr];
   }
 if(checkdata.status == 'active' && expiredDate.toISOString() > currentDae.toISOString()){
