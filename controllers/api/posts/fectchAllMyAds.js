@@ -1146,7 +1146,6 @@ exports.search = async (req, res, next) => {
       const startIndex = (page - 1) * perPage;
       const endIndex = startIndex + perPage;
       const paginatedData = jobData.slice(startIndex, endIndex);
-      // console.log(paginatedData);
   results.push({category:adType.label,data:paginatedData,count:totalCount});
 }
 

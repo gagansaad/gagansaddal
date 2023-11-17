@@ -613,7 +613,6 @@ exports.editAds = async (req, res, next) => {
 /////----------------------Update Job Status -------------------/////
 
 // exports.editJobStatus = async (req, res, next) => {
-//   console.log(`kejhrjhyewgrjhew`);
 //   try {
 //     const jobId = req?.params?.jobId;
 
