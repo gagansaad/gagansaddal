@@ -49,7 +49,7 @@ let ods = await AdsPlan.aggregate([
     $unwind: "$joinedData", // Unwind the array (optional)
   },
 ])
-console.log(ods,"kjncesnsejceskncec-----------==============");
+// console.log(ods,"kjncesnsejceskncec-----------==============");
 // console.log(previousdata);
     // AdsPlan.find({
     //   ads_type: planObjectId,

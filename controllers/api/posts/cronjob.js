@@ -28,16 +28,16 @@ cron.schedule("*/15 * * * *", async () => {
       });
 
       for (const document of documents) {
-        console.log(document);
+        // console.log(document);
         // Parse the string to a Date object
         const expiredOnDate = new Date(document.plan_validity.expired_on);
 
         // Get the timezone offset from the document's "plan_validity.expired_on" field
         const documentTimezoneOffset = expiredOnDate.getTimezoneOffset();
-        console.log(documentTimezoneOffset);
+        // console.log(documentTimezoneOffset);
         // Calculate the adjustclged time using the document's timezone offset
         const adjustedTime = new Date(new Date().getTime() + documentTimezoneOffset * 60000);
-        console.log(adjustedTime.toISOString(),"rv drvffbdfbfrbd");
+        // console.log(adjustedTime.toISOString(),"rv drvffbdfbfrbd");
         // Update the documents based on the adjusted time
         const result = await Model.updateMany(
           {
@@ -132,7 +132,7 @@ cron.schedule('0 7 * * *', async (req,res) => {
               return recordDates.includes(today);
             });
             let bumpId = recordsWithTodayDate.map(featuredItem => featuredItem._id)
-            console.log(bumpId);
+            // console.log(bumpId);
             if(bumpId.length > 0){
                datas =  await YourModel.updateMany(
                 { $and: [

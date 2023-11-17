@@ -243,7 +243,7 @@ exports.create_payment_intent = async (req, res) => {
     let adsModel = await ModelName.findOne({
       _id: req.body.postId,
     }).populate("adsType");
-    console.log(adsModel.adsType.name,"----------------------------");
+    // console.log(adsModel.adsType.name,"----------------------------");
     if(adsModel.adsType.name == "Events"){
       // Assuming start_date and end_date are valid date strings or Date objects
 let startDate = new Date(adsModel.adsInfo.date_time.start_date);
@@ -257,7 +257,7 @@ endDate.setHours(0, 0, 0, 0);
 let timeDifference = endDate.getTime() - startDate.getTime();
 let daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
 
-console.log(startDate, endDate, daysDifference, "fvmfmvkfmvkfmvkfvmfrk");
+// console.log(startDate, endDate, daysDifference, "fvmfmvkfmvkfmvkfvmfrk");
 
     }
     // if (adsModel?.status == "active") {
@@ -282,12 +282,12 @@ console.log(startDate, endDate, daysDifference, "fvmfmvkfmvkfmvkfvmfrk");
       // Iterate through the addons_validity array
       for (const addonValidity of adsModel.addons_validity) {
         const addonIndex = addonsId.indexOf(addonValidity.add_ons_id);
-      console.log("gagan");
+      // console.log("gagan");
         if (addonIndex != -1) {
           const expiredOnDate = new Date(addonValidity.expired_on);
       
           if (currentDate <= expiredOnDate.toISOString()) {
-            console.log(`${addonValidity.name} Already Valid till ${addonValidity.expired_on}. //////////////////////////////////////////////////////////////////////////////////////////////`);
+            // console.log(`${addonValidity.name} Already Valid till ${addonValidity.expired_on}. //////////////////////////////////////////////////////////////////////////////////////////////`);
             // Remove the valid add-on from addonsId
            return failureJSONResponse(res, {
               message: `${addonValidity.name} Already Valid till ${addonValidity.expired_on}`,
@@ -310,7 +310,7 @@ console.log(startDate, endDate, daysDifference, "fvmfmvkfmvkfmvkfvmfrk");
             (priceObj) => priceObj._id == targetId
           );
           if (foundObj) {
-            console.log(foundObj,"----------------------------------");
+            // console.log(foundObj,"----------------------------------");
             foundObjects.push(foundObj);
           }
         });
@@ -397,7 +397,7 @@ console.log(startDate, endDate, daysDifference, "fvmfmvkfmvkfmvkfvmfrk");
         deviceType
       );
     } else {
-      console.log("rana maaf krna");
+      // console.log("rana maaf krna");
       if (deviceType == "web") {
         paymentIntentClientSecret = paymentModelInfo.payment_intent.url;
       } else {
@@ -648,7 +648,7 @@ let conditions = [];
      
   if (adsName) {
     let adLocation = await ModelName.findById(ads_id)
-    console.log(adLocation);
+    // console.log(adLocation);
     let long ;
     let lat ;
     if(adLocation.adsInfo.location.coordinates){
@@ -658,7 +658,7 @@ let conditions = [];
   
      let Distance = 200000;
     
-console.log(long,lat,"----------------------------------------------------------------------------------------------------------------------------------------------") 
+// console.log(long,lat,"----------------------------------------------------------------------------------------------------------------------------------------------") 
     if (dpsIndex && long && lat && Distance) {
       const targetPoint = {
         type: "Point",
@@ -677,7 +677,7 @@ console.log(long,lat,"----------------------------------------------------------
     let updateQuery = { $and: conditions };
     let alertdata = await USER.find(updateQuery);
     userIds = alertdata.map((alert) => String(alert._id));
-    console.log(userIds,"------------------------------------------------------------------------------------------");
+    // console.log(userIds,"------------------------------------------------------------------------------------------");
   }
   const myidIndex = userIds.indexOf(String(userID));
 
@@ -685,7 +685,7 @@ console.log(long,lat,"----------------------------------------------------------
     // If myid is found, remove it from the array
     userIds.splice(myidIndex, 1);
   }
-console.log(userIds,"------------------------------------------------------------------------------------------");
+// console.log(userIds,"------------------------------------------------------------------------------------------");
   let title1 = `${adsName}`;
   let body1 = `${adsName} New Post Added Click to See`;
 
@@ -754,7 +754,7 @@ if(checkdata.status == 'active' && expiredDate.toISOString() > currentDae.toISOS
   
   plan_obj = plan_duration
 
-console.log(checkdata.addons_validity,"================",AddOnsArr,"*************************************");
+// console.log(checkdata.addons_validity,"================",AddOnsArr,"*************************************");
 let aNameMap = {};
 oldval.forEach(item => {
   aNameMap[item.name] = item;
@@ -774,7 +774,7 @@ AddOnsArr.forEach(itemB => {
   }
 });
 }
-console.log(oldval,"----------------------------------------jnenvjrnvjkfjvbfjv fj vjmfbvhjfnkjfnjfnvjfhjmvbdfjvbfvbfjhjfvjhfhjfvjh------------------");
+// console.log(oldval,"----------------------------------------jnenvjrnvjkfjvbfjv fj vjmfbvhjfnkjfnjfnvjfhjmvbdfjvbfvbfjhjfvjhfhjfvjh------------------");
    data_Obj = {
     status: "active",
     plan_validity: plan_obj,

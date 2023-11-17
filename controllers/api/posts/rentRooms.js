@@ -171,7 +171,7 @@ exports.fetchDynamicsData = async (req, res, next) => {
 exports.fetchRoomData = async (req, res, next) => {
   try {
     const { longitude, latitude } = req.query; // Get longitude and latitude from the request query parameters
-    console.log(req.query,"dncdnvjdnjhdv");
+    // console.log(req.query,"dncdnvjdnjhdv");
     let maxDistance = req.query.maxDistance || 200;
     const sub_categories = {
       "Rooms for Rent": [
@@ -221,7 +221,7 @@ exports.fetchRoomData = async (req, res, next) => {
         };
         if (req.query.longitude && req.query.latitude) {
           // Assuming you have longitude and latitude fields in your data
-          console.log(req.query.longitude,req.query.latitude ,"njrdenvjfdnvjfdvjfnvjnfjvnfrn");
+          // console.log(req.query.longitude,req.query.latitude ,"njrdenvjfdnvjfdvjfnvjnfjvnfrn");
           query["adsInfo.location.coordinates"] = {
             $geoWithin: {
               $centerSphere: [
@@ -234,9 +234,9 @@ exports.fetchRoomData = async (req, res, next) => {
             },
           };
         }
-        console.log(query,"jaijdewndjewndjwndjwndjw");
+        // console.log(query,"jaijdewndjewndjwndjwndjw");
         const count = await RoomRentsAds.countDocuments(query);
-        console.log(count);
+        // console.log(count);
         subcategoryData.push({ sub_category_name: subCategory, count });
       }
 
@@ -252,7 +252,7 @@ exports.fetchRoomData = async (req, res, next) => {
         sub_categories: subcategoryData,
       });
     }
-console.log(lalcount,"lalalallala");
+// console.log(lalcount,"lalalallala");
     let RedZone = lalcount.reduce(
       (accumulator, currentValue) => accumulator + currentValue,
       0
@@ -786,7 +786,7 @@ exports.fetchAll = async (req, res, next) => {
       is_favorite,
       is_myad,
     } = req.query;
-    console.log(req.query,"bnvdjnvjrdxjfdxfjbn dfxnv fjdsnvb");
+    // console.log(req.query,"bnvdjnvjrdxjfdxfjbn dfxnv fjdsnvb");
     let adOnsQuery = {};
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
@@ -798,7 +798,7 @@ exports.fetchAll = async (req, res, next) => {
     } else {
       Distance = maxDistance * 1000;
     }
-    console.log(longitude,latitude,"------------------kjfhnh");
+    // console.log(longitude,latitude,"------------------kjfhnh");
     if (longitude && latitude && Distance) {
       const targetPoint = {
         type: "Point",
@@ -936,7 +936,7 @@ exports.fetchAll = async (req, res, next) => {
       });
     }
     if (is_myad != "true" ) {
-      console.log("rja ki jai ho");
+      // console.log("rja ki jai ho");
       dbQuery.status = "active";
       dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
       adOnsQuery.status = "active";
@@ -985,13 +985,13 @@ exports.fetchAll = async (req, res, next) => {
       let featuredData;
       let bumpupData;
       let commonId;
-      console.log(is_favorite);
+      // console.log(is_favorite);
 
       if(is_favorite != "true"){
 
      
       if (is_myad != "true" ) {
-        console.log("adOnsQuery",adOnsQuery);
+        // console.log("adOnsQuery",adOnsQuery);
         let FeaturedData = await RoomRentsAds.find({
          
           ...adOnsQuery,
@@ -1017,9 +1017,9 @@ exports.fetchAll = async (req, res, next) => {
             match: { user: myid },
           });
           if(FeaturedData){
-            console.log(FeaturedData,"ekmfckejnej");
+            // console.log(FeaturedData,"ekmfckejnej");
             FeaturedData = FeaturedData.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
-            console.log(FeaturedData);
+            // console.log(FeaturedData);
           }
         const featuredRecordsToPick = 6;
         const FeaturedpickedRecords = [];
@@ -1189,7 +1189,7 @@ exports.fetchAll = async (req, res, next) => {
         //   totalresult = totalCount
         //   freedata = JSON.parse(paginationlength)
         // }else{
-          console.log("totalCount");
+          // console.log("totalCount");
           totalresult = totalCount
           // adodata = bumpupData.length + featuredData.length
           // freedata = paginationlength - adodata
@@ -1197,7 +1197,7 @@ exports.fetchAll = async (req, res, next) => {
           
           paginationlength= JSON.parse(paginationlength)
         // }
-        console.log(totalresult);
+        // console.log(totalresult);
         // console.log(freedata,"gg");
         const perPage = parseInt(paginationlength) || 40;
         const page = parseInt(req.query.page) || 1;
@@ -1241,7 +1241,7 @@ exports.fetchonead = async (req, res, next) => {
     const adsId = req.query.adsId;
     let data_Obj;
     let checkId = await RoomRentsAds.findOne({ _id: adsId });
-  console.log(checkId);
+  // console.log(checkId);
     if (!checkId) {
       return failureJSONResponse(res, {
         message: `Please provide valid ad id`,

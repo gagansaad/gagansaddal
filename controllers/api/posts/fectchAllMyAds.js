@@ -234,7 +234,7 @@ if(!MyId){
 
         let priceDefaultSelect = adType.value;
         let selectFields = { ...commonSelectFields, ...priceDefaultSelect };
-      console.log({...priceDefaultSelect,...commonSelectFields});
+      // console.log({...priceDefaultSelect,...commonSelectFields});
       let YourModel = mongoose.model(adType.key);
       let checkAlreadyExist = await YourModel.find(dbQuery)
         .populate(commonPopulateOptions)
@@ -258,7 +258,7 @@ if(!MyId){
           is_favorite: !!job.isFavorite,
         };
       });
-      console.log(filterData,"hdsch");
+      // console.log(filterData,"hdsch");
       let adonsData =[]
       adonsData.push(...filterData);
 
@@ -366,7 +366,7 @@ exports.fetchActie = async (req, res, next) => {
         return recordDates.includes(today);
       });
       let bumpId = recordsWithTodayDate.map(featuredItem => featuredItem._id)
-      console.log(bumpId);
+      // console.log(bumpId);
       if(bumpId.length > 0){
          datas =  await YourModel.updateMany(
           { $and: [
@@ -400,7 +400,7 @@ exports.fetchAll = async (req, res, next) => {
       myid = req.userId || "0";
     }
     const {longitude, latitude, maxDistance,location_name} = req.query;
-    console.log(myid,req.query,"----------");
+    // console.log(myid,req.query,"----------");
     let Distance;
 
     if (maxDistance === "0" || !maxDistance) {
@@ -415,7 +415,7 @@ exports.fetchAll = async (req, res, next) => {
         coordinates: [longitude, latitude],
       };
     }
-    console.log(live_location,"-----------------");
+    // console.log(live_location,"-----------------");
     if(myid != "0"){
       if(longitude && latitude){
         await UserModel.findByIdAndUpdate(myid, { $set: { 'userBasicInfo.live_location': live_location } }, { new: true });
@@ -650,7 +650,7 @@ exports.removemedia = async (req, res, next) => {
         },
       ],
     };
-    console.log(dbQuery,"--------------------------------------------------------------------------------------------------p--------gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg-");
+    // console.log(dbQuery,"--------------------------------------------------------------------------------------------------p--------gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg-");
      let YourModel = mongoose.model(Typename);
          let UpdateMedia= await YourModel.updateOne(
           dbQuery,
@@ -705,7 +705,7 @@ exports.remove_accredation_media = async (req, res, next) => {
         },
       ],
     };
-    console.log(dbQuery,"--------------------------------------------------------------------------------------------------p--------gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg-");
+    // console.log(dbQuery,"--------------------------------------------------------------------------------------------------p--------gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg-");
      let YourModel = mongoose.model(Typename);
          let UpdateMedia= await YourModel.updateOne(
           dbQuery,
@@ -1116,7 +1116,7 @@ exports.search = async (req, res, next) => {
     .select(selectFields)
     .sort(sortval)
     .exec();
-console.log(checkAlreadyExist); 
+// console.log(checkAlreadyExist); 
  
  adTypeCount = checkAlreadyExist;
  if (adTypeCount.length) {
@@ -1146,7 +1146,7 @@ console.log(checkAlreadyExist);
       const startIndex = (page - 1) * perPage;
       const endIndex = startIndex + perPage;
       const paginatedData = jobData.slice(startIndex, endIndex);
-      console.log(paginatedData);
+      // console.log(paginatedData);
   results.push({category:adType.label,data:paginatedData,count:totalCount});
 }
 

@@ -383,7 +383,7 @@ exports.createEventAds = async (req, res, next) => {
       other_platform,
       other_platform_name,
     } = req.body;
-    console.log(currency,"000000000",req.body);
+    // console.log(currency,"000000000",req.body);
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
@@ -437,7 +437,7 @@ exports.createEventAds = async (req, res, next) => {
         platform_link: tiktok_platform,
       });
     }
-    console.log(other_platform_name,other_platform,"-----------------------------------------");
+    // console.log(other_platform_name,other_platform,"-----------------------------------------");
     if (other_platform) {
       for (let i = 0; i < other_platform.length; i++) {
       platforms.push({
@@ -600,7 +600,7 @@ exports.editEventAds = async (req, res, next) => {
       primary_phone_number,
       secondary_phone_number,
     } = req.body;
-console.log(currency,"000000000");
+// console.log(currency,"000000000");
     let taglines = tagline;
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {

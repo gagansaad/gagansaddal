@@ -733,7 +733,7 @@ exports.editbizAds = async (req, res, next) => {
       if (
         accreditation_name.length != req.files.accreditation_document.length
       ) {
-        console.log(accreditation_name,req.files.accreditation_document.length,"ayaya re aya re aaya");
+        // console.log(accreditation_name,req.files.accreditation_document.length,"ayaya re aya re aaya");
         return failureJSONResponse(res, {
           message: `Please provide accreditation_name`,
         });
@@ -1362,7 +1362,7 @@ exports.fetchAll = async (req, res, next) => {
       return failureJSONResponse(res, { message: `ads not Available` });
     }
   } catch (err) {
-    console.log(err,"hshshhs");
+    // console.log(err,"hshshhs");
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };

@@ -1165,7 +1165,7 @@ exports.fetchAllAds = async (req, res, next) => {
     //   totalresult = totalCount
     //   freedata = JSON.parse(paginationlength)
     // }else{
-      console.log(totalCount);
+      // console.log(totalCount);
       totalresult = totalCount
     //   adodata = bumpupData.length + featuredData.length
     //   freedata = paginationlength - adodata

@@ -21,7 +21,7 @@ module.exports = {
       let notificationData;
       let emailData;
       const convertedIds = userIds.map((id) => mongoose.Types.ObjectId(id));
-      console.log(convertedIds,"=======================");
+      // console.log(convertedIds,"=======================");
       let androidTokens;
       let iosTokens;
       let webTokens;
@@ -31,11 +31,11 @@ module.exports = {
         data: data,
         user_id: userId,
       }));
-console.log("gagan ki maya ka jaal kaala maal laal maal ",notificationData,"jinga la la hu hu");
+// console.log("gagan ki maya ka jaal kaala maal laal maal ",notificationData,"jinga la la hu hu");
       if (saveNotification == true) {
 
        let data = await Notification.insertMany(notificationData);
-       console.log(data,"hra hra rang tainu lgdi na sang kri ki tu ni jave roti v na khave");
+      //  console.log(data,"hra hra rang tainu lgdi na sang kri ki tu ni jave roti v na khave");
       }
       if (Object.keys(sendEmailNotification).length > 0) {
         convertedIds.map(async (userId) => {
@@ -73,7 +73,7 @@ console.log("gagan ki maya ka jaal kaala maal laal maal ",notificationData,"jing
       webTokens = userDeviceTypes.find((type) => type._id === 3)?.devices || [];
       if (androidTokens.length) {
         androidTokens = androidTokens.map((user) => user.token);
-console.log(androidTokens,"---------------------------");
+// console.log(androidTokens,"---------------------------");
         sendAndroidNotifications(androidTokens, title, body, data);
       }
       if (iosTokens.length) {

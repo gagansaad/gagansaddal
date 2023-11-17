@@ -86,16 +86,16 @@ let postid
       finaldata.add_ons = thedata;
       modifiedResults.push(finaldata);
     }
-    console.log(modifiedResults,"gagan");
+    // console.log(modifiedResults,"gagan");
     return successJSONResponse(res, { data: modifiedResults });
   }else{
-    console.log(results,"naman");
+    // console.log(results,"naman");
     return successJSONResponse(res, { data: results });
   }
 
      
   } catch (err) {
-    console.log(err,"fdknvkfvkfv");
+    // console.log(err,"fdknvkfvkfv");
 
     return failureJSONResponse(res, { message: `something went wrong` });
   }
