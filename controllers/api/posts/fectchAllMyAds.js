@@ -1071,7 +1071,7 @@ exports.search = async (req, res, next) => {
       });
     }
   
-  
+  console.log(dbQuery,"cdcdck");
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
@@ -1102,7 +1102,7 @@ exports.search = async (req, res, next) => {
         "adsInfo.rent_info": 1,
       }},
     ];
-    
+    console.log(queryFinal,"vdv");
     let adTypeCount;
     for (const adType of adTypes) {
       let YourModel = mongoose.model(adType.key);
