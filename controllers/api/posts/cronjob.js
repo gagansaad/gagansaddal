@@ -44,22 +44,27 @@ cron.schedule("*/15 * * * *", async () => {
         let adjustedTime
         if(adType.key == "event"){
           adjustedTime = new Date()
+          const result = await Model.updateMany(
+            {
+              $and: [
+                { "adsInfo.date_time.end_date": { $lt: new Date().toISOString }},,
+                { status: "active" },
+              ],
+            },
+            {
+              $set: {
+                status: 'inactive',
+                'plan_validity.expired_on': new Date().toISOString()
+              }
+            }
+          ).exec();
         }else{
           expiredOnDate = new Date(document.plan_validity.expired_on);
           const documentTimezoneOffset = expiredOnDate.getTimezoneOffset();
         // console.log(documentTimezoneOffset);
         // Calculate the adjustclged time using the document's timezone offset
          adjustedTime = new Date(new Date().getTime() + documentTimezoneOffset * 60000);
-        }
-
-        // Get the timezone offset from the document's "plan_validity.expired_on" field
-        // const documentTimezoneOffset = expiredOnDate.getTimezoneOffset();
-        // // console.log(documentTimezoneOffset);
-        // // Calculate the adjustclged time using the document's timezone offset
-        //  adjustedTime = new Date(new Date().getTime() + documentTimezoneOffset * 60000);
-        // console.log(adjustedTime.toISOString(),"rv drvffbdfbfrbd");
-        // Update the documents based on the adjusted time
-        const result = await Model.updateMany(
+         const result = await Model.updateMany(
           {
             $and: [
               { "plan_validity.expired_on": { $lt: adjustedTime.toISOString() } },
@@ -70,6 +75,26 @@ cron.schedule("*/15 * * * *", async () => {
             $set: { status: 'inactive' },
           }
         ).exec();
+        }
+
+        // Get the timezone offset from the document's "plan_validity.expired_on" field
+        // const documentTimezoneOffset = expiredOnDate.getTimezoneOffset();
+        // // console.log(documentTimezoneOffset);
+        // // Calculate the adjustclged time using the document's timezone offset
+        //  adjustedTime = new Date(new Date().getTime() + documentTimezoneOffset * 60000);
+        // console.log(adjustedTime.toISOString(),"rv drvffbdfbfrbd");
+        // Update the documents based on the adjusted time
+        // const result = await Model.updateMany(
+        //   {
+        //     $and: [
+        //       { "plan_validity.expired_on": { $lt: adjustedTime.toISOString() } },
+        //       { status: "active" },
+        //     ],
+        //   },
+        //   {
+        //     $set: { status: 'inactive' },
+        //   }
+        // ).exec();
 
         // console.log(`Updated documents in ${adType.key}:`, result);
       }
