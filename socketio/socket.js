@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Message = require("../model/posts/message");
 const User = require("../model/accounts/users");
 const Admin = require("../model/accounts/admin");
-
+// const io = require('socket.io-client');
 //var user=0;
 //const sockets = new Set();
 
@@ -21,8 +21,8 @@ const {
 
 const socketio = (io) => {
   io.on("connection", async (socket) => {
-    // console.log("connected user num:",++user);
-    // sockets.add(socket.id);
+    console.log("connected user num:");
+    // sockets.add();
     console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
     //send geeting to new user and request his id
     io.to(socket.id).emit("greeting");

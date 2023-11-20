@@ -21,22 +21,42 @@ cron.schedule("*/15 * * * *", async () => {
       const Model = mongoose.model(adType.key);
 
       // Find documents that meet the criteria
-      const documents = await Model.find({$and:[
-       { "plan_validity.expired_on": { $lt: new Date().toISOString }},
-       { status: "active"},
-      ]
-      });
+      let documents;
+      if(adType.key == "event"){
+         documents = await Model.find({$and:[
+          { "adsInfo.date_time.end_date": { $lt: new Date().toISOString }},
+          { status: "active"},
+         ]
+         });
+      }else{
+         documents = await Model.find({$and:[
+          { "plan_validity.expired_on": { $lt: new Date().toISOString }},
+          { status: "active"},
+         ]
+         });
+      }
+     
 
       for (const document of documents) {
         // console.log(document);
         // Parse the string to a Date object
-        const expiredOnDate = new Date(document.plan_validity.expired_on);
-
-        // Get the timezone offset from the document's "plan_validity.expired_on" field
-        const documentTimezoneOffset = expiredOnDate.getTimezoneOffset();
+        let expiredOnDate
+        let adjustedTime
+        if(adType.key == "event"){
+          adjustedTime = new Date()
+        }else{
+          expiredOnDate = new Date(document.plan_validity.expired_on);
+          const documentTimezoneOffset = expiredOnDate.getTimezoneOffset();
         // console.log(documentTimezoneOffset);
         // Calculate the adjustclged time using the document's timezone offset
-        const adjustedTime = new Date(new Date().getTime() + documentTimezoneOffset * 60000);
+         adjustedTime = new Date(new Date().getTime() + documentTimezoneOffset * 60000);
+        }
+
+        // Get the timezone offset from the document's "plan_validity.expired_on" field
+        // const documentTimezoneOffset = expiredOnDate.getTimezoneOffset();
+        // // console.log(documentTimezoneOffset);
+        // // Calculate the adjustclged time using the document's timezone offset
+        //  adjustedTime = new Date(new Date().getTime() + documentTimezoneOffset * 60000);
         // console.log(adjustedTime.toISOString(),"rv drvffbdfbfrbd");
         // Update the documents based on the adjusted time
         const result = await Model.updateMany(
