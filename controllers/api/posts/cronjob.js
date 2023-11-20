@@ -6,7 +6,7 @@ const {
   ModelNameByAdsType,
 } = require(`../../../handlers/jsonResponseHandlers`);
 
-cron.schedule("* * * * * *", async () => {
+cron.schedule("*/15 * * * *", async () => {
   try {
     function formatDate(date) {
       const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
@@ -35,11 +35,11 @@ cron.schedule("* * * * * *", async () => {
         const nextDay = new Date(currentDate);
         // nextDay.setDate(currentDate.getDate() + 1);
         const formattedDate = formatDate(nextDay);
-console.log(currentDate,"jmiidid",formattedDate);
+// console.log(currentDate,"jmiidid",formattedDate);
         documents = await Model.find({
           $and: [
             {
-                "adsInfo.date_time.end_date": { $gt: formattedDate }  
+                "adsInfo.date_time.end_date": { $lt: formattedDate }  
             },
             { status: "active" },
           ],
@@ -54,22 +54,22 @@ console.log(currentDate,"jmiidid",formattedDate);
           ],
         });
       }
-return
+// return
       for (const document of documents) {
         // console.log(document);
         // Parse the string to a Date object
         let expiredOnDate;
         let adjustedTime;
         if (adType.key == "event") {
-          const endDate = new Date(document.adsInfo.date_time.end_date);
-          const nextDay = new Date(endDate);
-          nextDay.setDate(endDate.getDate() - 1);
-
+          const currentDate = new Date();
+        const nextDay = new Date(currentDate);
+        // nextDay.setDate(currentDate.getDate() + 1);
+        const formattedDate = formatDate(nextDay);
           const result = await Model.updateMany(
             {
               $and: [
             {
-              "adsInfo.date_time.end_date": { $lt: nextDay.toISOString() },
+              "adsInfo.date_time.end_date": { $lt: formattedDate },
               status: "active",
             }]},
             {
