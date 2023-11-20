@@ -994,19 +994,21 @@ exports.search = async (req, res, next) => {
     } else {
       Distance = maxDistance * 1000;
     }
+    let locationQuery ={} ;
     if (longitude && latitude && Distance) {
       const targetPoint = {
         type: "Point",
         coordinates: [longitude, latitude],
       };
      
-      dbQuery["adsInfo.location.coordinates"] = {
+      locationQuery["adsInfo.location.coordinates"] = {
         $near: {
           $geometry: targetPoint,
           $maxDistance: Distance,
         },
       };
     }
+    console.log(dbQuery,"vl,vklvkvkrk");
     let results = [];
     if (amount) {
       // Add filter for rent amount
@@ -1018,10 +1020,12 @@ exports.search = async (req, res, next) => {
         $lte: parseFloat(max_price),
       };
     }
+    console.log({dbQuery},"cdcjv mdjvdjvdkjdck");
     let currentDate = new Date();
     // Convert the date to ISO 8601 format
     let currentISODate = currentDate.toISOString();
     dbQuery = { "plan_validity.expired_on": { $gte: currentISODate } }
+    console.log({dbQuery},"cdcdck");
     // if (add_on) {
     //   dbQuery = {
     //     addons_validity: {
@@ -1071,10 +1075,11 @@ exports.search = async (req, res, next) => {
       });
     }
   
-  console.log(dbQuery,"cdcdck");
+  console.log({dbQuery},"cdcdck");
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
+        ...locationQuery,
         ...dbQuery,
         $or: [
           { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
@@ -1083,7 +1088,11 @@ exports.search = async (req, res, next) => {
         ],
       };
     }
-
+    if (dbQuery["adsInfo.location.coordinates"]) {
+      console.log("gagan ni jnsj");
+      queryFinal["adsInfo.location"] = dbQuery["adsInfo.location"];
+    }
+    
    if(searchTerm.length > 0){
 
     let adTypes = [
