@@ -984,7 +984,7 @@ exports.search = async (req, res, next) => {
       is_favorite,
       is_myad,
     } = req.query;
-    
+    console.log(req.query);
     let myid = req.userId;
     const sortval = sortBy === "Oldest" ? { 'plan_validity.active_on': 1 } : { 'plan_validity.active_on': -1 };
     let Distance;
@@ -1116,7 +1116,7 @@ exports.search = async (req, res, next) => {
     .select(selectFields)
     .sort(sortval)
     .exec();
-// console.log(checkAlreadyExist); 
+console.log(checkAlreadyExist); 
  
  adTypeCount = checkAlreadyExist;
  if (adTypeCount.length) {
