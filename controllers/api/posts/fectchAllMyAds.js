@@ -587,8 +587,9 @@ exports.fetchAll = async (req, res, next) => {
 
         combinedData = [...combinedData, ...randomlyPickedData];
       }
-
+console.log(combinedData,"vrkmfrmkrmvjfrm,dgnbk,jdgnbkjdfmbkjk,bvdfkl dxfkvmk dscfk mbdf");
       let filterData;
+      
       filterData = combinedData.map((job) => {
         return {
           ...job._doc,
