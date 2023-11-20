@@ -785,6 +785,7 @@ exports.fetchAll = async (req, res, next) => {
       max_price,
       is_favorite,
       is_myad,
+      is_homepage
     } = req.query;
     // console.log(req.query,"bnvdjnvjrdxjfdxfjbn dfxnv fjdsnvb");
     let adOnsQuery = {};
@@ -985,6 +986,7 @@ exports.fetchAll = async (req, res, next) => {
       let featuredData;
       let bumpupData;
       let commonId;
+      let excludedIds;
       // console.log(is_favorite);
 
       if(is_favorite != "true"){
@@ -1044,7 +1046,7 @@ exports.fetchAll = async (req, res, next) => {
         });
       
         /////
-        let excludedIds = featuredData.map(featuredItem => featuredItem._id)
+        excludedIds = featuredData.map(featuredItem => featuredItem._id)
         let BumpupData = await RoomRentsAds.find({
           
           ...adOnsQuery,
@@ -1127,15 +1129,17 @@ exports.fetchAll = async (req, res, next) => {
           };
         });
         // let bumpId = bumpupData.map(featuredItem => featuredItem._id)
-        // commonId = [...excludedIds,...bumpId]
+        // commonId = [...excludedIds]
       } }
       let query = {
         $or: [queryFinal]
       };
-      
-      // if (commonId && commonId.length > 0) {
-      //   query._id = { $nin: commonId };
-      // }
+      if(is_homepage == "true"){
+        if (excludedIds && excludedIds.length > 0) {
+          query._id = { $nin: excludedIds };
+        }
+      }
+     
       let records = await RoomRentsAds.find(
         query
       )

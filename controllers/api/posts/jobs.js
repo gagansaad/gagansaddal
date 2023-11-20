@@ -758,6 +758,7 @@ exports.fetchAllAds = async (req, res, next) => {
       max_price,
       is_favorite,
       is_myad,
+      is_homepage
     } = req.query;
     let adOnsQuery = {};
     if (add_on) {
@@ -974,6 +975,7 @@ exports.fetchAllAds = async (req, res, next) => {
       let featuredData;
       let bumpupData;
       let commonId;
+      let excludedIds;
       if(is_favorite != "true"){
       if (is_myad != "true") {
         let FeaturedData = await postJobAd
@@ -1116,10 +1118,11 @@ exports.fetchAllAds = async (req, res, next) => {
         $or: [queryFinal]
       };
       
-      // if (commonId && commonId.length > 0) {
-      //   query._id = { $nin: commonId };
-      // }
-
+      if(is_homepage == "true"){
+        if (excludedIds && excludedIds.length > 0) {
+          query._id = { $nin: excludedIds };
+        }
+      }
     let records = await postJobAd
     .find(query)
     .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })

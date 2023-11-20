@@ -1024,6 +1024,7 @@ exports.fetchAll = async (req, res, next) => {
       max_price,
       is_favorite,
       is_myad,
+      is_homepage
     } = req.query;
     // console.log(req.query,"fkmvkfv");
     let adOnsQuery = {};
@@ -1232,7 +1233,7 @@ exports.fetchAll = async (req, res, next) => {
       "userNotification.buysell"
     );
     let valueofnotification = notification?.userNotification?.buysell;
-   
+    let excludedIds;
       let featuredData;
       let commonId;
       if(is_favorite != "true"){
@@ -1292,9 +1293,11 @@ exports.fetchAll = async (req, res, next) => {
         $or: [queryFinal]
       };
       
-      // if (commonId && commonId.length > 0) {
-      //   query._id = { $nin: commonId };
-      // }
+      if(is_homepage == "true"){
+        if (excludedIds && excludedIds.length > 0) {
+          query._id = { $nin: excludedIds };
+        }
+      }
 
       let records = await postBuySellAd
       .find(query)
