@@ -168,10 +168,11 @@ cron.schedule("0 7 * * *", async (req, res) => {
             (addon) => addon.name === "Bump up"
           );
           if (bumpUpAddon) {
+            const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
             return {
               active_on: bumpUpAddon.active_on,
               expired_on: bumpUpAddon.expired_on,
-              interval: bumpUpAddon.days, // Add the interval property
+              interval: iter, // Add the interval property
             };
           }
           return null; // If "Bump up" addon is not found, return null
@@ -181,7 +182,9 @@ cron.schedule("0 7 * * *", async (req, res) => {
       const resultDates = [];
 
       for (const dateRange of bumpUpDates) {
+       
         const { active_on, expired_on, interval } = dateRange;
+        // console.log(interval);
         const startDate = new Date(active_on);
         const endDate = new Date(expired_on);
         const recordDates = []; // Create a separate array for each record
@@ -193,6 +196,7 @@ cron.schedule("0 7 * * *", async (req, res) => {
 
         resultDates.push(recordDates); // Push the record's dates array into the result array
       }
+      console.log(resultDates);
 
       const today = new Date().toISOString().split("T")[0]; // Get today's date in the format "YYYY-MM-DD"
       let date_of_time = new Date().toISOString();
@@ -202,7 +206,6 @@ cron.schedule("0 7 * * *", async (req, res) => {
         return recordDates.includes(today);
       });
       let bumpId = recordsWithTodayDate.map((featuredItem) => featuredItem._id);
-      // console.log(bumpId);
       if (bumpId.length > 0) {
         datas = await YourModel.updateMany(
           {
