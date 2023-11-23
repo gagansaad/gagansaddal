@@ -333,16 +333,16 @@ try {
             );
     
             io.to(`chat-${adId}`).emit('receive-message', newMessage);
-            socket.on('receive-message', (data) => {
-              console.log(`Received message from socket ${socket.id}:`, data);
-              // Further processing or handling of the received message
-            });
+           
           } catch (error) {
             console.error(error);
           }
 
         });
-        
+        socket.on('receive-message', (data) => {
+          console.log(`Received message from socket ${socket.id}:`, data);
+          // Further processing or handling of the received message
+        });
 
        
        
