@@ -279,6 +279,7 @@ try {
       
          socket.on('send-message', async (data) => {
           try {
+            console.log(data,"hoja 22 bnke yr");
             const { adId,sellerId,buyerId,senderId, ads_type, content } = data;
     
             // Check if a chat already exists for the given adId
