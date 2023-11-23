@@ -6,7 +6,7 @@ const chatSchema = new mongoose.Schema({
       userId: mongoose.Schema.Types.ObjectId,
     },
     seller: {
-      userId: mongoose.Schema.Types.ObjectId,
+      userId: {type:String},
     },
     ads_type:{type:String},
     messages: [
