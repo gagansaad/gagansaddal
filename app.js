@@ -332,7 +332,7 @@ try {
               { new: true, upsert: true }
             );
     
-            io.to(`chat-${adId}`).emit('receive-message', newMessage);
+            io.emit('receive-message', newMessage);
            
           } catch (error) {
             console.error(error);
