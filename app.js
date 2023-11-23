@@ -276,8 +276,9 @@ try {
         setTimeout(function(){
             socket.send('Sent a message 4seconds after connection!');
          }, 4000);
-         socket.on('join-room', () => {
-          socket.join(`chat-6556f01038961d531c106e3a`);
+         socket.on('join-room', (adId) => {
+          console.log(adId,"tu meri jaan ");
+          socket.join(`chat-${adId}`);
         });
         //  console.log(`Socket ${socket.id} joined room: chat-${adId}`);
          socket.on('send-message', async (data) => {
