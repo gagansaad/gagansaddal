@@ -276,7 +276,10 @@ try {
         setTimeout(function(){
             socket.send('Sent a message 4seconds after connection!');
          }, 4000);
-      
+         socket.on('join-room', () => {
+          socket.join(`chat-6556f01038961d531c106e3a`);
+        });
+        //  console.log(`Socket ${socket.id} joined room: chat-${adId}`);
          socket.on('send-message', async (data) => {
           try {
             console.log(data,"hoja 22 bnke yr");
@@ -332,7 +335,7 @@ try {
               { new: true, upsert: true }
             );
     
-            io.emit('receive-message', newMessage);
+            io.to(`chat-${adId}`).emit('receive-message', newMessage);
            
           } catch (error) {
             console.error(error);
