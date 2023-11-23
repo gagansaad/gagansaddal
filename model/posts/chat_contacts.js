@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 // const validator = require('validator');
 const chatSchema = new mongoose.Schema({
-    adId: mongoose.Schema.Types.ObjectId,
+    adId:{type:String},
     buyer: {
-      userId: mongoose.Schema.Types.ObjectId,
+      userId: {type:String},
     },
     seller: {
       userId: {type:String},
@@ -11,7 +11,7 @@ const chatSchema = new mongoose.Schema({
     ads_type:{type:String},
     messages: [
       {
-        senderId: mongoose.Schema.Types.ObjectId,
+        senderId: {type:String},
         content: String,
         timestamp: { type: Date, default: Date.now },
       },
