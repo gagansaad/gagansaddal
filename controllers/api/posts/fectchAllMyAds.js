@@ -258,8 +258,10 @@ if(!MyId){
 
           price_default: job.price_default,
           view_count: job.viewCount,
-          favorite_count: job.favoriteCount,
-          is_favorite: !!job.isFavorite,
+          ...(myid && {
+            favorite_count: job.favoriteCount,
+            is_favorite: !!job.isFavorite,
+          }),
         };
       });
       filterData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
