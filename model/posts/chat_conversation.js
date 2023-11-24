@@ -9,6 +9,11 @@ const chatSchema = new mongoose.Schema({
     {
       senderId: { type: mongoose.Schema.Types.ObjectId, ref: `user` },
       content: String,
+      content_type: {
+        type: String,
+        enum: [`text`, `file`],
+        default: "text",
+      },
       timestamp: { type: Date, default: Date.now },
     },
   ],
