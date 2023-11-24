@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 // const validator = require('validator');
 const chatSchema = new mongoose.Schema({
-  ads_id: { type: mongoose.Schema.Types.ObjectId, ref: `PostType` },
-  buyer: { type: mongoose.Schema.Types.ObjectId, ref: `user` },
-  seller: { type: mongoose.Schema.Types.ObjectId, ref: `user` },
-  ads_type: { type: mongoose.Schema.Types.ObjectId, ref: `PostType` },
+  ads_id: { type: mongoose.Schema.Types.ObjectId, ref: `PostType`,required:true },
+  buyer: { type: mongoose.Schema.Types.ObjectId, ref: `user`,required:true },
+  seller: { type: mongoose.Schema.Types.ObjectId, ref: `user` ,required:true},
+  ads_type: { type: mongoose.Schema.Types.ObjectId, ref: `PostType`,required:true },
   messages: [
     {
-      senderId: { type: mongoose.Schema.Types.ObjectId, ref: `user` },
-      content: String,
+      senderId: { type: mongoose.Schema.Types.ObjectId, ref: `user` ,required:true},
+      content: {type:String,required:true},
       content_type: {
         type: String,
         enum: [`text`, `file`],
