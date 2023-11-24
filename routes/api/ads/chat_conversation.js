@@ -1,6 +1,6 @@
 const router = require(`express`).Router(),
   authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
-  controllers = require(`../../../controllers/api/posts/message`);
+  controllers = require(`../../../controllers/api/posts/chat_conversation`);
 
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
@@ -42,8 +42,13 @@ const upload = multer({ storage: storage });
 //   },
 
 router.get(
-  `/details`,
+  `/chat-details`,
   authMiddleware.ensureUserLoggedIn,
-  controllers.sendMessage
+  controllers.ChatDetails
+);
+router.get(
+  `/chat-list`,
+  authMiddleware.ensureUserLoggedIn,
+  controllers.ChatList
 );
 module.exports = router;

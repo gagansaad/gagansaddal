@@ -66,7 +66,7 @@ const connection = require(`./config/dbConnection`);
 connection(mongoose);
 //chat
 require("./model/posts/message");
-require("./model/posts/chat_contacts");
+require("./model/posts/chat_conversation");
 
 require(`./model/accounts/users`);
 require(`./model/accounts/admin`);
@@ -126,7 +126,7 @@ const postTypeAdminRoutes = require("./routes/admin/types");
 const roomRentsRoutes = require("./routes/api/ads/roomRents");
 const bizRoutes = require("./routes/api/ads/bizAndServices");
 const jobsRoutes = require("./routes/api/ads/jobs");
-const messageRoutes = require("./routes/api/ads/message");
+const messageRoutes = require("./routes/api/ads/chat_conversation");
 
 const buySellRoutes = require("./routes/api/ads/buysell");
 const babysitterRoutes = require("./routes/api/ads/babbysitter & nannis");
@@ -276,25 +276,25 @@ try {
         setTimeout(function(){
             socket.send('Sent a message 4seconds after connection!');
          }, 4000);
-         socket.on('join-room', (adId) => {
-          console.log(adId,"tu meri jaan ");
-          socket.join(`chat-${adId}`);
+         socket.on('join-room', (ads_id) => {
+          console.log(ads_id,"tu meri jaan ");
+          socket.join(`chat-${ads_id}`);
         });
         //  console.log(`Socket ${socket.id} joined room: chat-${adId}`);
          socket.on('send-message', async (data) => {
           try {
-            console.log(data,"hoja 22 bnke yr");
-            const { adId,sellerId,buyerId,senderId, ads_type, content } = data;
+            // console.log(data,"hoja 22 bnke yr");
+            const { ads_id,sellerId,buyerId,senderId,ads_type,content } = data;
     
             // Check if a chat already exists for the given adId
             
             let chat = await Chat.findOne({
               $and: [
-                { adId: adId },
+                { ads_id: ads_id },
                 {
                   $or: [
-                    { 'buyer.userId': buyerId },
-                    { 'seller.userId': sellerId },
+                    { 'buyer': buyerId },
+                    { 'seller': sellerId },
                   ],
                 },
               ],
@@ -303,16 +303,16 @@ try {
             if (!chat) {
               // If no chat exists, initiate a new chat
               chat = new Chat({
-                adId,
-                buyer: { userId: buyerId },
-                seller: { userId: sellerId },
+                ads_id,
+                buyer:  buyerId ,
+                seller: sellerId ,
                 ads_type,
               });
     
               await chat.save();
     
               // Notify the seller about the new chat
-              io.to(`chat-${adId}`).emit('new-chat', chat);
+              io.to(`chat-${ads_id}`).emit('new-chat', chat);
             }
     
             const newMessage = {
@@ -326,8 +326,8 @@ try {
                   { adId: adId },
                   {
                     $or: [
-                      { 'buyer.userId': buyerId },
-                      { 'seller.userId': sellerId },
+                      { 'buyer': buyerId },
+                      { 'seller': sellerId },
                     ],
                   },
                 ],
