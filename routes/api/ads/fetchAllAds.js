@@ -42,7 +42,7 @@ router.get(
 
 router.get(
   `/seller-ads`,
-  authMiddleware.ensureUserLoggedIn,
+  authMiddleware.ensureUserLoggedInDummy,
   controllers.fetchActive
 );
 
