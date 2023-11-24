@@ -323,7 +323,7 @@ try {
             await Chat.findOneAndUpdate(
               {
                 $and: [
-                  { adId: adId },
+                  { ads_id: ads_id },
                   {
                     $or: [
                       { 'buyer': buyerId },
@@ -336,7 +336,7 @@ try {
               { new: true, upsert: true }
             );
     
-            io.to(`chat-${adId}`).emit('receive-message', newMessage);
+            io.to(`chat-${ads_id}`).emit('receive-message', newMessage);
            
           } catch (error) {
             console.error(error);
