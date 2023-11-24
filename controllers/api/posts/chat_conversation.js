@@ -25,8 +25,6 @@ exports.ChatDetails = async (req, res, next) => {
   try {
     const {ads_id} = req.query;
    let userId = req.userId;
-//    let userId = JSON.stringify(usId);
-// console.log(userId);
     let chat = await Chat.findOne({
       $and: [
         { ads_id: ads_id },
@@ -53,7 +51,6 @@ if(chat){
 
 exports.ChatList = async (req, res, next) => {
   try {
-    // const {ads_id} = req.query;
    let userId = req.userId;
  
     let chat = await Chat.findOne({
