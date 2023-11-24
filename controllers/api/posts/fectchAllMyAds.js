@@ -299,7 +299,7 @@ if(!MyId){
     status: 200,  });
   } catch (error) {
     console.log(error);
-    return failureJSONResponse(res, { message: `Something went wrong` });
+    return failureJSONResponse(res, { message: `Something went wrong 11` });
   }
 };
 
