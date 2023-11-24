@@ -336,6 +336,7 @@ try {
               { $push: { messages: newMessage } },
               { new: true, upsert: true }
             );
+            console.log(createmsg,"gagan");
     console.log("kjv dsnkivniujv dsziunb jkdjm bdfi1",createmsg?.length - 1)
             io.to(`chat-${ads_id}`).emit('receive-message', createmsg[createmsg?.length - 1]);
            
