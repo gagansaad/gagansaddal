@@ -287,7 +287,7 @@ try {
             const { ads_id,sellerId,buyerId,senderId,ads_type,content } = data;
     
             // Check if a chat already exists for the given adId
-            
+            console.log(ads_id,sellerId,buyerId,senderId,ads_type,content);
             let chat = await Chat.findOne({
               $and: [
                 { ads_id: ads_id },
