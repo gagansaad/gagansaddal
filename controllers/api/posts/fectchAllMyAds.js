@@ -179,10 +179,14 @@ if(!MyId){
       { path: "viewCount" },
       { path: "ReportCount" },
       { path: "ReportCount", select: "_id" },
-      { path: "isReported", select: "userId", match: { userId: myid } },
-      { path: "isFavorite", select: "user", match: { user: myid } },
+      
     ];
-
+    if (myid) {
+      commonPopulateOptions.push(
+        { path: "isReported", select: "userId", match: { userId: myid } },
+        { path: "isFavorite", select: "user", match: { user: myid } }
+      );
+    }
     let commonSelectFields = {
       "addons_validity": 1,
       "adsInfo.title": 1,
