@@ -2224,7 +2224,7 @@ module.exports = {
 
               
               createdAt: user?.createdAt || null,
-              _id:user?._id,
+              _id:user?._id || null
             };
             return successJSONResponse(res, { user: data });
           }
