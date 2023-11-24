@@ -41,8 +41,8 @@ const upload = multer({ storage: storage });
 //     }
 //   },
 
-router.post(
-  `/create-message`,
+router.get(
+  `/details`,
   authMiddleware.ensureUserLoggedIn,
   controllers.sendMessage
 );

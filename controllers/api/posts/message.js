@@ -2,7 +2,7 @@ const { json } = require("express");
 
 const crypto = require("crypto");
 const mongoose = require("mongoose"),
-  Message = mongoose.model("message"),
+  Chat = mongoose.model("Chat"),
   Media = mongoose.model("media"),
   {
     successJSONResponse,
@@ -23,26 +23,26 @@ const mongoose = require("mongoose"),
 
 exports.sendMessage = async (req, res, next) => {
   try {
-    const senderId = req.userId;
+    const {adId} = req.query;
+   let 
 
-    const { senderName, recieverId, message } = req.body;
-
-    const newMessage = Message({
-      senderId,
-      senderName,
-      recieverId,
-      message: {
-        text: message,
-        image: "",
-      },
+    const chat = await Chat.findOne({
+      $and: [
+        { adId: adId },
+        {
+          $or: [
+            { 'buyer.userId': userId },
+            { 'seller.userId': userId },
+          ],
+        },
+      ],
     });
-
-    const saveMessage = await newMessage.save();
-
-    return successJSONResponse(res, {
-      message: `success`,
-      data: saveMessage,
-    });
+if(Chat){
+  return successJSONResponse(res, {
+    message: `success`,
+    data: chat,
+  });
+}  
   } catch (err) {
     console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` });
