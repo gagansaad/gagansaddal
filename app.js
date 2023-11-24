@@ -284,7 +284,7 @@ try {
          socket.on('send-message', async (data) => {
           try {
             // console.log(data,"hoja 22 bnke yr");
-            const { ads_id,sellerId,buyerId,senderId,ads_type,content } = data;
+            const { ads_id,sellerId,buyerId,senderId,ads_type,content,content_type } = data;
     
             // Check if a chat already exists for the given adId
             console.log(ads_id,sellerId,buyerId,senderId,ads_type,content);
@@ -318,9 +318,10 @@ try {
             const newMessage = {
               senderId,
               content,
+              content_type:content_type || "text"
             };
     
-            await Chat.findOneAndUpdate(
+          let createmsg = await Chat.findOneAndUpdate(
               {
                 $and: [
                   { ads_id: ads_id },
@@ -335,7 +336,7 @@ try {
               { $push: { messages: newMessage } },
               { new: true, upsert: true }
             );
-    
+    console.log("kjv dsnkivniujv dsziunb jkdjm bdfi1",createmsg)
             io.to(`chat-${ads_id}`).emit('receive-message', newMessage);
            
           } catch (error) {
