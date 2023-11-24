@@ -337,7 +337,7 @@ try {
               { new: true, upsert: true }
             );
     console.log("kjv dsnkivniujv dsziunb jkdjm bdfi1",createmsg)
-            io.to(`chat-${ads_id}`).emit('receive-message', newMessage);
+            io.to(`chat-${ads_id}`).emit('receive-message', createmsg[createmsg.length - 1]);
            
           } catch (error) {
             console.error(error);
