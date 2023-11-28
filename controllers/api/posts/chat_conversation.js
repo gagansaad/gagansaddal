@@ -66,6 +66,9 @@ exports.ChatList = async (req, res, next) => {
         { 'seller': userId },
       ],
     }).populate({
+      path: 'ads_id',
+      select: 'adsInfo.title',
+    }).populate({
       path: 'seller',
       select: 'userInfo.name',
     }).populate({
@@ -76,34 +79,36 @@ exports.ChatList = async (req, res, next) => {
       select: 'userInfo.name',
     });
     let newChatObject
-chat.map((chat)=>{
-   newChatObject = {
-    _id: chat?._id || null,
-    buyer_name: chat?.buyer?.userInfo?.name || null,
-    buyerId: chat?.buyer?._id || null,
-    seller_name: chat?.seller?.userInfo?.name || null,
-    sellerId: chat?.seller?._id || null,
-    ads_id: chat?.ads_id?.adsInfo?.title || null,
-    ads_name: chat?.ads_id?._id || null,
-    ads_type: chat?.ads_type || null,
-    messages: chat?.messages?.slice(-1).map(message => ({
-      sender_name: message?.senderId?.userInfo?.name || null,
-      senderId: message?.senderId?._id || null,
-      content: message?.content || null,
-      content_type: message?.content_type || null,
-      _id: message?._id || null,
-      timestamp: message?.timestamp || null,
-    })),
-    
-  };
+    let userlist=[]
+    chat.map((chat)=>{
+      newChatObject = {
+       _id: chat?._id || null,
+       buyer_name: chat?.buyer?.userInfo?.name || null,
+       buyerId: chat?.buyer?._id || null,
+       seller_name: chat?.seller?.userInfo?.name || null,
+       sellerId: chat?.seller?._id || null,
+       ads_id: chat?.ads_id?.adsInfo?.title || null,
+       ads_name: chat?.ads_id?._id || null,
+       ads_type: chat?.ads_type || null,
+       messages: chat?.messages?.slice(-1).map(message => ({
+         sender_name: message?.senderId?.userInfo?.name || null,
+         senderId: message?.senderId?._id || null,
+         content: message?.content || null,
+         content_type: message?.content_type || null,
+         _id: message?._id || null,
+         timestamp: message?.timestamp || null,
+       })),
+       
+     };
+     userlist.push(newChatObject)
+   })
+       
 
-})
-    
 
     if (chat) {
       return successJSONResponse(res, {
         message: 'success',
-        data: newChatObject,
+        data: userlist,
       });
     }
   } catch (err) {
