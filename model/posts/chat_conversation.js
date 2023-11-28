@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
+// const autopopulate = require('mongoose-autopopulate');
 // const validator = require('validator');
 const chatSchema = new mongoose.Schema({
-  ads_id: { type: mongoose.Schema.Types.ObjectId, ref: `PostType`,required:true },
+  ads_id: { type: mongoose.Schema.Types.ObjectId, refPath:'ads_type',required:true },
   buyer: { type: mongoose.Schema.Types.ObjectId, ref: `user`,required:true },
   seller: { type: mongoose.Schema.Types.ObjectId, ref: `user` ,required:true},
-  ads_type: { type: mongoose.Schema.Types.ObjectId, ref: `PostType`,required:true },
+  ads_type: { type: String, // Field to store the model name
+  enum: ['job', 'rental','event','Buy & Sell',"babysitter & nannie","Local_biz & Service"], },// Add your model names here },
   messages: [
     {
       senderId: { type: mongoose.Schema.Types.ObjectId, ref: `user` ,required:true},
@@ -18,7 +20,7 @@ const chatSchema = new mongoose.Schema({
     },
   ],
 });
-
+// chatSchema.plugin(autopopulate);
 const Chat = mongoose.model("Chat", chatSchema);
 
 module.exports = Chat;

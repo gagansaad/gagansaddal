@@ -1,6 +1,7 @@
 const { json } = require("express");
 
 const crypto = require("crypto");
+const {io} = require('../../../app'); 
 const mongoose = require("mongoose"),
   Chat = mongoose.model("Chat"),
   Media = mongoose.model("media"),
@@ -57,24 +58,58 @@ if(chat){
 
 exports.ChatList = async (req, res, next) => {
   try {
-   let userId = req.userId;
- 
-    let chat = await Chat.findOne({
-          $or: [
-            { 'buyer': userId },
-            { 'seller': userId },
-          ],
+    let userId = req.userId;
+
+    let chat = await Chat.find({
+      $or: [
+        { 'buyer': userId },
+        { 'seller': userId },
+      ],
+    }).populate({
+      path: 'seller',
+      select: 'userInfo.name',
+    }).populate({
+      path: 'buyer',
+      select: 'userInfo.name',
+    }).populate({
+      path: 'messages.senderId',
+      select: 'userInfo.name',
     });
-    console.log(chat);
-if(chat){
-  return successJSONResponse(res, {
-    message: `success`,
-    data: chat,
-  });
-}  
+    let newChatObject
+chat.map((chat)=>{
+   newChatObject = {
+    _id: chat?._id || null,
+    buyer_name: chat?.buyer?.userInfo?.name || null,
+    buyerId: chat?.buyer?._id || null,
+    seller_name: chat?.seller?.userInfo?.name || null,
+    sellerId: chat?.seller?._id || null,
+    ads_id: chat?.ads_id?.adsInfo?.title || null,
+    ads_name: chat?.ads_id?._id || null,
+    ads_type: chat?.ads_type || null,
+    messages: chat?.messages?.slice(-1).map(message => ({
+      sender_name: message?.senderId?.userInfo?.name || null,
+      senderId: message?.senderId?._id || null,
+      content: message?.content || null,
+      content_type: message?.content_type || null,
+      _id: message?._id || null,
+      timestamp: message?.timestamp || null,
+    })),
+    
+  };
+
+})
+    
+
+    if (chat) {
+      return successJSONResponse(res, {
+        message: 'success',
+        data: newChatObject,
+      });
+    }
   } catch (err) {
     console.log(err);
-    return failureJSONResponse(res, { message: `something went wrong` });
+    return failureJSONResponse(res, { message: 'something went wrong' });
   }
 };
+
 
