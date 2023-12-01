@@ -728,6 +728,7 @@ let conditions = [];
     //  let lat = adLocation.adsInfo.location.coordinates[1];
         function getDateTimeWithTimeZone(latitude, longitude, format = expired_date) {
           try {
+            console.log(latitude, longitude, format = expired_date,"soootarrrrrrr");
             const userTimeZone = DateTime.fromObject({ latitude, longitude }).zoneName;
             const currentTime = DateTime.now().setZone(userTimeZone);
             return currentTime.toFormat(format);
