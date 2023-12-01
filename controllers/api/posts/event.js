@@ -639,10 +639,28 @@ function createDateTimeObject(dateString, timeString, timeZone) {
   const dateTimeString = `${dateString} ${timeString}`;
 
   try {
-    // Create DateTime object with specified time zone
-    const dateTimeObject = DateTime.fromFormat(dateTimeString, 'MM/dd/yyyy hh:mm a', { zone: timeZone });
-  
-    return dateTimeObject.toJSDate();
+    // Parse the date and time string
+    const dateTime = new Date(dateTimeString);
+    
+    // Get the UTC time in milliseconds
+    const utcTime = dateTime.getTime() + (dateTime.getTimezoneOffset() * 60000);
+    
+    // Create a new date object with the adjusted UTC time
+    const dateTimeObject = new Date(utcTime);
+
+    // Format the date object with the specified time zone
+    const formattedDateWithTimeZone = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      timeZoneName: 'short',
+    }).format(dateTimeObject);
+
+    return new Date(formattedDateWithTimeZone);
   } catch (error) {
     console.error("Error creating DateTime object:", error.message);
     console.error("dateString:", dateString);
@@ -651,6 +669,7 @@ function createDateTimeObject(dateString, timeString, timeZone) {
     throw error;
   }
 }
+
   
     const startDateObject = createDateTimeObject(start_date, start_time, time_zone);
     const endDateObject = createDateTimeObject(end_date, end_time, time_zone);
