@@ -726,18 +726,18 @@ let conditions = [];
         // let adLocation = await ModelName.findById(ads_id)
     //     let long = adLocation.adsInfo.location.coordinates[0];
     //  let lat = adLocation.adsInfo.location.coordinates[1];
-        function getDateTimeWithTimeZone(latitude, longitude, format = expired_date) {
-          try {
-            console.log(latitude, longitude, format = expired_date,"soootarrrrrrr");
-            const userTimeZone = DateTime.fromObject({ latitude, longitude }).zoneName;
-            const currentTime = DateTime.now().setZone(userTimeZone);
-            return currentTime.toFormat(format);
-          } catch (error) {
-            console.error('Error getting date and time with timezone:', error);
-            return null;
-          }
-        }
-        
+    function getDateTimeWithTimeZone(latitude, longitude, format = 'yyyy-MM-ddTHH:mm:ss.SSSZ') {
+      try {
+        const timezone = tzlookup(latitude, longitude);
+        const currentTime = DateTime.now().setZone(timezone);
+        return currentTime.toFormat(format);
+      } catch (error) {
+        console.error('Error getting date and time with timezone:', error);
+        return null;
+      }
+    }
+    
+  
         
         const formattedDateTime = getDateTimeWithTimeZone(lat, long);
         

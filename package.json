@@ -36,7 +36,8 @@
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
     "stripe": "^12.3.0",
-    "twilio": "^4.8.0"
+    "twilio": "^4.8.0",
+    "tz-lookup": "^6.1.25"
   },
   "devDependencies": {
     "dotenv": "^16.0.3",
