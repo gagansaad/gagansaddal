@@ -15,6 +15,13 @@ cron.schedule("*/1 * * * *", async () => {
     
       return `${month}/${day}/${year}`;
     }
+    const currentDate = new Date();
+        const nextDay = new Date(currentDate);
+        // nextDay.setDate(currentDate.getDate() + 1);
+        const formattedDate = formatDate(nextDay);
+        const formattedDateObject = new Date(formattedDate);
+        console.log("Formatted Date Object:", formattedDateObject);
+console.log(currentDate,"jmiidid",formattedDate);
     const adTypes = [
       { key: "job", label: "Jobs" },
       { key: "event", label: "Events" },
@@ -31,13 +38,7 @@ cron.schedule("*/1 * * * *", async () => {
 
       let documents;
       if (adType.key == "event") {
-        const currentDate = new Date();
-        const nextDay = new Date(currentDate);
-        // nextDay.setDate(currentDate.getDate() + 1);
-        const formattedDate = formatDate(nextDay);
-        const formattedDateObject = new Date(formattedDate);
-        console.log("Formatted Date Object:", formattedDateObject);
-console.log(currentDate,"jmiidid",formattedDate);
+        
         documents = await Model.find({
           $and: [
             {
