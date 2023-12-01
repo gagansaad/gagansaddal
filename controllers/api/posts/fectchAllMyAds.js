@@ -589,7 +589,8 @@ exports.fetchAll = async (req, res, next) => {
               ...mergedPrices[priceDefaultSelect],
             })
             .exec();
-
+            data = data.map(record => record.toObject({ virtuals: true }));
+           
           data = shuffleArray(data);
         }
         let randomlyPickedData = data.slice(0, adons_nameLimit[adonsSlug]);
