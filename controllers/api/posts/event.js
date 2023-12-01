@@ -458,38 +458,31 @@ exports.createEventAds = async (req, res, next) => {
       productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
     }
-    function createDateTimeObject(dateString, timeString, timeZone) {
+    function createDateTimeObject(dateString, timeString) {
       // Parse date string
       const dateComponents = dateString.split('/');
       const month = parseInt(dateComponents[0], 10) - 1; // Months are zero-based
       const day = parseInt(dateComponents[1], 10);
       const year = parseInt(dateComponents[2], 10);
     
-      // Parse time string
-      const timeComponents = timeString.split(':');
-      const hours = parseInt(timeComponents[0], 10);
-      const minutes = parseInt(timeComponents[1], 10);
+      // Parse time string with AM/PM indicator
+      const timeRegex = /(\d+):(\d+) (AM|PM)/i;
+      const [, hoursStr, minutesStr, ampm] = timeString.match(timeRegex);
+      let hours = parseInt(hoursStr, 10);
     
-      // Create Date object with specified time zone
-      const utcDateObject = new Date(Date.UTC(year, month, day, hours, minutes, 0, 0));
+      // Adjust hours for PM
+      if (ampm.toUpperCase() === 'PM' && hours !== 12) {
+        hours += 12;
+      }
     
-      // Format with time zone using Intl.DateTimeFormat
-      const formattedDateWithTimeZone = new Intl.DateTimeFormat('en-US', {
-        timeZone,
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        timeZoneName: 'short',
-      }).format(utcDateObject);
+      // Create Date object with time set to 00:00:00 and formatted as "YYYY-MM-DDTHH:mm:ssZ"
+      const dateTimeObject = new Date(Date.UTC(year, month, day, hours, parseInt(minutesStr, 10), 0, 0));
     
-      return new Date(formattedDateWithTimeZone);
+      return dateTimeObject.toISOString();
     }
   
-    const startDateObject = createDateTimeObject(start_date, start_time, time_zone);
-    const endDateObject = createDateTimeObject(end_date, end_time, time_zone);
+    const startDateObject = createDateTimeObject(start_date, start_time);
+    const endDateObject = createDateTimeObject(end_date, end_time);
     const dataObj = {
       isfeatured,
       status: status,
