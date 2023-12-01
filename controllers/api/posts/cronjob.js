@@ -36,11 +36,11 @@ cron.schedule("*/2 * * * *", async () => {
         // nextDay.setDate(currentDate.getDate() + 1);
         const formattedDate = formatDate(nextDay);
 
-console.log(currentDate,"jmiidid",formattedDate);
+console.log(currentDate,"jmiidid",formattedDate,new Date("12/01/2023"));
         documents = await Model.find({
           $and: [
             {
-                "adsInfo.date_time.end_date": { $lt: formattedDate }  
+                "adsInfo.date_time.end_date": { $lt: new Date("12/01/2023") }  
             },
             { status: "active" },
           ],
