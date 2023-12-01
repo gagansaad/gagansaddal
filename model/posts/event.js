@@ -197,10 +197,7 @@ events_Schema.virtual('active_on_virtual').get(function () {
   // Check if bumpupAt is not null
   if (this.active_on_bumpup_at !== null) {
     return this.active_on_bumpup_at;
-  }
-
-  // Check if addons_validity is not empty
-  if (this.plan_validity && this.plan_validity.active_on) {
+  }else if (this.plan_validity && this.plan_validity.active_on) {
     return this.plan_validity.active_on;
   }
 
