@@ -35,7 +35,8 @@ cron.schedule("*/2 * * * *", async () => {
         const nextDay = new Date(currentDate);
         // nextDay.setDate(currentDate.getDate() + 1);
         const formattedDate = formatDate(nextDay);
-
+        const formattedDateObject = new Date(formattedDate);
+        console.log("Formatted Date Object:", formattedDateObject);
 console.log(currentDate,"jmiidid",formattedDate);
         documents = await Model.find({
           $and: [
