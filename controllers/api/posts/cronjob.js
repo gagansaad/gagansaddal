@@ -6,7 +6,7 @@ const {
   ModelNameByAdsType,
 } = require(`../../../handlers/jsonResponseHandlers`);
 
-cron.schedule("*/15 * * * *", async () => {
+cron.schedule("* * * * * *", async () => {
   try {
     function formatDate(date) {
       const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
@@ -45,8 +45,9 @@ cron.schedule("*/15 * * * *", async () => {
           ],
         });
 
-        console.log(documents,"cewcdecdrcdscsdvdfvddvdvdv");
+        console.log(documents,"begani shaadi mai abdullah diwana");
       } else {
+        console.log("raja ki rani se shaadi hai ");
         documents = await Model.find({
           $and: [
             { "plan_validity.expired_on": { $lt: new Date().toISOString } },
@@ -61,6 +62,7 @@ cron.schedule("*/15 * * * *", async () => {
         let expiredOnDate;
         let adjustedTime;
         if (adType.key == "event") {
+          console.log("haye mera kaalu");
           const currentDate = new Date();
         const nextDay = new Date(currentDate);
         // nextDay.setDate(currentDate.getDate() + 1);
@@ -80,6 +82,7 @@ cron.schedule("*/15 * * * *", async () => {
             }
           ).exec();
         } else {
+          console.log("lulu das nayak");
           expiredOnDate = new Date(document.plan_validity.expired_on);
           const documentTimezoneOffset = expiredOnDate.getTimezoneOffset();
           // console.log(documentTimezoneOffset);
