@@ -657,7 +657,7 @@ function createDateTimeObject(dateString, timeString) {
 
   return dateTimeObject.toISOString();
 }
-
+console.log(start_date, start_time);
   
     const startDateObject = createDateTimeObject(start_date, start_time);
     const endDateObject = createDateTimeObject(end_date, end_time);
