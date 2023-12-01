@@ -1029,7 +1029,7 @@ exports.fetchAllAds = async (req, res, next) => {
           };
         });
         
-        // let excludedIds = featuredData.map(featuredItem => featuredItem._id)
+        excludedIds = featuredData.map(featuredItem => featuredItem._id)
         /////
         let BumpupData = await postJobAd
           .find({ ...adOnsQuery, "addons_validity.name": "Bump up" 

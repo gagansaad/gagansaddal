@@ -1183,7 +1183,7 @@ exports.fetchAll = async (req, res, next) => {
             is_favorite: !!job.isFavorite,
           };
         });
-        // let bumpId = featuredData.map(featuredItem => featuredItem._id)
+         excludedIds = featuredData.map(featuredItem => featuredItem._id)
         // commonId = [...bumpId]
       }}
       let query = {

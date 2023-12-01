@@ -1180,7 +1180,7 @@ exports.fetchAll = async (req, res, next) => {
           };
         });
         /////
-        // let excludedIds = featuredData.map(featuredItem => featuredItem._id)
+        excludedIds = featuredData.map(featuredItem => featuredItem._id)
         let BumpupData = await postbizAndServicesAd
           .find({ ...adOnsQuery, "addons_validity.name": "Bump up" })
           .populate({
