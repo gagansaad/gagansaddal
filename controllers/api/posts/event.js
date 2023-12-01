@@ -457,6 +457,38 @@ exports.createEventAds = async (req, res, next) => {
       productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
     }
+    function createDateTimeObject(dateString, timeString, timeZone) {
+      // Parse date string
+      const dateComponents = dateString.split('/');
+      const month = parseInt(dateComponents[0], 10) - 1; // Months are zero-based
+      const day = parseInt(dateComponents[1], 10);
+      const year = parseInt(dateComponents[2], 10);
+    
+      // Parse time string
+      const timeComponents = timeString.split(':');
+      const hours = parseInt(timeComponents[0], 10);
+      const minutes = parseInt(timeComponents[1], 10);
+    
+      // Create Date object with specified time zone
+      const utcDateObject = new Date(Date.UTC(year, month, day, hours, minutes, 0, 0));
+    
+      // Format with time zone using Intl.DateTimeFormat
+      const formattedDateWithTimeZone = new Intl.DateTimeFormat('en-US', {
+        timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZoneName: 'short',
+      }).format(utcDateObject);
+    
+      return new Date(formattedDateWithTimeZone);
+    }
+  
+    const startDateObject = createDateTimeObject(start_date, start_time, time_zone);
+    const endDateObject = createDateTimeObject(end_date, end_time, time_zone);
     const dataObj = {
       isfeatured,
       status: status,
@@ -485,8 +517,8 @@ exports.createEventAds = async (req, res, next) => {
         venue_name,
         date_time: {
           time_zone,
-          start_date,
-          end_date,
+          start_date:startDateObject,
+          end_date:endDateObject,
           start_time,
           end_time,
         },
@@ -868,7 +900,7 @@ exports.fetchAll = async (req, res, next) => {
           $elemMatch: {
             name: add_on,
             expired_on: {
-              $gte: new Date("2023-09-18").toISOString(), // Construct ISODate manually
+              $gte: new Date().toISOString(), // Construct ISODate manually
             },
           },
         },
