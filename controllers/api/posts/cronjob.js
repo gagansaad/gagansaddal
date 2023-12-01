@@ -42,7 +42,7 @@ console.log(currentDate,"jmiidid",formattedDate);
         documents = await Model.find({
           $and: [
             {
-                "adsInfo.date_time.end_date": { $lt: formattedDateObject }  
+                "adsInfo.date_time.end_date": { $lt: formattedDateObject.toISOString() }  
             },
             { status: "active" },
           ],
