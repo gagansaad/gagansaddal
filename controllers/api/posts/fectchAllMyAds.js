@@ -587,6 +587,7 @@ exports.fetchAll = async (req, res, next) => {
             .select({
               ...commonSelectFields,
               ...mergedPrices[priceDefaultSelect],
+              active_on_virtual: 1,
             })
             .exec();
             
@@ -598,12 +599,11 @@ exports.fetchAll = async (req, res, next) => {
       }
       combinedData = shuffleArray(combinedData);
       let filterData;
-      combinedData = combinedData.map(combinedData => combinedData.toObject({ virtuals: true }));
-           
+      
       filterData = combinedData.map((job) => {
         return {
           ...job._doc,
-
+          active_on_virtual: job.active_on_virtual,
           price_default: job.price_default,
           view_count: job.viewCount,
           favorite_count: job.favoriteCount,
