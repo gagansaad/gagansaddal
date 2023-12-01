@@ -694,7 +694,7 @@ let conditions = [];
   let activedate = currentDate.toISOString();
   let planDuration = await AdsPlan.findById({ _id: plan_id });
 
-  let expired_data = new Date(
+  let expired_date = new Date(
     currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
   )
     .toISOString()
@@ -723,7 +723,7 @@ let conditions = [];
       let expired = duration;
 
       if (name === "Bump up") {
-        let expired_data = new Date(expired_data);
+        let expired_data = new Date(expired_date);
 
 // Get the time zone dynamically from the user's environment
 const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
