@@ -1,5 +1,6 @@
 const { json } = require("express");
 const crypto = require("crypto");
+const { DateTime } = require('luxon');
 const { mongoose, ObjectId, modelNames } = require("mongoose"),
   eventAd = mongoose.model("event"),
   Media = mongoose.model("media"),
@@ -632,38 +633,21 @@ exports.editEventAds = async (req, res, next) => {
       primary_phone_number,
       secondary_phone_number,
     } = req.body;
+    
+
     function createDateTimeObject(dateString, timeString, timeZone) {
-      // Parse date string
-      const dateComponents = dateString.split('/');
-      const month = parseInt(dateComponents[0], 10) - 1; // Months are zero-based
-      const day = parseInt(dateComponents[1], 10);
-      const year = parseInt(dateComponents[2], 10);
+      const dateTimeString = `${dateString} ${timeString}`;
+      
+      // Create DateTime object with specified time zone
+      const dateTimeObject = DateTime.fromFormat(dateTimeString, 'MM/dd/yyyy HH:mm', { zone: timeZone });
     
-      // Parse time string
-      const timeComponents = timeString.split(':');
-      const hours = parseInt(timeComponents[0], 10);
-      const minutes = parseInt(timeComponents[1], 10);
-    
-      // Create Date object with specified time zone
-      const utcDateObject = new Date(Date.UTC(year, month, day, hours, minutes, 0, 0));
-    
-      // Format with time zone using Intl.DateTimeFormat
-      const formattedDateWithTimeZone = new Intl.DateTimeFormat('en-US', {
-        timeZone,
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        timeZoneName: 'short',
-      }).format(utcDateObject);
-    
-      return new Date(formattedDateWithTimeZone);
+      return dateTimeObject.toJSDate();
     }
+    
   
     const startDateObject = createDateTimeObject(start_date, start_time, time_zone);
     const endDateObject = createDateTimeObject(end_date, end_time, time_zone);
+    console.log(endDateObject,"Formatted Date with Time Zone:", endDateObject.toISOString());
 // console.log(currency,"000000000");
     let taglines = tagline;
     if (taglines) {
