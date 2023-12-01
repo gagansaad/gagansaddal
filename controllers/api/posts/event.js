@@ -635,44 +635,27 @@ exports.editEventAds = async (req, res, next) => {
     } = req.body;
     
 console.log(start_date, start_time, time_zone);
-function createDateTimeObject(dateString, timeString, timeZone) {
-  const dateTimeString = `${dateString} ${timeString}`;
+function createDateTimeObject(dateString, timeString) {
+  // Parse date string
+  const dateComponents = dateString.split('/');
+  const month = parseInt(dateComponents[0], 10) - 1; // Months are zero-based
+  const day = parseInt(dateComponents[1], 10);
+  const year = parseInt(dateComponents[2], 10);
 
-  try {
-    // Parse the date and time string
-    const dateTime = new Date(dateTimeString);
-    
-    // Get the UTC time in milliseconds
-    const utcTime = dateTime.getTime() + (dateTime.getTimezoneOffset() * 60000);
-    
-    // Create a new date object with the adjusted UTC time
-    const dateTimeObject = new Date(utcTime);
+  // Parse time string
+  const timeComponents = timeString.split(':');
+  const hours = parseInt(timeComponents[0], 10);
+  const minutes = parseInt(timeComponents[1], 10);
 
-    // Format the date object with the specified time zone
-    const formattedDateWithTimeZone = new Intl.DateTimeFormat('en-US', {
-      timeZone,
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      timeZoneName: 'short',
-    }).format(dateTimeObject);
+  // Create Date object with time set to 00:00:00 and formatted as "YYYY-MM-DDTHH:mm:ssZ"
+  const dateTimeObject = new Date(Date.UTC(year, month, day, hours, minutes, 0, 0));
 
-    return new Date(formattedDateWithTimeZone);
-  } catch (error) {
-    console.error("Error creating DateTime object:", error.message);
-    console.error("dateString:", dateString);
-    console.error("timeString:", timeString);
-    console.error("timeZone:", timeZone);
-    throw error;
-  }
+  return dateTimeObject.toISOString();
 }
 
   
-    const startDateObject = createDateTimeObject(start_date, start_time, time_zone);
-    const endDateObject = createDateTimeObject(end_date, end_time, time_zone);
+    const startDateObject = createDateTimeObject(start_date, start_time);
+    const endDateObject = createDateTimeObject(end_date, end_time);
     console.log(endDateObject,"Formatted Date with Time Zone:", endDateObject.toISOString());
 // console.log(currency,"000000000");
     let taglines = tagline;
