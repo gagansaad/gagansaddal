@@ -1,5 +1,6 @@
 const { json } = require("express");
 const { ObjectId } = require("mongodb");
+const { DateTime } = require('luxon');
 const {
   EventListInstance,
 } = require("twilio/lib/rest/taskrouter/v1/workspace/event");
@@ -591,6 +592,7 @@ exports.webhooks = async (request, response) => {
 const paymentSuccessModelUpdate = async (payment_id, userId) => {
   // let userID = req.userId;
   let userID = userId;
+  let ads_id;
   let paymentDetails = await PaymentModel.findById({ _id: payment_id });
   if (paymentDetails) {
     plan_id = paymentDetails.plan_id;
@@ -696,9 +698,7 @@ let conditions = [];
 
   let expired_date = new Date(
     currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
-  )
-    .toISOString()
-    .split("T")[0];
+  ).toISOString()
   let plan_obj = {
     plan_id: planDuration._id.toString(),
     active_on: activedate,
@@ -723,15 +723,37 @@ let conditions = [];
       let expired = duration;
 
       if (name === "Bump up") {
-        let expired_data = new Date(expired_date);
+        let adLocation = await ModelName.findById(ads_id)
+        let long = adLocation.adsInfo.location.coordinates[0];
+     let lat = adLocation.adsInfo.location.coordinates[1];
+        function getDateTimeWithTimeZone(latitude, longitude, format = expired_date) {
+          try {
+            const userTimeZone = DateTime.fromObject({ latitude, longitude }).zoneName;
+            const currentTime = DateTime.now().setZone(userTimeZone);
+            return currentTime.toFormat(format);
+          } catch (error) {
+            console.error('Error getting date and time with timezone:', error);
+            return null;
+          }
+        }
+        
+        
+        const formattedDateTime = getDateTimeWithTimeZone(lat, long);
+        
+        if (formattedDateTime) {
+          console.log('Date and Time with Timezone:', formattedDateTime);
+        } else {
+          console.log('Unable to determine date and time with timezone.');
+        }
+//         let expired_data = new Date(expired_date);
 
-// Get the time zone dynamically from the user's environment
-const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+// // Get the time zone dynamically from the user's environment
+// const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-// Format the date string using the dynamically obtained time zone
-const formattedExpirationDate = expired_data.toLocaleString('en-US', { timeZone });
-console.log(formattedExpirationDate,"rvmrdjvmjdrmvkdrmvdemckdem");
-        expired = formattedExpirationDate;
+// // Format the date string using the dynamically obtained time zone
+// const formattedExpirationDate = expired_data.toLocaleString('en-US', { timeZone });
+// console.log(formattedExpirationDate,"rvmrdjvmjdrmvkdrmvdemckdem");
+        // expired = formattedExpirationDate;
       }
       // Create the object
       const addOn = {
