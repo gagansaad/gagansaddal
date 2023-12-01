@@ -504,10 +504,12 @@ exports.fetchAll = async (req, res, next) => {
     let price_babysitterAd = {
       "adsInfo.expected_salary_amount": 1,
       "adsInfo.expected_salary_rate": 1,
+      "active_on_bumpup_at":1,
     };
     let price_jobsAd = {
       "adsInfo.salary": 1,
       "adsInfo.salary_info": 1,
+      "active_on_bumpup_at":1,
     };
     let price_buysellAd = {
       "adsInfo.price": 1,
@@ -519,6 +521,7 @@ exports.fetchAll = async (req, res, next) => {
     let price_roomrentAd = {
       "adsInfo.rent": 1,
       "adsInfo.rent_info": 1,
+      "active_on_bumpup_at":1,
     };
     let mergedPrices = {
       price_babysitterAd,
@@ -586,7 +589,6 @@ exports.fetchAll = async (req, res, next) => {
               ...mergedPrices[priceDefaultSelect],
             })
             .exec();
-            data = data.map(record => record.toObject({ virtuals: true }));
 
           data = shuffleArray(data);
         }
