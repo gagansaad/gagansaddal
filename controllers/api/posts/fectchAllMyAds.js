@@ -589,8 +589,7 @@ exports.fetchAll = async (req, res, next) => {
               ...mergedPrices[priceDefaultSelect],
             })
             .exec();
-            data = data.map(record => record.toObject({ virtuals: true }));
-           
+            
           data = shuffleArray(data);
         }
         let randomlyPickedData = data.slice(0, adons_nameLimit[adonsSlug]);
@@ -599,7 +598,8 @@ exports.fetchAll = async (req, res, next) => {
       }
       combinedData = shuffleArray(combinedData);
       let filterData;
-      
+      combinedData = combinedData.map(combinedData => combinedData.toObject({ virtuals: true }));
+           
       filterData = combinedData.map((job) => {
         return {
           ...job._doc,
