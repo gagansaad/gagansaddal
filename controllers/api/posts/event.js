@@ -634,7 +634,7 @@ exports.editEventAds = async (req, res, next) => {
       secondary_phone_number,
     } = req.body;
     
-
+console.log(start_date, start_time, time_zone);
     function createDateTimeObject(dateString, timeString, timeZone) {
       const dateTimeString = `${dateString} ${timeString}`;
       
