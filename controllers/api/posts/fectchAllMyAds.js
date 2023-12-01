@@ -586,6 +586,7 @@ exports.fetchAll = async (req, res, next) => {
               ...mergedPrices[priceDefaultSelect],
             })
             .exec();
+            data = data.map(record => record.toObject({ virtuals: true }));
 
           data = shuffleArray(data);
         }
@@ -595,7 +596,7 @@ exports.fetchAll = async (req, res, next) => {
       }
       combinedData = shuffleArray(combinedData);
       let filterData;
-      combinedData = combinedData.map(record => record.toObject({ virtuals: true }));
+      
       filterData = combinedData.map((job) => {
         return {
           ...job._doc,
