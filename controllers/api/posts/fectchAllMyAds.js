@@ -595,7 +595,7 @@ exports.fetchAll = async (req, res, next) => {
       }
       combinedData = shuffleArray(combinedData);
       let filterData;
-      
+      combinedData = combinedData.map(record => record.toObject({ virtuals: true }));
       filterData = combinedData.map((job) => {
         return {
           ...job._doc,
