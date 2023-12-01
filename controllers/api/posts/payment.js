@@ -740,8 +740,9 @@ let conditions = [];
   
         
         const formattedDateTime = getDateTimeWithTimeZone(lat, long);
-        
+       
         if (formattedDateTime) {
+          console.log(formattedDateTime);
           console.log('Date and Time with Timezone:', formattedDateTime);
         } else {
           console.log('Unable to determine date and time with timezone.');
