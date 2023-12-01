@@ -635,15 +635,22 @@ exports.editEventAds = async (req, res, next) => {
     } = req.body;
     
 console.log(start_date, start_time, time_zone);
-    function createDateTimeObject(dateString, timeString, timeZone) {
-      const dateTimeString = `${dateString} ${timeString}`;
-      
-      // Create DateTime object with specified time zone
-      const dateTimeObject = DateTime.fromFormat(dateTimeString, 'MM/dd/yyyy HH:mm', { zone: timeZone });
-    
-      return dateTimeObject.toJSDate();
-    }
-    
+function createDateTimeObject(dateString, timeString, timeZone) {
+  const dateTimeString = `${dateString} ${timeString}`;
+
+  try {
+    // Create DateTime object with specified time zone
+    const dateTimeObject = DateTime.fromFormat(dateTimeString, 'MM/dd/yyyy hh:mm a', { zone: timeZone });
+  
+    return dateTimeObject.toJSDate();
+  } catch (error) {
+    console.error("Error creating DateTime object:", error.message);
+    console.error("dateString:", dateString);
+    console.error("timeString:", timeString);
+    console.error("timeZone:", timeZone);
+    throw error;
+  }
+}
   
     const startDateObject = createDateTimeObject(start_date, start_time, time_zone);
     const endDateObject = createDateTimeObject(end_date, end_time, time_zone);
