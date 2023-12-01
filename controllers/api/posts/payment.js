@@ -647,12 +647,12 @@ let conditions = [];
   const userCollection = USER.collection;
   
     let dpsIndex=  await userCollection.createIndex({ 'userBasicInfo.live_location.coordinates': '2dsphere' });
-     
+    let long ;
+    let lat ;
   if (adsName) {
     let adLocation = await ModelName.findById(ads_id)
     // console.log(adLocation);
-    let long ;
-    let lat ;
+    
     if(adLocation.adsInfo.location.coordinates){
       long = adLocation.adsInfo.location.coordinates[0]
       lat = adLocation.adsInfo.location.coordinates[1]
@@ -723,9 +723,9 @@ let conditions = [];
       let expired = duration;
 
       if (name === "Bump up") {
-        let adLocation = await ModelName.findById(ads_id)
-        let long = adLocation.adsInfo.location.coordinates[0];
-     let lat = adLocation.adsInfo.location.coordinates[1];
+        // let adLocation = await ModelName.findById(ads_id)
+    //     let long = adLocation.adsInfo.location.coordinates[0];
+    //  let lat = adLocation.adsInfo.location.coordinates[1];
         function getDateTimeWithTimeZone(latitude, longitude, format = expired_date) {
           try {
             const userTimeZone = DateTime.fromObject({ latitude, longitude }).zoneName;
