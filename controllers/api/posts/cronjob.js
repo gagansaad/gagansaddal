@@ -55,7 +55,7 @@ cron.schedule("*/2 * * * *", async () => {
           ],
         });
       }
-// return
+
       for (const document of documents) {
         // console.log(document);
         // Parse the string to a Date object
