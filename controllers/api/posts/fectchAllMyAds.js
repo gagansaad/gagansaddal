@@ -587,6 +587,7 @@ exports.fetchAll = async (req, res, next) => {
             .select({
               ...commonSelectFields,
               ...mergedPrices[priceDefaultSelect],
+              active_on_bumpup_at:1,
               active_on_virtual: 1,
             })
             .exec();
