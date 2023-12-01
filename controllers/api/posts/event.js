@@ -632,6 +632,38 @@ exports.editEventAds = async (req, res, next) => {
       primary_phone_number,
       secondary_phone_number,
     } = req.body;
+    function createDateTimeObject(dateString, timeString, timeZone) {
+      // Parse date string
+      const dateComponents = dateString.split('/');
+      const month = parseInt(dateComponents[0], 10) - 1; // Months are zero-based
+      const day = parseInt(dateComponents[1], 10);
+      const year = parseInt(dateComponents[2], 10);
+    
+      // Parse time string
+      const timeComponents = timeString.split(':');
+      const hours = parseInt(timeComponents[0], 10);
+      const minutes = parseInt(timeComponents[1], 10);
+    
+      // Create Date object with specified time zone
+      const utcDateObject = new Date(Date.UTC(year, month, day, hours, minutes, 0, 0));
+    
+      // Format with time zone using Intl.DateTimeFormat
+      const formattedDateWithTimeZone = new Intl.DateTimeFormat('en-US', {
+        timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZoneName: 'short',
+      }).format(utcDateObject);
+    
+      return new Date(formattedDateWithTimeZone);
+    }
+  
+    const startDateObject = createDateTimeObject(start_date, start_time, time_zone);
+    const endDateObject = createDateTimeObject(end_date, end_time, time_zone);
 // console.log(currency,"000000000");
     let taglines = tagline;
     if (taglines) {
@@ -742,8 +774,8 @@ exports.editEventAds = async (req, res, next) => {
     if (category) adsInfoObj.category = category;
     if (details) adsInfoObj.descriptions = details;
     if (time_zone) date_time.time_zone = time_zone;
-    if (start_date) date_time.start_date = start_date;
-    if (end_date) date_time.end_date = end_date;
+    if (start_date) date_time.start_date = startDateObject;
+    if (end_date) date_time.end_date = endDateObject;
     if (start_time) date_time.start_time = start_time;
     if (end_time) date_time.end_time = end_time;
     if (date_time) adsInfoObj.date_time = date_time;
