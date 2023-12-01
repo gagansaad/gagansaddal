@@ -1000,6 +1000,7 @@ exports.fetchAll = async (req, res, next) => {
       let query = {
         $or: [queryFinal]
       };
+      console.log(is_homepage,"job");
       
       if(is_homepage == "true"){
         if (excludedIds && excludedIds.length > 0) {

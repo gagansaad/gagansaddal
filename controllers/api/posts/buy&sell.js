@@ -1298,6 +1298,7 @@ exports.fetchAll = async (req, res, next) => {
           query._id = { $nin: excludedIds };
         }
       }
+      console.log(is_homepage,"job");
 
       let records = await postBuySellAd
       .find(query)
