@@ -727,7 +727,7 @@ let conditions = [];
         // let adLocation = await ModelName.findById(ads_id)
     //     let long = adLocation.adsInfo.location.coordinates[0];
     //  let lat = adLocation.adsInfo.location.coordinates[1];
-    function getDateTimeWithTimeZone(latitude, longitude, format = 'yyyy-MM-ddTHH:mm:ss.SSSZ') {
+    function getDateTimeWithTimeZone(latitude, longitude, format = 'yyyy-MM-ddTHH:mm:ss.SSSZZ') {
       try {
         const timezone = tzlookup(latitude, longitude);
         const currentTime = DateTime.now().setZone(timezone);
@@ -740,7 +740,7 @@ let conditions = [];
     
   
         
-        const formattedDateTime = getDateTimeWithTimeZone(lat, long);
+        const formattedDateTime = getDateTimeWithTimeZone(lat, long,'yyyy-MM-ddTHH:mm:ss.SSSZZ');
        
         if (formattedDateTime) {
           console.log(formattedDateTime);
