@@ -723,7 +723,7 @@ let conditions = [];
       let expired = duration;
 
       if (name === "Bump up") {
-        let expired_data = new Date(expired_on);
+        let expired_data = new Date(expired_data);
 
 // Get the time zone dynamically from the user's environment
 const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
