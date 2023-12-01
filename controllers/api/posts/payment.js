@@ -723,7 +723,15 @@ let conditions = [];
       let expired = duration;
 
       if (name === "Bump up") {
-        expired = expired_data;
+        let expired_data = new Date(expired_on);
+
+// Get the time zone dynamically from the user's environment
+const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+// Format the date string using the dynamically obtained time zone
+const formattedExpirationDate = expired_data.toLocaleString('en-US', { timeZone });
+console.log(formattedExpirationDate,"rvmrdjvmjdrmvkdrmvdemckdem");
+        expired = formattedExpirationDate;
       }
       // Create the object
       const addOn = {

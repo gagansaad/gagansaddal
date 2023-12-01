@@ -6,7 +6,7 @@ const {
   ModelNameByAdsType,
 } = require(`../../../handlers/jsonResponseHandlers`);
 
-cron.schedule("*/1 * * * *", async () => {
+cron.schedule("*/15 * * * *", async () => {
   try {
     function formatDate(date) {
       const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
@@ -20,8 +20,8 @@ cron.schedule("*/1 * * * *", async () => {
         // nextDay.setDate(currentDate.getDate() + 1);
         const formattedDate = formatDate(nextDay);
         const formattedDateObject = new Date(formattedDate);
-        console.log("Formatted Date Object:", formattedDateObject);
-console.log(currentDate,"jmiidid",formattedDate);
+        // console.log("Formatted Date Object:", formattedDateObject);
+// console.log(currentDate,"jmiidid",formattedDate);
     const adTypes = [
       { key: "job", label: "Jobs" },
       { key: "event", label: "Events" },
@@ -48,9 +48,9 @@ console.log(currentDate,"jmiidid",formattedDate);
           ],
         });
 
-        console.log(documents,"begani shaadi mai abdullah diwana");
+        // console.log(documents,"begani shaadi mai abdullah diwana");
       } else {
-        console.log("raja ki rani se shaadi hai ");
+        // console.log("raja ki rani se shaadi hai ");
         documents = await Model.find({
           $and: [
             { "plan_validity.expired_on": { $lt: new Date().toISOString } },
@@ -65,7 +65,8 @@ console.log(currentDate,"jmiidid",formattedDate);
         let expiredOnDate;
         let adjustedTime;
         if (adType.key == "event") {
-          console.log("haye mera kaalu");
+          // console.log("haye mera kaalu");
+
           const currentDate = new Date();
         const nextDay = new Date(currentDate);
         // nextDay.setDate(currentDate.getDate() + 1);
