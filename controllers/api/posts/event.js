@@ -487,6 +487,7 @@ exports.createEventAds = async (req, res, next) => {
       isfeatured,
       status: status,
       adsType,
+      active_on_bumpup_at:endDateObject,
       adsInfo: {
         title,
         type,
@@ -798,6 +799,7 @@ console.log(start_date, start_time);
     //   dataObj.adsInfo = adsInfoObj;
     // }
     const dataObjq = {
+      active_on_bumpup_at:endDateObject,
       adsInfo: adsInfoObj,
       lister_basic_info: {
         organization_name,
