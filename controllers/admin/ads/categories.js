@@ -50,7 +50,7 @@ exports.fetchNewCategories = async (req, res, next) => {
 
     if (!ads_type)
       return failureJSONResponse(res, { message: `Please provide ads id` });
-    AdsCategories.find({ ads_type: ads_type }).populate("ads_type")
+    AdsCategories.find({ ads_type: ads_type }).populate({path:"ads_type",select:"name"})
       .then((newCategory) => {
         if (!newCategory)
           return failureJSONResponse(res, { message: `Something went wrong` });
