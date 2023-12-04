@@ -202,12 +202,12 @@ events_Schema.virtual('expiredAt').get(function () {
   const endDate = new Date(end_date_str);
 
   const daysDifference = Math.floor((endDate - startDate) / (24 * 60 * 60 * 1000));
-if(daysDifference>30){
+if(daysDifference>=30){
   const expiredOn = new Date(endDate);
   expiredOn.setDate(endDate.getDate() + 1);
 
   // Return the ISO string representation
-  return expiredOn.toISOString();
+  return expiredOn;
 }else{
   console.log("america");
   return this.adsInfo.date_time.end_date
