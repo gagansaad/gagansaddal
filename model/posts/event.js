@@ -200,18 +200,21 @@ events_Schema.virtual('expiredAt').get(function () {
 
   const startDate = new Date(start_date_str);
   const endDate = new Date(end_date_str);
-
-  const daysDifference = Math.floor((endDate - startDate) / (24 * 60 * 60 * 1000));
-if(daysDifference>=30){
-  const expiredOn = new Date(endDate);
-  expiredOn.setDate(endDate.getDate() + 1);
-
-  // Return the ISO string representation
-  return expiredOn;
-}else{
-  console.log("america");
-  return this.adsInfo.date_time.end_date
-}
+  const daysDifference = Math.abs(Math.floor((endDate - startDate) / (24 * 60 * 60 * 1000)));
+  console.log(daysDifference);
+  if (daysDifference > 30) {
+    // Include one day extra
+    const expiredOn = new Date(this.plan_validity?.expired_on);
+    expiredOn.setDate(expiredOn.getDate() + 1);
+    return expiredOn.toISOString();
+  } else {
+    console.log("america");
+    // Include one day extra
+    const endDate = new Date(this.adsInfo.date_time.end_date);
+    endDate.setDate(endDate.getDate() + 1);
+    return endDate.toISOString();
+  }
+  
   }
   
   return null;
