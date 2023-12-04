@@ -739,7 +739,6 @@ let conditions = [];
     }
     
   
-        
         const formattedDateTime = getDateTimeWithTimeZone(lat, long,'yyyy-MM-ddTHH:mm:ss.SSSZZ');
        
         if (formattedDateTime) {
