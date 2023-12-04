@@ -203,8 +203,11 @@ events_Schema.virtual('expiredAt').get(function () {
 
   const daysDifference = Math.floor((endDate - startDate) / (24 * 60 * 60 * 1000));
 if(daysDifference>30){
-  console.log("naughty");
-  return this.plan_validity.expired_on;
+  const expiredOn = new Date(endDate);
+  expiredOn.setDate(endDate.getDate() + 1);
+
+  // Return the ISO string representation
+  return expiredOn.toISOString();
 }else{
   console.log("america");
   return this.adsInfo.date_time.end_date

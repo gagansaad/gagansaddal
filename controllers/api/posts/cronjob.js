@@ -42,7 +42,7 @@ cron.schedule("*/15 * * * *", async () => {
         documents = await Model.find({
           $and: [
             {
-                "adsInfo.date_time.end_date": { $lt: formattedDateObject.toISOString() }  
+                "expiredAt": { $lt: formattedDateObject.toISOString() }  
             },
             { status: "active" },
           ],
@@ -71,20 +71,30 @@ cron.schedule("*/15 * * * *", async () => {
         const nextDay = new Date(currentDate);
         // nextDay.setDate(currentDate.getDate() + 1);
         const formattedDate = formatDate(nextDay);
-          const result = await Model.updateMany(
+        let data = await Model.find({
+          $and: [
             {
-              $and: [
-            {
-              "adsInfo.date_time.end_date": { $lt: formattedDateObject },
+              "expiredAt": { $lt: formattedDateObject },
               status: "active",
-            }]},
+            },
+          ],
+        });
+        
+        // Update each document
+        for (const document of data) {
+          // Update the document
+          await Model.updateOne(
+            {
+              _id: document._id, // or use your unique identifier
+            },
             {
               $set: {
                 status: "inactive",
-                "plan_validity.expired_on": new Date().toISOString(),
+                "plan_validity.expired_on": currentDateISOString,
               },
             }
-          ).exec();
+          );
+        }
         } else {
           console.log("lulu das nayak");
           expiredOnDate = new Date(document.plan_validity.expired_on);
