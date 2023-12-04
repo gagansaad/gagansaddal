@@ -193,20 +193,24 @@ const events_Schema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-events_Schema.virtual('active_on_virtual').get(function () {
-  // Check if bumpupAt is not null
-  if (this.active_on_bumpup_at !== null) {
-    return this.active_on_bumpup_at;
-  }
-  if (this.active_on_bumpup_at == null) {
-    return this.plan_validity.active_on;
-  }
-  // Check if addons_validity is not empty
-if (this.plan_validity && this.plan_validity.active_on) {
-    return this.plan_validity.active_on;
-  }
+events_Schema.virtual('expiredAt').get(function () {
+  if (this.adsInfo.date_time || this.adsInfo.date_time.start_date || this.adsInfo.date_time.end_date) {
+    const start_date_str = this.adsInfo.date_time.start_date;
+  const end_date_str = this.adsInfo.date_time.end_date;
 
-  // Default value if neither bumpupAt nor "Bump up" add-on is present
+  const startDate = new Date(start_date_str);
+  const endDate = new Date(end_date_str);
+
+  const daysDifference = Math.floor((endDate - startDate) / (24 * 60 * 60 * 1000));
+if(daysDifference>30){
+  console.log("naughty");
+  return this.plan_validity.expired_on;
+}else{
+  console.log("america");
+  return this.adsInfo.date_time.end_date
+}
+  }
+  
   return null;
 });
 events_Schema.virtual("favoriteCount", {
