@@ -276,9 +276,9 @@ try {
         setTimeout(function(){
             socket.send('Sent a message 4seconds after connection!');
          }, 4000);
-         socket.on('join-room', (ads_id) => {
-          console.log(ads_id,"tu meri jaan ");
-          socket.join(`chat-${ads_id}`);
+         socket.on('join-room', (chat_id) => {
+          console.log(chat_id,"tu meri jaan ");
+          socket.join(`chat-${chat_id}`);
         });
         //  console.log(`Socket ${socket.id} joined room: chat-${adId}`);
          socket.on('send-message', async (data) => {
@@ -309,8 +309,12 @@ try {
                 ads_type,
               });
     
-              await chat.save();
-    
+              let data = await chat.save();
+             let chatid = data?._id
+              socket.on('join-room', (chatid) => {
+                console.log(chatid,"tu meri jaan ")
+                socket.join(`chat-${chatid}`)
+              })
               // Notify the seller about the new chat
               
             }
@@ -362,6 +366,7 @@ try {
               
             });
     // console.log("kjv dsnkivniujv dsziunb jkdjm bdfi1",createmsg?.length - 1)
+    let chatid = chatting?._id
    let newChatObject = {
       _id: chatting?._id || null,
       messageCount: chatting.messages ? chatting.messages.filter(message => message.senderId !== senderId).length : 0,
@@ -413,7 +418,7 @@ try {
     };
     console.log(newChatObject);
             io.emit('new-chat', newChatObject);
-            io.to(`chat-${chatting?._id}`).emit('receive-message', newChatObject1);
+            io.to(`chat-${chatid}`).emit('receive-message', newChatObject1);
            
           } catch (error) {
             console.error(error);
