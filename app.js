@@ -362,6 +362,31 @@ try {
               
             });
     // console.log("kjv dsnkivniujv dsziunb jkdjm bdfi1",createmsg?.length - 1)
+   let newChatObject = {
+      _id: chatting?._id || null,
+      messageCount: chatting.messages ? chatting.messages.filter(message => message.senderId !== userId).length : 0,
+      buyer_name: chatting?.buyer?.userInfo?.name || null,
+      buyer_image: chatting?.buyer?.userBasicInfo?.profile_image || null,
+
+      buyerId: chatting?.buyer?._id || null,
+      seller_name: chatting?.seller?.userInfo?.name || null,
+      seller_image: chatting?.seller?.userBasicInfo?.profile_image || null,
+      sellerId: chatting?.seller?._id || null,
+      ads_name: chatting?.ads_id?.adsInfo?.title || null,
+      ads_image: chatting?.ads_id?.adsInfo?.image || null,
+      ads_id: chatting?.ads_id?._id || null,
+      ads_type: chatting?.ads_type || null,
+      messages: chatting?.messages?.slice(-1).map(message => ({
+        sender_name: message?.senderId?.userInfo?.name || null,
+        senderId: message?.senderId?._id || null,
+        content: message?.content || null,
+        status: message?.status || null,
+        content_type: message?.content_type || null,
+        _id: message?._id || null,
+        timestamp: message?.timestamp || null,
+      })),
+      
+    };
     console.log(chatting);
             io.to(`chat-${ads_id}`).emit('new-chat', chatting);
             io.to(`chat-${ads_id}`).emit('receive-message', createmsg.messages[createmsg.messages.length - 1]);
