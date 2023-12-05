@@ -95,6 +95,7 @@ exports.ChatList = async (req, res, next) => {
       console.log(chat.messages);
       newChatObject = {
        _id: chat?._id || null,
+       messageCount: chat.messages ? chat.messages.filter(message => message.senderId !== userId).length : 0,
        buyer_name: chat?.buyer?.userInfo?.name || null,
        buyer_image: chat?.buyer?.userBasicInfo?.profile_image || null,
 
@@ -110,6 +111,7 @@ exports.ChatList = async (req, res, next) => {
          sender_name: message?.senderId?.userInfo?.name || null,
          senderId: message?.senderId?._id || null,
          content: message?.content || null,
+         status: message?.status || null,
          content_type: message?.content_type || null,
          _id: message?._id || null,
          timestamp: message?.timestamp || null,
