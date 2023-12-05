@@ -311,10 +311,11 @@ try {
     
               let data = await chat.save();
              let chatid = data?._id;
+             console.log("ho");
              io.to(`chat-${chatid}`).emit('join-room', chatid);
              socket.join(`chat-${chatid}`);
               // Notify the seller about the new chat
-              
+              console.log("baba ve kla mrod ni nikkiye lgade jor baba maar na daaba awe hoju khon kharaba dhakka laundi da sah ah ah ah chdgya ve");
             }
     
             const newMessage = {
