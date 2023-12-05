@@ -24,7 +24,7 @@ const mongoose = require("mongoose"),
 
   exports.ChatDetails = async (req, res, next) => {
     try {
-      const PAGE_SIZE = 10;
+      const PAGE_SIZE = 20;
       // Assuming req.query.page and req.query.perpage are used to get the page and limit from the request query parameters
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.perpage) || PAGE_SIZE;
@@ -123,7 +123,7 @@ const mongoose = require("mongoose"),
 exports.ChatList = async (req, res, next) => {
   try {
     let userId = req.userId;
-    const PAGE_SIZE = 10;
+    const PAGE_SIZE = 20;
     // Assuming req.query.page and req.query.limit are used to get the page and limit from the request query parameters
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.perpage) || PAGE_SIZE;
