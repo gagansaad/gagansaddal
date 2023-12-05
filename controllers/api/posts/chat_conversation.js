@@ -74,25 +74,25 @@ exports.ChatList = async (req, res, next) => {
       },
     }).populate({
       path: 'seller',
-      select: 'userInfo.name',
+      select: 'userInfo.name userBasicInfo.profile_image',
       populate: {
         path: 'userBasicInfo.profile_image',
-        select: 'url', // Assuming 'imageUrl' is the field you want to select
       },
     }).populate({
       path: 'buyer',
-      select: 'userInfo.name',
+      select: 'userInfo.name userBasicInfo.profile_image',
+      populate: {
+        path: 'userBasicInfo.profile_image', // Assuming 'imageUrl' is the field you want to select
+      },
     }).populate({
       path: 'messages.senderId',
-      select: 'userInfo.name',
-      populate: {
-        path: 'userBasicInfo.profile_image',
-        select: 'url', // Assuming 'imageUrl' is the field you want to select
-      },
+      select: 'userInfo.name userBasicInfo.profile_image',
+      
     });
     let newChatObject
     let userlist=[]
     chat.map((chat)=>{
+      console.log(chat.messages);
       newChatObject = {
        _id: chat?._id || null,
        buyer_name: chat?.buyer?.userInfo?.name || null,
@@ -100,7 +100,7 @@ exports.ChatList = async (req, res, next) => {
 
        buyerId: chat?.buyer?._id || null,
        seller_name: chat?.seller?.userInfo?.name || null,
-       seller_image: chat?.userBasicInfo?.profile_image || null,
+       seller_image: chat?.seller?.userBasicInfo?.profile_image || null,
        sellerId: chat?.seller?._id || null,
        ads_name: chat?.ads_id?.adsInfo?.title || null,
        ads_image: chat?.ads_id?.adsInfo?.image || null,
@@ -118,15 +118,37 @@ exports.ChatList = async (req, res, next) => {
      };
      userlist.push(newChatObject)
    })
-       
+   const PAGE_SIZE = 10;
+// Assuming req.query.page and req.query.limit are used to get the page and limit from the request query parameters
+const page = parseInt(req.query.page) || 1;
+const limit = parseInt(req.query.limit) || PAGE_SIZE;
+
+const startIndex = (page - 1) * limit;
+const endIndex = page * limit;
+
+const paginatedUserlist = userlist.slice(startIndex, endIndex);
 
 
-    if (chat) {
-      return successJSONResponse(res, {
-        message: 'success',
-        data: userlist,
-      });
-    }
+if (paginatedUserlist.length > 0) {
+  return successJSONResponse(res, {
+    message: 'success',
+    totalItems: userlist.length,
+    currentPage: page,
+    totalPages: Math.ceil(userlist.length / limit),
+    data: paginatedUserlist,
+  });
+} else {
+  return errorJSONResponse(res, {
+    message: 'No data found',
+  });
+}
+
+    // if (chat) {
+    //   return successJSONResponse(res, {
+    //     message: 'success',
+    //     data: userlist,
+    //   });
+    // }
   } catch (err) {
     console.log(err);
     return failureJSONResponse(res, { message: 'something went wrong' });

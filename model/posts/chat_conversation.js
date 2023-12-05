@@ -16,6 +16,10 @@ const chatSchema = new mongoose.Schema({
         enum: [`text`, `file`],
         default: "text",
       },
+      status:{
+        type: String,
+        enum: [`seen`, `unseen`,"deleted"],
+        default: "unseen",},
       timestamp: { type: Date, default: Date.now },
     },
   ],
