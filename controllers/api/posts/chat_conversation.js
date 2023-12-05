@@ -90,7 +90,7 @@ const mongoose = require("mongoose"),
         let Model = mongoose.model(ads_type)
         ad = await Model.findById(senderId)
        }
-       
+       console.log(sender,buyer,selle,ad);
        const customResponse = {
         _id: "252525",
         ads_id: ad._id || null,
