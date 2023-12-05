@@ -75,12 +75,20 @@ exports.ChatList = async (req, res, next) => {
     }).populate({
       path: 'seller',
       select: 'userInfo.name',
+      populate: {
+        path: 'userBasicInfo.profile_image',
+        select: 'url', // Assuming 'imageUrl' is the field you want to select
+      },
     }).populate({
       path: 'buyer',
       select: 'userInfo.name',
     }).populate({
       path: 'messages.senderId',
       select: 'userInfo.name',
+      populate: {
+        path: 'userBasicInfo.profile_image',
+        select: 'url', // Assuming 'imageUrl' is the field you want to select
+      },
     });
     let newChatObject
     let userlist=[]
@@ -88,10 +96,14 @@ exports.ChatList = async (req, res, next) => {
       newChatObject = {
        _id: chat?._id || null,
        buyer_name: chat?.buyer?.userInfo?.name || null,
+       buyer_image: chat?.buyer?.userBasicInfo?.profile_image || null,
+
        buyerId: chat?.buyer?._id || null,
        seller_name: chat?.seller?.userInfo?.name || null,
+       seller_image: chat?.userBasicInfo?.profile_image || null,
        sellerId: chat?.seller?._id || null,
        ads_name: chat?.ads_id?.adsInfo?.title || null,
+       ads_image: chat?.ads_id?.adsInfo?.image || null,
        ads_id: chat?.ads_id?._id || null,
        ads_type: chat?.ads_type || null,
        messages: chat?.messages?.slice(-1).map(message => ({
