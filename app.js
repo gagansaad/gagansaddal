@@ -312,7 +312,7 @@ try {
               await chat.save();
     
               // Notify the seller about the new chat
-              io.to(`chat-${ads_id}`).emit('new-chat', chat);
+              
             }
     
             const newMessage = {
@@ -336,8 +336,33 @@ try {
               { $push: { messages: newMessage } },
               { new: true, upsert: true }
             );
-            console.log(createmsg,"gagan");
+            console.log(chat._id,"gagan");
+            let chatting = await Chat.findById({"_id":chat._id}).populate({
+              path: 'ads_id',
+              select: 'adsInfo.title',
+              populate: {
+                path: 'adsInfo.image',
+                select: 'url', // Assuming 'imageUrl' is the field you want to select
+              },
+            }).populate({
+              path: 'seller',
+              select: 'userInfo.name userBasicInfo.profile_image',
+              populate: {
+                path: 'userBasicInfo.profile_image',
+              },
+            }).populate({
+              path: 'buyer',
+              select: 'userInfo.name userBasicInfo.profile_image',
+              populate: {
+                path: 'userBasicInfo.profile_image', // Assuming 'imageUrl' is the field you want to select
+              },
+            }).populate({
+              path: 'messages.senderId',
+              select: 'userInfo.name userBasicInfo.profile_image',
+              
+            });
     // console.log("kjv dsnkivniujv dsziunb jkdjm bdfi1",createmsg?.length - 1)
+            io.to(`chat-${ads_id}`).emit('new-chat', chatting);
             io.to(`chat-${ads_id}`).emit('receive-message', createmsg.messages[createmsg.messages.length - 1]);
            
           } catch (error) {

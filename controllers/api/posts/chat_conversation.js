@@ -24,6 +24,10 @@ const mongoose = require("mongoose"),
 
   exports.ChatDetails = async (req, res, next) => {
     try {
+      const PAGE_SIZE = 10;
+      // Assuming req.query.page and req.query.perpage are used to get the page and limit from the request query parameters
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.perpage) || PAGE_SIZE;
       const { ads_id } = req.query;
       let userId = req.userId;
   
@@ -72,10 +76,7 @@ const mongoose = require("mongoose"),
         });
       }
   
-      const PAGE_SIZE = 10;
-      // Assuming req.query.page and req.query.perpage are used to get the page and limit from the request query parameters
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.perpage) || PAGE_SIZE;
+      
   
       const startIndex = (page - 1) * limit;
       const endIndex = page * limit;
@@ -122,7 +123,11 @@ const mongoose = require("mongoose"),
 exports.ChatList = async (req, res, next) => {
   try {
     let userId = req.userId;
-
+    const PAGE_SIZE = 10;
+    // Assuming req.query.page and req.query.limit are used to get the page and limit from the request query parameters
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.perpage) || PAGE_SIZE;
+    
     let chat = await Chat.find({
       $or: [
         { 'buyer': userId },
@@ -183,10 +188,6 @@ exports.ChatList = async (req, res, next) => {
      };
      userlist.push(newChatObject)
    })
-   const PAGE_SIZE = 10;
-// Assuming req.query.page and req.query.limit are used to get the page and limit from the request query parameters
-const page = parseInt(req.query.page) || 1;
-const limit = parseInt(req.query.perpage) || PAGE_SIZE;
 
 const startIndex = (page - 1) * limit;
 const endIndex = page * limit;
