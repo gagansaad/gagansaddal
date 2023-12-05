@@ -68,6 +68,10 @@ exports.ChatList = async (req, res, next) => {
     }).populate({
       path: 'ads_id',
       select: 'adsInfo.title',
+      populate: {
+        path: 'adsInfo.image',
+        select: 'url', // Assuming 'imageUrl' is the field you want to select
+      },
     }).populate({
       path: 'seller',
       select: 'userInfo.name',
