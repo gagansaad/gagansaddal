@@ -22,39 +22,102 @@ const mongoose = require("mongoose"),
     isValidNumber,
   } = require(`../../../utils/validators`);
 
-exports.ChatDetails = async (req, res, next) => {
-  try {
-    const {ads_id} = req.query;
-   let userId = req.userId;
-   console.log(ads_id,userId,"mekmrkmkg vfkj jmmelokmdm sk mdkjf dfm mmm bfs kjcvm mnd vfdm kdxf dxf  k,cb k, sfv,mcbm k, mnd k, nf k,cbvm md ,k mn vdszm, nkj zsdmn kj mx c cvkjm mnf cvkj ");
-    let chat = await Chat.findOne({
-      $and: [
-        { ads_id: ads_id },
-        {
-          $or: [
-            { 'buyer': userId },
-            { 'seller': userId },
-          ],
+  exports.ChatDetails = async (req, res, next) => {
+    try {
+      const { ads_id } = req.query;
+      let userId = req.userId;
+  
+      let chat = await Chat.findOne({
+        $and: [
+          { ads_id: ads_id },
+          {
+            $or: [
+              { 'buyer': userId },
+              { 'seller': userId },
+            ],
+          },
+        ],
+      })
+      .populate({
+        path: 'ads_id',
+        select: 'adsInfo.title adsInfo.image',
+        populate: {
+          path: 'adsInfo.image',
+          select: 'url',
         },
-      ],
-    });
-    console.log(chat);
-if(chat){
-  return successJSONResponse(res, {
-    message: `success`,
-    data: chat,
-  });
-}  else{
-  return successJSONResponse(res, {
-    message: `success`,
-    data: null,
-  });
-}
-  } catch (err) {
-    console.log(err);
-    return failureJSONResponse(res, { message: `something went wrong` });
-  }
-};
+      })
+      .populate({
+        path: 'seller',
+        select: 'userInfo.name userBasicInfo.profile_image',
+        populate: {
+          path: 'userBasicInfo.profile_image',
+        },
+      })
+      .populate({
+        path: 'buyer',
+        select: 'userInfo.name userBasicInfo.profile_image',
+        populate: {
+          path: 'userBasicInfo.profile_image',
+        },
+      })
+      .populate({
+        path: 'messages.senderId',
+        select: 'userInfo.name userBasicInfo.profile_image',
+      });
+  
+      if (!chat) {
+        return successJSONResponse(res, {
+          message: 'success',
+          data: null,
+        });
+      }
+  
+      const PAGE_SIZE = 10;
+      // Assuming req.query.page and req.query.perpage are used to get the page and limit from the request query parameters
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.perpage) || PAGE_SIZE;
+  
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+  
+      let paginatedMessages = [];
+      let totalItems = chat.messages.length;
+  
+      if (chat.messages && totalItems > 0) {
+        paginatedMessages = chat.messages.slice(startIndex, endIndex);
+      }
+      
+      const customResponse = {
+        _id: chat._id,
+        ads_id: chat.ads_id._id || null,
+        ads_name: chat.ads_id.adsInfo.title || null,
+        ads_image: chat.ads_id.adsInfo.image || null,
+        buyer_id: chat.buyer._id || null,
+        buyer_name: chat.buyer.userInfo.name || null,
+        buyer_image: chat.buyer.userBasicInfo.profile_image || null,
+        seller_id: chat.seller._id || null,
+        seller_name: chat.seller.userInfo.name || null,
+        seller_image: chat.seller.userBasicInfo.profile_image || null,
+        ads_type: chat.ads_type || null,
+        messages: paginatedMessages || null,
+        
+      };
+  
+      return successJSONResponse(res, {
+        message: 'success',
+        totalItems: totalItems,
+        currentPage: page,
+        totalPages: Math.ceil(totalItems / limit),
+        data: customResponse,
+      });
+    } catch (err) {
+      console.log(err);
+      return failureJSONResponse(res, { message: 'something went wrong' });
+    }
+  };
+  
+  
+  
 
 exports.ChatList = async (req, res, next) => {
   try {
@@ -123,7 +186,7 @@ exports.ChatList = async (req, res, next) => {
    const PAGE_SIZE = 10;
 // Assuming req.query.page and req.query.limit are used to get the page and limit from the request query parameters
 const page = parseInt(req.query.page) || 1;
-const limit = parseInt(req.query.limit) || PAGE_SIZE;
+const limit = parseInt(req.query.perpage) || PAGE_SIZE;
 
 const startIndex = (page - 1) * limit;
 const endIndex = page * limit;
