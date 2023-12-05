@@ -364,7 +364,7 @@ try {
     // console.log("kjv dsnkivniujv dsziunb jkdjm bdfi1",createmsg?.length - 1)
    let newChatObject = {
       _id: chatting?._id || null,
-      messageCount: chatting.messages ? chatting.messages.filter(message => message.senderId !== userId).length : 0,
+      messageCount: chatting.messages ? chatting.messages.filter(message => message.senderId !== senderId).length : 0,
       buyer_name: chatting?.buyer?.userInfo?.name || null,
       buyer_image: chatting?.buyer?.userBasicInfo?.profile_image || null,
 
