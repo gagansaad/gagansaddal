@@ -88,7 +88,7 @@ const mongoose = require("mongoose"),
        }
        if(ads_id){
         let Model = mongoose.model(ads_type)
-        ad = await Model.findById(senderId)
+        ad = await Model.findById(ads_id)
        }
        console.log(sender,buyer,seller,ad);
        const customResponse = {
