@@ -29,7 +29,7 @@ const mongoose = require("mongoose"),
       // Assuming req.query.page and req.query.perpage are used to get the page and limit from the request query parameters
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.perpage) || PAGE_SIZE;
-      const { ads_id } = req.query;
+      const { ads_id ,sellerId,buyerId,senderId,ads_type} = req.query;
       let userId = req.userId;
   
       let chat = await Chat.findOne({
@@ -71,9 +71,44 @@ const mongoose = require("mongoose"),
       });
   
       if (!chat) {
+        let sender;
+        let buyer;
+        let seller;
+        let ad;
+        let adtype;
+        if(sellerId){
+          seller = await User.findById(sellerId)
+        }
+        if(buyerId){
+          buyer = await User.findById(buyerId)
+        }
+       if(senderId){
+        sender = await User.findById(senderId)
+       }
+       if(ads_id){
+        ad = await User.findById(senderId)
+       }
+       if(ads_type){
+        adtype = await User.findById(senderId)
+       }
+       const customResponse = {
+        _id: "252525",
+        ads_id: ad._id || null,
+        ads_name: ad.adsInfo.title || null,
+        ads_image: ad.adsInfo.image || null,
+        buyer_id: buyer._id || null,
+        buyer_name: buyer.userInfo.name || null,
+        buyer_image: buyer.userBasicInfo.profile_image || null,
+        seller_id: seller._id || null,
+        seller_name: seller.userInfo.name || null,
+        seller_image: seller.userBasicInfo.profile_image || null,
+        ads_type: adtype.name || null,
+        messages: null,
+        
+      };
         return successJSONResponse(res, {
           message: 'success',
-          data: null,
+          data: customResponse,
         });
       }
   
