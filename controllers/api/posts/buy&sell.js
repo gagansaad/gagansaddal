@@ -1380,7 +1380,7 @@ exports.fetchAll = async (req, res, next) => {
       };
       return successJSONResponse(res, finalResponse);
     } else {
-      return failureJSONResponse(res, { message: `ads not Available` });
+      return successJSONResponse(res, { message: `ads not Available` });
     }
   } catch (err) {
     console.log(err);
