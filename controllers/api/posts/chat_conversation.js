@@ -5,6 +5,7 @@ const {io} = require('../../../app');
 const mongoose = require("mongoose"),
   Chat = mongoose.model("Chat"),
   User = mongoose.model("user")
+  postType = mongoose.model("user")
   Media = mongoose.model("media"),
   {
     successJSONResponse,
@@ -86,11 +87,10 @@ const mongoose = require("mongoose"),
         sender = await User.findById(senderId)
        }
        if(ads_id){
-        ad = await User.findById(senderId)
+        let Model = mongoose.model(ads_type)
+        ad = await Model.findById(senderId)
        }
-       if(ads_type){
-        adtype = await User.findById(senderId)
-       }
+       
        const customResponse = {
         _id: "252525",
         ads_id: ad._id || null,
@@ -102,7 +102,7 @@ const mongoose = require("mongoose"),
         seller_id: seller._id || null,
         seller_name: seller.userInfo.name || null,
         seller_image: seller.userBasicInfo.profile_image || null,
-        ads_type: adtype.name || null,
+        ads_type: ads_type || null,
         messages: null,
         
       };
