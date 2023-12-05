@@ -55,7 +55,7 @@ exports.fetchNewSubCategories = async (req, res, next) => {
     const { category_id } = req.query;
 
     if (!category_id)
-      return failureJSONResponse(res, { message: `Please provide ads id` });
+      return failureJSONResponse(res, { message: `Please provide category_id` });
 
     AdsSubCategory.find({ category: category_id })
       .then((newCategory) => {
@@ -75,13 +75,37 @@ exports.fetchNewSubCategories = async (req, res, next) => {
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
-
-exports.deleteNewSubCategories = async (req, res, next) => {
+exports.fetchOneSubCategories = async (req, res, next) => {
   try {
-    const { sub_category_id } = req.body;
+    const { sub_category_id } = req.query;
 
     if (!sub_category_id)
-      return failureJSONResponse(res, { message: `Please provide ads id` });
+      return failureJSONResponse(res, { message: `Please provide subcategory_id` });
+
+    AdsSubCategory.find({ _id: sub_category_id })
+      .then((newCategory) => {
+        if (!newCategory)
+          return failureJSONResponse(res, { message: `Something went wrong` });
+        else {
+          return successJSONResponse(res, {
+            message: "Success",
+            subCategories: newCategory,
+          });
+        }
+      })
+      .catch((err) => {
+        return failureJSONResponse(res, { message: `Something went wrong` });
+      });
+  } catch (err) {
+    return failureJSONResponse(res, { message: `something went wrong` });
+  }
+};
+exports.deleteNewSubCategories = async (req, res, next) => {
+  try {
+    const { sub_category_id } = req.query;
+
+    if (!sub_category_id)
+      return failureJSONResponse(res, { message: `Please provide sub_category_id` });
 
     AdsSubCategory.findOneAndDelete({ _id: sub_category_id })
       .then((newCategory) => {
@@ -109,7 +133,7 @@ exports.updateSubCategories = async (req, res) => {
     if (name) dbQuery.name = name;
     if (status) dbQuery.status = status;
     if (!sub_category_id)
-      return failureJSONResponse(res, { message: `Please provide ads id` });
+      return failureJSONResponse(res, { message: `Please provide sub_category_id` });
 
     AdsSubCategory.findByIdAndUpdate(
       { _id: sub_category_id },

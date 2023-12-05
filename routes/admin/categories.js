@@ -41,6 +41,7 @@ function validateImage(req, res, next) {
 // );
 router.post(`/create-category-data`, controllers.createNewCategories);
 router.get(`/fetch-category-data`, controllers.fetchNewCategories);
+router.get(`/fetch-one-category-data`, controllers.fetchOneCategory);
 router.post(`/delete-category`, controllers.deleteNewCategories);
 router.patch(`/update-category`, controllers.UpdateCategories);
 module.exports = router;

@@ -13,7 +13,7 @@ exports.createNewCategories = async (req, res, next) => {
     if (!isValidString(name))
       return failureJSONResponse(res, { message: `Please provide name` });
     if (!ads_type)
-      return failureJSONResponse(res, { message: `Please provide ads id` });
+      return failureJSONResponse(res, { message: `Please provide ads type id` });
 
     const dataObj = {};
     if (name) dataObj.name = name;
@@ -49,7 +49,7 @@ exports.fetchNewCategories = async (req, res, next) => {
     const { ads_type } = req.query;
 
     if (!ads_type)
-      return failureJSONResponse(res, { message: `Please provide ads id` });
+      return failureJSONResponse(res, { message: `Please provide ads_type id` });
     AdsCategories.find({ ads_type: ads_type }).populate({path:"ads_type",select:"name"})
       .then((newCategory) => {
         if (!newCategory)
@@ -68,13 +68,36 @@ exports.fetchNewCategories = async (req, res, next) => {
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
-
-exports.deleteNewCategories = async (req, res, next) => {
+exports.fetchOneCategory = async (req, res, next) => {
   try {
-    const { category_id } = req.body;
+    const { category_id } = req.query;
 
     if (!category_id)
-      return failureJSONResponse(res, { message: `Please provide ads id` });
+      return failureJSONResponse(res, { message: `Please provide category_id` });
+    AdsCategories.findById({ _id: category_id })
+      .then((newCategory) => {
+        if (!newCategory)
+          return failureJSONResponse(res, { message: `Something went wrong` });
+        else {
+          return successJSONResponse(res, {
+            message: "Success",
+            categories: newCategory,
+          });
+        }
+      })
+      .catch((err) => {
+        return failureJSONResponse(res, { message: `Something went wrong` });
+      });
+  } catch (err) {
+    return failureJSONResponse(res, { message: `something went wrong` });
+  }
+};
+exports.deleteNewCategories = async (req, res, next) => {
+  try {
+    const { category_id } = req.query;
+
+    if (!category_id)
+      return failureJSONResponse(res, { message: `Please provide category_id` });
 
     AdsCategories.findOneAndDelete({ _id: category_id })
       .then((newCategory) => {
@@ -98,7 +121,7 @@ exports.UpdateCategories = async (req, res, next) => {
     const { category_id, name, status } = req.body;
 
     if (!category_id)
-      return failureJSONResponse(res, { message: `Please provide ads id` });
+      return failureJSONResponse(res, { message: `Please provide category_id` });
     if (name) dbQuery.name = name;
     if (status) dbQuery.status = status;
 
