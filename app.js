@@ -402,8 +402,7 @@ try {
       ads_id: chatting?.ads_id?._id || null,
       ads_type: chatting?.ads_type || null,
       messages: chatting?.messages?.slice(-1).map(message => ({
-        sender_name: message?.senderId?.userInfo?.name || null,
-        senderId: message?.senderId?._id || null,
+        senderId: message?.senderId|| null,
         content: message?.content || null,
         status: message?.status || null,
         content_type: message?.content_type || null,
@@ -413,7 +412,7 @@ try {
       
     };
     console.log(newChatObject);
-            // io.to(`chatuser-${ads_id}`).emit('new-chat', newChatObject);
+            io.to(`chatuser-${ads_id}`).emit('new-chat', newChatObject);
             io.to(`chat-${ads_id}`).emit('receive-message', newChatObject1);
            
           } catch (error) {
