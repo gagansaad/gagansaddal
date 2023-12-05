@@ -74,7 +74,7 @@ cron.schedule("*/15 * * * *", async () => {
         let data = await Model.find({
           $and: [
             {
-              "expiredAt": { $lt: formattedDateObject },
+              "expiredAt": { $lte: formattedDateObject },
               status: "active",
             },
           ],
@@ -90,13 +90,12 @@ cron.schedule("*/15 * * * *", async () => {
             {
               $set: {
                 status: "inactive",
-                "plan_validity.expired_on": currentDateISOString,
+                "plan_validity.expired_on": formattedDateObject,
               },
             }
           );
         }
         } else {
-          console.log("lulu das nayak");
           expiredOnDate = new Date(document.plan_validity.expired_on);
           const documentTimezoneOffset = expiredOnDate.getTimezoneOffset();
           // console.log(documentTimezoneOffset);
