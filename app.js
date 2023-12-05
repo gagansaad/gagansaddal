@@ -413,7 +413,7 @@ try {
       
     };
     console.log(newChatObject);
-            io.to(`chat-${ads_id}`).emit('new-chat', newChatObject);
+            io.to(`chatuser-${ads_id}`).emit('new-chat', newChatObject);
             io.to(`chat-${ads_id}`).emit('receive-message', newChatObject1);
            
           } catch (error) {
