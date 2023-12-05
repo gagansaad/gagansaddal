@@ -362,6 +362,7 @@ try {
               
             });
     // console.log("kjv dsnkivniujv dsziunb jkdjm bdfi1",createmsg?.length - 1)
+    console.log(chatting);
             io.to(`chat-${ads_id}`).emit('new-chat', chatting);
             io.to(`chat-${ads_id}`).emit('receive-message', createmsg.messages[createmsg.messages.length - 1]);
            
