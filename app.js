@@ -310,7 +310,8 @@ try {
               });
     
               let data = await chat.save();
-             let chatid = data?._id
+             let chatid = data?._id;
+             io.to(`chat-${chatid}`).emit('join-room', chatid);
               socket.on('join-room', (chatid) => {
                 console.log(chatid,"tu meri jaan ")
                 socket.join(`chat-${chatid}`)

@@ -4,6 +4,7 @@ const crypto = require("crypto");
 const {io} = require('../../../app'); 
 const mongoose = require("mongoose"),
   Chat = mongoose.model("Chat"),
+  User = mongoose.model("user")
   Media = mongoose.model("media"),
   {
     successJSONResponse,
