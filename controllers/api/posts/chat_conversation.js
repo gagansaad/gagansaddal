@@ -205,7 +205,7 @@ if (paginatedUserlist.length > 0) {
   });
 } else {
   return failureJSONResponse(res, {
-    message: 'No data found',
+    data: null,
   });
 }
 
