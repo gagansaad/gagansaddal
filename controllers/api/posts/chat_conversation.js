@@ -204,8 +204,8 @@ if (paginatedUserlist.length > 0) {
     data: paginatedUserlist,
   });
 } else {
-  return failureJSONResponse(res, {
-    data: null,
+  return successJSONResponse(res, {
+    message: 'No data found',
   });
 }
 
