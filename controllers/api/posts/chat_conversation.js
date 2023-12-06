@@ -220,24 +220,24 @@ exports.ChatList = async (req, res, next) => {
       });
     
       
-      console.log(count.length,"bjrbjsdbvjhsdbvjhsdbvjsdrnsnkjvnsrdkjvnsdrkjnvkjdrsnvjkdrnknvjsdfnvkjsdnvkjsdnvkjsdnvkn");
+      console.log(count,"bjrbjsdbvjhsdbvjhsdbvjsdrnsnkjvnsrdkjvnsdrkjnvkjdrsnvjkdrnknvjsdfnvkjsdnvkjsdnvkjsdnvkn");
       newChatObject = {
        _id: chat?._id || null,
        messageCount: count.length || 0,
        buyer_name: chat?.buyer?.userInfo?.name || null,
        buyer_image: chat?.buyer?.userBasicInfo?.profile_image || null,
 
-       buyer_id: chat?.buyer?._id || null,
+       buyerId: chat?.buyer?._id || null,
        seller_name: chat?.seller?.userInfo?.name || null,
        seller_image: chat?.seller?.userBasicInfo?.profile_image || null,
-       seller_id: chat?.seller?._id || null,
+       sellerId: chat?.seller?._id || null,
        ads_name: chat?.ads_id?.adsInfo?.title || null,
        ads_image: chat?.ads_id?.adsInfo?.image || null,
        ads_id: chat?.ads_id?._id || null,
        ads_type: chat?.ads_type || null,
        messages: chat?.messages?.slice(-1).map(message => ({
          sender_name: message?.senderId?.userInfo?.name || null,
-         sender_id: message?.senderId?._id || null,
+         senderId: message?.senderId?._id || null,
          content: message?.content || null,
          status: message?.status || null,
          content_type: message?.content_type || null,
