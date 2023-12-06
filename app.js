@@ -278,7 +278,7 @@ try {
          }, 4000);
          socket.on('join-room', (chat_id) => {
           console.log(chat_id,"tu meri jaan ");
-          socket.join(`chat-${chat_id}`);
+          socket.join(chat_id);
         });
         //  console.log(`Socket ${socket.id} joined room: chat-${adId}`);
          socket.on('send-message', async (data) => {
@@ -312,8 +312,8 @@ try {
               let data = await chat.save();
              let chatid = data?._id;
              console.log("ho");
-             io.to(`chat-${chatid}`).emit('join-room', chatid);
-             socket.join(`chat-${chatid}`);
+             io.to(chatid).emit('join-room', chatid);
+             socket.join(chatid);
               // Notify the seller about the new chat
               console.log("baba ve kla mrod ni nikkiye lgade jor baba maar na daaba awe hoju khon kharaba dhakka laundi da sah ah ah ah chdgya ve");
             }
@@ -430,7 +430,7 @@ try {
     };
     console.log(newChatObject);
             io.emit('new-chat', newChatObject);
-            io.to(`chat-${chatid}`).emit('receive-message', newChatObject1);
+            io.to(chatid).emit('receive-message', newChatObject1);
             console.log(`Emitted 'receive-message' to room chat-${chatid}`);
           } catch (error) {
             console.error(error);
