@@ -124,7 +124,13 @@ const mongoose = require("mongoose"),
         chat.messages.reverse();
         paginatedMessages = chat.messages.slice(startIndex, endIndex);
       }
-      
+      const newStatus = 'seen';
+      for (const message of chat.messages) {
+        if (message.senderId._id.toString() !== userId.toString()) {
+            message.status = newStatus;
+        }
+    }
+    await chat.save();
       const customResponse = {
         _id: chat._id,
         ads_id: chat.ads_id._id || null,
@@ -200,7 +206,7 @@ exports.ChatList = async (req, res, next) => {
       console.log(chat.messages);
       newChatObject = {
        _id: chat?._id || null,
-       messageCount: chat.messages ? chat.messages.filter(message => message.senderId !== userId).length : 0,
+       messageCount: chat.messages ? chat.messages.filter(message => message.senderId != userId).length : 0,
        buyer_name: chat?.buyer?.userInfo?.name || null,
        buyer_image: chat?.buyer?.userBasicInfo?.profile_image || null,
 
