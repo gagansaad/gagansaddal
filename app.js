@@ -366,16 +366,29 @@ try {
             });
     // console.log("kjv dsnkivniujv dsziunb jkdjm bdfi1",createmsg?.length - 1)
     let chatid = chatting?._id
+    let count = [];
+    if(chatting){
+      chatting.messages.filter((message) => {
+        if (message.senderId._id.toString() !== senderId.toString() && message.status === "unseen") {
+          count.push(message)
+          console.log(message.senderId._id,count,userId);
+          return true; // Include the message in the filtered array
+        } else {
+          return false; // Exclude the message from the filtered array
+        }
+      });
+    }
+    
    let newChatObject = {
       _id: chatting?._id || null,
-      messageCount: chatting.messages ? chatting.messages.filter(message => message.senderId !== senderId).length : 0,
+      messageCount: count.length || 0,
       buyer_name: chatting?.buyer?.userInfo?.name || null,
       buyer_image: chatting?.buyer?.userBasicInfo?.profile_image || null,
 
-      buyerId: chatting?.buyer?._id || null,
+      buyer_id: chatting?.buyer?._id || null,
       seller_name: chatting?.seller?.userInfo?.name || null,
       seller_image: chatting?.seller?.userBasicInfo?.profile_image || null,
-      sellerId: chatting?.seller?._id || null,
+      seller_id: chatting?.seller?._id || null,
       ads_name: chatting?.ads_id?.adsInfo?.title || null,
       ads_image: chatting?.ads_id?.adsInfo?.image || null,
       ads_id: chatting?.ads_id?._id || null,
@@ -397,10 +410,10 @@ try {
       buyer_name: chatting?.buyer?.userInfo?.name || null,
       buyer_image: chatting?.buyer?.userBasicInfo?.profile_image || null,
 
-      buyerId: chatting?.buyer?._id || null,
+      buyer_id: chatting?.buyer?._id || null,
       seller_name: chatting?.seller?.userInfo?.name || null,
       seller_image: chatting?.seller?.userBasicInfo?.profile_image || null,
-      sellerId: chatting?.seller?._id || null,
+      seller_id: chatting?.seller?._id || null,
       ads_name: chatting?.ads_id?.adsInfo?.title || null,
       ads_image: chatting?.ads_id?.adsInfo?.image || null,
       ads_id: chatting?.ads_id?._id || null,
