@@ -216,7 +216,7 @@ exports.ChatList = async (req, res, next) => {
           )
           .map((message) => message.senderId)
       );
-      console.log(chat.messages);
+      console.log(unseenSenders);
       newChatObject = {
        _id: chat?._id || null,
        messageCount: unseenSenders.size || 0,
