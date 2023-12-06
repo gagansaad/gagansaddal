@@ -113,7 +113,7 @@ const mongoose = require("mongoose"),
       }
       const newStatus = 'seen';
       for (const message of chat.messages) {
-        console.log(message.senderId._id.toString() != userId.toString(),message.senderId._id.toString(), userId.toString());
+        console.log(message.senderId._id !== userId,message.senderId._id, userId);
         if (message.senderId._id.toString() !== userId.toString()) {
             message.status = newStatus;
         }
