@@ -371,7 +371,7 @@ try {
       chatting.messages.filter((message) => {
         if (message.senderId._id.toString() !== senderId.toString() && message.status === "unseen") {
           count.push(message)
-          console.log(message.senderId._id,count,userId);
+          console.log(message.senderId._id,count,senderId);
           return true; // Include the message in the filtered array
         } else {
           return false; // Exclude the message from the filtered array
@@ -430,7 +430,7 @@ try {
     };
     console.log(newChatObject);
             io.emit('new-chat', newChatObject);
-            io.emit('receive-message', newChatObject1);
+            io.to(`chat-${chatid}`).emit('receive-message', newChatObject1);
             console.log(`Emitted 'receive-message' to room chat-${chatid}`);
           } catch (error) {
             console.error(error);
