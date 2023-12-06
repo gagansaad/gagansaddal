@@ -220,7 +220,7 @@ exports.ChatList = async (req, res, next) => {
       });
     
       
-      console.log(count,"bjrbjsdbvjhsdbvjhsdbvjsdrnvjksnkjvsnkjvnsrdkjvnsdrkjnvkjdrsnvjkdrnknvjsdfnvkjsdnvkjsdnvkjsdnvkn");
+      console.log(count,"bjrbjsdbvjhsdbvjhsdbvjsdrnsnkjvnsrdkjvnsdrkjnvkjdrsnvjkdrnknvjsdfnvkjsdnvkjsdnvkjsdnvkn");
       newChatObject = {
        _id: chat?._id || null,
        messageCount: count || 0,
