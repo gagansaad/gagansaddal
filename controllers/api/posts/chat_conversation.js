@@ -210,7 +210,7 @@ exports.ChatList = async (req, res, next) => {
     chat.map((chat)=>{
       const unseenMessagesCount = chat.messages.filter(
         (message) =>
-          message.senderId !== userId && message.status === "unseen"
+          message.senderId.toString() !== userId.toString() && message.status === "unseen"
       ).length;
     
        const unseenMessagesCount2 = chat.messages.filter(
