@@ -212,6 +212,7 @@ exports.ChatList = async (req, res, next) => {
     chat.messages.filter((message) => {
         if (message.senderId.toString() !== userId.toString() && message.status === "unseen") {
           count++;
+          console.log(count);
           return true; // Include the message in the filtered array
         } else {
           return false; // Exclude the message from the filtered array
