@@ -208,10 +208,14 @@ exports.ChatList = async (req, res, next) => {
     let newChatObject
     let userlist=[]
     chat.map((chat)=>{
+      const unseenMessages = chat.messages.filter(
+        (message) =>
+          message.senderId !== userId && message.status === "unseen"
+      );
       console.log(chat.messages);
       newChatObject = {
        _id: chat?._id || null,
-       messageCount: chat.messages ? chat.messages.filter(message => message.senderId != userId).length : 0,
+       messageCount: unseenMessages.length || 0,
        buyer_name: chat?.buyer?.userInfo?.name || null,
        buyer_image: chat?.buyer?.userBasicInfo?.profile_image || null,
 
