@@ -136,7 +136,7 @@ const mongoose = require("mongoose"),
         seller_name: chat.seller.userInfo.name || null,
         seller_image: chat.seller.userBasicInfo.profile_image || null,
         ads_type: chat.ads_type || null,
-        messages: paginatedMessages || null,
+        messages: paginatedMessages.reverse() || null,
         
       };
   
