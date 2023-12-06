@@ -430,7 +430,7 @@ try {
     };
     console.log(newChatObject);
             io.emit('new-chat', newChatObject);
-            io.to(`chat-${chatid}`).emit('receive-message', newChatObject1);
+            io.emit('receive-message', newChatObject1);
             console.log(`Emitted 'receive-message' to room chat-${chatid}`);
           } catch (error) {
             console.error(error);
