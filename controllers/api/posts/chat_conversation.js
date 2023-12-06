@@ -212,7 +212,7 @@ exports.ChatList = async (req, res, next) => {
         chat.messages
           .filter(
             (message) =>
-              message.senderId !== userId && message.status === "unseen"
+              message.senderId !== userId && message.status !== "seen"
           )
           .map((message) => message.senderId)
       );
