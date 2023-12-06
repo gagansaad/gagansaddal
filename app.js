@@ -431,7 +431,7 @@ try {
     console.log(newChatObject);
             io.emit('new-chat', newChatObject);
             io.to(`chat-${chatid}`).emit('receive-message', newChatObject1);
-           
+            console.log(`Emitted 'receive-message' to room chat-${chatid}`);
           } catch (error) {
             console.error(error);
           }
@@ -441,10 +441,10 @@ try {
           console.log(`new chat recieved:`, data);
           // Further processing or handling of the received message
         });
-        socket.on('receive-message', (data) => {
-          console.log(`Received message from socket ${socket.id}:`, data);
-          // Further processing or handling of the received message
-        });
+        // socket.on('receive-message', (data) => {
+        //   console.log(`Received message from socket ${socket.id}:`, data);
+        //   // Further processing or handling of the received message
+        // });
         //gagan
 
        
