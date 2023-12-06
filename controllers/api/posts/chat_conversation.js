@@ -207,12 +207,13 @@ exports.ChatList = async (req, res, next) => {
     });
     let newChatObject
     let userlist=[]
-    const unseenMessagesCount = chat.messages.reduce(
-      (count, message) =>
-        count + (message.senderId !== userId && message.status === "unseen" ? 1 : 0),
-      0
-    );
-  
+    chat.map((chat)=>{
+      const unseenMessagesCount = chat.messages.reduce(
+        (count, message) =>
+          count + (message.senderId !== userId && message.status === "unseen" ? 1 : 0),
+        0
+      );
+    
       console.log(unseenSenders,"bjrbjsdbvjhsdbvjhsdbvjsdrnvjksnkjvsnkjvnsrdkjvnsdrkjnvkjdrsnvjkdrnknvjsdfnvkjsdnvkjsdnvkjsdnvkn");
       newChatObject = {
        _id: chat?._id || null,
