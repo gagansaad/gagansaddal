@@ -120,9 +120,9 @@ const mongoose = require("mongoose"),
     }
 
     // // Save only if there are messages to update
-    // if (paginatedMessages.length > 0) {
-    //     await chat.save();
-    // }
+    if (chat.messages.length > 0) {
+        await chat.save();
+    }
       
   
       const startIndex = (page - 1) * limit;
