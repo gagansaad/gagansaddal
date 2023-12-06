@@ -214,7 +214,7 @@ exports.ChatList = async (req, res, next) => {
             (message) =>
               message.senderId !== userId && message.status !== "seen"
           )
-          .map((message) => message.senderId)
+          
       );
       console.log(unseenSenders,"bjrbjsdbvjhsdbvjhsdbvjsdrnvjksnkjvsnkjvnsrdkjvnsdrkjnvkjdrsnvjkdrnknvjsdfnvkjsdnvkjsdnvkjsdnvkn");
       newChatObject = {
