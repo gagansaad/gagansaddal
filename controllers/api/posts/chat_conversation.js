@@ -121,6 +121,7 @@ const mongoose = require("mongoose"),
       let totalItems = chat.messages.length;
   
       if (chat.messages && totalItems > 0) {
+        chat.messages.reverse();
         paginatedMessages = chat.messages.slice(startIndex, endIndex);
       }
       
@@ -136,7 +137,7 @@ const mongoose = require("mongoose"),
         seller_name: chat.seller.userInfo.name || null,
         seller_image: chat.seller.userBasicInfo.profile_image || null,
         ads_type: chat.ads_type || null,
-        messages: paginatedMessages.reverse() || null,
+        messages: paginatedMessages || null,
         
       };
   
