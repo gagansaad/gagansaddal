@@ -111,7 +111,18 @@ const mongoose = require("mongoose"),
           data: customResponse,
         });
       }
-  
+      const newStatus = 'seen';
+      for (const message of chat.messages) {
+        console.log(message.senderId._id.toString() !== userId.toString(),message.senderId._id.toString(), userId.toString());
+        if (message.senderId._id.toString() !== userId.toString()) {
+            message.status = newStatus;
+        }
+    }
+
+    // // Save only if there are messages to update
+    // if (paginatedMessages.length > 0) {
+    //     await chat.save();
+    // }
       
   
       const startIndex = (page - 1) * limit;
@@ -124,13 +135,7 @@ const mongoose = require("mongoose"),
         chat.messages.reverse();
         paginatedMessages = chat.messages.slice(startIndex, endIndex);
       }
-      const newStatus = 'seen';
-      for (const message of chat.messages) {
-        if (message.senderId._id.toString() !== userId.toString()) {
-            message.status = newStatus;
-        }
-    }
-    await chat.save();
+     
       const customResponse = {
         _id: chat._id,
         ads_id: chat.ads_id._id || null,
