@@ -436,7 +436,7 @@ console.log("Count of unseen messages:", count);
       
     };
     console.log(newChatObject1.messages[0].senderId._id);
-   io.emit('new-chat', newChatObject);
+    io.emit('new-chat', newChatObject);
     io.emit('receive-message', newChatObject1);
             console.log(`Emitted 'receive-message' to room chat-${chatid}`);
           } catch (error) {
@@ -452,6 +452,7 @@ console.log("Count of unseen messages:", count);
         const { chatId, userId, isread } = data;
     
         if (isread === "true") {
+
           let chatting = await Chat.findById(chatId);
     
           if (chatting) {

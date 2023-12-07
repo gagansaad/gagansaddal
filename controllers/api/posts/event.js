@@ -440,6 +440,7 @@ exports.createEventAds = async (req, res, next) => {
     }
     // console.log(other_platform_name,other_platform,"-----------------------------------------");
     if (other_platform) {
+      console.log(other_platform,other_platform.length,"abiske ka er");
       for (let i = 0; i < other_platform.length; i++) {
       platforms.push({
         live_platform: other_platform_name[i],
