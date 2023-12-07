@@ -4,8 +4,8 @@ const crypto = require("crypto");
 const {io} = require('../../../app'); 
 const mongoose = require("mongoose"),
   Chat = mongoose.model("Chat"),
-  User = mongoose.model("user")
-  postType = mongoose.model("user")
+  User = mongoose.model("user"),
+  postType = mongoose.model("user"),
   Media = mongoose.model("media"),
   {
     successJSONResponse,
@@ -282,3 +282,20 @@ if (paginatedUserlist.length > 0) {
 };
 
 
+
+
+exports.uploadfile = async (req, res, next) => {
+  try {
+    let file = req.file
+   
+
+    return successJSONResponse(res, {
+      message: 'success',
+      url: file.path,
+      
+    });
+  } catch (err) {
+    console.log(err);
+    return failureJSONResponse(res, { message: 'something went wrong' });
+  }
+};

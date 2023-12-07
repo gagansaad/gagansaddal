@@ -51,4 +51,10 @@ router.get(
   authMiddleware.ensureUserLoggedIn,
   controllers.ChatList
 );
+router.post(
+  `/upload-file`,
+  upload.single("photos"),
+  authMiddleware.ensureUserLoggedIn,
+  controllers.uploadfile
+);
 module.exports = router;
