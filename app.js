@@ -9,7 +9,7 @@ const express = require(`express`),
   centralErrorHandlers = require(`./utils/centralErrorHandlers`),
   expressSession = require(`express-session`),
   MongoStore = require(`connect-mongo`);
-
+  let Notification = require("./resources/notification");
 const { EmailOTPVerification } = require("./resources/sendEmailFunction");
 // DB Setup
 // const {
@@ -435,10 +435,23 @@ console.log("Count of unseen messages:", count);
       })),
       
     };
-    console.log(newChatObject1.messages[0].senderId._id);
+    const otherUserId = newChatObject1.messages[0].senderId._id === newChatObject1.buyerId ? newChatObject1.sellerId : newChatObject1.buyerId;
+    console.log(otherUserId,"mila tu milaackdnvkjenvjkefvkfnvkndsfkvnsdfkvnksdfnvksdnvksd");
     io.emit('new-chat', newChatObject);
     io.emit('receive-message', newChatObject1);
-            console.log(`Emitted 'receive-message' to room chat-${chatid}`);
+            // console.log(`Emitted 'receive-message' to room chat-$`,);
+            await Notification.sendNotifications(
+              [UserId],
+              getNotification.title,
+              getNotification.body,
+              { model_id: Ad_id, model: adsName },
+              true,
+              {
+                subject: "Payment succedded of post",
+                email_template: "paymentstatus",
+                data: { payment_status: "succeeded" },
+              }
+            );
           } catch (error) {
             console.error(error);
           }

@@ -581,10 +581,7 @@ exports.fetchAll = async (req, res, next) => {
         if (adons_nameModelActive[adonsSlug][modelLabel] == true) {
           let YourModel = mongoose.model(modelName);
 
-          data = await YourModel.find(dbQuery)
-
-            .populate(commonPopulateOptions)
-            .select({
+          data = await YourModel.find(dbQuery).populate(commonPopulateOptions).select({
               ...commonSelectFields,
               ...mergedPrices[priceDefaultSelect],
               active_on_bumpup_at:1,
