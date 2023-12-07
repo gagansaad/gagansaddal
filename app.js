@@ -435,7 +435,7 @@ console.log("Count of unseen messages:", count);
       })),
       
     };
-    const otherUserId = newChatObject1.messages[0].senderId._id === newChatObject1.buyerId ? newChatObject1.sellerId : newChatObject1.buyerId;
+    const otherUserId = newChatObject1.messages[0].senderId._id === newChatObject1.buyer_id ? newChatObject1.seller_id : newChatObject1.buyer_id;
     console.log(otherUserId,"mila tu milaackdnvkjenvjkefvkfnvkndsfkvnsdfkvnksdfnvksdnvksd");
     io.emit('new-chat', newChatObject);
     io.emit('receive-message', newChatObject1);
