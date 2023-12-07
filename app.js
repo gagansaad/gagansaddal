@@ -366,14 +366,13 @@ try {
             });
     // console.log("kjv dsnkivniujv dsziunb jkdjm bdfi1",createmsg?.length - 1)
     let chatid = chatting?._id
-    let count = [];
+    let count = 0;
     if(chatting){
       // console.log(chatting.messages.senderId._id,senderId,"don don don don don dond don don");
       chatting.messages.map((message) => {
         console.log(senderId , message.senderId._id,"fnejfnsekncf");
         if (message.senderId._id.toString() !== senderId.toString() && message.status === "unseen") {
-          count.push(message)
-          console.log(message);
+          count++
           return true; // Include the message in the filtered array
         } else {
           return false; // Exclude the message from the filtered array
