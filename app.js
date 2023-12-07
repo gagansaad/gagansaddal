@@ -448,7 +448,7 @@ console.log("Count of unseen messages:", count);
           console.log(`new chat recieved:`, data);
           // Further processing or handling of the received message
         });
-        // socket.on('receive-message', (data) => {
+        //socket.on('receive-message', (data) => {
         //   console.log(`Received message from socket ${socket.id}:`, data);
         //   // Further processing or handling of the received message
         // });
