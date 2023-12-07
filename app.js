@@ -371,18 +371,16 @@ try {
 
 let count = 0;
 
-let unseenMessages = chatting.messages.map((message) => {
-    console.log(senderId, message.senderId._id, "fnejfnsekncf");
-    if (message.senderId._id.toString() !== senderId.toString() && message.status === "unseen") {
-        count++;
-        return true; // Include the message in the filtered array
-    } else {
-        return false; // Exclude the message from the filtered array
-    }
+chatting.messages.map((message) => {
+  console.log(senderId, message.senderId._id, "fnejfnsekncf");
+  if (message.senderId._id.toString() !== senderId.toString() && message.status === "unseen") {
+      count++;
+  }
 });
 
+
 console.log("Count of unseen messages:", count);
-console.log("Unseen messages:", unseenMessages);
+// console.log("Unseen messages:", unseenMessages);
 
     console.log(count,"nvjernvkjsrnvkswnvksndkjvnsdkjvn jvnfjv djnvjd vidv  dj vdn vikdv dn vdkindnv kjnnd kdfmk kjf");
    let newChatObject = {
