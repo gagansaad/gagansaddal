@@ -436,12 +436,12 @@ console.log("Count of unseen messages:", count);
       
     };
     const lastMessageSender = newChatObject1.messages[0]?.senderId?._id || null;
-
+console.log(lastMessageSender,newChatObject1.seller_id);
     // Determine the otherUserId based on the sender of the last message
-    const otherUserId = lastMessageSender === newChatObject1.buyer_id
-      ? newChatObject1.seller_id
-      : lastMessageSender === newChatObject1.seller_id
-      ? newChatObject1.buyer_id
+    const otherUserId = lastMessageSender.toString() === newChatObject1.buyer_id.toString()
+      ? newChatObject1.seller_id.toString()
+      : lastMessageSender.toString() === newChatObject1.seller_id.toString()
+      ? newChatObject1.buyer_id.toString()
       : null;
     
     console.log(otherUserId,"mila tu milaackdnvkjenvjkefvkfnvkndsfkvnsdfkvnksdfnvksdnvksd");
