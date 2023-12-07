@@ -372,14 +372,14 @@ try {
       chatting.messages.filter((message) => {
         if (message.senderId._id.toString() !== senderId.toString() && message.status === "unseen") {
           count.push(message)
-          console.log(message.senderId._id,count,senderId);
+          // console.log(message.senderId._id,count,senderId);
           return true; // Include the message in the filtered array
         } else {
           return false; // Exclude the message from the filtered array
         }
       });
     }
-    
+    console.log(count.length,"nvjernvkjsrnvkswnvksndkjvnsdkjvn jvnfjv djnvjd vidv  dj vdn vikdv dn vdkindnv kjnnd kdfmk kjf");
    let newChatObject = {
       _id: chatting?._id || null,
       messageCount: count.length || 0,
