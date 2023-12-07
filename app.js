@@ -436,8 +436,8 @@ console.log("Count of unseen messages:", count);
       
     };
     console.log(newChatObject);
-            io.emit('new-chat', newChatObject);
-            io.emit('receive-message', newChatObject1);
+    socket.to(chatRoom).emit('new-chat', newChatObject);
+    socket.to(chatRoom).emit('receive-message', newChatObject1);
             console.log(`Emitted 'receive-message' to room chat-${chatid}`);
           } catch (error) {
             console.error(error);
