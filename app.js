@@ -446,40 +446,36 @@ console.log("Count of unseen messages:", count);
 
         });
      // Modify the 'is-read-message' event handler
-socket.on("is-read-message", async (data) => {
-  try {
-    console.log(data, "fesgdnftyhjsthfgdfgdfgdfgdfg");
-    const { chatId, userId, isread } = data;
-
-    if (isread === "true") {
-      let chatting = await Chat.findById(chatId);
-
-      if (chatting) {
-        const newStatus = 'seen';
-
-        for (const message of chatting.messages) {
-          if (message.senderId.toString() !== userId.toString() && message.status !== newStatus) {
-            message.status = newStatus;
-            console.log("jaadu");
-            let tatta =   await chatting.save();
-        console.log(tatta.messages,"ejnvjsdfnvjdfsnvj");
+     socket.on("is-read-message", async (data) => {
+      try {
+        console.log(data, "fesgdnftyhjsthfgdfgdfgdfgdfg");
+        const { chatId, userId, isread } = data;
+    
+        if (isread === "true") {
+          let chatting = await Chat.findById(chatId);
+    
+          if (chatting) {
+            const newStatus = 'seen';
+    
+            for (const message of chatting.messages) {
+              // Check if the status is not already 'seen'
+              if (message.senderId.toString() !== userId.toString() && message.status !== newStatus) {
+                message.status = newStatus;
+                console.log("jaadu");
+    
+                // Save only if there are messages to update
+                await chatting.save();
+                console.log(chatting.messages, "ejnvjsdfnvjdfsnvj");
+              }
+            }
           }
+    
         }
-       
-        // Save only if there are messages to update
-       
-      
-        
-
-        
+      } catch (error) {
+        console.error(error);
       }
-    }
-
-  } catch (error) {
-    console.error(error);
-  }
-});
-
+    });
+    
         // socket.on('new-chat', (data) => {
         //   console.log(`new chat recieved:`, data);
         //   // Further processing or handling of the received message
