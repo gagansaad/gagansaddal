@@ -449,16 +449,11 @@ console.log(lastMessageSender,newChatObject1.seller_id);
     io.emit('receive-message', newChatObject1);
             // console.log(`Emitted 'receive-message' to room chat-$`,);
             await Notification.sendNotifications(
-              [UserId],
-              getNotification.title,
-              getNotification.body,
-              { model_id: Ad_id, model: adsName },
-              true,
-              {
-                subject: "Payment succedded of post",
-                email_template: "paymentstatus",
-                data: { payment_status: "succeeded" },
-              }
+              [otherUserId],
+              newChatObject1.ads_name,
+              newChatObject1.messages[0].content,
+              { model_id:newChatObject1._id, model: "chat_details" },
+              
             );
           } catch (error) {
             console.error(error);
