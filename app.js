@@ -447,6 +447,7 @@ console.log("Count of unseen messages:", count);
         });
         socket.on("is-read-message" , async (data)=>{
           try{
+            console.log(data,"fesgdnftyhjsthfgdfgdfgdfgdfg");
             const {chatId,userId,isread} = data
             if(isread == "true"){
               let chatting = await Chat.findById(chatId)
