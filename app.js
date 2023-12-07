@@ -443,6 +443,7 @@ console.log("Count of unseen messages:", count);
             console.error(error);
           }
 
+          
         });
         socket.on('new-chat', (data) => {
           console.log(`new chat recieved:`, data);
