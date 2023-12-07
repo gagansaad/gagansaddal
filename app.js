@@ -372,7 +372,7 @@ try {
       chatting.messages.map((message) => {
         if (message.senderId._id.toString() !== senderId.toString() && message.status === "unseen") {
           count.push(message)
-          // console.log(message.senderId._id,count,senderId);
+          console.log(message);
           return true; // Include the message in the filtered array
         } else {
           return false; // Exclude the message from the filtered array
