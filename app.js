@@ -445,32 +445,39 @@ console.log("Count of unseen messages:", count);
 
 
         });
-        socket.on("is-read-message" , async (data)=>{
-          try{
-            console.log(data,"fesgdnftyhjsthfgdfgdfgdfgdfg");
-            const {chatId,userId,isread} = data
-            if(isread == "true"){
-              let chatting = await Chat.findById(chatId)
-              if(chatting){
-                const newStatus = 'seen';
-      for (const message of chatting.messages) {
-       
-        if (message.senderId._id.toString() !== userId.toString()) {
+     // Modify the 'is-read-message' event handler
+socket.on("is-read-message", async (data) => {
+  try {
+    console.log(data, "fesgdnftyhjsthfgdfgdfgdfgdfg");
+    const { chatId, userId, isread } = data;
+
+    if (isread === "true") {
+      let chatting = await Chat.findById(chatId);
+
+      if (chatting) {
+        const newStatus = 'seen';
+
+        for (const message of chatting.messages) {
+          if (message.senderId.toString() !== userId.toString() && message.status !== newStatus) {
             message.status = newStatus;
+          }
         }
+
+        // Save only if there are messages to update
+        if (chatting.messages.length > 0) {
+       let tata =   await chatting.save();
+       console.log(tata,"ejnvjsdfnvjdfsnvj");
+        }
+
+        
+      }
     }
 
-    // // Save only if there are messages to update
-    if (chatting.messages.length > 0) {
-        await chatting.save();
-    }
-              }
-            }
-            
-          }catch(error){
-            console.error(error);
-          }
-        });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
         // socket.on('new-chat', (data) => {
         //   console.log(`new chat recieved:`, data);
         //   // Further processing or handling of the received message
