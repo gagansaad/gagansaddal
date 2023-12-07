@@ -443,12 +443,37 @@ console.log("Count of unseen messages:", count);
             console.error(error);
           }
 
-          
+
         });
-        socket.on('new-chat', (data) => {
-          console.log(`new chat recieved:`, data);
-          // Further processing or handling of the received message
+        socket.on("is-read-message" , async (data)=>{
+          try{
+            const {chatId,userId,isread} = data
+            if(isread == "true"){
+              let chatting = await Chat.findById(chatId)
+              if(chatting){
+                const newStatus = 'seen';
+      for (const message of chatting.messages) {
+       
+        if (message.senderId._id.toString() !== userId.toString()) {
+            message.status = newStatus;
+        }
+    }
+
+    // // Save only if there are messages to update
+    if (chatting.messages.length > 0) {
+        await chatting.save();
+    }
+              }
+            }
+            
+          }catch(error){
+            console.error(error);
+          }
         });
+        // socket.on('new-chat', (data) => {
+        //   console.log(`new chat recieved:`, data);
+        //   // Further processing or handling of the received message
+        // });
         //socket.on('receive-message', (data) => {
         //   console.log(`Received message from socket ${socket.id}:`, data);
         //   // Further processing or handling of the received message
