@@ -9,7 +9,6 @@ const express = require(`express`),
   centralErrorHandlers = require(`./utils/centralErrorHandlers`),
   expressSession = require(`express-session`),
   MongoStore = require(`connect-mongo`);
-  let Notification = require("./resources/notification");
 const { EmailOTPVerification } = require("./resources/sendEmailFunction");
 // DB Setup
 // const {
@@ -247,6 +246,7 @@ app.use((err, req, res, next) => {
   console.log(err);
   res.status(500).send({ error: "seriously something went wrong " });
 });
+let Notification = require("./resources/notification");
 
 //////////////////////////////////////////////////////////
 let Chat = mongoose.model("Chat")
