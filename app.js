@@ -460,14 +460,16 @@ socket.on("is-read-message", async (data) => {
         for (const message of chatting.messages) {
           if (message.senderId.toString() !== userId.toString() && message.status !== newStatus) {
             message.status = newStatus;
+            console.log("jaadu");
+            let tatta =   await chatting.save();
+        console.log(tatta.messages,"ejnvjsdfnvjdfsnvj");
           }
         }
-
+       
         // Save only if there are messages to update
-        if (chatting.messages.length > 0) {
-       let tatta =   await chatting.save();
-       console.log(tatta.messages,"ejnvjsdfnvjdfsnvj");
-        }
+       
+      
+        
 
         
       }
