@@ -209,7 +209,7 @@ exports.ChatList = async (req, res, next) => {
     let userlist=[]
     chat.map((chat)=>{
       let count = [];
-    chat.messages.filter((message) => {
+    chat.messages.map((message) => {
         if (message.senderId._id.toString() !== userId.toString() && message.status === "unseen") {
           count.push(message)
           console.log(message.senderId._id,count,userId);
