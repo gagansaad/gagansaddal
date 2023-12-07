@@ -379,7 +379,7 @@ try {
         }
       });
     }
-    console.log(count.length,"nvjernvkjsrnvkswnvksndkjvnsdkjvn jvnfjv djnvjd vidv  dj vdn vikdv dn vdkindnv kjnnd kdfmk kjf");
+    console.log(count,"nvjernvkjsrnvkswnvksndkjvnsdkjvn jvnfjv djnvjd vidv  dj vdn vikdv dn vdkindnv kjnnd kdfmk kjf");
    let newChatObject = {
       _id: chatting?._id || null,
       messageCount: count.length || 0,
