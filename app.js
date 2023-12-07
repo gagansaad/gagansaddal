@@ -374,14 +374,15 @@ let count = 0;
 chatting.messages.map((message) => {
   console.log(message.senderId._id.toString() === senderId.toString() && message.status === "unseen",message.senderId._id.toString() ,senderId.toString());
   if (message.senderId._id.toString() !== senderId.toString() && message.status === "unseen") {
-      count++;
+      count++
+console.log("Count of unseen messages:", count);
+      
   }
 
 });
 
 
 
-console.log("Count of unseen messages:", count);
 // console.log("Unseen messages:", unseenMessages);
 
     console.log(count,"nvjernvkjsrnvkswnvksndkjvnsdkjvn jvnfjv djnvjd vidv  dj vdn vikdv dn vdkindnv kjnnd kdfmk kjf");
