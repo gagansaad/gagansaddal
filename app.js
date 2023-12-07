@@ -366,23 +366,28 @@ try {
             });
     // console.log("kjv dsnkivniujv dsziunb jkdjm bdfi1",createmsg?.length - 1)
     let chatid = chatting?._id
-    let count = 0;
-    if(chatting){
-      // console.log(chatting.messages.senderId._id,senderId,"don don don don don dond don don");
-      chatting.messages.map((message) => {
-        console.log(senderId , message.senderId._id,"fnejfnsekncf");
-        if (message.senderId._id.toString() !== senderId.toString() && message.status === "unseen") {
-          count++
-          return true; // Include the message in the filtered array
-        } else {
-          return false; // Exclude the message from the filtered array
-        }
-      });
+   // Assuming this code is part of a function or a block
+// where 'chatting' is defined
+
+let count = 0;
+
+let unseenMessages = chatting.messages.map((message) => {
+    console.log(senderId, message.senderId._id, "fnejfnsekncf");
+    if (message.senderId._id.toString() !== senderId.toString() && message.status === "unseen") {
+        count++;
+        return true; // Include the message in the filtered array
+    } else {
+        return false; // Exclude the message from the filtered array
     }
+});
+
+console.log("Count of unseen messages:", count);
+console.log("Unseen messages:", unseenMessages);
+
     console.log(count,"nvjernvkjsrnvkswnvksndkjvnsdkjvn jvnfjv djnvjd vidv  dj vdn vikdv dn vdkindnv kjnnd kdfmk kjf");
    let newChatObject = {
       _id: chatting?._id || null,
-      messageCount: count.length || 0,
+      messageCount: count || 0,
       buyer_name: chatting?.buyer?.userInfo?.name || null,
       buyer_image: chatting?.buyer?.userBasicInfo?.profile_image || null,
 
