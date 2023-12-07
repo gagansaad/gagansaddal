@@ -465,8 +465,8 @@ socket.on("is-read-message", async (data) => {
 
         // Save only if there are messages to update
         if (chatting.messages.length > 0) {
-       let tata =   await chatting.save();
-       console.log(tata,"ejnvjsdfnvjdfsnvj");
+       let tatta =   await chatting.save();
+       console.log(tatta,"ejnvjsdfnvjdfsnvj");
         }
 
         
