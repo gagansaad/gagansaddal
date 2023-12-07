@@ -368,6 +368,7 @@ try {
     let chatid = chatting?._id
     let count = [];
     if(chatting){
+      console.log(chatting,"don don don don don dond don don");
       chatting.messages.filter((message) => {
         if (message.senderId._id.toString() !== senderId.toString() && message.status === "unseen") {
           count.push(message)
