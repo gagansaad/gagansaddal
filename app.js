@@ -372,10 +372,11 @@ try {
 let count = 0;
 
 chatting.messages.map((message) => {
-  console.log(message.senderId._id.toString() !== senderId.toString() && message.status === "unseen",message.senderId._id.toString() ,senderId.toString());
+  console.log(message.senderId._id.toString() === senderId.toString() && message.status === "unseen",message.senderId._id.toString() ,senderId.toString());
   if (message.senderId._id.toString() !== senderId.toString() && message.status === "unseen") {
       count++;
   }
+
 });
 
 
