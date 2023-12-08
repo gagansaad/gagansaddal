@@ -324,9 +324,9 @@ try {
 const currentDateTimeInDallas = DateTime.now().setZone(dallasTimeZone);
 
 // Format the date and time
-const formattedDateTimeInDallas = currentDateTimeInDallas.toLocaleString(DateTime.DATETIME_FULL);
+const formattedDateTimeInDallas = currentDateTimeInDallas.toISOString(DateTime.DATETIME_FULL);
 
-console.log(`Current Date and Time in Dallas (${dallasTimeZone}): ${formattedDateTimeInDallas}`);
+console.log(`Current Date and Time in Dallas (${dallasTimeZone}): ${currentDateTimeInDallas}`,formattedDateTimeInDallas);
             const newMessage = {
               senderId,
               content,
