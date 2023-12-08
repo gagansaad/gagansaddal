@@ -317,11 +317,16 @@ try {
               // Notify the seller about the new chat
               console.log("baba ve kla mrod ni nikkiye lgade jor baba maar na daaba awe hoju khon kharaba dhakka laundi da sah ah ah ah chdgya ve");
             }
-    
+            const currentDate = new Date();
+
+// To get the current date and time in a human-readable format
+const formattedDate = currentDate.toLocaleString();
             const newMessage = {
               senderId,
               content,
-              content_type:content_type || "text"
+              content_type:content_type || "text",
+              timestamp:formattedDate
+
             };
     
           let createmsg = await Chat.findOneAndUpdate(
