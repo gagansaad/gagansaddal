@@ -386,6 +386,7 @@ exports.createEventAds = async (req, res, next) => {
     } = req.body;
     // console.log(currency,"000000000",req.body);
     let taglines = tagline;
+    console.log("object");
     if (taglines) {
       for (i = 0; i < taglines.length; i++) {
         let tags = await tagline_keywords.findOne({ keywords: taglines[i] });
@@ -461,6 +462,7 @@ exports.createEventAds = async (req, res, next) => {
     }
     function createDateTimeObject(dateString, timeString) {
       // Parse date string
+      console.log(dateString, timeString,"vrkjnvjfdnvkjsdfnv kjsfnvkjsfdss");
       const dateComponents = dateString.split('/');
       const month = parseInt(dateComponents[0], 10) - 1; // Months are zero-based
       const day = parseInt(dateComponents[1], 10);
