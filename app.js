@@ -319,13 +319,12 @@ try {
               // Notify the seller about the new chat
               console.log("baba ve kla mrod ni nikkiye lgade jor baba maar na daaba awe hoju khon kharaba dhakka laundi da sah ah ah ah chdgya ve");
             }
-            const dallasTimeZone = 'America/dallas';
-            const dallasUtcOffset = -6;
+            const dallasTimeZone = 'America/chicago';
 
 // Get the current date and time in the Dallas time zone
-const currentDateTimeInDallas = moment().utcOffset(dallasUtcOffset);
+const currentDateTimeInDallas = DateTime.now().setZone(dallasTimeZone);
 
-console.log(currentDateTimeInDallas,"timezone.......................");
+
             const newMessage = {
               senderId,
               content,
