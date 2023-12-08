@@ -318,6 +318,10 @@ try {
               console.log("baba ve kla mrod ni nikkiye lgade jor baba maar na daaba awe hoju khon kharaba dhakka laundi da sah ah ah ah chdgya ve");
             }
             const currentDate = new Date();
+            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+console.log("Time Zone:", timeZone);
+
 // To get the current date and time in a human-readable format
 console.log(currentDate,"see");
 const formattedDate = new Intl.DateTimeFormat('en-US').format(currentDate);
