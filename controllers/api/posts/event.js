@@ -632,6 +632,7 @@ exports.editEventAds = async (req, res, next) => {
 // console.log(start_date, start_time, time_zone);
 function createDateTimeObject(dateString, timeString) {
   // Parse date string
+  console.log(dateString, timeString);
   const dateComponents = dateString.split('/');
   const month = parseInt(dateComponents[0], 10) - 1; // Months are zero-based
   const day = parseInt(dateComponents[1], 10);
