@@ -1,7 +1,7 @@
 const router = require(`express`).Router(),
   authMiddleware = require(`../../../middleware/ensureUserLoggedIn`),
-  controllers = require(`../../../controllers/api/posts/event`);
-
+  controllers = require(`../../../controllers/api/posts/event`),
+  cron = require("../../../controllers/api/posts/cronjob")
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
@@ -40,7 +40,10 @@ router.get(
   authMiddleware.ensureUserLoggedInDummy,
   controllers.getDnymicsData
 );
-
+router.get(
+  `/cron`,
+ cron.CronjobExprireAds
+);
 router.post(
   `/new-event`,
   upload.array("photos", 10),

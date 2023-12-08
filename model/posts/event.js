@@ -194,31 +194,35 @@ const events_Schema = new mongoose.Schema(
   { timestamps: true }
 );
 events_Schema.virtual('expiredAt').get(function () {
-  if (this.adsInfo.date_time || this.adsInfo.date_time.start_date || this.adsInfo.date_time.end_date) {
-    const start_date_str = this.adsInfo.date_time.start_date;
-  const end_date_str = this.adsInfo.date_time.end_date;
+  const dateInfo = this.adsInfo.date_time;
 
-  const startDate = new Date(start_date_str);
-  const endDate = new Date(end_date_str);
-  const daysDifference = Math.abs(Math.floor((endDate - startDate) / (24 * 60 * 60 * 1000)));
-  console.log(daysDifference);
-  if (daysDifference > 30) {
-    // Include one day extra
-    const expiredOn = new Date(this.plan_validity?.expired_on);
-    expiredOn.setDate(expiredOn.getDate() + 1);
-    return expiredOn.toISOString();
-  } else {
-    console.log("america");
-    // Include one day extra
-    const endDate = new Date(this.adsInfo.date_time.end_date);
-    endDate.setDate(endDate.getDate() + 1);
-    return endDate.toISOString();
+  if (dateInfo && dateInfo.start_date && dateInfo.end_date) {
+    const start_date_str = dateInfo.start_date;
+    const end_date_str = dateInfo.end_date;
+
+    const startDate = new Date(start_date_str);
+    const endDate = new Date(end_date_str);
+    const daysDifference = Math.abs(Math.floor((endDate - startDate) / (24 * 60 * 60 * 1000)));
+
+    console.log(daysDifference);
+
+    if (daysDifference > 30 && this.plan_validity && this.plan_validity.expired_on) {
+      console.log("object");
+      const expiredOn = new Date(this.plan_validity.expired_on);
+      expiredOn.setDate(expiredOn.getDate() + 1);
+      return expiredOn.toISOString();
+    } else {
+      console.log("america");
+      // Include one day extra
+      const endDate = new Date(end_date_str);
+      endDate.setDate(endDate.getDate() + 1);
+      return endDate.toISOString();
+    }
   }
-  
-  }
-  
+
   return null;
 });
+
 events_Schema.virtual('active_on_virtual').get(function () {
   // Check if active_on_bumpup_at is not null
   if (this.active_on_bumpup_at !== null) {
