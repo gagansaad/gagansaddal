@@ -61,6 +61,7 @@ const { EmailOTPVerification } = require("./resources/sendEmailFunction");
 //   profileUpdate,
 //   userLeave
 // } = require('./utils/users');
+const { DateTime } = require('luxon');
 const connection = require(`./config/dbConnection`);
 connection(mongoose);
 //chat
@@ -317,14 +318,15 @@ try {
               // Notify the seller about the new chat
               console.log("baba ve kla mrod ni nikkiye lgade jor baba maar na daaba awe hoju khon kharaba dhakka laundi da sah ah ah ah chdgya ve");
             }
-            const currentDate = new Date();
-            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const dallasTimeZone = 'America/Chicago';
 
-console.log("Time Zone:", timeZone);
+// Get the current date and time in the Dallas time zone
+const currentDateTimeInDallas = DateTime.now().setZone(dallasTimeZone);
 
-// To get the current date and time in a human-readable format
-console.log(currentDate,"see");
-const formattedDate = new Intl.DateTimeFormat('en-US').format(currentDate);
+// Format the date and time
+const formattedDateTimeInDallas = currentDateTimeInDallas.toLocaleString(DateTime.DATETIME_FULL);
+
+console.log(`Current Date and Time in Dallas (${dallasTimeZone}): ${formattedDateTimeInDallas}`);
             const newMessage = {
               senderId,
               content,
