@@ -319,6 +319,7 @@ try {
             }
             const currentDate = new Date();
 // To get the current date and time in a human-readable format
+console.log(currentDate,"see maar");
 const formattedDate = currentDate.toLocaleString();
             const newMessage = {
               senderId,
