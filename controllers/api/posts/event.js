@@ -652,11 +652,11 @@ function createDateTimeObject(dateString, timeString) {
 
   return dateTimeObject.toISOString();
 }
-console.log(start_date, start_time);
+console.log(start_date);
   
     const startDateObject = createDateTimeObject(start_date, start_time);
     const endDateObject = createDateTimeObject(end_date, end_time);
-    console.log(endDateObject,"Formatted Date with Time Zone:");
+    console.log(endDateObject,"Formatted Date with Time Zone:",startDateObject);
 // console.log(currency,"000000000");
     let taglines = tagline;
     if (taglines) {

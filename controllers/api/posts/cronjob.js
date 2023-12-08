@@ -6,7 +6,7 @@ const {
   ModelNameByAdsType,
 } = require(`../../../handlers/jsonResponseHandlers`);
 
-cron.schedule("*/1 * * * *", async () => {
+cron.schedule("*/15 * * * *", async () => {
   try {
     function formatDate(date) {
       const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
