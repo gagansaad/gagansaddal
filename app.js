@@ -62,6 +62,7 @@ const { EmailOTPVerification } = require("./resources/sendEmailFunction");
 //   userLeave
 // } = require('./utils/users');
 const { DateTime } = require('luxon');
+const moment = require('moment');
 const connection = require(`./config/dbConnection`);
 connection(mongoose);
 //chat
@@ -327,6 +328,14 @@ const currentDateTimeInDallas = DateTime.now().setZone(dallasTimeZone);
 // const formattedDateTimeInDallas = currentDateTimeInDallas.toISOString(DateTime.DATETIME_FULL);
 
 console.log(`Current Date and Time in Dallas (${dallasTimeZone}): `,currentDateTimeInDallas);
+
+// Get the current date and time
+const currentDateTime = moment();
+
+// Format the date and time
+const formattedDateTime = currentDateTime.format('YYYY-MM-DD HH:mm:ss');
+
+console.log("Current Date and Time:", formattedDateTim)
             const newMessage = {
               senderId,
               content,
