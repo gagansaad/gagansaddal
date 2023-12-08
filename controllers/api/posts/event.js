@@ -632,7 +632,6 @@ exports.editEventAds = async (req, res, next) => {
 // console.log(start_date, start_time, time_zone);
 function createDateTimeObject(dateString, timeString) {
   // Parse date string
-  console.log(dateString, timeString);
   const dateComponents = dateString.split('/');
   const month = parseInt(dateComponents[0], 10) - 1; // Months are zero-based
   const day = parseInt(dateComponents[1], 10);
@@ -648,11 +647,12 @@ function createDateTimeObject(dateString, timeString) {
     hours += 12;
   }
 
-  // Create Date object with time set to 00:00:00 and formatted as "YYYY-MM-DDTHH:mm:ssZ"
-  const dateTimeObject = new Date(Date.UTC(year, month, day, hours, parseInt(minutesStr, 10), 0, 0));
+  // Create Date object with the exact same date and time as provided
+  const dateTimeObject = new Date(year, month, day, hours, parseInt(minutesStr, 10), 0, 0);
 
   return dateTimeObject.toISOString();
 }
+
 console.log(start_date);
   
     const startDateObject = createDateTimeObject(start_date, start_time);
