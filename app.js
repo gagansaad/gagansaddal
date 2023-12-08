@@ -318,7 +318,6 @@ try {
               console.log("baba ve kla mrod ni nikkiye lgade jor baba maar na daaba awe hoju khon kharaba dhakka laundi da sah ah ah ah chdgya ve");
             }
             const currentDate = new Date();
-
 // To get the current date and time in a human-readable format
 const formattedDate = currentDate.toLocaleString();
             const newMessage = {
@@ -328,7 +327,7 @@ const formattedDate = currentDate.toLocaleString();
              timestamp:formattedDate
 
             };
-    
+    console.log(newMessage,"cdlck");
           let createmsg = await Chat.findOneAndUpdate(
               {
                 $and: [
