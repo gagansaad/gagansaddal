@@ -325,17 +325,12 @@ try {
 const currentTimeInDallas = dallasTime.format('YYYY-MM-DD HH:mm:ss');
 console.log('Current time in America/Chicago:', currentTimeInDallas);
 // return;
-            const dallasTimeZone = 'America/chicago';
-
-// Get the current date and time in the Dallas time zone
-const currentDateTimeInDallas = DateTime.now().setZone(dallasTimeZone);
-
 
             const newMessage = {
               senderId,
               content,
               content_type:content_type || "text",
-             timestamp:currentDateTimeInDallas
+             timestamp:currentTimeInDallas
 
             };
     console.log(newMessage,"cdlck");
