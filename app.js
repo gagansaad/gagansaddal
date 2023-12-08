@@ -335,7 +335,7 @@ const currentDateTime = moment();
 // Format the date and time
 const formattedDateTime = currentDateTime.format('YYYY-MM-DD HH:mm:ss');
 
-console.log("Current Date and Time:", formattedDateTim)
+console.log("Current Date and Time:", formattedDateTime)
             const newMessage = {
               senderId,
               content,
