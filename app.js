@@ -62,7 +62,7 @@ const { EmailOTPVerification } = require("./resources/sendEmailFunction");
 //   userLeave
 // } = require('./utils/users');
 const { DateTime } = require('luxon');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const connection = require(`./config/dbConnection`);
 connection(mongoose);
 //chat
