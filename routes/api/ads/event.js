@@ -40,10 +40,7 @@ router.get(
   authMiddleware.ensureUserLoggedInDummy,
   controllers.getDnymicsData
 );
-router.get(
-  `/cron`,
- cron.CronjobExprireAds
-);
+
 router.post(
   `/new-event`,
   upload.array("photos", 10),

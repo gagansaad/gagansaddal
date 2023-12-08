@@ -6,144 +6,7 @@ const {
   ModelNameByAdsType,
 } = require(`../../../handlers/jsonResponseHandlers`);
 
-// cron.schedule("*/1 * * * *", async () => {
-//   try {
-//     function formatDate(date) {
-//       const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
-//       const day = date.getDate().toString().padStart(2, '0');
-//       const year = date.getFullYear().toString();
-    
-//       return `${month}/${day}/${year}`;
-//     }
-//     const currentDate = new Date();
-//         const nextDay = new Date(currentDate);
-//         // nextDay.setDate(currentDate.getDate() + 1);
-//         const formattedDate = formatDate(nextDay);
-//         const formattedDateObject = new Date(formattedDate);
-//         // console.log("Formatted Date Object:", formattedDateObject);
-// // console.log(currentDate,"jmiidid",formattedDate);
-//     const adTypes = [
-//       { key: "job", label: "Jobs" },
-//       { key: "event", label: "Events" },
-//       { key: "Buy & Sell", label: "Buy & Sell" },
-//       { key: "babysitter & nannie", label: "Babysitters & Nannies" },
-//       { key: "Local_biz & Service", label: "Local Biz & Services" },
-//       { key: "rental", label: "Rentals" },
-//     ];
-
-//     for (const adType of adTypes) {
-//       const Model = mongoose.model(adType.key);
-
-//       // Find documents that meet the criteria
-
-//       let documents;
-//       if (adType.key == "event") {
-        
-//         documents = await Model.find(
-//             { status: "active" },
-//          );
-
-//         console.log(documents,"begani shaadi mai abdullah diwana");
-//       } else {
-//         // console.log("raja ki rani se shaadi hai ");
-//         documents = await Model.find({
-//           $and: [
-//             { "plan_validity.expired_on": { $lt: new Date().toISOString } },
-//             { status: "active" },
-//           ],
-//         });
-//       }
-
-//       for (const document of documents) {
-//         // console.log(document);
-//         // Parse the string to a Date object
-//         let expiredOnDate;
-//         let adjustedTime;
-//         if (adType.key == "event") {
-//           // console.log("haye mera kaalu");
-
-//           const currentDate = new Date();
-//         const nextDay = new Date(currentDate);
-//         // nextDay.setDate(currentDate.getDate() + 1);
-//         const formattedDate = formatDate(nextDay);
-//         let data = await Model.find({
-//           $and: [
-//             {
-//               "expiredAt": { $lte: formattedDateObject },
-//               status: "active",
-//             },
-//           ],
-//         });
-        
-//         // Update each document
-//         for (const document of data) {
-//           // Update the document
-//           await Model.updateOne(
-//             {
-//               _id: document._id, // or use your unique identifier
-//             },
-//             {
-//               $set: {
-//                 status: "inactive",
-//                 "plan_validity.expired_on": formattedDateObject,
-//               },
-//             }
-//           );
-//         }
-//         } else {
-//           expiredOnDate = new Date(document.plan_validity.expired_on);
-//           const documentTimezoneOffset = expiredOnDate.getTimezoneOffset();
-//           // console.log(documentTimezoneOffset);
-//           // Calculate the adjustclged time using the document's timezone offset
-//           adjustedTime = new Date(
-//             new Date().getTime() + documentTimezoneOffset * 60000
-//           );
-//           const result = await Model.updateMany(
-//             {
-//               $and: [
-//                 {
-//                   "plan_validity.expired_on": {
-//                     $lt: adjustedTime.toISOString(),
-//                   },
-//                 },
-//                 { status: "active" },
-//               ],
-//             },
-//             {
-//               $set: { status: "inactive" },
-//             }
-//           ).exec();
-//         }
-
-//         // Get the timezone offset from the document's "plan_validity.expired_on" field
-//         // const documentTimezoneOffset = expiredOnDate.getTimezoneOffset();
-//         // // console.log(documentTimezoneOffset);
-//         // // Calculate the adjustclged time using the document's timezone offset
-//         //  adjustedTime = new Date(new Date().getTime() + documentTimezoneOffset * 60000);
-//         // console.log(adjustedTime.toISOString(),"rv drvffbdfbfrbd");
-//         // Update the documents based on the adjusted time
-//         // const result = await Model.updateMany(
-//         //   {
-//         //     $and: [
-//         //       { "plan_validity.expired_on": { $lt: adjustedTime.toISOString() } },
-//         //       { status: "active" },
-//         //     ],
-//         //   },
-//         //   {
-//         //     $set: { status: 'inactive' },
-//         //   }
-//         // ).exec();
-
-//         // console.log(`Updated documents in ${adType.key}:`, result);
-//       }
-//     }
-
-//     console.log("Cron job executed successfully");
-//   } catch (error) {
-//     console.error("Cron job error:", error);
-//   }
-// });
-exports.CronjobExprireAds = async ()=>{
+cron.schedule("*/1 * * * *", async () => {
   try {
     function formatDate(date) {
       const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
@@ -177,17 +40,13 @@ exports.CronjobExprireAds = async ()=>{
       if (adType.key == "event") {
         
         documents = await Model.find(
-            { status: "active" },
-         );
-         documents = documents.map(record => record.toObject({ virtuals: true }));
-         documents = documents.filter(doc => {
-          // const expiredDate = new Date(doc.expiredAt);
-          return doc.expiredAt < formattedDateObject;
-        });
-        
-        // console.log(filteredDocuments);
-        console.log(documents,"begani shaadi mai abdullah diwana");
-        
+          { status: "active" },
+       );
+       documents = documents.map(record => record.toObject({ virtuals: true }));
+       documents = documents.filter(doc => {
+        // const expiredDate = new Date(doc.expiredAt);
+        return doc.expiredAt < formattedDateObject;
+      });
       } else {
         // console.log("raja ki rani se shaadi hai ");
         documents = await Model.find({
@@ -197,7 +56,7 @@ exports.CronjobExprireAds = async ()=>{
           ],
         });
       }
-// return true;
+
       for (const document of documents) {
         // console.log(document);
         // Parse the string to a Date object
@@ -211,15 +70,16 @@ exports.CronjobExprireAds = async ()=>{
         // nextDay.setDate(currentDate.getDate() + 1);
         const formattedDate = formatDate(nextDay);
         let data = await Model.find(
-            {
-              status: "active",
-            });
-        data = data.map(record => record.toObject({ virtuals: true }));
-        data = data.filter(doc => {
-         // const expiredDate = new Date(doc.expiredAt);
-         return doc.expiredAt < formattedDateObject;
-       });
-       
+          {
+            status: "active",
+          });
+      data = data.map(record => record.toObject({ virtuals: true }));
+      data = data.filter(doc => {
+       // const expiredDate = new Date(doc.expiredAt);
+       return doc.expiredAt < formattedDateObject;
+     });
+     
+        
         // Update each document
         for (const document of data) {
           // Update the document
@@ -287,7 +147,9 @@ exports.CronjobExprireAds = async ()=>{
   } catch (error) {
     console.error("Cron job error:", error);
   }
-}
+});
+
+
 cron.schedule("0 7 * * *", async (req, res) => {
   try {
     let datas;
