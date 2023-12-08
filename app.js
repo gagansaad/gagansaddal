@@ -319,6 +319,12 @@ try {
               // Notify the seller about the new chat
               console.log("baba ve kla mrod ni nikkiye lgade jor baba maar na daaba awe hoju khon kharaba dhakka laundi da sah ah ah ah chdgya ve");
             }
+
+            const dallasTime = moment.tz('America/Dallas');
+// Get the current time in America/Dallas
+const currentTimeInDallas = dallasTime.format('YYYY-MM-DD HH:mm:ss');
+console.log('Current time in America/Dallas:', currentTimeInDallas);
+return;
             const dallasTimeZone = 'America/chicago';
 
 // Get the current date and time in the Dallas time zone
