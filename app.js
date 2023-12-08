@@ -324,23 +324,12 @@ try {
 // Get the current date and time in the Dallas time zone
 const currentDateTimeInDallas = DateTime.now().setZone(dallasTimeZone);
 
-// Format the date and time
-// const formattedDateTimeInDallas = currentDateTimeInDallas.toISOString(DateTime.DATETIME_FULL);
 
-console.log(`Current Date and Time in Dallas (${dallasTimeZone}): `,currentDateTimeInDallas);
-
-// Get the current date and time
-const currentDateTime = moment();
-
-// Format the date and time
-const formattedDateTime = currentDateTime.format('YYYY-MM-DD HH:mm:ss');
-
-console.log("Current Date and Time:", formattedDateTime)
             const newMessage = {
               senderId,
               content,
               content_type:content_type || "text",
-             timestamp:formattedDate
+             timestamp:currentDateTimeInDallas
 
             };
     console.log(newMessage,"cdlck");
