@@ -325,7 +325,7 @@ const formattedDate = currentDate.toLocaleString();
               senderId,
               content,
               content_type:content_type || "text",
-              timestamp:formattedDate
+             timestamp:formattedDate
 
             };
     
