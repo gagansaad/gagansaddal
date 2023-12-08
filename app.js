@@ -319,7 +319,7 @@ try {
               // Notify the seller about the new chat
               console.log("baba ve kla mrod ni nikkiye lgade jor baba maar na daaba awe hoju khon kharaba dhakka laundi da sah ah ah ah chdgya ve");
             }
-            const dallasTimeZone = 'America/Dallas';
+            const dallasTimeZone = 'America/dallas';
 
 // Get the current date and time in the Dallas time zone
 const currentDateTimeInDallas = DateTime.now().setZone(dallasTimeZone);
