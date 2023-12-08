@@ -204,7 +204,7 @@ exports.ChatList = async (req, res, next) => {
       path: 'messages.senderId',
       select: 'userInfo.name userBasicInfo.profile_image',
       
-    }).sort({updatedAt:-1});
+    });
     let newChatObject
     let userlist=[]
     chat.map((chat)=>{

@@ -23,7 +23,7 @@ const chatSchema = new mongoose.Schema({
       timestamp: { type: Date, default: Date.now },
     },
   ],
-});
+},{ timestamps: true });
 // chatSchema.plugin(autopopulate);
 const Chat = mongoose.model("Chat", chatSchema);
 
