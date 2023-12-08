@@ -324,7 +324,7 @@ try {
 // Get the current time in America/Dallas
 const currentTimeInDallas = dallasTime.format('YYYY-MM-DD HH:mm:ss');
 console.log('Current time in America/Chicago:', currentTimeInDallas);
-return;
+// return;
             const dallasTimeZone = 'America/chicago';
 
 // Get the current date and time in the Dallas time zone
