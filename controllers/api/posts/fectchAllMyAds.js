@@ -365,7 +365,7 @@ console.log(checkAlreadyExist);
         };
       });
       filterData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      // console.log(filterData,"hdsch");
+      console.log(filterData,"hdsch");
       let adonsData =[]
       adonsData.push(...filterData);
 
@@ -384,7 +384,7 @@ console.log(checkAlreadyExist);
   
     paginatedData = mergedData.slice(startIndex, endIndex);
   // }
-
+console.log(paginatedData);
   // const paginatedData = jobData.slice(startIndex, endIndex);
   // let finalResponse = {
    
