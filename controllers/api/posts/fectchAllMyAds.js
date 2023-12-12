@@ -356,7 +356,7 @@ if(!MyId){
       filterData = results.map((job) => {
         console.log(job,"skmdkskskskskksksks");
         return {
-          ...job._doc,
+          ...job,
 
           price_default: job.price_default,
           view_count: job.viewCount,
