@@ -998,7 +998,7 @@ exports.search = async (req, res, next) => {
     let myid = req.userId;
     const sortval = sortBy === "Oldest" ? { 'plan_validity.active_on': 1 } : { 'plan_validity.active_on': -1 };
     let Distance;
-
+    
     if (maxDistance === "0" || !maxDistance) {
       Distance = 200000;
     } else {
@@ -1024,6 +1024,7 @@ exports.search = async (req, res, next) => {
       // Add filter for rent amount
       dbQuery["adsInfo.rent.amount"] = { $lte: amount };
     }
+    dbquery.status = "active";
     if (min_price && max_price) {
       dbQuery["adsInfo.rent.amount"] = {
         $gte: parseFloat(min_price),
