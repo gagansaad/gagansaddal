@@ -1199,9 +1199,9 @@ exports.search = async (req, res, next) => {
           { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
           // { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } },
           // { "adsInfo.tagline": { $elemMatch: { $regex: searchTerm.trim(), $options: "i" } } },
-          { "adsInfo.categories":  { $regex: searchTerm.trim(), $options: "i" }  },  // Exact case-sensitive match
+          { "adsInfo.category":  { $regex: searchTerm.trim(), $options: "i" }  },  // Exact case-sensitive match
           // { "adsInfo.sub_categories": searchTerm.trim() }, 
-          // {"advertisement_id":searchTerm}
+          {"advertisement_id":searchTerm}
         ],
       };
     }
