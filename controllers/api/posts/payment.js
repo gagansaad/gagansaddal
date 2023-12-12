@@ -807,7 +807,7 @@ AddOnsArr.forEach(itemB => {
 });
 }
 console.log(oldval,"----------------------------------------jnenvjrnvjkfjvbfjv fj vjmfbvhjfnkjfnjfnvjfhjmvbdfjvbfvbfjhjfvjhfhjfvjh------------------");
-oldval.map
+
    data_Obj = {
     status: "active",
     plan_validity: plan_obj,
@@ -816,6 +816,7 @@ oldval.map
   };
   oldval.map((data)=>{
 if(data.name == "Bump up"){
+
   data_Obj.active_on_bumpup_at=data.active_on;
 }
   })
