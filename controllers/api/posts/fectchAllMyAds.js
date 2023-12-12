@@ -339,12 +339,9 @@ if(!MyId){
         .select(selectFields)
         .exec();
 console.log(checkAlreadyExist); 
-     
+checkAlreadyExist.map(adTypeCount => adTypeCount.toObject({ virtuals: true }));
      adTypeCount = checkAlreadyExist;
-     if(adTypeCount){
-      adTypeCount.map(adTypeCount => adTypeCount.toObject({ virtuals: true }));
-      // results.map(FeaturedData => FeaturedData.toJSON({ virtuals: true }));
-    }
+    
     // }
     // checkAlreadyExist = checkAlreadyExist.map(doc => doc.toObject({ virtuals: true }));
     results.push(...checkAlreadyExist);
