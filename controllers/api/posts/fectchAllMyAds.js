@@ -244,7 +244,7 @@ if(adType.key == "job" ||  adType.key == "babysitter & nannie" ||adType.key == "
     
     let BumpupData = await YourModel.find({
       
-      ...adOnsQuery,
+      ...dbQuery,
       "addons_validity.name": "Bump up",
       // _id: { $nin: excludedIds }
     })
