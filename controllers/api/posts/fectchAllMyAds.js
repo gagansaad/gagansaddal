@@ -338,7 +338,7 @@ if(!MyId){
         .populate(commonPopulateOptions)
         .select(selectFields)
         .exec();
-// console.log(checkAlreadyExist); 
+console.log(checkAlreadyExist); 
      
      adTypeCount = checkAlreadyExist;
       
