@@ -1259,6 +1259,7 @@ exports.search = async (req, res, next) => {
           $or: orConditions
         };
       }
+      console.log(orConditions,"vfvfvvfvfv");
       let YourModel = mongoose.model(adType.key);
   let priceDefaultSelect = adType.value;
         let selectFields = { ...commonSelectFields, ...priceDefaultSelect };
