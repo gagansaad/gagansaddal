@@ -242,8 +242,8 @@ roomRentsSchema.virtual("ReportCount", {
   foreignField: "adsid",
   count: true,
 });
-roomRentsSchema.set('toJSON', { virtuals: true });
-roomRentsSchema.set('toObject', { virtuals: true });
+// roomRentsSchema.set('toJSON', { virtuals: true });
+// roomRentsSchema.set('toObject', { virtuals: true });
 
 roomRentsSchema.virtual("isReported", {
   ref: "Report",

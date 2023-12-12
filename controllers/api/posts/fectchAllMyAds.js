@@ -341,7 +341,10 @@ if(!MyId){
 console.log(checkAlreadyExist); 
      
      adTypeCount = checkAlreadyExist;
-      
+     if(adTypeCount){
+      adTypeCount.map(adTypeCount => adTypeCount.toObject({ virtuals: true }));
+      // results.map(FeaturedData => FeaturedData.toJSON({ virtuals: true }));
+    }
     // }
     // checkAlreadyExist = checkAlreadyExist.map(doc => doc.toObject({ virtuals: true }));
     results.push(...checkAlreadyExist);
