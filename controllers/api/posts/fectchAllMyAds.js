@@ -359,7 +359,7 @@ if(adType.key == "job" ||  adType.key == "babysitter & nannie" ||adType.key == "
         };
       });
       filterData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      // console.log(filterData,"hdsch");
+      console.log(filterData,"hdsch");
       let adonsData =[]
       adonsData.push(...filterData);
 
