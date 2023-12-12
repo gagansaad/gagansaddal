@@ -807,13 +807,18 @@ AddOnsArr.forEach(itemB => {
 });
 }
 console.log(oldval,"----------------------------------------jnenvjrnvjkfjvbfjv fj vjmfbvhjfnkjfnjfnvjfhjmvbdfjvbfvbfjhjfvjhfhjfvjh------------------");
+oldval.map
    data_Obj = {
     status: "active",
     plan_validity: plan_obj,
     addons_validity: oldval,
     deletedAt:null
   };
-
+  oldval.map((data)=>{
+if(data.name == "Bump up"){
+  data_Obj.active_on_bumpup_at=data.active_on;
+}
+  })
   
   let statusUpdate = await ModelName.findByIdAndUpdate(
     { _id: ads_id },
