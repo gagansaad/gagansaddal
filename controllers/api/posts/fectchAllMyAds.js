@@ -338,10 +338,10 @@ if(!MyId){
         .populate(commonPopulateOptions)
         .select(selectFields)
         .exec();
-console.log(checkAlreadyExist); 
+
 checkAlreadyExist.map(adTypeCount => adTypeCount.toObject({ virtuals: true }));
      adTypeCount = checkAlreadyExist;
-    
+     console.log(checkAlreadyExist); 
     // }
     // checkAlreadyExist = checkAlreadyExist.map(doc => doc.toObject({ virtuals: true }));
     results.push(...checkAlreadyExist);
@@ -384,7 +384,7 @@ checkAlreadyExist.map(adTypeCount => adTypeCount.toObject({ virtuals: true }));
   
     paginatedData = mergedData.slice(startIndex, endIndex);
   // }
-console.log(paginatedData);
+// console.log(paginatedData);
   // const paginatedData = jobData.slice(startIndex, endIndex);
   // let finalResponse = {
    
