@@ -343,7 +343,8 @@ if(!MyId){
      adTypeCount = checkAlreadyExist;
       
     // }
-    results.push(...adTypeCount);
+    checkAlreadyExist = checkAlreadyExist.map(doc => doc.toObject({ virtuals: true }));
+    results.push(...checkAlreadyExist);
   }
   if(results){
     results.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
@@ -351,7 +352,7 @@ if(!MyId){
   }
   let filterData;
       filterData = results.map((job) => {
-        job.toObject({ virtuals: true })
+        
         return {
           ...job._doc,
 
