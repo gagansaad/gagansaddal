@@ -1024,7 +1024,7 @@ exports.search = async (req, res, next) => {
       // Add filter for rent amount
       dbQuery["adsInfo.rent.amount"] = { $lte: amount };
     }
-    dbquery.status = "active";
+    dbQuery.status = "active";
     if (min_price && max_price) {
       dbQuery["adsInfo.rent.amount"] = {
         $gte: parseFloat(min_price),
