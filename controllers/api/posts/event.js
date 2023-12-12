@@ -1118,7 +1118,8 @@ exports.fetchAll = async (req, res, next) => {
       adOnsQuery.$or = [
         // { "adsInfo.title": { $regex: `^${searchTerm.trim()}`, $options: "i" } },
         { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
-
+        { "adsInfo.tagline": { $elemMatch: { $regex: searchTerm.trim(), $options: "i" } } },
+        { "adsInfo.category":  { $regex: searchTerm.trim(), $options: "i" }},
         { "advertisement_id": searchTerm },
       ];
       queryFinal = {
@@ -1126,6 +1127,8 @@ exports.fetchAll = async (req, res, next) => {
         $or: [
           { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
           // { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } },
+          { "adsInfo.tagline": { $elemMatch: { $regex: searchTerm.trim(), $options: "i" } } },
+          { "adsInfo.category":  { $regex: searchTerm.trim(), $options: "i" }},
           {"advertisement_id":searchTerm}
         ],
       };
