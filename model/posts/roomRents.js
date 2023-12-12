@@ -197,10 +197,7 @@ const roomRentsSchema = new mongoose.Schema(
     },
   },
 
-  { timestamps: true },{
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  }
+  { timestamps: true }
 );
 roomRentsSchema.virtual('active_on_virtual').get(function () {
   // Check if bumpupAt is not null

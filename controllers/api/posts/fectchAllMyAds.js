@@ -346,10 +346,10 @@ if(!MyId){
     checkAlreadyExist = checkAlreadyExist.map(doc => doc.toObject({ virtuals: true }));
     results.push(...checkAlreadyExist);
   }
-  if(results){
-    results.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
-    results.map(FeaturedData => FeaturedData.toJSON({ virtuals: true }));
-  }
+  // if(results){
+  //   results.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
+  //   results.map(FeaturedData => FeaturedData.toJSON({ virtuals: true }));
+  // }
   let filterData;
       filterData = results.map((job) => {
         
