@@ -343,7 +343,7 @@ if(!MyId){
      adTypeCount = checkAlreadyExist;
       
     // }
-    checkAlreadyExist = checkAlreadyExist.map(doc => doc.toObject({ virtuals: true }));
+    // checkAlreadyExist = checkAlreadyExist.map(doc => doc.toObject({ virtuals: true }));
     results.push(...checkAlreadyExist);
   }
   // if(results){
