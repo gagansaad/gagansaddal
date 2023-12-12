@@ -346,6 +346,7 @@ if(!MyId){
     // }
     // checkAlreadyExist = checkAlreadyExist.map(doc => doc.toObject({ virtuals: true }));
     results.push(...checkAlreadyExist);
+    console.log(results,"kmdmvmvmdkc");
   }
   // if(results){
   //   results.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
