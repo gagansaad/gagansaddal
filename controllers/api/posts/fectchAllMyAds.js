@@ -235,8 +235,12 @@ if(!MyId){
     let results = [];
     let adTypeCount;
     for (const adType of adTypes) {
-      // for (let [modelLabel, modelName] of Object.entries(addsModel)) {
 
+      console.log(adType,"kmkmvkkv");
+      // for (let [modelLabel, modelName] of Object.entries(addsModel)) {
+// if(adType == ){
+
+// }
         let priceDefaultSelect = adType.value;
         let selectFields = { ...commonSelectFields, ...priceDefaultSelect };
       // console.log({...priceDefaultSelect,...commonSelectFields});
