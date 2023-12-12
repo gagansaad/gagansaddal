@@ -1227,6 +1227,8 @@ exports.search = async (req, res, next) => {
         if (adType.key == "job") {
           // Add conditions specific to the "job" ad type
           orConditions.push({ "adsInfo.categories": searchTerm.trim() },);
+          console.log("object",orConditions);
+
         }
         if (adType.key == "event") {
           // Add conditions specific to the "job" ad type
@@ -1241,8 +1243,10 @@ exports.search = async (req, res, next) => {
           orConditions.push({ "adsInfo.category.category_name": searchTerm.trim()},);
         }
         if (adType.key == "Local_biz & Service") {
+          console.log("object");
           // Add conditions specific to the "job" ad type
           orConditions.push({ "adsInfo.sub_categories": searchTerm.trim()},{ "adsInfo.categories": searchTerm.trim()},);
+          console.log("object",orConditions);
         }
         if (adType.key == "rental") {
           // Add conditions specific to the "job" ad type
