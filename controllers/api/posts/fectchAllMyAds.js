@@ -162,6 +162,7 @@ exports.CountMyAd = async (req, res, next) => {
 exports.fetchActive = async (req, res, next) => {
   let myid = req.userId
   let MyId = req.query.userId;
+  console.log("rvrvrv");
 if(!MyId){
   return failureJSONResponse(res,  `Please provide Seller Id` );
 }
