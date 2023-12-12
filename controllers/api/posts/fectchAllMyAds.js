@@ -1198,8 +1198,9 @@ exports.search = async (req, res, next) => {
         $or: [
           { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
           { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } },
-          {"adsInfo.categories":{ $regex: searchTerm.trim(), $options: "i" }},
-          {"adsInfo.sub_categories":{ $regex: searchTerm.trim(), $options: "i" }},
+          { "adsInfo.tagline": { $elemMatch: { $regex: searchTerm.trim(), $options: "i" } } },
+          { "adsInfo.categories": searchTerm.trim() },  // Exact case-sensitive match
+          { "adsInfo.sub_categories": searchTerm.trim() }, 
           {"advertisement_id":searchTerm}
         ],
       };
