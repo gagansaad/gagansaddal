@@ -1223,7 +1223,8 @@ exports.search = async (req, res, next) => {
       if (searchTerm) {
         orConditions = [
           { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
-          {"advertisement_id": searchTerm.trim()}
+          {"advertisement_id": searchTerm.trim()},
+          { "adsInfo.tagline": { $elemMatch: { $regex: searchTerm.trim(), $options: "i" } } }
         ];
         if (adType.key == "job") {
           // Add conditions specific to the "job" ad type
