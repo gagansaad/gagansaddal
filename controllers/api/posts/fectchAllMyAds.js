@@ -325,8 +325,8 @@ if(adType.key == "job" ||  adType.key == "babysitter & nannie" ||adType.key == "
     });
     // let bumpId = bumpupData.map(featuredItem => featuredItem._id)
     // commonId = [...excludedIds]
+    console.log(bumpupData);
    }
-   console.log(bumpupData);
 }
         let priceDefaultSelect = adType.value;
         let selectFields = { ...commonSelectFields, ...priceDefaultSelect };
