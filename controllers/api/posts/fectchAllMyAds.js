@@ -239,7 +239,7 @@ if(!MyId){
       console.log(adType,"kmkmvkkv");
       // for (let [modelLabel, modelName] of Object.entries(addsModel)) {
 if(adType.key == "job" ||  adType.key == "babysitter & nannie" ||adType.key == "Local_biz & Service" ||adType.key == "rental"){
-  if (is_myad != "true" ) {
+ 
     let YourModel = mongoose.model(adType.key)
     
     let BumpupData = await YourModel.find({
@@ -326,7 +326,7 @@ if(adType.key == "job" ||  adType.key == "babysitter & nannie" ||adType.key == "
     // let bumpId = bumpupData.map(featuredItem => featuredItem._id)
     // commonId = [...excludedIds]
     console.log(bumpupData);
-   }
+   
 }
         let priceDefaultSelect = adType.value;
         let selectFields = { ...commonSelectFields, ...priceDefaultSelect };
