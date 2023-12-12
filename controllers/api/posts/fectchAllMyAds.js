@@ -345,6 +345,9 @@ if(!MyId){
     // }
     results.push(...adTypeCount);
   }
+  if(results){
+    results.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
+  }
   let filterData;
       filterData = results.map((job) => {
         job.toObject({ virtuals: true })
