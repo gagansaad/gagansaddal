@@ -160,18 +160,17 @@ exports.CountMyAd = async (req, res, next) => {
   }
 };
 exports.fetchActive = async (req, res, next) => {
-  let myid = req.userId
+  let myid = req.userId;
   let MyId = req.query.userId;
   console.log("rvrvrv");
-if(!MyId){
-  return failureJSONResponse(res,  `Please provide Seller Id` );
-}
-  else if (MyId && !isValidMongoObjId(mongoose, MyId)){
-    return failureJSONResponse(res,`Please provide valid Seller Id`);
+  if (!MyId) {
+    return failureJSONResponse(res, `Please provide Seller Id`);
+  } else if (MyId && !isValidMongoObjId(mongoose, MyId)) {
+    return failureJSONResponse(res, `Please provide valid Seller Id`);
   }
-    
+
   try {
-    let data =[]
+    let data = [];
     const mergedData = [];
     let commonPopulateOptions = [
       { path: "adsType", strictPopulate: false, select: "name" },
@@ -180,7 +179,6 @@ if(!MyId){
       { path: "viewCount" },
       { path: "ReportCount" },
       { path: "ReportCount", select: "_id" },
-      
     ];
     if (myid) {
       commonPopulateOptions.push(
@@ -195,20 +193,20 @@ if(!MyId){
       "adsInfo.location": 1,
       "createdAt": 1,
       "_id": 1,
-      "plan_validity":1,
-      "active_on_bumpup_at":1,
+      "plan_validity": 1,
+      "active_on_bumpup_at": 1,
     };
-    
-      // Get the current date
-      const currentDate = new Date();
-      // Convert the date to ISO 8601 format
-      const currentISODate = currentDate.toISOString();
+
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
     var dbQuery = {
       $and: [
         { status: "active" },
         { "plan_validity.expired_on": { $gte: currentISODate } },
-        { userId: MyId }
-      ]
+        { userId: MyId },
+      ],
     };
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -218,191 +216,99 @@ if(!MyId){
       return array;
     }
     let adTypes = [
-      { key: "job", label: "Jobs" ,value:{"adsInfo.salary": 1,
-      "adsInfo.salary_info": 1,}},
-      { key: "event", label: "Events",value:{ "adsInfo.ticket_price": 1} },
-      { key: "Buy & Sell", label: "Buy & Sell",value:{"adsInfo.price": 1,
-      "price_drop": 1} },
-      { key: "babysitter & nannie", label: "Babysitters & Nannies" ,value:{
-        "adsInfo.expected_salary_amount": 1,
-        "adsInfo.expected_salary_rate": 1,
-      }},
-      { key: "Local_biz & Service", label: "Local Biz & Services"},
-      { key: "rental", label: "Rentals" ,value:{
-        "adsInfo.rent": 1,
-        "adsInfo.rent_info": 1,
-      }},
+      {
+        key: "job",
+        label: "Jobs",
+        value: { "adsInfo.salary": 1, "adsInfo.salary_info": 1 },
+      },
+      { key: "event", label: "Events", value: { "adsInfo.ticket_price": 1 } },
+      {
+        key: "Buy & Sell",
+        label: "Buy & Sell",
+        value: { "adsInfo.price": 1, "price_drop": 1 },
+      },
+      {
+        key: "babysitter & nannie",
+        label: "Babysitters & Nannies",
+        value: {
+          "adsInfo.expected_salary_amount": 1,
+          "adsInfo.expected_salary_rate": 1,
+        },
+      },
+      { key: "Local_biz & Service", label: "Local Biz & Services" },
+      {
+        key: "rental",
+        label: "Rentals",
+        value: { "adsInfo.rent": 1, "adsInfo.rent_info": 1 },
+      },
     ];
     let results = [];
     let adTypeCount;
     for (const adType of adTypes) {
+      console.log(adType, "kmkmvkkv");
 
-      console.log(adType,"kmkmvkkv");
-      // for (let [modelLabel, modelName] of Object.entries(addsModel)) {
-// if(adType.key == "job" ||  adType.key == "babysitter & nannie" ||adType.key == "Local_biz & Service" ||adType.key == "rental"){
- 
-//     let YourModel = mongoose.model(adType.key)
-    
-//     let BumpupData = await YourModel.find({
-      
-//       ...dbQuery,
-//       "addons_validity.name": "Bump up",
-//       // _id: { $nin: excludedIds }
-//     })
-//       .populate({
-//         path: "adsInfo.image",
-//         strictPopulate: false,
-//         select: "url",
-//       })
-//       .populate({ path: "favoriteCount", select: "_id" })
-//       .populate({ path: "viewCount" })
-//       .populate({
-//         path: "isFavorite",
-//         select: "user",
-//         match: { user: myid },
-//       });
-
-//     let bumpUpDates = BumpupData.map((data) => {
-//       data.toObject({ virtuals: true })
-//       // Filter addons_validity to get only the "Bump up" addon
-//       let bumpUpAddon = data.addons_validity.find(
-//         (addon) => addon.name === "Bump up"
-//       );
-//       if (bumpUpAddon) {
-//         return {
-//           active_on: bumpUpAddon.active_on,
-//           expired_on: bumpUpAddon.expired_on,
-//           interval: bumpUpAddon.days, // Add the interval property
-//         };
-//       }
-//       return null; // If "Bump up" addon is not found, return null
-//     }).filter((dates) => dates !== null);
-
-//     const resultDates = [];
-
-//     for (const dateRange of bumpUpDates) {
-//       const { active_on, expired_on, interval } = dateRange;
-//       const startDate = new Date(active_on);
-//       const endDate = new Date(expired_on);
-//       const recordDates = []; // Create a separate array for each record
-
-//       while (startDate <= endDate) {
-//         recordDates.push(startDate.toISOString().split("T")[0]);
-//         startDate.setDate(startDate.getDate() + interval);
-//       }
-
-//       resultDates.push(recordDates); // Push the record's dates array into the result array
-//     }
-
-//     const today = new Date().toISOString().split("T")[0]; // Get today's date in the format "YYYY-MM-DD"
-
-//     // Filter adonsData to find records where resultDates array contains today's date
-//     const recordsWithTodayDate = BumpupData.filter((data, index) => {
-//       const recordDates = resultDates[index]; // Get the resultDates array for the current record
-//       return recordDates.includes(today);
-//     });
-
-//     const numberOfRecordsToPick = 3;
-//     const pickedRecords = [];
-
-//     while (
-//       pickedRecords.length < numberOfRecordsToPick &&
-//       recordsWithTodayDate.length > 0
-//     ) {
-//       const randomIndex = Math.floor(
-//         Math.random() * recordsWithTodayDate.length
-//       );
-//       const randomRecord = recordsWithTodayDate.splice(randomIndex, 1)[0]; // Remove and pick the record
-//       pickedRecords.push(randomRecord);
-//     }
-
-//    let bumpupData = pickedRecords.map((job) => {
-//       return {
-//         ...job._doc,
-//         // Add other job fields as needed
-//         view_count: job.viewCount,
-//         favorite_count: job.favoriteCount,
-//         is_favorite: !!job.isFavorite,
-//       };
-//     });
-//     // let bumpId = bumpupData.map(featuredItem => featuredItem._id)
-//     // commonId = [...excludedIds]
-//     console.log(bumpupData);
-   
-// }
-        let priceDefaultSelect = adType.value;
-        let selectFields = { ...commonSelectFields, ...priceDefaultSelect };
-      // console.log({...priceDefaultSelect,...commonSelectFields});
+      let priceDefaultSelect = adType.value;
+      let selectFields = { ...commonSelectFields, ...priceDefaultSelect };
       let YourModel = mongoose.model(adType.key);
       let checkAlreadyExist = await YourModel.find(dbQuery)
         .populate(commonPopulateOptions)
         .select(selectFields)
         .exec();
 
-checkAlreadyExist.map(adTypeCount => adTypeCount.toObject({ virtuals: true }));
-     adTypeCount = checkAlreadyExist;
-     console.log(checkAlreadyExist); 
-    // }
-    // checkAlreadyExist = checkAlreadyExist.map(doc => doc.toObject({ virtuals: true }));
-    results.push(...checkAlreadyExist);
-  }
-  if(results){
-    results.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
-    // results.map(FeaturedData => FeaturedData.toJSON({ virtuals: true }));
-  }
-  let filterData;
-      filterData = results.map((job) => {
-        
-        return {
-          ...job._doc,
+      checkAlreadyExist = checkAlreadyExist.map((doc) => doc.toObject({ virtuals: true }));
+      adTypeCount = checkAlreadyExist;
+      console.log(checkAlreadyExist);
+      results.push(...checkAlreadyExist);
+    }
 
-          price_default: job.price_default,
-          view_count: job.viewCount,
-          ...(myid && {
-            favorite_count: job.favoriteCount,
-            is_favorite: !!job.isFavorite,
-          }),
-        };
-      });
-      filterData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      console.log(filterData,"hdsch");
-      let adonsData =[]
-      adonsData.push(...filterData);
+    if (results) {
+      results = results.map((FeaturedData) => FeaturedData.toObject({ virtuals: true }));
+    }
 
-      mergedData.push(...adonsData);
-  // data = shuffleArray(mergedData);
-  let totalresult = mergedData?.length
-  let paginationlength = req.query.perpage || 40
-  const perPage = parseInt(paginationlength) || 40;
-  const page = parseInt(req.query.page) || 1;
-  let paginatedData
-  // if (perPage === 0) {
-  //   paginatedData = []; // Create an empty array
-  // } else {
+    let filterData;
+    filterData = results.map((job) => {
+      return {
+        ...job._doc,
+        price_default: job.price_default,
+        view_count: job.viewCount,
+        ...(myid && {
+          favorite_count: job.favoriteCount,
+          is_favorite: !!job.isFavorite,
+        }),
+      };
+    });
+    filterData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    console.log(filterData, "hdsch");
+    let adonsData = [];
+    adonsData.push(...filterData);
+
+    mergedData.push(...adonsData);
+    let totalresult = mergedData?.length;
+    let paginationlength = req.query.perpage || 40;
+    const perPage = parseInt(paginationlength) || 40;
+    const page = parseInt(req.query.page) || 1;
+    let paginatedData;
+
     const startIndex = (page - 1) * perPage;
     const endIndex = startIndex + perPage;
-  
+
     paginatedData = mergedData.slice(startIndex, endIndex);
-  // }
-// console.log(paginatedData);
-  // const paginatedData = jobData.slice(startIndex, endIndex);
-  // let finalResponse = {
-   
-  // };
-  // return successJSONResponse(res, finalResponse);
-    return successJSONResponse(res, { message: `success`,
-    total: totalresult,
-    perPage: paginationlength,
-    totalPages: Math.ceil(totalresult / perPage),
-    currentPage: page,
-    records: paginatedData,
-    
-    status: 200,  });
+
+    return successJSONResponse(res, {
+      message: `success`,
+      total: totalresult,
+      perPage: paginationlength,
+      totalPages: Math.ceil(totalresult / perPage),
+      currentPage: page,
+      records: paginatedData,
+      status: 200,
+    });
   } catch (error) {
     console.log(error);
     return failureJSONResponse(res, { message: `Something went wrong 11` });
   }
 };
+
 
 exports.fetchActie = async (req, res, next) => {
  
