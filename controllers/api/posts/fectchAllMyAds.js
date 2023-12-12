@@ -1217,10 +1217,11 @@ exports.search = async (req, res, next) => {
     ];
     console.log(queryFinal,"vdv");
     let adTypeCount;
+    let orConditions;
     for (const adType of adTypes) {
      
       if (searchTerm) {
-        let orConditions = [
+        orConditions = [
           { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
           {"advertisement_id": searchTerm.trim()}
         ];
