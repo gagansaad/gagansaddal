@@ -1227,31 +1227,31 @@ exports.search = async (req, res, next) => {
         ];
         if (adType.key == "job") {
           // Add conditions specific to the "job" ad type
-          orConditions.push({ "adsInfo.categories": searchTerm.trim() },);
+          orConditions.push({ "adsInfo.categories": { $regex: searchTerm.trim() } },);
           console.log("job",orConditions);
 
         }
         if (adType.key == "event") {
           // Add conditions specific to the "job" ad type
-          orConditions.push({ "adsInfo.category": searchTerm.trim()},);
+          orConditions.push({ "adsInfo.category": { $regex: searchTerm.trim() }},);
         }
         if (adType.key == "Buy & Sell") {
           // Add conditions specific to the "job" ad type
-          orConditions.push({ "adsInfo.sub_category": searchTerm.trim()},{ "adsInfo.category": searchTerm.trim()},);
+          orConditions.push({ "adsInfo.sub_category": { $regex: searchTerm.trim() }},{ "adsInfo.category": { $regex: searchTerm.trim() }},);
         }
         if (adType.key == "babysitter & nannie") {
           // Add conditions specific to the "job" ad type
-          orConditions.push({ "adsInfo.category.category_name": searchTerm.trim()},);
+          orConditions.push({ "adsInfo.category.category_name": { $regex: searchTerm.trim() }},);
         }
         if (adType.key == "Local_biz & Service") {
           console.log("object");
           // Add conditions specific to the "job" ad type
-          orConditions.push({ "adsInfo.sub_categories": searchTerm.trim()},{ "adsInfo.categories": searchTerm.trim()},);
+          orConditions.push({ "adsInfo.sub_categories": { $regex: searchTerm.trim() }},{ "adsInfo.categories": { $regex: searchTerm.trim() }},);
           console.log("Local_biz & Service",orConditions);
         }
         if (adType.key == "rental") {
           // Add conditions specific to the "job" ad type
-          orConditions.push({ "adsInfo.rental_type": searchTerm.trim()},{ "adsInfo.category": searchTerm.trim()},);
+          orConditions.push({ "adsInfo.rental_type": { $regex: searchTerm.trim() }},{ "adsInfo.category": { $regex: searchTerm.trim() }},);
           console.log("ental",orConditions);
         }
         queryFinal = {
