@@ -262,7 +262,7 @@ if(adType.key == "job" ||  adType.key == "babysitter & nannie" ||adType.key == "
       });
 
     let bumpUpDates = BumpupData.map((data) => {
-      data.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
+      data.toObject({ virtuals: true })
       // Filter addons_validity to get only the "Bump up" addon
       let bumpUpAddon = data.addons_validity.find(
         (addon) => addon.name === "Bump up"
