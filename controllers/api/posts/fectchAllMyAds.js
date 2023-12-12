@@ -1227,31 +1227,31 @@ exports.search = async (req, res, next) => {
         ];
         if (adType.key == "job") {
           // Add conditions specific to the "job" ad type
-          orConditions.push({ "adsInfo.categories": { $regex: searchTerm.trim() } },);
+          orConditions.push({ "adsInfo.categories":  { $regex: searchTerm.trim(), $options: "i" } },);
           console.log("job",orConditions);
 
         }
         if (adType.key == "event") {
           // Add conditions specific to the "job" ad type
-          orConditions.push({ "adsInfo.category": { $regex: searchTerm.trim() }},);
+          orConditions.push({ "adsInfo.category":  { $regex: searchTerm.trim(), $options: "i" }},);
         }
         if (adType.key == "Buy & Sell") {
           // Add conditions specific to the "job" ad type
-          orConditions.push({ "adsInfo.sub_category": { $regex: searchTerm.trim() }},{ "adsInfo.category": { $regex: searchTerm.trim() }},);
+          orConditions.push({ "adsInfo.sub_category":  { $regex: searchTerm.trim(), $options: "i" }},{ "adsInfo.category":  { $regex: searchTerm.trim(), $options: "i" }},);
         }
         if (adType.key == "babysitter & nannie") {
           // Add conditions specific to the "job" ad type
-          orConditions.push({ "adsInfo.category.category_name": { $regex: searchTerm.trim() }},);
+          orConditions.push({ "adsInfo.category.category_name":  { $regex: searchTerm.trim(), $options: "i" }},);
         }
         if (adType.key == "Local_biz & Service") {
           console.log("object");
           // Add conditions specific to the "job" ad type
-          orConditions.push({ "adsInfo.sub_categories": { $regex: searchTerm.trim() }},{ "adsInfo.categories": { $regex: searchTerm.trim() }},);
+          orConditions.push({ "adsInfo.sub_categories":  { $regex: searchTerm.trim(), $options: "i" }},{ "adsInfo.categories":  { $regex: searchTerm.trim(), $options: "i" }},);
           console.log("Local_biz & Service",orConditions);
         }
         if (adType.key == "rental") {
           // Add conditions specific to the "job" ad type
-          orConditions.push({ "adsInfo.rental_type": { $regex: searchTerm.trim() }},{ "adsInfo.category": { $regex: searchTerm.trim() }},);
+          orConditions.push({ "adsInfo.rental_type":  { $regex: searchTerm.trim(), $options: "i" }},{ "adsInfo.category":  { $regex: searchTerm.trim(), $options: "i" }},);
           console.log("ental",orConditions);
         }
         queryFinal = {
