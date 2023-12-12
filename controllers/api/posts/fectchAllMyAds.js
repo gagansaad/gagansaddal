@@ -1130,6 +1130,7 @@ exports.search = async (req, res, next) => {
         let selectFields = { ...commonSelectFields, ...priceDefaultSelect };
         
     let checkAlreadyExist = await YourModel.find({
+      status: "active",
       $or: [queryFinal],
     })
     .populate(commonPopulateOptions)
