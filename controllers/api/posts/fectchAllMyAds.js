@@ -1191,20 +1191,7 @@ exports.search = async (req, res, next) => {
   
   console.log({dbQuery},"cdcdck");
     let queryFinal = dbQuery;
-    if (searchTerm) {
-      queryFinal = {
-        ...locationQuery,
-        ...dbQuery,
-        $or: [
-          { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
-          // { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } },
-          // { "adsInfo.tagline": { $elemMatch: { $regex: searchTerm.trim(), $options: "i" } } },
-          { "adsInfo.category":  { $regex: searchTerm.trim(), $options: "i" }  },  // Exact case-sensitive match
-          // { "adsInfo.sub_categories": searchTerm.trim() }, 
-          {"advertisement_id":searchTerm}
-        ],
-      };
-    }
+   
     if (dbQuery["adsInfo.location.coordinates"]) {
       console.log("gagan ni jnsj");
       queryFinal["adsInfo.location"] = dbQuery["adsInfo.location"];
@@ -1231,6 +1218,49 @@ exports.search = async (req, res, next) => {
     console.log(queryFinal,"vdv");
     let adTypeCount;
     for (const adType of adTypes) {
+     
+      if (searchTerm) {
+        let orConditions = [
+          { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
+          {"advertisement_id": searchTerm.trim()}
+        ];
+        if (adType.key == "job") {
+          // Add conditions specific to the "job" ad type
+          orConditions.push({ "adsInfo.categories": searchTerm.trim() },);
+        }
+        if (adType.key == "event") {
+          // Add conditions specific to the "job" ad type
+          orConditions.push({ "adsInfo.category": searchTerm.trim()},);
+        }
+        if (adType.key == "Buy & Sell") {
+          // Add conditions specific to the "job" ad type
+          orConditions.push({ "adsInfo.sub_category": searchTerm.trim()},{ "adsInfo.category": searchTerm.trim()},);
+        }
+        if (adType.key == "babysitter & nannie") {
+          // Add conditions specific to the "job" ad type
+          orConditions.push({ "adsInfo.category.category_name": searchTerm.trim()},);
+        }
+        if (adType.key == "Local_biz & Service") {
+          // Add conditions specific to the "job" ad type
+          orConditions.push({ "adsInfo.sub_categories": searchTerm.trim()},{ "adsInfo.categories": searchTerm.trim()},);
+        }
+        if (adType.key == "rental") {
+          // Add conditions specific to the "job" ad type
+          orConditions.push({ "adsInfo.rental_type": searchTerm.trim()},{ "adsInfo.category": searchTerm.trim()},);
+        }
+        queryFinal = {
+          ...locationQuery,
+          ...dbQuery,
+          $or: [
+            { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
+            // { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } },
+            // { "adsInfo.tagline": { $elemMatch: { $regex: searchTerm.trim(), $options: "i" } } },
+            { "adsInfo.category":  { $regex: searchTerm.trim(), $options: "i" }  },  // Exact case-sensitive match
+            // { "adsInfo.sub_categories": searchTerm.trim() }, 
+            {"advertisement_id":searchTerm}
+          ],
+        };
+      }
       let YourModel = mongoose.model(adType.key);
   let priceDefaultSelect = adType.value;
         let selectFields = { ...commonSelectFields, ...priceDefaultSelect };
