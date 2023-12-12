@@ -347,6 +347,7 @@ if(!MyId){
   }
   if(results){
     results.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
+    results.map(FeaturedData => FeaturedData.toJSON({ virtuals: true }));
   }
   let filterData;
       filterData = results.map((job) => {
