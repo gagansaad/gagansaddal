@@ -816,8 +816,8 @@ console.log(oldval,"----------------------------------------jnenvjrnvjkfjvbfjv f
   };
   oldval.map((data)=>{
 if(data.name == "Bump up"){
-
-  data_Obj.active_on_bumpup_at=data.active_on;
+  let date_of_time = new Date(data.active_on).toISOString();
+  data_Obj.active_on_bumpup_at=date_of_time;
 }
   })
   
