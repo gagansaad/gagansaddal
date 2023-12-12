@@ -346,6 +346,7 @@ if(adType.key == "job" ||  adType.key == "babysitter & nannie" ||adType.key == "
   }
   let filterData;
       filterData = results.map((job) => {
+        job.toObject({ virtuals: true })
         return {
           ...job._doc,
 

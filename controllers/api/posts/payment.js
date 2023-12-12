@@ -806,20 +806,14 @@ AddOnsArr.forEach(itemB => {
   }
 });
 }
-console.log(oldval,"----------------------------------------jnenvjrnvjkfjvbfjv fj vjmfbvhjfnkjfnjfnvjfhjmvbdfjvbfvbfjhjfvjhfhjfvjh------------------");
-
+// console.log(oldval,"----------------------------------------jnenvjrnvjkfjvbfjv fj vjmfbvhjfnkjfnjfnvjfhjmvbdfjvbfvbfjhjfvjhfhjfvjh------------------");
    data_Obj = {
     status: "active",
     plan_validity: plan_obj,
     addons_validity: oldval,
     deletedAt:null
   };
-  oldval.map((data)=>{
-if(data.name == "Bump up"){
-  let date_of_time = new Date(data.active_on).toISOString();
-  data_Obj.active_on_bumpup_at=date_of_time;
-}
-  })
+
   
   let statusUpdate = await ModelName.findByIdAndUpdate(
     { _id: ads_id },
