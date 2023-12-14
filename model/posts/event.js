@@ -209,7 +209,7 @@ const startIN = this.plan_validity.active_on;
     if (daysDifference > 30 && this.plan_validity && this.plan_validity.expired_on) {
       console.log("object");
       const expiredOn = new Date(this.plan_validity.expired_on);
-      expiredOn.setDate(expiredOn.getDate() + 1);
+      expiredOn.setDate(expiredOn.getDate());
       return expiredOn.toISOString();
     } else {
       console.log("america");
