@@ -50,9 +50,7 @@ console.log(formattedDateObject);
        );
        documents = documents.map(record => record.toObject({ virtuals: true }));
        documents = documents.filter(doc => {
-        if (adType.key == "event") {
-         console.log(doc,"BRAZZERS----------------NAUGTY AMERICA----------",doc.expiredAt < formattedDateObject ,doc.expiredAt , formattedDateObject);
-        }
+     
         // const expiredDate = new Date(doc.expiredAt);
         
         return doc.expiredAt < formattedDateObject;
