@@ -195,9 +195,9 @@ const events_Schema = new mongoose.Schema(
 );
 events_Schema.virtual('expiredAt').get(function () {
   const dateInfo = this.adsInfo.date_time;
-
+const startIN = this.plan_validity.active_on;
   if (dateInfo && dateInfo.start_date && dateInfo.end_date) {
-    const start_date_str = dateInfo.start_date;
+    const start_date_str = startIN;
     const end_date_str = dateInfo.end_date;
 
     const startDate = new Date(start_date_str);
