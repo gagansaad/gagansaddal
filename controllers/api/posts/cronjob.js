@@ -17,9 +17,15 @@ cron.schedule("*/15 * * * *", async () => {
     }
     const currentDate = new Date();
         const nextDay = new Date(currentDate);
-        // nextDay.setDate(currentDate.getDate() + 1);
+        nextDay.setDate(currentDate.getDate() + 1);
         const formattedDate = formatDate(nextDay);
-        const formattedDateObject = new Date(formattedDate);
+        console.log(formattedDate);
+        const formattedDateObjectt = new Date(formattedDate);
+        const formattedDateObject = formattedDateObjectt.toISOString();
+
+console.log(formattedDateObject);
+
+        // console.log(formattedDateString.toISOString,"fb fhbfhv");
         // console.log("Formatted Date Object:", formattedDateObject);
 // console.log(currentDate,"jmiidid",formattedDate);
     const adTypes = [
@@ -44,7 +50,11 @@ cron.schedule("*/15 * * * *", async () => {
        );
        documents = documents.map(record => record.toObject({ virtuals: true }));
        documents = documents.filter(doc => {
+        if (adType.key == "event") {
+         console.log(doc,"BRAZZERS----------------NAUGTY AMERICA----------",doc.expiredAt < formattedDateObject ,doc.expiredAt , formattedDateObject);
+        }
         // const expiredDate = new Date(doc.expiredAt);
+        
         return doc.expiredAt < formattedDateObject;
       });
       } else {
@@ -58,13 +68,13 @@ cron.schedule("*/15 * * * *", async () => {
       }
 
       for (const document of documents) {
-        // console.log(document);
+       
         // Parse the string to a Date object
         let expiredOnDate;
         let adjustedTime;
         if (adType.key == "event") {
           // console.log("haye mera kaalu");
-
+          console.log(document,"kallu");
           const currentDate = new Date();
         const nextDay = new Date(currentDate);
         // nextDay.setDate(currentDate.getDate() + 1);
@@ -78,11 +88,12 @@ cron.schedule("*/15 * * * *", async () => {
        // const expiredDate = new Date(doc.expiredAt);
        return doc.expiredAt < formattedDateObject;
      });
-     
+     console.log("object",formattedDateObject);
         
         // Update each document
         for (const document of data) {
           // Update the document
+          // console.log("object",formattedDateObject);
           await Model.updateOne(
             {
               _id: document._id, // or use your unique identifier

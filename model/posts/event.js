@@ -215,6 +215,7 @@ const startIN = this.plan_validity.active_on;
       console.log("america");
       // Include one day extra
       const endDate = new Date(end_date_str);
+      console.log("Naughty America" ,endDate);
       endDate.setDate(endDate.getDate() + 1);
       return endDate.toISOString();
     }
