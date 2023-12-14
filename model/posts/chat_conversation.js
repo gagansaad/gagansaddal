@@ -6,7 +6,8 @@ const chatSchema = new mongoose.Schema({
   buyer: { type: mongoose.Schema.Types.ObjectId, ref: `user`,required:true },
   seller: { type: mongoose.Schema.Types.ObjectId, ref: `user` ,required:true},
   ads_type: { type: String, // Field to store the model name
-  enum: ['job', 'rental','event','Buy & Sell',"babysitter & nannie","Local_biz & Service"], },// Add your model names here },
+  enum: ['job', 'rental','event','Buy & Sell',"babysitter & nannie","Local_biz & Service"], },
+  type_name:{ type: String,},// Add your model names here },
   messages: [
     {
       senderId: { type: mongoose.Schema.Types.ObjectId, ref: `user` ,required:true},

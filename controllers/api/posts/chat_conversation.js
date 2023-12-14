@@ -220,7 +220,7 @@ exports.ChatList = async (req, res, next) => {
        _id: chat?._id || null,
        messageCount: count.length || 0,
        buyer_name: chat?.buyer?.userInfo?.name || null,
-       buyer_image: chat?.buyer?.userBasicInfo?.profile_image || null,
+       buyer_image: chat?.buyer?.userBasicInfo?.profile_image == "null" ? null : chat?.buyer?.userBasicInfo?.profile_image || null,
 
        buyerId: chat?.buyer?._id || null,
        seller_name: chat?.seller?.userInfo?.name || null,
