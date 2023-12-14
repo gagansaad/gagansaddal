@@ -62,7 +62,7 @@ const { EmailOTPVerification } = require("./resources/sendEmailFunction");
 //   userLeave
 // } = require('./utils/users');
 const { DateTime } = require('luxon');
-const moment = require('moment-timezone');
+// const moment = require('moment-timezone');
 const connection = require(`./config/dbConnection`);
 connection(mongoose);
 //chat
@@ -523,6 +523,47 @@ console.log(lastMessageSender,newChatObject1.seller_id);
 } catch (error) {
     console.error("error ==================>", error);
 }
+const NodeGeocoder = require('node-geocoder');
+const moment = require('moment-timezone');
+
+const geocoder = NodeGeocoder({
+  provider: 'openstreetmap',
+  language: 'en',
+});
+
+async function getCurrentTime(latitude, longitude) {
+  try {
+    // Step 1: Reverse Geocoding
+    const location = await geocoder.reverse({ lat: latitude, lon: longitude, language: 'en' });
+    const city = location;
+console.log(city);
+    // Step 2: Time Zone Lookup
+    const timeZone = moment.tz.guess();
+
+    // Step 3: Get Current Time
+    const currentTime = moment().tz(timeZone).format('YYYY-MM-DD HH:mm:ss');
+
+    console.log(`Current time in ${city} (${latitude}, ${longitude}): ${currentTime} (${timeZone})`);
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+// Example coordinates for New York City
+
+
+// Example coordinates for New York City
+const latitude = 32.7767;  // Replace with your desired latitude
+const longitude = -96.7970; 
+
+getCurrentTime(latitude, longitude);
+
+
+// Example usage
+ // Replace with your desired longitude
+
+
+
 
 /////////////////////////////////////////////////////////
 app.listen(process.env.PORT, () =>
