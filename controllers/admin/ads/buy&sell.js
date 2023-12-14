@@ -27,7 +27,7 @@ exports.fetchAll = async (req, res, next) => {
     let totalViewCount = 0; // Initialize the total view count variable
     let todayViewCount = 0; // Initialize the view count for records created today
     let todayRecordsCount = 0;
-    let searchTerm = req.body.searchTerm;
+    let searchTerm = req.query.searchTerm || "";
     let dbQuery = {};
     const {
       status,
