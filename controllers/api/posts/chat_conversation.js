@@ -37,12 +37,12 @@ const mongoose = require("mongoose"),
       let chat = await Chat.findOne({
         $and: [
           { ads_id: ads_id },
-          {
-            $or: [
-              { 'buyer': userId },
-              { 'seller': userId },
-            ],
-          },
+          // {
+          //   $or: [
+              { 'buyer': buyerId },
+              { 'seller': sellerId },
+          //   ],
+          // },
         ],
       })
       .populate({
