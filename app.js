@@ -271,13 +271,25 @@ try {
         console.log(event,'=======event>');
         console.log(data,'=======data>');
     });
-    
+    const onlineUsers = {};
     io.on("connection", async (socket) => {
         // console.log("socket.handshake.query", socket);
         console.log("socket Connected ", socket.id)
+
         setTimeout(function(){
             socket.send('Sent a message 4seconds after connection!');
          }, 4000);
+
+         console.log("socket Connected ", socket.id);
+
+  // Get user ID from query parameters (you may need to modify this based on your authentication)
+  const userId = socket.handshake.query.userId;
+
+  // Set user as online
+  onlineUsers[userId] = true;
+
+  // Emit online status to other users
+  io.emit("user-status", { userId, status: "online" });
          socket.on('join-room', (chat_id) => {
           console.log(chat_id,"tu meri jaan ");
           socket.join(chat_id);
@@ -293,12 +305,12 @@ try {
             let chat = await Chat.findOne({
               $and: [
                 { ads_id: ads_id },
-                {
-                  $or: [
+                // {
+                //   $: [
                     { 'buyer': buyerId },
                     { 'seller': sellerId },
-                  ],
-                },
+                //   ],
+                // },
               ],
             });
     
@@ -514,6 +526,10 @@ console.log(lastMessageSender,newChatObject1.seller_id);
        
         socket.on("disconnect", () => {
             console.log("socket is disconnect");
+            onlineUsers[userId] = false;
+
+            // Emit offline status to other users
+            io.emit("user-status", { userId, status: "offline" });
         })
     });
 
