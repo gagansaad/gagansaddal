@@ -778,10 +778,28 @@ let plan_duration = checkdata.plan_validity
 let expiredDate = new Date(plan_duration.expired_on)
   let currentDae = new Date()
   
-  if(checkdata.status == "deleted" || checkdata.status == "draft"  ){
-    oldval = [...AddOnsArr];
+  if(checkdata.status == "deleted" || checkdata.status == "draft" || checkdata.status == 'inactive' ){
+    // oldval = [...AddOnsArr];
+    let aNameMap = {};
+oldval.forEach(item => {
+  aNameMap[item.name] = item;
+});
+
+// Iterate over the b array and update a
+AddOnsArr.forEach(itemB => {
+  if (aNameMap.hasOwnProperty(itemB.name)) {
+    // Replace values in a with values from b
+    const itemA = aNameMap[itemB.name];
+    for (const key in itemA) {
+      itemA[key] = itemB[key];
+    }
+  } else {
+    // Push new values to a
+    oldval.push(itemB);
   }
-if(checkdata.status == 'active' && expiredDate.toISOString() > currentDae.toISOString() || checkdata.status == 'inactive' ){
+});
+  }
+if(checkdata.status == 'active' && expiredDate.toISOString() > currentDae.toISOString() ){
   
   plan_obj = plan_duration
 
