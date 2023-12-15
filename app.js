@@ -347,12 +347,12 @@ try {
               {
                 $and: [
                   { ads_id: ads_id },
-                  {
-                    $or: [
+                  // {
+                  //   $or: [
                       { 'buyer': buyerId },
                       { 'seller': sellerId },
-                    ],
-                  },
+                  //   ],
+                  // },
                 ],
               },
               { $push: { messages: newMessage } },
