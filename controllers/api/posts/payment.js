@@ -706,7 +706,6 @@ let conditions = [];
     expired_on: new Date(
       currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
     ).toISOString()
-    
   };
   await Promise.all(
     paymentDetails?.plan_addons?.map(async (obj) => {
@@ -779,7 +778,7 @@ let plan_duration = checkdata.plan_validity
 let expiredDate = new Date(plan_duration.expired_on)
   let currentDae = new Date()
   
-  if(checkdata.status == "deleted" || checkdata.status == "draft"){
+  if(checkdata.status == "deleted" || checkdata.status == "draft" || checkdata.status == 'inactive'  ){
     oldval = [...AddOnsArr];
   }
 if(checkdata.status == 'active' && expiredDate.toISOString() > currentDae.toISOString()){
