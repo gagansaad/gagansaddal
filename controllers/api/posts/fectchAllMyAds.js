@@ -645,6 +645,7 @@ exports.fetchAll = async (req, res, next) => {
       const adonsData = [];
       let adonsSlug = adons.replace(/\s+/g, "_");
       let dbQuery = {
+        status:"active",
         addons_validity: {
           $elemMatch: {
             name: adons,
