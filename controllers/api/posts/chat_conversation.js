@@ -31,6 +31,7 @@ const mongoose = require("mongoose"),
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.perpage) || PAGE_SIZE;
       const { ads_id ,sellerId,buyerId,senderId,ads_type} = req.query;
+      console.log(ads_id ,sellerId,buyerId,senderId,ads_type);
       let userId = req.userId;
   
       let chat = await Chat.findOne({
