@@ -194,7 +194,7 @@ roomRentsSchema.virtual('active_on_virtual').get(function () {
   if (this.active_on_bumpup_at == null) {
     return this.plan_validity.active_on;
   }
-  if (this.active_on_bumpup_at < plan_validity.active_on) {
+  if (this.active_on_bumpup_at < this.plan_validity.active_on) {
     return this.plan_validity.active_on;
   }
   // Check if addons_validity is not empty
