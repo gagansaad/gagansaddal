@@ -188,7 +188,7 @@ const roomRentsSchema = new mongoose.Schema(
 // });
 roomRentsSchema.virtual('active_on_virtual').get(function () {
   // Check if bumpupAt is not null
-  if (this.active_on_bumpup_at !== null) {
+  if (this.active_on_bumpup_at !== null && this.active_on_bumpup_at < this.plan_validity.active_on) {
     return this.active_on_bumpup_at;
   }
   if (this.active_on_bumpup_at == null) {
