@@ -802,7 +802,7 @@ AddOnsArr.forEach(itemB => {
   if( checkdata.status == 'inactive' ){
     plan_obj = {
       plan_id: planDuration._id.toString(),
-      active_on: new Date(currentDate),
+      active_on: new Date(currentDate).toISOString(),
       expired_on: new Date(
         currentDate.getTime() + planDuration.duration * 24 * 60 * 60 * 1000
       ).toISOString()
