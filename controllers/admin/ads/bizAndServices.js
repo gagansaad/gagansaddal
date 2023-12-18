@@ -407,3 +407,27 @@ function getModelByType(adType) {
       throw new Error(`Unsupported ad type: ${adType}`);
   }
 }
+const calculateMonthlyRevenue = async (startDate, endDate) => {
+  const todayTotalAmountAggregation = await paymentModel.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: startDate,
+          $lte: endDate,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        revenue: { $sum: "$total_amount" },
+      },
+    },
+  ]);
+
+  if (todayTotalAmountAggregation.length > 0) {
+    return todayTotalAmountAggregation[0].revenue;
+  } else {
+    return 0; // No revenue for the given month
+  }
+};
