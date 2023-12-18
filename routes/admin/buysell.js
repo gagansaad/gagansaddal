@@ -40,7 +40,7 @@ router.get(
 
   controllers.fetchAll
 );
-router.get('/buysell-graph',controllers.fetchGraph);
+router.get('/graph',controllers.fetchGraph);
 router.get(`/view-buysell-ad`, controllers.fetchOne);
 router.delete(`/delete-buysell-ad`, controllers.fetchOneDelete);
 module.exports = router;

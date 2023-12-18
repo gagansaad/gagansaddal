@@ -40,7 +40,7 @@ router.get(
 
   controllers.fetchAll
 );
-router.get('/biz-graph',controllers.fetchGraph);
+router.get('/graph',controllers.fetchGraph);
 router.get(`/view-biz-ad`, controllers.fetchOne);
 router.delete(`/delete-biz-ad`, controllers.fetchOneDelete);
 module.exports = router;

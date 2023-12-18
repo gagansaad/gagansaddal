@@ -44,7 +44,7 @@ router.get(
 
   controllers.fetchAll
 );
-router.get('/job-graph',controllers.fetchGraph);
+router.get('/graph',controllers.fetchGraph);
 router.get(`/view-job-ad`, controllers.fetchOne);
 router.delete(`/delete-job-ad`, controllers.fetchOneDelete);
 module.exports = router;

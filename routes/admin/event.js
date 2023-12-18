@@ -40,7 +40,7 @@ router.get(
 
   controllers.fetchAll
 );
-router.get('/event-graph',controllers.fetchGraph);
+router.get('/graph',controllers.fetchGraph);
 router.get(`/view-event-ad`, controllers.fetchOne);
 router.delete(`/delete-event-ad`, controllers.fetchOneDelete);
 module.exports = router;

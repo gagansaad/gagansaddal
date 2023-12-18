@@ -40,7 +40,7 @@ router.get(
 
   controllers.fetchAll
 );
-router.get('/room-rent-graph',controllers.fetchGraph);
+router.get('/graph',controllers.fetchGraph);
 router.get(`/view-roomrent-ad`, controllers.fetchOne);
 router.delete(`/delete-roomrent-ad`, controllers.fetchOneDelete);
 
