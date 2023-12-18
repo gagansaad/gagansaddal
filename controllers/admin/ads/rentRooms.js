@@ -412,6 +412,7 @@ function getModelByType(adType) {
   }
 }
 const calculateMonthlyRevenue = async (startDate, endDate ,adstype) => {
+  console.log(adstype);
   const todayTotalAmountAggregation = await paymentModel.aggregate([
   {
     $match: {
