@@ -166,7 +166,7 @@ exports.fetchAll = async (req, res, next) => {
       today.setHours(0, 0, 0, 0); // Set the time to the beginning of the day (midnight)
       const endDate = new Date(today); // Create a copy of the start date
       endDate.setDate(today.getDate() + 1); // Set the end date to the next day
-
+console.log(today,endDate);
       const query = {
         $and: [
           { ads_type: sadsid },
