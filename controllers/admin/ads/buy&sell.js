@@ -116,8 +116,8 @@ exports.fetchAll = async (req, res, next) => {
     // Convert the date to ISO 8601 format
     const currentISODate = currentDate.toISOString();
     // Extract only the date portion
-    dbQuery.status = "active";
-    dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
+    // dbQuery.status = "active";
+    // dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
