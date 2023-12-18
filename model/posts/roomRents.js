@@ -251,7 +251,7 @@ roomRentsSchema.virtual("isReported", {
   foreignField: "adsid",
   justOne: true,
   match: function () {
-    return { user: this.userId };
+    return { adsid: this._id };
   },
 });
 
