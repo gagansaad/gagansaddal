@@ -24,6 +24,8 @@ exports.fetchAll = async (req, res, next) => {
   try {
     let totalViewCount = 0; // Initialize the total view count variable
     let todayViewCount = 0; // Initialize the view count for records created today
+    let totalReportCount = 0; // Initialize the total view count variable
+    let todayReportCount = 0; 
     let todayRecordsCount = 0;
     let searchTerm = req.query.searchTerm || "";
     let dbQuery = {};
@@ -130,6 +132,7 @@ exports.fetchAll = async (req, res, next) => {
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "isFavorite", select: "user", match: { user: myid } })
       .populate({ path: "viewCount" })
+      .populate({ path: "ReportCount" })
       .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
@@ -149,6 +152,11 @@ exports.fetchAll = async (req, res, next) => {
         if (job.createdAt.toISOString().substring(0, 10) === currentDateOnly) {
           todayViewCount += job.viewCount;
           todayRecordsCount += 1;
+        }
+        totalReportCount += job.ReportCount;
+        if (job.createdAt.toISOString().substring(0, 10) === currentDateOnly) {
+          todayReportCount += job.viewCount;
+          // todayRecordsCount += 1;
         }
       });
       const paymentStatus = "confirmed"; // Replace with the actual payment_status value you want to search for
