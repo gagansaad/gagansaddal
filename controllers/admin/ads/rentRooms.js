@@ -326,7 +326,7 @@ exports.fetchGraph = async (req, res, next) => {
     const adTypes = [
       "roomrent",
     ];
-let type = await PostType.find()
+let type = await PostType.find({name:"Rentals"})
 console.log(type);
     for (let month = 0; month < 12; month++) {
       const startDate = new Date(currentYear, month, 1);
@@ -371,7 +371,7 @@ console.log(type);
       data1.push(monthlyfTotal);
 
       // Calculate revenue for the month
-      const monthlyRevenue = await calculateMonthlyRevenue(startDate, endDate);
+      const monthlyRevenue = await calculateMonthlyRevenue(startDate, endDate,type._id);
       revenueData.push(monthlyRevenue);
     }
 
@@ -411,14 +411,20 @@ function getModelByType(adType) {
       throw new Error(`Unsupported ad type: ${adType}`);
   }
 }
-const calculateMonthlyRevenue = async (startDate, endDate) => {
+const calculateMonthlyRevenue = async (startDate, endDate ,adstype) => {
   const todayTotalAmountAggregation = await paymentModel.aggregate([
     {
       $match: {
-        createdAt: {
-          $gte: startDate,
-          $lte: endDate,
-        },
+        $and:[{
+          createdAt: {
+            $gte: startDate,
+            $lte: endDate,
+          },
+        },{
+          ads_type:adstype,
+        }
+      ]
+        
       },
     },
     {
