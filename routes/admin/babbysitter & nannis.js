@@ -36,7 +36,7 @@ function validateImage(req, res, next) {
 }
 
 router.get(`/fetchbabysitterads`, controllers.fetchAll);
-
+router.get('/babysitter-graph',controllers.fetchGraph);
 router.get(`/view-babysitter-ad`, controllers.fetchOne);
 router.delete(`/delete-babysitter-ad`, controllers.fetchOneDelete);
 module.exports = router;

@@ -310,3 +310,79 @@ exports.fetchOneDelete = async (req, res, next) => {
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };
+
+exports.fetchGraph = async (req, res, next) => {
+  try {
+    const currentYear = new Date().getFullYear();
+    const data = []; // Array to store monthly counts
+    const data1 = []; // Array to store monthly counts
+    const revenueData = []; // Array to store monthly revenue
+    const adTypes = [
+      "buysell",
+    ];
+
+    for (let month = 0; month < 12; month++) {
+      const startDate = new Date(currentYear, month, 1);
+      const endDate = new Date(currentYear, month + 1, 0);
+
+      const adCounts = {};
+      const adfCounts = {};
+
+      // Create an array of promises for each ad type
+      const promises = adTypes.map(async (adType) => {
+        const AdModel = getModelByType(adType); // Replace with a function to get the correct model
+        adCounts[adType] = await AdModel.countDocuments({
+          createdAt: {
+            $gte: startDate,
+            $lte: endDate,
+          },
+        });
+
+        adfCounts[adType] = await AdModel.countDocuments({
+          createdAt: {
+            $gte: startDate,
+            $lte: endDate,
+          },
+          "addons_validity.name": "Featured",
+        });
+      });
+
+      // Wait for all promises to resolve
+      await Promise.all(promises);
+
+      // Calculate the total counts for the month
+      const monthlyTotal = adTypes.reduce(
+        (total, adType) => total + adCounts[adType],
+        0
+      );
+      const monthlyfTotal = adTypes.reduce(
+        (total, adType) => total + adfCounts[adType],
+        0
+      );
+
+      data.push(monthlyTotal);
+      data1.push(monthlyfTotal);
+
+      // Calculate revenue for the month
+      const monthlyRevenue = await calculateMonthlyRevenue(startDate, endDate);
+      revenueData.push(monthlyRevenue);
+    }
+
+    if (data.length > 0) {
+      return successJSONResponse(res, {
+        message: "Success",
+        data,
+        data1,
+        revenueData, // Include revenue data in the response
+        status: 200,
+      });
+    } else {
+      return failureJSONResponse(res, { message: "Ads not available" });
+    }
+  } catch (err) {
+    return failureJSONResponse(res, {
+      message: "Something went wrong",
+      err: err.message,
+    });
+  }
+};
