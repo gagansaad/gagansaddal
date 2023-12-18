@@ -327,7 +327,7 @@ exports.fetchGraph = async (req, res, next) => {
       "roomrent",
     ];
 let type = await PostType.find({name:"Rentals"})
-console.log(type._id);
+console.log(type[0]._id);
     for (let month = 0; month < 12; month++) {
       const startDate = new Date(currentYear, month, 1);
       const endDate = new Date(currentYear, month + 1, 0);
@@ -371,7 +371,7 @@ console.log(type._id);
       data1.push(monthlyfTotal);
 
       // Calculate revenue for the month
-      const monthlyRevenue = await calculateMonthlyRevenue(startDate, endDate,type._id);
+      const monthlyRevenue = await calculateMonthlyRevenue(startDate, endDate,type[0]._id);
       revenueData.push(monthlyRevenue);
     }
 
