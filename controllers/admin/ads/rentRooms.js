@@ -156,7 +156,7 @@ exports.fetchAll = async (req, res, next) => {
           todayReportCount += job.ReportCount;
           todayRecordsCount += 1;
         }
-        totalReportCount += job.ReportCount;
+        // totalReportCount += job.ReportCount;
         
       });
       const paymentStatus = "confirmed"; // Replace with the actual payment_status value you want to search for
@@ -185,7 +185,7 @@ exports.fetchAll = async (req, res, next) => {
           // { payment_status: paymentStatus },
         ],
       };
-
+console.log(query,query2);
       let reve = await paymentModel.find(query2);
       let treve = await paymentModel.find(query);
       let totalAmountSum = 0;
