@@ -19,13 +19,12 @@ const mongoose = require("mongoose"),
     isValidEmailAddress,
     isValidIndianMobileNumber,
   } = require(`../../../utils/validators`);
-
 exports.fetchAll = async (req, res, next) => {
   try {
     let totalViewCount = 0; // Initialize the total view count variable
     let todayViewCount = 0; // Initialize the view count for records created today
     let todayRecordsCount = 0;
-    
+
     let searchTerm = req.query.searchTerm || "";
     let dbQuery = {};
     const {
