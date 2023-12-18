@@ -437,7 +437,7 @@ const calculateMonthlyRevenue = async (startDate, endDate ,adstype) => {
   },
 ]);
 
-
+console.log(todayTotalAmountAggregation);
   if (todayTotalAmountAggregation.length > 0) {
     return todayTotalAmountAggregation[0].revenue;
   } else {
