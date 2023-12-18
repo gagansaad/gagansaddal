@@ -440,6 +440,7 @@ const calculateMonthlyRevenue = async (startDate, endDate ,adstype) => {
   if (todayTotalAmountAggregation.length > 0) {
     return todayTotalAmountAggregation[0].revenue;
   } else {
+    console.log("dedede");
     return 0; // No revenue for the given month
   }
 };
