@@ -412,3 +412,21 @@ exports.fetchGraph = async (req, res, next) => {
     });
   }
 };
+function getModelByType(adType) {
+  switch (adType) {
+    case "event":
+      return eventAd;
+    case "biz":
+      return bizAd;
+    case "babysitter":
+      return babysitterAd;
+    case "roomrent":
+      return RoomRentsAds;
+    case "jobs":
+      return jobsAd;
+    case "buysell":
+      return buysellAd;
+    default:
+      throw new Error(`Unsupported ad type: ${adType}`);
+  }
+}
