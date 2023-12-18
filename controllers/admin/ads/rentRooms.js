@@ -155,7 +155,7 @@ exports.fetchAll = async (req, res, next) => {
         }
         totalReportCount += job.ReportCount;
         if (job.createdAt.toISOString().substring(0, 10) === currentDateOnly) {
-          todayReportCount += job.viewCount;
+          todayReportCount += job.ReportCount;
           // todayRecordsCount += 1;
         }
       });
