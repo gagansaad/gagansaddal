@@ -416,17 +416,15 @@ const calculateMonthlyRevenue = async (startDate, endDate ,adstype) => {
   const todayTotalAmountAggregation = await paymentModel.aggregate([
   {
     $match: {
-      $and: [
-        {
+      
           createdAt: {
             $gte: startDate,
-            $lte: endDate,
+            $lt: endDate,
           },
-        },
-        {
-          ads_type: adstype,
-        },
-      ],
+       
+    },
+    $match: {
+      ads_type: adstype,
     },
   },
   {
