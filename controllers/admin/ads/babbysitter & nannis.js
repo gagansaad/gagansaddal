@@ -25,6 +25,7 @@ exports.fetchAll = async (req, res, next) => {
     let totalViewCount = 0; // Initialize the total view count variable
     let todayViewCount = 0; // Initialize the view count for records created today
     let todayRecordsCount = 0;
+    
     let searchTerm = req.query.searchTerm || "";
     let dbQuery = {};
     const {
@@ -117,7 +118,7 @@ exports.fetchAll = async (req, res, next) => {
     const currentISODate = currentDate.toISOString();
     // Extract only the date portion
     
-    
+
     // dbQuery.status = "active";
     // dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
     let queryFinal = dbQuery;
