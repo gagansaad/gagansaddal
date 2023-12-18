@@ -3,6 +3,7 @@ const { json } = require("express");
 const mongoose = require("mongoose"),
   RoomRentsAds = mongoose.model("rental"),
   PostViews = mongoose.model("Post_view"),
+  PostType = mongoose.model("Post_type"),
   tagline_keywords = mongoose.model("keywords"),
   paymentModel = mongoose.model("payment"),
   {
@@ -323,11 +324,10 @@ exports.fetchGraph = async (req, res, next) => {
     const data1 = []; // Array to store monthly counts
     const revenueData = []; // Array to store monthly revenue
     const adTypes = [
-      
       "roomrent",
-     
     ];
-
+let type = await PostType.find()
+console.log(type);
     for (let month = 0; month < 12; month++) {
       const startDate = new Date(currentYear, month, 1);
       const endDate = new Date(currentYear, month + 1, 0);
