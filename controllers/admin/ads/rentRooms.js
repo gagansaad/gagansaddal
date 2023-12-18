@@ -202,6 +202,7 @@ exports.fetchAll = async (req, res, next) => {
         return {
           ...job._doc,
           // Add other job fields as needed
+          report_count:job.ReportCount,
           view_count: job.viewCount,
           favorite_count: job.favoriteCount,
           is_favorite: !!job.isFavorite,
@@ -217,6 +218,8 @@ exports.fetchAll = async (req, res, next) => {
         totalViewCount: totalViewCount, // Include total view count in the response
         todayViewCount: todayViewCount,
         todayRecordsCount: todayRecordsCount,
+        totalReportCount:totalReportCount,
+        todayReportCount:todayReportCount,
         totalrevenue: totalAmountSum,
         todayrevenue: totayAmountSum, //
         status: 200,
