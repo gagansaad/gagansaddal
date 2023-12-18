@@ -3,7 +3,7 @@ const { json } = require("express");
 const mongoose = require("mongoose"),
   RoomRentsAds = mongoose.model("rental"),
   PostViews = mongoose.model("Post_view"),
-  PostType = mongoose.model("Post_type"),
+  PostType = mongoose.model("PostType"),
   tagline_keywords = mongoose.model("keywords"),
   paymentModel = mongoose.model("payment"),
   {
