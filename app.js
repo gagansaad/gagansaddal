@@ -287,9 +287,9 @@ try {
 console.log(userId,"evfndejndjvnnvjdnjdenvjden");
   // Set user as online
   onlineUsers[userId] = true;
-
+  let onlineUserIds = Object.keys(onlineUsers);
   // Emit online status to other users
-  io.emit("user-status", { userId:userId, status: "online" });
+  io.emit("user-status", { userId:onlineUserIds, status: "online" });
          socket.on('join-room', (chat_id) => {
           console.log(chat_id,"tu meri jaan ");
           socket.join(chat_id);
@@ -527,9 +527,10 @@ console.log(lastMessageSender,newChatObject1.seller_id);
         socket.on("disconnect", () => {
             console.log("socket is disconnect");
             onlineUsers[userId] = false;
+            let onlineUserIds = Object.keys(onlineUsers);
 
             // Emit offline status to other users
-            io.emit("user-status", { userId, status: "offline" });
+            io.emit("user-status", { userId:onlineUserIds, status: "offline" });
         })
     });
 
