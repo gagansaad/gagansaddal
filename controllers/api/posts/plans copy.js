@@ -25,7 +25,7 @@ let postid
     let {Typename} = await ModelNameByAdsType(planObjectId)
     let YourModel = mongoose.model(Typename);
     let previousdata
-    
+    let urlan 
     let results = await AdsPlan.find({
       ads_type: planObjectId,
     }).populate("add_ons");
@@ -40,9 +40,9 @@ let postid
     
     const currentDate = new Date();
     const modifiedResults = [];
-    let urlan = previousdata?.website_url || null;
+    urlan = previousdata?.website_url || null;
    
-
+console.log(urlan,"lllllllllllllllllllllllllllllllllllllllllllllllllll");
   
     for (let result of results) {
       const finaldata = JSON.parse(JSON.stringify(result));
