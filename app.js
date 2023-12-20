@@ -284,7 +284,7 @@ try {
 
   // Get user ID from query parameters (you may need to modify this based on your authentication)
   const userId = socket.handshake.query.userId;
-
+console.log(userId,"evfndejndjvnnvjdnjdenvjden");
   // Set user as online
   onlineUsers[userId] = true;
 
