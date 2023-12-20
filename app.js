@@ -295,6 +295,34 @@ console.log(userId,"evfndejndjvnnvjdnjdenvjden");
           socket.join(chat_id);
         });
         //  console.log(`Socket ${socket.id} joined room: chat-${adId}`);
+        socket.on('like_by', async (data) => {
+          try {
+              const {msg_id,chatId,status,userId } = data;
+      
+              let chatting = await Chat.findByIdAndUpdate(
+                chatId,
+                {
+                    $pull: { is_like: { msg_id: msg_id, likeby: userId } },
+                    $push: {
+                        is_like: {
+                            msg_id: chatId,
+                            status,
+                            likeby: userId,
+                        },
+                    },
+                },
+                { new: true }
+            );
+      
+              if (chatting) {
+                  // Emit the updated chat details or specific information related to the like_by event
+                  io.emit('update-like', { msg_id,chatId, status, userId });
+              }
+          } catch (error) {
+              console.error(error);
+          }
+      });
+      
          socket.on('send-message', async (data) => {
           try {
             // console.log(data,"hoja 22 bnke yr");
