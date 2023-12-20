@@ -43,6 +43,7 @@ console.log(formattedDateObject);
       // Find documents that meet the criteria
 
       let documents;
+      let addonsValidity; 
       if (adType.key == "event") {
         
         documents = await Model.find(
@@ -63,6 +64,17 @@ console.log(formattedDateObject);
             { status: "active" },
           ],
         });
+        addonsValidity = documents.map(document => {
+          return {
+              ...document,
+              addons_validity: document.addons_validity.map(addon => {
+                  return {
+                      ...addon,
+                      expired_on: formattedDateObject,
+                  };
+              }),
+          };
+      });
       }
 
       for (const document of documents) {
@@ -91,6 +103,12 @@ console.log(formattedDateObject);
         // Update each document
         for (const document of data) {
           // Update the document
+          const addonsValidity = document.addons_validity.map(addon => {
+            return {
+                ...addon,
+                expired_on: formattedDateObject,
+            };
+        });
           // console.log("object",formattedDateObject);
           await Model.updateOne(
             {
@@ -100,11 +118,13 @@ console.log(formattedDateObject);
               $set: {
                 status: "inactive",
                 "plan_validity.expired_on": formattedDateObject,
+                addons_validity: addonsValidity,
               },
             }
           );
         }
         } else {
+          
           expiredOnDate = new Date(document.plan_validity.expired_on);
           const documentTimezoneOffset = expiredOnDate.getTimezoneOffset();
           // console.log(documentTimezoneOffset);
@@ -124,7 +144,10 @@ console.log(formattedDateObject);
               ],
             },
             {
-              $set: { status: "inactive" },
+              $set: { status: "inactive" ,},
+              "plan_validity.expired_on": formattedDateObject,
+              addons_validity: addonsValidity[0].addons_validity,
+              // Use the same addonsValidity for all documents
             }
           ).exec();
         }
