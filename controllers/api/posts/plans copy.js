@@ -40,7 +40,7 @@ let postid
     
     const currentDate = new Date();
     const modifiedResults = [];
-    // let thisplan = previousdata?.plan_validity;
+    let urlan = previousdata?.website_url || null;
    
 
   
@@ -87,7 +87,7 @@ let postid
       modifiedResults.push(finaldata);
     }
     // console.log(modifiedResults,"gagan");
-    return successJSONResponse(res, { data: modifiedResults });
+    return successJSONResponse(res, { data: modifiedResults,url:urlan});
   }else{
     // console.log(results,"naman");
     return successJSONResponse(res, { data: results });
