@@ -64,13 +64,14 @@ console.log(formattedDateObject);
             { status: "active" },
           ],
         });
+        let data = formattedDateObject
         addonsValidity = documents.map(document => {
           return {
               ...document,
               addons_validity: document.addons_validity.map(addon => {
                   return {
                       ...addon,
-                      expired_on: formattedDateObject,
+                      expired_on: formattedDateObject.slice(0, 10),
                   };
               }),
           };
@@ -106,7 +107,7 @@ console.log(formattedDateObject);
           const addonsValidity = document.addons_validity.map(addon => {
             return {
                 ...addon,
-                expired_on: formattedDateObject,
+                expired_on: formattedDateObject.slice(0, 10),
             };
         });
           // console.log("object",formattedDateObject);
