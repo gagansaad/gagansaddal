@@ -289,7 +289,7 @@ console.log(userId,"evfndejndjvnnvjdnjdenvjden");
   onlineUsers[userId] = true;
 
   // Emit online status to other users
-  io.emit("user-status", { userId, status: "online" });
+  io.emit("user-status", { userId:userId, status: "online" });
          socket.on('join-room', (chat_id) => {
           console.log(chat_id,"tu meri jaan ");
           socket.join(chat_id);
