@@ -330,7 +330,12 @@ exports.createAds = async (req, res, next) => {
       productImages = await Media.create({ url: thumbnail });
       imageArr.push(productImages._id);
     }
-
+    let zone =find(latitude,longitude) ;
+    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+    let zones ;
+    if(zone.length >= 0){
+  zones = zone[0];
+    }
     const dataObj = {
       isfeatured,
       status: status,
@@ -362,7 +367,7 @@ exports.createAds = async (req, res, next) => {
         tagline,
         image: imageArr,
       },
-
+      time_zone:zones,
       userId: userId,
     };
     const newPost = await postbabyAd.create(dataObj);
@@ -548,7 +553,12 @@ exports.editAds = async (req, res, next) => {
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
     }
-
+    let zone =find(latitude,longitude) ;
+    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+    let zones ;
+    if(zone.length >= 0){
+  zones = zone[0];
+    }
     const dataObjq = {
       adsInfo: adsInfoObj,
       lister_basic_info: {
@@ -569,6 +579,7 @@ exports.editAds = async (req, res, next) => {
         },
         preferable_contact_mode: preferable_contact_mode,
       },
+      time_zone:zones,
     };
 
     const updateproduct = await postbabyAd.findByIdAndUpdate(

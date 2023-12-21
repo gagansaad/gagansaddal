@@ -570,7 +570,12 @@ exports.createbizAds = async (req, res, next) => {
         }
       }
     }
-
+    let zone =find(latitude,longitude) ;
+    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+    let zones ;
+    if(zone.length >= 0){
+  zones = zone[0];
+    }
     const dataObj = {
       isfeatured,
       status: status,
@@ -592,7 +597,7 @@ exports.createbizAds = async (req, res, next) => {
         video_link,
         accreditation_file: accreditationArr,
       },
-
+      time_zone:zones,
       userId: userId,
     };
 
@@ -869,7 +874,12 @@ exports.editbizAds = async (req, res, next) => {
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
     }
-
+    let zone =find(latitude,longitude) ;
+    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+    let zones;
+    if(zone.length >= 0){
+  zones = zone[0];
+    }
     const dataObjq = {
       adsInfo: adsInfoObj,
       lister_basic_info: {
@@ -888,6 +898,7 @@ exports.editbizAds = async (req, res, next) => {
           secondary_phone_number: secondary_phone_number,
         },
       },
+      time_zone:zones,
     };
     const updatebiz = await postbizAndServicesAd.findByIdAndUpdate(
       { _id: bizId },

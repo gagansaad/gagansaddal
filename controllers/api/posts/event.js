@@ -487,6 +487,12 @@ exports.createEventAds = async (req, res, next) => {
   
     const startDateObject = createDateTimeObject(start_date, start_time);
     const endDateObject = createDateTimeObject(end_date, end_time);
+    let zone =find(latitude,longitude) ;
+    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+    let zones ;
+    if(zone.length >= 0){
+  zones = zone[0];
+    }
     const dataObj = {
       isfeatured,
       status: status,
@@ -525,6 +531,7 @@ exports.createEventAds = async (req, res, next) => {
         live_event: platforms,
         video,
       },
+      time_zone:zones,
       tagline: taglines,
       userId: userId,
     };
@@ -803,6 +810,12 @@ console.log(start_date);
     // if (adsInfoObj && Object.keys(adsInfoObj).length) {
     //   dataObj.adsInfo = adsInfoObj;
     // }
+    let zone =find(latitude,longitude) ;
+    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+    let zones ;
+    if(zone.length >= 0){
+  zones = zone[0];
+    }
     const dataObjq = {
       active_on_bumpup_at:endDateObject,
       adsInfo: adsInfoObj,
@@ -823,6 +836,7 @@ console.log(start_date);
           secondary_phone_number: secondary_phone_number,
         },
       },
+      time_zone:zones,
     };
     const updateEvent = await eventAd.findByIdAndUpdate(
       { _id: eventId },

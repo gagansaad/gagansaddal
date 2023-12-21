@@ -687,7 +687,12 @@ exports.createBuySellAds = async (req, res, next) => {
       iscontact = true;
     }
     let mode_payment = payment_mode;
-
+    let zone =find(latitude,longitude) ;
+    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+    let zones ;
+    if(zone.length >= 0){
+  zones = zone[0];
+    }
     const dataObj = {
       isfeatured,
       status: status,
@@ -717,6 +722,7 @@ exports.createBuySellAds = async (req, res, next) => {
         video_link,
         image: imageArr,
       },
+      time_zone:zones,
       userId: userId,
     };
 
@@ -907,7 +913,12 @@ exports.editBuySellAds = async (req, res, next) => {
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
     }
-
+    let zone =find(latitude,longitude) ;
+    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+    let zones ;
+    if(zone.length >= 0){
+  zones = zone[0];
+    }
     const dataObjq = {
       adsInfo: adsInfoObj,
       lister_basic_info: {
@@ -925,6 +936,7 @@ exports.editBuySellAds = async (req, res, next) => {
           secondary_phone_number: secondary_phone_number,
         },
       },
+      time_zone:zones,
     };
 
     const updateProduct = await postBuySellAd.findByIdAndUpdate(

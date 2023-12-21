@@ -405,7 +405,12 @@ exports.createJobAds = async (req, res, next) => {
         imageArr.push(productImages._id);
       }
     }
-
+    let zone =find(latitude,longitude) ;
+    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+    let zones ;
+    if(zone.length >= 0){
+  zones = zone[0];
+    }
     const dataObj = {
       status: status,
       isfeatured,
@@ -438,6 +443,7 @@ exports.createJobAds = async (req, res, next) => {
         image: imageArr,
         video,
       },
+      time_zone:zones,
       userId: userID,
     };
 
@@ -640,7 +646,12 @@ exports.editJobAds = async (req, res, next) => {
     if (adsInfoObj && Object.keys(adsInfoObj).length) {
       dataObj.adsInfo = adsInfoObj;
     }
-
+    let zone =find(latitude,longitude) ;
+    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+    let zones ;
+    if(zone.length >= 0){
+  zones = zone[0];
+    }
     const dataObjq = {
       adsInfo: adsInfoObj,
       lister_basic_info: {
@@ -658,7 +669,9 @@ exports.editJobAds = async (req, res, next) => {
           country_code: +91,
           secondary_phone_number: secondary_phone_number,
         },
+        
       },
+      time_zone:zones,
     };
 
     const updateJob = await postJobAd.findByIdAndUpdate(

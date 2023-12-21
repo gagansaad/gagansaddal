@@ -711,7 +711,12 @@ exports.editRoomRentAds = async (req, res, next) => {
   if (locationobj) adsInfoObj.location = locationobj;
   if (imageArr.length) adsInfoObj.image = imageArr;
   if (name) listerBasicInfoObj.name = name;
-
+  let zone =find(latitude,longitude) ;
+  console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+  let zones ;
+  if(zone.length >= 0){
+zones = zone[0];
+  }
   const dataObjq = {
     adsInfo: adsInfoObj,
     lister_basic_info: {
@@ -730,6 +735,7 @@ exports.editRoomRentAds = async (req, res, next) => {
         secondary_phone_number: secondary_phone_number,
       },
     },
+    time_zone:zones,
   };
   const updateRoomRents = await RoomRentsAds.findByIdAndUpdate(
     { _id: roomRentId },
