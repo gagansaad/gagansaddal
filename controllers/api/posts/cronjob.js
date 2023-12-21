@@ -232,11 +232,13 @@ cron.schedule("*/15 * * * *", async (req, res) => {
                 interval: iter, // Add the interval property
               };
             }
+         
+          return null;
+           // If "Bump up" addon is not found, return null
           }
-          return null; // If "Bump up" addon is not found, return null
         })
         .filter((dates) => dates !== null);
-
+      
       const resultDates = [];
 
       for (const dateRange of bumpUpDates) {
