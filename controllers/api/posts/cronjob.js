@@ -221,6 +221,8 @@ cron.schedule("*/15 * * * *", async (req, res) => {
           console.log(bumpUpAddon,'data');
           const currentTimeInTimeZone = new Date().toLocaleString('en-US', { timeZone: data.location_timezone});
           const currentHour = new Date(currentTimeInTimeZone).getHours();
+          let hou = currentTimeInTimeZone.getHours()
+          console.log(currentHour,hou,"hbsdhbsjdcjsdncjsdnkjdnksdnckdnckj");
           if(currentHour === 7){
             if (bumpUpAddon) {
               const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
@@ -281,6 +283,7 @@ cron.schedule("*/15 * * * *", async (req, res) => {
           const converteddate_of_time = new Date(date_of_time).toLocaleString('en-US', {
             timeZone: document.location_timezone,
           });
+          console.log(converteddate_of_time,"=============================================");
           if (document) {
             // Update the document with the new value for active_on_bumpup_at
             datas =  await YourModel.updateOne(
