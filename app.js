@@ -290,7 +290,7 @@ try {
       { 'seller': userId },
     ],
   })
-console.log(chat._id,"evfndejndjvnnvjdnjdenvjden");
+console.log(chat,"evfndejndjvnnvjdnjdenvjden");
   // Set user as online
   onlineUsers[userId] = true;
   
