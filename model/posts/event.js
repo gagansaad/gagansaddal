@@ -182,7 +182,7 @@ const events_Schema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
-    time_zone:{type:String},
+    location_timezone:{type:String},
     deletedAt:{
       type :String,
       default:null

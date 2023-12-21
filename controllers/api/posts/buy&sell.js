@@ -722,7 +722,7 @@ exports.createBuySellAds = async (req, res, next) => {
         video_link,
         image: imageArr,
       },
-      time_zone:zones,
+      location_timezone:zones,
       userId: userId,
     };
 
@@ -936,7 +936,7 @@ exports.editBuySellAds = async (req, res, next) => {
           secondary_phone_number: secondary_phone_number,
         },
       },
-      time_zone:zones,
+      location_timezone:zones,
     };
 
     const updateProduct = await postBuySellAd.findByIdAndUpdate(

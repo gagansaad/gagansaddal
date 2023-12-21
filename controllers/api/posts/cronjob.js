@@ -183,12 +183,13 @@ console.log(formattedDateObject);
 });
 
 
-cron.schedule("0 7 * * *", async (req, res) => {
+cron.schedule("*/15 * * * *", async (req, res) => {
   try {
     let datas;
     const currentDate = new Date();
     // Convert the date to ISO 8601 format
     const currentISODate = currentDate.toISOString();
+    console.log(currentISODate,' cron start dataa')
     var dbQuery = {
       $and: [
         { status: "active" },
@@ -217,13 +218,18 @@ cron.schedule("0 7 * * *", async (req, res) => {
           let bumpUpAddon = data.addons_validity.find(
             (addon) => addon.name === "Bump up"
           );
-          if (bumpUpAddon) {
-            const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
-            return {
-              active_on: bumpUpAddon.active_on,
-              expired_on: bumpUpAddon.expired_on,
-              interval: iter, // Add the interval property
-            };
+          console.log(bumpUpAddon,'data');
+          const currentTimeInTimeZone = new Date().toLocaleString('en-US', { timeZone: data.location_timezone});
+          const currentHour = new Date(currentTimeInTimeZone).getHours();
+          if(currentHour === 7){
+            if (bumpUpAddon) {
+              const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
+              return {
+                active_on: bumpUpAddon.active_on,
+                expired_on: bumpUpAddon.expired_on,
+                interval: iter, // Add the interval property
+              };
+            }
           }
           return null; // If "Bump up" addon is not found, return null
         })
@@ -250,6 +256,9 @@ cron.schedule("0 7 * * *", async (req, res) => {
 
       const today = new Date().toISOString().split("T")[0]; // Get today's date in the format "YYYY-MM-DD"
       let date_of_time = new Date().toISOString();
+
+
+
       // Filter adonsData to find records where resultDates array contains today's date
       const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
         const recordDates = resultDates[index]; // Get the resultDates array for the current record
@@ -257,21 +266,32 @@ cron.schedule("0 7 * * *", async (req, res) => {
       });
       let bumpId = recordsWithTodayDate.map((featuredItem) => featuredItem._id);
       if (bumpId.length > 0) {
-        datas = await YourModel.updateMany(
-          {
+        for (const id of bumpId) {
+          const document = await YourModel.findOne({
             $and: [
-              { _id: { $in: bumpId } },
+              { _id: id },
               {
                 $or: [
                   { active_on_bumpup_at: { $lt: today } },
                   { active_on_bumpup_at: null }, // Add condition for active_on_bumpup_at < todayDate7am
                 ],
-              }, // Add condition for active_on_bumpup_at < todayDate7am
+              },
             ],
-          }, // Find documents with IDs in the array
-          { $set: { active_on_bumpup_at: date_of_time } }
-        );
+          });
+          const converteddate_of_time = new Date(date_of_time).toLocaleString('en-US', {
+            timeZone: document.location_timezone,
+          });
+          if (document) {
+            // Update the document with the new value for active_on_bumpup_at
+            datas =  await YourModel.updateOne(
+              { _id: id },
+              { $set: { active_on_bumpup_at: converteddate_of_time } }
+              // { $set: { active_on_bumpup_at: date_of_time } }
+            );
+          }
+        }
       }
+      
     }
 
     return successJSONResponse(res, { message: `success`, total: datas });

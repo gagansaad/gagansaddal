@@ -367,7 +367,7 @@ exports.createAds = async (req, res, next) => {
         tagline,
         image: imageArr,
       },
-      time_zone:zones,
+      location_timezone:zones,
       userId: userId,
     };
     const newPost = await postbabyAd.create(dataObj);
@@ -579,7 +579,7 @@ exports.editAds = async (req, res, next) => {
         },
         preferable_contact_mode: preferable_contact_mode,
       },
-      time_zone:zones,
+      location_timezone:zones,
     };
 
     const updateproduct = await postbabyAd.findByIdAndUpdate(

@@ -597,7 +597,7 @@ exports.createbizAds = async (req, res, next) => {
         video_link,
         accreditation_file: accreditationArr,
       },
-      time_zone:zones,
+      location_timezone:zones,
       userId: userId,
     };
 
@@ -898,7 +898,7 @@ exports.editbizAds = async (req, res, next) => {
           secondary_phone_number: secondary_phone_number,
         },
       },
-      time_zone:zones,
+      location_timezone:zones,
     };
     const updatebiz = await postbizAndServicesAd.findByIdAndUpdate(
       { _id: bizId },

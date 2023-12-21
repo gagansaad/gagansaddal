@@ -151,7 +151,7 @@ const BuySellSchema = new mongoose.Schema(
       //     //   3:
       // }
     },
-    time_zone:{type:String},
+    location_timezone:{type:String},
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",

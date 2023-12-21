@@ -531,7 +531,7 @@ exports.createEventAds = async (req, res, next) => {
         live_event: platforms,
         video,
       },
-      time_zone:zones,
+      location_timezone:zones,
       tagline: taglines,
       userId: userId,
     };
@@ -836,7 +836,7 @@ console.log(start_date);
           secondary_phone_number: secondary_phone_number,
         },
       },
-      time_zone:zones,
+      location_timezone:zones,
     };
     const updateEvent = await eventAd.findByIdAndUpdate(
       { _id: eventId },

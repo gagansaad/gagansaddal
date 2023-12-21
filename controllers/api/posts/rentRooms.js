@@ -502,7 +502,7 @@ zones = zone[0];
     },
 
     userId: userId,
-    time_zone:zones || null,
+    location_timezone:zones || null,
   };
 
   const newRoomRentPost = await RoomRentsAds.create(dataObj);
@@ -735,7 +735,7 @@ zones = zone[0];
         secondary_phone_number: secondary_phone_number,
       },
     },
-    time_zone:zones,
+    location_timezone:zones,
   };
   const updateRoomRents = await RoomRentsAds.findByIdAndUpdate(
     { _id: roomRentId },

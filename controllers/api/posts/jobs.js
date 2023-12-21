@@ -443,7 +443,7 @@ exports.createJobAds = async (req, res, next) => {
         image: imageArr,
         video,
       },
-      time_zone:zones,
+      location_timezone:zones,
       userId: userID,
     };
 
@@ -671,7 +671,7 @@ exports.editJobAds = async (req, res, next) => {
         },
         
       },
-      time_zone:zones,
+      location_timezone:zones,
     };
 
     const updateJob = await postJobAd.findByIdAndUpdate(
