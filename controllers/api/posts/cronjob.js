@@ -263,9 +263,18 @@ cron.schedule("*/15 * * * *", async (req, res) => {
 
       // Filter adonsData to find records where resultDates array contains today's date
       const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
-        const recordDates = resultDates[index]; // Get the resultDates array for the current record
-        return recordDates.includes(today);
+        const recordDates = resultDates[index];
+      
+        // Ensure that resultDates[index] exists and is an array
+        if (Array.isArray(recordDates)) {
+          // Check if today is included in the recordDates array
+          return recordDates.includes(today);
+        }
+      
+        // If resultDates[index] is not an array, consider it as a non-matching condition
+        return false;
       });
+      
       let bumpId = recordsWithTodayDate.map((featuredItem) => featuredItem._id);
       if (bumpId.length > 0) {
         for (const id of bumpId) {
