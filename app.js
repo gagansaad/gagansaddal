@@ -284,15 +284,15 @@ try {
 
   // Get user ID from query parameters (you may need to modify this based on your authentication)
   const userId = socket.handshake.query.userId;
-  let chat = await Chat.find({
-    $or: [
-      { 'buyer': userId },
-      { 'seller': userId },
-    ],
-  })
-console.log(chat,"evfndejndjvnnvjdnjdenvjden");
-  // Set user as online
-  onlineUsers[userId] = true;
+//   let chat = await Chat.find({
+//     $or: [
+//       { 'buyer': userId },
+//       { 'seller': userId },
+//     ],
+//   })
+// console.log(chat,"evfndejndjvnnvjdnjdenvjden");
+//   // Set user as online
+//   onlineUsers[userId] = true;
   
   // Emit online status to other users
   const filteredOnlineUsers = Object.entries(onlineUsers)
