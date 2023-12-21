@@ -289,13 +289,13 @@ console.log(userId,"evfndejndjvnnvjdnjdenvjden");
   onlineUsers[userId] = true;
   let onlineUserIds = Object.keys(onlineUsers);
   // Emit online status to other users
-  io.emit("user-status", { userId:onlineUserIds, status: "online" });
+  io.emit("user-status", { userId:onlineUserIds,onlineUsers:onlineUsers, status: "online" });
          socket.on('join-room', (chat_id) => {
           console.log(chat_id,"tu meri jaan ");
           socket.join(chat_id);
         });
         //  console.log(`Socket ${socket.id} joined room: chat-${adId}`);
-        socket.on('like_by', async (data) => {
+        socket.on('like-by', async (data) => {
           try {
               const {msg_id,chatId,status,userId } = data;
       
@@ -322,7 +322,7 @@ console.log(userId,"evfndejndjvnnvjdnjdenvjden");
               console.error(error);
           }
       });
-      socket.on('delete_msg', async (data) => {
+      socket.on('delete-msg', async (data) => {
         try {
             const { chatId, messageId } = data;
     
@@ -577,7 +577,7 @@ console.log(lastMessageSender,newChatObject1.seller_id);
             let onlineUserIds = Object.keys(onlineUsers);
 console.log(userId,onlineUsers,onlineUserIds,"sdfghjkiolp;lkjhgfcx");
             // Emit offline status to other users
-            io.emit("user-status", { userId:userId, status: "offline" ,onlineUserIds:onlineUserIds});
+            io.emit("user-status", { userId:userId,onlineUsers:onlineUsers, status: "offline" ,onlineUserIds:onlineUserIds});
         })
     });
 
