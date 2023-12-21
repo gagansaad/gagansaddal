@@ -297,7 +297,7 @@ console.log(userId,"evfndejndjvnnvjdnjdenvjden");
   }, {});
   let onlineUserIds = Object.keys(filteredOnlineUsers);
 console.log(onlineUserIds);
-  io.emit("user-status", { userId:onlineUserIds, status: "online" });
+  io.emit("user-status", { userId:onlineUserIds});
          socket.on('join-room', (chat_id) => {
           console.log(chat_id,"tu meri jaan ");
           socket.join(chat_id);
