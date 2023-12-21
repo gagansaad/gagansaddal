@@ -594,7 +594,7 @@ console.log(lastMessageSender,newChatObject1.seller_id);
           
           console.log(onlineUserIds,"vrdvnrdvrdmvrdvrdvdrkm");
             // Emit offline status to other users
-            io.emit("user-status", {onlineUsers:onlineUserIds});
+            io.emit("user-status", {userId:onlineUserIds});
         })
     });
 
