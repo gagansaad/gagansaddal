@@ -1,5 +1,6 @@
 const { json, query } = require("express");
 const crypto = require("crypto");
+const { find } = require('geo-tz');
 const { listeners } = require("../../../model/posts/roomRents");
 const { mongoose, ObjectId, modelNames } = require("mongoose"),
   RoomRentsAds = mongoose.model("rental"),
@@ -455,7 +456,12 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
   } else {
     immidiate = false;
   }
-
+  let zone =find(latitude,longitude) ;
+  console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+  let zones ;
+  if(zone.length >= 0){
+zones = zone[0];
+  }
   const dataObj = {
     isfeatured,
     status: status,
@@ -496,6 +502,7 @@ exports.creatingRoomRentsAds = async (req, res, next) => {
     },
 
     userId: userId,
+    time_zone:zones || null,
   };
 
   const newRoomRentPost = await RoomRentsAds.create(dataObj);

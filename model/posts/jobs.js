@@ -144,6 +144,7 @@ const roomRentsSchema = new mongoose.Schema(
         //   3:
       },
     },
+    time_zone:{type:String},
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",

@@ -69,6 +69,7 @@ const events_Schema = new mongoose.Schema(
           index: "2dsphere",
           default: [0, 0], // Specify a 2dsphere index for geospatial querying
         },
+       
       },
       live_event: [
         {
@@ -181,6 +182,7 @@ const events_Schema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
+    time_zone:{type:String},
     deletedAt:{
       type :String,
       default:null
