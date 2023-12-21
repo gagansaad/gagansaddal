@@ -183,7 +183,7 @@ console.log(formattedDateObject);
 });
 
 
-cron.schedule("*/2 * * * *", async (req, res) => {
+cron.schedule("*/1 * * * *", async (req, res) => {
   try {
     let datas;
     const currentDate = new Date();
