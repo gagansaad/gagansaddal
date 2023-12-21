@@ -287,9 +287,17 @@ try {
 console.log(userId,"evfndejndjvnnvjdnjdenvjden");
   // Set user as online
   onlineUsers[userId] = true;
-  let onlineUserIds = Object.keys(onlineUsers);
+  
   // Emit online status to other users
-  io.emit("user-status", { userId:onlineUserIds,onlineUsers:onlineUsers, status: "online" });
+  const filteredOnlineUsers = Object.entries(onlineUsers)
+  .filter(([userId, status]) => status === true)
+  .reduce((result, [userId]) => {
+    result[userId] = true;
+    return result;
+  }, {});
+  let onlineUserIds = Object.keys(filteredOnlineUsers);
+console.log(onlineUserIds);
+  io.emit("user-status", { userId:onlineUserIds, status: "online" });
          socket.on('join-room', (chat_id) => {
           console.log(chat_id,"tu meri jaan ");
           socket.join(chat_id);
@@ -574,10 +582,19 @@ console.log(lastMessageSender,newChatObject1.seller_id);
         socket.on("disconnect", () => {
             console.log("socket is disconnect");
             onlineUsers[userId] = false;
-            let onlineUserIds = Object.keys(onlineUsers);
-console.log(userId,onlineUsers,onlineUserIds,"sdfghjkiolp;lkjhgfcx");
+            const filteredOnlineUsers = Object.entries(onlineUsers)
+            .filter(([userId, status]) => status === true)
+            .reduce((result, [userId]) => {
+              result[userId] = true;
+              return result;
+            }, {});
+          
+          
+          let onlineUserIds = Object.keys(filteredOnlineUsers);
+          
+          console.log(onlineUserIds,"vrdvnrdvrdmvrdvrdvdrkm");
             // Emit offline status to other users
-            io.emit("user-status", { userId:userId,onlineUsers:onlineUsers, status: "offline" ,onlineUserIds:onlineUserIds});
+            io.emit("user-status", {onlineUsers:onlineUserIds});
         })
     });
 
