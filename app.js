@@ -311,7 +311,7 @@ console.log(userId,"evfndejndjvnnvjdnjdenvjden");
                         },
                     },
                 },
-                { new: true }
+                { upsert: true }
             );
       
               if (chatting) {
@@ -322,7 +322,26 @@ console.log(userId,"evfndejndjvnnvjdnjdenvjden");
               console.error(error);
           }
       });
-      
+      socket.on('delete_msg', async (data) => {
+        try {
+            const { chatId, messageId } = data;
+    
+            let chatting = await Chat.findByIdAndUpdate(
+                chatId,
+                {
+                    $pull: { messages: { _id: messageId } },
+                },
+                { upsert: true }
+            );
+    
+            if (chatting) {
+                // Emit the updated chat details or specific information related to the delete_msg event
+                io.emit('update-delete-msg', { chatId, messageId });
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    });
          socket.on('send-message', async (data) => {
           try {
             // console.log(data,"hoja 22 bnke yr");
@@ -556,9 +575,9 @@ console.log(lastMessageSender,newChatObject1.seller_id);
             console.log("socket is disconnect");
             onlineUsers[userId] = false;
             let onlineUserIds = Object.keys(onlineUsers);
-
+console.log(userId,onlineUsers,onlineUserIds,"sdfghjkiolp;lkjhgfcx");
             // Emit offline status to other users
-            io.emit("user-status", { userId:onlineUserIds, status: "offline" });
+            io.emit("user-status", { userId:userId, status: "offline" ,onlineUserIds:onlineUserIds});
         })
     });
 
