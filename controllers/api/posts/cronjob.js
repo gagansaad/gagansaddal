@@ -224,6 +224,7 @@ cron.schedule("*/15 * * * *", async (req, res) => {
         
           console.log(currentHour,"hbsdhbsjdcjsdncjsdnkjdnksdnckdnckj");
           if(currentHour === 7){
+            console.log(data._id,"-----------------------------------------------------------------------------------");
             if (bumpUpAddon) {
               const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
               return {
