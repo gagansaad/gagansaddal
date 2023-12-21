@@ -233,9 +233,10 @@ cron.schedule("*/15 * * * *", async (req, res) => {
               };
             }
          
-          return null;
+           return null;
            // If "Bump up" addon is not found, return null
           }
+          return null;
         })
         .filter((dates) => dates !== null);
       
