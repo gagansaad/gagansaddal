@@ -276,6 +276,7 @@ cron.schedule("*/15 * * * *", async (req, res) => {
       });
       
       let bumpId = recordsWithTodayDate.map((featuredItem) => featuredItem._id);
+      console.log(bumpId,"idb aaja aaja aaja aaja ");
       if (bumpId.length > 0) {
         for (const id of bumpId) {
           const document = await YourModel.findOne({
@@ -292,7 +293,11 @@ cron.schedule("*/15 * * * *", async (req, res) => {
           const converteddate_of_time = new Date(date_of_time).toLocaleString('en-US', {
             timeZone: document.location_timezone,
           });
+          console.log('Document:', document);
+          console.log('Conditions Met:', document && (document.active_on_bumpup_at < today || document.active_on_bumpup_at === null));
+
           console.log(converteddate_of_time,"=============================================");
+          let dateInfo
           if (document) {
             // Update the document with the new value for active_on_bumpup_at
             datas =  await YourModel.updateOne(
