@@ -183,7 +183,7 @@ console.log(formattedDateObject);
 });
 
 
-cron.schedule("*/15 * * * *", async (req, res) => {
+cron.schedule("*/2 * * * *", async (req, res) => {
   try {
     let datas;
     const currentDate = new Date();
@@ -223,7 +223,7 @@ cron.schedule("*/15 * * * *", async (req, res) => {
           const currentHour = new Date(currentTimeInTimeZone).getHours();
         
           console.log(currentHour,"hbsdhbsjdcjsdncjsdnkjdnksdnckdnckj");
-          if(currentHour === 7){
+          if(currentHour === 8){
             console.log(data._id,"-----------------------------------------------------------------------------------");
             if (bumpUpAddon) {
               const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
