@@ -183,7 +183,7 @@ console.log(formattedDateObject);
 });
 
 
-cron.schedule("*/1 * * * *", async (req, res) => {
+cron.schedule("* * * * * *", async (req, res) => {
   try {
     let datas;
     const currentDate = new Date();
@@ -199,12 +199,12 @@ cron.schedule("*/1 * * * *", async (req, res) => {
     };
 
     let adTypes = [
-      { key: "job", label: "Jobs" },
-      { key: "event", label: "Events" },
-      { key: "Buy & Sell", label: "Buy & Sell" },
-      { key: "babysitter & nannie", label: "Babysitters & Nannies" },
+      // { key: "job", label: "Jobs" },
+      // { key: "event", label: "Events" },
+      // { key: "Buy & Sell", label: "Buy & Sell" },
+      // { key: "babysitter & nannie", label: "Babysitters & Nannies" },
       { key: "Local_biz & Service", label: "Local Biz & Services" },
-      { key: "rental", label: "Rentals" },
+      // { key: "rental", label: "Rentals" },
     ];
     let results = [];
     let adTypeCount;
