@@ -293,7 +293,7 @@ try {
 //   })
 // console.log(chat,"evfndejndjvnnvjdnjdenvjden");
 //   // Set user as online
-//   onlineUsers[userId] = true;
+  onlineUsers[userId] = true;
   
   // Emit online status to other users
   const filteredOnlineUsers = Object.entries(onlineUsers)
