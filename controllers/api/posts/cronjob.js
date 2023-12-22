@@ -294,6 +294,7 @@ if (bumpId.length > 0) {
       ],
     });
     if (document) {
+      console.log(date_of_time,"///////////////////////////");
     const converteddate_of_time = new Date(date_of_time).toLocaleString('en-US', {
       timeZone: document?.location_timezone,
     });
