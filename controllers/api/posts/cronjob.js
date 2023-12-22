@@ -293,9 +293,9 @@ cron.schedule("*/15 * * * *", async (req, res) => {
           });
           
           const converteddate_of_time = new Date(date_of_time).toLocaleString('en-US', {
-            timeZone: document.location_timezone,
+            timeZone: document?.location_timezone,
           });
-          const document_location_timezone = document.location_timezone; // Replace with your actual time zone
+          const document_location_timezone = document?.location_timezone; // Replace with your actual time zone
 
 // Parse the date string to extract components
 const dateComponents = converteddate_of_time.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/);
