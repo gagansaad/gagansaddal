@@ -279,6 +279,7 @@ const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
 console.log(recordsWithTodayDate);
 
 let bumpId = recordsWithTodayDate.map((featuredItem) => featuredItem._id);
+console.log(bumpId,"cdcdcdcdcdcdcdcdcdcdcd");
 if (bumpId.length > 0) {
   for (const id of bumpId) {
     const document = await YourModel.findOne({
@@ -292,15 +293,15 @@ if (bumpId.length > 0) {
         },
       ],
     });
-
+    if (document) {
     const converteddate_of_time = new Date(date_of_time).toLocaleString('en-US', {
       timeZone: document?.location_timezone,
     });
     const document_location_timezone = document?.location_timezone;
-
+console.log(document_location_timezone,"dcdcdc");
     // Parse the date string to extract components
     const dateComponents = converteddate_of_time.match(/(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+.\d+)Z/);
-
+console.log(dateComponents,"----------------------------------------");
     if (dateComponents) {
       const month = parseInt(dateComponents[2], 10) - 1; // Months are zero-based
       const day = parseInt(dateComponents[3], 10);
@@ -328,7 +329,7 @@ if (bumpId.length > 0) {
       let new_date = new Date(inputDate).toISOString();
       console.log("Input Date:", inputDate, new_date);
 
-      if (document) {
+      
         datas = await YourModel.updateOne(
           { _id: id },
           { $set: { active_on_bumpup_at: new_date } }
