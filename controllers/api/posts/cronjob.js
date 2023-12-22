@@ -299,17 +299,12 @@ cron.schedule("*/15 * * * *", async (req, res) => {
 
 // Parse the date string to extract components
 const dateComponents = converteddate_of_time.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/);
-let new_date
-if (dateComponents) {
-  const month = parseInt(dateComponents[1], 10) - 1; // Months are zero-based
-  const day = parseInt(dateComponents[2], 10);
-  const year = parseInt(dateComponents[3], 10);
-  let hour = parseInt(dateComponents[4], 10);
-  const minute = parseInt(dateComponents[5], 10);
-  const ampm = dateComponents[6];
-
-  // Rest of your code using the parsed components
-
+const month = parseInt(dateComponents[1], 10) - 1; // Months are zero-based
+const day = parseInt(dateComponents[2], 10);
+const year = parseInt(dateComponents[3], 10);
+let hour = parseInt(dateComponents[4], 10);
+const minute = parseInt(dateComponents[5], 10);
+const ampm = dateComponents[6];
 
 // Adjust the hour for AM/PM
 if (ampm === "PM" && hour < 12) {
@@ -322,11 +317,9 @@ if (ampm === "PM" && hour < 12) {
 const inputDate = new Date(year, month, day, hour, minute);
 const offset = new Date(inputDate.toLocaleString("en-US", { timeZone: document_location_timezone })).getTimezoneOffset();
 inputDate.setMinutes(inputDate.getMinutes() - offset);
-new_date = new Date(inputDate).toISOString()
+let new_date = new Date(inputDate).toISOString()
 console.log("Input Date:", inputDate,new_date);
-} else {
-  console.error("Invalid date format: " + converteddate_of_time);
-}
+
           if (document) {
             // Update the document with the new value for active_on_bumpup_at
             datas =  await YourModel.updateOne(
