@@ -183,7 +183,7 @@ console.log(formattedDateObject);
 });
 
 
-cron.schedule("* * * * * *", async (req, res) => {
+cron.schedule("*/15 * * * *", async (req, res) => {
   try {
     let datas;
     const currentDate = new Date();
@@ -298,37 +298,35 @@ if (bumpId.length > 0) {
     const converteddate_of_time = new Date(date_of_time).toLocaleString('en-US', {
       timeZone: document?.location_timezone,
     });
+console.log(converteddate_of_time,"2222222222222222222222");
     const document_location_timezone = document?.location_timezone;
 console.log(document_location_timezone,"dcdcdc");
     // Parse the date string to extract components
-    const dateComponents = converteddate_of_time.match(/(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+.\d+)Z/);
+    const dateComponents = converteddate_of_time.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/);
 console.log(dateComponents,"----------------------------------------");
     if (dateComponents) {
-      const month = parseInt(dateComponents[2], 10) - 1; // Months are zero-based
-      const day = parseInt(dateComponents[3], 10);
-      const year = parseInt(dateComponents[1], 10);
-      let hour = parseInt(dateComponents[4], 10);
-      const minute = parseInt(dateComponents[5], 10);
-      const second = parseFloat(dateComponents[6]);
+      const month = parseInt(dateComponents[1], 10) - 1; // Months are zero-based
+  const day = parseInt(dateComponents[2], 10);
+  const year = parseInt(dateComponents[3], 10);
+  let hour = parseInt(dateComponents[4], 10);
+  const minute = parseInt(dateComponents[5], 10);
+  const second = parseInt(dateComponents[6], 10);
+  const ampm = dateComponents[7];
 
       // Adjust the hour for AM/PM
-      if (hour >= 12) {
-        // PM
-        if (hour > 12) {
-          hour -= 12;
-        }
-      } else {
-        // AM
-        if (hour === 0) {
-          hour = 12;
-        }
+      if (ampm === "PM" && hour < 12) {
+        hour += 12;
+      } else if (ampm === "AM" && hour === 12) {
+        hour = 0;
       }
-
-      const inputDate = new Date(year, month, day, hour, minute, Math.floor(second));
-      const offset = new Date(inputDate.toLocaleString("en-US", { timeZone: document_location_timezone })).getTimezoneOffset();
-      inputDate.setMinutes(inputDate.getMinutes() - offset);
-      let new_date = new Date(inputDate).toISOString();
-      console.log("Input Date:", inputDate, new_date);
+console.log(year, month, day, hour, minute,"7777777");
+      const inputDate = new Date(year, month, day, hour, minute);
+      console.log(inputDate,"66666666666");
+const offset = new Date(inputDate.toLocaleString("en-US", { timeZone: document_location_timezone })).getTimezoneOffset();
+inputDate.setMinutes(inputDate.getMinutes() - offset);
+console.log(inputDate,",,,,,,,");
+let new_date = new Date(inputDate).toISOString()
+console.log("Input Date:", inputDate,new_date);
 
       
         datas = await YourModel.updateOne(
