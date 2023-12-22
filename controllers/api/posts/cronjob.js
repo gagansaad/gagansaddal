@@ -183,7 +183,7 @@ console.log(formattedDateObject);
 });
 
 
-cron.schedule("*/1 * * * *", async (req, res) => {
+cron.schedule("*/15 * * * *", async (req, res) => {
   try {
     let datas;
     const currentDate = new Date();
@@ -219,12 +219,10 @@ cron.schedule("*/1 * * * *", async (req, res) => {
             (addon) => addon.name === "Bump up"
           );
           console.log(bumpUpAddon,'data');
-          const currentTimeInTimeZone = new Date().toLocaleString('en-US', { timeZone: data.location_timezone});
+          const currentTimeInTimeZone = new Date().toLocaleString('en-US', { timeZone: data?.location_timezone});
           const currentHour = new Date(currentTimeInTimeZone).getHours();
-        
-          console.log(currentHour,"hbsdhbsjdcjsdncjsdnkjdnksdnckdnckj");
-          if(currentHour === 8){
-            console.log(data._id,"-----------------------------------------------------------------------------------");
+          console.log(currentHour);
+          if(currentHour === 7){
             if (bumpUpAddon) {
               const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
               return {
@@ -233,14 +231,11 @@ cron.schedule("*/1 * * * *", async (req, res) => {
                 interval: iter, // Add the interval property
               };
             }
-         
-           return null;
-           // If "Bump up" addon is not found, return null
           }
-          return null;
+          return null; // If "Bump up" addon is not found, return null
         })
         .filter((dates) => dates !== null);
-      
+
       const resultDates = [];
 
       for (const dateRange of bumpUpDates) {
@@ -266,21 +261,23 @@ cron.schedule("*/1 * * * *", async (req, res) => {
 
 
       // Filter adonsData to find records where resultDates array contains today's date
+      console.log(checkAlreadyExist);
       const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
-        const recordDates = resultDates[index];
-      
-        // Ensure that resultDates[index] exists and is an array
-        if (Array.isArray(recordDates)) {
-          // Check if today is included in the recordDates array
-          return recordDates.includes(today);
+        if (index < resultDates.length) {
+            const recordDates = resultDates[index]; // Get the resultDates array for the current record
+            console.log(recordDates, "tfjmmkm");
+    
+            return recordDates.includes(today);
+        } else {
+            // Handle the case where the index is out of bounds
+            console.error("Index out of bounds for resultDates array");
+            return false;
         }
-      
-        // If resultDates[index] is not an array, consider it as a non-matching condition
-        return false;
-      });
-      
+    });
+    
+    console.log(recordsWithTodayDate);
+    
       let bumpId = recordsWithTodayDate.map((featuredItem) => featuredItem._id);
-      console.log(bumpId,"idb aaja aaja aaja aaja ");
       if (bumpId.length > 0) {
         for (const id of bumpId) {
           const document = await YourModel.findOne({
@@ -294,19 +291,40 @@ cron.schedule("*/1 * * * *", async (req, res) => {
               },
             ],
           });
+          
           const converteddate_of_time = new Date(date_of_time).toLocaleString('en-US', {
             timeZone: document.location_timezone,
           });
-          console.log('Document:', document);
-          console.log('Conditions Met:', document && (document.active_on_bumpup_at < today || document.active_on_bumpup_at === null));
+          const document_location_timezone = document.location_timezone; // Replace with your actual time zone
 
-          console.log(converteddate_of_time,"=============================================");
-          let dateInfo
+// Parse the date string to extract components
+const dateComponents = converteddate_of_time.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/);
+const month = parseInt(dateComponents[1], 10) - 1; // Months are zero-based
+const day = parseInt(dateComponents[2], 10);
+const year = parseInt(dateComponents[3], 10);
+let hour = parseInt(dateComponents[4], 10);
+const minute = parseInt(dateComponents[5], 10);
+const ampm = dateComponents[6];
+
+// Adjust the hour for AM/PM
+if (ampm === "PM" && hour < 12) {
+  hour += 12;
+} else if (ampm === "AM" && hour === 12) {
+  hour = 0;
+}
+
+// Create a new Date object with the specified time zone
+const inputDate = new Date(year, month, day, hour, minute);
+const offset = new Date(inputDate.toLocaleString("en-US", { timeZone: document_location_timezone })).getTimezoneOffset();
+inputDate.setMinutes(inputDate.getMinutes() - offset);
+let new_date = new Date(inputDate).toISOString()
+console.log("Input Date:", inputDate,new_date);
+
           if (document) {
             // Update the document with the new value for active_on_bumpup_at
             datas =  await YourModel.updateOne(
               { _id: id },
-              { $set: { active_on_bumpup_at: converteddate_of_time } }
+              { $set: { active_on_bumpup_at: new_date } }
               // { $set: { active_on_bumpup_at: date_of_time } }
             );
           }
