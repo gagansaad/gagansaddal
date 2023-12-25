@@ -1195,6 +1195,8 @@ exports.fetchAll = async (req, res, next) => {
             is_Reported: !!job.isReported,
           };
         }); //////
+     
+        
         const isFavoriteFilter = is_favorite === "true" ? true : undefined;
         if (isFavoriteFilter) {
           jobData = jobData.filter((job) => job.is_favorite === true);

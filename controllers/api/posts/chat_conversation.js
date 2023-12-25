@@ -71,7 +71,7 @@ const mongoose = require("mongoose"),
         path: 'messages.senderId',
         select: 'userInfo.name userBasicInfo.profile_image',
       });
-  
+  console.log(chat);
       if (!chat) {
         let sender;
         let buyer;
@@ -93,7 +93,7 @@ const mongoose = require("mongoose"),
        }
        console.log(sender,buyer,seller,ad);
        const customResponse = {
-        _id: "252525",
+        _id: chat._id,
         ads_id: ad._id || null,
         ads_name: ad.adsInfo.title || null,
         ads_image: ad.adsInfo.image || null,
