@@ -72,6 +72,7 @@ const mongoose = require("mongoose"),
         select: 'userInfo.name userBasicInfo.profile_image',
       });
   console.log(chat);
+  let customResponse
       if (!chat) {
         let sender;
         let buyer;
@@ -89,11 +90,11 @@ const mongoose = require("mongoose"),
        }
        if(ads_id){
         let Model = mongoose.model(ads_type)
-        ad = await Model.findById(ads_id)
+        ad = await Model.findById(ads_id).populate("adsInfo.image")
        }
        console.log(sender,buyer,seller,ad);
-       const customResponse = {
-        _id: chat._id,
+       customResponse = {
+        _id: "252525",
         ads_id: ad._id || null,
         ads_name: ad.adsInfo.title || null,
         ads_image: ad.adsInfo.image || null,
@@ -110,48 +111,52 @@ const mongoose = require("mongoose"),
         return successJSONResponse(res, {
           message: 'success',
           data: customResponse,
+          chat
         });
       }
-      const newStatus = 'seen';
-      for (const message of chat.messages) {
-        console.log(message.senderId._id !== userId,message.senderId._id, userId);
-        if (message.senderId._id.toString() !== userId.toString()) {
-            message.status = newStatus;
-        }
-    }
-
-    // // Save only if there are messages to update
-    if (chat.messages.length > 0) {
-        await chat.save();
-    }
-      
-  
-      const startIndex = (page - 1) * limit;
-      const endIndex = page * limit;
-  
-      let paginatedMessages = [];
-      let totalItems = chat.messages.length;
-  
-      if (chat.messages && totalItems > 0) {
-        chat.messages.reverse();
-        paginatedMessages = chat.messages.slice(startIndex, endIndex);
+      else{
+        const newStatus = 'seen';
+        for (const message of chat.messages) {
+          console.log(message.senderId._id !== userId,message.senderId._id, userId);
+          if (message.senderId._id.toString() !== userId.toString()) {
+              message.status = newStatus;
+          }
       }
-     
-      const customResponse = {
-        _id: chat._id,
-        ads_id: chat.ads_id._id || null,
-        ads_name: chat.ads_id.adsInfo.title || null,
-        ads_image: chat.ads_id.adsInfo.image || null,
-        buyer_id: chat.buyer._id || null,
-        buyer_name: chat.buyer.userInfo.name || null,
-        buyer_image: chat.buyer.userBasicInfo.profile_image || null,
-        seller_id: chat.seller._id || null,
-        seller_name: chat.seller.userInfo.name || null,
-        seller_image: chat.seller.userBasicInfo.profile_image || null,
-        ads_type: chat.ads_type || null,
-        messages: paginatedMessages || null,
+  
+      // // Save only if there are messages to update
+      if (chat.messages.length > 0) {
+          await chat.save();
+      }
         
-      };
+    
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+    
+        let paginatedMessages = [];
+        let totalItems = chat.messages.length;
+    
+        if (chat.messages && totalItems > 0) {
+          chat.messages.reverse();
+          paginatedMessages = chat.messages.slice(startIndex, endIndex);
+        }
+       
+       customResponse = {
+          _id: chat._id,
+          ads_id: chat.ads_id._id || null,
+          ads_name: chat.ads_id.adsInfo.title || null,
+          ads_image: chat.ads_id.adsInfo.image || null,
+          buyer_id: chat.buyer._id || null,
+          buyer_name: chat.buyer.userInfo.name || null,
+          buyer_image: chat.buyer.userBasicInfo.profile_image || null,
+          seller_id: chat.seller._id || null,
+          seller_name: chat.seller.userInfo.name || null,
+          seller_image: chat.seller.userBasicInfo.profile_image || null,
+          ads_type: chat.ads_type || null,
+          messages: paginatedMessages || null,
+          
+        };
+      }
+      
   
       return successJSONResponse(res, {
         message: 'success',
@@ -159,6 +164,7 @@ const mongoose = require("mongoose"),
         currentPage: page,
         totalPages: Math.ceil(totalItems / limit),
         data: customResponse,
+        chat
       });
     } catch (err) {
       console.log(err);
@@ -184,7 +190,7 @@ exports.ChatList = async (req, res, next) => {
       ],
     }).populate({
       path: 'ads_id',
-      select: 'adsInfo.title',
+      select: 'adsInfo.title ',
       populate: {
         path: 'adsInfo.image',
         select: 'url', // Assuming 'imageUrl' is the field you want to select
