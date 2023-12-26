@@ -1039,6 +1039,7 @@ exports.fetchAll = async (req, res, next) => {
             FeaturedData = FeaturedData.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
             // console.log(FeaturedData);
           }
+
         const featuredRecordsToPick = 6;
         const FeaturedpickedRecords = [];
 
@@ -1050,7 +1051,13 @@ exports.fetchAll = async (req, res, next) => {
           const randomRecord = FeaturedData.splice(randomIndex, 1)[0]; // Remove and pick the record
           FeaturedpickedRecords.push(randomRecord);
         }
-      
+        featuredData.sort((a, b) => {
+          // Assuming active_on_virtual is a date, modify the comparison accordingly
+          const dateA = new Date(a.active_on_virtual);
+          const dateB = new Date(b.active_on_virtual);
+          
+          return dateB - dateA;// Ascending order, use dateB - dateA for descending
+      });
         featuredData = FeaturedpickedRecords.map((job) => {
           return {
             ...job,

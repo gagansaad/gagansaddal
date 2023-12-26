@@ -1304,6 +1304,13 @@ exports.fetchAll = async (req, res, next) => {
             is_favorite: !!job.isFavorite,
           };
         });
+        featuredData.sort((a, b) => {
+          // Assuming active_on_virtual is a date, modify the comparison accordingly
+          const dateA = new Date(a.active_on_virtual);
+          const dateB = new Date(b.active_on_virtual);
+          
+          return dateB - dateA;// Ascending order, use dateB - dateA for descending
+      });
         excludedIds = featuredData.map(featuredItem => featuredItem._id)
         // commonId = [...bumpId]
       }}
