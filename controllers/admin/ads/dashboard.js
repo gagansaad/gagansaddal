@@ -120,7 +120,7 @@ exports.fetchAlldashboard = async (req, res, next) => {
     let totalAmountSums = []; // Initialize an array to store the sums
 
     for (const ids of post_type) {
-      let reve = await paymentModel.find({ ads_type: ids._id });
+      let reve = await paymentModel.find({$and:[{ads_type: ids._id },{payment_status:"confirmed"}] });
 
       let totalAmountSum = 0;
       for (const payment of reve) {
