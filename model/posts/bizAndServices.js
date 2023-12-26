@@ -189,34 +189,34 @@ bizAndServices.virtual('active_on_virtual').get(function () {
   // Default value if neither active_on_bumpup_at nor "Bump up" add-on is present
   return null;
 });
-bizAndServices.virtual('expiredAt').get(function () {
-  const dateString =  this.plan_validity.expired_on;
+// bizAndServices.virtual('expiredAt').get(function () {
+//   const dateString =  this.plan_validity.expired_on;
 
-  // Split the date string to get the year, month, day, etc.
-  const [year, month, day] = dateString.split("T")[0].split("-");
+//   // Split the date string to get the year, month, day, etc.
+//   const [year, month, day] = dateString.split("T")[0].split("-");
   
-  // Create a Date object
-  const originalDate = new Date(year, month - 1, day); // Note: Month is zero-based
+//   // Create a Date object
+//   const originalDate = new Date(year, month - 1, day); // Note: Month is zero-based
   
-  // Add one day to the original date
-  originalDate.setDate(originalDate.getDate()+1);
+//   // Add one day to the original date
+//   originalDate.setDate(originalDate.getDate()+1);
   
-  // Get today's date
-  const today = new Date();
-  today.setDate(today.getDate()+1);
-  today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero for accurate comparison
-  originalDate.setHours(0, 0, 0, 0)
-  // Check if the next day is equal to today's date
-  console.log(dateString,originalDate,today);
-  if (originalDate > today) {
-    return null;
+//   // Get today's date
+//   const today = new Date();
+//   today.setDate(today.getDate()+1);
+//   today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero for accurate comparison
+//   originalDate.setHours(0, 0, 0, 0)
+//   // Check if the next day is equal to today's date
+//   console.log(dateString,originalDate,today);
+//   if (originalDate > today) {
+//     return null;
    
-  } else {
-    return dateString;
-  }
+//   } else {
+//     return dateString;
+//   }
 
   
-});
+// });
 bizAndServices.virtual("favoriteCount", {
   ref: "FavoriteAd",
   localField: "_id",
