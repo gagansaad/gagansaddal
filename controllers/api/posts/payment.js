@@ -133,6 +133,7 @@ const paymentIntentCreate = async (
   if (deviceType != null) dataobj.device_type = deviceType;
   let PaymentModelId = await PaymentModel.create(dataobj);
   if (dataobj.total_amount == 0) {
+    console.log("---------------------------------------------------");
     await paymentSuccessModelUpdate(PaymentModelId._id, UserId);
     return null;
   }
