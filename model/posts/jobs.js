@@ -257,7 +257,34 @@ roomRentsSchema
     this.adsInfo.price = value.price;
     this.adsInfo.price_info = value.price_info; // Corrected from this.adsInfo.price_drop
   });
+  roomRentsSchema.virtual('expiredAt').get(function () {
+    const dateString =  this.plan_validity.expired_on;
 
+    // Split the date string to get the year, month, day, etc.
+    const [year, month, day] = dateString.split("T")[0].split("-");
+    
+    // Create a Date object
+    const originalDate = new Date(year, month - 1, day); // Note: Month is zero-based
+    
+    // Add one day to the original date
+    originalDate.setDate(originalDate.getDate()+1);
+    
+    // Get today's date
+    const today = new Date();
+    today.setDate(today.getDate()+1);
+    today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero for accurate comparison
+    originalDate.setHours(0, 0, 0, 0)
+    // Check if the next day is equal to today's date
+    console.log(dateString,originalDate,today);
+    if (originalDate > today) {
+      return null;
+     
+    } else {
+      return dateString;
+    }
+  
+    
+  });
 // Make sure to include 'toJSON' transform to include virtual properties when converting to JSON
 roomRentsSchema.set("toJSON", { virtuals: true });
 
