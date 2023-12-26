@@ -601,6 +601,7 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
     ads_type = paymentDetails.ads_type;
     // Continue with your logic...
   }
+  console.log(paymentDetails,"0000000000-----------");
   const newPaymentStatus = "confirmed";
   await PaymentModel.findByIdAndUpdate(
     { _id: payment_id },
