@@ -858,7 +858,7 @@ AddOnsArr.forEach(itemB => {
     deletedAt:null
   };
 
-  
+  console.log(oldval,"/////////////////////////////////////////////////");
   let statusUpdate = await ModelName.findByIdAndUpdate(
     { _id: ads_id },
     { $set: data_Obj }
