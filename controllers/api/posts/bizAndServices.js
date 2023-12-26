@@ -1332,7 +1332,13 @@ exports.fetchAll = async (req, res, next) => {
       if (isFavoriteFilter) {
         jobData = jobData.filter((job) => job.is_favorite === true);
       }
-
+      jobData.sort((a, b) => {
+        // Assuming active_on_virtual is a date, modify the comparison accordingly
+        const dateA = new Date(a.active_on_virtual);
+        const dateB = new Date(b.active_on_virtual);
+        
+        return dateA - dateB; // Ascending order, use dateB - dateA for descending
+    });
       // Pagination
       let totalCount = jobData.length; 
         let totalresult;
