@@ -829,7 +829,7 @@ AddOnsArr.forEach(itemB => {
 });
   }
 if(checkdata.status == 'active' && expiredDate.toISOString() > currentDae.toISOString() ){
-  
+  console.log("aaya--------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.");
   plan_obj = plan_duration
 
 // console.log(checkdata.addons_validity,"================",AddOnsArr,"*************************************");
