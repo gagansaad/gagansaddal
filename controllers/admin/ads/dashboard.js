@@ -209,6 +209,11 @@ exports.fetchAlldashboard = async (req, res, next) => {
     }
     const totalAmountAggregation = await paymentModel.aggregate([
       {
+        $match: {
+          payment_status: "confirmed", // Add your specific condition here
+        },
+      },
+      {
         $group: {
           _id: null,
           totalAmount: { $sum: "$total_amount" },
@@ -221,6 +226,11 @@ exports.fetchAlldashboard = async (req, res, next) => {
     const tomorrow = moment(today).add(1, "days");
 
     const todayTotalAmountAggregation = await paymentModel.aggregate([
+      {
+        $match: {
+          payment_status: "confirmed", // Add your specific condition here
+        },
+      },
       {
         $match: {
           createdAt: {
@@ -384,6 +394,11 @@ exports.fetchGraph = async (req, res, next) => {
 
 const calculateMonthlyRevenue = async (startDate, endDate) => {
   const todayTotalAmountAggregation = await paymentModel.aggregate([
+    {
+      $match: {
+        payment_status: "confirmed", // Add your specific condition here
+      },
+    },
     {
       $match: {
         createdAt: {
