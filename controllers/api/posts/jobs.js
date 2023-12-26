@@ -1181,7 +1181,7 @@ exports.fetchAllAds = async (req, res, next) => {
       const dateA = new Date(a.active_on_virtual);
       const dateB = new Date(b.active_on_virtual);
       
-      return dateA - dateB; // Ascending order, use dateB - dateA for descending
+      return dateB - dateA; // Ascending order, use dateB - dateA for descending
   });
     // Pagination
    
