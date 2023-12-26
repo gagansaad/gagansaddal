@@ -124,6 +124,7 @@ exports.fetchAlldashboard = async (req, res, next) => {
 
       let totalAmountSum = 0;
       for (const payment of reve) {
+        console.log(payment);
         totalAmountSum += payment.total_amount;
       }
 
