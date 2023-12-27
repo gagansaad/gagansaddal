@@ -415,7 +415,7 @@ const calculateMonthlyRevenue = async (startDate, endDate ,adstype) => {
   
  let staDate = startDate.toISOString();
   let eDate = endDate.toISOString()
-  let type = adstype.toString
+  let type = adstype.toString()
   console.log(adstype.toString(),staDate, eDate);
   const todayTotalAmountAggregation = await paymentModel.aggregate([
     {
