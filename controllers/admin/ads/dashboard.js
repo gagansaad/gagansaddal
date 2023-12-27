@@ -70,7 +70,24 @@ exports.fetchAllFeaturedAds = async (req, res, next) => {
     });
   }
 };
-
+function getKeyFromName(name) {
+  switch (name) {
+    case 'events':
+      return 'event';
+    case 'local biz & services':
+      return 'biz';
+    case 'babysitters & nannies':
+      return 'babysitter';
+    case 'rentals':
+      return 'roomrent';
+    case 'jobs':
+      return 'jobs';
+    case 'buy & sell':
+      return 'buysell';
+    default:
+      return '';
+  }
+};
 exports.fetchAll = async (req, res, next) => {
   try {
     // Get the current date
@@ -272,39 +289,45 @@ exports.fetchAlldashboard = async (req, res, next) => {
     if (todayTotalAmountAggregation.length > 0) {
       todayTotalAmount = todayTotalAmountAggregation[0].todayTotalAmount;
     }
-    const counts = {
+    
+    let counts = {
       event: {
         total: eventCount,
         featured: featuredcounts.featuredevent,
-        totalrevenue: totalAmountSums[0].totalrevenue,
+        // totalrevenue: totalAmountSums[0].totalrevenue,
       },
       biz: {
         total: bizCount,
         featured: featuredcounts.featuredbiz,
-        totalrevenue: totalAmountSums[1].totalrevenue,
+        // totalrevenue: totalAmountSums[1].totalrevenue,
       },
       babysitter: {
         total: babysitterCount,
         featured: featuredcounts.featuredbabysitter,
-        totalrevenue: totalAmountSums[2].totalrevenue,
+        // totalrevenue: totalAmountSums[2].totalrevenue,
       },
       roomrent: {
         total: roomrentCount,
         featured: featuredcounts.featuredroomrent,
-        totalrevenue: totalAmountSums[3].totalrevenue,
+        // totalrevenue: totalAmountSums[3].totalrevenue,
       },
       jobs: {
         total: jobsCount,
         featured: featuredcounts.featuredjobs,
-        totalrevenue: totalAmountSums[4].totalrevenue,
+        // totalrevenue: totalAmountSums[4].totalrevenue,
       },
       buysell: {
         total: buysellCount,
         featured: featuredcounts.featuredbuysell,
-        totalrevenue: totalAmountSums[5].totalrevenue,
+        // totalrevenue: totalAmountSums[5].totalrevenue,
       },
     };
-  
+    totalAmountSums.forEach(item => {
+      const key = getKeyFromName(item.name.toLowerCase());
+      
+      counts[key].totalrevenue += item.totalrevenue;
+    });
+    
     if (totalSum > 0) {
       return successJSONResponse(res, {
         message: "Success",
