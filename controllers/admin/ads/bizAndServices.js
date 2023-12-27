@@ -325,6 +325,7 @@ exports.fetchGraph = async (req, res, next) => {
       "biz",
     ];
     let type = await PostType.find({name:"Local Biz & Services"})
+    console.log(type);
     for (let month = 0; month < 12; month++) {
       const startDate = new Date(currentYear, month, 1);
       const endDate = new Date(currentYear, month + 1, 0);

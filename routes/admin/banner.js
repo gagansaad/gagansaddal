@@ -39,10 +39,21 @@ router.post(
   upload.array("photos", 1),
   controllers.createBanner
 );
-// router.get(`/view-buysell-ad`,
-//     controllers.fetchOne
-// );
-// router.delete(`/delete-buysell-ad`,
-//     controllers.fetchOneDelete
-// );
+router.put(
+  `/updatebanner`,
+  upload.array("photos", 1),
+  controllers.updateBanner
+);
+router.get(
+  `/banners`,
+  controllers.getAllBanners
+);
+router.delete(
+  `/deletebanner`,
+  controllers.deleteBannerById
+);
+router.get(
+  `/banner`,
+  controllers.getBannerById
+);
 module.exports = router;
