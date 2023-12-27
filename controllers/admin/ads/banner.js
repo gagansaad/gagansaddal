@@ -62,7 +62,7 @@ exports.createBanner = async (req, res, next) => {
 // Update Banner
 exports.updateBanner = async (req, res, next) => {
   try {
-    const bannerId = req.query.bannerId; // Assuming bannerId is part of the URL path
+    const bannerId = req.params.id; // Assuming bannerId is part of the URL path
     const { caption, target_url, img_type ,status} = req.body;
 
     // Your validation logic here if needed

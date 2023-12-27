@@ -40,7 +40,7 @@ router.post(
   controllers.createBanner
 );
 router.put(
-  `/updatebanner`,
+  `/updatebanner/:id`,
   upload.array("photos", 1),
   controllers.updateBanner
 );
