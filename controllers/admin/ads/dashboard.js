@@ -324,10 +324,9 @@ exports.fetchAlldashboard = async (req, res, next) => {
     };
     totalAmountSums.forEach(item => {
       const key = getKeyFromName(item.name.toLowerCase());
-      
       counts[key].totalrevenue += item.totalrevenue;
     });
-    
+    console.log(counts);
     if (totalSum > 0) {
       return successJSONResponse(res, {
         message: "Success",
