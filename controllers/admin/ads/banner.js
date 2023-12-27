@@ -75,11 +75,25 @@ exports.updateBanner = async (req, res, next) => {
     }
 
     // Update banner properties
-    existingBanner.caption = caption;
-    existingBanner.target_url = target_url;
-    existingBanner.img_type = img_type;
-    existingBanner.status = status;
-    existingBanner.image = image;
+    if (caption) {
+      existingBanner.caption = caption;
+    }
+
+    if (target_url) {
+      existingBanner.target_url = target_url;
+    }
+
+    if (img_type) {
+      existingBanner.img_type = img_type;
+    }
+
+    if (status) {
+      existingBanner.status = status;
+    }
+
+    if (image) {
+      existingBanner.image = image;
+    }
     // Save the updated banner
     console.log(existingBanner,"ekmk");
     const updatedBanner = await existingBanner.save();
