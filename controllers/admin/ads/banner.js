@@ -88,6 +88,7 @@ console.log(req.body);
     }
 
     if (status) {
+      console.log(status,"fmekjn");
       existingBanner.status = status;
     }
 
