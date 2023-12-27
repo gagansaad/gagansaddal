@@ -120,6 +120,15 @@ exports.fetchAlldashboard = async (req, res, next) => {
     const totalAmountSums = [];
     
     for (const ids of post_type) {
+      console.log(ids._id,"ckc");
+      const aggregaeResult = await paymentModel.aggregate([
+        {
+          $match: {
+            ads_type: ids._id,
+          },
+        },
+      ]);
+      console.log(aggregaeResult);
       const aggregateResult = await paymentModel.aggregate([
         {
           $match: {
