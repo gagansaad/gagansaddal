@@ -169,7 +169,7 @@ exports.getAllBanners = async (req, res, next) => {
     };
 
     // Fetch banners with pagination and search from the database
-    const query = BannerSchema.find(searchCriteria).skip(skip).limit(pageSize);
+    const query = BannerSchema.find(searchCriteria).populate("image").skip(skip).limit(pageSize);
     const allBanners = await query.exec();
 
     // Get total count of documents that match the search criteria
