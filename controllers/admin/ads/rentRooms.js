@@ -171,7 +171,7 @@ console.log(today,endDate);
       const query = {
         $and: [
           { ads_type: sadsid },
-          // { payment_status: paymentStatus },
+          { payment_status: paymentStatus },
           {
             createdAt: {
               $gte: today,
@@ -183,7 +183,7 @@ console.log(today,endDate);
       const query2 = {
         $and: [
           { ads_type: sadsid },
-          // { payment_status: paymentStatus },
+          { payment_status: paymentStatus },
         ],
       };
 console.log(query,query2);
