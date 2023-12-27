@@ -33,7 +33,7 @@ const mongoose = require("mongoose"),
       const { ads_id ,sellerId,buyerId,senderId,ads_type} = req.query;
       console.log(ads_id ,sellerId,buyerId,senderId,ads_type);
       let userId = req.userId;
-  
+      let totalItems
       let chat = await Chat.findOne({
         $and: [
           { ads_id: ads_id },
@@ -133,7 +133,7 @@ const mongoose = require("mongoose"),
         const endIndex = page * limit;
     
         let paginatedMessages = [];
-        let totalItems = chat.messages.length;
+        totalItems = chat.messages.length;
     
         if (chat.messages && totalItems > 0) {
           chat.messages.reverse();
