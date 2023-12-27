@@ -337,7 +337,7 @@ exports.fetchGraph = async (req, res, next) => {
     const adTypes = [
       "jobs",
     ];
-    let type = await PostType.find({name:"Rentals"})
+    let type = await PostType.find({name:"Jobs"})
 
     for (let month = 0; month < 12; month++) {
       const startDate = new Date(currentYear, month, 1);
