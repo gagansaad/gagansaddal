@@ -86,9 +86,9 @@ console.log(req.body);
     if (img_type) {
       existingBanner.img_type = img_type;
     }
-
-    if (status) {
-      console.log(status,"fmekjn");
+    
+    if (status == true || status == false) {
+      
       existingBanner.status = status;
     }
 
