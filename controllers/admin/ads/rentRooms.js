@@ -425,6 +425,7 @@ const calculateMonthlyRevenue = async (startDate, endDate ,adstype) => {
           $lt: endDate,
         },
         ads_type: type,
+        payment_status:"confirmed"
       },
     },
     {
