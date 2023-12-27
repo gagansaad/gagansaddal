@@ -140,7 +140,7 @@ exports.fetchAlldashboard = async (req, res, next) => {
    
       const totalAmountSum = aggregateResult.length > 0 ? aggregateResult[0].totalrevenue : 0;
     
-      totalAmountSums.push({ totalrevenue: totalAmountSum });
+      totalAmountSums.push({ name:ids.name,totalrevenue: totalAmountSum });
     }
     
     console.log(totalAmountSums);
