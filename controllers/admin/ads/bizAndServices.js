@@ -1,10 +1,11 @@
 const { json } = require("express");
 
 const mongoose = require("mongoose"),
-  postbizAndServicesAd = mongoose.model("Local_biz & Service"),
-  PostViews = mongoose.model("Post_view"),
-  tagline_keywords = mongoose.model("keywords"),
-  paymentModel = mongoose.model("payment"),
+    postbizAndServicesAd = mongoose.model("Local_biz & Service"),
+    PostViews = mongoose.model("Post_view"),
+    tagline_keywords = mongoose.model("keywords"),
+    PostType = mongoose.model("PostType"),
+    paymentModel = mongoose.model("payment"),
   {
     successJSONResponse,
     failureJSONResponse,
@@ -323,7 +324,7 @@ exports.fetchGraph = async (req, res, next) => {
     const adTypes = [
       "biz",
     ];
-
+    let type = await PostType.find({name:"Rentals"})
     for (let month = 0; month < 12; month++) {
       const startDate = new Date(currentYear, month, 1);
       const endDate = new Date(currentYear, month + 1, 0);
@@ -367,7 +368,7 @@ exports.fetchGraph = async (req, res, next) => {
       data1.push(monthlyfTotal);
 
       // Calculate revenue for the month
-      const monthlyRevenue = await calculateMonthlyRevenue(startDate, endDate);
+      const monthlyRevenue = await calculateMonthlyRevenue(startDate, endDate,type[0]._id);
       revenueData.push(monthlyRevenue);
     }
 
@@ -407,27 +408,37 @@ function getModelByType(adType) {
       throw new Error(`Unsupported ad type: ${adType}`);
   }
 }
-const calculateMonthlyRevenue = async (startDate, endDate) => {
-  const todayTotalAmountAggregation = await paymentModel.aggregate([
-    {
-      $match: {
-        createdAt: {
-          $gte: startDate,
-          $lte: endDate,
-        },
-      },
-    },
-    {
-      $group: {
-        _id: null,
-        revenue: { $sum: "$total_amount" },
-      },
-    },
-  ]);
-
-  if (todayTotalAmountAggregation.length > 0) {
-    return todayTotalAmountAggregation[0].revenue;
-  } else {
-    return 0; // No revenue for the given month
-  }
-};
+const calculateMonthlyRevenue = async (startDate, endDate ,adstype) => {
+  
+  let staDate = startDate.toISOString();
+   let eDate = endDate.toISOString()
+   let type = adstype.toString()
+   console.log(adstype.toString(),staDate, eDate);
+   const todayTotalAmountAggregation = await paymentModel.aggregate([
+     {
+       $match: {
+         createdAt: {
+           $gte: startDate,
+           $lt: endDate,
+         },
+         ads_type: type,
+         payment_status:"confirmed"
+       },
+     },
+     {
+       $group: {
+         _id: null,
+         revenue: { $sum: "$total_amount" },
+       },
+     },
+   ]);
+   
+ 
+ console.log(todayTotalAmountAggregation);
+   if (todayTotalAmountAggregation.length > 0) {
+     return todayTotalAmountAggregation[0].revenue;
+   } else {
+     console.log("dedede");
+     return 0; // No revenue for the given month
+   }
+ };
