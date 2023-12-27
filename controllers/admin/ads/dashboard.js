@@ -116,19 +116,32 @@ exports.fetchAll = async (req, res, next) => {
 
 exports.fetchAlldashboard = async (req, res, next) => {
   try {
-    let post_type = await posttype.find();
-    let totalAmountSums = []; // Initialize an array to store the sums
-
+    const post_type = await posttype.find();
+    const totalAmountSums = [];
+    
     for (const ids of post_type) {
-      // Find payments for the current ads_type with payment_status "confirmed"
-      const payments = await paymentModel.find({ ads_type: ids._id, payment_status: "confirmed" });
+      const aggregateResult = await paymentModel.aggregate([
+        {
+          $match: {
+            ads_type: ids._id,
+            payment_status: "confirmed",
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            totalrevenue: { $sum: "$total_amount" },
+          },
+        },
+      ]);
     
-      // Calculate the total amount for the current ads_type
-      const totalAmountSum = payments.reduce((sum, payment) => sum + payment.total_amount, 0);
+      const totalAmountSum = aggregateResult.length > 0 ? aggregateResult[0].totalrevenue : 0;
     
-      // Push the sum into the array along with the corresponding ads_type
-      totalAmountSums.push({totalrevenue: totalAmountSum });
+      totalAmountSums.push({ ads_type: ids._id, totalrevenue: totalAmountSum });
     }
+    
+    console.log(totalAmountSums);
+    
     
    
     console.log(totalAmountSums,"rdd");
