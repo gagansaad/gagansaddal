@@ -149,6 +149,7 @@ exports.deleteBannerById = async (req, res, next) => {
 
 // Get All Banners
 // Get All Banners with Pagination and Search
+// Get All Banners with Pagination and Search
 exports.getAllBanners = async (req, res, next) => {
   try {
     // Extract query parameters for pagination and search
@@ -168,15 +169,22 @@ exports.getAllBanners = async (req, res, next) => {
     };
 
     // Fetch banners with pagination and search from the database
-    const allBanners = await BannerSchema.find(searchCriteria)
-      .skip(skip)
-      .limit(pageSize);
+    const query = BannerSchema.find(searchCriteria).skip(skip).limit(pageSize);
+    const allBanners = await query.exec();
+
+    // Get total count of documents that match the search criteria
+    const totalRecords = await BannerSchema.countDocuments(searchCriteria);
+
+    // Calculate total pages
+    const totalPages = Math.ceil(totalRecords / pageSize);
 
     return successJSONResponse(res, {
       message: 'Banners retrieved successfully with pagination and search',
       banners: allBanners,
       currentPage: page,
       pageSize: pageSize,
+      totalRecords: totalRecords,
+      totalPages: totalPages,
     });
   } catch (err) {
     console.log(err);
@@ -185,3 +193,4 @@ exports.getAllBanners = async (req, res, next) => {
     });
   }
 };
+
