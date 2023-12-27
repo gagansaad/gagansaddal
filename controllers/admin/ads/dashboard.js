@@ -201,7 +201,7 @@ exports.fetchAlldashboard = async (req, res, next) => {
     });
 
     if (totalSum > 0) {
-      let dbquery = { "addons_validity.name": "Featured" };
+      let dbquery = {  "addons_validity": { $exists: true, $not: { $size: 0 } } };
       const eventCount = await eventAd.countDocuments(dbquery);
       const bizCount = await bizAd.countDocuments(dbquery);
       const babysitterCount = await babysitterAd.countDocuments(dbquery);
