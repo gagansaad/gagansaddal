@@ -129,15 +129,15 @@ exports.fetchAlldashboard = async (req, res, next) => {
         },
         {
           $group: {
-            
+            _id: null,
             totalrevenue: { $sum: "$total_amount" },
           },
         },
       ]);
-    console.log(aggregateResult);
+    console.log(aggregateResult,"ckd");
       const totalAmountSum = aggregateResult.length > 0 ? aggregateResult[0].totalrevenue : 0;
     
-      totalAmountSums.push({ ads_type: ids._id, totalrevenue: totalAmountSum });
+      totalAmountSums.push({ totalrevenue: totalAmountSum });
     }
     
     console.log(totalAmountSums);
