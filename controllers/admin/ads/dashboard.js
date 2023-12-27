@@ -294,32 +294,32 @@ exports.fetchAlldashboard = async (req, res, next) => {
       event: {
         total: eventCount,
         featured: featuredcounts.featuredevent,
-        // totalrevenue: totalAmountSums[0].totalrevenue,
+        totalrevenue: 0,
       },
       biz: {
         total: bizCount,
         featured: featuredcounts.featuredbiz,
-        // totalrevenue: totalAmountSums[1].totalrevenue,
+        totalrevenue: 0,
       },
       babysitter: {
         total: babysitterCount,
         featured: featuredcounts.featuredbabysitter,
-        // totalrevenue: totalAmountSums[2].totalrevenue,
+        totalrevenue: 0,
       },
       roomrent: {
         total: roomrentCount,
         featured: featuredcounts.featuredroomrent,
-        // totalrevenue: totalAmountSums[3].totalrevenue,
+        totalrevenue: 0,
       },
       jobs: {
         total: jobsCount,
         featured: featuredcounts.featuredjobs,
-        // totalrevenue: totalAmountSums[4].totalrevenue,
+         totalrevenue: 0,
       },
       buysell: {
         total: buysellCount,
         featured: featuredcounts.featuredbuysell,
-        // totalrevenue: totalAmountSums[5].totalrevenue,
+         totalrevenue: 0,
       },
     };
     totalAmountSums.forEach(item => {
