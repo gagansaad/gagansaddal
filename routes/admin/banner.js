@@ -41,7 +41,7 @@ router.post(
 );
 router.put(
   `/updatebanner/:id`,
-  upload.array("photos", 1),
+  // upload.array("photos", 1),
   controllers.updateBanner
 );
 router.get(
