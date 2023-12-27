@@ -66,7 +66,7 @@ exports.updateBanner = async (req, res, next) => {
     const { caption, target_url, img_type ,status,image} = req.body;
 
     // Your validation logic here if needed
-
+console.log(req.body);
     // Find the banner by ID
     const existingBanner = await BannerSchema.findById(bannerId);
 
