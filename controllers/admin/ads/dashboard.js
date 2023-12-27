@@ -131,6 +131,7 @@ exports.fetchAlldashboard = async (req, res, next) => {
       // Push the sum into the array along with the corresponding ads_type
       totalAmountSums.push({ totalrevenue: totalAmountSum });
     }
+    console.log(totalAmountSums,"rdd");
 
     let totalAmount = 0;
     let todayTotalAmount = 0;
