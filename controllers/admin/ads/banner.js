@@ -63,7 +63,7 @@ exports.createBanner = async (req, res, next) => {
 exports.updateBanner = async (req, res, next) => {
   try {
     const bannerId = req.params.id; // Assuming bannerId is part of the URL path
-    const { caption, target_url, img_type ,status} = req.body;
+    const { caption, target_url, img_type ,status,image} = req.body;
 
     // Your validation logic here if needed
 
@@ -79,8 +79,9 @@ exports.updateBanner = async (req, res, next) => {
     existingBanner.target_url = target_url;
     existingBanner.img_type = img_type;
     existingBanner.status = status;
-
+    existingBanner.image = image;
     // Save the updated banner
+    console.log(existingBanner,"ekmk");
     const updatedBanner = await existingBanner.save();
 
     return successJSONResponse(res, {
