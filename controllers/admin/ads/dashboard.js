@@ -304,7 +304,13 @@ exports.fetchAlldashboard = async (req, res, next) => {
         totalrevenue: totalAmountSums[5].totalrevenue,
       },
     };
-
+    totalAmountSums.forEach((item) => {
+      const lowerCaseName = item.name.toLowerCase().replace(/\s+/g, ''); // Convert to lowercase and remove spaces
+      if (counts[lowerCaseName]) {
+        counts[lowerCaseName].totalrevenue = item.totalrevenue;
+      }
+    });
+    console.log(counts);
     if (totalSum > 0) {
       return successJSONResponse(res, {
         message: "Success",
