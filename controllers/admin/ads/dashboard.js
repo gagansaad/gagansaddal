@@ -388,7 +388,7 @@ exports.fetchGraph = async (req, res, next) => {
             $gte: startDate,
             $lte: endDate,
           },
-          "addons_validity.name": "Featured",
+          "addons_validity": { $exists: true, $not: { $size: 0 } },
         });
       });
 
