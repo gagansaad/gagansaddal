@@ -350,7 +350,7 @@ console.log(type[0]._id);
             $gte: startDate,
             $lte: endDate,
           },
-          "addons_validity.name": "Featured",
+          "addons_validity": { $exists: true, $not: { $size: 0 } }
         });
       });
 

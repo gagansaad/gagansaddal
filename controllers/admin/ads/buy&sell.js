@@ -167,7 +167,7 @@ exports.fetchAll = async (req, res, next) => {
       const query = {
         $and: [
           { ads_type: sadsid },
-          // { payment_status: paymentStatus },
+          { payment_status: paymentStatus },
           {
             createdAt: {
               $gte: today,
@@ -179,7 +179,7 @@ exports.fetchAll = async (req, res, next) => {
       const query2 = {
         $and: [
           { ads_type: sadsid },
-          // { payment_status: paymentStatus },
+          { payment_status: paymentStatus },
         ],
       };
 
@@ -343,7 +343,7 @@ exports.fetchGraph = async (req, res, next) => {
             $gte: startDate,
             $lte: endDate,
           },
-          "addons_validity.name": "Featured",
+          "addons_validity": { $exists: true, $not: { $size: 0 } }
         });
       });
 
