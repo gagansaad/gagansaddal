@@ -36,7 +36,7 @@ function validateImage(req, res, next) {
 
 router.post(
   `/createbanner`,
-  upload.array("photos", 1),
+ 
   controllers.createBanner
 );
 router.put(

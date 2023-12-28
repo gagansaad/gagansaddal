@@ -24,17 +24,12 @@ exports.createBanner = async (req, res, next) => {
       return failureJSONResponse(res, { message: `Please provide caption` });
     if (!isValidString(target_url))
       return failureJSONResponse(res, { message: `Please provide target url` });
-    if (!req.files.length)
-      return failureJSONResponse(res, { message: `Please provide Banner img` });
-    let productImages;
-    if (req.files.length) {
-      var thumbnail = req.files[0].path;
-
-      productImages = await Media.create({ url: thumbnail });
-    }
-
+   
+      if (!isValidString(image))
+      return failureJSONResponse(res, { message: `Please provide valid image` });
+    
     const dataObj = {
-      image: productImages.id,
+      image: image,
       caption,
       target_url,
       img_type,
