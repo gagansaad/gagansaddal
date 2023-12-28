@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken"),
   authMiddleware = require(`../../../middleware/ensureUserLoggedIn`);
 router.post("/login", (req, res, next) => {
+  console.log(req.body,"cscscdscsc");
   Admin.find({ email_address: req.body.email_address })
     .exec()
     .then((admin) => {
