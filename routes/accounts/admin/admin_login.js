@@ -10,6 +10,7 @@ router.post("/login", (req, res, next) => {
   Admin.find({ email_address: req.body.email_address })
     .exec()
     .then((admin) => {
+      console.log(admin,"decdc");
       if (admin.length < 1) {
         return res.status(401).json({
           msg: "Admin Not Exist",
