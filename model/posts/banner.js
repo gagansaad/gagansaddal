@@ -14,8 +14,7 @@ const BannerSchema = new mongoose.Schema({
     default: false,
   },
   image: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: `media`,
+    type: String,
     required: true,
   },
   caption: {
