@@ -56,4 +56,9 @@ router.get(
   `/banner`,
   controllers.getBannerById
 );
+router.post(
+  `/upload-file`,
+  upload.single("photos"),
+  controllers.uploadfile
+);
 module.exports = router;

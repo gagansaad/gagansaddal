@@ -210,3 +210,19 @@ exports.getAllBanners = async (req, res, next) => {
   }
 };
 
+
+exports.uploadfile = async (req, res, next) => {
+  try {
+    let file = req.file
+   
+
+    return successJSONResponse(res, {
+      message: 'success',
+      url: file.path,
+      
+    });
+  } catch (err) {
+    console.log(err);
+    return failureJSONResponse(res, { message: 'something went wrong' });
+  }
+};
