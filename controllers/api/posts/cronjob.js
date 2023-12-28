@@ -199,12 +199,12 @@ cron.schedule("*/15 * * * *", async (req, res) => {
     };
 
     let adTypes = [
-      // { key: "job", label: "Jobs" },
-      // { key: "event", label: "Events" },
-      // { key: "Buy & Sell", label: "Buy & Sell" },
-      // { key: "babysitter & nannie", label: "Babysitters & Nannies" },
+      { key: "job", label: "Jobs" },
+      { key: "event", label: "Events" },
+      { key: "Buy & Sell", label: "Buy & Sell" },
+      { key: "babysitter & nannie", label: "Babysitters & Nannies" },
       { key: "Local_biz & Service", label: "Local Biz & Services" },
-      // { key: "rental", label: "Rentals" },
+      { key: "rental", label: "Rentals" },
     ];
     let results = [];
     let adTypeCount;
@@ -222,7 +222,7 @@ cron.schedule("*/15 * * * *", async (req, res) => {
           const currentTimeInTimeZone = new Date().toLocaleString('en-US', { timeZone: data?.location_timezone});
           const currentHour = new Date(currentTimeInTimeZone).getHours();
           console.log(currentHour);
-          if(currentHour === 7){
+          if(currentHour ===7 ){
             if (bumpUpAddon) {
               const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
               return {
@@ -280,9 +280,10 @@ console.log(recordsWithTodayDate);
 
 let bumpId = recordsWithTodayDate.map((featuredItem) => featuredItem._id);
 console.log(bumpId,"cdcdcdcdcdcdcdcdcdcdcd");
+let document
 if (bumpId.length > 0) {
   for (const id of bumpId) {
-    const document = await YourModel.findOne({
+    document = await YourModel.findOne({
       $and: [
         { _id: id },
         {
