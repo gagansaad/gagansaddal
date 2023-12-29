@@ -531,7 +531,7 @@ exports.fetchAll = async (req, res, next) => {
         await UserModel.findByIdAndUpdate(myid, { $set: { 'userBasicInfo.live_location': live_location } }, { new: true });
       }
     }
-    let banner = await BannerSchema.find()
+    let banner = await BannerSchema.find({status:true});
 
     const adons_name = [
       "Homepage Gallery",

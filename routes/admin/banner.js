@@ -45,7 +45,7 @@ router.put(
   controllers.updateBanner
 );
 router.get(
-  `/banners`,
+  `/banners`, 
   controllers.getAllBanners
 );
 router.delete(
