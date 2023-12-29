@@ -151,7 +151,7 @@ exports.fetchAll = async (req, res, next) => {
         sadsid = job.adsType;
         totalViewCount += job.viewCount;
         totalReportCount += job.ReportCount;
-      console.log(job.createdAt.toISOString().substring(0, 10) === currentDateOnly);
+      console.log(job.createdAt.toISOString().substring(0, 10) === currentDateOnly,"vdfvdfvdsvsdvdv");
         if (job.createdAt.toISOString().substring(0, 10) === currentDateOnly) {
           todayViewCount += job.viewCount;
           todayReportCount += job.ReportCount;
