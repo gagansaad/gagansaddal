@@ -532,6 +532,7 @@ exports.fetchAll = async (req, res, next) => {
       }
     }
     let banner = await BannerSchema.find({status:true});
+    console.log(banner);
 
     const adons_name = [
       "Homepage Gallery",
