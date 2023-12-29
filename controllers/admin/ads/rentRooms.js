@@ -148,8 +148,11 @@ exports.fetchAll = async (req, res, next) => {
       // Calculate the total view count
       let sadsid;
       records.forEach((job) => {
-        sadsid = job.adsType;
         totalViewCount += job.viewCount;
+        },
+      records.forEach((job) => {
+        sadsid = job.adsType;
+        
         totalReportCount += job.ReportCount;
       console.log(job.createdAt.toISOString().substring(0, 10) === currentDateOnly,"vdfvdfvdsvsdvdv");
         if (job.createdAt.toISOString().substring(0, 10) === currentDateOnly) {
@@ -158,6 +161,7 @@ exports.fetchAll = async (req, res, next) => {
           todayRecordsCount += 1;
         }
         // totalReportCount += job.ReportCount;
+       
         
       });
       const paymentStatus = "confirmed"; // Replace with the actual payment_status value you want to search for
