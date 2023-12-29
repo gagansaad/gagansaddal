@@ -33,32 +33,22 @@ exports.fetchAll = async (req, res, next) => {
     let searchTerm = req.query.searchTerm || "";
     let dbQuery = {};
     const {
-      userId,
-      isfeatured,
       status,
-      adsType,
+      ads_type,
       category,
       sub_category,
       title,
-      roomType,
-      listerType,
-      accommodates,
-      furnished,
-      attachedBath,
-      isSmokingAllowed,
-      isAlcoholAllowed,
-      isPetFriendly,
-      preferedGender,
-      sortBy,
+      product_condition,
+      user_type,
+      payment_mode,
+      fullfilment,
       location,
       tagline,
+      sortBy,
       longitude,
       latitude,
       maxDistance,
-      prefered_age,
     } = req.query;
-    var perPage = parseInt(req.query.perpage) || 40;
-    var page = parseInt(req.query.page) || 1;
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     let Distance;
 
@@ -79,35 +69,50 @@ exports.fetchAll = async (req, res, next) => {
         },
       };
     }
+    var perPage = parseInt(req.query.perpage) || 40;
+    var page = parseInt(req.query.page) || 1;
+    if (status) {
+      dbQuery.status = status;
+    }
 
-    if (isfeatured) dbQuery.isfeatured = isfeatured;
-    if (status) dbQuery.status = status;
-    if (adsType) dbQuery.adsType = adsType;
-    if (category) dbQuery["adsInfo.rental_type"] = category;
-    if (sub_category) dbQuery["adsInfo.category"] = sub_category;
-    if (title) dbQuery["adsInfo.title"] = title;
-    if (roomType) dbQuery["adsInfo.roomType"] = roomType;
-    if (listerType) dbQuery["adsInfo.listerType"] = listerType;
-    if (accommodates) dbQuery["adsInfo.accommodates"] = accommodates;
-    if (furnished) dbQuery["adsInfo.furnished"] = furnished;
-    if (attachedBath) dbQuery["adsInfo.attachedBath"] = attachedBath;
-    if (isSmokingAllowed)
-      dbQuery["adsInfo.isSmokingAllowed"] = isSmokingAllowed;
-    if (isAlcoholAllowed)
-      dbQuery["adsInfo.isAlcoholAllowed"] = isAlcoholAllowed;
-    if (isPetFriendly) dbQuery["adsInfo.isPetFriendly"] = isPetFriendly;
-    if (preferedGender) dbQuery["adsInfo.preferedGender"] = preferedGender;
+    if (ads_type) {
+      dbQuery.adsType = ads_type;
+    }
 
-    if (prefered_age) {
-      // Convert prefered_age to an array if it's not already
-      const preferedAgeArray = Array.isArray(prefered_age)
-        ? prefered_age
-        : [prefered_age];
+    if (category) {
+      dbQuery["adsInfo.category"] = category;
+    }
 
-      // Add $in query to filter based on prefered_age
-      dbQuery["adsInfo.prefered_age"] = {
-        $in: preferedAgeArray,
-      };
+    if (sub_category) {
+      dbQuery["adsInfo.sub_category"] = sub_category;
+    }
+
+    if (title) {
+      dbQuery["adsInfo.title"] = title;
+    }
+
+    if (product_condition) {
+      dbQuery["adsInfo.product_condition"] = product_condition;
+    }
+
+    if (user_type) {
+      dbQuery["adsInfo.user_type"] = user_type;
+    }
+
+    if (payment_mode) {
+      dbQuery["adsInfo.payment_mode"] = payment_mode;
+    }
+
+    if (fullfilment) {
+      dbQuery["adsInfo.fullfilment"] = fullfilment;
+    }
+
+    if (location) {
+      dbQuery["adsInfo.location"] = location;
+    }
+
+    if (tagline) {
+      dbQuery["adsInfo.tagline"] = tagline;
     }
     // Get the current date
     const currentDate = new Date();
@@ -116,7 +121,6 @@ exports.fetchAll = async (req, res, next) => {
     // Extract only the date portion
     // dbQuery.status = "active";
     // dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
-    if (userId) dbQuery.userId = userId;
     let queryFinal = dbQuery;
     if (searchTerm) {
       queryFinal = {
@@ -128,22 +132,20 @@ exports.fetchAll = async (req, res, next) => {
       };
     }
     let myid = req.userId;
-    let records = await postBuySellAd.find({
-      $or: [queryFinal],
-    })
+    let records = await postBuySellAd
+      .find({ $or: [queryFinal] })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
       .populate({ path: "viewCount" })
-      .populate({ path: "ReportCount" })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
       .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
-
-    const totalCount = await postJobAd.find({
+    const totalCount = await postBuySellAd.find({
       $or: [queryFinal],
     });
     let responseModelCount = totalCount.length;
+
     if (records) {
       const currentDate = new Date();
       const currentDateOnly = currentDate.toISOString().substring(0, 10);
@@ -153,14 +155,11 @@ exports.fetchAll = async (req, res, next) => {
         sadsid = job.adsType;
         totalViewCount += job.viewCount;
         totalReportCount += job.ReportCount;
-      console.log(job.createdAt.toISOString().substring(0, 10) === currentDateOnly);
         if (job.createdAt.toISOString().substring(0, 10) === currentDateOnly) {
           todayViewCount += job.viewCount;
           todayReportCount += job.ReportCount;
           todayRecordsCount += 1;
         }
-        // totalReportCount += job.ReportCount;
-        
       });
       const paymentStatus = "confirmed"; // Replace with the actual payment_status value you want to search for
 
@@ -169,7 +168,7 @@ exports.fetchAll = async (req, res, next) => {
       today.setHours(0, 0, 0, 0); // Set the time to the beginning of the day (midnight)
       const endDate = new Date(today); // Create a copy of the start date
       endDate.setDate(today.getDate() + 1); // Set the end date to the next day
-console.log(today,endDate);
+
       const query = {
         $and: [
           { ads_type: sadsid },
@@ -188,7 +187,7 @@ console.log(today,endDate);
           { payment_status: paymentStatus },
         ],
       };
-console.log(query,query2);
+
       let reve = await paymentModel.find(query2);
       let treve = await paymentModel.find(query);
       let totalAmountSum = 0;
@@ -221,17 +220,16 @@ console.log(query,query2);
         totalViewCount: totalViewCount, // Include total view count in the response
         todayViewCount: todayViewCount,
         todayRecordsCount: todayRecordsCount,
-        totalReportCount:totalReportCount,
-        todayReportCount:todayReportCount,
         totalrevenue: totalAmountSum,
         todayrevenue: totayAmountSum, //
+        totalReportCount:totalReportCount,
+        todayReportCount:todayReportCount,
         status: 200,
       });
     } else {
       return failureJSONResponse(res, { message: `ads not Available` });
     }
   } catch (err) {
-    console.log(err);
     return failureJSONResponse(res, { message: `something went wrong` });
   }
 };

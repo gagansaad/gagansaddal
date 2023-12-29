@@ -20,218 +20,223 @@ const mongoose = require("mongoose"),
     isValidEmailAddress,
     isValidIndianMobileNumber,
   } = require(`../../../utils/validators`);
-  exports.fetchAll = async (req, res, next) => {
-    try {
-      let totalViewCount = 0; // Initialize the total view count variable
-      let todayViewCount = 0; // Initialize the view count for records created today
-      let totalReportCount = 0; // Initialize the total view count variable
-      let todayReportCount = 0; 
-      let todayRecordsCount = 0;
-      let searchTerm = req.query.searchTerm || "";
-      let dbQuery = {};
-      const {
-        userId,
-        isfeatured,
-        status,
-        adsType,
-        category,
-        sub_category,
-        title,
-        roomType,
-        listerType,
-        accommodates,
-        furnished,
-        attachedBath,
-        isSmokingAllowed,
-        isAlcoholAllowed,
-        isPetFriendly,
-        preferedGender,
-        sortBy,
-        location,
-        tagline,
-        longitude,
-        latitude,
-        maxDistance,
-        prefered_age,
-      } = req.query;
-      var perPage = parseInt(req.query.perpage) || 40;
-      var page = parseInt(req.query.page) || 1;
-      const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
-      let Distance;
-  
-      if (maxDistance === "0" || !maxDistance) {
-        Distance = 200000;
-      } else {
-        Distance = maxDistance * 1000;
-      }
-      if (longitude && latitude && Distance) {
-        const targetPoint = {
-          type: "Point",
-          coordinates: [longitude, latitude],
-        };
-        dbQuery["adsInfo.location.coordinates"] = {
-          $near: {
-            $geometry: targetPoint,
-            $maxDistance: Distance,
-          },
-        };
-      }
-  
-      if (isfeatured) dbQuery.isfeatured = isfeatured;
-      if (status) dbQuery.status = status;
-      if (adsType) dbQuery.adsType = adsType;
-      if (category) dbQuery["adsInfo.rental_type"] = category;
-      if (sub_category) dbQuery["adsInfo.category"] = sub_category;
-      if (title) dbQuery["adsInfo.title"] = title;
-      if (roomType) dbQuery["adsInfo.roomType"] = roomType;
-      if (listerType) dbQuery["adsInfo.listerType"] = listerType;
-      if (accommodates) dbQuery["adsInfo.accommodates"] = accommodates;
-      if (furnished) dbQuery["adsInfo.furnished"] = furnished;
-      if (attachedBath) dbQuery["adsInfo.attachedBath"] = attachedBath;
-      if (isSmokingAllowed)
-        dbQuery["adsInfo.isSmokingAllowed"] = isSmokingAllowed;
-      if (isAlcoholAllowed)
-        dbQuery["adsInfo.isAlcoholAllowed"] = isAlcoholAllowed;
-      if (isPetFriendly) dbQuery["adsInfo.isPetFriendly"] = isPetFriendly;
-      if (preferedGender) dbQuery["adsInfo.preferedGender"] = preferedGender;
-  
-      if (prefered_age) {
-        // Convert prefered_age to an array if it's not already
-        const preferedAgeArray = Array.isArray(prefered_age)
-          ? prefered_age
-          : [prefered_age];
-  
-        // Add $in query to filter based on prefered_age
-        dbQuery["adsInfo.prefered_age"] = {
-          $in: preferedAgeArray,
-        };
-      }
-      // Get the current date
-      const currentDate = new Date();
-      // Convert the date to ISO 8601 format
-      const currentISODate = currentDate.toISOString();
-      // Extract only the date portion
-      // dbQuery.status = "active";
-      // dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
-      if (userId) dbQuery.userId = userId;
-      let queryFinal = dbQuery;
-      if (searchTerm) {
-        queryFinal = {
-          ...dbQuery,
-          $or: [
-            { "adsInfo.title": { $regex: searchTerm, $options: "i" } },
-            { "adsInfo.tagline": { $regex: searchTerm, $options: "i" } },
-          ],
-        };
-      }
-      let myid = req.userId;
-      let records = await postbabyAd.find({
-        $or: [queryFinal],
-      })
-        .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
-        .populate({ path: "favoriteCount", select: "_id" })
-        .populate({ path: "isFavorite", select: "user", match: { user: myid } })
-        .populate({ path: "viewCount" })
-        .populate({ path: "ReportCount" })
-        .sort(sortval)
-        .skip(perPage * page - perPage)
-        .limit(perPage);
-  
-      const totalCount = await postJobAd.find({
-        $or: [queryFinal],
-      });
-      let responseModelCount = totalCount.length;
-      if (records) {
-        const currentDate = new Date();
-        const currentDateOnly = currentDate.toISOString().substring(0, 10);
-        // Calculate the total view count
-        let sadsid;
-        records.forEach((job) => {
-          sadsid = job.adsType;
-          totalViewCount += job.viewCount;
-          totalReportCount += job.ReportCount;
-        console.log(job.createdAt.toISOString().substring(0, 10) === currentDateOnly);
-          if (job.createdAt.toISOString().substring(0, 10) === currentDateOnly) {
-            todayViewCount += job.viewCount;
-            todayReportCount += job.ReportCount;
-            todayRecordsCount += 1;
-          }
-          // totalReportCount += job.ReportCount;
-          
-        });
-        const paymentStatus = "confirmed"; // Replace with the actual payment_status value you want to search for
-  
-        // Calculate the start and end dates for today
-        const today = new Date();
-        today.setHours(0, 0, 0, 0); // Set the time to the beginning of the day (midnight)
-        const endDate = new Date(today); // Create a copy of the start date
-        endDate.setDate(today.getDate() + 1); // Set the end date to the next day
-  console.log(today,endDate);
-        const query = {
-          $and: [
-            { ads_type: sadsid },
-            { payment_status: paymentStatus },
-            {
-              createdAt: {
-                $gte: today,
-                $lt: endDate,
-              },
-            },
-          ],
-        };
-        const query2 = {
-          $and: [
-            { ads_type: sadsid },
-            { payment_status: paymentStatus },
-          ],
-        };
-  console.log(query,query2);
-        let reve = await paymentModel.find(query2);
-        let treve = await paymentModel.find(query);
-        let totalAmountSum = 0;
-        for (const payment of reve) {
-          totalAmountSum += payment.total_amount;
-        }
-  
-        let totayAmountSum = 0;
-        for (const payment of treve) {
-          totayAmountSum += payment.total_amount;
-        }
-  
-        const jobData = records.map((job) => {
-          return {
-            ...job._doc,
-            // Add other job fields as needed
-            report_count:job.ReportCount,
-            view_count: job.viewCount,
-            favorite_count: job.favoriteCount,
-            is_favorite: !!job.isFavorite,
-          };
-        });
-        return successJSONResponse(res, {
-          message: `success`,
-          total: responseModelCount,
-          perPage: perPage,
-          totalPages: Math.ceil(responseModelCount / perPage),
-          currentPage: page,
-          records: jobData,
-          totalViewCount: totalViewCount, // Include total view count in the response
-          todayViewCount: todayViewCount,
-          todayRecordsCount: todayRecordsCount,
-          totalReportCount:totalReportCount,
-          todayReportCount:todayReportCount,
-          totalrevenue: totalAmountSum,
-          todayrevenue: totayAmountSum, //
-          status: 200,
-        });
-      } else {
-        return failureJSONResponse(res, { message: `ads not Available` });
-      }
-    } catch (err) {
-      console.log(err);
-      return failureJSONResponse(res, { message: `something went wrong` });
+exports.fetchAll = async (req, res, next) => {
+  try {
+    let totalViewCount = 0; // Initialize the total view count variable
+    let todayViewCount = 0; // Initialize the view count for records created today
+    let totalReportCount = 0; // Initialize the total view count variable
+    let todayReportCount = 0; 
+    let todayRecordsCount = 0;
+
+    let searchTerm = req.query.searchTerm || "";
+    let dbQuery = {};
+    const {
+      status,
+      category_value,
+      category,
+      work_type,
+      care_service,
+      age_group,
+      prefered_language,
+      prefered_gender,
+      transport_facilty,
+      location,
+      tagline,
+      sortBy,
+      longitude,
+      latitude,
+      maxDistance,
+    } = req.query;
+    const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
+    let Distance;
+
+    if (maxDistance === "0" || !maxDistance) {
+      Distance = 200000;
+    } else {
+      Distance = maxDistance * 1000;
     }
-  };
+    if (longitude && latitude && Distance) {
+      const targetPoint = {
+        type: "Point",
+        coordinates: [longitude, latitude],
+      };
+      dbQuery["adsInfo.location.coordinates"] = {
+        $near: {
+          $geometry: targetPoint,
+          $maxDistance: Distance,
+        },
+      };
+    }
+    var perPage = parseInt(req.query.perpage) || 40;
+    var page = parseInt(req.query.page) || 1;
+
+    if (status) {
+      dbQuery.status = status;
+    }
+
+    if (category_value) {
+      dbQuery["adsInfo.category.category_value"] = category_value;
+    }
+
+    if (category === "I%20want%20a%20Babysitter%2FNanny") {
+      dbQuery["adsInfo.category.category_name"] = "I want a Babysitter/Nanny";
+    } else if (category === "I%2520am%2520a%2520Babysitter%252FNanny") {
+      dbQuery["adsInfo.category.category_name"] = "I am a Babysitter/Nanny";
+    }
+    if (work_type) {
+      dbQuery["adsInfo.work_type"] = work_type;
+    }
+
+    if (care_service) {
+      dbQuery["adsInfo.care_service"] = care_service;
+    }
+
+    if (age_group) {
+      dbQuery["adsInfo.age_group"] = age_group;
+    }
+
+    if (prefered_language) {
+      dbQuery["adsInfo.prefered_language"] = prefered_language;
+    }
+
+    if (prefered_gender) {
+      dbQuery["adsInfo.prefered_gender"] = prefered_gender;
+    }
+
+    if (transport_facilty) {
+      dbQuery["adsInfo.transport_facilty"] = transport_facilty;
+    }
+
+    if (location) {
+      dbQuery["adsInfo.location"] = location;
+    }
+
+    if (tagline) {
+      dbQuery["adsInfo.tagline"] = tagline;
+    }
+    // Get the current date
+    const currentDate = new Date();
+    // Convert the date to ISO 8601 format
+    const currentISODate = currentDate.toISOString();
+    // Extract only the date portion
+    
+
+    // dbQuery.status = "active";
+    // dbQuery["plan_validity.expired_on"] = { $gte: currentISODate };
+    let queryFinal = dbQuery;
+    if (searchTerm) {
+      queryFinal = {
+        ...dbQuery,
+        $or: [
+          { "adsInfo.title": { $regex: searchTerm, $options: "i" } },
+          { "adsInfo.tagline": { $regex: searchTerm, $options: "i" } },
+        ],
+      };
+    }
+    let myid = req.userId;
+    let records = await postbabyAd
+      .find({ $or: [queryFinal] })
+      .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+      .populate({ path: "favoriteCount", select: "_id" })
+      .populate({ path: "ReportCount" })
+      .populate({ path: "viewCount" })
+      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+      .sort(sortval)
+      .skip(perPage * page - perPage)
+      .limit(perPage);
+    const totalCount = await postbabyAd.find({
+      $or: [queryFinal],
+    });
+    let responseModelCount = totalCount.length;
+
+    if (records) {
+      const currentDate = new Date();
+      const currentDateOnly = currentDate.toISOString().substring(0, 10);
+      // Calculate the total view count
+      let sadsid;
+      records.forEach((job) => {
+        sadsid = job.adsType;
+        totalViewCount += job.viewCount;
+        totalReportCount += job.ReportCount;
+        if (job.createdAt.toISOString().substring(0, 10) === currentDateOnly) {
+          todayViewCount += job.viewCount;
+          todayReportCount += job.ReportCount;
+          todayRecordsCount += 1;
+        }
+      });
+      const paymentStatus = "confirmed"; // Replace with the actual payment_status value you want to search for
+
+      // Calculate the start and end dates for today
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set the time to the beginning of the day (midnight)
+      const endDate = new Date(today); // Create a copy of the start date
+      endDate.setDate(today.getDate() + 1); // Set the end date to the next day
+
+      const query = {
+        $and: [
+          { ads_type: sadsid },
+          { payment_status: paymentStatus },
+          {
+            createdAt: {
+              $gte: today,
+              $lt: endDate,
+            },
+          },
+        ],
+      };
+      const query2 = {
+        $and: [
+          { ads_type: sadsid },
+          { payment_status: paymentStatus },
+        ],
+      };
+
+      let reve = await paymentModel.find(query2);
+      let treve = await paymentModel.find(query);
+      let totalAmountSum = 0;
+      for (const payment of reve) {
+        totalAmountSum += payment.total_amount;
+      }
+
+      let totayAmountSum = 0;
+      for (const payment of treve) {
+        totayAmountSum += payment.total_amount;
+      }
+
+      const jobData = records.map((job) => {
+        return {
+          ...job._doc,
+          // Add other job fields
+
+          view_count: job.viewCount,
+            report_count:job.ReportCount,
+          favorite_count: job.favoriteCount,
+          is_favorite: !!job.isFavorite,
+        };
+      });
+      return successJSONResponse(res, {
+        message: `success`,
+        total: responseModelCount,
+        perPage: perPage,
+        totalPages: Math.ceil(responseModelCount / perPage),
+        currentPage: page,
+        records: jobData,
+        totalViewCount: totalViewCount, // Include total view count in the response
+        todayViewCount: todayViewCount,
+        totalReportCount:totalReportCount,
+        todayReportCount:todayReportCount,
+        todayRecordsCount: todayRecordsCount,
+        totalrevenue: totalAmountSum,
+        todayrevenue: totayAmountSum, //
+        status: 200,
+      });
+    } else {
+      return failureJSONResponse(res, { message: `ads not Available` });
+    }
+  } catch (err) {
+    return failureJSONResponse(res, { message: `something went wrong` });
+  }
+};
 
 exports.fetchOne = async (req, res, next) => {
   try {
