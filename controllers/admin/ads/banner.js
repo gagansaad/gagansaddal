@@ -139,7 +139,7 @@ exports.deleteBannerById = async (req, res, next) => {
     const bannerId = req.query.bannerId; // Assuming bannerId is part of the URL path
 
     // Find the banner by ID and remove it
-    const deletedBanner = await BannerSchema.findByIdAndRemove(bannerId);
+    const deletedBanner = await BannerSchema.findByIdAndDelete(bannerId);
 
     if (!deletedBanner) {
       return failureJSONResponse(res, { message: 'Banner not found' });
