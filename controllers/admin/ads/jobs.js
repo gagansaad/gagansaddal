@@ -152,6 +152,7 @@ exports.fetchAll = async (req, res, next) => {
       .populate({ path: "favoriteCount", select: "_id" })
       .populate({ path: "viewCount" })
       .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+      .populate({ path: "ReportCount" })
       .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
