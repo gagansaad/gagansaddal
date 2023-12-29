@@ -149,7 +149,7 @@ exports.fetchAll = async (req, res, next) => {
       let sadsid;
       records.forEach((job) => {
         totalViewCount += job.viewCount;
-        },
+        })
       records.forEach((job) => {
         sadsid = job.adsType;
         
