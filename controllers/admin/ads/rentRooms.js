@@ -131,26 +131,34 @@ exports.fetchAll = async (req, res, next) => {
     })
       .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
       .populate({ path: "favoriteCount", select: "_id" })
-      .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+      // .populate({ path: "isFavorite", select: "user", match: { user: myid } })
       .populate({ path: "viewCount" })
       .populate({ path: "ReportCount" })
       .sort(sortval)
       .skip(perPage * page - perPage)
       .limit(perPage);
-
+      let record = await RoomRentsAds.find({
+        $or: [queryFinal],
+      })
+        .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+        .populate({ path: "favoriteCount", select: "_id" })
+        // .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+        .populate({ path: "viewCount" })
+        .populate({ path: "ReportCount" })
+        .sort(sortval)
     const totalCount = await RoomRentsAds.find({
       $or: [queryFinal],
     });
     let responseModelCount = totalCount.length;
-    if (records) {
+    if (record) {
       const currentDate = new Date();
       const currentDateOnly = currentDate.toISOString().substring(0, 10);
       // Calculate the total view count
       let sadsid;
-      records.forEach((job) => {
+      record.forEach((job) => {
         totalViewCount += job.viewCount;
         })
-      records.forEach((job) => {
+      record.forEach((job) => {
         sadsid = job.adsType;
         
         totalReportCount += job.ReportCount;
