@@ -233,12 +233,7 @@ babysitter_Schema.virtual("ReportCount", {
   foreignField: "adsid",
   count: true,
 });
-babysitter_Schema.virtual("ReportCount", {
-  ref: "Report",
-  localField: "_id",
-  foreignField: "adsid",
-  count: true,
-});
+
 babysitter_Schema.virtual("isReported", {
   ref: "Report",
   localField: "_id",
