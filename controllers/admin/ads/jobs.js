@@ -166,7 +166,7 @@ exports.fetchAll = async (req, res, next) => {
       // Calculate the total view count
       let sadsid;
       records.forEach((job) => {
-console.log(job);
+console.log(job,"edede");
         sadsid = job.adsType;
         totalViewCount += job.viewCount;
         totalReportCount += job.ReportCount;
