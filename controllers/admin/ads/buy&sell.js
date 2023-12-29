@@ -146,13 +146,20 @@ exports.fetchAll = async (req, res, next) => {
       $or: [queryFinal],
     });
     let responseModelCount = totalCount.length;
-
-    if (records) {
+    let record = await postBuySellAd
+    .find({ $or: [queryFinal] })
+    .populate({ path: "adsInfo.image", strictPopulate: false, select: "url" })
+    .populate({ path: "favoriteCount", select: "_id" })
+    .populate({ path: "viewCount" })
+    .populate({ path: "ReportCount" })
+    .populate({ path: "isFavorite", select: "user", match: { user: myid } })
+    .sort(sortval)
+    if (record) {
       const currentDate = new Date();
       const currentDateOnly = currentDate.toISOString().substring(0, 10);
       // Calculate the total view count
       let sadsid;
-      records.forEach((job) => {
+      record.forEach((job) => {
         sadsid = job.adsType;
         totalViewCount += job.viewCount;
         totalReportCount += job.ReportCount;
