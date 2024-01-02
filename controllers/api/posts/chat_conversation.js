@@ -142,9 +142,9 @@ const mongoose = require("mongoose"),
        
        customResponse = {
           _id: chat._id,
-          ads_id: chat.ads_id._id || null,
-          ads_name: chat.ads_id.adsInfo.title || null,
-          ads_image: chat.ads_id.adsInfo.image || null,
+          ads_id: chat?.ads_id?._id || null,
+          ads_name: chat?.ads_id?.adsInfo?.title || null,
+          ads_image: chat?.ads_id?.adsInfo?.image || null,
           buyer_id: chat.buyer._id || null,
           buyer_name: chat.buyer.userInfo.name || null,
           buyer_image: chat.buyer.userBasicInfo.profile_image || null,
