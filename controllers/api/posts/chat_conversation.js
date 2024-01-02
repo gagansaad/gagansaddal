@@ -201,7 +201,7 @@ const mongoose = require("mongoose"),
         ],
       }).populate({
         path: 'ads_id',
-        select: 'adsInfo.title ',
+        select: 'adsInfo.title status',
         populate: {
           path: 'adsInfo.image',
           select: 'url', // Assuming 'imageUrl' is the field you want to select
@@ -231,16 +231,14 @@ const mongoose = require("mongoose"),
           );
         });
   
-        let chatid = chat?.ads_id?._id || null;
+        let chatid = chat?.ads_id?.status 
+        
         let status = "active";
         let Aid;
   
         console.log(chatid, "rvswkjnerrjkvwkj");
-        if (chatid == "null" || chatid === null) {
-          status = "adDeleted";
-          console.log(chat._id, "vkjdkdkdkdkdkkd", chat);
-          Aid = await Chat.findById(chat?._id);
-          console.log(Aid, "fvfvkvknvknvk");
+        if (chatid == "deleted") {
+          status = "deleted";
         }
   
         return {
@@ -255,7 +253,7 @@ const mongoose = require("mongoose"),
           sellerId: chat?.seller?._id || null,
           ads_name: chat?.ads_id?.adsInfo?.title || null,
           ads_image: chat?.ads_id?.adsInfo?.image || null,
-          ads_id: chat?.ads_id?._id == "null" || chat?.ads_id?._id == null ? Aid.ads_id : chat?.ads_id?._id || null,
+          ads_id:  chat?.ads_id?._id || null,
           ads_type: chat?.ads_type || null,
           messages: chat?.messages?.slice(-1).map(message => ({
             sender_name: message?.senderId?.userInfo?.name || null,
@@ -312,3 +310,4 @@ exports.uploadfile = async (req, res, next) => {
     return failureJSONResponse(res, { message: 'something went wrong' });
   }
 };
+
