@@ -47,7 +47,7 @@ const mongoose = require("mongoose"),
       })
       .populate({
         path: 'ads_id',
-        select: 'adsInfo.title adsInfo.image',
+        select: 'adsInfo.title status adsInfo.image',
         populate: {
           path: 'adsInfo.image',
           select: 'url',
@@ -139,22 +139,12 @@ const mongoose = require("mongoose"),
           chat.messages.reverse();
           paginatedMessages = chat.messages.slice(startIndex, endIndex);
         }
-        let chatid = chat?.ads_id?._id || null;
-        let status = "active";
-        let Aid;
-  
-        console.log(chatid, "rvswkjnerrjkvwkj");
-        if (chatid == "null" || chatid === null) {
-          status = "adDeleted";
-          console.log(chat._id, "vkjdkdkdkdkdkkd", chat);
-          Aid = await Chat.findById(chat?._id);
-          console.log(Aid, "fvfvkvknvknvk");
-        }
+      
   
        customResponse = {
           _id: chat._id,
-          status:status,
-          ads_id: chat?.ads_id?._id == "null" || chat?.ads_id?._id == null ? Aid.ads_id : chat?.ads_id?._id || null,
+          status:chat?.ads_id?.status,
+          ads_id: chat?.ads_id?._id || null,
           ads_name: chat?.ads_id?.adsInfo?.title || null,
           ads_image: chat?.ads_id?.adsInfo?.image || null,
           buyer_id: chat.buyer._id || null,
@@ -231,19 +221,10 @@ const mongoose = require("mongoose"),
           );
         });
   
-        let chatid = chat?.ads_id?.status 
-        
-        let status = "active";
-        let Aid;
-  
-        console.log(chatid, "rvswkjnerrjkvwkj");
-        if (chatid == "deleted") {
-          status = "deleted";
-        }
   
         return {
           _id: chat?._id || null,
-          status :status,
+          status :chat?.ads_id?.status,
           messageCount: count.length || 0,
           buyer_name: chat?.buyer?.userInfo?.name || null,
           buyer_image: chat?.buyer?.userBasicInfo?.profile_image == "null" ? null : chat?.buyer?.userBasicInfo?.profile_image || null,
