@@ -175,142 +175,112 @@ const mongoose = require("mongoose"),
   
   
 
-exports.ChatList = async (req, res, next) => {
-  try {
-    let userId = req.userId;
-    const PAGE_SIZE = 20;
-    // Assuming req.query.page and req.query.limit are used to get the page and limit from the request query parameters
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.perpage) || PAGE_SIZE;
-    
-    let chat = await Chat.find({
-      $or: [
-        { 'buyer': userId },
-        { 'seller': userId },
-      ],
-    }).populate({
-      path: 'ads_id',
-      select: 'adsInfo.title ',
-      populate: {
-        path: 'adsInfo.image',
-        select: 'url', // Assuming 'imageUrl' is the field you want to select
-      },
-    }).populate({
-      path: 'seller',
-      select: 'userInfo.name userBasicInfo.profile_image',
-      populate: {
-        path: 'userBasicInfo.profile_image',
-      },
-    }).populate({
-      path: 'buyer',
-      select: 'userInfo.name userBasicInfo.profile_image',
-      populate: {
-        path: 'userBasicInfo.profile_image', // Assuming 'imageUrl' is the field you want to select
-      },
-    }).populate({
-      path: 'messages.senderId',
-      select: 'userInfo.name userBasicInfo.profile_image',
-      
-    }).sort({updatedAt:-1});
-    let newChatObject
-    let userlist=[]
-   
- 
-    // console.log(chat,"cdkmd");
-    chat.map(async (chat)=>{
-      let count = chat.messages.filter((message) => {
-        return (
-          message.senderId._id.toString() !== userId.toString() &&
-          message.status === "unseen"
-        );
-      });
-      
-      let chatid = chat?.ads_id?._id || null
-      let sellerid = chat?.seller?._id || null
-      let buyerid = chat?.buyer?._id || null
-      let status
-      let Sid
-      let Uid
-      let Aid
-      
-      console.log(chatid,"rvswkjnerrjkvwkj");
-      if(chatid == "null"){
-        status = "adDeleted";
-        console.log(chat._id,"vkjdkdkdkdkdkkd",chat);
-        Aid = await Chat.findById(chat?._id)
-        console.log(Aid,"fvfvkvknvknvk");
-      }else{
-        status = "active"
+  exports.ChatList = async (req, res, next) => {
+    try {
+      let userId = req.userId;
+      const PAGE_SIZE = 20;
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.perpage) || PAGE_SIZE;
+  
+      let chat = await Chat.find({
+        $or: [
+          { 'buyer': userId },
+          { 'seller': userId },
+        ],
+      }).populate({
+        path: 'ads_id',
+        select: 'adsInfo.title ',
+        populate: {
+          path: 'adsInfo.image',
+          select: 'url', // Assuming 'imageUrl' is the field you want to select
+        },
+      }).populate({
+        path: 'seller',
+        select: 'userInfo.name userBasicInfo.profile_image',
+        populate: {
+          path: 'userBasicInfo.profile_image',
+        },
+      }).populate({
+        path: 'buyer',
+        select: 'userInfo.name userBasicInfo.profile_image',
+        populate: {
+          path: 'userBasicInfo.profile_image', // Assuming 'imageUrl' is the field you want to select
+        },
+      }).populate({
+        path: 'messages.senderId',
+        select: 'userInfo.name userBasicInfo.profile_image',
+      }).sort({ updatedAt: -1 });
+  
+      const userlist = await Promise.all(chat.map(async (chat) => {
+        let count = chat.messages.filter((message) => {
+          return (
+            message.senderId._id.toString() !== userId.toString() &&
+            message.status === "unseen"
+          );
+        });
+  
+        let chatid = chat?.ads_id?._id || null;
+        let status = "active";
+        let Aid;
+  
+        console.log(chatid, "rvswkjnerrjkvwkj");
+        if (chatid == "null" || chatid === null) {
+          status = "adDeleted";
+          console.log(chat._id, "vkjdkdkdkdkdkkd", chat);
+          Aid = await Chat.findById(chat?._id);
+          console.log(Aid, "fvfvkvknvknvk");
+        }
+  
+        return {
+          _id: chat?._id || null,
+          status :status,
+          messageCount: count.length || 0,
+          buyer_name: chat?.buyer?.userInfo?.name || null,
+          buyer_image: chat?.buyer?.userBasicInfo?.profile_image == "null" ? null : chat?.buyer?.userBasicInfo?.profile_image || null,
+          buyerId: chat?.buyer?._id || null,
+          seller_name: chat?.seller?.userInfo?.name || null,
+          seller_image: chat?.seller?.userBasicInfo?.profile_image || null,
+          sellerId: chat?.seller?._id || null,
+          ads_name: chat?.ads_id?.adsInfo?.title || null,
+          ads_image: chat?.ads_id?.adsInfo?.image || null,
+          ads_id: chat?.ads_id?._id == "null" || chat?.ads_id?._id == null ? Aid.ads_id : chat?.ads_id?._id || null,
+          ads_type: chat?.ads_type || null,
+          messages: chat?.messages?.slice(-1).map(message => ({
+            sender_name: message?.senderId?.userInfo?.name || null,
+            senderId: message?.senderId?._id || null,
+            content: message?.content || null,
+            status: message?.status || null,
+            content_type: message?.content_type || null,
+            _id: message?._id || null,
+            timestamp: message?.timestamp || null,
+          })),
+        };
+      }));
+  
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      const paginatedUserlist = userlist.slice(startIndex, endIndex);
+  
+      if (paginatedUserlist.length > 0) {
+        return successJSONResponse(res, {
+          message: 'success',
+          totalItems: userlist.length,
+          currentPage: page,
+          totalPages: Math.ceil(userlist.length / limit),
+          data: paginatedUserlist,
+        });
+      } else {
+        return successJSONResponse(res, {
+          message: 'No data found',
+        });
       }
-      console.log(status);
-      // if(sellerid == "null" || buyerid == "null"){
-      //   Sid = await Chat.findById(chat._id)
-
-      //   status = "userDeleted"
-      // }
-        
-      
-      // console.log(count.length, "Number of unseen messages");
-      newChatObject = {
-       _id: chat?._id || null,
-       status:status,
-       messageCount: count.length || 0,
-       buyer_name: chat?.buyer?.userInfo?.name || null,
-       buyer_image: chat?.buyer?.userBasicInfo?.profile_image == "null" ? null : chat?.buyer?.userBasicInfo?.profile_image || null,
-
-       buyerId: chat?.buyer?._id || null,
-       seller_name: chat?.seller?.userInfo?.name || null,
-       seller_image: chat?.seller?.userBasicInfo?.profile_image || null,
-       sellerId: chat?.seller?._id || null,
-       ads_name: chat?.ads_id?.adsInfo?.title || null,
-       ads_image: chat?.ads_id?.adsInfo?.image || null,
-       ads_id: chat?.ads_id?._id == "null" ? Aid.ads_id : chat?.ads_id?._id|| null,
-       ads_type: chat?.ads_type || null,
-       messages: chat?.messages?.slice(-1).map(message => ({
-         sender_name: message?.senderId?.userInfo?.name || null,
-         senderId: message?.senderId?._id || null,
-         content: message?.content || null,
-         status: message?.status || null,
-         content_type: message?.content_type || null,
-         _id: message?._id || null,
-         timestamp: message?.timestamp || null,
-       })),
-       
-     };
-     userlist.push(newChatObject)
-   })
-
-const startIndex = (page - 1) * limit;
-const endIndex = page * limit;
-
-const paginatedUserlist = userlist.slice(startIndex, endIndex);
-
-
-if (paginatedUserlist.length > 0) {
-  return successJSONResponse(res, {
-    message: 'success',
-    totalItems: userlist.length,
-    currentPage: page,
-    totalPages: Math.ceil(userlist.length / limit),
-    data: paginatedUserlist,
-  });
-} else {
-  return successJSONResponse(res, {
-    message: 'No data found',
-  });
-}
-
-    // if (chat) {
-    //   return successJSONResponse(res, {
-    //     message: 'success',
-    //     data: userlist,
-    //   });
-    // }
-  } catch (err) {
-    console.log(err);
-    return failureJSONResponse(res, { message: 'something went wrong' });
-  }
-};
+  
+    } catch (err) {
+      console.log(err);
+      return failureJSONResponse(res, { message: 'something went wrong' });
+    }
+  };
+  
 
 
 
