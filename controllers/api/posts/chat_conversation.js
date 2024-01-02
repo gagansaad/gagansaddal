@@ -242,6 +242,7 @@ exports.ChatList = async (req, res, next) => {
       }else{
         status = "active"
       }
+      console.log(status);
       // if(sellerid == "null" || buyerid == "null"){
       //   Sid = await Chat.findById(chat._id)
 
@@ -263,7 +264,7 @@ exports.ChatList = async (req, res, next) => {
        sellerId: chat?.seller?._id || null,
        ads_name: chat?.ads_id?.adsInfo?.title || null,
        ads_image: chat?.ads_id?.adsInfo?.image || null,
-       ads_id: chat?.ads_id?._id == "null" ?Aid.ads_id : chat?.ads_id?._id|| null,
+       ads_id: chat?.ads_id?._id == "null" ? Aid.ads_id : chat?.ads_id?._id|| null,
        ads_type: chat?.ads_type || null,
        messages: chat?.messages?.slice(-1).map(message => ({
          sender_name: message?.senderId?.userInfo?.name || null,
