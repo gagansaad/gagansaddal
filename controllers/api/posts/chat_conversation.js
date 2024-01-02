@@ -250,7 +250,7 @@ exports.ChatList = async (req, res, next) => {
       // console.log(count.length, "Number of unseen messages");
       newChatObject = {
        _id: chat?._id || null,
-      //  status:status,
+       status:status,
        messageCount: count.length || 0,
        buyer_name: chat?.buyer?.userInfo?.name || null,
        buyer_image: chat?.buyer?.userBasicInfo?.profile_image == "null" ? null : chat?.buyer?.userBasicInfo?.profile_image || null,
