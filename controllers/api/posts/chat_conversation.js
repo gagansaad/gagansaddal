@@ -139,10 +139,22 @@ const mongoose = require("mongoose"),
           chat.messages.reverse();
           paginatedMessages = chat.messages.slice(startIndex, endIndex);
         }
-       
+        let chatid = chat?.ads_id?._id || null;
+        let status = "active";
+        let Aid;
+  
+        console.log(chatid, "rvswkjnerrjkvwkj");
+        if (chatid == "null" || chatid === null) {
+          status = "adDeleted";
+          console.log(chat._id, "vkjdkdkdkdkdkkd", chat);
+          Aid = await Chat.findById(chat?._id);
+          console.log(Aid, "fvfvkvknvknvk");
+        }
+  
        customResponse = {
           _id: chat._id,
-          ads_id: chat?.ads_id?._id || null,
+          status:status,
+          ads_id: chat?.ads_id?._id == "null" || chat?.ads_id?._id == null ? Aid.ads_id : chat?.ads_id?._id || null,
           ads_name: chat?.ads_id?.adsInfo?.title || null,
           ads_image: chat?.ads_id?.adsInfo?.image || null,
           buyer_id: chat.buyer._id || null,
