@@ -468,6 +468,7 @@ console.log("Count of unseen messages:", count);
 
     console.log(count,"nvjernvkjsrnvkswnvksndkjvnsdkjvn jvnfjv djnvjd vidv  dj vdn vikdv dn vdkindnv kjnnd kdfmk kjf");
    let newChatObject = {
+
       _id: chatting?._id || null,
       messageCount: count || 0,
       buyer_name: chatting?.buyer?.userInfo?.name || null,

@@ -71,7 +71,7 @@ const mongoose = require("mongoose"),
         path: 'messages.senderId',
         select: 'userInfo.name userBasicInfo.profile_image',
       });
-  console.log(chat);
+  // console.log(chat);
   let customResponse
       if (!chat) {
         let sender;
@@ -214,28 +214,51 @@ exports.ChatList = async (req, res, next) => {
     }).sort({updatedAt:-1});
     let newChatObject
     let userlist=[]
-    chat.map((chat)=>{
+   
+ 
+    // console.log(chat,"cdkmd");
+    chat.map(async (chat)=>{
       let count = chat.messages.filter((message) => {
         return (
           message.senderId._id.toString() !== userId.toString() &&
           message.status === "unseen"
         );
       });
-      
-      console.log(count.length, "Number of unseen messages");
+      let chatid = chat?.ads_id?._id || null
+      let sellerid = chat?.seller?._id || null
+      let buyerid = chat?.buyer?._id || null
+      let status
+      let Sid
+      let Uid
+      let Aid
+      console.log(chatid,"rvswkjnerrjkvwkj");
+      if(chatid == null){
+        status = "chatDeled";
+        console.log(chat._id,"vkjdkdkdkdkdkkd");
+        Aid = await Chat.findOne({_id:chat._id})
+        
+      }else if(sellerid == null || buyerid == null){
+        Sid = await Chat.findOne({_id:chat._id})
+
+        status = "userDeleted"
+      }else{
+        status = "active"
+      }
+      // console.log(count.length, "Number of unseen messages");
       newChatObject = {
        _id: chat?._id || null,
+       status:status,
        messageCount: count.length || 0,
        buyer_name: chat?.buyer?.userInfo?.name || null,
        buyer_image: chat?.buyer?.userBasicInfo?.profile_image == "null" ? null : chat?.buyer?.userBasicInfo?.profile_image || null,
 
-       buyerId: chat?.buyer?._id || null,
+       buyerId: chat?.buyer?._id || Sid.buyer,
        seller_name: chat?.seller?.userInfo?.name || null,
        seller_image: chat?.seller?.userBasicInfo?.profile_image || null,
-       sellerId: chat?.seller?._id || null,
+       sellerId: chat?.seller?._id || Sid.seller,
        ads_name: chat?.ads_id?.adsInfo?.title || null,
        ads_image: chat?.ads_id?.adsInfo?.image || null,
-       ads_id: chat?.ads_id?._id || null,
+       ads_id: chat?.ads_id?._id || Aid.ads_id,
        ads_type: chat?.ads_type || null,
        messages: chat?.messages?.slice(-1).map(message => ({
          sender_name: message?.senderId?.userInfo?.name || null,

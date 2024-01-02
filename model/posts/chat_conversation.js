@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 // const autopopulate = require('mongoose-autopopulate');
 // const validator = require('validator');
 const chatSchema = new mongoose.Schema({
+  
   ads_id: { type: mongoose.Schema.Types.ObjectId, refPath:'ads_type',required:true },
   buyer: { type: mongoose.Schema.Types.ObjectId, ref: `user`,required:true },
   seller: { type: mongoose.Schema.Types.ObjectId, ref: `user` ,required:true},

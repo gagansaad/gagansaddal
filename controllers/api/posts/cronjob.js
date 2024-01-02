@@ -199,11 +199,11 @@ cron.schedule("*/15 * * * *", async (req, res) => {
     };
 
     let adTypes = [
-      { key: "job", label: "Jobs" },
-      { key: "event", label: "Events" },
-      { key: "Buy & Sell", label: "Buy & Sell" },
-      { key: "babysitter & nannie", label: "Babysitters & Nannies" },
-      { key: "Local_biz & Service", label: "Local Biz & Services" },
+      // { key: "job", label: "Jobs" },
+      // { key: "event", label: "Events" },
+      // { key: "Buy & Sell", label: "Buy & Sell" },
+      // { key: "babysitter & nannie", label: "Babysitters & Nannies" },
+      // { key: "Local_biz & Service", label: "Local Biz & Services" },
       { key: "rental", label: "Rentals" },
     ];
     let results = [];
@@ -222,7 +222,7 @@ cron.schedule("*/15 * * * *", async (req, res) => {
           const currentTimeInTimeZone = new Date().toLocaleString('en-US', { timeZone: data?.location_timezone});
           const currentHour = new Date(currentTimeInTimeZone).getHours();
           console.log(currentHour);
-          if(currentHour ===7 ){
+          if(currentHour === 8){
             if (bumpUpAddon) {
               const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
               return {
@@ -261,7 +261,7 @@ cron.schedule("*/15 * * * *", async (req, res) => {
 
 
       // Filter adonsData to find records where resultDates array contains today's date
-      console.log(checkAlreadyExist);
+      // console.log(checkAlreadyExist);
       // ... (previous code remains unchanged)
 
 const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
