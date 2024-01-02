@@ -232,13 +232,15 @@ exports.ChatList = async (req, res, next) => {
       let Sid
       let Uid
       let Aid
-      status = "active"
+      
       console.log(chatid,"rvswkjnerrjkvwkj");
       if(chatid == "null"){
         status = "adDeleted";
         console.log(chat._id,"vkjdkdkdkdkdkkd",chat);
         Aid = await Chat.findById(chat?._id)
         console.log(Aid,"fvfvkvknvknvk");
+      }else{
+        status = "active"
       }
       // if(sellerid == "null" || buyerid == "null"){
       //   Sid = await Chat.findById(chat._id)
