@@ -267,13 +267,11 @@ cron.schedule("*/1 * * * *", async (req, res) => {
 
 const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
   console.log(index ,resultDates,"rvrkvrfvmkrmvkrmvkrvkrvrkvmrkvmkrvfkvkfvkrkvk");
-  if (index < resultDates.length) {
-    const recordDates = resultDates[index];
-    console.log(recordDates, "tfjmmkm",today);
-
-    return recordDates.includes(today);
+  const recordDates = resultDates[index] || []; // Use an empty array if resultDates[index] is undefined
+  if (recordDates.includes(today)) {
+    return true;
   } else {
-    console.error("Index out of bounds for resultDates array");
+    console.error("Record does not have today's date in resultDates");
     return false;
   }
 });
