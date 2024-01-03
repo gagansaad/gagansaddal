@@ -1121,7 +1121,7 @@ exports.fetchAll = async (req, res, next) => {
       queryFinal = {
         ...dbQuery,
         $or: [
-          { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
+          { "adsInfo.title": { $regex: searchTerm.replace(/\s+/g, ' ').trim(), $options: "i" } },
           { "adsInfo.tagline": { $elemMatch: { $regex: searchTerm.trim(), $options: "i" } } },
           { "adsInfo.sub_categories":  { $regex: searchTerm.trim(), $options: "i" }},{ "adsInfo.categories":  { $regex: searchTerm.trim(), $options: "i" }},
           // { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } },
