@@ -236,7 +236,7 @@ cron.schedule("*/1 * * * *", async (req, res) => {
           return null; // If "Bump up" addon is not found, return null
         })
         .filter((dates) => dates !== null);
-console.log(bumpUpDates,"ccdcdcdcddssssssssssssssssssssssssss");
+      console.log(bumpUpDates,"ccdcdcdcddssssssssssssssssssssssssss");
       const resultDates = [];
 
       for (const dateRange of bumpUpDates) {
@@ -262,11 +262,11 @@ console.log(bumpUpDates,"ccdcdcdcddssssssssssssssssssssssssss");
 
 
       // Filter adonsData to find records where resultDates array contains today's date
-      // console.log(checkAlreadyExist);
+      console.log(checkAlreadyExist);
       // ... (previous code remains unchanged)
 
 const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
-  console.log(index ,resultDates.length);
+  console.log(index ,resultDates);
   if (index < resultDates.length) {
     const recordDates = resultDates[index];
     console.log(recordDates, "tfjmmkm",today);
