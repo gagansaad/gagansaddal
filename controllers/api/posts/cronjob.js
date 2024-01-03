@@ -267,15 +267,15 @@ cron.schedule("*/1 * * * *", async (req, res) => {
 
 const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
   console.log(index ,resultDates);
-  if (index < resultDates.length) {
+  // if (index < resultDates.length) {
     const recordDates = resultDates[index];
     console.log(recordDates, "tfjmmkm",today);
 
     return recordDates.includes(today);
-  } else {
-    console.error("Index out of bounds for resultDates array");
-    return false;
-  }
+  // } else {
+  //   console.error("Index out of bounds for resultDates array");
+  //   return false;
+  // }
 });
 
 console.log(recordsWithTodayDate);
