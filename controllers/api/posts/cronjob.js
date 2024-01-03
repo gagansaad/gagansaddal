@@ -301,12 +301,12 @@ if (bumpId.length > 0) {
     const converteddate_of_time = new Date(date_of_time).toLocaleString('en-US', {
       timeZone: document?.location_timezone,
     });
-console.log(converteddate_of_time,"2222222222222222222222");
+// console.log(converteddate_of_time,"2222222222222222222222");
     const document_location_timezone = document?.location_timezone;
-console.log(document_location_timezone,"dcdcdc");
+// console.log(document_location_timezone,"dcdcdc");
     // Parse the date string to extract components
     const dateComponents = converteddate_of_time.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/);
-console.log(dateComponents,"----------------------------------------");
+// console.log(dateComponents,"----------------------------------------");
     if (dateComponents) {
       const month = parseInt(dateComponents[1], 10) - 1; // Months are zero-based
   const day = parseInt(dateComponents[2], 10);
