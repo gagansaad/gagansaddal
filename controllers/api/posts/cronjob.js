@@ -265,6 +265,7 @@ cron.schedule("*/1 * * * *", async (req, res) => {
       // ... (previous code remains unchanged)
 
 const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
+  console.log(index ,resultDates.length);
   if (index < resultDates.length) {
     const recordDates = resultDates[index];
     console.log(recordDates, "tfjmmkm",today);
