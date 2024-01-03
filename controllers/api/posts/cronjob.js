@@ -183,22 +183,13 @@ console.log(formattedDateObject);
 });
 
 
-cron.schedule("*/1 * * * *", async (req, res) => {
+cron.schedule("*/15 * * * *", async () => {
   try {
-    let datas;
     const currentDate = new Date();
-    // Convert the date to ISO 8601 format
     const currentISODate = currentDate.toISOString();
-    console.log(currentISODate,' cron start dataa')
-    var dbQuery = {
-      $and: [
-        { status: "active" },
-        { "plan_validity.expired_on": { $gte: currentISODate } },
-        { "addons_validity.name": "Bump up" },
-      ],
-    };
+    console.log(currentISODate, 'Cron job start');
 
-    let adTypes = [
+    const adTypes = [
       { key: "job", label: "Jobs" },
       { key: "event", label: "Events" },
       { key: "Buy & Sell", label: "Buy & Sell" },
@@ -206,218 +197,108 @@ cron.schedule("*/1 * * * *", async (req, res) => {
       { key: "Local_biz & Service", label: "Local Biz & Services" },
       { key: "rental", label: "Rentals" },
     ];
-    let results = [];
-    let adTypeCount;
-    for (const adType of adTypes) {
-      let YourModel = mongoose.model(adType.key);
-      let checkAlreadyExist = await YourModel.find(dbQuery).exec();
 
-      let bumpUpDates = checkAlreadyExist
+    let datas = [];
+
+    for (const adType of adTypes) {
+      const YourModel = mongoose.model(adType.key);
+      const checkAlreadyExist = await YourModel.find({
+        $and: [
+          { status: "active" },
+          { "plan_validity.expired_on": { $gte: currentISODate } },
+          { "addons_validity.name": "Bump up" },
+        ],
+      }).exec();
+
+      const bumpUpDates = checkAlreadyExist
         .map((data) => {
-          // Filter addons_validity to get only the "Bump up" addon
-          let bumpUpAddon = data.addons_validity.find(
+          const bumpUpAddon = data.addons_validity.find(
             (addon) => addon.name === "Bump up"
           );
-          console.log(bumpUpAddon,'data');
-          const currentTimeInTimeZone = new Date().toLocaleString('en-US', { timeZone: data?.location_timezone});
-          const currentHour = new Date(currentTimeInTimeZone).getHours();
-          console.log(currentHour);
-          if(currentHour === 11){
-            if (bumpUpAddon) {
 
-              const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
-              return {
-                active_on: bumpUpAddon.active_on,
-                expired_on: bumpUpAddon.expired_on,
-                interval: iter, // Add the interval property
-              };
-            }
+          const currentTimeInTimeZone = new Date().toLocaleString('en-US', { timeZone: data?.location_timezone });
+          const currentHour = new Date(currentTimeInTimeZone).getHours();
+
+          if (currentHour === 7 && bumpUpAddon) {
+            const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
+            return {
+              id: data._id,
+              active_on: bumpUpAddon.active_on,
+              expired_on: bumpUpAddon.expired_on,
+              interval: iter,
+              location_timezone: data.location_timezone,
+            };
           }
-          return null; // If "Bump up" addon is not found, return null
+          return null;
         })
         .filter((dates) => dates !== null);
-      console.log(bumpUpDates,"ccdcdcdcddssssssssssssssssssssssssss");
-      const resultDates = [];
 
       for (const dateRange of bumpUpDates) {
-       
-        const { active_on, expired_on, interval } = dateRange;
-        // console.log(interval);
+        const { id, active_on, expired_on, interval, location_timezone } = dateRange;
+
         const startDate = new Date(active_on);
         const endDate = new Date(expired_on);
-        const recordDates = []; // Create a separate array for each record
+        const recordDates = [];
 
         while (startDate <= endDate) {
           recordDates.push(startDate.toISOString().split("T")[0]);
           startDate.setDate(startDate.getDate() + interval);
         }
 
-        resultDates.push(recordDates); // Push the record's dates array into the result array
+        const today = new Date().toISOString().split("T")[0];
+
+        if (recordDates.includes(today)) {
+          const document = await YourModel.findOne({
+            $and: [
+              { _id: id },
+              {
+                $or: [
+                  { active_on_bumpup_at: { $lt: today } },
+                  { active_on_bumpup_at: null },
+                ],
+              },
+            ],
+          });
+
+          if (document) {
+            const convertedDate = new Date().toLocaleString('en-US', { timeZone: location_timezone });
+            const dateComponents = convertedDate.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/);
+
+            if (dateComponents) {
+              const month = parseInt(dateComponents[1], 10) - 1;
+              const day = parseInt(dateComponents[2], 10);
+              const year = parseInt(dateComponents[3], 10);
+              let hour = parseInt(dateComponents[4], 10);
+              const minute = parseInt(dateComponents[5], 10);
+
+              if (dateComponents[7] === "PM" && hour < 12) {
+                hour += 12;
+              } else if (dateComponents[7] === "AM" && hour === 12) {
+                hour = 0;
+              }
+
+              const inputDate = new Date(year, month, day, hour, minute);
+              const offset = new Date(inputDate.toLocaleString("en-US", { timeZone: location_timezone })).getTimezoneOffset();
+              inputDate.setMinutes(inputDate.getMinutes() - offset);
+              const new_date = new Date(inputDate).toISOString();
+
+              datas.push({
+                id,
+                inputDate,
+                new_date,
+              });
+
+              await YourModel.updateOne({ _id: id }, { $set: { active_on_bumpup_at: new_date } });
+            }
+          }
+        }
       }
-      console.log(resultDates,"vvevdefv");
-
-      const today = new Date().toISOString().split("T")[0]; // Get today's date in the format "YYYY-MM-DD"
-      let date_of_time = new Date().toISOString();
-
-
-
-      // Filter adonsData to find records where resultDates array contains today's date
-      console.log(checkAlreadyExist.length,"vdvdvdfnvdkfnvdfvsdkvsddskvm");
-      // ... (previous code remains unchanged)
-
-const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
-  console.log(index ,resultDates,"rvrkvrfvmkrmvkrmvkrvkrvrkvmrkvmkrvfkvkfvkrkvk");
-  const recordDates = resultDates[index] || []; // Use an empty array if resultDates[index] is undefined
-  if (recordDates.includes(today)) {
-    return true;
-  } else {
-    console.error("Record does not have today's date in resultDates");
-    return false;
-  }
-});
-
-console.log(recordsWithTodayDate);
-
-let bumpId = recordsWithTodayDate.map((featuredItem) => featuredItem._id);
-console.log(bumpId,"cdcdcdcdcdcdcdcdcdcdcd");
-let document
-if (bumpId.length > 0) {
-  for (const id of bumpId) {
-    document = await YourModel.findOne({
-      $and: [
-        { _id: id },
-        {
-          $or: [
-            { active_on_bumpup_at: { $lt: today } },
-            { active_on_bumpup_at: null },
-          ],
-        },
-      ],
-    });
-    if (document) {
-      console.log(date_of_time,"///////////////////////////");
-    const converteddate_of_time = new Date(date_of_time).toLocaleString('en-US', {
-      timeZone: document?.location_timezone,
-    });
-// console.log(converteddate_of_time,"2222222222222222222222");
-    const document_location_timezone = document?.location_timezone;
-// console.log(document_location_timezone,"dcdcdc");
-    // Parse the date string to extract components
-    const dateComponents = converteddate_of_time.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/);
-// console.log(dateComponents,"----------------------------------------");
-    if (dateComponents) {
-      const month = parseInt(dateComponents[1], 10) - 1; // Months are zero-based
-  const day = parseInt(dateComponents[2], 10);
-  const year = parseInt(dateComponents[3], 10);
-  let hour = parseInt(dateComponents[4], 10);
-  const minute = parseInt(dateComponents[5], 10);
-  const second = parseInt(dateComponents[6], 10);
-  const ampm = dateComponents[7];
-
-      // Adjust the hour for AM/PM
-      if (ampm === "PM" && hour < 12) {
-        hour += 12;
-      } else if (ampm === "AM" && hour === 12) {
-        hour = 0;
-      }
-console.log(year, month, day, hour, minute,"7777777");
-      const inputDate = new Date(year, month, day, hour, minute);
-      console.log(inputDate,"66666666666");
-const offset = new Date(inputDate.toLocaleString("en-US", { timeZone: document_location_timezone })).getTimezoneOffset();
-inputDate.setMinutes(inputDate.getMinutes() - offset);
-console.log(inputDate,",,,,,,,");
-let new_date = new Date(inputDate).toISOString()
-console.log("Input Date:", inputDate,new_date);
-
-      
-        datas = await YourModel.updateOne(
-          { _id: id },
-          { $set: { active_on_bumpup_at: new_date } }
-        );
-      }
-    } else {
-      console.error("Date components not found in the expected format");
-      // Handle the case where dateComponents is null
-    }
-  }
-}
-
-// ... (rest of your code remains unchanged)
-
-//       const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
-//         if (index < resultDates.length) {
-//             const recordDates = resultDates[index]; // Get the resultDates array for the current record
-//             console.log(recordDates, "tfjmmkm");
-    
-//             return recordDates.includes(today);
-//         } else {
-//             // Handle the case where the index is out of bounds
-//             console.error("Index out of bounds for resultDates array");
-//             return false;
-//         }
-//     });
-    
-//     console.log(recordsWithTodayDate);
-    
-//       let bumpId = recordsWithTodayDate.map((featuredItem) => featuredItem._id);
-//       if (bumpId.length > 0) {
-//         for (const id of bumpId) {
-//           const document = await YourModel.findOne({
-//             $and: [
-//               { _id: id },
-//               {
-//                 $or: [
-//                   { active_on_bumpup_at: { $lt: today } },
-//                   { active_on_bumpup_at: null }, // Add condition for active_on_bumpup_at < todayDate7am
-//                 ],
-//               },
-//             ],
-//           });
-          
-//           const converteddate_of_time = new Date(date_of_time).toLocaleString('en-US', {
-//             timeZone: document?.location_timezone,
-//           });
-//           const document_location_timezone = document?.location_timezone; // Replace with your actual time zone
-
-// // Parse the date string to extract components
-// const dateComponents = converteddate_of_time.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/);
-// const month = parseInt(dateComponents[1], 10) - 1; // Months are zero-based
-// const day = parseInt(dateComponents[2], 10);
-// const year = parseInt(dateComponents[3], 10);
-// let hour = parseInt(dateComponents[4], 10);
-// const minute = parseInt(dateComponents[5], 10);
-// const ampm = dateComponents[6];
-
-// // Adjust the hour for AM/PM
-// if (ampm === "PM" && hour < 12) {
-//   hour += 12;
-// } else if (ampm === "AM" && hour === 12) {
-//   hour = 0;
-// }
-
-// // Create a new Date object with the specified time zone
-// const inputDate = new Date(year, month, day, hour, minute);
-// const offset = new Date(inputDate.toLocaleString("en-US", { timeZone: document_location_timezone })).getTimezoneOffset();
-// inputDate.setMinutes(inputDate.getMinutes() - offset);
-// let new_date = new Date(inputDate).toISOString()
-// console.log("Input Date:", inputDate,new_date);
-
-//           if (document) {
-//             // Update the document with the new value for active_on_bumpup_at
-//             datas =  await YourModel.updateOne(
-//               { _id: id },
-//               { $set: { active_on_bumpup_at: new_date } }
-//               // { $set: { active_on_bumpup_at: date_of_time } }
-//             );
-//           }
-//         }
-      // }
-      
     }
 
-    return successJSONResponse(res, { message: `success`, total: datas });
+    console.log(datas);
+    console.log("Cron job completed successfully");
   } catch (error) {
-    console.log(error);
-    return failureJSONResponse(res, { message: `Something went wrong` });
+    console.error(error);
+    console.log("Something went wrong in the cron job");
   }
 });
