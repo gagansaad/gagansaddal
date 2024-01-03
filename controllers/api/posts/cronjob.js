@@ -224,6 +224,7 @@ cron.schedule("*/1 * * * *", async (req, res) => {
           console.log(currentHour);
           if(currentHour === 10){
             if (bumpUpAddon) {
+
               const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
               return {
                 active_on: bumpUpAddon.active_on,
@@ -235,7 +236,7 @@ cron.schedule("*/1 * * * *", async (req, res) => {
           return null; // If "Bump up" addon is not found, return null
         })
         .filter((dates) => dates !== null);
-
+console.log(bumpUpAddon,"ccdcdcdcddssssssssssssssssssssssssss");
       const resultDates = [];
 
       for (const dateRange of bumpUpDates) {
