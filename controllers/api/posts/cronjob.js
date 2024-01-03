@@ -236,7 +236,7 @@ cron.schedule("*/1 * * * *", async (req, res) => {
           return null; // If "Bump up" addon is not found, return null
         })
         .filter((dates) => dates !== null);
-console.log(bumpUpAddon,"ccdcdcdcddssssssssssssssssssssssssss");
+console.log(bumpUpDates,"ccdcdcdcddssssssssssssssssssssssssss");
       const resultDates = [];
 
       for (const dateRange of bumpUpDates) {
