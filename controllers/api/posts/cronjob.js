@@ -222,7 +222,7 @@ cron.schedule("*/1 * * * *", async (req, res) => {
           const currentTimeInTimeZone = new Date().toLocaleString('en-US', { timeZone: data?.location_timezone});
           const currentHour = new Date(currentTimeInTimeZone).getHours();
           console.log(currentHour);
-          if(currentHour === 10){
+          if(currentHour === 11){
             if (bumpUpAddon) {
 
               const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
@@ -254,7 +254,7 @@ cron.schedule("*/1 * * * *", async (req, res) => {
 
         resultDates.push(recordDates); // Push the record's dates array into the result array
       }
-      console.log(resultDates);
+      console.log(resultDates,"vvevdefv");
 
       const today = new Date().toISOString().split("T")[0]; // Get today's date in the format "YYYY-MM-DD"
       let date_of_time = new Date().toISOString();
