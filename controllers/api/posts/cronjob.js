@@ -262,7 +262,7 @@ cron.schedule("*/1 * * * *", async (req, res) => {
 
 
       // Filter adonsData to find records where resultDates array contains today's date
-      console.log(checkAlreadyExist);
+      console.log(checkAlreadyExist,"vdvdvdfnvdkfnvdfvsdkvsddskvm");
       // ... (previous code remains unchanged)
 
 const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
