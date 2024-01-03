@@ -183,7 +183,7 @@ console.log(formattedDateObject);
 });
 
 
-cron.schedule("*/15 * * * *", async (req, res) => {
+cron.schedule("*/1 * * * *", async (req, res) => {
   try {
     let datas;
     const currentDate = new Date();
@@ -222,7 +222,7 @@ cron.schedule("*/15 * * * *", async (req, res) => {
           const currentTimeInTimeZone = new Date().toLocaleString('en-US', { timeZone: data?.location_timezone});
           const currentHour = new Date(currentTimeInTimeZone).getHours();
           console.log(currentHour);
-          if(currentHour === 7){
+          if(currentHour === 10){
             if (bumpUpAddon) {
               const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
               return {
@@ -267,7 +267,7 @@ cron.schedule("*/15 * * * *", async (req, res) => {
 const recordsWithTodayDate = checkAlreadyExist.filter((data, index) => {
   if (index < resultDates.length) {
     const recordDates = resultDates[index];
-    console.log(recordDates, "tfjmmkm");
+    console.log(recordDates, "tfjmmkm",today);
 
     return recordDates.includes(today);
   } else {
