@@ -346,6 +346,7 @@ console.log(onlineUserIds);
             if (chatting) {
               console.log('Chat deleted successfully:', chatting);
               // Emit the updated chat details or specific information related to the deleted-chat event
+              
               io.emit('deleted-chat', { chatId });
           } else {
               console.log('Chat not found with chatId:', chatId);
@@ -357,7 +358,7 @@ console.log(onlineUserIds);
       socket.on('delete-msg', async (data) => {
         try {
             const { chatId, messageId } = data;
-    
+    console.log(data,":jai ho");
             let chatting = await Chat.findByIdAndUpdate(
                 chatId,
                 {
