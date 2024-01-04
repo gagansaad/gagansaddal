@@ -183,7 +183,7 @@ console.log(formattedDateObject);
 });
 
 
-cron.schedule("*/1 * * * *", async () => {
+cron.schedule("*/15 * * * *", async () => {
   try {
     const currentDate = new Date();
     const currentISODate = currentDate.toISOString();
@@ -219,7 +219,7 @@ cron.schedule("*/1 * * * *", async () => {
           const currentTimeInTimeZone = new Date().toLocaleString('en-US', { timeZone: data?.location_timezone });
           const currentHour = new Date(currentTimeInTimeZone).getHours();
 
-          if (currentHour === 11 && bumpUpAddon) {
+          if (currentHour === 7 && bumpUpAddon) {
             const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
             return {
               id: data._id,
@@ -252,18 +252,14 @@ cron.schedule("*/1 * * * *", async () => {
           if(yuakism){
             console.log(yuakism.active_on_bumpup_at,"aaya re baabu");
           }
-          const document = await YourModel.findOne({
-            $and: [
-              { _id: id },
-              {
-                $or: [
-                  { active_on_bumpup_at: { $lt: today } },
-                  { active_on_bumpup_at: null },
-                ],
-              },
-            ],
-          });
-
+          let newyoua = yuakism.active_on_bumpup_at
+          let splittedDate = newyoua.split("T")[0];
+          console.log(splittedDate,today);
+          let document 
+          if(splittedDate<today || newyoua == null) {
+            console.log("yasadu");
+            document = await YourModel.findById(id);
+          }
           if (document) {
             const convertedDate = new Date().toLocaleString('en-US', { timeZone: location_timezone });
             const dateComponents = convertedDate.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/);
