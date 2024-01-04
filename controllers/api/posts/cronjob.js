@@ -183,7 +183,7 @@ console.log(formattedDateObject);
 });
 
 
-cron.schedule("*/15 * * * *", async () => {
+cron.schedule("*/1 * * * *", async () => {
   try {
     const currentDate = new Date();
     const currentISODate = currentDate.toISOString();
@@ -219,7 +219,7 @@ cron.schedule("*/15 * * * *", async () => {
           const currentTimeInTimeZone = new Date().toLocaleString('en-US', { timeZone: data?.location_timezone });
           const currentHour = new Date(currentTimeInTimeZone).getHours();
 
-          if (currentHour === 7 && bumpUpAddon) {
+          if (currentHour === 11 && bumpUpAddon) {
             const iter = bumpUpAddon.days == 30 ? 1 : bumpUpAddon.days;
             return {
               id: data._id,
