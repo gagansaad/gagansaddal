@@ -340,7 +340,7 @@ console.log(onlineUserIds);
       socket.on('delete-chat', async (data) => {
         try {
             const { chatId } = data;
-    console.log(chatId,"hhhhhhjjjjj",data);
+    // console.log(chatId,"hhhhhhjjjjj",data);
             let chatting = await Chat.findByIdAndDelete(chatId);
     
             if (chatting) {
@@ -409,7 +409,6 @@ console.log(onlineUserIds);
              io.emit('join-room', chatid);
              socket.join(chatid);
               // Notify the seller about the new chat
-              console.log("baba ve kla mrod ni nikkiye lgade jor baba maar na daaba awe hoju khon kharaba dhakka laundi da sah ah ah ah chdgya ve");
             }
 
             
@@ -484,7 +483,6 @@ console.log("Count of unseen messages:", count);
 
 // console.log("Unseen messages:", unseenMessages);
 
-    console.log(count,"nvjernvkjsrnvkswnvksndkjvnsdkjvn jvnfjv djnvjd vidv  dj vdn vikdv dn vdkindnv kjnnd kdfmk kjf");
    let newChatObject = {
       _id: chatting?._id || null,
       messageCount: count || 0,
