@@ -1219,8 +1219,12 @@ exports.search = async (req, res, next) => {
     for (const adType of adTypes) {
      
       if (searchTerm) {
+        const searchTermsArray = searchTerm.trim().split(/\s+/);
+
+// Create an array of regular expressions for each term
+const regexArray = searchTermsArray.map(term => new RegExp(term, 'i'));
         orConditions = [
-          { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
+          { "adsInfo.title": { $in: regexArray }},
           {"advertisement_id": searchTerm.trim()},
           { "adsInfo.tagline": { $elemMatch: { $regex: searchTerm.trim(), $options: "i" } } }
         ];

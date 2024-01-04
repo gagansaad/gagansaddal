@@ -974,6 +974,10 @@ exports.fetchAll = async (req, res, next) => {
       ...addOnsQuery,}
     let queryFinal = dbQuery;
     if (searchTerm) {
+      const searchTermsArray = searchTerm.trim().split(/\s+/);
+
+// Create an array of regular expressions for each term
+const regexArray = searchTermsArray.map(term => new RegExp(term, 'i'));
       adOnsQuery.$or = [
         // { "adsInfo.title": { $regex: `^${searchTerm.trim()}`, $options: "i" } },
         { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
@@ -985,7 +989,7 @@ exports.fetchAll = async (req, res, next) => {
       queryFinal = {
         ...dbQuery,
         $or: [
-          { "adsInfo.title": { $regex: searchTerm.trim(), $options: "i" } },
+          { "adsInfo.title": { $in: regexArray } },
           { "adsInfo.tagline": { $elemMatch: { $regex: searchTerm.trim(), $options: "i" } } },
           { "adsInfo.rental_type":  { $regex: searchTerm.trim(), $options: "i" }},
           { "adsInfo.category":  { $regex: searchTerm.trim(), $options: "i" }},
