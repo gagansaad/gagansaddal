@@ -337,6 +337,22 @@ console.log(onlineUserIds);
               console.error(error);
           }
       });
+      socket.on('delete-chat', async (data) => {
+        try {
+            const { chatId, messageId } = data;
+    
+            let chatting = await Chat.findByIdAndDelete(
+                chatId,
+            );
+    
+            if (chatting) {
+                // Emit the updated chat details or specific information related to the delete_msg event
+                io.emit('deleted-chat', { chatId});
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    });
       socket.on('delete-msg', async (data) => {
         try {
             const { chatId, messageId } = data;
@@ -344,7 +360,7 @@ console.log(onlineUserIds);
             let chatting = await Chat.findByIdAndUpdate(
                 chatId,
                 {
-                    $pull: { messages: { _id: messageId } },
+                    $pull: { messages: { _id: { $in: messageId }  } },
                 },
                 { upsert: true }
             );
