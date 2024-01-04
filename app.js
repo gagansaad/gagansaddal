@@ -341,9 +341,7 @@ console.log(onlineUserIds);
         try {
             const { chatId } = data;
     console.log(data,"hhhhhhjjjjj");
-            let chatting = await Chat.findByIdAndDelete(
-                chatId,
-            );
+            let chatting = await Chat.findByIdAndDelete(chatId);
     
             if (chatting) {
                 // Emit the updated chat details or specific information related to the delete_msg event
