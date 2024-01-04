@@ -339,7 +339,7 @@ console.log(onlineUserIds);
       });
       socket.on('delete-chat', async (data) => {
         try {
-            const { chatId, messageId } = data;
+            const { chatId } = data;
     
             let chatting = await Chat.findByIdAndDelete(
                 chatId,
