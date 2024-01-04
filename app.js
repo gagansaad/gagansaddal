@@ -344,9 +344,12 @@ console.log(onlineUserIds);
             let chatting = await Chat.findByIdAndDelete(chatId);
     
             if (chatting) {
-                // Emit the updated chat details or specific information related to the delete_msg event
-                io.emit('deleted-chat', { chatId});
-            }
+              console.log('Chat deleted successfully:', chatting);
+              // Emit the updated chat details or specific information related to the deleted-chat event
+              io.emit('deleted-chat', { chatId });
+          } else {
+              console.log('Chat not found with chatId:', chatId);
+          }
         } catch (error) {
             console.error(error);
         }
