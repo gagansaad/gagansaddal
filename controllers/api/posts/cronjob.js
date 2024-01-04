@@ -255,7 +255,7 @@ cron.schedule("*/15 * * * *", async () => {
           let newyoua = yuakism.active_on_bumpup_at
           let splittedDate = newyoua.split("T")[0];
           console.log(splittedDate,today);
-          let document 
+          let document  = null ;
           if(splittedDate<today || newyoua == null) {
             console.log("yasadu");
             document = await YourModel.findById(id);
