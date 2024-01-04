@@ -1127,7 +1127,7 @@ const regexArray = searchTermsArray.map(term => new RegExp(term, 'i'));
       queryFinal = {
         ...dbQuery,
         $or: [
-          { "adsInfo.title": { $all:regexArray}},
+          { "adsInfo.title": { $in:regexArray}},
           { "adsInfo.tagline": { $elemMatch: { $regex: searchTerm.trim(), $options: "i" } } },
           { "adsInfo.sub_categories":  { $regex: searchTerm.trim(), $options: "i" }},{ "adsInfo.categories":  { $regex: searchTerm.trim(), $options: "i" }},
           // { "adsInfo.tagline": { $regex: searchTerm.trim(), $options: "i" } },
