@@ -248,6 +248,10 @@ cron.schedule("*/15 * * * *", async () => {
         const today = new Date().toISOString().split("T")[0];
 
         if (recordDates.includes(today)) {
+          let yuakism = await YourModel.findById(id)
+          if(yuakism){
+            console.log(yuakism.active_on_bumpup_at,"aaya re baabu");
+          }
           const document = await YourModel.findOne({
             $and: [
               { _id: id },
