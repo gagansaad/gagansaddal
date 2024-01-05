@@ -235,7 +235,7 @@ cron.schedule("*/15 * * * *", async () => {
 
       for (const dateRange of bumpUpDates) {
         const { id, active_on, expired_on, interval, location_timezone } = dateRange;
-
+console.log(id,"llllllll");
         const startDate = new Date(active_on);
         const endDate = new Date(expired_on);
         const recordDates = [];
@@ -249,15 +249,15 @@ cron.schedule("*/15 * * * *", async () => {
 
         if (recordDates.includes(today)) {
           let yuakism = await YourModel.findById(id)
-          if(yuakism){
-            console.log(yuakism.active_on_bumpup_at,"aaya re baabu");
-          }
+          // if(yuakism){
+          //   console.log(yuakism.active_on_bumpup_at,"aaya re baabu");
+          // }
           let newyoua = yuakism.active_on_bumpup_at
           let splittedDate = newyoua.split("T")[0];
           console.log(splittedDate,today);
           let document  = null ;
           if(splittedDate<today || newyoua == null) {
-            console.log("yasadu");
+            console.log("yasadu",id);
             document = await YourModel.findById(id);
           }
           if (document) {
