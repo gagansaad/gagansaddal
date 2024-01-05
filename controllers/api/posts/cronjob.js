@@ -261,6 +261,7 @@ console.log(id,"llllllll");
             document = await YourModel.findById(id);
           }
           if (document) {
+            // console.log(document._id,"jkh bmbm");
             const convertedDate = new Date().toLocaleString('en-US', { timeZone: location_timezone });
             const dateComponents = convertedDate.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/);
 
@@ -281,7 +282,7 @@ console.log(id,"llllllll");
               const offset = new Date(inputDate.toLocaleString("en-US", { timeZone: location_timezone })).getTimezoneOffset();
               inputDate.setMinutes(inputDate.getMinutes() - offset);
               const new_date = new Date(inputDate).toISOString();
-
+console.log(id);
               datas.push({
                 id,
                 inputDate,
