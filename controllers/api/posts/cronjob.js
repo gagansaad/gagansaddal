@@ -271,7 +271,7 @@ console.log(id,"llllllll");
               const year = parseInt(dateComponents[3], 10);
               let hour = parseInt(dateComponents[4], 10);
               const minute = parseInt(dateComponents[5], 10);
-
+console.log(dateComponents);
               if (dateComponents[7] === "PM" && hour < 12) {
                 hour += 12;
               } else if (dateComponents[7] === "AM" && hour === 12) {
