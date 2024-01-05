@@ -265,7 +265,7 @@ console.log(id,"llllllll");
             const convertedDate = new Date().toLocaleString('en-US', { timeZone: location_timezone });
             let jaid = convertedDate.toLocaleString()
             console.log(typeof(jaid),"fkmkcmk",`${jaid}`);
-            const dateComponents = jaid.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (A|P)M/);
+            const dateComponents = jaid.match(/(\d+)\/(\d+)\/(\d+),\s*(\d+):(\d+):(\d+)\s*(A|P)M/);
 console.log(dateComponents,"vvvv",convertedDate);
             if (dateComponents) {
               const month = parseInt(dateComponents[1], 10) - 1;
