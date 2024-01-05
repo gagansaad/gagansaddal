@@ -264,7 +264,7 @@ console.log(id,"llllllll");
             console.log(document._id,"jkh bmbm");
             const convertedDate = new Date().toLocaleString('en-US', { timeZone: location_timezone });
             let jaid = convertedDate.toString()
-            console.log(typeof(jaid),"fkmkcmk");
+            console.log(typeof(jaid),"fkmkcmk",`${jaid}`);
             const dateComponents = jaid.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/);
 console.log(dateComponents,"vvvv",convertedDate);
             if (dateComponents) {
