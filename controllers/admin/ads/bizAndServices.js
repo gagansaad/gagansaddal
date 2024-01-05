@@ -44,7 +44,27 @@ exports.fetchAll = async (req, res, next) => {
       latitude,
       maxDistance,
       availability,
+      startDate,
+      endDate,
+      daysFilter,
     } = req.query;
+    if (startDate && endDate) {
+      // If start date and end date are provided, filter by custom date range
+      dbQuery.createdAt = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      };
+    } 
+    if(daysFilter) {
+       // Default to last 30 days if not specified
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - daysFilter);
+      console.log(startDate,"kiya hai");
+      dbQuery.createdAt = {
+        $gte: startDate,
+      };
+    }
+
     if (availability) {
       switch (availability) {
         case "Weekdays":

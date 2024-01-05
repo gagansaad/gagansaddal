@@ -102,7 +102,7 @@ exports.fetchAll = async (req, res, next) => {
       // If start date and end date are provided, filter by custom date range
       dbQuery.createdAt = {
         $gte: new Date(startDate),
-        $lt: new Date(endDate),
+        $lte: new Date(endDate),
       };
     } 
     if(daysFilter) {

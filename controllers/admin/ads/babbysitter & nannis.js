@@ -46,9 +46,28 @@ exports.fetchAll = async (req, res, next) => {
       longitude,
       latitude,
       maxDistance,
+      startDate,
+      endDate,
+      daysFilter,
     } = req.query;
     const sortval = sortBy === "Oldest" ? { createdAt: 1 } : { createdAt: -1 };
     let Distance;
+    if (startDate && endDate) {
+      // If start date and end date are provided, filter by custom date range
+      dbQuery.createdAt = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      };
+    } 
+    if(daysFilter) {
+       // Default to last 30 days if not specified
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - daysFilter);
+      console.log(startDate,"kiya hai");
+      dbQuery.createdAt = {
+        $gte: startDate,
+      };
+    }
 
     if (maxDistance === "0" || !maxDistance) {
       Distance = 200000;
