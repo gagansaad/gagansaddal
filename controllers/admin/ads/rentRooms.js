@@ -54,6 +54,9 @@ exports.fetchAll = async (req, res, next) => {
       latitude,
       maxDistance,
       prefered_age,
+      startDate,
+      endDate,
+      daysFilter,
     } = req.query;
     var perPage = parseInt(req.query.perpage) || 40;
     var page = parseInt(req.query.page) || 1;
@@ -95,6 +98,21 @@ exports.fetchAll = async (req, res, next) => {
       dbQuery["adsInfo.isAlcoholAllowed"] = isAlcoholAllowed;
     if (isPetFriendly) dbQuery["adsInfo.isPetFriendly"] = isPetFriendly;
     if (preferedGender) dbQuery["adsInfo.preferedGender"] = preferedGender;
+    if (startDate && endDate) {
+      // If start date and end date are provided, filter by custom date range
+      dbQuery.createdAt = {
+        $gte: new Date(startDate),
+        $lt: new Date(endDate),
+      };
+    } 
+    if(daysFilter) {
+       // Default to last 30 days if not specified
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - daysFilter);
+      dbQuery.createdAt = {
+        $gte: startDate,
+      };
+    }
 
     if (prefered_age) {
       // Convert prefered_age to an array if it's not already
