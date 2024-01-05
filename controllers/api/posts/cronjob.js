@@ -263,10 +263,11 @@ console.log(id,"llllllll");
           if (document) {
             console.log(document._id,"jkh bmbm");
             const convertedDate = new Date().toLocaleString('en-US', { timeZone: location_timezone });
+            const formattedDate = `${convertedDate.getMonth() + 1}/${convertedDate.getDate()}/${convertedDate.getFullYear()}, ${convertedDate.getHours()}:${convertedDate.getMinutes()}:${convertedDate.getSeconds()} ${convertedDate.getHours() >= 12 ? 'PM' : 'AM'}`;
             let jaid = convertedDate.toString()
             console.log(typeof(jaid),"fkmkcmk",`${jaid}`);
-            const dateComponents = jaid.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (A|P)M/);
-console.log(dateComponents,"vvvv",convertedDate);
+            const dateComponents = formattedDate.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (A|P)M/);
+console.log(dateComponents,"vvvv",formattedDate);
             if (dateComponents) {
               const month = parseInt(dateComponents[1], 10) - 1;
               const day = parseInt(dateComponents[2], 10);
