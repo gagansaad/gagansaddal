@@ -109,6 +109,7 @@ exports.fetchAll = async (req, res, next) => {
        // Default to last 30 days if not specified
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - daysFilter);
+      console.log(startDate,"kiya hai");
       dbQuery.createdAt = {
         $gte: startDate,
       };
