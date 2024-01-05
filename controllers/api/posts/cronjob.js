@@ -264,7 +264,7 @@ console.log(id,"llllllll");
             console.log(document._id,"jkh bmbm");
             const convertedDate = new Date().toLocaleString('en-US', { timeZone: location_timezone });
             const dateComponents = convertedDate.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/);
-
+console.log(dateComponents,"vvvv",convertedDate);
             if (dateComponents) {
               const month = parseInt(dateComponents[1], 10) - 1;
               const day = parseInt(dateComponents[2], 10);
