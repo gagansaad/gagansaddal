@@ -183,7 +183,7 @@ console.log(formattedDateObject);
 });
 
 
-cron.schedule("*/15 * * * *", async () => {
+cron.schedule("*/1 * * * *", async () => {
   try {
     const currentDate = new Date();
     const currentISODate = currentDate.toISOString();
@@ -261,7 +261,7 @@ console.log(id,"llllllll");
             document = await YourModel.findById(id);
           }
           if (document) {
-            // console.log(document._id,"jkh bmbm");
+            console.log(document._id,"jkh bmbm");
             const convertedDate = new Date().toLocaleString('en-US', { timeZone: location_timezone });
             const dateComponents = convertedDate.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/);
 
