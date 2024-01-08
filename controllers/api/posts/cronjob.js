@@ -248,14 +248,22 @@ cron.schedule("*/15 * * * *", async () => {
 
         if (recordDates.includes(today)) {
           let yuakism = await YourModel.findById(id)
-          // if(yuakism){
-          //   console.log(yuakism.active_on_bumpup_at,"aaya re baabu");
-          // }
-          let newyoua = yuakism.active_on_bumpup_at
-          let splittedDate = newyoua.split("T")[0];
+          let newyoua
+          let splittedDate
+          if (yuakism) {
+            if (adTypes.key == "rental") {
+             newyoua = yuakism.active_on_bumpup_at
+              splittedDate = newyoua.split("T")[0];
+            }
+            // Continue with the rest of your code...
+          } else {
+            console.log("No document found with the specified ID.");
+            // Handle the case where the document is not found.
+          }
+        
           console.log(splittedDate,today);
           let document  = null ;
-          if(splittedDate<today || newyoua == "null" || yuakism.active_on_bumpup_at == null) {
+          if( splittedDate && splittedDate<today || newyoua == "null" || yuakism.active_on_bumpup_at == null) {
             console.log("yasadu",id);
             document = await YourModel.findById(id);
           }

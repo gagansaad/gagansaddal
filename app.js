@@ -303,7 +303,6 @@ try {
     return result;
   }, {});
   let onlineUserIds = Object.keys(filteredOnlineUsers);
-console.log(onlineUserIds);
   io.emit("user-status", { userId:onlineUserIds});
          socket.on('join-room', (chat_id) => {
           
@@ -541,10 +540,8 @@ console.log(lastMessageSender,newChatObject1.seller_id);
       ? newChatObject1.buyer_id.toString()
       : null;
     
-    console.log(otherUserId,"mila tu milaackdnvkjenvjkefvkfnvkndsfkvnsdfkvnksdfnvksdnvksd");
     io.emit('new-chat', newChatObject);
     io.emit('receive-message', newChatObject1);
-            // console.log(`Emitted 'receive-message' to room chat-$`,);
             await Notification.sendNotifications(
               [otherUserId],
               newChatObject1.ads_name,
@@ -579,7 +576,6 @@ console.log(lastMessageSender,newChatObject1.seller_id);
     
                 // Save only if there are messages to update
                 await chatting.save();
-                console.log(chatting.messages, "ejnvjsdfnvjdfsnvj");
               }
             }
           }
