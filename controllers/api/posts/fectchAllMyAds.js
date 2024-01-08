@@ -1282,7 +1282,7 @@ console.log(checkAlreadyExist);
  if (adTypeCount.length) {
  
   let jobData = adTypeCount.map((job) => {
-    job.toObject({ virtuals: true })
+   
     return {
       ...job._doc,
       // Add other job fields as needed
