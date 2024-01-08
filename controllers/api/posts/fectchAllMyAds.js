@@ -1172,6 +1172,7 @@ exports.search = async (req, res, next) => {
       "createdAt": 1,
       "_id": 1,
       "plan_validity":1,
+      "active_on_bumpup_at":1,
     };
     
     // Get the current date
@@ -1271,19 +1272,21 @@ const regexArray = searchTermsArray.map(term => new RegExp(term, 'i'));
       $or: [queryFinal],
     })
     .populate(commonPopulateOptions)
-    .select(selectFields)
+    
+    // .select(selectFields)
     .sort(sortval)
     .exec();
 console.log(checkAlreadyExist); 
  
  adTypeCount = checkAlreadyExist;
  if (adTypeCount.length) {
- 
+
+  // console.log(adTypeCount);
   let jobData = adTypeCount.map((job) => {
-   
     return {
       ...job._doc,
       // Add other job fields as needed
+      active_on_virtual:job.active_on_virtual,
       view_count: job.viewCount,
       favorite_count: job.favoriteCount,
       is_favorite: !!job.isFavorite,
@@ -1291,7 +1294,7 @@ console.log(checkAlreadyExist);
       is_Reported: !!job.isReported,
     };
   }); //////
-  
+ 
   const isFavoriteFilter = is_favorite === "true" ? true : undefined;
   if (isFavoriteFilter) {
     jobData = jobData.filter((job) => job.is_favorite === true);
