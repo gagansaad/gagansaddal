@@ -109,7 +109,7 @@ exports.fetchAll = async (req, res, next) => {
        // Default to last 30 days if not specified
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - daysFilter);
-      console.log(startDate,"kiya hai");
+   
       dbQuery.createdAt = {
         $gte: startDate,
       };
@@ -198,7 +198,7 @@ exports.fetchAll = async (req, res, next) => {
       today.setHours(0, 0, 0, 0); // Set the time to the beginning of the day (midnight)
       const endDate = new Date(today); // Create a copy of the start date
       endDate.setDate(today.getDate() + 1); // Set the end date to the next day
-console.log(today,endDate);
+
       const query = {
         $and: [
           { ads_type: sadsid },
@@ -217,7 +217,7 @@ console.log(today,endDate);
           { payment_status: paymentStatus },
         ],
       };
-console.log(query,query2);
+
       let reve = await paymentModel.find(query2);
       let treve = await paymentModel.find(query);
       let totalAmountSum = 0;
@@ -358,7 +358,7 @@ exports.fetchGraph = async (req, res, next) => {
       "roomrent",
     ];
 let type = await PostType.find({name:"Rentals"})
-console.log(type[0]._id);
+
     for (let month = 0; month < 12; month++) {
       const startDate = new Date(currentYear, month, 1);
       const endDate = new Date(currentYear, month + 1, 0);
@@ -468,11 +468,10 @@ const calculateMonthlyRevenue = async (startDate, endDate ,adstype) => {
   ]);
   
 
-console.log(todayTotalAmountAggregation);
   if (todayTotalAmountAggregation.length > 0) {
     return todayTotalAmountAggregation[0].revenue;
   } else {
-    console.log("dedede");
+  
     return 0; // No revenue for the given month
   }
 };

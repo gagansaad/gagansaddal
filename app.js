@@ -273,7 +273,7 @@ try {
     });
     const onlineUsers = {};
     io.on("connection", async (socket) => {
-        // console.log("socket.handshake.query", socket);
+       
         console.log("socket Connected ", socket.id)
 
         setTimeout(function(){
@@ -284,14 +284,14 @@ try {
 
   // Get user ID from query parameters (you may need to modify this based on your authentication)
   const userId = socket.handshake.query.userId;
-  console.log(userId,"/////////////");
+  
 //   let chat = await Chat.find({
 //     $or: [
 //       { 'buyer': userId },
 //       { 'seller': userId },
 //     ],
 //   })
-// console.log(chat,"evfndejndjvnnvjdnjdenvjden");
+
 //   // Set user as online
   onlineUsers[userId] = true;
   
@@ -306,7 +306,7 @@ try {
 console.log(onlineUserIds);
   io.emit("user-status", { userId:onlineUserIds});
          socket.on('join-room', (chat_id) => {
-          console.log(chat_id,"tu meri jaan ");
+          
           socket.join(chat_id);
         });
         //  console.log(`Socket ${socket.id} joined room: chat-${adId}`);
@@ -340,7 +340,7 @@ console.log(onlineUserIds);
       socket.on('delete-chat', async (data) => {
         try {
             const { chatId } = data;
-    // console.log(chatId,"hhhhhhjjjjj",data);
+   
             let chatting = await Chat.findByIdAndDelete(chatId);
     
             if (chatting) {
@@ -358,7 +358,7 @@ console.log(onlineUserIds);
       socket.on('delete-msg', async (data) => {
         try {
             const { chatId, messageId } = data;
-    console.log(data,":jai ho");
+
             let chatting = await Chat.findByIdAndUpdate(
                 chatId,
                 {
@@ -377,7 +377,7 @@ console.log(onlineUserIds);
     });
          socket.on('send-message', async (data) => {
           try {
-            // console.log(data,"hoja 22 bnke yr");
+       
             const { ads_id,sellerId,buyerId,senderId,ads_type,content,content_type } = data;
             
             // Check if a chat already exists for the given adId
@@ -405,7 +405,7 @@ console.log(onlineUserIds);
     
               let data = await chat.save();
              let chatid = data?._id;
-             console.log("ho");
+           
              io.emit('join-room', chatid);
              socket.join(chatid);
               // Notify the seller about the new chat
@@ -421,7 +421,7 @@ console.log(onlineUserIds);
            
 
             };
-    console.log(newMessage,"cdlck");
+    
           let createmsg = await Chat.findOneAndUpdate(
               {
                 $and: [
@@ -437,7 +437,7 @@ console.log(onlineUserIds);
               { $push: { messages: newMessage } },
               { new: true, upsert: true }
             );
-            console.log(chat._id,"gagan");
+         
             let chatting = await Chat.findById({"_id":chat._id}).populate({
               path: 'ads_id',
               select: 'adsInfo.title',
@@ -462,7 +462,7 @@ console.log(onlineUserIds);
               select: 'userInfo.name userBasicInfo.profile_image',
               
             });
-    // console.log("kjv dsnkivniujv dsziunb jkdjm bdfi1",createmsg?.length - 1)
+   
     let chatid = chatting?._id
    // Assuming this code is part of a function or a block
 // where 'chatting' is defined
@@ -561,7 +561,7 @@ console.log(lastMessageSender,newChatObject1.seller_id);
      // Modify the 'is-read-message' event handler
      socket.on("is-read-message", async (data) => {
       try {
-        console.log(data, "fesgdnftyhjsthfgdfgdfgdfgdfg");
+       
         const { chatId, userId, isread } = data;
     
         if (isread === "true") {
@@ -575,7 +575,7 @@ console.log(lastMessageSender,newChatObject1.seller_id);
               // Check if the status is not already 'seen'
               if (message.senderId.toString() !== userId.toString() && message.status !== newStatus) {
                 message.status = newStatus;
-                console.log("jaadu");
+               
     
                 // Save only if there are messages to update
                 await chatting.save();
@@ -615,7 +615,7 @@ console.log(lastMessageSender,newChatObject1.seller_id);
           
           let onlineUserIds = Object.keys(filteredOnlineUsers);
           
-          console.log(onlineUserIds,"vrdvnrdvrdmvrdvrdvdrkm");
+       
             // Emit offline status to other users
             io.emit("user-status", {userId:onlineUserIds});
         })
@@ -633,7 +633,7 @@ console.log(lastMessageSender,newChatObject1.seller_id);
  
 
 
-// console.log(zone,"jnmczjnvjkszdnvkjxcfn kjxfdnv kjndxfk")
+
 /////////////////////////////////////////////////////////
 app.listen(process.env.PORT, () =>
   console.log(`[ MENEHARIYA API ] on ${process.env.PORT}`)

@@ -488,7 +488,7 @@ exports.createEventAds = async (req, res, next) => {
     const startDateObject = createDateTimeObject(start_date, start_time);
     const endDateObject = createDateTimeObject(end_date, end_time);
     let zone =find(latitude,longitude) ;
-    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+    
     let zones ;
     if(zone.length >= 0){
   zones = zone[0];
@@ -811,7 +811,7 @@ console.log(start_date);
     //   dataObj.adsInfo = adsInfoObj;
     // }
     let zone =find(latitude,longitude) ;
-    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+   
     let zones ;
     if(zone.length >= 0){
   zones = zone[0];
@@ -1230,7 +1230,7 @@ const regexArray = searchTermsArray.map(term => new RegExp(term, 'i'));
           query._id = { $nin: excludedIds };
         }
       }
-      console.log(is_homepage,"job");
+    
 
       let records = await eventAd
       .find(query)

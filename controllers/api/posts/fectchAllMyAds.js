@@ -162,7 +162,7 @@ exports.CountMyAd = async (req, res, next) => {
 exports.fetchActive = async (req, res, next) => {
   let myid = req.userId
   let MyId = req.query.userId;
-  console.log("rvrvrv");
+
 if(!MyId){
   return failureJSONResponse(res,  `Please provide Seller Id` );
 }
@@ -237,7 +237,7 @@ if(!MyId){
     let adTypeCount;
     for (const adType of adTypes) {
 
-      console.log(adType,"kmkmvkkv");
+    
       // for (let [modelLabel, modelName] of Object.entries(addsModel)) {
 // if(adType.key == "job" ||  adType.key == "babysitter & nannie" ||adType.key == "Local_biz & Service" ||adType.key == "rental"){
  
@@ -346,15 +346,14 @@ if(!MyId){
     // }
     // checkAlreadyExist = checkAlreadyExist.map(doc => doc.toObject({ virtuals: true }));
     results.push(...checkAlreadyExist);
-    console.log(results,"kmdmvmvmdkc");
-  }
+    }
   // if(results){
   //   results.map(FeaturedData => FeaturedData.toObject({ virtuals: true }));
   //   // results.map(FeaturedData => FeaturedData.toJSON({ virtuals: true }));
   // }
   let filterData;
       filterData = results.map((job) => {
-        console.log(job,"skmdkskskskskksksks");
+       
         return {
           ...job,
 
@@ -367,7 +366,7 @@ if(!MyId){
         };
       });
       filterData.sort((a, b) => new Date(b.active_on_virtual) - new Date(a.active_on_virtual));
-      console.log(filterData,"hdsch");
+     
       let adonsData =[]
       adonsData.push(...filterData);
 
@@ -1119,7 +1118,7 @@ exports.search = async (req, res, next) => {
         },
       };
     }
-    console.log(dbQuery,"vl,vklvkvkrk");
+   
     let results = [];
     if (amount) {
       // Add filter for rent amount
@@ -1132,12 +1131,12 @@ exports.search = async (req, res, next) => {
         $lte: parseFloat(max_price),
       };
     }
-    console.log({dbQuery},"cdcjv mdjvdjvdkjdck");
+ 
     let currentDate = new Date();
     // Convert the date to ISO 8601 format
     let currentISODate = currentDate.toISOString();
     dbQuery = { "plan_validity.expired_on": { $gte: currentISODate } }
-    console.log({dbQuery},"cdcdck");
+   
     // if (add_on) {
     //   dbQuery = {
     //     addons_validity: {
@@ -1186,12 +1185,11 @@ exports.search = async (req, res, next) => {
         message: "Please login to your account",
       });
     }
-  
-  console.log({dbQuery},"cdcdck");
+
     let queryFinal = dbQuery;
    
     if (dbQuery["adsInfo.location.coordinates"]) {
-      console.log("gagan ni jnsj");
+  
       queryFinal["adsInfo.location"] = dbQuery["adsInfo.location"];
     }
     
@@ -1213,7 +1211,7 @@ exports.search = async (req, res, next) => {
         "adsInfo.rent_info": 1,
       }},
     ];
-    console.log(queryFinal,"vdv");
+  
     let adTypeCount;
     let orConditions;
     for (const adType of adTypes) {
@@ -1231,7 +1229,7 @@ const regexArray = searchTermsArray.map(term => new RegExp(term, 'i'));
         if (adType.key == "job") {
           // Add conditions specific to the "job" ad type
           orConditions.push({ "adsInfo.categories":  { $regex: searchTerm.trim(), $options: "i" } },);
-          console.log("job",orConditions);
+       
 
         }
         if (adType.key == "event") {
@@ -1263,7 +1261,7 @@ const regexArray = searchTermsArray.map(term => new RegExp(term, 'i'));
           $or: orConditions
         };
       }
-      console.log(orConditions,"vfvfvvfvfv");
+   
       let YourModel = mongoose.model(adType.key);
   let priceDefaultSelect = adType.value;
         let selectFields = { ...commonSelectFields, ...priceDefaultSelect };

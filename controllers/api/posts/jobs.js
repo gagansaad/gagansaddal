@@ -406,7 +406,7 @@ exports.createJobAds = async (req, res, next) => {
       }
     }
     let zone =find(latitude,longitude) ;
-    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+   
     let zones ;
     if(zone.length >= 0){
   zones = zone[0];
@@ -647,7 +647,7 @@ exports.editJobAds = async (req, res, next) => {
       dataObj.adsInfo = adsInfoObj;
     }
     let zone =find(latitude,longitude) ;
-    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+  
     let zones ;
     if(zone.length >= 0){
   zones = zone[0];
@@ -704,7 +704,7 @@ exports.editJobAds = async (req, res, next) => {
 /////----------------------Update Job Status -------------------/////
 
 exports.editJobStatus = async (req, res, next) => {
-  // console.log(`kejhrjhyewgrjhew`);
+ 
   try {
     const jobId = req.query.ads_id;
 

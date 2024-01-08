@@ -285,7 +285,7 @@ let daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
       // Iterate through the addons_validity array
       for (const addonValidity of adsModel.addons_validity) {
         const addonIndex = addonsId.indexOf(addonValidity.add_ons_id);
-      // console.log("gagan");
+      
         if (addonIndex != -1) {
           const expiredOnDate = new Date(addonValidity.expired_on);
       
@@ -400,7 +400,7 @@ let daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
         deviceType
       );
     } else {
-      // console.log("rana maaf krna");
+    
       if (deviceType == "web") {
         paymentIntentClientSecret = paymentModelInfo.payment_intent.url;
       } else {
@@ -602,7 +602,7 @@ const paymentSuccessModelUpdate = async (payment_id, userId) => {
     ads_type = paymentDetails.ads_type;
     // Continue with your logic...
   }
-  console.log(paymentDetails,"0000000000-----------");
+  
   const newPaymentStatus = "confirmed";
   await PaymentModel.findByIdAndUpdate(
     { _id: payment_id },

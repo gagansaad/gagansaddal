@@ -69,7 +69,7 @@ exports.fetchAll = async (req, res, next) => {
        // Default to last 30 days if not specified
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - daysFilter);
-      console.log(startDate,"kiya hai");
+   
       dbQuery.createdAt = {
         $gte: startDate,
       };
@@ -193,7 +193,7 @@ exports.fetchAll = async (req, res, next) => {
       // Calculate the total view count
       let sadsid;
       record.forEach((job) => {
-console.log(job,"edede");
+
         sadsid = job.adsType;
         totalViewCount += job.viewCount;
         totalReportCount += job.ReportCount;
@@ -487,7 +487,7 @@ const calculateMonthlyRevenue = async (startDate, endDate ,adstype) => {
    if (todayTotalAmountAggregation.length > 0) {
      return todayTotalAmountAggregation[0].revenue;
    } else {
-     console.log("dedede");
+   
      return 0; // No revenue for the given month
    }
  };

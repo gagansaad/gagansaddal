@@ -331,7 +331,7 @@ exports.createAds = async (req, res, next) => {
       imageArr.push(productImages._id);
     }
     let zone =find(latitude,longitude) ;
-    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+   
     let zones ;
     if(zone.length >= 0){
   zones = zone[0];
@@ -554,7 +554,7 @@ exports.editAds = async (req, res, next) => {
       dataObj.adsInfo = adsInfoObj;
     }
     let zone =find(latitude,longitude) ;
-    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+   
     let zones ;
     if(zone.length >= 0){
   zones = zone[0];
@@ -1027,7 +1027,7 @@ const regexArray = searchTermsArray.map(term => new RegExp(term, 'i'));
       let query = {
         $or: [queryFinal]
       };
-      console.log(is_homepage,"job");
+   
       
       if(is_homepage == "true"){
         if (excludedIds && excludedIds.length > 0) {

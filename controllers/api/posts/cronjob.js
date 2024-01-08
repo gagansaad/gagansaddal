@@ -57,7 +57,7 @@ console.log(formattedDateObject);
         return doc.expiredAt < formattedDateObject;
       });
       } else {
-        // console.log("raja ki rani se shaadi hai ");
+       
         documents = await Model.find({
           $and: [
             { "plan_validity.expired_on": { $lt: new Date().toISOString } },
@@ -84,8 +84,7 @@ console.log(formattedDateObject);
         let expiredOnDate;
         let adjustedTime;
         if (adType.key == "event") {
-          // console.log("haye mera kaalu");
-          console.log(document,"kallu");
+       
           const currentDate = new Date();
         const nextDay = new Date(currentDate);
         // nextDay.setDate(currentDate.getDate() + 1);
@@ -235,7 +234,7 @@ cron.schedule("*/15 * * * *", async () => {
 
       for (const dateRange of bumpUpDates) {
         const { id, active_on, expired_on, interval, location_timezone } = dateRange;
-console.log(id,"llllllll");
+
         const startDate = new Date(active_on);
         const endDate = new Date(expired_on);
         const recordDates = [];

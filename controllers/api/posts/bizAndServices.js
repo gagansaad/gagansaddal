@@ -571,7 +571,7 @@ exports.createbizAds = async (req, res, next) => {
       }
     }
     let zone =find(latitude,longitude) ;
-    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+   
     let zones ;
     if(zone.length >= 0){
   zones = zone[0];
@@ -875,7 +875,7 @@ exports.editbizAds = async (req, res, next) => {
       dataObj.adsInfo = adsInfoObj;
     }
     let zone =find(latitude,longitude) ;
-    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+  
     let zones;
     if(zone.length >= 0){
   zones = zone[0];

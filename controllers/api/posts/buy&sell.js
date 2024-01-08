@@ -688,7 +688,7 @@ exports.createBuySellAds = async (req, res, next) => {
     }
     let mode_payment = payment_mode;
     let zone =find(latitude,longitude) ;
-    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+   
     let zones ;
     if(zone.length >= 0){
   zones = zone[0];
@@ -914,7 +914,7 @@ exports.editBuySellAds = async (req, res, next) => {
       dataObj.adsInfo = adsInfoObj;
     }
     let zone =find(latitude,longitude) ;
-    console.log(zone,"ayayayyayayayayayayyayayayayyayayayyayayaya");
+   
     let zones ;
     if(zone.length >= 0){
   zones = zone[0];
@@ -1039,7 +1039,7 @@ exports.fetchAll = async (req, res, next) => {
       is_myad,
       is_homepage
     } = req.query;
-    // console.log(req.query,"fkmvkfv");
+  
     let adOnsQuery = {};
     // let is_myadCheck;
     // is_myadCheck=(!is_myad && is_myad==false && is_myad==null && is_myad ==undefined)?false:true;
@@ -1327,7 +1327,7 @@ const regexArray = searchTermsArray.map(term => new RegExp(term, 'i'));
           query._id = { $nin: excludedIds };
         }
       }
-      console.log(is_homepage,"job");
+    
 
       let records = await postBuySellAd
       .find(query)
