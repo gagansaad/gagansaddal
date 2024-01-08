@@ -256,7 +256,7 @@ console.log(id,"llllllll");
           let splittedDate = newyoua.split("T")[0];
           console.log(splittedDate,today);
           let document  = null ;
-          if(splittedDate<today || newyoua == null) {
+          if(splittedDate<today || newyoua == "null" || yuakism.active_on_bumpup_at == null) {
             console.log("yasadu",id);
             document = await YourModel.findById(id);
           }
