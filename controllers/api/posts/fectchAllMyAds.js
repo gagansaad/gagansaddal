@@ -1273,7 +1273,7 @@ const regexArray = searchTermsArray.map(term => new RegExp(term, 'i'));
     })
     .populate(commonPopulateOptions)
     
-    // .select(selectFields)
+    .select(selectFields)
     .sort(sortval)
     .exec();
 console.log(checkAlreadyExist); 
