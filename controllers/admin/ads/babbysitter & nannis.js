@@ -149,6 +149,7 @@ exports.fetchAll = async (req, res, next) => {
         $or: [
           { "adsInfo.title": { $regex: searchTerm, $options: "i" } },
           { "adsInfo.tagline": { $regex: searchTerm, $options: "i" } },
+          { "advertisement_id": searchTerm },
         ],
       };
     }

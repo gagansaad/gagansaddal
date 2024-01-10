@@ -182,7 +182,7 @@ console.log(formattedDateObject);
 });
 
 
-cron.schedule("*/1 * * * *", async () => {
+cron.schedule("*/15 * * * *", async () => {
 
 
 
